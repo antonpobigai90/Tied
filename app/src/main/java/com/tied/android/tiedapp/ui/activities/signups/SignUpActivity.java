@@ -1,0 +1,165 @@
+package com.tied.android.tiedapp.ui.activities.signups;
+
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.widget.ImageView;
+import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.soundcloud.android.crop.Crop;
+import com.tied.android.tiedapp.MainApplication;
+import com.tied.android.tiedapp.R;
+import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
+import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.ui.fragments.signups.EmailSignUpFragment;
+import com.tied.android.tiedapp.ui.fragments.signups.NameFragment;
+import com.tied.android.tiedapp.ui.fragments.signups.OfficeAddressFragment;
+import com.tied.android.tiedapp.ui.fragments.signups.PasswordFragment;
+import com.tied.android.tiedapp.ui.fragments.signups.PhoneFaxFragment;
+import com.tied.android.tiedapp.ui.fragments.signups.PictureFragment;
+import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
+
+import java.io.File;
+import java.io.IOException;
+
+import retrofit2.Retrofit;
+
+public class SignUpActivity extends AppCompatActivity implements SignUpFragmentListener {
+
+    public static final String TAG = SignUpActivity.class
+            .getSimpleName();
+
+    private Fragment fragment = null;
+    private int fragment_index = 0;
+
+    public Bitmap bitmap;
+
+    public Retrofit retrofit;
+    public SignUpApi service;
+
+    public Uri imageUri = null, outputUri = null;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_sign_up);
+
+        User user = User.getUser(getApplicationContext());
+        if(user != null){
+            Log.d(TAG, user.toString());
+            Bundle bundle = new Bundle();
+            Gson gson = new Gson();
+            String user_json = gson.toJson(user);
+            bundle.putString(Constants.USER, user_json);
+            launchFragment(user.getSign_up_stage(), bundle);
+        }else{
+            launchFragment(Constants.EmailSignUp, null);
+        }
+
+        retrofit = MainApplication.getInstance().getRetrofit();
+        service = retrofit.create(SignUpApi.class);
+
+    }
+
+    public void launchFragment(int pos, Bundle bundle) {
+        fragment_index = pos;
+        fragment = null;
+
+        switch (pos) {
+            case Constants.EmailSignUp:
+                fragment = new EmailSignUpFragment();
+                fragment.setArguments(bundle);
+                break;
+            case Constants.Password:
+                fragment = new PasswordFragment();
+                fragment.setArguments(bundle);
+                break;
+            case Constants.Picture:
+                fragment = new PictureFragment();
+                fragment.setArguments(bundle);
+                break;
+            case Constants.Name:
+                fragment = new NameFragment();
+                fragment.setArguments(bundle);
+                break;
+            case Constants.PhoneAndFax:
+                fragment = new PhoneFaxFragment();
+                fragment.setArguments(bundle);
+                break;
+            case Constants.OfficeAddress:
+                fragment = new OfficeAddressFragment();
+                fragment.setArguments(bundle);
+                break;
+        }
+
+        if (fragment != null) {
+            Log.d(TAG, getSupportFragmentManager().getBackStackEntryCount() + "");
+            while (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+                getSupportFragmentManager().popBackStackImmediate();
+            }
+
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .addToBackStack(fragment.getClass().getSimpleName())
+                    .commit();
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log. d(TAG, "fragment_index " + fragment_index);
+        if (fragment_index == Constants.EmailSignUp || fragment_index == Constants.SignInUser) {
+            Intent intent = new Intent(this, WalkThroughActivity.class);
+            startActivity(intent);
+        } else {
+            finish();
+        }
+    }
+
+    @Override
+    public void onFragmentInteraction(int action, Bundle bundle) {
+        Log.d(TAG, " onFragmentInteraction "+action);
+        launchFragment(action, bundle);
+    }
+
+    private void handleCrop(Uri outputUri) {
+        ImageView avatar = ((PictureFragment) fragment).avatar;
+        avatar.setImageBitmap(null);
+        Log.d("path * ", outputUri.getPath());
+        try {
+            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), outputUri);
+            avatar.setImageBitmap(bitmap);
+        } catch (IOException e) {
+            Toast.makeText(this, " error : " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+
+    /**
+     * Photo Selection result
+     */
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == Crop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
+            handleCrop(outputUri);
+        } else if (requestCode == ((PictureFragment) fragment).REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
+            outputUri = Uri.fromFile(new File(getFilesDir(), "cropped.jpg"));
+            Uri selectedImage = imageUri;
+            Crop.of(selectedImage, outputUri).asSquare().start(this);
+        } else if (requestCode == ((PictureFragment) fragment).IMAGE_PICKER_SELECT && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
+            Uri selectedImage = data.getData();
+            outputUri = Uri.fromFile(new File(getFilesDir(), "cropped.jpg"));
+            Crop.of(selectedImage, outputUri).asSquare().start(this);
+        }
+    }
+
+}
