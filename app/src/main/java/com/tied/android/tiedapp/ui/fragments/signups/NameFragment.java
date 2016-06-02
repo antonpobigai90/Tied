@@ -103,7 +103,7 @@ public class NameFragment extends Fragment implements View.OnClickListener{
             user.setSign_up_stage(Constants.PhoneAndFax);
 
             SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
-            Call<UpdateUser> response = signUpApi.updateUserName(user.getId(), user.getToken(), firstNameText, lastNameText, Constants.PhoneAndFax);
+            Call<UpdateUser> response = signUpApi.updateUser(user);
             response.enqueue(new Callback<UpdateUser>() {
                 @Override
                 public void onResponse(Call<UpdateUser> call, Response<UpdateUser> UpdateUserResponse) {

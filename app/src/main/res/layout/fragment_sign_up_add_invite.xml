@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Continue"
+        android:id="@+id/continue_btn"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add / invite Employees"
+        android:id="@+id/textView4"
+        android:textSize="18sp"
+        android:layout_marginTop="75dp"
+        android:layout_gravity="center"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Invite via app"
+        android:id="@+id/via_app"
+        android:layout_below="@+id/vai_sms"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:visibility="invisible"
+        android:indeterminate="false"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="48dp"
+        android:layout_above="@+id/continue_btn"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="invite via Email address"
+        android:id="@+id/via_email"
+        android:layout_below="@+id/textView4"
+        android:layout_marginTop="25dp" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Invite via sms"
+        android:id="@+id/vai_sms"
+        android:layout_below="@+id/via_email"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Later"
+        android:id="@+id/later"
+        android:layout_below="@+id/via_app"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="33dp" />
+
+
+</RelativeLayout>

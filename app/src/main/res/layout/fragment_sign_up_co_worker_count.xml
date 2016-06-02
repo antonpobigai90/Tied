@@ -15,8 +15,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="What type of sales rep are you?"
+            android:text="How many co- worker do you have?"
             android:id="@+id/textView2"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="20dp" />
@@ -24,27 +23,40 @@
         <RadioGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/sales_rep_type">
+            android:id="@+id/co_worker_count">
 
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Self"
-                android:id="@+id/self"
+                android:text="1 - 5"
+                android:id="@+id/first"
+                android:layout_gravity="center_horizontal"
+                android:checked="true" />
+
+            <RadioButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="6 - 10"
+                android:id="@+id/second"
                 android:layout_gravity="center_horizontal"
                 android:checked="false" />
 
             <RadioButton
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Group"
-                android:id="@+id/group"
+                android:text="11 - 20"
+                android:id="@+id/third"
                 android:layout_gravity="center_horizontal"
-                android:checked="true"
-                android:layout_marginTop="30dp" />
+                android:checked="false" />
+
+            <RadioButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="50+"
+                android:id="@+id/fourth"
+                android:layout_gravity="center_horizontal"
+                android:checked="false" />
         </RadioGroup>
-
-
 
         <ProgressBar
             android:layout_width="wrap_content"

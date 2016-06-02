@@ -7,15 +7,23 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
+import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.ui.activities.MainActivity;
 
 
 /**
  * Created by yuweichen on 16/4/30.
  */
 public class SplashActivity extends Activity {
+
+    public static final String TAG = SplashActivity.class
+            .getSimpleName();
+
 
     Context context;
     protected boolean _active = true;
@@ -35,9 +43,28 @@ public class SplashActivity extends Activity {
         final SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         boolean done = mPrefs.getBoolean(Constants.SPLASH_SCREEN_DONE, false);
         if (done) {
-            Intent intent = new Intent(sPlashScreen, WalkThroughActivity.class);
-            startActivity(intent);
-            finish();
+            User user = User.getUser(getApplicationContext());
+            if (user != null && user.getId() != null && user.getSign_up_stage() == Constants.Completed) {
+//                user.setSign_up_stage(7);
+//                user.save(getApplicationContext());
+                Log.d(TAG, user.toString());
+                Bundle bundle = new Bundle();
+                Gson gson = new Gson();
+                String user_json = gson.toJson(user);
+                bundle.putString(Constants.USER, user_json);
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.putExtra(Constants.USER, bundle);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+
+            } else {
+                Intent intent = new Intent(sPlashScreen, WalkThroughActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
+            }
+
         } else {
             final Thread splashTread = new Thread() {
                 @Override
@@ -62,6 +89,7 @@ public class SplashActivity extends Activity {
                                 prefsEditor.putBoolean(Constants.SPLASH_SCREEN_DONE, true);
                                 prefsEditor.apply();
                                 Intent intent = new Intent(sPlashScreen, WalkThroughActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
                                 finish();
                             }

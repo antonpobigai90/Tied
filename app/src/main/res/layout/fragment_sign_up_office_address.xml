@@ -24,10 +24,10 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="phone"
+            android:inputType="text"
             android:hint="Address"
             android:ems="10"
-            android:id="@+id/address"
+            android:id="@+id/street"
             android:text="5 ikuna isolo rd" />
 
         <EditText
@@ -54,15 +54,15 @@
             android:inputType="text"
             android:hint="Zip Code"
             android:text="23401"
-            android:ems="10" />
+            android:ems="10"
+            android:id="@+id/zip" />
 
-        <RadioButton
+        <CheckBox
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Office address same as home"
-            android:id="@+id/radioButton"
-            android:layout_gravity="center_horizontal"
-            android:checked="true" />
+            android:id="@+id/same"
+            android:layout_gravity="center_horizontal" />
 
         <ProgressBar
             android:layout_width="wrap_content"

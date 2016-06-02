@@ -17,7 +17,7 @@ import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
-import com.tied.android.tiedapp.objects.auth.Login;
+import com.tied.android.tiedapp.objects.auth.SignUpLogin;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
@@ -96,15 +96,15 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
             User user = gson.fromJson(user_json, User.class);
             progressBar.setVisibility(View.VISIBLE);
             SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
-            Call<Login> response = signUpApi.LoginSignUpUser(user.getEmail(), passwordText, Constants.Picture);
+            Call<SignUpLogin> response = signUpApi.LoginSignUpUser(user.getEmail(), passwordText, Constants.Picture);
             Log.d(TAG, response.request().url().toString());
-            response.enqueue(new Callback<Login>() {
+            response.enqueue(new Callback<SignUpLogin>() {
                 @Override
-                public void onResponse(Call<Login> call, Response<Login> LoginResponse) {
-                    Login login = LoginResponse.body();
+                public void onResponse(Call<SignUpLogin> call, Response<SignUpLogin> LoginResponse) {
+                    SignUpLogin signUpLogin = LoginResponse.body();
 
-                    User loggedIn_user = login.getUser();
-                    Log.d(TAG, login.toString());
+                    User loggedIn_user = signUpLogin.getUser();
+                    Log.d(TAG, signUpLogin.toString());
                     if (loggedIn_user.getToken() != null) {
                         loggedIn_user.setSign_up_stage(Constants.Picture);
                         boolean saved = loggedIn_user.save(getActivity().getApplicationContext());
@@ -125,7 +125,7 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
                 }
 
                 @Override
-                public void onFailure(Call<Login> checkEmailCall, Throwable t) {
+                public void onFailure(Call<SignUpLogin> checkEmailCall, Throwable t) {
                     Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
                     Log.d(TAG + " onFailure", t.toString());
                     progressBar.setVisibility(View.INVISIBLE);

@@ -3,6 +3,7 @@ package com.tied.android.tiedapp.ui.fragments.signups;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,14 +15,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
 import com.tied.android.tiedapp.objects.Location;
-import com.tied.android.tiedapp.objects.auth.UpdateUser;
+import com.tied.android.tiedapp.objects.user.Boss;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
@@ -30,36 +29,37 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 /**
  * A placeholder fragment containing a simple view.
  */
-public class HomeAddressFragment extends Fragment implements View.OnClickListener{
+public class AddBossFragment extends Fragment implements View.OnClickListener{
 
-    public static final String TAG = HomeAddressFragment.class
+    public static final String TAG = AddBossFragment.class
             .getSimpleName();
 
-    private SignUpFragmentListener mListener;
-
+    private EditText email,phone;
     private Button continue_btn;
+
     private ProgressBar progressBar;
 
     private EditText street, city, state, zip;
     private String cityText, stateText, streetText, zipText;
-    private Location location;
+    private String emailText, phoneText;
 
     int fetchType = Constants.USE_ADDRESS_NAME;
 
-    public HomeAddressFragment() {
+    private SignUpFragmentListener mListener;
+
+    private Boss boss;
+    private Location location;
+
+    public AddBossFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_sign_up_home_address, container, false);
+        return inflater.inflate(R.layout.fragment_sign_up_add_boss, container, false);
     }
 
     @Override
@@ -67,6 +67,22 @@ public class HomeAddressFragment extends Fragment implements View.OnClickListene
         super.onViewCreated(view, savedInstanceState);
 
         initComponent(view);
+    }
+
+
+    public void initComponent(View view){
+
+        street = (EditText) view.findViewById(R.id.street);
+        city = (EditText) view.findViewById(R.id.city);
+        state = (EditText) view.findViewById(R.id.state);
+        zip = (EditText) view.findViewById(R.id.zip);
+
+        email = (EditText) view.findViewById(R.id.email);
+        phone = (EditText) view.findViewById(R.id.phone);
+        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+
+        continue_btn = (Button) view.findViewById(R.id.continue_btn);
+        continue_btn.setOnClickListener(this);
     }
 
     @Override
@@ -80,44 +96,29 @@ public class HomeAddressFragment extends Fragment implements View.OnClickListene
         }
     }
 
-    public void nextAction(int action, Bundle bundle) {
+
+    public void nextAction(Bundle bundle) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(action, bundle);
+            mListener.onFragmentInteraction(Constants.AddBossNow, bundle);
         }
     }
 
-    public void initComponent(View view) {
 
-        street = (EditText) view.findViewById(R.id.street);
-        city = (EditText) view.findViewById(R.id.city);
-        state = (EditText) view.findViewById(R.id.state);
-        zip = (EditText) view.findViewById(R.id.zip);
-
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-
-        continue_btn = (Button) view.findViewById(R.id.continue_btn);
-        continue_btn.setOnClickListener(this);
-    }
-
-    public void continue_action() {
-        if (validated()) {
-            new GeocodeAsyncTask().execute();
-        }
-    }
-
-    private boolean validated() {
+    public boolean validated(){
         streetText = street.getText().toString();
         cityText = city.getText().toString();
         zipText = zip.getText().toString();
         stateText = state.getText().toString();
         location = new Location(cityText, zipText, stateText, streetText);
+
+        emailText = email.getText().toString();
+        phoneText = phone.getText().toString();
         return !streetText.equals("");
     }
 
-
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
+        switch (v.getId()){
             case R.id.continue_btn:
                 continue_action();
                 break;
@@ -163,47 +164,28 @@ public class HomeAddressFragment extends Fragment implements View.OnClickListene
                 location.setLongitude(address.getLongitude());
             }
 
+            boss = new Boss(emailText, phoneText, location);
+
             Bundle bundle = getArguments();
+
+            Uri uri = ((SignUpActivity) getActivity()).outputUri;
 
             Gson gson = new Gson();
             String user_json = bundle.getString("user");
             final User user = gson.fromJson(user_json, User.class);
-            user.setHome_address(location);
+            user.setBoss(boss);
+            user.setSign_up_stage(Constants.AddBossNow);
+            String json = gson.toJson(user);
+            bundle.putString(Constants.USER, json);
+            if(uri != null)
+                bundle.putString("avatar", uri.toString());
+            nextAction(bundle);
+        }
+    }
 
-            SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
-            Call<UpdateUser> response = signUpApi.updateUser(user);
-            response.enqueue(new Callback<UpdateUser>() {
-                @Override
-                public void onResponse(Call<UpdateUser> call, Response<UpdateUser> UpdateUserResponse) {
-                    UpdateUser UpdateUser = UpdateUserResponse.body();
-                    Log.d(TAG +" onFailure", UpdateUserResponse.body().toString());
-                    if(UpdateUser.isSuccess()){
-                        Bundle bundle = new Bundle();
-                        boolean saved = user.save(getActivity().getApplicationContext());
-                        if (saved) {
-                            Gson gson = new Gson();
-                            String json = gson.toJson(user);
-                            bundle.putString(Constants.USER, json);
-                            progressBar.setVisibility(View.INVISIBLE);
-                            nextAction(Constants.Territory,bundle);
-                            Log.d(TAG, "location: " + json);
-                        } else {
-                            progressBar.setVisibility(View.INVISIBLE);
-                            Toast.makeText(getActivity(), "user info  was not updated", Toast.LENGTH_LONG).show();
-                        }
-                    }else{
-                        Toast.makeText(getActivity(), UpdateUser.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                    progressBar.setVisibility(View.INVISIBLE);
-                }
-
-                @Override
-                public void onFailure(Call<UpdateUser> UpdateUserCall, Throwable t) {
-                    Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
-                    Log.d(TAG +" onFailure", t.toString());
-                    progressBar.setVisibility(View.INVISIBLE);
-                }
-            });
+    public void continue_action() {
+        if (validated()) {
+            new GeocodeAsyncTask().execute();
         }
     }
 }

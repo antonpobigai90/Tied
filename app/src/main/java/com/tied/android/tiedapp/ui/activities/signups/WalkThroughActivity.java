@@ -30,11 +30,11 @@ public class WalkThroughActivity extends Activity implements View.OnClickListene
         setContentView(R.layout.fragment_welcome);
 
         User user = User.getUser(getApplicationContext());
-        if(user != null){
+        if(user != null && user.getId() != null){
             Intent intent = new Intent(this, SignUpActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         }
-
         initComponent();
     }
 

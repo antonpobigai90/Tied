@@ -83,7 +83,7 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
 
     public void nextAction(Bundle bundle) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(Constants.OfficeAddress, bundle);
+            mListener.onFragmentInteraction(Constants.EnterCode, bundle);
         }
     }
     
@@ -93,31 +93,31 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
         if(validated()){
             progressBar.setVisibility(View.VISIBLE);
 
-            Bundle bundle = getArguments();
+            final Bundle bundle = getArguments();
 
-            Gson gson = new Gson();
+            final Gson gson = new Gson();
             String user_json = bundle.getString("user");
             final User user = gson.fromJson(user_json, User.class);
             user.setPhone(phoneText);
             user.setFax(faxText);
-            user.setSign_up_stage(Constants.OfficeAddress);
+            user.setSign_up_stage(Constants.EnterCode);
 
             SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
-            Call<UpdateUser> response = signUpApi.updateUserPhoneAndFax(user.getId(), user.getToken(), phoneText, faxText, Constants.OfficeAddress);
+            Call<UpdateUser> response = signUpApi.updateUser(user);
             response.enqueue(new Callback<UpdateUser>() {
                 @Override
                 public void onResponse(Call<UpdateUser> call, Response<UpdateUser> UpdateUserResponse) {
                     UpdateUser UpdateUser = UpdateUserResponse.body();
                     Log.d(TAG +" onFailure", UpdateUserResponse.body().toString());
                     if(UpdateUser.isSuccess()){
-                        Bundle bundle = new Bundle();
+                        Gson gson = new Gson();
                         boolean saved = user.save(getActivity().getApplicationContext());
                         if(saved){
-                            Gson gson = new Gson();
+                            String user_json = bundle.getString("user");
+                            User user = gson.fromJson(user_json, User.class);
                             String json = gson.toJson(user);
                             bundle.putString(Constants.USER, json);
-                            progressBar.setVisibility(View.INVISIBLE);
-                            nextAction(bundle);
+                            call_send_phone_vc(bundle);
                         }else{
                             progressBar.setVisibility(View.INVISIBLE);
                             Toast.makeText(getActivity(), "user info  was not updated", Toast.LENGTH_LONG).show();
@@ -135,11 +135,22 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
                     progressBar.setVisibility(View.INVISIBLE);
                 }
             });
+
         }else{
             Toast.makeText(getActivity(), "Invalid input", Toast.LENGTH_LONG).show();
         }
     }
-    
+
+    private void call_send_phone_vc(Bundle bundle) {
+
+        //Todo api request for phone verification code to be sent
+        Gson gson = new Gson();
+        String code = "123456";
+        bundle.putString(Constants.CODE,code);
+        progressBar.setVisibility(View.INVISIBLE);
+        nextAction(bundle);
+    }
+
     public boolean validated(){
         
         return !phone.equals("") && !fax.equals("");

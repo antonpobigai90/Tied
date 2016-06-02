@@ -32,12 +32,21 @@
             android:ems="10"
             android:id="@+id/territory_1" />
 
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:hint="Territory 1"
+            android:text="Texas"
+            android:ems="10"
+            android:id="@+id/territory_2" />
+
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Add"
-            android:id="@+id/button"
+            android:id="@+id/add"
             android:layout_gravity="center_horizontal"
             android:layout_margin="20dp" />
 

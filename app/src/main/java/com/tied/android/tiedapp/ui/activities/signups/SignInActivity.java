@@ -1,6 +1,5 @@
 package com.tied.android.tiedapp.ui.activities.signups;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -80,9 +79,8 @@ public class SignInActivity extends AppCompatActivity implements SignUpFragmentL
     @Override
     public void onBackPressed() {
         Log. d(TAG, "fragment_index " + fragment_index);
-        if (fragment_index == Constants.EmailSignUp || fragment_index == Constants.SignInUser) {
-            Intent intent = new Intent(this, WalkThroughActivity.class);
-            startActivity(intent);
+        if (fragment_index == Constants.Reset) {
+            launchFragment(Constants.SignInUser, null);
         } else {
             finish();
         }

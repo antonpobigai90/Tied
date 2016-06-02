@@ -1,9 +1,6 @@
 package com.tied.android.tiedapp.ui.fragments.signups;
 
 import android.content.Context;
-import android.location.Address;
-import android.location.Geocoder;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,23 +9,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
-import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.objects.auth.UpdateUser;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,29 +30,27 @@ import retrofit2.Response;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class HomeAddressFragment extends Fragment implements View.OnClickListener{
+public class CoWorkerCountFragment extends Fragment implements View.OnClickListener {
 
-    public static final String TAG = HomeAddressFragment.class
+    public static final String TAG = CoWorkerCountFragment.class
             .getSimpleName();
+
+    private Button continue_btn;
+
+    private RadioGroup co_worker_count;
+    private String coWorkerCountText;
 
     private SignUpFragmentListener mListener;
 
-    private Button continue_btn;
     private ProgressBar progressBar;
 
-    private EditText street, city, state, zip;
-    private String cityText, stateText, streetText, zipText;
-    private Location location;
-
-    int fetchType = Constants.USE_ADDRESS_NAME;
-
-    public HomeAddressFragment() {
+    public CoWorkerCountFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_sign_up_home_address, container, false);
+        return inflater.inflate(R.layout.fragment_sign_up_co_worker_count, container, false);
     }
 
     @Override
@@ -80,95 +71,48 @@ public class HomeAddressFragment extends Fragment implements View.OnClickListene
         }
     }
 
-    public void nextAction(int action, Bundle bundle) {
+    public void nextAction(Bundle bundle) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(action, bundle);
+            mListener.onFragmentInteraction(Constants.AddOptions, bundle);
         }
     }
 
     public void initComponent(View view) {
 
-        street = (EditText) view.findViewById(R.id.street);
-        city = (EditText) view.findViewById(R.id.city);
-        state = (EditText) view.findViewById(R.id.state);
-        zip = (EditText) view.findViewById(R.id.zip);
-
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
+        co_worker_count = (RadioGroup) view.findViewById(R.id.co_worker_count);
         continue_btn = (Button) view.findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(this);
     }
 
-    public void continue_action() {
-        if (validated()) {
-            new GeocodeAsyncTask().execute();
-        }
-    }
-
-    private boolean validated() {
-        streetText = street.getText().toString();
-        cityText = city.getText().toString();
-        zipText = zip.getText().toString();
-        stateText = state.getText().toString();
-        location = new Location(cityText, zipText, stateText, streetText);
-        return !streetText.equals("");
-    }
-
-
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
+        switch (v.getId()){
             case R.id.continue_btn:
                 continue_action();
                 break;
         }
     }
 
-    class GeocodeAsyncTask extends AsyncTask<Void, Void, Address> {
+    public boolean validated(){
+        int radioButtonID = co_worker_count.getCheckedRadioButtonId();
+        RadioButton radioButton = (RadioButton) co_worker_count.findViewById(radioButtonID);
+        coWorkerCountText = radioButton.getText().toString();
+        return !coWorkerCountText.equals("");
+    }
 
-        String errorMessage = "";
-
-        @Override
-        protected void onPreExecute() {
+    public void continue_action(){
+        if(validated()){
             progressBar.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        protected Address doInBackground(Void... none) {
-            Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
-            List<Address> addresses = null;
-
-            if (fetchType == Constants.USE_ADDRESS_NAME) {
-                try {
-                    Log.d(TAG, location.getLocationAddress());
-                    addresses = geocoder.getFromLocationName(location.getLocationAddress(), 1);
-                } catch (IOException e) {
-                    errorMessage = "Service not available";
-                    Log.e(TAG, errorMessage, e);
-                }
-            } else {
-                errorMessage = "Unknown Type";
-                Log.e(TAG, errorMessage);
-            }
-
-            if (addresses != null && addresses.size() > 0)
-                return addresses.get(0);
-
-            return null;
-        }
-
-        protected void onPostExecute(Address address) {
-            if (address != null) {
-                location.setLatitude(address.getLatitude());
-                location.setLongitude(address.getLongitude());
-            }
 
             Bundle bundle = getArguments();
 
             Gson gson = new Gson();
             String user_json = bundle.getString("user");
             final User user = gson.fromJson(user_json, User.class);
-            user.setHome_address(location);
+            user.setCo_workers(coWorkerCountText);
+            user.setSign_up_stage(Constants.AddOptions);
 
             SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
             Call<UpdateUser> response = signUpApi.updateUser(user);
@@ -180,14 +124,13 @@ public class HomeAddressFragment extends Fragment implements View.OnClickListene
                     if(UpdateUser.isSuccess()){
                         Bundle bundle = new Bundle();
                         boolean saved = user.save(getActivity().getApplicationContext());
-                        if (saved) {
+                        if(saved){
                             Gson gson = new Gson();
                             String json = gson.toJson(user);
                             bundle.putString(Constants.USER, json);
                             progressBar.setVisibility(View.INVISIBLE);
-                            nextAction(Constants.Territory,bundle);
-                            Log.d(TAG, "location: " + json);
-                        } else {
+                            nextAction(bundle);
+                        }else{
                             progressBar.setVisibility(View.INVISIBLE);
                             Toast.makeText(getActivity(), "user info  was not updated", Toast.LENGTH_LONG).show();
                         }
@@ -204,6 +147,8 @@ public class HomeAddressFragment extends Fragment implements View.OnClickListene
                     progressBar.setVisibility(View.INVISIBLE);
                 }
             });
+        }else{
+            Toast.makeText(getActivity(), "Invalid input", Toast.LENGTH_LONG).show();
         }
     }
 }

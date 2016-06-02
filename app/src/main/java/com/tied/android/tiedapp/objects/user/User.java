@@ -1,14 +1,17 @@
 package com.tied.android.tiedapp.objects.user;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.location.Location;
 import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.objects.Location;
+import com.tied.android.tiedapp.ui.activities.signups.WalkThroughActivity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by Emmanuel on 5/28/2016.
@@ -25,6 +28,12 @@ public class User implements Serializable {
     private String password;
     private String avatar;
 
+    private String sale_type;
+    private String co_workers;
+    private String group_description;
+    private ArrayList<String> territories;
+    private ArrayList<String> industries;
+
     private int sign_up_stage;
 
     public Location home_address;
@@ -39,8 +48,9 @@ public class User implements Serializable {
 
     private String token;
 
-    public User(String id, String email, String first_name, String last_name, String phone,
-                String fax, String password, String avatar, int sign_up_stage, Location home_address,
+    public User(String id, String email, String first_name, String last_name, String phone, String fax,
+                String password, String avatar, String sale_type, String co_workers, String group_description,
+                ArrayList<String> territories, ArrayList<String> industries, int sign_up_stage, Location home_address,
                 Location office_address, Boss boss, Profile profile, String createdAt, String updatedAt, String token) {
         this.id = id;
         this.email = email;
@@ -50,6 +60,11 @@ public class User implements Serializable {
         this.fax = fax;
         this.password = password;
         this.avatar = avatar;
+        this.sale_type = sale_type;
+        this.co_workers = co_workers;
+        this.group_description = group_description;
+        this.territories = territories;
+        this.industries = industries;
         this.sign_up_stage = sign_up_stage;
         this.home_address = home_address;
         this.office_address = office_address;
@@ -89,6 +104,24 @@ public class User implements Serializable {
         prefsEditor.putString(Constants.CURRENT_USER, json);
         prefsEditor.apply();
         return true;
+    }
+
+
+    public static void LogOut(Context context){
+        User user = new User();
+        boolean saved = user.save(context);
+        if(saved){
+
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putBoolean(Constants.LOGGED_OUT_USER,true);
+            editor.commit();
+
+            Intent intent = new Intent(context, WalkThroughActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            context.startActivity(intent);
+        }
     }
 
     public String getId() {
@@ -167,10 +200,6 @@ public class User implements Serializable {
         return office_address;
     }
 
-    public void setOffice_address(Location office_address) {
-        this.office_address = office_address;
-    }
-
     public Boss getBoss() {
         return boss;
     }
@@ -219,6 +248,50 @@ public class User implements Serializable {
         this.fax = fax;
     }
 
+    public void setOffice_address(Location office_address) {
+        this.office_address = office_address;
+    }
+
+    public ArrayList<String> getTerritories() {
+        return territories;
+    }
+
+    public void setTerritories(ArrayList<String> territories) {
+        this.territories = territories;
+    }
+
+    public String getSale_type() {
+        return sale_type;
+    }
+
+    public void setSale_type(String sale_type) {
+        this.sale_type = sale_type;
+    }
+
+    public ArrayList<String> getIndustries() {
+        return industries;
+    }
+
+    public void setIndustries(ArrayList<String> industries) {
+        this.industries = industries;
+    }
+
+    public String getGroup_description() {
+        return group_description;
+    }
+
+    public void setGroup_description(String group_description) {
+        this.group_description = group_description;
+    }
+
+    public String getCo_workers() {
+        return co_workers;
+    }
+
+    public void setCo_workers(String co_workers) {
+        this.co_workers = co_workers;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -230,6 +303,11 @@ public class User implements Serializable {
                 ", fax='" + fax + '\'' +
                 ", password='" + password + '\'' +
                 ", avatar='" + avatar + '\'' +
+                ", sale_type='" + sale_type + '\'' +
+                ", co_workers='" + co_workers + '\'' +
+                ", group_description='" + group_description + '\'' +
+                ", territories=" + territories +
+                ", industries=" + industries +
                 ", sign_up_stage=" + sign_up_stage +
                 ", home_address=" + home_address +
                 ", office_address=" + office_address +

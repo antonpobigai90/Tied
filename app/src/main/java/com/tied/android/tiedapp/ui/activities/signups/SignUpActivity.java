@@ -19,12 +19,23 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.ui.fragments.signups.AddBossFragment;
+import com.tied.android.tiedapp.ui.fragments.signups.AddBossNowFragment;
+import com.tied.android.tiedapp.ui.fragments.signups.AddInviteFragment;
+import com.tied.android.tiedapp.ui.fragments.signups.CoWorkerCountFragment;
+import com.tied.android.tiedapp.ui.fragments.signups.CoWorkerFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.EmailSignUpFragment;
+import com.tied.android.tiedapp.ui.fragments.signups.GroupDescFragment;
+import com.tied.android.tiedapp.ui.fragments.signups.HomeAddressFragment;
+import com.tied.android.tiedapp.ui.fragments.signups.IndustryFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.NameFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.OfficeAddressFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.PasswordFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.PhoneFaxFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.PictureFragment;
+import com.tied.android.tiedapp.ui.fragments.signups.SalesRepFragment;
+import com.tied.android.tiedapp.ui.fragments.signups.TerritoryFragment;
+import com.tied.android.tiedapp.ui.fragments.signups.VerifyPhoneFragment;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
 
 import java.io.File;
@@ -53,8 +64,10 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
         setContentView(R.layout.activity_sign_up);
 
         User user = User.getUser(getApplicationContext());
-        if(user != null){
+        if(user != null && user.getId() != null){
             Log.d(TAG, user.toString());
+//            user.setSign_up_stage(7);
+//            user.save(getApplicationContext());
             Bundle bundle = new Bundle();
             Gson gson = new Gson();
             String user_json = gson.toJson(user);
@@ -94,10 +107,55 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
                 fragment = new PhoneFaxFragment();
                 fragment.setArguments(bundle);
                 break;
+            case Constants.EnterCode:
+                fragment = new VerifyPhoneFragment();
+                fragment.setArguments(bundle);
+                break;
             case Constants.OfficeAddress:
                 fragment = new OfficeAddressFragment();
                 fragment.setArguments(bundle);
                 break;
+            case Constants.HomeAddress:
+                fragment = new HomeAddressFragment();
+                fragment.setArguments(bundle);
+                break;
+            case Constants.Territory:
+                fragment = new TerritoryFragment();
+                fragment.setArguments(bundle);
+                break;
+            case Constants.SalesRep:
+                fragment = new SalesRepFragment();
+                fragment.setArguments(bundle);
+                break;
+            case Constants.GroupDesc:
+                fragment = new GroupDescFragment();
+                fragment.setArguments(bundle);
+                break;
+            case Constants.Industry:
+                fragment = new IndustryFragment();
+                fragment.setArguments(bundle);
+                break;
+            case Constants.AddBoss:
+                fragment = new AddBossFragment();
+                fragment.setArguments(bundle);
+                break;
+            case Constants.AddBossNow:
+                fragment = new AddBossNowFragment();
+                fragment.setArguments(bundle);
+                break;
+            case Constants.CoWorkerCount:
+                fragment = new CoWorkerCountFragment();
+                fragment.setArguments(bundle);
+                break;
+            case Constants.AddOptions:
+                fragment = new AddInviteFragment();
+                fragment.setArguments(bundle);
+                break;
+            case Constants.CoWorker:
+                fragment = new CoWorkerFragment();
+                fragment.setArguments(bundle);
+                break;
+            default: finish();
         }
 
         if (fragment != null) {
@@ -117,7 +175,9 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
     public void onBackPressed() {
         Log. d(TAG, "fragment_index " + fragment_index);
         if (fragment_index == Constants.EmailSignUp || fragment_index == Constants.SignInUser) {
+            Log. d(TAG, "am in fragment_index " + fragment_index);
             Intent intent = new Intent(this, WalkThroughActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         } else {
             finish();
@@ -127,7 +187,13 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
     @Override
     public void onFragmentInteraction(int action, Bundle bundle) {
         Log.d(TAG, " onFragmentInteraction "+action);
-        launchFragment(action, bundle);
+        switch (action){
+            case Constants.USE_ADDRESS_NAME:
+                break;
+            default:
+                launchFragment(action, bundle);
+        }
+
     }
 
     private void handleCrop(Uri outputUri) {
@@ -141,7 +207,6 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
             Toast.makeText(this, " error : " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
-
 
     /**
      * Photo Selection result
@@ -160,6 +225,6 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
             outputUri = Uri.fromFile(new File(getFilesDir(), "cropped.jpg"));
             Crop.of(selectedImage, outputUri).asSquare().start(this);
         }
-    }
 
+    }
 }
