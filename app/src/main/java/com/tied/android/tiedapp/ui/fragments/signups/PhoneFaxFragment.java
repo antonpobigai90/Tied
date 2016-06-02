@@ -147,6 +147,7 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
         Gson gson = new Gson();
         String code = "123456";
         bundle.putString(Constants.CODE,code);
+        Toast.makeText(getActivity(), "your code is 123456", Toast.LENGTH_LONG).show();
         progressBar.setVisibility(View.INVISIBLE);
         nextAction(bundle);
     }
