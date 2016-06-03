@@ -136,13 +136,15 @@ public class NameFragment extends Fragment implements View.OnClickListener{
                 }
             });
         }else{
-            Toast.makeText(getActivity(), "Invalid input", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Invalid input, must be valid characters", Toast.LENGTH_LONG).show();
         }
     }
     
     public boolean validated(){
-        
-        return !firstNameText.equals("") && !lastNameText.equals("");
+        String regx = "^[\\p{L} .'-]+$";
+        boolean first_name_match = firstNameText.matches(regx);
+        boolean last_name_match = lastNameText.matches(regx);
+        return first_name_match && last_name_match;
     }
 
     @Override

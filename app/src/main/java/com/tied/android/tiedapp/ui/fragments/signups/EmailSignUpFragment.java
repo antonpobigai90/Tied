@@ -20,6 +20,7 @@ import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
 import com.tied.android.tiedapp.objects.auth.CheckEmail;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
+import com.tied.android.tiedapp.ui.listeners.EmailTextListener;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
 
 import retrofit2.Call;
@@ -82,6 +83,8 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
 
         continue_btn = (Button) view.findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(this);
+
+        email.addTextChangedListener(new EmailTextListener(getActivity(), emailText));
     }
 
     public void continue_action(){
@@ -123,7 +126,6 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
     }
 
     public boolean validated(){
-
         emailText = email.getText().toString();
         return emailText.contains("@");
     }

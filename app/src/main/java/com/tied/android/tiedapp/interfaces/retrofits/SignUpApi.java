@@ -38,7 +38,7 @@ public interface SignUpApi {
 
     @FormUrlEncoded
     @POST(Constants.AUTH_SEND_PHONE_CODE_ENDPOINT)
-    Call<UpdateUser> sendPhoneCode(@Field("user_id") String code, @Field("phone_number") String phone_number);
+    Call<UpdateUser> sendPhoneCode(@Field("user_id") String user_id, @Field("phone_number") String phone_number);
 
     @Multipart
     @PUT(Constants.USER_UPDATE_AVATAR)
