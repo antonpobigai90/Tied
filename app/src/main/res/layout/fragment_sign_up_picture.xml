@@ -72,36 +72,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/str_add_picture"
-            android:id="@+id/txt_add_picture"
+            android:id="@+id/select_pics"
             android:layout_below="@+id/avatar"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
             android:textSize="16sp" />
-
-
-        <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/select_pics"
-            android:src="@drawable/ic_menu_camera"
-            android:layout_below="@+id/txt_add_picture"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBotton="10dp"
-            android:layout_marginTop="5dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/str_signup_hint3"
             android:id="@+id/txt_hint_string"
-            android:layout_below="@+id/select_pics"
             android:textSize="17sp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:gravity="center_horizontal"
             android:textColor="@color/white"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true" />
+            android:layout_above="@+id/progressBar"
+            android:layout_centerHorizontal="true" />
 
 
     <LinearLayout
