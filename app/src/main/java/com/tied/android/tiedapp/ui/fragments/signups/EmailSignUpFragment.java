@@ -11,7 +11,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
+import android.widget.RelativeLayout;
+import android.view.View;
 
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
@@ -36,7 +39,9 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
 
     private SignUpFragmentListener mListener;
 
-    private Button continue_btn;
+//    private Button continue_btn;
+    private RelativeLayout continue_btn;
+
     private ProgressBar progressBar;
     private EditText email;
 
@@ -80,7 +85,8 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
         email = (EditText) view.findViewById(R.id.email);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
-        continue_btn = (Button) view.findViewById(R.id.continue_btn);
+//        continue_btn = (Button) view.findViewById(R.id.continue_btn);
+        continue_btn = (RelativeLayout)view.findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(this);
     }
 

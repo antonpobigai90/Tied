@@ -30,7 +30,8 @@
         <activity
             android:name=".ui.activities.signups.SignUpActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize"></activity>
         <activity
             android:name=".ui.activities.signups.SignInActivity"
             android:label="@string/app_name"

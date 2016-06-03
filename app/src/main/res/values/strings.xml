@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TiedApp</string>
+    <string name="app_name">TiedApp12</string>
     <string name="action_settings">Settings</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -7,5 +7,114 @@
     <string name="map_api_key">AIzaSyAMy78wKfpM8eKXtr94jqS38jsgQMDKQzA</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="Logout">Logout</string>
+
+    <string name="str_splash">Your tool to be an exceptional rep for your clients and business</string>
+
+    <string name="str_register">REGISTER</string>
+    <string name="str_signin">SIGN IN</string>
+    <string name="str_login">LOGIN</string>
+    <string name="str_done">Done!</string>
+    <string name="str_back">Back</string>
+    <string name="str_hint_email">Email Address</string>
+    <string name="str_hint_password">Password</string>
+    <string name="str_forgot_password">Forgot Password?</string>
+    <string name="str_reset_success">We just sent you an email with instructions to reset your password</string>
+
+    <string-array name="str_walkthrough">
+        <item >Manage your tasks quickly and efficiently</item>
+        <item >Keep your clients close to you and the activities</item>
+        <item >See analytics about your sales from clients and lines</item>
+        <item >Your clients sometimes are located close enough</item>
+    </string-array>
+
+    <!-- Sign Up -->
+    <string name="str_signup">SIGN UP</string>
+    <string name="str_signup_hint1">What is your email address?</string>
+    <string name="str_signup_hint2">What should your password be?</string>
+    <string name="str_signup_hint_email">EMAIL</string>
+    <string name="str_signup_hint_password">PASSWORD</string>
+    <string name="str_continue">CONTINUE SETUP</string>
+    <string name="str_add_picture">+ADD PICTURE</string>
+    <string name="str_signup_hint3">Please tell me more about yourself so I can better server you</string>
+    <string name="str_profile">PROFILE</string>
+    <string name="str_first_name">FIRSTNAME</string>
+    <string name="str_last_name">LASTNAME</string>
+    <string name="str_signup_hint4">What should I call you?</string>
+    <string name="str_signup_hint5">Let me save both your phone number and fax number</string>
+    <string name="str_signup_verify">Enter the verification code sent to your phone</string>
+    <string name="str_phone">PHONE</string>
+    <string name="str_fax">FAX</string>
+    <string name="str_address">ADDRESS</string>
+    <string name="str_city">CITY</string>
+    <string name="str_state">STATE</string>
+    <string name="str_zip_code">ZIP CODE</string>
+    <string name="str_signup_hint6">Tell me your office address</string>
+    <string name="str_signup_hint7">Office address same as hc</string>
+    <string name="str_signup_hint8">Please enter your home address</string>
+    <string name="str_signup_hint9">What territories do you cover?</string>
+    <string name="str_signup_hint10">What type of sales rep are you?</string>
+    <string name="str_self">Self</string>
+    <string name="str_group">Group</string>
+    <string name="str_principal">I am the Principal</string>
+    <string name="str_subrep">I am a sub rep</string>
+    <string name="str_signup_hint11">How would you describe yourself for this group?</string>
+    <string name="str_signup_hint12">What is your industry?</string>
+    <string-array name="str_industry">
+        <item >News</item>
+        <item >Business</item>
+        <item >Furnitures</item>
+        <item >Technology</item>
+        <item >Travel</item>
+        <item >Food</item>
+        <item >Test1</item>
+        <item >Tes21</item>
+    </string-array>
+
+    <string name="str_signup_hint13">ADD BOSS INFO</string>
+    <string name="str_fullname">FULL NAME</string>
+    <string name="str_invite_via">INVITE VIA</string>
+    <string name="str_sms">SMS</string>
+    <string name="str_email">Email</string>
+    <string name="str_no_invite">No Invite</string>
+    <string name="str_verify">VERIFICATION</string>
+    <string name="str_territory">TERRITORY</string>
+
+    <string name="str_signup_hint14">Would you like to add your boss info now or later?</string>
+    <string name="str_signup_hint15">We advise you add now to better server you</string>
+    <string name="str_add_later">ADD LATER</string>
+
+    <string name="str_signup_hint16">How many co-workers do you have?</string>
+    <string name="str_worker_count1">1 - 5</string>
+    <string name="str_worker_count2">6 - 10</string>
+    <string name="str_worker_count3">11 - 20</string>
+    <string name="str_worker_count4">50+</string>
+
+    <string name="str_signup_hint17">Add/Invite your employees</string>
+    <string name="str_signup_hint18">*You can import multiple employees via EXCEL using the website. Learn More></string>
+    <string name="str_invite_email">invite via email address</string>
+    <string name="str_invite_sms">invite via SMS</string>
+    <string name="str_add_app">Add via app</string>
+
+    <string name="str_signup_hint19">Enter Code</string>
+    <string name="str_signup_hint20">We sent code to your phone number, please enter code below</string>
+    <string name="str_help">HELP</string>
+    <string name="str_next">NEXT</string>
+    <string name="str_delete">DELETE</string>
+
+    <string name="alert_valide_email">*Please enter a valid email address</string>
+
+    <string-array name="str_help_title">
+        <item >How does Tied work?</item>
+        <item >how can I add multiple clients?</item>
+        <item >Who can use Tied?</item>
+        <item >is Tied that helpful?</item>
+    </string-array>
+
+    <string-array name="str_help_content">
+        <item >Last night, Darth Vader came down from planet Vulcan. And he otld me that if didn\'t take Lerraine, That he had melt my brain.</item>
+        <item >Oh, please to meet you, Calvin Marty Klein. Do you mind if I sit here? Look, there is a ceremonial reitual coming up.</item>
+        <item >Last night, Darth Vader came down from planet Vulcan. And he otld me that if didn\'t take Lerraine, That he had melt my brain.</item>
+        <item >Oh, please to meet you, Calvin Marty Klein. Do you mind if I sit here? Look, there is a ceremonial reitual coming up.</item>
+    </string-array>
 
 </resources>
