@@ -1,89 +1,429 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    android:background="@mipmap/background">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:id="@+id/top_layout">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/str_signup"
+            android:id="@+id/txt_signup_label"
+            android:textColor="@color/white"
+            android:textSize="25dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:layout_centerHorizontal="true" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="center_vertical"
+            android:id="@+id/back_layout">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:id="@+id/img_close"
+                android:src="@mipmap/btn_back_arrow"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/str_back"
+                android:id="@+id/txt_back"
+                android:textSize="20dp"
+                android:textColor="@color/white"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/img_close" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:id="@+id/img_help"
+            android:src="@mipmap/btn_help"
+            android:layout_marginRight="15dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/str_signup_hint6"
+        android:id="@+id/txt_hint_string"
+        android:gravity="center_horizontal"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:layout_below="@+id/top_layout"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp" />
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="57dp"
-        android:padding="20dp">
+        android:layout_below="@+id/txt_hint_string"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:id="@+id/address_layout">
 
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tell me your office address"
-            android:id="@+id/textView2"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="20dp" />
-
-        <EditText
+        <RelativeLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:hint="Address"
-            android:ems="10"
-            android:id="@+id/street"
-            android:text="5 ikuna isolo rd" />
+            android:layout_height="match_parent"
+            android:gravity="center_vertical">
 
-        <EditText
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:text="5 ikuna isolo rd"
+                android:id="@+id/street"
+                android:inputType="text"
+                android:paddingBottom="@dimen/editext_padding"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/label_padding"
+                android:text="@string/str_address"
+                android:id="@+id/txt_address_label"
+                android:textSize="15sp"
+                android:layout_centerVertical="true" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/address_layout"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:id="@+id/city_layout"
+        android:layout_marginTop="15dp">
+
+        <RelativeLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:hint="City"
-            android:text="Ikotun"
-            android:ems="10"
-            android:id="@+id/city" />
+            android:layout_height="match_parent"
+            android:gravity="center_vertical">
 
-        <EditText
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:text="Ikotun"
+                android:id="@+id/city"
+                android:inputType="text"
+                android:paddingBottom="@dimen/editext_padding"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/label_padding"
+                android:text="@string/str_city"
+                android:id="@+id/txt_city_label"
+                android:textSize="15sp"
+                android:layout_centerVertical="true" />
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/city_layout"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:id="@+id/state_layout"
+        android:layout_marginTop="15dp">
+
+        <RelativeLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:hint="State"
-            android:text="Lagos"
-            android:ems="10"
-            android:id="@+id/state" />
+            android:layout_height="match_parent"
+            android:gravity="center_vertical">
 
-        <EditText
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:text="Lagos"
+                android:id="@+id/state"
+                android:inputType="text"
+                android:paddingBottom="@dimen/editext_padding"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/label_padding"
+                android:text="@string/str_state"
+                android:id="@+id/txt_state_label"
+                android:textSize="15sp"
+                android:layout_centerVertical="true" />
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/state_layout"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:id="@+id/zipcode_layout"
+        android:layout_marginTop="15dp">
+
+        <RelativeLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
-            android:hint="Zip Code"
-            android:text="23401"
-            android:ems="10"
-            android:id="@+id/zip" />
+            android:layout_height="match_parent"
+            android:gravity="center_vertical">
 
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:text="23401"
+                android:id="@+id/zip"
+                android:inputType="number"
+                android:paddingBottom="@dimen/editext_padding"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/label_padding"
+                android:text="@string/str_zip_code"
+                android:id="@+id/txt_zipcode_label"
+                android:textSize="15sp"
+                android:layout_centerVertical="true" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <!--  checkbox and progressbar-->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/zipcode_layout"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_marginTop="15dp"
+        android:id="@+id/checkbox_layout">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:id="@+id/img_check" />
         <CheckBox
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Office address same as home"
             android:id="@+id/same"
             android:layout_gravity="center_horizontal" />
+    </LinearLayout>
 
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/progressBar"
-            android:layout_centerHorizontal="true"
-            android:visibility="invisible"
-            android:indeterminate="false"
-            android:layout_gravity="center_horizontal" />
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible"
+        android:indeterminate="false"
+        android:layout_gravity="center_horizontal" />
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:id="@+id/continue_layout"
+        android:layout_marginTop="15dp"
+        android:layout_alignParentBottom="true">
 
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:id="@+id/profile_layout">
+
+            <ImageView
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:id="@+id/img_user_picture"
+                android:src="@mipmap/user_example"
+                android:layout_marginLeft="15dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/str_profile"
+                android:id="@+id/txt_profile_label"
+                android:textColor="@color/button_bg"
+                android:textSize="15dp"
+                android:layout_marginLeft="25dp" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:background="@color/button_bg"
+            android:clickable="true"
+            android:focusable="true"
+            android:id="@+id/continue_btn"
+            android:layout_weight="1">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:id="@+id/img_next_arrow"
+                android:src="@mipmap/btn_next_arrow"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toLeftOf="@+id/img_next_arrow">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_continue"
+                    android:id="@+id/txt_continue_label"
+                    android:textSize="15dp"
+                    android:textColor="@color/white"
+                    android:layout_marginRight="10dp"
+                    android:layout_centerInParent="true" />
+
+            </RelativeLayout>
+        </RelativeLayout>
     </LinearLayout>
 
 
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Continue"
-        android:id="@+id/continue_btn"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
 </RelativeLayout>
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--&gt;-->
+
+    <!--<LinearLayout-->
+        <!--android:orientation="vertical"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="57dp"-->
+        <!--android:padding="20dp">-->
+
+
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Tell me your office address"-->
+            <!--android:id="@+id/textView2"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:layout_marginBottom="20dp" />-->
+
+        <!--<EditText-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:inputType="text"-->
+            <!--android:hint="Address"-->
+            <!--android:ems="10"-->
+            <!--android:id="@+id/street"-->
+            <!--android:text="5 ikuna isolo rd" />-->
+
+        <!--<EditText-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:inputType="text"-->
+            <!--android:hint="City"-->
+            <!--android:text="Ikotun"-->
+            <!--android:ems="10"-->
+            <!--android:id="@+id/city" />-->
+
+        <!--<EditText-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:inputType="text"-->
+            <!--android:hint="State"-->
+            <!--android:text="Lagos"-->
+            <!--android:ems="10"-->
+            <!--android:id="@+id/state" />-->
+
+        <!--<EditText-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:inputType="text"-->
+            <!--android:hint="Zip Code"-->
+            <!--android:text="23401"-->
+            <!--android:ems="10"-->
+            <!--android:id="@+id/zip" />-->
+
+        <!--<CheckBox-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Office address same as home"-->
+            <!--android:id="@+id/same"-->
+            <!--android:layout_gravity="center_horizontal" />-->
+
+        <!--<ProgressBar-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:id="@+id/progressBar"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:visibility="invisible"-->
+            <!--android:indeterminate="false"-->
+            <!--android:layout_gravity="center_horizontal" />-->
+
+
+    <!--</LinearLayout>-->
+
+
+    <!--<Button-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Continue"-->
+        <!--android:id="@+id/continue_btn"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignParentStart="true" />-->
+
+<!--</RelativeLayout>-->

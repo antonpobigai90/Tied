@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -45,7 +46,8 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
 
     private SignUpFragmentListener mListener;
 
-    private Button continue_btn;
+//    private Button continue_btn;
+    private RelativeLayout continue_btn;
     private ProgressBar progressBar;
 
     private CheckBox same;
@@ -101,7 +103,8 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
 
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
-        continue_btn = (Button) view.findViewById(R.id.continue_btn);
+//        continue_btn = (Button) view.findViewById(R.id.continue_btn);
+        continue_btn = (RelativeLayout) view.findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(this);
     }
 

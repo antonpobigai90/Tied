@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -52,7 +53,8 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
     // Activity result key for camera
     public final int REQUEST_TAKE_PHOTO = 11111;
 
-    private Button continue_btn;
+//    private Button continue_btn;
+    private RelativeLayout continue_btn;
     private ImageButton select_pics;
 
     // Reference to our image view we will use
@@ -87,7 +89,8 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
 
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
-        continue_btn = (Button) view.findViewById(R.id.continue_btn);
+//        continue_btn = (Button) view.findViewById(R.id.continue_btn);
+        continue_btn = (RelativeLayout)view.findViewById(R.id.continue_btn);
 
         select_pics.setOnClickListener(this);
         continue_btn.setOnClickListener(this);
