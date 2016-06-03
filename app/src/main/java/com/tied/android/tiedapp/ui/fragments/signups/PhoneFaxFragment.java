@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -21,7 +20,6 @@ import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
 import com.tied.android.tiedapp.objects.auth.UpdateUser;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
-import com.tied.android.tiedapp.ui.listeners.PhoneTextListener;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
 
 import retrofit2.Call;
@@ -72,7 +70,7 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
         continue_btn = (RelativeLayout)view.findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(this);
 
-        phone.addTextChangedListener(new PhoneTextListener());
+//        phone.addTextChangedListener(new PhoneTextListener());
 
     }
 

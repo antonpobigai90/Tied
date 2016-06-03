@@ -1,6 +1,7 @@
 package com.tied.android.tiedapp.ui.fragments.signups;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,13 +9,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
-import android.widget.RelativeLayout;
-import android.view.View;
 
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
@@ -23,7 +22,7 @@ import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
 import com.tied.android.tiedapp.objects.auth.CheckEmail;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
-import com.tied.android.tiedapp.ui.listeners.EmailTextListener;
+import com.tied.android.tiedapp.ui.activities.signups.WalkThroughActivity;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
 
 import retrofit2.Call;
@@ -40,16 +39,15 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
 
     private SignUpFragmentListener mListener;
 
-//    private Button continue_btn;
     private RelativeLayout continue_btn;
+    private ImageView btn_close;
 
     private ProgressBar progressBar;
     private EditText email;
 
-    private String emailText;
+    private String emailText = "";
 
-    public EmailSignUpFragment() {
-    }
+    public EmailSignUpFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,7 +58,6 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         initComponent(view);
     }
 
@@ -86,11 +83,18 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
         email = (EditText) view.findViewById(R.id.email);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
-//        continue_btn = (Button) view.findViewById(R.id.continue_btn);
-        continue_btn = (RelativeLayout)view.findViewById(R.id.continue_btn);
+        btn_close = (ImageView) view.findViewById(R.id.img_close);
+        continue_btn = (RelativeLayout) view.findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(this);
+        btn_close.setOnClickListener(this);
 
-        email.addTextChangedListener(new EmailTextListener(getActivity(), emailText));
+        Bundle bundle = getArguments();
+        if(bundle != null){
+            Gson gson = new Gson();
+            String user_json = bundle.getString("user");
+            User user = gson.fromJson(user_json, User.class);
+            email.setText(user.getEmail());
+        }
     }
 
     public void continue_action(){
@@ -126,14 +130,15 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
                 }
             });
         }else{
-            Toast.makeText(getActivity(), "Invalid input", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Invalid email", Toast.LENGTH_LONG).show();
         }
 
     }
 
     public boolean validated(){
+        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
         emailText = email.getText().toString();
-        return emailText.contains("@");
+        return emailText.matches(emailPattern);
     }
 
     @Override
@@ -141,6 +146,11 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
         switch (v.getId()){
             case R.id.continue_btn:
                 continue_action();
+                break;
+            case R.id.img_close:
+                Intent intent = new Intent(getActivity(), WalkThroughActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
                 break;
         }
     }

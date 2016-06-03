@@ -13,8 +13,11 @@ public class EmailTextListener implements TextWatcher {
     private String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     private String email;
     private Context context;
+
+
     public EmailTextListener(Context context, String email) {
         this.context = context;
+        this.email = email;
     }
 
     @Override

@@ -60,6 +60,8 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
     public Retrofit retrofit;
     public SignUpApi service;
 
+    private Bundle bundle;
+
     public Uri imageUri = null, outputUri = null;
 
     @Override
@@ -70,7 +72,7 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
         User user = User.getUser(getApplicationContext());
         if(user != null && user.getId() != null){
             Log.d(TAG, user.toString());
-            user.setSign_up_stage(4);
+            user.setSign_up_stage(Constants.Picture);
             user.save(getApplicationContext());
             Bundle bundle = new Bundle();
             Gson gson = new Gson();
@@ -89,6 +91,8 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
     public void launchFragment(int pos, Bundle bundle) {
         fragment_index = pos;
         fragment = null;
+
+        this.bundle = bundle;
 
         switch (pos) {
             case Constants.EmailSignUp:
@@ -183,7 +187,13 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
             Intent intent = new Intent(this, WalkThroughActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
-        } else {
+        }else if(fragment_index == Constants.Password){
+            if(bundle != null){
+                Bundle bundle = fragment.getArguments();
+            }
+            launchFragment(Constants.EmailSignUp, bundle);
+        }
+        else {
             finish();
         }
     }

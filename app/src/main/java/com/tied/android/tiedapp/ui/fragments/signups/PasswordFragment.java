@@ -8,8 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -38,6 +38,7 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
     private SignUpFragmentListener mListener;
 
 //    private Button continue_btn;
+    private LinearLayout back_btn;
     private RelativeLayout continue_btn;
     private ProgressBar progressBar;
     private EditText password;
@@ -66,9 +67,10 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
         password = (EditText) view.findViewById(R.id.password);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
-//        continue_btn = (Button) view.findViewById(R.id.continue_btn);
+        back_btn = (LinearLayout) view.findViewById(R.id.back_layout);
         continue_btn = (RelativeLayout)view.findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(this);
+        back_btn.setOnClickListener(this);
     }
 
     @Override
@@ -83,9 +85,9 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    public void nextAction(Bundle bundle) {
+    public void nextAction(int action, Bundle bundle) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(Constants.Picture, bundle);
+            mListener.onFragmentInteraction(action, bundle);
         }
     }
 
@@ -116,7 +118,7 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
                             Gson gson = new Gson();
                             String user_json = gson.toJson(loggedIn_user);
                             bundle.putString("user", user_json);
-                            nextAction(bundle);
+                            nextAction(Constants.Picture, bundle);
                         } else {
                             Toast.makeText(getActivity(), "user not save", Toast.LENGTH_LONG).show();
                         }
@@ -141,7 +143,6 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
 
     public boolean validated() {
         passwordText = password.getText().toString();
-
         return !passwordText.equals("");
     }
 
@@ -150,6 +151,10 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.continue_btn:
                 continue_action();
+                break;
+            case R.id.back_layout:
+                Bundle bundle = getArguments();
+                nextAction(Constants.EmailSignUp,bundle);
                 break;
         }
     }

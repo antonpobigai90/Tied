@@ -1,5 +1,6 @@
 package com.tied.android.tiedapp.ui.listeners;
 
+import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 
@@ -8,6 +9,13 @@ import android.text.TextWatcher;
  */
 public class PhoneTextListener implements TextWatcher {
 
+    private String phone;
+    private Context context;
+
+    public PhoneTextListener(Context context, String phone) {
+        this.context = context;
+        this.phone = phone;
+    }
 
     @Override
     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -21,6 +29,13 @@ public class PhoneTextListener implements TextWatcher {
 
     @Override
     public void afterTextChanged(Editable s) {
-
+//        if (email.matches(emailPattern) && s.length() > 0)
+//        {
+//            Toast.makeText(context,"valid email address",Toast.LENGTH_SHORT).show();
+//        }
+//        else
+//        {
+//            Toast.makeText(context,"Invalid email address",Toast.LENGTH_SHORT).show();
+//        }
     }
 }
