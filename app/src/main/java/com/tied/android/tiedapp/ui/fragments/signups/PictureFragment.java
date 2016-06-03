@@ -19,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -55,7 +56,7 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
 
 //    private Button continue_btn;
     private RelativeLayout continue_btn;
-    private ImageButton select_pics;
+    private TextView select_pics;
 
     // Reference to our image view we will use
     public ImageView avatar;
@@ -83,7 +84,7 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
 
 
     public void initComponent(View view) {
-        select_pics = (ImageButton) view.findViewById(R.id.select_pics);
+        select_pics = (TextView) view.findViewById(R.id.select_pics);
 
         avatar = (ImageView) view.findViewById(R.id.avatar);
 

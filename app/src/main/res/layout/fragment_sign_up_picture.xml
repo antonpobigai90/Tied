@@ -1,148 +1,171 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/background">
+    android:background="@mipmap/background"
+    android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/top_layout"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:id="@+id/top_layout">
+        android:layout_height="54dp">
 
         <TextView
+            android:id="@+id/txt_signup_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/str_signup"
-            android:id="@+id/txt_signup_label"
-            android:textColor="@color/white"
-            android:textSize="25dp"
+            android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="15dp"
-            android:layout_centerHorizontal="true" />
+            android:text="@string/str_signup"
+            android:textColor="@color/white"
+            android:textSize="25dp" />
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:id="@+id/back_layout"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:gravity="center_vertical"
-            android:id="@+id/back_layout">
+            android:orientation="horizontal">
 
             <ImageView
+                android:id="@+id/img_close"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:id="@+id/img_close"
-                android:src="@mipmap/btn_back_arrow"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp" />
+                android:layout_marginLeft="10dp"
+                android:src="@mipmap/btn_back_arrow" />
 
             <TextView
+                android:id="@+id/txt_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/str_back"
-                android:id="@+id/txt_back"
-                android:textSize="20dp"
-                android:textColor="@color/white"
                 android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/img_close" />
+                android:layout_toRightOf="@+id/img_close"
+                android:text="@string/str_back"
+                android:textColor="@color/white"
+                android:textSize="20dp" />
         </LinearLayout>
 
         <ImageView
+            android:id="@+id/img_help"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:id="@+id/img_help"
-            android:src="@mipmap/btn_help"
-            android:layout_marginRight="15dp"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true" />
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:src="@mipmap/btn_help" />
 
     </RelativeLayout>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/continue_layout"
+        android:layout_below="@+id/top_layout">
 
-        <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:id="@+id/avatar"
-            android:layout_below="@+id/top_layout"
-            android:layout_marginTop="30dp"
-            android:layout_centerHorizontal="true"
-            android:src="@mipmap/default_avatar" />
-
-        <TextView
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/str_add_picture"
-            android:id="@+id/select_pics"
-            android:layout_below="@+id/avatar"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:textSize="16sp" />
+            android:paddingBottom="20dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/str_signup_hint3"
-            android:id="@+id/txt_hint_string"
-            android:textSize="17sp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:gravity="center_horizontal"
-            android:textColor="@color/white"
-            android:layout_above="@+id/progressBar"
-            android:layout_centerHorizontal="true" />
+            <ImageView
+                android:id="@+id/avatar"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
+                android:src="@mipmap/default_avatar" />
+
+            <TextView
+                android:id="@+id/select_pics"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/avatar"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:text="@string/str_add_picture"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/txt_hint_string"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/select_pics"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:gravity="center_horizontal"
+                android:text="@string/str_signup_hint3"
+                android:textColor="@color/white"
+                android:textSize="17sp" />
+
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_hint_string"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="66dp"
+                android:indeterminate="false"
+                android:visibility="invisible" />
+        </RelativeLayout>
+    </ScrollView>
 
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:id="@+id/continue_layout"
         android:layout_width="fill_parent"
         android:layout_height="60dp"
-        android:id="@+id/continue_layout"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:id="@+id/profile_layout"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/white"
             android:gravity="center_vertical"
-            android:id="@+id/profile_layout">
+            android:orientation="horizontal">
 
             <ImageView
+                android:id="@+id/img_user_picture"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
-                android:id="@+id/img_user_picture"
-                android:src="@mipmap/user_example"
-                android:layout_marginLeft="15dp" />
+                android:layout_marginLeft="15dp"
+                android:src="@mipmap/user_example" />
 
             <TextView
+                android:id="@+id/txt_profile_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
                 android:text="@string/str_profile"
-                android:id="@+id/txt_profile_label"
                 android:textColor="@color/button_bg"
-                android:textSize="15dp"
-                android:layout_marginLeft="25dp" />
+                android:textSize="15dp" />
         </LinearLayout>
 
         <RelativeLayout
+            android:id="@+id/continue_btn"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
+            android:layout_weight="1"
             android:background="@color/button_bg"
             android:clickable="true"
-            android:focusable="true"
-            android:id="@+id/continue_btn"
-            android:layout_weight="1">
+            android:focusable="true">
 
             <ImageView
+                android:id="@+id/img_next_arrow"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:id="@+id/img_next_arrow"
-                android:src="@mipmap/btn_next_arrow"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="10dp" />
+                android:layout_marginRight="10dp"
+                android:src="@mipmap/btn_next_arrow" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -150,94 +173,25 @@
                 android:layout_toLeftOf="@+id/img_next_arrow">
 
                 <TextView
+                    android:id="@+id/txt_continue_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/str_continue"
-                    android:id="@+id/txt_continue_label"
-                    android:textSize="15dp"
-                    android:textColor="@color/white"
+                    android:layout_centerInParent="true"
                     android:layout_marginRight="10dp"
-                    android:layout_centerInParent="true" />
+                    android:text="@string/str_continue"
+                    android:textColor="@color/white"
+                    android:textSize="15dp" />
 
                 <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="12/20"-->
-                    <!--android:id="@+id/textView"-->
-                    <!--android:layout_below="@+id/txt_continue_label"-->
-                    <!--android:layout_centerInParent="true" />-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="12/20"-->
+                <!--android:id="@+id/textView"-->
+                <!--android:layout_below="@+id/txt_continue_label"-->
+                <!--android:layout_centerInParent="true" />-->
             </RelativeLayout>
         </RelativeLayout>
     </LinearLayout>
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:indeterminate="false"
-        android:visibility="invisible"
-        android:layout_marginBottom="66dp"
-        android:layout_above="@+id/continue_layout"
-        android:layout_centerHorizontal="true" />
-
 
 </RelativeLayout>
-<!--<?xml version="1.0" encoding="utf-8"?>-->
-<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--xmlns:tools="http://schemas.android.com/tools"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent">-->
-
-    <!--<LinearLayout-->
-        <!--android:layout_width="fill_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:orientation="vertical"-->
-        <!--android:padding="20dp"-->
-        <!--android:id="@+id/linearLayout">-->
-
-        <!--<ImageView-->
-            <!--android:layout_width="fill_parent"-->
-            <!--android:layout_height="200dp"-->
-            <!--android:layout_weight="1"-->
-            <!--android:src="@android:mipmap/sym_def_app_icon"-->
-            <!--android:id="@+id/avatar" />-->
-
-        <!--<ImageButton-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/select_pics"-->
-            <!--android:src="@drawable/ic_menu_camera"-->
-            <!--android:layout_gravity="center_horizontal" />-->
-
-        <!--<TextView-->
-            <!--android:layout_width="fill_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="20dp"-->
-            <!--android:textSize="17sp"-->
-            <!--android:text="Pls tell me more about yourself so i can better serve you"-->
-            <!--android:gravity="center" />-->
-
-    <!--</LinearLayout>-->
-
-    <!--<Button-->
-        <!--android:id="@+id/continue_btn"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_alignParentLeft="true"-->
-        <!--android:layout_alignParentStart="true"-->
-        <!--android:text="Continue"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_alignParentEnd="true" />-->
-
-    <!--<ProgressBar-->
-        <!--android:id="@+id/progressBar"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:indeterminate="false"-->
-        <!--android:visibility="invisible"-->
-        <!--android:layout_marginBottom="66dp"-->
-        <!--android:layout_above="@+id/continue_btn"-->
-        <!--android:layout_centerHorizontal="true" />-->
-
-<!--</RelativeLayout>-->
