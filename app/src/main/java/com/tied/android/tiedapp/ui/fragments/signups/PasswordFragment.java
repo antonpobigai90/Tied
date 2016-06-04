@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -42,7 +41,6 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
     private LinearLayout back_btn;
     private RelativeLayout continue_btn;
     LinearLayout alert_valid_password;
-    private ProgressBar progressBar;
     private EditText password;
 
     private String usernameText, passwordText;
@@ -67,8 +65,6 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
     public void initComponent(View view) {
 
         password = (EditText) view.findViewById(R.id.password);
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-
         back_btn = (LinearLayout) view.findViewById(R.id.back_layout);
         continue_btn = (RelativeLayout)view.findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(this);
@@ -103,7 +99,6 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
         Gson gson = new Gson();
         String user_json = bundle.getString("user");
         User user = gson.fromJson(user_json, User.class);
-        progressBar.setVisibility(View.VISIBLE);
         SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
         Call<SignUpLogin> response = signUpApi.LoginSignUpUser(user.getEmail(), passwordText, Constants.Picture);
         Log.d(TAG, response.request().url().toString());
@@ -130,14 +125,12 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
                 } else {
                     Toast.makeText(getActivity(), "user not created", Toast.LENGTH_LONG).show();
                 }
-                progressBar.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void onFailure(Call<SignUpLogin> checkEmailCall, Throwable t) {
                 Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
                 Log.d(TAG + " onFailure", t.toString());
-                progressBar.setVisibility(View.INVISIBLE);
             }
         });
     }
