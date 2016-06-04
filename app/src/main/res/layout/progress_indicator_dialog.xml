@@ -10,7 +10,7 @@
         android:layout_centerInParent="true"
         android:background="@drawable/rounded_progress_background">
 
-        <com.tied.coverflow.util.MaterialProgressBar
+        <com.tied.android.tiedapp.util.MaterialProgressBar
             android:id="@+id/progress"
             android:layout_width="45dp"
             android:layout_height="45dp"

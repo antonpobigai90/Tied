@@ -55,6 +55,14 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
     private Fragment fragment = null;
     private int fragment_index = 0;
 
+    // Code for our image picker select action.
+    public final int IMAGE_PICKER_SELECT = 999;
+
+    // Activity result key for camera
+    public final int REQUEST_TAKE_PHOTO = 11111;
+
+    public final int REQUEST_FACEBOOK_LOGIN = 129742;
+
     public Bitmap bitmap;
 
     public Retrofit retrofit;
@@ -228,14 +236,17 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
      */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == Crop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
+        Log.d("RequestCode ", requestCode+"");
+        if(requestCode == REQUEST_FACEBOOK_LOGIN && resultCode == Activity.RESULT_OK){
+            ((EmailSignUpFragment) fragment).callbackManager.onActivityResult(requestCode, resultCode, data);
+        }
+        else if (requestCode == Crop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
             handleCrop(outputUri);
-        } else if (requestCode == ((PictureFragment) fragment).REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
+        } else if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
             outputUri = Uri.fromFile(new File(getFilesDir(), "cropped.jpg"));
             Uri selectedImage = imageUri;
             Crop.of(selectedImage, outputUri).asSquare().start(this);
-        } else if (requestCode == ((PictureFragment) fragment).IMAGE_PICKER_SELECT && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
+        } else if (requestCode == IMAGE_PICKER_SELECT && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
             Uri selectedImage = data.getData();
             outputUri = Uri.fromFile(new File(getFilesDir(), "cropped.jpg"));
             Crop.of(selectedImage, outputUri).asSquare().start(this);
