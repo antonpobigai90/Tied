@@ -20,6 +20,8 @@ import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
 import com.tied.android.tiedapp.objects.auth.UpdateUser;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
+import com.tied.android.tiedapp.ui.listeners.FaxNumberTextWatcher;
+import com.tied.android.tiedapp.ui.listeners.PhoneNumberTextWatcher;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
 
 import retrofit2.Call;
@@ -79,8 +81,8 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
             fax.setText(user.getFax());
         }
 
-//        phone.addTextChangedListener(new PhoneTextListener(getActivity(),phoneText));
-//        phone.addTextChangedListener(new FaxTextListener());
+        phone.addTextChangedListener(new PhoneNumberTextWatcher(phone));
+        fax.addTextChangedListener(new FaxNumberTextWatcher(fax));
 
     }
 

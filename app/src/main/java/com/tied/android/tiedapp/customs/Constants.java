@@ -5,6 +5,10 @@ package com.tied.android.tiedapp.customs;
  */
 public class Constants {
 
+    public static final String SERVER_URL = "http://tied.goattale.com:8100/api/v1/";
+
+    static final String TAG = "Tied App";
+
     public static final String HOST = "https://tied-api.herokuapp.com/";
 
     public static final int PORT = 3000;

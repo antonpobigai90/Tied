@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.user.User;
@@ -22,7 +22,7 @@ public class WalkThroughActivity extends Activity implements View.OnClickListene
 
     private SignUpFragmentListener mListener;
 
-    private Button register, sign_in;
+    private TextView register, sign_in;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +40,8 @@ public class WalkThroughActivity extends Activity implements View.OnClickListene
 
     public void initComponent(){
 
-        register = (Button) findViewById(R.id.register);
-        sign_in = (Button) findViewById(R.id.sign_in);
+        register = (TextView) findViewById(R.id.register);
+        sign_in = (TextView) findViewById(R.id.signin);
 
         register.setOnClickListener(this);
         sign_in.setOnClickListener(this);
@@ -56,7 +56,7 @@ public class WalkThroughActivity extends Activity implements View.OnClickListene
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 break;
-            case R.id.sign_in:
+            case R.id.signin:
                 Intent intent2 = new Intent(this, SignInActivity.class);
                 intent2.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent2);

@@ -72,7 +72,7 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
         User user = User.getUser(getApplicationContext());
         if(user != null && user.getId() != null){
             Log.d(TAG, user.toString());
-            user.setSign_up_stage(9);
+            user.setSign_up_stage(0);
             user.save(getApplicationContext());
             Log.d(TAG +" 3", user.toString());
             Bundle bundle = new Bundle();

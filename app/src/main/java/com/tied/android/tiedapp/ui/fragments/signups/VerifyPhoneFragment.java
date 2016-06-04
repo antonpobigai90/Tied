@@ -82,7 +82,6 @@ public class VerifyPhoneFragment extends Fragment implements View.OnClickListene
         code.addTextChangedListener(new CodeListener(this));
     }
 
-
     public void continue_action(){
         if(validated()){
             //Todo Verify Code from Server request should be sent here.
