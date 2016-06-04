@@ -10,4 +10,9 @@
     <color name="lineColor">#6074c2</color>
     <color name="text_disable_color">#b4d0e8</color>
     <color name="alert_bg_color">#f90c29</color>
+    <color name="schedule_title_bg_color">#161a22</color>
+    <color name="schedule_create_appointment_bg_color">#e6ebed</color>
+    <color name="schedule_tab_bar_color">#1d2431</color>
+    <color name="background_tab_pressed">#6633B5E5</color>
+    <color name="primary">#002943</color>
 </resources>

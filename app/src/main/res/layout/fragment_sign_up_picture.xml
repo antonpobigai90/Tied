@@ -193,5 +193,30 @@
         </RelativeLayout>
     </LinearLayout>
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="54dp"
+        android:background="@color/alert_bg_color"
+        android:gravity="center_vertical|center_horizontal"
+        android:id="@+id/alert_valid"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/imageView2"
+            android:src="@mipmap/attention" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txt_alert"
+            android:textColor="@color/white"
+            android:textSize="17dp"
+            android:layout_marginLeft="25dp" />
+    </LinearLayout>
+
+
 
 </RelativeLayout>

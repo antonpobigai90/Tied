@@ -75,8 +75,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="30dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
                 android:layout_marginTop="40dp"
                 android:gravity="center_horizontal"
                 android:text="@string/str_signup_hint6"
@@ -129,11 +129,13 @@
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginTop="15dp"
+                android:weightSum="5"
                 android:orientation="horizontal">
 
                 <RelativeLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_weight="3"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
@@ -159,20 +161,9 @@
 
                 </RelativeLayout>
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/state_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/city_layout"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_marginTop="15dp"
-                android:orientation="vertical">
-
                 <RelativeLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
@@ -205,7 +196,7 @@
                 android:id="@+id/zipcode_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/state_layout"
+                android:layout_below="@+id/city_layout"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginTop="15dp"
@@ -240,7 +231,7 @@
 
             </LinearLayout>
 
-            <!--  checkbox and progressbar-->
+            <!--  checkbox -->
             <LinearLayout
                 android:id="@+id/checkbox_layout"
                 android:layout_width="fill_parent"
@@ -255,12 +246,13 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp" />
 
-                <CheckBox
-                    android:id="@+id/same"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Office address same as home" />
+                    android:text="@string/str_signup_hint7"
+                    android:id="@+id/txt_same"
+                    android:textSize="15sp"
+                    android:layout_marginLeft="15dp" />
             </LinearLayout>
 
             <ProgressBar
@@ -345,6 +337,31 @@
             </RelativeLayout>
         </RelativeLayout>
     </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="54dp"
+        android:background="@color/alert_bg_color"
+        android:gravity="center_vertical|center_horizontal"
+        android:id="@+id/alert_valid"
+        android:visibility="visible">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/imageView2"
+            android:src="@mipmap/attention" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txt_alert"
+            android:textColor="@color/white"
+            android:textSize="17dp"
+            android:layout_marginLeft="25dp" />
+    </LinearLayout>
+
 
 
 </RelativeLayout>
