@@ -29,6 +29,17 @@ public class PhoneTextListener implements TextWatcher {
 
     @Override
     public void afterTextChanged(Editable s) {
+
+        if(s.length() == 3){
+            phone = s +" ";
+            s = s.insert(4, phone);
+        }else if(s.length() == 7){
+            phone = s +" ";
+            s = s.insert(8, phone);
+        }else if(s.length() == 12){
+            phone = s +"";
+        }
+
 //        if (email.matches(emailPattern) && s.length() > 0)
 //        {
 //            Toast.makeText(context,"valid email address",Toast.LENGTH_SHORT).show();

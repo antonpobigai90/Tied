@@ -70,7 +70,17 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
         continue_btn = (RelativeLayout)view.findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(this);
 
-//        phone.addTextChangedListener(new PhoneTextListener());
+        Bundle bundle = getArguments();
+        if(bundle != null){
+            Gson gson = new Gson();
+            String user_json = bundle.getString("user");
+            User user = gson.fromJson(user_json, User.class);
+            phone.setText(user.getPhone());
+            fax.setText(user.getFax());
+        }
+
+//        phone.addTextChangedListener(new PhoneTextListener(getActivity(),phoneText));
+//        phone.addTextChangedListener(new FaxTextListener());
 
     }
 
@@ -147,34 +157,35 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
 
     private void call_send_phone_vc(User user) {
 
-        SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
-        Call<UpdateUser> response = signUpApi.sendPhoneCode(user.getId(), user.getPhone());
-        response.enqueue(new Callback<UpdateUser>() {
-            @Override
-            public void onResponse(Call<UpdateUser> call, Response<UpdateUser> UpdateUserResponse) {
-                if(getActivity() == null) return;
-                Log.d(TAG +" onFailure", UpdateUserResponse.body().toString());
-
-                progressBar.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void onFailure(Call<UpdateUser> UpdateUserCall, Throwable t) {
-                Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
-                Log.d(TAG +" onFailure", t.toString());
-                progressBar.setVisibility(View.INVISIBLE);
-            }
-        });
+//        SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
+//        Call<UpdateUser> response = signUpApi.sendPhoneCode(user.getId(), user.getPhone());
+//        response.enqueue(new Callback<UpdateUser>() {
+//            @Override
+//            public void onResponse(Call<UpdateUser> call, Response<UpdateUser> UpdateUserResponse) {
+//                if(getActivity() == null) return;
+//                Log.d(TAG +" onFailure", UpdateUserResponse.body().toString());
+//
+//                progressBar.setVisibility(View.INVISIBLE);
+//            }
+//
+//            @Override
+//            public void onFailure(Call<UpdateUser> UpdateUserCall, Throwable t) {
+//                Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
+//                Log.d(TAG +" onFailure", t.toString());
+//                progressBar.setVisibility(View.INVISIBLE);
+//            }
+//        });
 
 //        //Todo api request for phone verification code to be sent
-//        String json = gson.toJson(user);
-//        bundle.putString(Constants.USER, json);
-//        Gson gson = new Gson();
-//        String code = "123456";
-//        bundle.putString(Constants.CODE,code);
-//        Toast.makeText(getActivity(), "your code is 123456", Toast.LENGTH_LONG).show();
-//        progressBar.setVisibility(View.INVISIBLE);
-//        nextAction(bundle);
+        Gson gson = new Gson();
+        String json = gson.toJson(user);
+        String code = "123456";
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.USER, json);
+        bundle.putString(Constants.CODE,code);
+        Toast.makeText(getActivity(), "your code is 12345", Toast.LENGTH_LONG).show();
+        progressBar.setVisibility(View.INVISIBLE);
+        nextAction(bundle);
     }
 
     public boolean validated(){

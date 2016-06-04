@@ -106,6 +106,7 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
             response.enqueue(new Callback<CheckEmail>() {
                 @Override
                 public void onResponse(Call<CheckEmail> call, Response<CheckEmail> checkEmailResponse) {
+                    if (getActivity() == null) return;
                     CheckEmail checkEmail = checkEmailResponse.body();
 
                     if(checkEmail.isSuccess()){

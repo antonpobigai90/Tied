@@ -14,8 +14,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -85,7 +83,6 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
 
     public void initComponent(View view) {
         select_pics = (TextView) view.findViewById(R.id.select_pics);
-
         avatar = (ImageView) view.findViewById(R.id.avatar);
 
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
@@ -94,6 +91,7 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
         continue_btn = (RelativeLayout)view.findViewById(R.id.continue_btn);
 
         select_pics.setOnClickListener(this);
+        avatar.setOnClickListener(this);
         continue_btn.setOnClickListener(this);
     }
 
@@ -158,6 +156,7 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
 
                 @Override
                 public void onResponse(Call<UpdateAvatar> call, Response<UpdateAvatar> updateAvatarResponse) {
+                    if (getActivity() == null) return;
                     UpdateAvatar updateAvatar = updateAvatarResponse.body();
                     Log.d(TAG,updateAvatarResponse.toString() );
                     if(updateAvatar.isSuccess()){
@@ -246,6 +245,9 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
                 continue_action();
                 break;
             case R.id.select_pics:
+                showChooser();
+                break;
+            case R.id.avatar:
                 showChooser();
                 break;
         }
