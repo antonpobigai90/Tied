@@ -41,7 +41,6 @@
     <string name="str_last_name">LASTNAME</string>
     <string name="str_signup_hint4">What should I call you?</string>
     <string name="str_signup_hint5">Let me save both your phone number and fax number</string>
-    <string name="str_signup_verify">Enter the verification code sent to your phone</string>
     <string name="str_phone">PHONE</string>
     <string name="str_fax">FAX</string>
     <string name="str_address">ADDRESS</string>
@@ -76,7 +75,6 @@
     <string name="str_sms">SMS</string>
     <string name="str_email">Email</string>
     <string name="str_no_invite">No Invite</string>
-    <string name="str_verify">VERIFICATION</string>
     <string name="str_territory">TERRITORY</string>
 
     <string name="str_signup_hint14">Would you like to add your boss info now or later?</string>
@@ -101,8 +99,6 @@
     <string name="str_next">NEXT</string>
     <string name="str_delete">DELETE</string>
 
-    <string name="alert_valide_email">*Please enter a valid email address</string>
-
     <string-array name="str_help_title">
         <item >How does Tied work?</item>
         <item >how can I add multiple clients?</item>
@@ -111,10 +107,36 @@
     </string-array>
 
     <string-array name="str_help_content">
-        <item >Last night, Darth Vader came down from planet Vulcan. And he otld me that if didn\'t take Lerraine, That he had melt my brain.</item>
+        <item >Last night, Darth Vader came down from planet Vulcan. And he otld me that if didn#t take Lerraine, That he had melt my brain.</item>
         <item >Oh, please to meet you, Calvin Marty Klein. Do you mind if I sit here? Look, there is a ceremonial reitual coming up.</item>
-        <item >Last night, Darth Vader came down from planet Vulcan. And he otld me that if didn\'t take Lerraine, That he had melt my brain.</item>
+        <item >Last night, Darth Vader came down from planet Vulcan. And he otld me that if didn#t take Lerraine, That he had melt my brain.</item>
         <item >Oh, please to meet you, Calvin Marty Klein. Do you mind if I sit here? Look, there is a ceremonial reitual coming up.</item>
     </string-array>
+
+    <!-- Schedule -->
+    <string name="schedule_add_an_activity">Add an Activity</string>
+    <string name="schedule_hint_string">You have not created any schedule yet. Let#s do this%</string>
+    <string name="schedule_create_schedule_btn">+ CREATE SCHEDULE</string>
+    <string name="schedule_hint_string1">Oops! We can%t find any client in your list</string>
+    <string name="schedule_hint_string2">Create New Client to Schedule that you would like to schedule an appointment with</string>
+    <string name="schedule_hint_string3">You have more lots of clients? Import via CSV, Excel using our website. It#s easy GO</string>
+    <string name="schedule_add_client_btn">+ ADD CLIENT</string>
+    <string name="schedule_create_new_schedule_btn">+ CREATE NEW SCHEDULE</string>
+
+    <string name="alert_valide_email">*Please enter a valid email address</string>
+    <string name="alert_valide_password">*Please enter password</string>
+    <string name="alert_valide_first_name">*Please enter first name</string>
+    <string name="alert_valide_last_name">*Please enter last name</string>
+
+    <string name="alert_valide_address">*Please enter address</string>
+    <string name="alert_valide_city">*Please enter city</string>
+    <string name="alert_valide_state">*Please enter state</string>
+    <string name="alert_valide_zipcode">*Please enter zip code</string>
+
+    <string name="alert_valide_territory">*Please enter territory</string>
+    <string name="alert_valide_industry">*Please select industry</string>
+
+    <string name="alert_valide_phone_number">*Please enter phone number</string>
+    <string name="alert_valide_verify_code">*Please enter verify code</string>
 
 </resources>
