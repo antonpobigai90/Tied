@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -50,7 +52,10 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
     private RelativeLayout continue_btn;
     private ProgressBar progressBar;
 
-    private CheckBox same;
+//    private CheckBox same;
+    LinearLayout checkbox_layout;
+    ImageView img_check;
+    boolean same = false;
 
     private EditText street, city, state, zip;
     private String cityText, stateText, streetText, zipText;
@@ -99,13 +104,18 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
         state = (EditText) view.findViewById(R.id.state);
         zip = (EditText) view.findViewById(R.id.zip);
 
-        same = (CheckBox) view.findViewById(R.id.same);
+//        same = (CheckBox) view.findViewById(R.id.same);
+        img_check = (ImageView) view.findViewById(R.id.img_check);
+        img_check.setBackgroundResource(R.mipmap.dot_unchecked_icon);
 
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
 //        continue_btn = (Button) view.findViewById(R.id.continue_btn);
         continue_btn = (RelativeLayout) view.findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(this);
+
+        checkbox_layout = (LinearLayout) view.findViewById(R.id.checkbox_layout);
+        checkbox_layout.setOnClickListener(this);
     }
 
     public void continue_action() {
@@ -129,6 +139,14 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
         switch (v.getId()) {
             case R.id.continue_btn:
                 continue_action();
+                break;
+            case R.id.checkbox_layout:
+                same = !same;
+                if (same) {
+                    img_check.setBackgroundResource(R.mipmap.dot_checked_icon);
+                } else {
+                    img_check.setBackgroundResource(R.mipmap.dot_unchecked_icon);
+                }
                 break;
         }
     }
@@ -178,7 +196,7 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
             String user_json = bundle.getString("user");
             final User user = gson.fromJson(user_json, User.class);
             user.setOffice_address(location);
-            if(same.isChecked()){
+            if(same){
                 user.setHome_address(location);
             }
 
@@ -197,7 +215,7 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
                             String json = gson.toJson(user);
                             bundle.putString(Constants.USER, json);
                             progressBar.setVisibility(View.INVISIBLE);
-                            if(same.isChecked()){
+                            if(same){
                                 nextAction(Constants.Territory,bundle);
                             }else{
                                 nextAction(Constants.HomeAddress, bundle);
