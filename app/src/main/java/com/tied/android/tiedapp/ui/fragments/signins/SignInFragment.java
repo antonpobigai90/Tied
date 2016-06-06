@@ -9,9 +9,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,10 +21,12 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
 import com.tied.android.tiedapp.objects.auth.LoginUser;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.activities.MainActivity;
+import com.tied.android.tiedapp.ui.activities.schedule.ScheduleActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignInActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
+import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.util.Utility;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,13 +42,15 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
 
     private SignUpFragmentListener mListener;
 
-    private Button sign_in;
-    private ProgressBar progressBar;
+    ImageView signin, signup;
+    Context context;
     private EditText email, password;
+
+    LinearLayout alert_valid;
 
     private String emailText, passwordText;
 
-    private TextView forgot_password, sign_up;
+    private TextView forgot_password;
 
     public SignInFragment() {
     }
@@ -77,65 +81,63 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
 
     public void initComponent(View view){
 
+        context = getActivity();
+
         email = (EditText) view.findViewById(R.id.email);
         password = (EditText) view.findViewById(R.id.password);
         forgot_password = (TextView) view.findViewById(R.id.forgot_password);
 
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        signin = (ImageView) view.findViewById(R.id.signin);
+        signup = (ImageView) view.findViewById(R.id.signup);
 
-        sign_in = (Button) view.findViewById(R.id.sign_in);
-        sign_up = (TextView) view.findViewById(R.id.sign_up);
-
-        sign_in.setOnClickListener(this);
-        sign_up.setOnClickListener(this);
+        signin.setOnClickListener(this);
+        signup.setOnClickListener(this);
         forgot_password.setOnClickListener(this);
+
+        alert_valid = (LinearLayout) view.findViewById(R.id.alert_valid);
+        alert_valid.setVisibility(View.GONE);
     }
 
     public void continue_action(){
-        if(validated()){
-            progressBar.setVisibility(View.VISIBLE);
-
-            SignUpApi signUpApi = ((SignInActivity) getActivity()).service;
-            Call<LoginUser> response = signUpApi.LoginUser(emailText, passwordText);
-            Log.d(TAG, response.request().url().toString());
-            response.enqueue(new Callback<LoginUser>() {
-                @Override
-                public void onResponse(Call<LoginUser> call, Response<LoginUser> LoginResponse) {
-                    LoginUser LoginUser = LoginResponse.body();
-
-                    Log.d(TAG, LoginUser.toString());
+        DialogUtils.displayProgress(getActivity());
+        SignUpApi signUpApi = ((SignInActivity) getActivity()).service;
+        Call<LoginUser> response = signUpApi.LoginUser(emailText, passwordText);
+        Log.d(TAG, response.request().url().toString());
+        response.enqueue(new Callback<LoginUser>() {
+            @Override
+            public void onResponse(Call<LoginUser> call, Response<LoginUser> LoginResponse) {
+                LoginUser LoginUser = LoginResponse.body();
+                Log.d(TAG, LoginUser.toString());
+                if (LoginUser.isSuccess()) {
                     User loggedIn_user = LoginUser.getUser();
                     loggedIn_user.setToken(LoginUser.getToken());
-                    if (loggedIn_user.getToken() != null) {
-                        boolean saved = loggedIn_user.save(getActivity().getApplicationContext());
-                        if (saved) {
-                            Bundle bundle = new Bundle();
-                            Gson gson = new Gson();
-                            String user_json = gson.toJson(loggedIn_user);
-                            Intent intent = new Intent(getActivity(), MainActivity.class);
-                            intent.putExtra(Constants.USER, user_json);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
-                        } else {
-                            Toast.makeText(getActivity(), "user not save", Toast.LENGTH_LONG).show();
-                        }
-                        Log.d(TAG, loggedIn_user.toString());
+                    boolean saved = loggedIn_user.save(getActivity().getApplicationContext());
+                    if (saved) {
+                        Bundle bundle = new Bundle();
+                        Gson gson = new Gson();
+                        String user_json = gson.toJson(loggedIn_user);
+                        Intent intent = new Intent(getActivity(), ScheduleActivity.class);
+                        intent.putExtra(Constants.USER, user_json);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
                     } else {
-                        Toast.makeText(getActivity(), "user not created", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "user not save", Toast.LENGTH_LONG).show();
                     }
-                    progressBar.setVisibility(View.INVISIBLE);
+                    Log.d(TAG, loggedIn_user.toString());
+                } else {
+                    DialogUtils.closeProgress();
+                    Toast.makeText(getActivity(), LoginUser.getMessage(), Toast.LENGTH_LONG).show();
                 }
+                DialogUtils.closeProgress();
+            }
 
-                @Override
-                public void onFailure(Call<LoginUser> checkEmailCall, Throwable t) {
-                    Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
-                    Log.d(TAG + " onFailure", t.toString());
-                    progressBar.setVisibility(View.INVISIBLE);
-                }
-            });
-        }else{
-            Toast.makeText(getActivity(), "Invalid input", Toast.LENGTH_LONG).show();
-        }
+            @Override
+            public void onFailure(Call<LoginUser> checkEmailCall, Throwable t) {
+                Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
+                Log.d(TAG + " onFailure", t.toString());
+                DialogUtils.closeProgress();
+            }
+        });
     }
 
     public boolean validated(){
@@ -148,13 +150,22 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.sign_in:
-                continue_action();
+            case R.id.signin:
+                if (!Utility.isEmailValid(email.getText().toString())) {
+                    alert_valid.setVisibility(View.VISIBLE);
+                    Utility.moveViewToScreenCenter( alert_valid, Utility.getResourceString(context, R.string.alert_valide_email));
+                } else if (password.getText().length() == 0) {
+                    alert_valid.setVisibility(View.VISIBLE);
+                    Utility.moveViewToScreenCenter( alert_valid, Utility.getResourceString(context, R.string.alert_valide_password));
+                } else {
+                    continue_action();
+                }
+
                 break;
             case R.id.forgot_password:
                 mListener.onFragmentInteraction(Constants.Reset, null);
                 break;
-            case R.id.sign_up:
+            case R.id.signup:
                 Intent intent = new Intent(getActivity(), SignUpActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);

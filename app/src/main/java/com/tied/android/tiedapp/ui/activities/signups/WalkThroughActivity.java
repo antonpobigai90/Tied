@@ -118,7 +118,7 @@ public class WalkThroughActivity extends Activity implements View.OnClickListene
             case R.id.register:
                 intent = new Intent(this, SignUpActivity.class);
                 break;
-            case R.id.sign_in:
+            case R.id.signin:
                 intent = new Intent(this, SignInActivity.class);
                 break;
         }

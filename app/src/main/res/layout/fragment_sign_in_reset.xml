@@ -1,45 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/background">
+
+    <RelativeLayout
+        android:id="@+id/top_layout"
+        android:layout_width="match_parent"
+        android:layout_height="64dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/str_done"
+            android:id="@+id/txt_done"
+            android:textColor="@color/white"
+            android:textSize="25dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:layout_centerHorizontal="true" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:gravity="center_vertical"
+            android:id="@+id/back_layout">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:id="@+id/img_close"
+                android:src="@mipmap/btn_back_arrow"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/str_back"
+                android:id="@+id/txt_back"
+                android:textSize="20dp"
+                android:textColor="@color/white"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/img_close" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="50dp"
+        android:id="@+id/img_logo"
+        android:src="@mipmap/logo"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="40dp"
+        android:layout_below="@+id/top_layout"
+        android:layout_centerHorizontal="true" />
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="57dp"
-        android:padding="20dp"
-        android:id="@+id/linearLayout2">
-
+        android:layout_height="match_parent"
+        android:layout_marginTop="30dp"
+        android:background="@color/white"
+        android:layout_below="@+id/img_logo">
 
         <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:hint="Enter your Email Address"
-            android:text=""
-            android:ems="10"
             android:id="@+id/email"
-            android:layout_gravity="center_horizontal" />
-
-        <Button
-            android:layout_width="match_parent"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Reset"
-            android:id="@+id/reset" />
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="10dp"
+            android:ems="10"
+            android:hint="@string/str_hint_email"
+            android:textColor="@android:color/black"
+            android:textColorHint="@android:color/darker_gray"/>
 
-        <ProgressBar
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/line"
+            android:layout_width="fill_parent"
+            android:layout_height="0.1dp"
+            android:background="@android:color/darker_gray" />
+
+        <ImageView
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/progressBar"
-            android:layout_centerHorizontal="true"
-            android:visibility="invisible"
-            android:indeterminate="false"
-            android:layout_gravity="center_horizontal" />
+            android:id="@+id/reset_password"
+            android:src="@mipmap/btn_reset_password"
+            android:layout_marginTop="25dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp" />
 
     </LinearLayout>
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="64dp"
+        android:background="@color/alert_bg_color"
+        android:gravity="center_vertical|center_horizontal"
+        android:id="@+id/alert_valid_email">
 
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/imageView2"
+            android:src="@mipmap/attention" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txt_alert"
+            android:textColor="@color/white"
+            android:textSize="17dp"
+            android:layout_marginLeft="25dp" />
+    </LinearLayout>
 </RelativeLayout>

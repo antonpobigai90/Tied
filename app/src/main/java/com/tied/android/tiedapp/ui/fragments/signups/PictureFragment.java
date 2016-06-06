@@ -55,6 +55,8 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
     private RelativeLayout continue_btn;
     private TextView select_pics;
 
+    private Uri uri;
+
     // Reference to our image view we will use
     public ImageView avatar, img_user_picture;
 
@@ -89,6 +91,8 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
         select_pics.setOnClickListener(this);
         avatar.setOnClickListener(this);
         continue_btn.setOnClickListener(this);
+
+        Bundle bundle = getArguments();
     }
 
     @Override
@@ -112,12 +116,10 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
 
         if (validated()) {
             DialogUtils.displayProgress(getActivity());
-            Bundle bundle = getArguments();
             Gson gson = new Gson();
             String user_json = bundle.getString("user");
             User user = gson.fromJson(user_json, User.class);
 
-            final Uri uri = ((SignUpActivity) getActivity()).outputUri;
             File file = new File(uri.getPath());
 
             Log.d("Uri", uri.getPath());
@@ -170,13 +172,12 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
                             nextAction(bundle);
                         }else {
                             DialogUtils.closeProgress();
-                            Toast.makeText(getActivity(), "user infor  was not updated", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getActivity(), "user information  was not updated", Toast.LENGTH_LONG).show();
                         }
                     }else{
                         DialogUtils.closeProgress();
                         Toast.makeText(getActivity(), updateAvatar.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                    Log.d("Upload", "success");
                 }
 
                 @Override
@@ -185,13 +186,27 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
                 }
             });
         } else {
-            Toast.makeText(getActivity(), "Invalid input", Toast.LENGTH_LONG).show();
+            Gson gson = new Gson();
+            String user_json = bundle.getString(Constants.USER, "");
+            User user = gson.fromJson(user_json, User.class);
+            user.setSign_up_stage(Constants.Name);
+            boolean saved = user.save(getActivity().getApplicationContext());
+            if(saved){
+                DialogUtils.closeProgress();
+                user_json = gson.toJson(user);
+                bundle.putString(Constants.USER, user_json);
+                nextAction(bundle);
+            }else {
+                DialogUtils.closeProgress();
+                Toast.makeText(getActivity(), "user information  was not updated", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
     //Todo validate file extenson to be image extension.
     public boolean validated(){
-        return true;
+        uri = ((SignUpActivity) getActivity()).outputUri;
+        return uri != null;
     }
 
 

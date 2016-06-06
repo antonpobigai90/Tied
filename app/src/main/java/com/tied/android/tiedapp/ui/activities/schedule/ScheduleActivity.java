@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
@@ -23,6 +25,8 @@ public class ScheduleActivity extends FragmentActivity {
 
     User user;
 
+    LinearLayout logout;
+
     private Fragment fragment = null;
     private int fragment_index = 0;
 
@@ -39,6 +43,15 @@ public class ScheduleActivity extends FragmentActivity {
         String user_json = gson.toJson(user);
         bundle.putString(Constants.USER, user_json);
         launchFragment(Constants.CreateSchedule, bundle);
+
+
+        logout = (LinearLayout) findViewById(R.id.logout);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                User.LogOut(getApplicationContext());
+            }
+        });
     }
 
     public void launchFragment(int pos, Bundle bundle) {

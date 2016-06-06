@@ -16,7 +16,7 @@ import com.tied.android.tiedapp.objects.user.User;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class CreateScheduleFragment extends Fragment implements View.OnClickListener{
+public class CreateScheduleFragment extends Fragment implements View.OnClickListener {
 
     public static final String TAG = CreateScheduleFragment.class
             .getSimpleName();
@@ -41,7 +41,7 @@ public class CreateScheduleFragment extends Fragment implements View.OnClickList
         initComponent(view);
     }
 
-    public void initComponent(View view){
+    public void initComponent(View view) {
 
         img_user_picture = (ImageView) view.findViewById(R.id.img_user_picture);
 
@@ -50,14 +50,16 @@ public class CreateScheduleFragment extends Fragment implements View.OnClickList
             Gson gson = new Gson();
             String user_json = bundle.getString("user");
             User user = gson.fromJson(user_json, User.class);
-            Uri myUri = Uri.parse(user.getAvatar_uri());
-            img_user_picture.setImageURI(myUri);
+            if (user.getAvatar_uri() != null) {
+                Uri myUri = Uri.parse(user.getAvatar_uri());
+                img_user_picture.setImageURI(myUri);
+            }
         }
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
 
         }
     }

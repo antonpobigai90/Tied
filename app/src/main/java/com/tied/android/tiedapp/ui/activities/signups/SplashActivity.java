@@ -44,7 +44,7 @@ public class SplashActivity extends Activity {
         boolean done = mPrefs.getBoolean(Constants.SPLASH_SCREEN_DONE, false);
         if (done) {
             User user = User.getUser(getApplicationContext());
-            if (user != null && user.getId() != null && user.getSign_up_stage() == Constants.Completed) {
+            if (user != null && user.getId() != null && user.getSign_up_stage() > Constants.Password) {
                 Log.d(TAG, user.toString());
                 Bundle bundle = new Bundle();
                 Gson gson = new Gson();
@@ -55,7 +55,6 @@ public class SplashActivity extends Activity {
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 finish();
-
             } else {
                 Intent intent = new Intent(sPlashScreen, WalkThroughActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
