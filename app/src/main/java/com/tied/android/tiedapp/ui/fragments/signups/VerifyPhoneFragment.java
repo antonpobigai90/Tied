@@ -9,13 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.ui.listeners.CodeListener;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
 
 /**
@@ -30,7 +28,6 @@ public class VerifyPhoneFragment extends Fragment implements View.OnClickListene
 
 //    private Button continue_btn;
     private RelativeLayout continue_btn;
-    public ProgressBar progressBar;
     private EditText code;
     private LinearLayout back_btn;
 
@@ -52,6 +49,8 @@ public class VerifyPhoneFragment extends Fragment implements View.OnClickListene
         initComponent(view);
     }
 
+
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -71,15 +70,10 @@ public class VerifyPhoneFragment extends Fragment implements View.OnClickListene
 
     public void initComponent(View view){
 
-        code = (EditText) view.findViewById(R.id.code);
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-
         back_btn = (LinearLayout) view.findViewById(R.id.back_layout);
         continue_btn = (RelativeLayout) view.findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(this);
         back_btn.setOnClickListener(this);
-
-        code.addTextChangedListener(new CodeListener(this));
     }
 
     public void continue_action(){

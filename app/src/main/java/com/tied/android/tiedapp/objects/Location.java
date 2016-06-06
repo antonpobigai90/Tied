@@ -32,7 +32,7 @@ public class Location implements Serializable {
     }
 
     public String getLocationAddress(){
-        return state+" " +city+" "+street +" "+zip;
+        return street+", " +city+", "+state +", "+zip;
     }
 
     public String getCity() {

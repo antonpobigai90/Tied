@@ -44,6 +44,7 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
     private EditText password;
 
     private String usernameText, passwordText;
+    private Bundle bundle;
 
     public PasswordFragment() {
     }
@@ -63,6 +64,8 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
 
 
     public void initComponent(View view) {
+
+        bundle = getArguments();
 
         password = (EditText) view.findViewById(R.id.password);
         back_btn = (LinearLayout) view.findViewById(R.id.back_layout);
@@ -94,8 +97,6 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
 
     public void continue_action() {
 
-        Bundle bundle = getArguments();
-
         Gson gson = new Gson();
         String user_json = bundle.getString("user");
         User user = gson.fromJson(user_json, User.class);
@@ -105,8 +106,8 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
         response.enqueue(new Callback<SignUpLogin>() {
             @Override
             public void onResponse(Call<SignUpLogin> call, Response<SignUpLogin> LoginResponse) {
+                if (getActivity() == null) return;
                 SignUpLogin signUpLogin = LoginResponse.body();
-
                 User loggedIn_user = signUpLogin.getUser();
                 Log.d(TAG, signUpLogin.toString());
                 if (loggedIn_user.getToken() != null) {
@@ -149,7 +150,6 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.back_layout:
-                Bundle bundle = getArguments();
                 nextAction(Constants.EmailSignUp,bundle);
                 break;
         }

@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -39,7 +40,7 @@ import com.tied.android.tiedapp.ui.fragments.signups.PhoneFaxFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.PictureFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.SalesRepFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.TerritoryFragment;
-import com.tied.android.tiedapp.ui.fragments.signups.VerifyPhoneFragment;
+import com.tied.android.tiedapp.ui.fragments.signups.VerifyCodeFragment;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
 
 import java.io.File;
@@ -80,7 +81,7 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
         User user = User.getUser(getApplicationContext());
         if(user != null && user.getId() != null){
             Log.d(TAG, user.toString());
-//            user.setSign_up_stage(0);
+//            user.setSign_up_stage(19);
 //            user.save(getApplicationContext());
             Log.d(TAG +" 3", user.toString());
             Bundle bundle = new Bundle();
@@ -94,7 +95,6 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
 
         retrofit = MainApplication.getInstance().getRetrofit();
         service = retrofit.create(SignUpApi.class);
-
     }
 
     public void launchFragment(int pos, Bundle bundle) {
@@ -125,7 +125,7 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
                 fragment.setArguments(bundle);
                 break;
             case Constants.EnterCode:
-                fragment = new VerifyPhoneFragment();
+                fragment = new VerifyCodeFragment();
                 fragment.setArguments(bundle);
                 break;
             case Constants.OfficeAddress:
@@ -221,11 +221,14 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
 
     private void handleCrop(Uri outputUri) {
         ImageView avatar = ((PictureFragment) fragment).avatar;
+        ImageView img_user_picture = ((PictureFragment) fragment).img_user_picture;
         avatar.setImageBitmap(null);
+        img_user_picture.setImageBitmap(null);
         Log.d("path * ", outputUri.getPath());
         try {
             bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), outputUri);
             avatar.setImageBitmap(bitmap);
+            img_user_picture.setImageBitmap(bitmap);
         } catch (IOException e) {
             Toast.makeText(this, " error : " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
@@ -236,7 +239,6 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
      */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("RequestCode ", requestCode+"");
         if(requestCode == REQUEST_FACEBOOK_LOGIN && resultCode == Activity.RESULT_OK){
             ((EmailSignUpFragment) fragment).callbackManager.onActivityResult(requestCode, resultCode, data);
         }
@@ -279,12 +281,11 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
                         String senderNum = phoneNumber;
                         String message = currentMessage.getDisplayMessageBody();
 
-                        Log.i("SmsReceiver", "senderNum: "+ senderNum + "; message: " + message);
+                        Log.d("SmsReceiver", "senderNum: "+ senderNum + "; message: " + message);
 
                         // Show Alert
                         int duration = Toast.LENGTH_LONG;
-                        Toast toast = Toast.makeText(context,
-                                "senderNum: "+ senderNum + ", message: " + message, duration);
+                        Toast toast = Toast.makeText(context,"senderNum: "+ senderNum + ", message: " + message, duration);
                         toast.show();
 
                     } // end for loop
@@ -294,6 +295,12 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
                 Log.e("SmsReceiver", "Exception smsReceiver" +e);
 
             }
+        }
+    }
+
+    public void onKeyPadClick(View v) {
+        if(((VerifyCodeFragment) fragment) != null){
+            ((VerifyCodeFragment) fragment).onKeyPadClick(v);
         }
     }
 

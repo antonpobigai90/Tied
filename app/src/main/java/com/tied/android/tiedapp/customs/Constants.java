@@ -22,9 +22,13 @@ public class Constants {
 
     public static final String USER_UPDATE_AVATAR = API_PATH + "users/avatar";
     public static final String USER_UPDATE_INFO = API_PATH + "users/me";
-    
+
+
+    public static final String GET_INDUSTRIES = API_PATH + "config/industries";
+
     public static final String USER = "user";
     public static final String CODE = "code";
+    public static final String SERVER_INFO = "server_info";
     public static final String CURRENT_USER = "current_user";
     public static final String SPLASH_SCREEN_DONE = "splash_screen_done";
     public static final String LOGGED_OUT_USER = "logout";
@@ -63,6 +67,11 @@ public class Constants {
 
 
     public static final int Completed = 25;
+
+
+
+    public static final int CreateSchedule = 30;
+
 
 
     public static final String RECEIVER = "geo_address_receiver";

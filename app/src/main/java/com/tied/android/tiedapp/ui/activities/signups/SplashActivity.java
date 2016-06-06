@@ -13,7 +13,7 @@ import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.activities.MainActivity;
+import com.tied.android.tiedapp.ui.activities.schedule.ScheduleActivity;
 
 
 /**
@@ -50,7 +50,7 @@ public class SplashActivity extends Activity {
                 Gson gson = new Gson();
                 String user_json = gson.toJson(user);
                 bundle.putString(Constants.USER, user_json);
-                Intent intent = new Intent(this, MainActivity.class);
+                Intent intent = new Intent(this, ScheduleActivity.class);
                 intent.putExtra(Constants.USER, bundle);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);

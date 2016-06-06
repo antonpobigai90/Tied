@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +27,7 @@ import com.tied.android.tiedapp.objects.auth.UpdateAvatar;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
+import com.tied.android.tiedapp.util.DialogUtils;
 
 import java.io.File;
 
@@ -52,16 +52,14 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
     // Activity result key for camera
     public final int REQUEST_TAKE_PHOTO = 11111;
 
-//    private Button continue_btn;
     private RelativeLayout continue_btn;
     private TextView select_pics;
 
     // Reference to our image view we will use
-    public ImageView avatar;
-
-    private ProgressBar progressBar;
+    public ImageView avatar, img_user_picture;
 
     private SignUpFragmentListener mListener;
+    Bundle bundle;
 
     public PictureFragment() {
 
@@ -84,10 +82,8 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
     public void initComponent(View view) {
         select_pics = (TextView) view.findViewById(R.id.select_pics);
         avatar = (ImageView) view.findViewById(R.id.avatar);
+        img_user_picture = (ImageView) view.findViewById(R.id.img_user_picture);
 
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-
-//        continue_btn = (Button) view.findViewById(R.id.continue_btn);
         continue_btn = (RelativeLayout)view.findViewById(R.id.continue_btn);
 
         select_pics.setOnClickListener(this);
@@ -115,14 +111,13 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
     public void continue_action() {
 
         if (validated()) {
-            progressBar.setVisibility(View.VISIBLE);
+            DialogUtils.displayProgress(getActivity());
             Bundle bundle = getArguments();
-
             Gson gson = new Gson();
             String user_json = bundle.getString("user");
             User user = gson.fromJson(user_json, User.class);
 
-            Uri uri = ((SignUpActivity) getActivity()).outputUri;
+            final Uri uri = ((SignUpActivity) getActivity()).outputUri;
             File file = new File(uri.getPath());
 
             Log.d("Uri", uri.getPath());
@@ -165,19 +160,20 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
                         String user_json = bundle.getString(Constants.USER, "");
                         User user = gson.fromJson(user_json, User.class);
                         user.setSign_up_stage(Constants.Name);
+                        user.setAvatar_uri(String.valueOf(uri));
                         user.setAvatar(updateAvatar.getAvatar());
                         boolean saved = user.save(getActivity().getApplicationContext());
                         if(saved){
-                            progressBar.setVisibility(View.INVISIBLE);
+                            DialogUtils.closeProgress();
                             user_json = gson.toJson(user);
                             bundle.putString(Constants.USER, user_json);
                             nextAction(bundle);
                         }else {
-                            progressBar.setVisibility(View.INVISIBLE);
+                            DialogUtils.closeProgress();
                             Toast.makeText(getActivity(), "user infor  was not updated", Toast.LENGTH_LONG).show();
                         }
                     }else{
-                        progressBar.setVisibility(View.INVISIBLE);
+                        DialogUtils.closeProgress();
                         Toast.makeText(getActivity(), updateAvatar.getMessage(), Toast.LENGTH_LONG).show();
                     }
                     Log.d("Upload", "success");

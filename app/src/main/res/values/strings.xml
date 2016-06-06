@@ -139,5 +139,9 @@
 
     <string name="alert_valide_phone_number">*Please enter phone number</string>
     <string name="alert_valide_verify_code">*Please enter verify code</string>
+    <string name="alert_valide_name">Cannot contains invalid characters</string>
+    <string name="alert_valide_name_empty">first name cannot be empty</string>
+    <string name="alert_valide_no_territory">No territory inputted</string>
+    <string name="str_name">Fulll Name</string>
 
 </resources>

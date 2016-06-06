@@ -46,6 +46,8 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
     compile 'com.android.support:support-v4:23.3.0'
     compile 'com.github.moondroid.coverflow:library:1.0'
+    compile 'de.hdodenhof:circleimageview:2.0.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
 
     compile files('libs/apache-mime4j-0.6.jar')
     compile files('libs/httpclient-4.2.3.jar')

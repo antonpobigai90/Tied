@@ -3,7 +3,7 @@ package com.tied.android.tiedapp.ui.fragments.signups;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
-import android.os.AsyncTask;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,24 +11,25 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.customs.MyAsyncTask;
 import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
 import com.tied.android.tiedapp.objects.Location;
-import com.tied.android.tiedapp.objects.auth.UpdateUser;
+import com.tied.android.tiedapp.objects.auth.ServerInfo;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
+import com.tied.android.tiedapp.util.DialogUtils;
+
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.List;
@@ -48,11 +49,15 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
 
     private SignUpFragmentListener mListener;
 
-//    private Button continue_btn;
+    //    private Button continue_btn;
     private RelativeLayout continue_btn;
-    private ProgressBar progressBar;
 
-//    private CheckBox same;
+    // Reference to our image view we will use
+    public ImageView img_user_picture;
+
+    private LinearLayout alert_valid;
+
+    //    private CheckBox same;
     LinearLayout checkbox_layout;
     ImageView img_check;
     boolean same = false;
@@ -60,7 +65,7 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
     private EditText street, city, state, zip;
     private String cityText, stateText, streetText, zipText;
     private Location location;
-
+    private Bundle bundle;
 
     int fetchType = Constants.USE_ADDRESS_NAME;
 
@@ -104,18 +109,28 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
         state = (EditText) view.findViewById(R.id.state);
         zip = (EditText) view.findViewById(R.id.zip);
 
-//        same = (CheckBox) view.findViewById(R.id.same);
+        img_user_picture = (ImageView) view.findViewById(R.id.img_user_picture);
+
         img_check = (ImageView) view.findViewById(R.id.img_check);
         img_check.setBackgroundResource(R.mipmap.dot_unchecked_icon);
 
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-
-//        continue_btn = (Button) view.findViewById(R.id.continue_btn);
         continue_btn = (RelativeLayout) view.findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(this);
 
         checkbox_layout = (LinearLayout) view.findViewById(R.id.checkbox_layout);
         checkbox_layout.setOnClickListener(this);
+
+        bundle = getArguments();
+        if (bundle != null) {
+            Gson gson = new Gson();
+            String user_json = bundle.getString("user");
+            User user = gson.fromJson(user_json, User.class);
+            Uri myUri = Uri.parse(user.getAvatar_uri());
+            img_user_picture.setImageURI(myUri);
+        }
+
+        alert_valid = (LinearLayout) view.findViewById(R.id.alert_valid);
+        alert_valid.setVisibility(View.GONE);
     }
 
     public void continue_action() {
@@ -151,17 +166,20 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
         }
     }
 
-    class GeocodeAsyncTask extends AsyncTask<Void, Void, Address> {
+    class GeocodeAsyncTask extends MyAsyncTask {
 
         String errorMessage = "";
+        JSONObject jObject;
+        JSONObject places = null;
+        String lat;
 
         @Override
         protected void onPreExecute() {
-            progressBar.setVisibility(View.VISIBLE);
+            DialogUtils.displayProgress(getActivity());
         }
 
         @Override
-        protected Address doInBackground(Void... none) {
+        protected Address doInBackground(Void... params) {
             Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
             List<Address> addresses = null;
 
@@ -185,10 +203,13 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
         }
 
         protected void onPostExecute(Address address) {
+            if (getActivity() == null) return;
             if (address != null) {
                 location.setLatitude(address.getLatitude());
                 location.setLongitude(address.getLongitude());
             }
+
+            Log.d(TAG," Location : "+  location.toString());
 
             Bundle bundle = getArguments();
 
@@ -196,49 +217,49 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
             String user_json = bundle.getString("user");
             final User user = gson.fromJson(user_json, User.class);
             user.setOffice_address(location);
-            if(same){
+            if (same) {
                 user.setHome_address(location);
             }
 
             SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
-            Call<UpdateUser> response = signUpApi.updateUser(user);
-            response.enqueue(new Callback<UpdateUser>() {
+            Call<ServerInfo> response = signUpApi.updateUser(user);
+            response.enqueue(new Callback<ServerInfo>() {
                 @Override
-                public void onResponse(Call<UpdateUser> call, Response<UpdateUser> UpdateUserResponse) {
-                    UpdateUser UpdateUser = UpdateUserResponse.body();
-                    Log.d(TAG +" onFailure", UpdateUserResponse.body().toString());
-                    if(UpdateUser.isSuccess()){
+                public void onResponse(Call<ServerInfo> call, Response<ServerInfo> UpdateUserResponse) {
+                    if (getActivity() == null) return;
+                    ServerInfo UpdateUser = UpdateUserResponse.body();
+                    Log.d(TAG + " onFailure", UpdateUserResponse.body().toString());
+                    if (UpdateUser.isSuccess()) {
                         Bundle bundle = new Bundle();
                         boolean saved = user.save(getActivity().getApplicationContext());
                         if (saved) {
                             Gson gson = new Gson();
                             String json = gson.toJson(user);
                             bundle.putString(Constants.USER, json);
-                            progressBar.setVisibility(View.INVISIBLE);
-                            if(same){
-                                nextAction(Constants.Territory,bundle);
-                            }else{
+                            DialogUtils.closeProgress();
+                            if (same) {
+                                nextAction(Constants.Territory, bundle);
+                            } else {
                                 nextAction(Constants.HomeAddress, bundle);
                             }
                             Log.d(TAG, "location: " + json);
                         } else {
-                            progressBar.setVisibility(View.INVISIBLE);
+                            DialogUtils.closeProgress();
                             Toast.makeText(getActivity(), "user info  was not updated", Toast.LENGTH_LONG).show();
                         }
-                    }else{
+                    } else {
                         Toast.makeText(getActivity(), UpdateUser.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                    progressBar.setVisibility(View.INVISIBLE);
+                    DialogUtils.closeProgress();
                 }
 
                 @Override
-                public void onFailure(Call<UpdateUser> UpdateUserCall, Throwable t) {
+                public void onFailure(Call<ServerInfo> UpdateUserCall, Throwable t) {
                     Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
-                    Log.d(TAG +" onFailure", t.toString());
-                    progressBar.setVisibility(View.INVISIBLE);
+                    Log.d(TAG + " onFailure", t.toString());
+                    DialogUtils.closeProgress();
                 }
             });
-
         }
     }
 }

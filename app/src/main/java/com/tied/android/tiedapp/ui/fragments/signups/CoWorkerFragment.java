@@ -1,10 +1,10 @@
 package com.tied.android.tiedapp.ui.fragments.signups;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,18 +12,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.customs.MyAsyncTask;
 import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.objects.user.Boss;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
+import com.tied.android.tiedapp.util.DialogUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -38,7 +42,7 @@ public class CoWorkerFragment extends Fragment implements View.OnClickListener{
             .getSimpleName();
 
     private EditText email,phone;
-    private Button continue_btn;
+    private RelativeLayout continue_btn;
 
     private ProgressBar progressBar;
 
@@ -81,7 +85,7 @@ public class CoWorkerFragment extends Fragment implements View.OnClickListener{
         phone = (EditText) view.findViewById(R.id.phone);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
-        continue_btn = (Button) view.findViewById(R.id.continue_btn);
+        continue_btn = (RelativeLayout) view.findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(this);
     }
 
@@ -113,7 +117,7 @@ public class CoWorkerFragment extends Fragment implements View.OnClickListener{
 
         emailText = email.getText().toString();
         phoneText = phone.getText().toString();
-        return !streetText.equals("");
+        return true;
     }
 
     @Override
@@ -125,13 +129,13 @@ public class CoWorkerFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-    class GeocodeAsyncTask extends AsyncTask<Void, Void, Address> {
+    class GeocodeAsyncTask extends MyAsyncTask {
 
         String errorMessage = "";
 
         @Override
         protected void onPreExecute() {
-            progressBar.setVisibility(View.VISIBLE);
+            DialogUtils.displayProgress(getActivity());
         }
 
         @Override
@@ -159,6 +163,7 @@ public class CoWorkerFragment extends Fragment implements View.OnClickListener{
         }
 
         protected void onPostExecute(Address address) {
+            if(getActivity() == null) return;
             if (address != null) {
                 location.setLatitude(address.getLatitude());
                 location.setLongitude(address.getLongitude());
@@ -174,12 +179,19 @@ public class CoWorkerFragment extends Fragment implements View.OnClickListener{
             String user_json = bundle.getString("user");
             final User user = gson.fromJson(user_json, User.class);
             user.setBoss(boss);
-            user.setSign_up_stage(Constants.AddBossNow);
+            user.setSign_up_stage(Constants.Completed);
             String json = gson.toJson(user);
             bundle.putString(Constants.USER, json);
-            if(uri != null)
-                bundle.putString("avatar", uri.toString());
-            nextAction(bundle);
+            boolean saved = user.save(getActivity().getApplicationContext());
+            if(saved){
+                DialogUtils.closeProgress();
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                intent.putExtra(Constants.USER, user);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }else{
+                Toast.makeText(getActivity(), "user info  was not updated", Toast.LENGTH_LONG).show();
+            }
         }
     }
 

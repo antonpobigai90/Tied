@@ -118,15 +118,16 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
         btn_close.setOnClickListener(this);
         img_facebook.setOnClickListener(this);
 
-        initializeFaceBook();
-
         Bundle bundle = getArguments();
         if(bundle != null){
             Gson gson = new Gson();
             String user_json = bundle.getString("user");
+            Log.d(TAG, user_json);
             User user = gson.fromJson(user_json, User.class);
             email.setText(user.getEmail());
         }
+
+        initializeFaceBook();
 
         alert_valid_email = (LinearLayout) view.findViewById(R.id.alert_valid);
         alert_valid_email.setVisibility(View.GONE);
@@ -165,11 +166,13 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
             }
         });
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.continue_btn:
-                if (!Utility.isEmailValid(email.getText().toString())) {
+                emailText = email.getText().toString();
+                if (!Utility.isEmailValid(emailText)) {
                     alert_valid_email.setVisibility(View.VISIBLE);
                     Utility.moveViewToScreenCenter( alert_valid_email, Utility.getResourceString(getActivity(), R.string.alert_valide_email));
                 } else {
@@ -216,7 +219,6 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
     }
 
     private void GetUserProfile() {
-
         DialogUtils.displayProgress(getActivity());
         GraphRequest request = GraphRequest.newMeRequest(
                 accessToken,
@@ -228,6 +230,8 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
 
                         DialogUtils.closeProgress();
 
+                        Log.d("response ", response.toString()+"");
+
                         // TODO Auto-generated method stub
                         JSONObject obj = response.getJSONObject();
                         try {
@@ -237,6 +241,7 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
                             firstName = obj.getString("first_name");
                             lastName = obj.getString("last_name");
                             emailText = obj.getString("email");
+
                             continue_action();
 
                         } catch (JSONException e) {
@@ -272,4 +277,6 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
             }
         };
     }
+
+
 }

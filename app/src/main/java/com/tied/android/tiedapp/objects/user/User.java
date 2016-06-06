@@ -27,6 +27,7 @@ public class User implements Serializable {
     private String fax;
     private String password;
     private String avatar;
+    private String avatar_uri;
 
     private String sale_type;
     private String co_workers;
@@ -48,8 +49,8 @@ public class User implements Serializable {
 
     private String token;
 
-    public User(String id, String email, String first_name, String last_name, String phone, String fax,
-                String password, String avatar, String sale_type, String co_workers, String group_description,
+    public User(String id, String email, String first_name, String last_name, String phone, String fax, String password,
+                String avatar, String avatar_uri, String sale_type, String co_workers, String group_description,
                 ArrayList<String> territories, ArrayList<String> industries, int sign_up_stage, Location home_address,
                 Location office_address, Boss boss, Profile profile, String createdAt, String updatedAt, String token) {
         this.id = id;
@@ -60,6 +61,7 @@ public class User implements Serializable {
         this.fax = fax;
         this.password = password;
         this.avatar = avatar;
+        this.avatar_uri = avatar_uri;
         this.sale_type = sale_type;
         this.co_workers = co_workers;
         this.group_description = group_description;
@@ -292,6 +294,14 @@ public class User implements Serializable {
         this.co_workers = co_workers;
     }
 
+    public String getAvatar_uri() {
+        return avatar_uri;
+    }
+
+    public void setAvatar_uri(String avatar_uri) {
+        this.avatar_uri = avatar_uri;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -303,6 +313,7 @@ public class User implements Serializable {
                 ", fax='" + fax + '\'' +
                 ", password='" + password + '\'' +
                 ", avatar='" + avatar + '\'' +
+                ", avatar_uri='" + avatar_uri + '\'' +
                 ", sale_type='" + sale_type + '\'' +
                 ", co_workers='" + co_workers + '\'' +
                 ", group_description='" + group_description + '\'' +

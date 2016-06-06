@@ -1,10 +1,10 @@
 package com.tied.android.tiedapp.ui.fragments.signups;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,18 +12,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.customs.MyAsyncTask;
 import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.objects.user.Boss;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
+import com.tied.android.tiedapp.util.DialogUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -38,20 +42,28 @@ public class AddBossFragment extends Fragment implements View.OnClickListener{
             .getSimpleName();
 
     private EditText email,phone;
-    private Button continue_btn;
+    private RelativeLayout continue_btn;
 
-    private ProgressBar progressBar;
+    private ImageView img_sms, img_email, img_no_invite;
 
     private EditText street, city, state, zip;
     private String cityText, stateText, streetText, zipText;
-    private String emailText, phoneText;
+    private String emailText, phoneText, territoryText, firstNameText, lastNameText;
 
     int fetchType = Constants.USE_ADDRESS_NAME;
 
     private SignUpFragmentListener mListener;
 
+    LinearLayout sms_layout, email_layout, no_invite_layout;
+    TextView txt_sms, txt_email1, txt_no_invite;
+
     private Boss boss;
     private Location location;
+
+    Bundle bundle;
+    // Reference to our image view we will use
+    public ImageView img_user_picture;
+
 
     public AddBossFragment() {
     }
@@ -79,10 +91,29 @@ public class AddBossFragment extends Fragment implements View.OnClickListener{
 
         email = (EditText) view.findViewById(R.id.email);
         phone = (EditText) view.findViewById(R.id.phone);
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
-        continue_btn = (Button) view.findViewById(R.id.continue_btn);
+        continue_btn = (RelativeLayout) view.findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(this);
+
+        img_user_picture = (ImageView) view.findViewById(R.id.img_user_picture);
+
+        bundle = getArguments();
+        if (bundle != null) {
+            Gson gson = new Gson();
+            String user_json = bundle.getString("user");
+            User user = gson.fromJson(user_json, User.class);
+            Uri myUri = Uri.parse(user.getAvatar_uri());
+            img_user_picture.setImageURI(myUri);
+        }
+
+        sms_layout = (LinearLayout) view.findViewById(R.id.sms_layout);
+        sms_layout.setOnClickListener(this);
+
+        email_layout = (LinearLayout) view.findViewById(R.id.email_layout);
+        email_layout.setOnClickListener(this);
+
+        no_invite_layout = (LinearLayout) view.findViewById(R.id.no_invite_layout);
+        no_invite_layout.setOnClickListener(this);
     }
 
     @Override
@@ -113,7 +144,7 @@ public class AddBossFragment extends Fragment implements View.OnClickListener{
 
         emailText = email.getText().toString();
         phoneText = phone.getText().toString();
-        return !streetText.equals("");
+        return true;
     }
 
     @Override
@@ -125,13 +156,13 @@ public class AddBossFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-    class GeocodeAsyncTask extends AsyncTask<Void, Void, Address> {
+    class GeocodeAsyncTask extends MyAsyncTask {
 
         String errorMessage = "";
 
         @Override
         protected void onPreExecute() {
-            progressBar.setVisibility(View.VISIBLE);
+            DialogUtils.displayProgress(getActivity());
         }
 
         @Override
@@ -159,12 +190,13 @@ public class AddBossFragment extends Fragment implements View.OnClickListener{
         }
 
         protected void onPostExecute(Address address) {
+            if(getActivity() == null) return;
             if (address != null) {
                 location.setLatitude(address.getLatitude());
                 location.setLongitude(address.getLongitude());
             }
 
-            boss = new Boss(emailText, phoneText, location);
+            boss = new Boss(emailText, phoneText, territoryText, location);
 
             Bundle bundle = getArguments();
 
@@ -179,6 +211,7 @@ public class AddBossFragment extends Fragment implements View.OnClickListener{
             bundle.putString(Constants.USER, json);
             if(uri != null)
                 bundle.putString("avatar", uri.toString());
+            DialogUtils.closeProgress();
             nextAction(bundle);
         }
     }
@@ -186,6 +219,34 @@ public class AddBossFragment extends Fragment implements View.OnClickListener{
     public void continue_action() {
         if (validated()) {
             new GeocodeAsyncTask().execute();
+        }
+    }
+
+    private void setSelectType(int index) {
+        if(index == 0) {
+            img_sms.setBackgroundResource(R.mipmap.dot_checked_icon1);
+            img_email.setBackgroundResource(R.mipmap.dot_unchecked_icon);
+            img_no_invite.setBackgroundResource(R.mipmap.dot_unchecked_icon);
+
+            txt_sms.setTextColor(Color.WHITE);
+            txt_email1.setTextColor(getResources().getColor(R.color.text_disable_color));
+            txt_no_invite.setTextColor(getResources().getColor(R.color.text_disable_color));
+        } else if (index == 1){
+            img_sms.setBackgroundResource(R.mipmap.dot_unchecked_icon);
+            img_email.setBackgroundResource(R.mipmap.dot_checked_icon1);
+            img_no_invite.setBackgroundResource(R.mipmap.dot_unchecked_icon);
+
+            txt_sms.setTextColor(getResources().getColor(R.color.text_disable_color));
+            txt_email1.setTextColor(Color.WHITE);
+            txt_no_invite.setTextColor(getResources().getColor(R.color.text_disable_color));
+        } else {
+            img_sms.setBackgroundResource(R.mipmap.dot_unchecked_icon);
+            img_email.setBackgroundResource(R.mipmap.dot_unchecked_icon);
+            img_no_invite.setBackgroundResource(R.mipmap.dot_checked_icon1);
+
+            txt_sms.setTextColor(getResources().getColor(R.color.text_disable_color));
+            txt_email1.setTextColor(getResources().getColor(R.color.text_disable_color));
+            txt_no_invite.setTextColor(Color.WHITE);
         }
     }
 }
