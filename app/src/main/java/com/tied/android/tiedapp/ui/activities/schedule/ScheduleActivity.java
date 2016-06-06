@@ -41,8 +41,6 @@ public class ScheduleActivity extends FragmentActivity {
         launchFragment(Constants.CreateSchedule, bundle);
     }
 
-
-
     public void launchFragment(int pos, Bundle bundle) {
         fragment_index = pos;
         fragment = null;
