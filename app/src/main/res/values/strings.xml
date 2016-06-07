@@ -108,6 +108,8 @@
     <string name="str_next">NEXT</string>
     <string name="str_delete">DELETE</string>
 
+    <string name="str_signup_invite">Add/Invite your employees</string>
+
     <string-array name="str_help_title">
         <item >How does Tied work?</item>
         <item >how can I add multiple clients?</item>
