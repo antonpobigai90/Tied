@@ -92,7 +92,7 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
         avatar.setOnClickListener(this);
         continue_btn.setOnClickListener(this);
 
-        Bundle bundle = getArguments();
+        bundle = getArguments();
     }
 
     @Override
@@ -155,7 +155,7 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
                 public void onResponse(Call<UpdateAvatar> call, Response<UpdateAvatar> updateAvatarResponse) {
                     if (getActivity() == null) return;
                     UpdateAvatar updateAvatar = updateAvatarResponse.body();
-                    Log.d(TAG,updateAvatarResponse.toString() );
+//                    Log.d(TAG,updateAvatar.toString() );
                     if(updateAvatar.isSuccess()){
                         Gson gson = new Gson();
                         Bundle bundle = getArguments();

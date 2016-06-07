@@ -99,6 +99,8 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
     }
 
     public void continue_action(){
+        emailText = email.getText().toString();
+        passwordText = password.getText().toString();
         DialogUtils.displayProgress(getActivity());
         SignUpApi signUpApi = ((SignInActivity) getActivity()).service;
         Call<LoginUser> response = signUpApi.LoginUser(emailText, passwordText);
@@ -138,13 +140,6 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                 DialogUtils.closeProgress();
             }
         });
-    }
-
-    public boolean validated(){
-
-        emailText = email.getText().toString();
-        passwordText = password.getText().toString();
-        return emailText.contains("@");
     }
 
     @Override

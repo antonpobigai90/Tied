@@ -20,7 +20,6 @@ public class Constants {
     public static final String AUTH_SEND_PHONE_CODE_ENDPOINT = API_PATH + "auth/send_phone_vc";
     public static final String AUTH_VERIFY_PHONE_ENDPOINT = API_PATH + "auth/verify_phone";
 
-    public static final String USER_UPDATE_AVATAR = API_PATH + "users/avatar";
     public static final String USER_UPDATE_INFO = API_PATH + "users/me";
 
 

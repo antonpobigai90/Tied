@@ -44,7 +44,7 @@ public class SplashActivity extends Activity {
         boolean done = mPrefs.getBoolean(Constants.SPLASH_SCREEN_DONE, false);
         if (done) {
             User user = User.getUser(getApplicationContext());
-            if (user != null && user.getId() != null && user.getSign_up_stage() > Constants.Password) {
+            if (user != null && user.getId() != null && user.getSign_up_stage() > Constants.Picture) {
                 Log.d(TAG, user.toString());
                 Bundle bundle = new Bundle();
                 Gson gson = new Gson();
