@@ -22,7 +22,6 @@ public class Constants {
 
     public static final String USER_UPDATE_INFO = API_PATH + "users/me";
 
-
     public static final String GET_INDUSTRIES = API_PATH + "config/industries";
 
     public static final String USER = "user";
@@ -42,7 +41,9 @@ public class Constants {
     public static final String LONGITUDE = "longitude";
     public static final String LATITUDE = "latitude";
 
-    public static final int WelcomeScreen = 0;
+    public static final String PREVIOUS = "previous";
+
+    public static final int Help = 0;
     public static final int SignInUser = 1;
     public static final int Reset = 2;
     public static final int DoneReset = 3;
@@ -63,16 +64,10 @@ public class Constants {
     public static final int CoWorkerCount = 18;
     public static final int AddOptions = 19;
     public static final int CoWorker = 20;
-    public static final int Help = 21;
-
 
     public static final int Completed = 25;
 
-
-
     public static final int CreateSchedule = 30;
-
-
 
     public static final String RECEIVER = "geo_address_receiver";
     public static final String FETCH_TYPE_EXTRA = "geo_address_fetch_extra";

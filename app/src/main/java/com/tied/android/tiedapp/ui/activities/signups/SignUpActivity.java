@@ -82,7 +82,7 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
         User user = User.getUser(getApplicationContext());
         if(user != null && user.getId() != null){
             Log.d(TAG, user.toString());
-            user.setSign_up_stage(21);
+            user.setSign_up_stage(20);
             user.save(getApplicationContext());
             Log.d(TAG +" 3", user.toString());
             Bundle bundle = new Bundle();
@@ -226,7 +226,7 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
     }
 
     private void handleCrop(Uri outputUri) {
-        ImageView avatar = ((PictureFragment) fragment).avatar;
+        ImageView avatar =  ((PictureFragment) fragment).avatar;
         ImageView img_user_picture = ((PictureFragment) fragment).img_user_picture;
         avatar.setImageBitmap(null);
         img_user_picture.setImageBitmap(null);
