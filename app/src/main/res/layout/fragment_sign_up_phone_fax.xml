@@ -80,17 +80,24 @@
                         android:ems="10"
                         android:inputType="phone"
                         android:gravity="center"
-                        android:paddingBottom="@dimen/editext_padding"/>
+                        android:layout_toRightOf="@+id/txt_phone_label"
+                        android:layout_marginLeft="5dp"
+                        android:backgroundTint="@android:color/transparent"/>
 
                     <TextView
-                        android:id="@+id/txt_firstname_label"
+                        android:id="@+id/txt_phone_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:paddingBottom="@dimen/label_padding"
                         android:text="@string/str_phone"
-                        android:textSize="15dp" />
+                        android:textSize="15sp" />
                 </RelativeLayout>
+                <TextView
+                    android:id="@+id/line"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@color/button_material_light"
+                    android:layout_marginTop="2dp" />
 
             </LinearLayout>
 
@@ -118,18 +125,26 @@
                         android:ems="10"
                         android:inputType="number"
                         android:gravity="center"
-                        android:paddingBottom="@dimen/editext_padding"/>
+                        android:layout_toRightOf="@+id/fax_label"
+                        android:layout_marginLeft="5dp"
+                        android:backgroundTint="@android:color/transparent"/>
 
                     <TextView
                         android:id="@+id/fax_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:paddingBottom="@dimen/label_padding"
                         android:text="@string/str_fax"
                         android:textSize="15dp" />
 
                 </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/line1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@color/button_material_light"
+                    android:layout_marginTop="2dp" />
 
             </LinearLayout>
 

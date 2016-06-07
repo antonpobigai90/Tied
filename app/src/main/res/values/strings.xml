@@ -28,6 +28,14 @@
         <item >Your clients sometimes are located close enough</item>
     </string-array>
 
+    <string-array name="help_description">
+        <item >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt</item>
+        <item >incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</item>
+        <item >How much does it cost?","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod</item>
+        <item >How much does it cost?","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod</item>
+        <item >How much does it cost?","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod</item>
+    </string-array>
+
     <!-- Sign Up -->
     <string name="str_signup">SIGN UP</string>
     <string name="str_signup_hint1">What is your email address?</string>
