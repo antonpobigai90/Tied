@@ -64,6 +64,7 @@ public class Constants {
     public static final int CoWorkerCount = 18;
     public static final int AddOptions = 19;
     public static final int CoWorker = 20;
+    public static final int Help = 21;
 
 
     public static final int Completed = 25;

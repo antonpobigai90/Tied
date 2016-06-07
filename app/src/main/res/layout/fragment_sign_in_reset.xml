@@ -7,7 +7,7 @@
     <RelativeLayout
         android:id="@+id/top_layout"
         android:layout_width="match_parent"
-        android:layout_height="64dp">
+        android:layout_height="54dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -15,7 +15,7 @@
             android:text="@string/str_done"
             android:id="@+id/txt_done"
             android:textColor="@color/white"
-            android:textSize="25dp"
+            android:textSize="25sp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="15dp"
             android:layout_centerHorizontal="true" />
@@ -77,6 +77,8 @@
             android:ems="10"
             android:hint="@string/str_hint_email"
             android:textColor="@android:color/black"
+            android:inputType="textEmailAddress"
+            android:backgroundTint="@android:color/transparent"
             android:textColorHint="@android:color/darker_gray"/>
 
         <TextView
@@ -100,7 +102,7 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="64dp"
+        android:layout_height="54dp"
         android:background="@color/alert_bg_color"
         android:gravity="center_vertical|center_horizontal"
         android:id="@+id/alert_valid_email">
@@ -116,7 +118,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/txt_alert"
             android:textColor="@color/white"
-            android:textSize="17dp"
+            android:textSize="17sp"
             android:layout_marginLeft="25dp" />
     </LinearLayout>
 </RelativeLayout>

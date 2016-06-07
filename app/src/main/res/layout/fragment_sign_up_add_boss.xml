@@ -7,7 +7,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="64dp"
+        android:layout_height="54dp"
         android:id="@+id/top_layout">
 
         <TextView
@@ -16,7 +16,7 @@
             android:text="@string/str_signup"
             android:id="@+id/txt_signup_label"
             android:textColor="@color/white"
-            android:textSize="25dp"
+            android:textSize="25sp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="15dp"
             android:layout_centerHorizontal="true" />
@@ -39,12 +39,12 @@
         android:id="@+id/txt_hint_string"
         android:gravity="center_horizontal"
         android:textColor="@color/white"
-        android:textSize="22dp"
+        android:textSize="20sp"
         android:layout_below="@+id/top_layout"
         android:layout_marginTop="40dp"
         android:layout_marginBottom="20dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp" />
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp" />
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -82,6 +82,8 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:id="@+id/email"
+                    android:inputType="textEmailAddress"
+                    android:backgroundTint="@android:color/transparent"
                     android:layout_gravity="center_horizontal"
                     android:layout_toRightOf="@+id/txt_lastname_label_label" />
             </RelativeLayout>
@@ -90,7 +92,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="0.1dp"
                 android:background="@color/button_material_light"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="2dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp" />
 
@@ -108,7 +110,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/str_address"
                     android:id="@+id/txt_address_label"
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     android:layout_centerVertical="true" />
 
                 <EditText
@@ -116,6 +118,7 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:id="@+id/street"
+                    android:backgroundTint="@android:color/transparent"
                     android:layout_gravity="center_horizontal"
                     android:layout_toRightOf="@+id/txt_address_label" />
             </RelativeLayout>
@@ -125,7 +128,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="0.1dp"
                 android:background="@color/button_material_light"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="2dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp" />
 
@@ -149,7 +152,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/str_city"
                         android:id="@+id/txt_city_label"
-                        android:textSize="15dp"
+                        android:textSize="15sp"
                         android:layout_centerVertical="true" />
 
                     <EditText
@@ -157,6 +160,7 @@
                         android:layout_height="wrap_content"
                         android:ems="10"
                         android:id="@+id/city"
+                        android:backgroundTint="@android:color/transparent"
                         android:layout_gravity="center_horizontal"
                         android:layout_toRightOf="@+id/txt_city_label"
                         android:layout_toLeftOf="@+id/txt_state_label" />
@@ -175,6 +179,7 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/state"
                         android:layout_marginLeft="10dp"
+                        android:backgroundTint="@android:color/transparent"
                         android:layout_alignParentRight="true"
                         android:gravity="center_horizontal" />
                 </RelativeLayout>
@@ -184,7 +189,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="0.1dp"
                     android:background="@color/button_material_light"
-                    android:layout_marginTop="12dp" />
+                    android:layout_marginTop="2dp" />
 
             </LinearLayout>
 
@@ -208,7 +213,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/str_zip_code"
                         android:id="@+id/txt_zipcode_label"
-                        android:textSize="15dp"
+                        android:textSize="15sp"
                         android:layout_centerVertical="true" />
 
                     <EditText
@@ -216,6 +221,7 @@
                         android:layout_height="wrap_content"
                         android:ems="10"
                         android:id="@+id/zip"
+                        android:backgroundTint="@android:color/transparent"
                         android:layout_gravity="center_horizontal"
                         android:layout_toRightOf="@+id/txt_zipcode_label"
                         android:inputType="number" />
@@ -226,7 +232,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="0.1dp"
                     android:background="@color/button_material_light"
-                    android:layout_marginTop="12dp" />
+                    android:layout_marginTop="2dp" />
 
             </LinearLayout>
 
@@ -258,6 +264,7 @@
                         android:layout_height="wrap_content"
                         android:ems="10"
                         android:id="@+id/txt_territory"
+                        android:backgroundTint="@android:color/transparent"
                         android:layout_gravity="center_horizontal"
                         android:layout_toRightOf="@+id/txt_territory_label" />
                 </RelativeLayout>
@@ -267,7 +274,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="0.1dp"
                     android:background="@color/button_material_light"
-                    android:layout_marginTop="12dp" />
+                    android:layout_marginTop="2dp" />
 
             </LinearLayout>
 
@@ -299,6 +306,7 @@
                         android:layout_height="wrap_content"
                         android:ems="10"
                         android:id="@+id/phone"
+                        android:backgroundTint="@android:color/transparent"
                         android:layout_gravity="center_horizontal"
                         android:layout_toRightOf="@+id/txt_phone_label"
                         android:inputType="number" />
@@ -309,7 +317,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="0.1dp"
                     android:background="@color/button_material_light"
-                    android:layout_marginTop="12dp" />
+                    android:layout_marginTop="2dp" />
 
             </LinearLayout>
 

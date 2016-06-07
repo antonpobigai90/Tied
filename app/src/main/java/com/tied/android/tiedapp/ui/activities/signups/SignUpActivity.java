@@ -31,6 +31,7 @@ import com.tied.android.tiedapp.ui.fragments.signups.CoWorkerCountFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.CoWorkerFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.EmailSignUpFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.GroupDescFragment;
+import com.tied.android.tiedapp.ui.fragments.signups.HelpFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.HomeAddressFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.IndustryFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.NameFragment;
@@ -81,14 +82,15 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
         User user = User.getUser(getApplicationContext());
         if(user != null && user.getId() != null){
             Log.d(TAG, user.toString());
-//            user.setSign_up_stage(19);
-//            user.save(getApplicationContext());
+            user.setSign_up_stage(21);
+            user.save(getApplicationContext());
             Log.d(TAG +" 3", user.toString());
             Bundle bundle = new Bundle();
             Gson gson = new Gson();
             String user_json = gson.toJson(user);
             bundle.putString(Constants.USER, user_json);
             launchFragment(user.getSign_up_stage(), bundle);
+//            launchFragment(Constants.Help, null);
         }else{
             launchFragment(Constants.EmailSignUp, null);
         }
@@ -170,6 +172,10 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
                 break;
             case Constants.CoWorker:
                 fragment = new CoWorkerFragment();
+                fragment.setArguments(bundle);
+                break;
+            case Constants.Help:
+                fragment = new HelpFragment();
                 fragment.setArguments(bundle);
                 break;
             default: finish();

@@ -45,6 +45,7 @@ public class AddBossFragment extends Fragment implements View.OnClickListener{
     private RelativeLayout continue_btn;
 
     private ImageView img_sms, img_email, img_no_invite;
+    int type_index;
 
     private EditText street, city, state, zip;
     private String cityText, stateText, streetText, zipText;
@@ -92,6 +93,14 @@ public class AddBossFragment extends Fragment implements View.OnClickListener{
         email = (EditText) view.findViewById(R.id.email);
         phone = (EditText) view.findViewById(R.id.phone);
 
+        img_sms = (ImageView) view.findViewById(R.id.img_sms);
+        img_email = (ImageView) view.findViewById(R.id.img_email);
+        img_no_invite = (ImageView) view.findViewById(R.id.img_no_invite);
+
+        txt_sms = (TextView) view.findViewById(R.id.txt_sms);
+        txt_email1 = (TextView) view.findViewById(R.id.txt_email1);
+        txt_no_invite = (TextView) view.findViewById(R.id.txt_no_invite);
+
         continue_btn = (RelativeLayout) view.findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(this);
 
@@ -114,6 +123,9 @@ public class AddBossFragment extends Fragment implements View.OnClickListener{
 
         no_invite_layout = (LinearLayout) view.findViewById(R.id.no_invite_layout);
         no_invite_layout.setOnClickListener(this);
+
+        type_index = 0;
+        setSelectType(0);
     }
 
     @Override
@@ -152,6 +164,15 @@ public class AddBossFragment extends Fragment implements View.OnClickListener{
         switch (v.getId()){
             case R.id.continue_btn:
                 continue_action();
+                break;
+            case R.id.sms_layout:
+                setSelectType(0);
+                break;
+            case R.id.email_layout:
+                setSelectType(1);
+                break;
+            case R.id.no_invite_layout:
+                setSelectType(2);
                 break;
         }
     }
@@ -224,7 +245,7 @@ public class AddBossFragment extends Fragment implements View.OnClickListener{
 
     private void setSelectType(int index) {
         if(index == 0) {
-            img_sms.setBackgroundResource(R.mipmap.dot_checked_icon1);
+            img_sms.setBackgroundResource(R.mipmap.dot_checked_icon);
             img_email.setBackgroundResource(R.mipmap.dot_unchecked_icon);
             img_no_invite.setBackgroundResource(R.mipmap.dot_unchecked_icon);
 
@@ -233,7 +254,7 @@ public class AddBossFragment extends Fragment implements View.OnClickListener{
             txt_no_invite.setTextColor(getResources().getColor(R.color.text_disable_color));
         } else if (index == 1){
             img_sms.setBackgroundResource(R.mipmap.dot_unchecked_icon);
-            img_email.setBackgroundResource(R.mipmap.dot_checked_icon1);
+            img_email.setBackgroundResource(R.mipmap.dot_checked_icon);
             img_no_invite.setBackgroundResource(R.mipmap.dot_unchecked_icon);
 
             txt_sms.setTextColor(getResources().getColor(R.color.text_disable_color));
@@ -242,7 +263,7 @@ public class AddBossFragment extends Fragment implements View.OnClickListener{
         } else {
             img_sms.setBackgroundResource(R.mipmap.dot_unchecked_icon);
             img_email.setBackgroundResource(R.mipmap.dot_unchecked_icon);
-            img_no_invite.setBackgroundResource(R.mipmap.dot_checked_icon1);
+            img_no_invite.setBackgroundResource(R.mipmap.dot_checked_icon);
 
             txt_sms.setTextColor(getResources().getColor(R.color.text_disable_color));
             txt_email1.setTextColor(getResources().getColor(R.color.text_disable_color));
