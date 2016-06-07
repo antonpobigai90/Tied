@@ -24,7 +24,6 @@ public class SplashActivity extends Activity {
     public static final String TAG = SplashActivity.class
             .getSimpleName();
 
-
     Context context;
     protected boolean _active = true;
     protected int _splashTime = 3000;
@@ -44,7 +43,8 @@ public class SplashActivity extends Activity {
         boolean done = mPrefs.getBoolean(Constants.SPLASH_SCREEN_DONE, false);
         if (done) {
             User user = User.getUser(getApplicationContext());
-            if (user != null && user.getId() != null && user.getSign_up_stage() > Constants.Picture) {
+            Log.d(TAG, user.toString());
+            if (user != null && user.getId() != null && user.getSign_up_stage() > Constants.Completed) {
                 Log.d(TAG, user.toString());
                 Bundle bundle = new Bundle();
                 Gson gson = new Gson();
