@@ -1,263 +1,278 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/background">
+    android:background="@mipmap/background"
+    android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/top_layout"
         android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:id="@+id/top_layout">
+        android:layout_height="54dp">
 
         <TextView
+            android:id="@+id/txt_signup_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/str_signup"
-            android:id="@+id/txt_signup_label"
-            android:textColor="@color/white"
-            android:textSize="25sp"
+            android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="15dp"
-            android:layout_centerHorizontal="true" />
+            android:text="@string/str_signup"
+            android:textColor="@color/white"
+            android:textSize="25sp" />
 
         <ImageView
+            android:id="@+id/img_help"
             android:layout_width="35dp"
             android:layout_height="35dp"
-            android:id="@+id/img_help"
-            android:src="@mipmap/btn_help"
-            android:layout_marginRight="15dp"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true" />
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:src="@mipmap/btn_help" />
 
     </RelativeLayout>
 
     <TextView
+        android:id="@+id/txt_hint_string"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/str_signup_invite"
-        android:id="@+id/txt_hint_string"
-        android:gravity="center_horizontal"
-        android:textColor="@color/white"
-        android:textSize="20sp"
         android:layout_below="@+id/top_layout"
-        android:layout_marginTop="30dp"
         android:layout_marginBottom="30dp"
         android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp" />
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="30dp"
+        android:gravity="center_horizontal"
+        android:text="@string/str_signup_invite"
+        android:textColor="@color/white"
+        android:textSize="20sp" />
 
-    <RelativeLayout
-        android:id="@+id/layout_email"
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/bottom_layout"
         android:layout_below="@+id/txt_hint_string"
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/line"
-            android:layout_width="fill_parent"
-            android:layout_height="0.1dp"
-            android:background="@color/button_material_light" />
+        android:scrollbars="none">
 
         <LinearLayout
-            android:orientation="vertical"
-            android:layout_marginTop="10dp"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="40dp"
-                android:id="@+id/img_email"
-                android:src="@mipmap/email_icon"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center_horizontal"/>
-
-            <TextView
-                android:layout_width="fill_parent"
+            <RelativeLayout
+                android:id="@+id/layout_email"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="invite via email address"
-                android:gravity="center_horizontal"
-                android:textSize="17sp"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"/>
+                android:layout_below="@+id/txt_hint_string"
+                android:orientation="vertical">
 
+                <TextView
+                    android:id="@+id/line"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@color/button_material_light" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/img_email"
+                        android:layout_width="50dp"
+                        android:layout_height="40dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@mipmap/email_icon" />
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center_horizontal"
+                        android:text="invite via email address"
+                        android:textSize="17sp" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layout_sms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layout_email"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/line1"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@color/button_material_light" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/img_sms"
+                        android:layout_width="50dp"
+                        android:layout_height="40dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@mipmap/phone_icon" />
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center_horizontal"
+                        android:text="invite via sms"
+                        android:textSize="17sp" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layout_add"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layout_sms"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/line2"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@color/button_material_light" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/img_add"
+                        android:layout_width="50dp"
+                        android:layout_height="40dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@mipmap/add_icon" />
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center_horizontal"
+                        android:text="Add via app"
+                        android:textSize="17sp" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layout_options"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layout_add"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/line4"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@color/button_material_light" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center_horizontal"
+                        android:text="@string/str_invite_options"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layout_later"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/layout_options"
+                android:layout_marginTop="25dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/line3"
+                    android:layout_width="fill_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@color/button_material_light" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="30dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center_horizontal"
+                        android:text="ADD LATER"
+                        android:textSize="20sp" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
         </LinearLayout>
 
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/layout_sms"
-        android:layout_below="@+id/layout_email"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/line1"
-            android:layout_width="fill_parent"
-            android:layout_height="0.1dp"
-            android:background="@color/button_material_light" />
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_marginTop="10dp"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="40dp"
-                android:id="@+id/img_sms"
-                android:src="@mipmap/phone_icon"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center_horizontal"/>
-
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="invite via sms"
-                android:gravity="center_horizontal"
-                android:textSize="17sp"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"/>
-
-        </LinearLayout>
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/layout_add"
-        android:visibility="gone"
-        android:layout_below="@+id/layout_sms"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/line2"
-            android:layout_width="fill_parent"
-            android:layout_height="0.1dp"
-            android:background="@color/button_material_light" />
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_marginTop="10dp"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="40dp"
-                android:id="@+id/img_add"
-                android:src="@mipmap/add_icon"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center_horizontal"/>
-
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="Add via app"
-                android:gravity="center_horizontal"
-                android:textSize="17sp"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"/>
-
-        </LinearLayout>
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/layout_options"
-        android:layout_below="@+id/layout_add"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/line4"
-            android:layout_width="fill_parent"
-            android:layout_height="0.1dp"
-            android:background="@color/button_material_light" />
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_marginTop="15dp"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="*You can import multiple employees via EXCEL using the website. LEARN MORE >"
-                android:gravity="center_horizontal"
-                android:textSize="14sp"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"/>
-
-        </LinearLayout>
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/layout_later"
-        android:layout_below="@+id/layout_options"
-        android:layout_marginTop="25dp"
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/line3"
-            android:layout_width="fill_parent"
-            android:layout_height="0.1dp"
-            android:background="@color/button_material_light" />
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_marginTop="10dp"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:text="ADD LATER"
-                android:gravity="center_horizontal"
-                android:textSize="20sp"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"/>
-
-        </LinearLayout>
-
-    </RelativeLayout>
+    </ScrollView>
 
     <LinearLayout
-        android:orientation="horizontal"
+        android:id="@+id/bottom_layout"
         android:layout_width="fill_parent"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
-        android:id="@+id/bottom_layout">
+        android:orientation="horizontal">
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:id="@+id/profile_layout"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/white"
             android:gravity="center_vertical"
-            android:id="@+id/profile_layout">
+            android:orientation="horizontal">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/img_user_picture"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
@@ -265,31 +280,31 @@
                 android:src="@mipmap/default_avatar" />
 
             <TextView
+                android:id="@+id/txt_profile_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
                 android:text="@string/str_profile"
-                android:id="@+id/txt_profile_label"
                 android:textColor="@color/button_bg"
-                android:textSize="15dp"
-                android:layout_marginLeft="25dp" />
+                android:textSize="15dp" />
         </LinearLayout>
 
         <RelativeLayout
+            android:id="@+id/continue_btn"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
-            android:background="@color/button_bg"
-            android:id="@+id/continue_btn"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:background="@color/button_bg">
 
             <ImageView
+                android:id="@+id/img_next_arrow"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:id="@+id/img_next_arrow"
-                android:src="@mipmap/btn_next_arrow"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="10dp" />
+                android:layout_marginRight="10dp"
+                android:src="@mipmap/btn_next_arrow" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -297,22 +312,22 @@
                 android:layout_toLeftOf="@+id/img_next_arrow">
 
                 <TextView
+                    android:id="@+id/txt_continue_label"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/str_continue"
-                    android:id="@+id/txt_continue_label"
-                    android:textSize="15dp"
-                    android:textColor="@color/white"
+                    android:layout_centerInParent="true"
                     android:layout_marginRight="10dp"
-                    android:layout_centerInParent="true" />
+                    android:text="@string/str_continue"
+                    android:textColor="@color/white"
+                    android:textSize="15dp" />
 
                 <TextView
+                    android:id="@+id/textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="12/20"
-                    android:id="@+id/textView"
                     android:layout_below="@+id/txt_continue_label"
-                    android:layout_centerInParent="true" />
+                    android:layout_centerInParent="true"
+                    android:text="12/20" />
             </RelativeLayout>
         </RelativeLayout>
     </LinearLayout>

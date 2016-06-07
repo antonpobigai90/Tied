@@ -2,6 +2,7 @@ package com.tied.android.tiedapp.ui.fragments.signups;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
@@ -13,8 +14,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -43,6 +47,11 @@ public class CoWorkerFragment extends Fragment implements View.OnClickListener{
 
     private EditText email,phone;
     private RelativeLayout continue_btn;
+
+    private ImageView img_sms, img_email, img_no_invite;
+    int type_index;
+    TextView txt_sms, txt_email1, txt_no_invite;
+    LinearLayout sms_layout, email_layout, no_invite_layout;
 
     private ProgressBar progressBar;
 
@@ -81,12 +90,32 @@ public class CoWorkerFragment extends Fragment implements View.OnClickListener{
         state = (EditText) view.findViewById(R.id.state);
         zip = (EditText) view.findViewById(R.id.zip);
 
+        img_sms = (ImageView) view.findViewById(R.id.img_sms);
+        img_email = (ImageView) view.findViewById(R.id.img_email);
+        img_no_invite = (ImageView) view.findViewById(R.id.img_no_invite);
+
+        txt_sms = (TextView) view.findViewById(R.id.txt_sms);
+        txt_email1 = (TextView) view.findViewById(R.id.txt_email1);
+        txt_no_invite = (TextView) view.findViewById(R.id.txt_no_invite);
+
         email = (EditText) view.findViewById(R.id.email);
         phone = (EditText) view.findViewById(R.id.phone);
         progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
         continue_btn = (RelativeLayout) view.findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(this);
+
+        sms_layout = (LinearLayout) view.findViewById(R.id.sms_layout);
+        sms_layout.setOnClickListener(this);
+
+        email_layout = (LinearLayout) view.findViewById(R.id.email_layout);
+        email_layout.setOnClickListener(this);
+
+        no_invite_layout = (LinearLayout) view.findViewById(R.id.no_invite_layout);
+        no_invite_layout.setOnClickListener(this);
+
+        type_index = 0;
+        setSelectType(0);
     }
 
     @Override
@@ -125,6 +154,15 @@ public class CoWorkerFragment extends Fragment implements View.OnClickListener{
         switch (v.getId()){
             case R.id.continue_btn:
                 continue_action();
+                break;
+            case R.id.sms_layout:
+                setSelectType(0);
+                break;
+            case R.id.email_layout:
+                setSelectType(1);
+                break;
+            case R.id.no_invite_layout:
+                setSelectType(2);
                 break;
         }
     }
@@ -198,6 +236,34 @@ public class CoWorkerFragment extends Fragment implements View.OnClickListener{
     public void continue_action() {
         if (validated()) {
             new GeocodeAsyncTask().execute();
+        }
+    }
+
+    private void setSelectType(int index) {
+        if(index == 0) {
+            img_sms.setBackgroundResource(R.mipmap.dot_checked_icon);
+            img_email.setBackgroundResource(R.mipmap.dot_unchecked_icon);
+            img_no_invite.setBackgroundResource(R.mipmap.dot_unchecked_icon);
+
+            txt_sms.setTextColor(Color.WHITE);
+            txt_email1.setTextColor(getResources().getColor(R.color.text_disable_color));
+            txt_no_invite.setTextColor(getResources().getColor(R.color.text_disable_color));
+        } else if (index == 1){
+            img_sms.setBackgroundResource(R.mipmap.dot_unchecked_icon);
+            img_email.setBackgroundResource(R.mipmap.dot_checked_icon);
+            img_no_invite.setBackgroundResource(R.mipmap.dot_unchecked_icon);
+
+            txt_sms.setTextColor(getResources().getColor(R.color.text_disable_color));
+            txt_email1.setTextColor(Color.WHITE);
+            txt_no_invite.setTextColor(getResources().getColor(R.color.text_disable_color));
+        } else {
+            img_sms.setBackgroundResource(R.mipmap.dot_unchecked_icon);
+            img_email.setBackgroundResource(R.mipmap.dot_unchecked_icon);
+            img_no_invite.setBackgroundResource(R.mipmap.dot_checked_icon);
+
+            txt_sms.setTextColor(getResources().getColor(R.color.text_disable_color));
+            txt_email1.setTextColor(getResources().getColor(R.color.text_disable_color));
+            txt_no_invite.setTextColor(Color.WHITE);
         }
     }
 }

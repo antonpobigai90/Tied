@@ -79,6 +79,7 @@
     </string-array>
 
     <string name="str_signup_hint13">ADD BOSS INFO</string>
+    <string name="str_signup_co_worker">Enter your co-worker info</string>
     <string name="str_fullname">FULL NAME</string>
     <string name="str_invite_via">INVITE VIA</string>
     <string name="str_sms">SMS</string>
@@ -109,6 +110,9 @@
     <string name="str_delete">DELETE</string>
 
     <string name="str_signup_invite">Add/Invite your employees</string>
+    <string name="str_invite_options">
+        *You can import multiple employees via EXCEL using the website. <u>LEARN MORE ></u>.
+    </string>
 
     <string-array name="str_help_title">
         <item >How does Tied work?</item>
