@@ -65,7 +65,8 @@ public class ScheduleActivity extends FragmentActivity {
                 fragment = new CreateScheduleFragment();
                 fragment.setArguments(bundle);
                 break;
-            default: finish();
+            default:
+                finish();
         }
 
         if (fragment != null) {
@@ -79,5 +80,10 @@ public class ScheduleActivity extends FragmentActivity {
                     .addToBackStack(fragment.getClass().getSimpleName())
                     .commit();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 }

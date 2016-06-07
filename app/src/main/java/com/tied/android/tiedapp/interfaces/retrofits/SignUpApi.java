@@ -45,7 +45,7 @@ public interface SignUpApi {
     Call<ServerInfo> sendPhoneCode(@Field("user_id") String user_id, @Field("phone_number") String phone_number);
 
     @Multipart
-    @PUT(Constants.USER_UPDATE_AVATAR)
+    @PUT(Constants.USER_UPDATE_INFO)
     Call<UpdateAvatar> uploadAvatar(@Part("id") RequestBody id, @Part("token") RequestBody token, @Part("sign_up_stage") RequestBody sign_up_stage, @Part MultipartBody.Part file);
 
     @PUT(Constants.USER_UPDATE_INFO)

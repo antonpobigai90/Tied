@@ -226,7 +226,7 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
     }
 
     private void handleCrop(Uri outputUri) {
-        ImageView avatar = ((PictureFragment) fragment).avatar;
+        ImageView avatar =  ((PictureFragment) fragment).avatar;
         ImageView img_user_picture = ((PictureFragment) fragment).img_user_picture;
         avatar.setImageBitmap(null);
         img_user_picture.setImageBitmap(null);
