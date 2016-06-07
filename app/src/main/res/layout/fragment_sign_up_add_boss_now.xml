@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:text="@string/str_signup_hint15"
         android:gravity="center_horizontal"
-        android:textSize="17dp"
+        android:textSize="17sp"
         android:layout_marginBottom="30dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
