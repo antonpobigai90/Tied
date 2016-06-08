@@ -99,6 +99,13 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
         service = retrofit.create(SignUpApi.class);
     }
 
+    public void loadAvatar(User user, ImageView img_user_picture){
+        if (user.getAvatar_uri() != null){
+            Uri myUri = Uri.parse(user.getAvatar_uri());
+            img_user_picture.setImageURI(myUri);
+        }
+    }
+
     public void launchFragment(int pos, Bundle bundle) {
         fragment_index = pos;
         fragment = null;

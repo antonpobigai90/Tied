@@ -1,7 +1,6 @@
 package com.tied.android.tiedapp.ui.fragments.signups;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -90,9 +89,7 @@ public class NameFragment extends Fragment implements View.OnClickListener {
             user = gson.fromJson(user_json, User.class);
             first_name.setText(user.getPhone());
             last_name.setText(user.getFax());
-            Uri myUri = Uri.parse(user.getAvatar_uri());
-            if (myUri != null)
-                img_user_picture.setImageURI(myUri);
+            ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
         }
 
 

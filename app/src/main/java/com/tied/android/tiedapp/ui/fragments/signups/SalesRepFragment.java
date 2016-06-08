@@ -2,7 +2,6 @@ package com.tied.android.tiedapp.ui.fragments.signups;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -111,9 +110,7 @@ public class SalesRepFragment extends Fragment implements View.OnClickListener {
             Gson gson = new Gson();
             String user_json = bundle.getString("user");
             User user = gson.fromJson(user_json, User.class);
-            Uri myUri = Uri.parse(user.getAvatar_uri());
-            if (myUri != null)
-                img_user_picture.setImageURI(myUri);
+            ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
         }
 
         self_layout = (LinearLayout) view.findViewById(R.id.self_layout);

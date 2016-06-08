@@ -2,7 +2,6 @@ package com.tied.android.tiedapp.ui.fragments.signups;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -91,9 +90,7 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
             User user = gson.fromJson(user_json, User.class);
             phone.setText(user.getPhone());
             fax.setText(user.getFax());
-            Uri myUri = Uri.parse(user.getAvatar_uri());
-            if (myUri != null)
-                img_user_picture.setImageURI(myUri);
+            ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
         }
 
         phone.addTextChangedListener(new PhoneNumberFormattingTextWatcher("US"));

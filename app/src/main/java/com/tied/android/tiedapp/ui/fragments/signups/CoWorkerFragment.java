@@ -125,9 +125,7 @@ public class CoWorkerFragment extends Fragment implements View.OnClickListener{
             Gson gson = new Gson();
             String user_json = bundle.getString("user");
             User user = gson.fromJson(user_json, User.class);
-            Uri myUri = Uri.parse(user.getAvatar_uri());
-            if (myUri != null)
-                img_user_picture.setImageURI(myUri);
+            ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
         }
 
         type_index = 0;

@@ -109,8 +109,7 @@ public class GroupDescFragment extends Fragment implements View.OnClickListener{
             String user_json = bundle.getString("user");
             User user = gson.fromJson(user_json, User.class);
             Uri myUri = Uri.parse(user.getAvatar_uri());
-            if (myUri != null)
-                img_user_picture.setImageURI(myUri);
+            ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
         }
 
         principal_layout = (LinearLayout) view.findViewById(R.id.principal_layout);
