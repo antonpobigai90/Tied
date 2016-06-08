@@ -66,6 +66,9 @@ public class CoWorkerFragment extends Fragment implements View.OnClickListener{
     private Boss boss;
     private Location location;
 
+    public ImageView img_user_picture;
+    private Bundle bundle;
+
     public CoWorkerFragment() {
     }
 
@@ -113,6 +116,19 @@ public class CoWorkerFragment extends Fragment implements View.OnClickListener{
 
         no_invite_layout = (LinearLayout) view.findViewById(R.id.no_invite_layout);
         no_invite_layout.setOnClickListener(this);
+
+        img_user_picture = (ImageView) view.findViewById(R.id.img_user_picture);
+
+
+        bundle = getArguments();
+        if (bundle != null) {
+            Gson gson = new Gson();
+            String user_json = bundle.getString("user");
+            User user = gson.fromJson(user_json, User.class);
+            Uri myUri = Uri.parse(user.getAvatar_uri());
+            if (myUri != null)
+                img_user_picture.setImageURI(myUri);
+        }
 
         type_index = 0;
         setSelectType(0);

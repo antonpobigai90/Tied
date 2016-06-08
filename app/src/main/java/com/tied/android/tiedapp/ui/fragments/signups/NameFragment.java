@@ -33,19 +33,19 @@ import retrofit2.Response;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class NameFragment extends Fragment implements View.OnClickListener{
+public class NameFragment extends Fragment implements View.OnClickListener {
 
     public static final String TAG = NameFragment.class
             .getSimpleName();
 
-    private EditText first_name,last_name;
-//    private Button continue_btn;
+    private EditText first_name, last_name;
+    //    private Button continue_btn;
     private RelativeLayout continue_btn;
     LinearLayout alert_valid;
 
     // Reference to our image view we will use
     public ImageView img_user_picture;
-    
+
     String firstNameText, lastNameText;
 
     private SignUpFragmentListener mListener;
@@ -69,7 +69,7 @@ public class NameFragment extends Fragment implements View.OnClickListener{
         initComponent(view);
     }
 
-    public void initComponent(View view){
+    public void initComponent(View view) {
 
         first_name = (EditText) view.findViewById(R.id.first_name);
         last_name = (EditText) view.findViewById(R.id.last_name);
@@ -79,11 +79,11 @@ public class NameFragment extends Fragment implements View.OnClickListener{
 
         img_user_picture = (ImageView) view.findViewById(R.id.img_user_picture);
 
-        continue_btn = (RelativeLayout)view.findViewById(R.id.continue_btn);
+        continue_btn = (RelativeLayout) view.findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(this);
 
         Bundle bundle = getArguments();
-        if(bundle != null){
+        if (bundle != null) {
             Gson gson = new Gson();
             bundle = getArguments();
             String user_json = bundle.getString("user");
@@ -91,7 +91,8 @@ public class NameFragment extends Fragment implements View.OnClickListener{
             first_name.setText(user.getPhone());
             last_name.setText(user.getFax());
             Uri myUri = Uri.parse(user.getAvatar_uri());
-            img_user_picture.setImageURI(myUri);
+            if (myUri != null)
+                img_user_picture.setImageURI(myUri);
         }
 
 
@@ -114,8 +115,8 @@ public class NameFragment extends Fragment implements View.OnClickListener{
             mListener.onFragmentInteraction(Constants.PhoneAndFax, bundle);
         }
     }
-    
-    public void continue_action(){
+
+    public void continue_action() {
         DialogUtils.displayProgress(getActivity());
         user.setFirst_name(firstNameText);
         user.setLast_name(lastNameText);
@@ -127,21 +128,21 @@ public class NameFragment extends Fragment implements View.OnClickListener{
             public void onResponse(Call<ServerInfo> call, Response<ServerInfo> UpdateUserResponse) {
                 if (getActivity() == null) return;
                 ServerInfo UpdateUser = UpdateUserResponse.body();
-                Log.d(TAG +" onFailure", UpdateUserResponse.body().toString());
-                if(UpdateUser.isSuccess()){
+                Log.d(TAG + " onFailure", UpdateUserResponse.body().toString());
+                if (UpdateUser.isSuccess()) {
                     Bundle bundle = new Bundle();
                     boolean saved = user.save(getActivity().getApplicationContext());
-                    if(saved){
+                    if (saved) {
                         Gson gson = new Gson();
                         String json = gson.toJson(user);
                         bundle.putString(Constants.USER, json);
                         DialogUtils.closeProgress();
                         nextAction(bundle);
-                    }else{
+                    } else {
                         DialogUtils.closeProgress();
                         Toast.makeText(getActivity(), "user info  was not updated", Toast.LENGTH_LONG).show();
                     }
-                }else{
+                } else {
                     Toast.makeText(getActivity(), UpdateUser.getMessage(), Toast.LENGTH_LONG).show();
                 }
                 DialogUtils.closeProgress();
@@ -150,7 +151,7 @@ public class NameFragment extends Fragment implements View.OnClickListener{
             @Override
             public void onFailure(Call<ServerInfo> UpdateUserCall, Throwable t) {
                 Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
-                Log.d(TAG +" onFailure", t.toString());
+                Log.d(TAG + " onFailure", t.toString());
                 DialogUtils.closeProgress();
             }
         });
@@ -158,21 +159,18 @@ public class NameFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.continue_btn:
                 firstNameText = first_name.getText().toString();
                 lastNameText = last_name.getText().toString();
                 boolean first_name_match = firstNameText.matches("^[\\p{L} .'-]+$");
                 if (!first_name_match) {
                     alert_valid.setVisibility(View.VISIBLE);
-                    Utility.moveViewToScreenCenter( alert_valid, Utility.getResourceString(getActivity(), R.string.alert_valide_name));
-                }
-                else if(firstNameText.length() == 0){
+                    Utility.moveViewToScreenCenter(alert_valid, Utility.getResourceString(getActivity(), R.string.alert_valide_name));
+                } else if (firstNameText.length() == 0) {
                     alert_valid.setVisibility(View.VISIBLE);
-                    Utility.moveViewToScreenCenter( alert_valid, Utility.getResourceString(getActivity(), R.string.alert_valide_name_empty));
-                }
-                else
-                {
+                    Utility.moveViewToScreenCenter(alert_valid, Utility.getResourceString(getActivity(), R.string.alert_valide_name_empty));
+                } else {
                     continue_action();
                 }
                 break;

@@ -121,7 +121,8 @@ public class TerritoryFragment extends Fragment implements View.OnClickListener{
             String user_json = bundle.getString("user");
             User user = gson.fromJson(user_json, User.class);
             Uri myUri = Uri.parse(user.getAvatar_uri());
-            img_user_picture.setImageURI(myUri);
+            if (myUri != null)
+                img_user_picture.setImageURI(myUri);
         }
     }
 

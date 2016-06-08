@@ -126,7 +126,8 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
             String user_json = bundle.getString("user");
             User user = gson.fromJson(user_json, User.class);
             Uri myUri = Uri.parse(user.getAvatar_uri());
-            img_user_picture.setImageURI(myUri);
+            if (myUri != null)
+                img_user_picture.setImageURI(myUri);
         }
 
         alert_valid = (LinearLayout) view.findViewById(R.id.alert_valid);

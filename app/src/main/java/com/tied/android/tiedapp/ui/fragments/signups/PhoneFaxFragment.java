@@ -92,7 +92,8 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
             phone.setText(user.getPhone());
             fax.setText(user.getFax());
             Uri myUri = Uri.parse(user.getAvatar_uri());
-            img_user_picture.setImageURI(myUri);
+            if (myUri != null)
+                img_user_picture.setImageURI(myUri);
         }
 
         phone.addTextChangedListener(new PhoneNumberFormattingTextWatcher("US"));
