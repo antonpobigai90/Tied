@@ -163,6 +163,7 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
                         User user = gson.fromJson(user_json, User.class);
                         user.setSign_up_stage(Constants.Name);
                         user.setAvatar_uri(String.valueOf(uri));
+                        user.setAvatar_uri("avatar_"+user.getId()+".jpg");
                         user.setAvatar(updateAvatar.getAvatar());
                         boolean saved = user.save(getActivity().getApplicationContext());
                         if(saved){

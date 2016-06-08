@@ -1,5 +1,7 @@
 package com.tied.android.tiedapp.ui.fragments.schedule;
 
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,7 +12,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.tied.android.tiedapp.R;
+import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
 
 /**
@@ -53,9 +58,33 @@ public class CreateScheduleFragment extends Fragment implements View.OnClickList
             if (user.getAvatar_uri() != null) {
                 Uri myUri = Uri.parse(user.getAvatar_uri());
                 img_user_picture.setImageURI(myUri);
+            }else{
+                Picasso.with(getActivity()).
+                        load(Constants.GET_AVATAR_ENDPOINT+"avatar_"+user.getId()+".jpg")
+                        .resize(35,35)
+                        .into(target);
             }
         }
     }
+
+    private Target target = new Target() {
+        @Override
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+            if(bitmap != null){
+                img_user_picture.setImageBitmap(bitmap);
+            }
+        }
+
+        @Override
+        public void onBitmapFailed(Drawable errorDrawable) {
+
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+        }
+    };
 
     @Override
     public void onClick(View v) {

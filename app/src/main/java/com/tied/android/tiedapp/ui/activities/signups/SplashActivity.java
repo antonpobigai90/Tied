@@ -44,7 +44,7 @@ public class SplashActivity extends Activity {
         if (done) {
             User user = User.getUser(getApplicationContext());
             Log.d(TAG, user.toString());
-            if (user != null && user.getId() != null && user.getSign_up_stage() > Constants.Completed) {
+            if (user != null && user.getId() != null && user.getSign_up_stage() == Constants.Completed) {
                 Log.d(TAG, user.toString());
                 Bundle bundle = new Bundle();
                 Gson gson = new Gson();

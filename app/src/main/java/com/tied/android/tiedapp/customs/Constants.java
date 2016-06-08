@@ -18,7 +18,8 @@ public class Constants {
     public static final String AUTH_REGISTER_ENDPOINT = API_PATH + "auth/register";
     public static final String AUTH_LOGIN_ENDPOINT = API_PATH + "auth/login";
     public static final String AUTH_SEND_PHONE_CODE_ENDPOINT = API_PATH + "auth/send_phone_vc";
-    public static final String AUTH_VERIFY_PHONE_ENDPOINT = API_PATH + "auth/verify_phone";
+
+    public static final String GET_AVATAR_ENDPOINT = HOST + "uploads/avatars/";
 
     public static final String USER_UPDATE_INFO = API_PATH + "users/me";
 
