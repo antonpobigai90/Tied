@@ -158,4 +158,9 @@
     <string name="alert_valide_no_territory">No territory inputted</string>
     <string name="str_name">Fulll Name</string>
 
+    <!-- Profile -->
+    <string name="profile_notification">Notifications</string>
+    <string name="profile_address">Address</string>
+    <string name="profile_edit">Profile Edit</string>
+
 </resources>
