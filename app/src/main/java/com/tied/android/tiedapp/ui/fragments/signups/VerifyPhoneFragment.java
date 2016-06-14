@@ -26,15 +26,13 @@ public class VerifyPhoneFragment extends Fragment implements View.OnClickListene
 
     private SignUpFragmentListener mListener;
 
-//    private Button continue_btn;
     private RelativeLayout continue_btn;
     private EditText code;
     private LinearLayout back_btn;
 
     private String codeText;
 
-    public VerifyPhoneFragment() {
-    }
+    public VerifyPhoneFragment() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,8 +46,6 @@ public class VerifyPhoneFragment extends Fragment implements View.OnClickListene
 
         initComponent(view);
     }
-
-
 
     @Override
     public void onAttach(Context context) {
@@ -86,8 +82,6 @@ public class VerifyPhoneFragment extends Fragment implements View.OnClickListene
             Toast.makeText(getActivity(), "Invalid input", Toast.LENGTH_LONG).show();
         }
     }
-
-
 
     public boolean validated(){
         String code_sent = getArguments().getString(Constants.CODE);
