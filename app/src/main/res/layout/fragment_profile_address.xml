@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="60dp"
+        android:background="@color/schedule_title_bg_color">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:id="@+id/img_close"
+            android:src="@mipmap/btn_close"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:color="@color/white"
+            android:textStyle="bold"
+            android:text="@string/profile_address"
+            android:id="@+id/txt_title"
+            android:textSize="18sp"
+            android:layout_centerInParent="true"
+            android:textIsSelectable="false" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:background="@color/schedule_create_appointment_bg_color"
+        android:paddingLeft="25dp"
+        android:borderBottom=""
+        android:layout_height="50dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/schedule_title_bg_color"
+            android:layout_centerVertical="true"
+            android:text="OFFICE"
+            android:id="@+id/txt_title1"
+            android:textSize="18sp"
+            android:textIsSelectable="false" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@android:color/darker_gray"/>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="25dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/schedule_title_bg_color"
+            android:layout_centerVertical="true"
+            android:text="Street Address"
+            android:paddingBottom="8dp"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/str_addresss"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/schedule_title_bg_color"
+            android:layout_centerVertical="true"
+            android:text="581 Meagan Ferry Suit 685"
+            android:textStyle="bold"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@android:color/darker_gray"/>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="25dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/schedule_title_bg_color"
+            android:layout_centerVertical="true"
+            android:text="Zip Code"
+            android:paddingBottom="8dp"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/zip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/schedule_title_bg_color"
+            android:layout_centerVertical="true"
+            android:text="76019"
+            android:textStyle="bold"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@android:color/darker_gray"/>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="25dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/schedule_title_bg_color"
+            android:layout_centerVertical="true"
+            android:text="City"
+            android:paddingBottom="8dp"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/city"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/schedule_title_bg_color"
+            android:layout_centerVertical="true"
+            android:text="Lagos"
+            android:textStyle="bold"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@android:color/darker_gray"/>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:background="@color/schedule_create_appointment_bg_color"
+        android:paddingLeft="25dp"
+        android:borderBottom=""
+        android:layout_height="50dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/schedule_title_bg_color"
+            android:layout_centerVertical="true"
+            android:text="HOME"
+            android:id="@+id/txt_title2"
+            android:textSize="18sp"
+            android:textIsSelectable="false" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@android:color/darker_gray"/>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="25dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/schedule_title_bg_color"
+            android:layout_centerVertical="true"
+            android:text="Street Address"
+            android:paddingBottom="8dp"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/home_str_addresss"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/schedule_title_bg_color"
+            android:layout_centerVertical="true"
+            android:text="530 Obalende Suit 739"
+            android:textStyle="bold"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@android:color/darker_gray"/>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="25dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/schedule_title_bg_color"
+            android:layout_centerVertical="true"
+            android:text="Zip Code"
+            android:paddingBottom="8dp"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/home_zip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/schedule_title_bg_color"
+            android:layout_centerVertical="true"
+            android:text="76019"
+            android:textStyle="bold"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@android:color/darker_gray"/>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="25dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/schedule_title_bg_color"
+            android:layout_centerVertical="true"
+            android:text="City"
+            android:paddingBottom="8dp"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/home_city"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/schedule_title_bg_color"
+            android:layout_centerVertical="true"
+            android:text="Lagos"
+            android:textStyle="bold"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@android:color/darker_gray"/>
+
+</LinearLayout>
