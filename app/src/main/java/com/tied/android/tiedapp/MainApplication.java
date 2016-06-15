@@ -9,9 +9,9 @@ import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
 import com.tied.android.tiedapp.customs.Constants;
 
-import io.fabric.sdk.android.Fabric;
 import java.util.concurrent.TimeUnit;
 
+import io.fabric.sdk.android.Fabric;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -34,6 +34,19 @@ public class MainApplication extends Application {
         super.onCreate();
         Fabric.with(this, new Crashlytics());
         mInstance = this;
+
+//        try {
+//            PackageInfo info = getPackageManager().getPackageInfo(
+//                    "com.tied.android.tiedapp",
+//                    PackageManager.GET_SIGNATURES);
+//            for (Signature signature : info.signatures) {
+//                MessageDigest md = MessageDigest.getInstance("SHA");
+//                md.update(signature.toByteArray());
+//                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+//            }
+//        } catch (PackageManager.NameNotFoundException | NoSuchAlgorithmException e) {
+//            Log.d("KeyHash:", e.getMessage());
+//        }
     }
 
     public Retrofit getRetrofit() {

@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -11,273 +11,280 @@
         android:background="@color/schedule_title_bg_color">
 
         <ImageView
+            android:id="@+id/img_close"
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:id="@+id/img_close"
-            android:src="@mipmap/btn_close"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp" />
+            android:layout_marginLeft="10dp"
+            android:src="@mipmap/btn_close" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:color="@color/white"
-            android:textStyle="bold"
-            android:text="@string/profile_address"
             android:id="@+id/txt_title"
-            android:textSize="18sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:textIsSelectable="false" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:background="@color/schedule_create_appointment_bg_color"
-        android:paddingLeft="25dp"
-        android:borderBottom=""
-        android:layout_height="50dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/schedule_title_bg_color"
-            android:layout_centerVertical="true"
-            android:text="OFFICE"
-            android:id="@+id/txt_title1"
+            android:color="@color/white"
+            android:text="@string/profile_address"
+            android:textIsSelectable="false"
             android:textSize="18sp"
-            android:textIsSelectable="false" />
+            android:textStyle="bold" />
     </RelativeLayout>
 
-    <View
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="0.1dp"
-        android:background="@android:color/darker_gray"/>
+        android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="25dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp">
-
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/schedule_title_bg_color"
-            android:layout_centerVertical="true"
-            android:text="Street Address"
-            android:paddingBottom="8dp"
-            android:textSize="14sp"/>
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/str_addresss"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/schedule_title_bg_color"
-            android:layout_centerVertical="true"
-            android:text="581 Meagan Ferry Suit 685"
-            android:textStyle="bold"
-            android:textSize="15sp" />
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:background="@color/schedule_create_appointment_bg_color"
+                android:paddingLeft="20dp">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.1dp"
-        android:background="@android:color/darker_gray"/>
+                <TextView
+                    android:id="@+id/txt_title1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="OFFICE"
+                    android:textColor="@color/schedule_title_bg_color"
+                    android:textIsSelectable="false"
+                    android:textStyle="bold"
+                    android:textSize="18sp" />
+            </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="25dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@android:color/darker_gray" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/schedule_title_bg_color"
-            android:layout_centerVertical="true"
-            android:text="Zip Code"
-            android:paddingBottom="8dp"
-            android:textSize="14sp"/>
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="15dp"
+                android:paddingTop="10dp">
 
-        <TextView
-            android:id="@+id/zip"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/schedule_title_bg_color"
-            android:layout_centerVertical="true"
-            android:text="76019"
-            android:textStyle="bold"
-            android:textSize="15sp" />
-    </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingBottom="10dp"
+                    android:text="Street Address"
+                    android:textColor="@color/schedule_title_bg_color"
+                    android:textSize="15sp" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.1dp"
-        android:background="@android:color/darker_gray"/>
+                <TextView
+                    android:id="@+id/str_addresss"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="581 Meagan Ferry Suit 685"
+                    android:textColor="@color/schedule_title_bg_color"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="25dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@android:color/darker_gray" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/schedule_title_bg_color"
-            android:layout_centerVertical="true"
-            android:text="City"
-            android:paddingBottom="8dp"
-            android:textSize="14sp"/>
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="15dp"
+                android:paddingTop="10dp">
 
-        <TextView
-            android:id="@+id/city"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/schedule_title_bg_color"
-            android:layout_centerVertical="true"
-            android:text="Lagos"
-            android:textStyle="bold"
-            android:textSize="15sp" />
-    </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingBottom="10dp"
+                    android:text="Zip Code"
+                    android:textColor="@color/schedule_title_bg_color"
+                    android:textSize="15sp" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.1dp"
-        android:background="@android:color/darker_gray"/>
+                <TextView
+                    android:id="@+id/zip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="76019"
+                    android:textColor="@color/schedule_title_bg_color"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:background="@color/schedule_create_appointment_bg_color"
-        android:paddingLeft="25dp"
-        android:borderBottom=""
-        android:layout_height="50dp">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@android:color/darker_gray" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/schedule_title_bg_color"
-            android:layout_centerVertical="true"
-            android:text="HOME"
-            android:id="@+id/txt_title2"
-            android:textSize="18sp"
-            android:textIsSelectable="false" />
-    </RelativeLayout>
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="15dp"
+                android:paddingTop="10dp">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.1dp"
-        android:background="@android:color/darker_gray"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingBottom="10dp"
+                    android:text="City"
+                    android:textColor="@color/schedule_title_bg_color"
+                    android:textSize="15sp" />
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="25dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp">
+                <TextView
+                    android:id="@+id/city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="Lagos"
+                    android:textColor="@color/schedule_title_bg_color"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/schedule_title_bg_color"
-            android:layout_centerVertical="true"
-            android:text="Street Address"
-            android:paddingBottom="8dp"
-            android:textSize="14sp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@android:color/darker_gray" />
 
-        <TextView
-            android:id="@+id/home_str_addresss"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/schedule_title_bg_color"
-            android:layout_centerVertical="true"
-            android:text="530 Obalende Suit 739"
-            android:textStyle="bold"
-            android:textSize="15sp" />
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:background="@color/schedule_create_appointment_bg_color"
+                android:paddingLeft="20dp">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.1dp"
-        android:background="@android:color/darker_gray"/>
+                <TextView
+                    android:id="@+id/txt_title2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="HOME"
+                    android:textColor="@color/schedule_title_bg_color"
+                    android:textIsSelectable="false"
+                    android:textStyle="bold"
+                    android:textSize="18sp" />
+            </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="25dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@android:color/darker_gray" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/schedule_title_bg_color"
-            android:layout_centerVertical="true"
-            android:text="Zip Code"
-            android:paddingBottom="8dp"
-            android:textSize="14sp"/>
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="15dp"
+                android:paddingTop="10dp">
 
-        <TextView
-            android:id="@+id/home_zip"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/schedule_title_bg_color"
-            android:layout_centerVertical="true"
-            android:text="76019"
-            android:textStyle="bold"
-            android:textSize="15sp" />
-    </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="10dp"
+                    android:text="Street Address"
+                    android:textColor="@color/schedule_title_bg_color"
+                    android:textSize="15sp" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.1dp"
-        android:background="@android:color/darker_gray"/>
+                <TextView
+                    android:id="@+id/home_str_addresss"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:text="530 Obalende Suit 739"
+                    android:textColor="@color/schedule_title_bg_color"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingLeft="25dp"
-        android:paddingRight="15dp"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@android:color/darker_gray" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/schedule_title_bg_color"
-            android:layout_centerVertical="true"
-            android:text="City"
-            android:paddingBottom="8dp"
-            android:textSize="14sp"/>
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="15dp"
+                android:paddingTop="10dp">
 
-        <TextView
-            android:id="@+id/home_city"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/schedule_title_bg_color"
-            android:layout_centerVertical="true"
-            android:text="Lagos"
-            android:textStyle="bold"
-            android:textSize="15sp" />
-    </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="10dp"
+                    android:text="Zip Code"
+                    android:textColor="@color/schedule_title_bg_color"
+                    android:textSize="15sp" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.1dp"
-        android:background="@android:color/darker_gray"/>
+                <TextView
+                    android:id="@+id/home_zip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="76019"
+                    android:textColor="@color/schedule_title_bg_color"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@android:color/darker_gray" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="15dp"
+                android:paddingTop="10dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="10dp"
+                    android:text="City"
+                    android:textColor="@color/schedule_title_bg_color"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/home_city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Lagos"
+                    android:textColor="@color/schedule_title_bg_color"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@android:color/darker_gray" />
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

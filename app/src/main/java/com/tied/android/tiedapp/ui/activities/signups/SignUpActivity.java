@@ -63,7 +63,7 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
     // Activity result key for camera
     public final int REQUEST_TAKE_PHOTO = 11111;
 
-    public final int REQUEST_FACEBOOK_LOGIN = 129742;
+    public final int REQUEST_FACEBOOK_LOGIN = 64206;
 
     public Bitmap bitmap;
 
@@ -82,8 +82,8 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
         User user = User.getUser(getApplicationContext());
         if(user != null && user.getId() != null){
             Log.d(TAG, user.toString());
-//            user.setSign_up_stage(20);
-//            user.save(getApplicationContext());
+            user.setSign_up_stage(4);
+            user.save(getApplicationContext());
             Log.d(TAG +" 3", user.toString());
             Bundle bundle = new Bundle();
             Gson gson = new Gson();
@@ -252,7 +252,9 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
      */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.d("requestCode",requestCode+"");
         if(requestCode == REQUEST_FACEBOOK_LOGIN && resultCode == Activity.RESULT_OK){
+            Log.d("TTTTTTTTT"," Emmanuel");
             ((EmailSignUpFragment) fragment).callbackManager.onActivityResult(requestCode, resultCode, data);
         }
         else if (requestCode == Crop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {

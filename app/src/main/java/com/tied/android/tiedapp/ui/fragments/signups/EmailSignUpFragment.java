@@ -116,6 +116,8 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
         continue_btn = (RelativeLayout) view.findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(this);
         btn_close.setOnClickListener(this);
+
+        initializeFaceBook();
         img_facebook.setOnClickListener(this);
 
         Bundle bundle = getArguments();
@@ -126,8 +128,6 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
             User user = gson.fromJson(user_json, User.class);
             email.setText(user.getEmail());
         }
-
-        initializeFaceBook();
 
         alert_valid_email = (LinearLayout) view.findViewById(R.id.alert_valid);
         alert_valid_email.setVisibility(View.GONE);
@@ -185,7 +185,7 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
                 startActivity(intent);
                 break;
             case R.id.img_facebook:
-                LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"));
+                LoginManager.getInstance().logInWithReadPermissions(getActivity(), Arrays.asList("public_profile", "email"));
                 break;
         }
     }
@@ -205,12 +205,14 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
 
                     @Override
                     public void onCancel() {
+                        Toast.makeText(getActivity(), "Login Cancel", Toast.LENGTH_LONG).show();
                     }
 
                     @Override
                     public void onError(FacebookException exception) {
                         Toast.makeText(getActivity(), exception.getMessage(),
                                 Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, exception.getMessage());
                     }
                 });
 
@@ -242,7 +244,10 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
                             lastName = obj.getString("last_name");
                             emailText = obj.getString("email");
 
-                            continue_action();
+                            Toast.makeText(getActivity(), emailText,Toast.LENGTH_LONG).show();
+                            Log.d("response email ", obj.getString("email")+"");
+
+                            //continue_action();
 
                         } catch (JSONException e) {
                             // TODO Auto-generated catch block

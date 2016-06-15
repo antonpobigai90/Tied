@@ -27,6 +27,15 @@ android {
         versionName "1.0"
     }
 
+    signingConfigs {
+        release {
+            storeFile file("Tied.jks")
+            storePassword "Student_1"
+            keyAlias "Tied"
+            keyPassword "Student_1"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false

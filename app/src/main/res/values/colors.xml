@@ -16,4 +16,5 @@
     <color name="schedule_tab_bar_color">#1d2431</color>
     <color name="background_tab_pressed">#6633B5E5</color>
     <color name="primary">#002943</color>
+    <color name="icon_green">#38df22</color>
 </resources>
