@@ -40,6 +40,11 @@ import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
 import com.tied.android.tiedapp.util.AppDialog;
 import com.tied.android.tiedapp.util.DialogUtils;
 import com.tied.android.tiedapp.util.Utility;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterAuthToken;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -67,7 +72,10 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
 
     private RelativeLayout continue_btn;
     LinearLayout alert_valid_email;
-    private ImageView btn_close, img_facebook;
+    private ImageView btn_close, img_facebook, img_twitter;
+    public TwitterAuthClient authClient = new TwitterAuthClient();
+    private TwitterSession session;
+    private TwitterAuthToken authToken;
 
     boolean m_bExit = false;
     AppDialog alertDialog;
@@ -113,12 +121,14 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
 
         btn_close = (ImageView) view.findViewById(R.id.img_close);
         img_facebook = (ImageView) view.findViewById(R.id.img_facebook);
+        img_twitter = (ImageView) view.findViewById(R.id.img_twitter);
         continue_btn = (RelativeLayout) view.findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(this);
         btn_close.setOnClickListener(this);
 
         initializeFaceBook();
         img_facebook.setOnClickListener(this);
+        img_twitter.setOnClickListener(this);
 
         Bundle bundle = getArguments();
         if(bundle != null){
@@ -187,8 +197,41 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
             case R.id.img_facebook:
                 LoginManager.getInstance().logInWithReadPermissions(getActivity(), Arrays.asList("public_profile", "email"));
                 break;
+            case R.id.img_twitter:
+                loginTwitter();
+                break;
         }
     }
+
+    private void loginTwitter(){
+
+        authClient.authorize(getActivity(), new com.twitter.sdk.android.core.Callback<TwitterSession>(){
+            @Override
+            public void success(Result<TwitterSession> twitterSessionResult) {
+                session = twitterSessionResult.data;
+                authToken = session.getAuthToken();
+
+                authClient.requestEmail(session, new com.twitter.sdk.android.core.Callback<String>() {
+                    @Override
+                    public void success(Result<String> result) {
+                        Toast.makeText(getActivity(), result.data, Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void failure(TwitterException e) {
+                        Log.d(TAG, e.getMessage());
+                        Toast.makeText(getActivity(),e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            @Override
+            public void failure(TwitterException e) {
+                Toast.makeText(getActivity(),e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
 
     private void initializeFaceBook() {
         FacebookSdk.sdkInitialize(getActivity());

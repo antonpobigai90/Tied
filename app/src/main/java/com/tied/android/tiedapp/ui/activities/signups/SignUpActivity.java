@@ -65,6 +65,8 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
 
     public final int REQUEST_FACEBOOK_LOGIN = 64206;
 
+    public final int REQUEST_TWITTER_LOGIN = 140;
+
     public Bitmap bitmap;
 
     public Retrofit retrofit;
@@ -254,8 +256,10 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
         super.onActivityResult(requestCode, resultCode, data);
         Log.d("requestCode",requestCode+"");
         if(requestCode == REQUEST_FACEBOOK_LOGIN && resultCode == Activity.RESULT_OK){
-            Log.d("TTTTTTTTT"," Emmanuel");
             ((EmailSignUpFragment) fragment).callbackManager.onActivityResult(requestCode, resultCode, data);
+        }
+        else if(requestCode == REQUEST_TWITTER_LOGIN){
+            ((EmailSignUpFragment) fragment).authClient.onActivityResult(requestCode, resultCode, data);
         }
         else if (requestCode == Crop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
             handleCrop(outputUri);

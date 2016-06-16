@@ -132,6 +132,13 @@
                         android:src="@mipmap/facebook1"
                         android:layout_marginLeft="12dp" />
 
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:id="@+id/img_twitter"
+                        android:src="@mipmap/twitter1"
+                        android:layout_marginLeft="12dp" />
+
                 </LinearLayout>
             </LinearLayout>
 

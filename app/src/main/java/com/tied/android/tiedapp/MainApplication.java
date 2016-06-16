@@ -8,6 +8,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
 import com.tied.android.tiedapp.customs.Constants;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterCore;
 
 import java.util.concurrent.TimeUnit;
 
@@ -32,6 +34,10 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(Constants.TWITTER_API_KEY, Constants.TWITTER_API_SECRET);
+        Fabric.with(this, new TwitterCore(authConfig));
+
         Fabric.with(this, new Crashlytics());
         mInstance = this;
 

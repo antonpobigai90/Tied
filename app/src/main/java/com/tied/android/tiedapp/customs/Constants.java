@@ -34,6 +34,9 @@ public class Constants {
 
     public static final String TOKEN = "token";
 
+    public static final String TWITTER_API_KEY = "6b2QdtehythOUVjBwEyHKeFGl";
+    public static final String TWITTER_API_SECRET = "hyjXQqyRekDAcpeXb1nrb1zVwjmiovXaoTVJNuZy80D0MuNBiR";
+
     public static final String CITY = "city";
     public static final String ZIP = "zip";
     public static final String STATE = "state";
