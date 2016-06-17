@@ -26,7 +26,7 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.HelpActivity;
-import com.tied.android.tiedapp.ui.fragments.HelpFragment;
+import com.tied.android.tiedapp.ui.activities.ProfileActivity;
 import com.tied.android.tiedapp.ui.fragments.signups.AddBossFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.AddBossNowFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.AddInviteFragment;
@@ -86,7 +86,7 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
         User user = User.getUser(getApplicationContext());
         if(user != null && user.getId() != null){
             Log.d(TAG, user.toString());
-            user.setSign_up_stage(4);
+            user.setSign_up_stage(6);
             user.save(getApplicationContext());
             Log.d(TAG +" : 3", user.toString());
             Bundle bundle = new Bundle();
@@ -170,9 +170,6 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
         }
         else if(pos == Constants.CoWorker){
             fragment = new CoWorkerFragment();
-        }
-        else if(pos == Constants.Help){
-            fragment = new HelpFragment();
         }
         else{
             finish();
@@ -391,6 +388,12 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
 
     public void helpButtonClicked(View v){
         Intent invite_intent = new Intent(this, HelpActivity.class);
+        startActivity(invite_intent);
+    }
+
+
+    public void profileButtonClicked(View v){
+        Intent invite_intent = new Intent(this, ProfileActivity.class);
         startActivity(invite_intent);
     }
 }

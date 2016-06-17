@@ -117,7 +117,10 @@
 
         <activity
             android:name=".ui.activities.HelpActivity"
-            android:label="@string/title_activity_help"></activity>
+            android:label="@string/title_activity_help" />
+        <activity
+            android:name=".ui.activities.ProfileActivity"
+            android:label="@string/title_activity_profile" />
     </application>
 
 </manifest>

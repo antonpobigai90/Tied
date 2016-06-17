@@ -163,5 +163,8 @@
     <string name="profile_address">Address</string>
     <string name="profile_edit">Profile Edit</string>
     <string name="title_activity_help">HelpActivity</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="title_activity_pager">PagerActivity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 
 </resources>

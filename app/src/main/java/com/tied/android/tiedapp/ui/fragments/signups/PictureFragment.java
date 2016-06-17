@@ -99,7 +99,12 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
             User user = gson.fromJson(user_json, User.class);
             ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
 
-            if(user.getAvatar() != null && !user.getAvatar().equals("")){
+            if (user.getAvatar_uri() != null){
+                Uri myUri = Uri.parse(user.getAvatar_uri());
+                img_user_picture.setImageURI(myUri);
+                avatar.setImageURI(myUri);
+            }
+            else if(user.getAvatar() != null && !user.getAvatar().equals("")){
                 Picasso.with(getActivity()).
                         load(user.getAvatar())
                         .resize(100,100)
