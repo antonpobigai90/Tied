@@ -19,6 +19,7 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.schedule.ScheduleActivity;
+import com.tied.android.tiedapp.ui.activities.signups.InviteContactActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
 
@@ -135,6 +136,14 @@ public class AddInviteFragment extends Fragment implements View.OnClickListener{
                 }else{
                     Toast.makeText(getActivity(), "user info  was not updated", Toast.LENGTH_LONG).show();
                 }
+                break;
+            case R.id.via_email_layout:
+                Intent invite_intent = new Intent(getActivity(), InviteContactActivity.class);
+                startActivity(invite_intent);
+                break;
+            case R.id.via_sms_layout:
+                Intent sms_intent = new Intent(getActivity(), InviteContactActivity.class);
+                startActivity(sms_intent);
                 break;
             case R.id.txt_add_later:
                 user.setSign_up_stage(Constants.Completed);

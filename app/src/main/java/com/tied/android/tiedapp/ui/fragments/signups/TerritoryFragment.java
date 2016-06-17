@@ -96,6 +96,8 @@ public class TerritoryFragment extends Fragment implements View.OnClickListener{
 
     public void initComponent(View view) {
 
+        context = getActivity();
+
         TerritoryModel item = new TerritoryModel();
         item.setTerritory_name("");
         item.setiNew(true);

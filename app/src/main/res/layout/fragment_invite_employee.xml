@@ -104,6 +104,7 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="40dp"
+            android:id="@+id/invite_all"
             android:gravity="center_horizontal"
             android:orientation="horizontal">
 
@@ -190,6 +191,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:id="@+id/invite"
                 android:layout_marginRight="25dp"
                 android:background="@drawable/button_invite"
                 android:text="Invite"

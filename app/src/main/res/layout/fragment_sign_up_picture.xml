@@ -148,6 +148,14 @@
                     android:textColor="@color/white"
                     android:textSize="15dp" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3/20"
+                    android:id="@+id/stage"
+                    android:layout_below="@+id/txt_continue_label"
+                    android:layout_centerInParent="true" />
+
             </RelativeLayout>
         </RelativeLayout>
     </LinearLayout>

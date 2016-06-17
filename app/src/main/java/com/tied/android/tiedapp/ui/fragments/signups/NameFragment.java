@@ -81,14 +81,14 @@ public class NameFragment extends Fragment implements View.OnClickListener {
         continue_btn = (RelativeLayout) view.findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(this);
 
-        Bundle bundle = getArguments();
+        bundle = getArguments();
         if (bundle != null) {
             Gson gson = new Gson();
             bundle = getArguments();
             String user_json = bundle.getString("user");
             user = gson.fromJson(user_json, User.class);
-            first_name.setText(user.getPhone());
-            last_name.setText(user.getFax());
+            first_name.setText(user.getFirst_name());
+            last_name.setText(user.getLast_name());
             ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
         }
 

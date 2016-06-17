@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
@@ -80,7 +81,6 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
         initComponent(view);
     }
 
-
     public void initComponent(View view) {
         select_pics = (TextView) view.findViewById(R.id.select_pics);
         avatar = (ImageView) view.findViewById(R.id.avatar);
@@ -93,6 +93,19 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
         continue_btn.setOnClickListener(this);
 
         bundle = getArguments();
+        if (bundle != null) {
+            Gson gson = new Gson();
+            String user_json = bundle.getString("user");
+            User user = gson.fromJson(user_json, User.class);
+            ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
+
+            if(user.getAvatar() != null && !user.getAvatar().equals("")){
+                Picasso.with(getActivity()).
+                        load(user.getAvatar())
+                        .resize(100,100)
+                        .into(avatar);
+            }
+        }
     }
 
     @Override
@@ -163,7 +176,6 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
                         User user = gson.fromJson(user_json, User.class);
                         user.setSign_up_stage(Constants.Name);
                         user.setAvatar_uri(String.valueOf(uri));
-                        user.setAvatar_uri("avatar_"+user.getId()+".jpg");
                         user.setAvatar(updateAvatar.getAvatar());
                         boolean saved = user.save(getActivity().getApplicationContext());
                         if(saved){

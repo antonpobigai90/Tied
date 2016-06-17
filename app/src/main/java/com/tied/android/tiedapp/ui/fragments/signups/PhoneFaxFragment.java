@@ -117,6 +117,8 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
     
     public void continue_action(){
         phoneText = phone.getText().toString();
+//        phoneText = phoneText.replaceAll("[)(-]","");
+//        phoneText = "+"+phoneText.replace(" ","");
         faxText = fax.getText().toString();
 
         DialogUtils.displayProgress(getActivity());
@@ -135,13 +137,13 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
             public void onResponse(Call<ServerInfo> call, Response<ServerInfo> UpdateUserResponse) {
                 if(getActivity() == null) return;
                 ServerInfo UpdateUser = UpdateUserResponse.body();
-                Log.d(TAG +" onFailure", UpdateUserResponse.body().toString());
                 if(UpdateUser.isSuccess()){
                     Gson gson = new Gson();
                     boolean saved = user.save(getActivity().getApplicationContext());
                     if(saved){
                         String user_json = bundle.getString("user");
                         User user = gson.fromJson(user_json, User.class);
+                        Log.d(TAG +" number", phoneText);
                         call_send_phone_vc(user);
                     }else{
                         DialogUtils.closeProgress();

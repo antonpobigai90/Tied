@@ -12,8 +12,13 @@ import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tied.android.tiedapp.R;
@@ -21,39 +26,55 @@ import com.tied.android.tiedapp.customs.model.SelectContact;
 import com.tied.android.tiedapp.ui.adapters.SelectContactAdapter;
 
 import java.io.IOException;
+import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Emmanuel on 6/15/2016.
  */
-public class InviteContactActivity extends Activity {
+public class InviteContactActivity extends Activity implements View.OnClickListener{
 
-    // ArrayList
-    ArrayList<SelectContact> SelectContacts;
-    List<SelectContact> temp;
-    // Contact List
-    ListView listView;
-    // Cursor to load contacts list
-    Cursor phones, email;
+    public static final String TAG = SignUpActivity.class
+            .getSimpleName();
+
+    private ArrayList<SelectContact> contacts;
+    private ListView listView;
+    private Cursor phones, email;
 
     // Pop up
-    ContentResolver resolver;
-    EditText search;
-    SelectContactAdapter adapter;
+    private ContentResolver resolver;
+    private EditText search;
+    private SelectContactAdapter adapter;
+
+    private LinearLayout invite_all;
+    private ImageView icon_check;
+    private TextView invite;
+    private boolean check_all = false;
+
+    private ArrayList<Map.Entry<String, String>> selected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_invite_employee);
 
-        SelectContacts = new ArrayList<SelectContact>();
+        contacts = new ArrayList<SelectContact>();
         resolver = this.getContentResolver();
         listView = (ListView) findViewById(R.id.contacts_list);
+
+        invite = (TextView) findViewById(R.id.invite);
+        invite_all = (LinearLayout) findViewById(R.id.invite_all);
+        icon_check = (ImageView) findViewById(R.id.icon_check);
+
+        invite_all.setOnClickListener(this);
+        invite.setOnClickListener(this);
 
         phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
         LoadContact loadContact = new LoadContact();
         loadContact.execute();
+
+        selected = new ArrayList<Map.Entry<String, String>>();
 
         search = (EditText) findViewById(R.id.search);
 
@@ -97,6 +118,51 @@ public class InviteContactActivity extends Activity {
                 adapter.filter(searchData);
             }
         });
+
+        // Select item on listclick
+//        listView.setOnItemClickListener(new ContactListAdapter());
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.invite_all:
+                check_all = !check_all;
+                if(check_all){
+                    icon_check.setBackgroundResource(R.mipmap.circle_check);
+                }else{
+                    icon_check.setBackgroundResource(R.mipmap.circle_uncheck);
+                }
+                for(SelectContact contact: contacts){
+                    contact.setCheckStatus(check_all);
+                }
+                Log.d(TAG, "check_all "+check_all);
+                adapter.notifyDataSetChanged();
+                break;
+            case R.id.invite:
+                for(SelectContact contact: contacts){
+                    if (contact.getCheckStatus()){
+                        Map.Entry entry = new AbstractMap.SimpleEntry<>(contact.getEmail(), contact.getPhone());
+                        selected.add(entry);
+                    }
+                }
+                Log.d(TAG, selected.toString());
+                break;
+        }
+    }
+
+    private class ContactListAdapter implements AdapterView.OnItemClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Log.d("search", "here---------------- listener");
+
+            SelectContact data = contacts.get(position);
+            Map.Entry entry = new AbstractMap.SimpleEntry<>(data.getEmail(), data.getPhone());
+            selected.add(entry);
+            Log.d("SelectContact", data.toString());
+        }
     }
 
     // Load data on background
@@ -134,14 +200,17 @@ public class InviteContactActivity extends Activity {
                         e.printStackTrace();
                     }
 
-                    SelectContact SelectContact = new SelectContact();
-                    SelectContact.setThumb(bit_thumb);
-                    SelectContact.setName(name);
-                    SelectContact.setPhone(phoneNumber);
+                    name = (name.length() < 15) ? name : name.substring(0, 15) + "...";
+                    EmailAddr = (EmailAddr.length() < 15) ? EmailAddr : EmailAddr.substring(0, 15) + "...";
+
+                    SelectContact contact = new SelectContact();
+                    contact.setThumb(bit_thumb);
+                    contact.setName(name);
+                    contact.setPhone(phoneNumber);
 //                    SelectContact.setEmail(id);
-                    SelectContact.setEmail(EmailAddr);
-                    SelectContact.setCheckStatus(false);
-                    SelectContacts.add(SelectContact);
+                    contact.setEmail(EmailAddr);
+                    contact.setCheckStatus(false);
+                    contacts.add(contact);
                 }
             } else {
                 Log.e("Cursor close 1", "----------------");
@@ -153,20 +222,8 @@ public class InviteContactActivity extends Activity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            adapter = new SelectContactAdapter(SelectContacts, InviteContactActivity.this);
+            adapter = new SelectContactAdapter(contacts, InviteContactActivity.this);
             listView.setAdapter(adapter);
-
-            // Select item on listclick
-//            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                @Override
-//                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//
-//                    Log.e("search", "here---------------- listener");
-//
-//                    SelectContact data = SelectContacts.get(i);
-//                }
-//            });
-
             listView.setFastScrollEnabled(true);
         }
     }

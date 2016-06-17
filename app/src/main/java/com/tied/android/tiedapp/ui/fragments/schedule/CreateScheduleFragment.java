@@ -62,7 +62,7 @@ public class CreateScheduleFragment extends Fragment implements View.OnClickList
                 Picasso.with(getActivity()).
                         load(Constants.GET_AVATAR_ENDPOINT+"avatar_"+user.getId()+".jpg")
                         .resize(35,35)
-                        .into(target);
+                        .into(img_user_picture);
             }
         }
     }

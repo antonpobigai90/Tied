@@ -51,4 +51,15 @@ public class SelectContact {
     public void setEmail(String email) {
         this.email = email;
     }
+
+    @Override
+    public String toString() {
+        return "SelectContact{" +
+                "name='" + name + '\'' +
+                ", thumb=" + thumb +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", checkStatus=" + checkStatus +
+                '}';
+    }
 }

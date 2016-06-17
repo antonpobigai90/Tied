@@ -72,7 +72,7 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
 
     private RelativeLayout continue_btn;
     LinearLayout alert_valid_email;
-    private ImageView btn_close, img_facebook, img_twitter;
+    private ImageView btn_close, img_facebook, img_twitter, img_help;
     public TwitterAuthClient authClient = new TwitterAuthClient();
     private TwitterSession session;
     private TwitterAuthToken authToken;
@@ -120,6 +120,7 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
         email = (EditText) view.findViewById(R.id.email);
 
         btn_close = (ImageView) view.findViewById(R.id.img_close);
+        img_help = (ImageView) view.findViewById(R.id.img_help);
         img_facebook = (ImageView) view.findViewById(R.id.img_facebook);
         img_twitter = (ImageView) view.findViewById(R.id.img_twitter);
         continue_btn = (RelativeLayout) view.findViewById(R.id.continue_btn);
@@ -158,6 +159,9 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
                     Bundle bundle = new Bundle();
                     User user = new User();
                     user.setEmail(emailText);
+                    user.setFirst_name(firstName);
+                    user.setLast_name(lastName);
+                    user.setAvatar(avatar);
                     Gson gson = new Gson();
                     String user_json = gson.toJson(user);
                     bundle.putString("user", user_json);
@@ -290,7 +294,7 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
                             Toast.makeText(getActivity(), emailText,Toast.LENGTH_LONG).show();
                             Log.d("response email ", obj.getString("email")+"");
 
-                            //continue_action();
+                            continue_action();
 
                         } catch (JSONException e) {
                             // TODO Auto-generated catch block

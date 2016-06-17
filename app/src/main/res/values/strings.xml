@@ -22,18 +22,18 @@
     <string name="str_reset_success">We just sent you an email with instructions to reset your password</string>
 
     <string-array name="str_walkthrough">
-        <item >Manage your tasks quickly and efficiently</item>
-        <item >Keep your clients close to you and the activities</item>
-        <item >See analytics about your sales from clients and lines</item>
-        <item >Your clients sometimes are located close enough</item>
+        <item>Manage your tasks quickly and efficiently</item>
+        <item>Keep your clients close to you and the activities</item>
+        <item>See analytics about your sales from clients and lines</item>
+        <item>Your clients sometimes are located close enough</item>
     </string-array>
 
     <string-array name="help_description">
-        <item >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt</item>
-        <item >incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</item>
-        <item >How much does it cost?","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod</item>
-        <item >How much does it cost?","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod</item>
-        <item >How much does it cost?","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod</item>
+        <item>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt</item>
+        <item>incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</item>
+        <item>How much does it cost?","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod</item>
+        <item>How much does it cost?","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod</item>
+        <item>How much does it cost?","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod</item>
     </string-array>
 
     <!-- Sign Up -->
@@ -68,14 +68,14 @@
     <string name="str_signup_hint11">How would you describe yourself for this group?</string>
     <string name="str_signup_hint12">What is your industry?</string>
     <string-array name="str_industry">
-        <item >News</item>
-        <item >Business</item>
-        <item >Furnitures</item>
-        <item >Technology</item>
-        <item >Travel</item>
-        <item >Food</item>
-        <item >Test1</item>
-        <item >Tes21</item>
+        <item>News</item>
+        <item>Business</item>
+        <item>Furnitures</item>
+        <item>Technology</item>
+        <item>Travel</item>
+        <item>Food</item>
+        <item>Test1</item>
+        <item>Tes21</item>
     </string-array>
 
     <string name="str_signup_hint13">ADD BOSS INFO</string>
@@ -115,17 +115,17 @@
     </string>
 
     <string-array name="str_help_title">
-        <item >How does Tied work?</item>
-        <item >how can I add multiple clients?</item>
-        <item >Who can use Tied?</item>
-        <item >is Tied that helpful?</item>
+        <item>How does Tied work?</item>
+        <item>how can I add multiple clients?</item>
+        <item>Who can use Tied?</item>
+        <item>is Tied that helpful?</item>
     </string-array>
 
     <string-array name="str_help_content">
-        <item >Last night, Darth Vader came down from planet Vulcan. And he otld me that if didn#t take Lerraine, That he had melt my brain.</item>
-        <item >Oh, please to meet you, Calvin Marty Klein. Do you mind if I sit here? Look, there is a ceremonial reitual coming up.</item>
-        <item >Last night, Darth Vader came down from planet Vulcan. And he otld me that if didn#t take Lerraine, That he had melt my brain.</item>
-        <item >Oh, please to meet you, Calvin Marty Klein. Do you mind if I sit here? Look, there is a ceremonial reitual coming up.</item>
+        <item>Last night, Darth Vader came down from planet Vulcan. And he otld me that if didn#t take Lerraine, That he had melt my brain.</item>
+        <item>Oh, please to meet you, Calvin Marty Klein. Do you mind if I sit here? Look, there is a ceremonial reitual coming up.</item>
+        <item>Last night, Darth Vader came down from planet Vulcan. And he otld me that if didn#t take Lerraine, That he had melt my brain.</item>
+        <item>Oh, please to meet you, Calvin Marty Klein. Do you mind if I sit here? Look, there is a ceremonial reitual coming up.</item>
     </string-array>
 
     <!-- Schedule -->
@@ -162,5 +162,6 @@
     <string name="profile_notification">Notifications</string>
     <string name="profile_address">Address</string>
     <string name="profile_edit">Profile Edit</string>
+    <string name="title_activity_help">HelpActivity</string>
 
 </resources>

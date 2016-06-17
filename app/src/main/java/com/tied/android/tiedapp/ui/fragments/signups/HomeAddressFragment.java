@@ -3,7 +3,6 @@ package com.tied.android.tiedapp.ui.fragments.signups;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -115,7 +114,6 @@ public class HomeAddressFragment extends Fragment implements View.OnClickListene
             Gson gson = new Gson();
             String user_json = bundle.getString("user");
             User user = gson.fromJson(user_json, User.class);
-            Uri myUri = Uri.parse(user.getAvatar_uri());
             ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
         }
 

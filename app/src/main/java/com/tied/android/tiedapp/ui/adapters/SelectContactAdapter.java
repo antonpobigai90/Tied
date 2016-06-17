@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,14 +60,11 @@ public class SelectContactAdapter extends BaseAdapter {
         if (view == null) {
             LayoutInflater li = (LayoutInflater) _c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = li.inflate(R.layout.invite_employee_list_item, null);
-            Log.e("Inside", "here--------------------------- In view1");
         } else {
             view = convertView;
-            Log.e("Inside", "here--------------------------- In view2");
         }
 
         v = new ViewHolder();
-
         v.title = (TextView) view.findViewById(R.id.name);
         v.check = (ImageView) view.findViewById(R.id.check);
         v.phone = (TextView) view.findViewById(R.id.no);
@@ -76,12 +72,11 @@ public class SelectContactAdapter extends BaseAdapter {
 
         final SelectContact data = (SelectContact) _data.get(i);
         v.title.setText(data.getName());
-//        v.check.setChecked(data.getCheckStatus());
-//        if (data.getCheckStatus()) {
-//            v.check.setBackgroundResource(R.mipmap.circle_check2);
-//        } else {
-//            v.check.setBackgroundResource(R.mipmap.circle_uncheck);
-//        }
+        if (data.getCheckStatus()) {
+            v.check.setBackgroundResource(R.mipmap.circle_check2);
+        } else {
+            v.check.setBackgroundResource(R.mipmap.circle_uncheck);
+        }
         v.phone.setText(data.getPhone());
 
         // Set image if exists
@@ -106,8 +101,6 @@ public class SelectContactAdapter extends BaseAdapter {
             v.imageView.setImageDrawable(this._c.getDrawable(R.mipmap.default_avatar));
             e.printStackTrace();
         }
-
-//        Log.e("Image Thumb", "--------------" + data.getThumb());
  
         // Set check box listener android
         v.check.setOnClickListener(new View.OnClickListener() {
@@ -121,6 +114,7 @@ public class SelectContactAdapter extends BaseAdapter {
                     data.setCheckStatus(true);
                     v.check.setBackgroundResource(R.mipmap.circle_check2);
                 }
+                notifyDataSetChanged();
             }
         });
 
