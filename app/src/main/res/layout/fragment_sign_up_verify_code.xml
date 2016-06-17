@@ -112,6 +112,7 @@
             android:layout_height="match_parent"
             android:text="@string/str_help"
             android:id="@+id/txt_help"
+            android:onClick="helpButtonClicked"
             android:textColor="@color/white"
             android:textSize="15dp"
             android:layout_weight="1"
