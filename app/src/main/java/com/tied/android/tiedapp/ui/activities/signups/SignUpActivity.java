@@ -27,6 +27,7 @@ import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.HelpActivity;
 import com.tied.android.tiedapp.ui.activities.ProfileActivity;
+import com.tied.android.tiedapp.ui.fragments.UIFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.AddBossFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.AddBossNowFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.AddInviteFragment;
@@ -86,7 +87,7 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
         User user = User.getUser(getApplicationContext());
         if(user != null && user.getId() != null){
             Log.d(TAG, user.toString());
-            user.setSign_up_stage(6);
+            user.setSign_up_stage(50);
             user.save(getApplicationContext());
             Log.d(TAG +" : 3", user.toString());
             Bundle bundle = new Bundle();
@@ -170,6 +171,9 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
         }
         else if(pos == Constants.CoWorker){
             fragment = new CoWorkerFragment();
+        }
+        else if(pos == Constants.Lines){
+            fragment = new UIFragment();
         }
         else{
             finish();

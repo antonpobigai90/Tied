@@ -77,6 +77,9 @@ public class Constants {
     public static final int Profile = 40;
 
 
+    public static final int Lines = 50;
+
+
 
 
 

@@ -17,9 +17,6 @@ import com.tied.android.tiedapp.ui.adapters.HelpAdapter;
 
 import java.util.ArrayList;
 
-/**
- * A placeholder fragment containing a simple view.
- */
 public class HelpActivityFragment extends Fragment implements AdapterView.OnItemClickListener , View.OnClickListener{
 
     ListView list;

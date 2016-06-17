@@ -342,7 +342,7 @@
                         android:id="@+id/add"
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
-                        android:layout_alignParentRight="true"
+                        android:layout_gravity="right"
                         android:layout_centerVertical="true"
                         android:src="@mipmap/plus_add" />
 
