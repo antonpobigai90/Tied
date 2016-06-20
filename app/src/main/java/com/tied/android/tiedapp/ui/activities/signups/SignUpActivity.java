@@ -96,7 +96,8 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
             bundle.putString(Constants.USER, user_json);
             launchFragment(user.getSign_up_stage(), bundle);
         }else{
-            launchFragment(Constants.EmailSignUp, null);
+//            launchFragment(Constants.EmailSignUp, null);
+            launchFragment(Constants.Lines, null);
         }
 
         retrofit = MainApplication.getInstance().getRetrofit();
