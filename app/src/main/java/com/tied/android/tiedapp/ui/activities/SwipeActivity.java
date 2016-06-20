@@ -28,6 +28,7 @@ public class SwipeActivity extends AppCompatActivity implements View.OnClickList
         if (vpPager != null) {
             vpPager.setAdapter(adapterViewPager);
         }
+
     }
 
     public void initComponent(){
