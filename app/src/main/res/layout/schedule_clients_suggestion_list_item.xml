@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="15dp"
-        android:paddingLeft="20dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
         android:paddingTop="15dp">
 
         <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -20,56 +21,66 @@
             android:layout_centerVertical="true"
             android:src="@mipmap/avatar_profile" />
 
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_marginLeft="15dp"-->
-            <!--android:layout_toRightOf="@+id/icon_lines"-->
-            <!--android:text="Emily Emmanuel"-->
-            <!--android:textColor="@color/schedule_title_bg_color"-->
-            <!--android:textSize="18sp" />-->
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:layout_toLeftOf="@+id/last_visit"
             android:paddingLeft="15dp"
             android:layout_toRightOf="@+id/pic"
-            android:layout_gravity="center">
+            android:layout_centerVertical="true">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/name"
                 android:textColor="@color/schedule_title_bg_color"
-                android:text="User name"
-                android:textSize="13sp" />
+                android:text="Emmanuel Tope"
+                android:textStyle="bold"
+                android:textSize="15sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/no"
-                android:layout_marginTop="4dp"
-                android:text="080......."
+                android:id="@+id/address"
                 android:textColor="@color/schedule_title_bg_color"
-                android:textSize="12sp" />
+                android:text="San Francisco CA"
+                android:textSize="13sp" />
+
 
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/check"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+        <LinearLayout
+            android:id="@+id/last_visit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="40dp"
-            android:src="@mipmap/circle_uncheck" />
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginRight="4dp"
+                android:src="@mipmap/info_warning"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/info"
+                android:gravity="center_vertical"
+                android:text="Last visit 3 months ago"
+                android:textColor="@color/schedule_title_bg_color"
+                android:textSize="9sp" />
+
+        </LinearLayout>
+
     </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.1dp"
+        android:layout_marginLeft="12dp"
         android:background="@android:color/darker_gray" />
 
 </LinearLayout>

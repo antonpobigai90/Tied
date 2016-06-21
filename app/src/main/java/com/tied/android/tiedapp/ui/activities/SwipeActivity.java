@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.ui.adapters.PagerAdapter;
+import com.tied.android.tiedapp.util.ScheduleDialog;
 
 public class SwipeActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -28,7 +29,8 @@ public class SwipeActivity extends AppCompatActivity implements View.OnClickList
         if (vpPager != null) {
             vpPager.setAdapter(adapterViewPager);
         }
-
+        ScheduleDialog alert = new ScheduleDialog();
+        alert.showDialog(this);
     }
 
     public void initComponent(){

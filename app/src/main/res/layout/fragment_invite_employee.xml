@@ -150,7 +150,7 @@
     <ListView
         android:id="@+id/contacts_list"
         android:layout_width="match_parent"
-        android:layout_height="257dp"
+        android:layout_height="wrap_content"
         android:layout_above="@+id/bottom_layout"
         android:layout_below="@+id/upper_layout"
         android:listSelector="@android:color/transparent"
@@ -167,11 +167,11 @@
             android:id="@+id/line1"
             android:layout_width="fill_parent"
             android:layout_height="1dp"
-            android:layout_above="@+id/by_mail"
+            android:layout_above="@+id/invite_emp"
             android:background="@color/schedule_create_appointment_bg_color" />
 
         <RelativeLayout
-            android:id="@+id/by_mail"
+            android:id="@+id/invite_emp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="10dp"
