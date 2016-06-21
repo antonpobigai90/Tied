@@ -24,8 +24,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:gravity="center_horizontal"
             android:color="@color/white"
+            android:gravity="center_horizontal"
             android:text="Schedule"
             android:textIsSelectable="false"
             android:textSize="18sp"
@@ -35,146 +35,436 @@
             android:id="@+id/img_search"
             android:layout_width="30dp"
             android:layout_height="25dp"
-            android:src="@mipmap/search_blue"
-            android:textColor="@color/button_bg"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="15dp"/>
+            android:layout_marginRight="15dp"
+            android:src="@mipmap/search_blue"
+            android:textColor="@color/button_bg" />
     </RelativeLayout>
 
-    <LinearLayout
-        android:id="@+id/upper_layout"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/top_layout"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp"
-        android:layout_marginTop="15dp"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:id="@+id/invite_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:paddingLeft="15dp"
-            android:paddingRight="5dp"
-            android:paddingBottom="15dp"
-            android:paddingTop="15dp">
-
-            <ImageView
-                android:id="@+id/tick"
-                android:layout_width="30dp"
-                android:layout_height="40dp"
-                android:layout_centerVertical="true"
-                android:src="@mipmap/checkmark_green" />
-
-            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/pic"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_toRightOf="@+id/tick"
-                android:layout_marginLeft="10dp"
-                android:layout_centerVertical="true"
-                android:src="@mipmap/avatar_profile" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/name"
-                android:textColor="@color/schedule_title_bg_color"
-                android:text="Ekaruz Technology"
-                android:textStyle="bold"
-                android:layout_toLeftOf="@+id/view_schedule"
-                android:layout_toRightOf="@+id/pic"
-                android:layout_marginLeft="10dp"
-                android:layout_centerVertical="true"
-                android:textSize="14sp" />
-
-
-            <TextView
-                android:id="@+id/view_schedule"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:textColor="@color/button_bg"
-                android:text="VIEW SCHEDULE"
-                android:layout_marginLeft="3dp"
-                android:layout_centerVertical="true"
-                android:textSize="16sp" />
-
-        </RelativeLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:textColor="@color/schedule_title_bg_color"
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:text="CLIENTS WITHIN 10 MILES OF THIS SCHEDULE"/>
-
-        <TextView
-            android:id="@+id/message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:textSize="14sp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:gravity="center"
-            android:textColor="@color/schedule_title_bg_color"
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:text="There are 5 Clients within 10 miles of your current schedule. It will be great .........."/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:textSize="18sp"
-            android:paddingLeft="5dp"
-            android:paddingRight="5dp"
-            android:textColor="@color/schedule_title_bg_color"
-            android:layout_gravity="center_vertical|center_horizontal"
-            android:text="CLIENTS YOU SHOULD VISIT"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:layout_marginTop="15dp"
-            android:background="@android:color/darker_gray" />
+        android:layout_below="@+id/top_layout">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:id="@+id/upper_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:layout_marginTop="15dp"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <RelativeLayout
-                android:layout_width="130dp"
-                android:layout_height="150dp"
-                android:padding="10dp"
-                android:background="@drawable/curve_background_white">
+                android:id="@+id/invite_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:paddingBottom="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="5dp"
+                android:paddingTop="10dp">
 
                 <ImageView
-                    android:layout_width="10dp"
-                    android:layout_height="25dp"
+                    android:id="@+id/tick"
+                    android:layout_width="25dp"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/checkmark_green" />
+
+                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/pic_client"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="7dp"
+                    android:layout_toRightOf="@+id/tick"
+                    android:src="@mipmap/avatar_profile" />
+
+                <TextView
+                    android:id="@+id/name_line"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="7dp"
+                    android:layout_toLeftOf="@+id/view_schedule"
+                    android:layout_toRightOf="@+id/pic_client"
+                    android:text="Ekaruz Technology"
+                    android:textColor="@color/schedule_title_bg_color"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:id="@+id/view_schedule"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:src="@mipmap/menu_icon_grey"/>
-
-
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="3dp"
+                    android:text="VIEW SCHEDULE"
+                    android:textColor="@color/button_bg"
+                    android:textSize="14sp" />
 
             </RelativeLayout>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginTop="20dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:gravity="center"
+                android:text="CLIENTS WITHIN 10 MILES OF THIS SCHEDULE"
+                android:textColor="@color/schedule_title_bg_color"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="There are 5 Clients within 10 miles of your current schedule. It will be great .........."
+                android:textColor="@color/schedule_title_bg_color"
+                android:textSize="14sp" />
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.3dp"
+                android:layout_marginTop="15dp"
+                android:background="@android:color/darker_gray" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:layout_width="160dp"
+                        android:layout_height="180dp"
+                        android:background="@drawable/curve_background_white"
+                        android:padding="10dp"
+                        android:layout_marginRight="10dp">
+
+
+                        <ImageView
+                            android:id="@+id/menu_icon"
+                            android:layout_width="15dp"
+                            android:layout_height="25dp"
+                            android:layout_alignParentRight="true"
+                            android:src="@mipmap/menu_icon_grey" />
+
+                        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/pic"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="15dp"
+                            android:src="@mipmap/avatar_profile" />
+
+                        <TextView
+                            android:id="@+id/name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/pic"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="5dp"
+                            android:text="Ekaruz Technology"
+                            android:textColor="@color/schedule_title_bg_color"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/distance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/name"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="5dp"
+                            android:text="5 miles away"
+                            android:textColor="@color/schedule_title_bg_color"
+                            android:textSize="10sp" />
+
+                        <LinearLayout
+                            android:id="@+id/last_visit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/distance"
+                            android:layout_marginTop="3dp"
+                            android:layout_centerHorizontal="true"
+                            android:gravity="center_horizontal"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:layout_marginRight="4dp"
+                                android:src="@mipmap/info_warning" />
+
+                            <TextView
+                                android:id="@+id/info"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:text="Last visited 3 months ago"
+                                android:textColor="@color/schedule_title_bg_color"
+                                android:textSize="9sp" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/line"
+                            android:layout_width="match_parent"
+                            android:layout_height="0.1dp"
+                            android:layout_marginTop="9dp"
+                            android:layout_marginBottom="7dp"
+                            android:layout_below="@+id/last_visit"
+                            android:background="@android:color/darker_gray" />
+
+                        <TextView
+                            android:id="@+id/schedule"
+                            android:layout_below="@+id/line"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:text="SCHEDULE NOW"
+                            android:textColor="@color/button_bg"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="160dp"
+                        android:layout_height="180dp"
+                        android:background="@drawable/curve_background_white"
+                        android:layout_marginRight="10dp"
+                        android:padding="10dp">
+
+
+                        <ImageView
+                            android:id="@+id/menu_icon1"
+                            android:layout_width="15dp"
+                            android:layout_height="25dp"
+                            android:layout_alignParentRight="true"
+                            android:src="@mipmap/menu_icon_grey" />
+
+                        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/pic1"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="15dp"
+                            android:src="@mipmap/avatar_profile" />
+
+                        <TextView
+                            android:id="@+id/name1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/pic1"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="5dp"
+                            android:text="Ekaruz Technology"
+                            android:textColor="@color/schedule_title_bg_color"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/distance1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/name1"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="5dp"
+                            android:text="5 miles away"
+                            android:textColor="@color/schedule_title_bg_color"
+                            android:textSize="10sp" />
+
+                        <LinearLayout
+                            android:id="@+id/last_visit1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/distance1"
+                            android:layout_marginTop="3dp"
+                            android:layout_centerHorizontal="true"
+                            android:gravity="center_horizontal"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:layout_marginRight="4dp"
+                                android:src="@mipmap/info_warning" />
+
+                            <TextView
+                                android:id="@+id/info1"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:text="Last visited 3 months ago"
+                                android:textColor="@color/schedule_title_bg_color"
+                                android:textSize="9sp" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/line1"
+                            android:layout_width="match_parent"
+                            android:layout_height="0.1dp"
+                            android:layout_marginTop="9dp"
+                            android:layout_marginBottom="7dp"
+                            android:layout_below="@+id/last_visit1"
+                            android:background="@android:color/darker_gray" />
+
+                        <TextView
+                            android:id="@+id/schedule1"
+                            android:layout_below="@+id/line1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:text="SCHEDULE NOW"
+                            android:textColor="@color/button_bg"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="160dp"
+                        android:layout_height="180dp"
+                        android:background="@drawable/curve_background_white"
+                        android:layout_marginRight="10dp"
+                        android:padding="10dp">
+
+
+                        <ImageView
+                            android:id="@+id/menu_icon2"
+                            android:layout_width="15dp"
+                            android:layout_height="25dp"
+                            android:layout_alignParentRight="true"
+                            android:src="@mipmap/menu_icon_grey" />
+
+                        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/pic2"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="15dp"
+                            android:src="@mipmap/avatar_profile" />
+
+                        <TextView
+                            android:id="@+id/name2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/pic2"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="5dp"
+                            android:text="Ekaruz Technology"
+                            android:textColor="@color/schedule_title_bg_color"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/distance2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/name2"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="5dp"
+                            android:text="5 miles away"
+                            android:textColor="@color/schedule_title_bg_color"
+                            android:textSize="10sp" />
+
+                        <LinearLayout
+                            android:id="@+id/last_visit2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/distance2"
+                            android:layout_marginTop="3dp"
+                            android:layout_centerHorizontal="true"
+                            android:gravity="center_horizontal"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_width="15dp"
+                                android:layout_height="15dp"
+                                android:layout_marginRight="4dp"
+                                android:src="@mipmap/info_warning" />
+
+                            <TextView
+                                android:id="@+id/info2"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:text="Last visited 3 months ago"
+                                android:textColor="@color/schedule_title_bg_color"
+                                android:textSize="9sp" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/line2"
+                            android:layout_width="match_parent"
+                            android:layout_height="0.1dp"
+                            android:layout_marginTop="9dp"
+                            android:layout_marginBottom="7dp"
+                            android:layout_below="@+id/last_visit2"
+                            android:background="@android:color/darker_gray" />
+
+                        <TextView
+                            android:id="@+id/schedule2"
+                            android:layout_below="@+id/line2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:text="SCHEDULE NOW"
+                            android:textColor="@color/button_bg"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.3dp"
+                android:layout_marginTop="15dp"
+                android:background="@android:color/darker_gray" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginTop="20dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="CLIENTS YOU SHOULD VISIT"
+                android:textColor="@color/schedule_title_bg_color"
+                android:textSize="18sp" />
+
+
         </LinearLayout>
-
-
-    </LinearLayout>
-
-
-
+    </ScrollView>
 
 </RelativeLayout>
