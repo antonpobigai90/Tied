@@ -26,21 +26,11 @@
             android:layout_centerInParent="true"
             android:gravity="center_horizontal"
             android:color="@color/white"
-            android:text="Select Client"
+            android:text="Creative Co-op Line"
             android:textIsSelectable="false"
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/done"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:textColor="@color/button_bg"
-            android:text="DONE"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="15dp"/>
     </RelativeLayout>
 
     <LinearLayout
@@ -66,8 +56,8 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/curve_editext"
                 android:drawableLeft="@android:drawable/ic_menu_search"
-                android:hint="Search Client by Name"
                 android:textSize="13sp"
+                android:hint="Search Name, Line, Phones"
                 android:paddingBottom="3dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
@@ -85,26 +75,26 @@
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="50dp"
+            android:layout_height="25dp"
             android:background="@color/schedule_create_appointment_bg_color"
             android:paddingLeft="20dp">
 
             <TextView
-                android:id="@+id/txt_title1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:text="0 - 5 MILES"
+                android:layout_gravity="center"
+                android:text="My Clients"
                 android:textColor="@color/schedule_title_bg_color"
                 android:textIsSelectable="false"
-                android:textStyle="bold"
-                android:textSize="18sp" />
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
         </LinearLayout>
 
     </LinearLayout>
 
     <ListView
-        android:id="@+id/contacts_list"
+        android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/bottom_layout"
@@ -115,19 +105,28 @@
     <RelativeLayout
         android:id="@+id/bottom_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/button_bg">
+
+        <ImageView
+            android:id="@+id/tick"
+            android:layout_width="35dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="50dp"
+            android:src="@mipmap/checkmark" />
 
         <TextView
             android:id="@+id/txt_continue"
-            android:layout_width="fill_parent"
-            android:layout_height="45dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="CONTINUE"
             android:textColor="@color/white"
-            android:textSize="18dp"
-            android:textStyle="bold"
-            android:gravity="center_vertical|center_horizontal"
-            android:layout_alignParentBottom="true"
-            android:background="@color/button_bg" />
+            android:layout_centerInParent="true"
+            android:gravity="center_horizontal"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
 
     </RelativeLayout>

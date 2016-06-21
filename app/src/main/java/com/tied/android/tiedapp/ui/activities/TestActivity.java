@@ -11,7 +11,7 @@ public class TestActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_schedule_clients_suggestion);
+        setContentView(R.layout.fragment_create_line);
 
         ScheduleDialog alert = new ScheduleDialog();
         alert.showDialog(this);

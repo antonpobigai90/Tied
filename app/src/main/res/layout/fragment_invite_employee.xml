@@ -48,12 +48,12 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/curve_editext"
                 android:drawableLeft="@android:drawable/ic_menu_search"
-                android:ems="8"
+                android:textSize="13sp"
                 android:hint="Search Name, phone, or email"
-                android:paddingBottom="5dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingTop="5dp"
+                android:paddingBottom="3dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingTop="3dp"
                 android:singleLine="true"
                 android:textColor="@android:color/black"
                 android:textColorHint="@android:color/darker_gray" />
@@ -70,8 +70,8 @@
 
             <ImageView
                 android:id="@+id/icon_lines"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_centerVertical="true"
                 android:src="@mipmap/icon_layer_blue" />
 
@@ -84,7 +84,7 @@
                 android:layout_toRightOf="@+id/icon_lines"
                 android:text="INVITE BY EMAIL"
                 android:textColor="@color/schedule_title_bg_color"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <!--<ImageView-->
                 <!--android:layout_width="20dp"-->
@@ -103,7 +103,7 @@
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="40dp"
+            android:layout_height="35dp"
             android:id="@+id/invite_all"
             android:gravity="center_horizontal"
             android:orientation="horizontal">
