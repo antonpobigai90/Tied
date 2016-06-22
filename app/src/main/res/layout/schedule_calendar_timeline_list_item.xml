@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:id="@+id/invite_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="10dp">
+
+        <LinearLayout
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="5dp"
+            android:paddingLeft="5dp"
+            android:orientation="vertical"
+            android:layout_centerVertical="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/day"
+                android:textColor="#1baf07"
+                android:layout_gravity="center_horizontal"
+                android:text="18"
+                android:textStyle="bold"
+                android:textSize="22sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/week_day"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/schedule_title_bg_color"
+                android:text="TODAY"
+                android:textSize="10sp" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="5dp"
+            android:layout_toLeftOf="@+id/weather"
+            android:paddingLeft="15dp"
+            android:layout_toRightOf="@+id/date">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/name"
+                android:textColor="@color/schedule_title_bg_color"
+                android:text="All day"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="5dp"
+                android:paddingBottom="10dp"
+                android:paddingRight="5dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginTop="4dp"
+                    android:src="@drawable/orange_dot" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/message"
+                    android:gravity="center_vertical"
+                    android:text="Shaibu's Birthday 23rd June"
+                    android:textStyle="bold"
+                    android:textColor="@color/schedule_title_bg_color"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/weather"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/temperature"
+                android:gravity="center_vertical"
+                android:layout_marginRight="5dp"
+                android:text="72°"
+                android:textStyle="bold"
+                android:textColor="@color/schedule_title_bg_color"
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/info"
+                android:gravity="center_vertical"
+                android:text="Cloudy"
+                android:textColor="@color/schedule_title_bg_color"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:layout_marginLeft="12dp"
+        android:background="@android:color/darker_gray" />
+
+</LinearLayout>

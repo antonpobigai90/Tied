@@ -28,8 +28,10 @@
             android:layout_marginLeft="15dp"
             android:layout_toLeftOf="@+id/check"
             android:text="Emily Emmanuel"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:textColor="@color/schedule_title_bg_color"
-            android:textSize="14sp" />
+            android:textSize="13sp" />
 
 
 

@@ -15,13 +15,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
 import com.tied.android.tiedapp.objects.auth.LoginUser;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.activities.schedule.ScheduleActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignInActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
@@ -115,13 +113,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                     loggedIn_user.setToken(LoginUser.getToken());
                     boolean saved = loggedIn_user.save(getActivity().getApplicationContext());
                     if (saved) {
-                        Bundle bundle = new Bundle();
-                        Gson gson = new Gson();
-                        String user_json = gson.toJson(loggedIn_user);
-                        Intent intent = new Intent(getActivity(), ScheduleActivity.class);
-                        intent.putExtra(Constants.USER, user_json);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
+                        loggedIn_user.LogIn(getActivity().getApplicationContext());
                     } else {
                         Toast.makeText(getActivity(), "user not save", Toast.LENGTH_LONG).show();
                     }

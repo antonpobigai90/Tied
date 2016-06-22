@@ -31,6 +31,8 @@ public class Constants {
     public static final String CURRENT_USER = "current_user";
     public static final String SPLASH_SCREEN_DONE = "splash_screen_done";
     public static final String LOGGED_OUT_USER = "logout";
+    public static final String LOGGED_IN_USER = "login";
+    public static final String AVATAR_STATE_SAVED = "avatar_state";
 
     public static final String TOKEN = "token";
 
@@ -80,6 +82,8 @@ public class Constants {
     public static final int Lines = 50;
 
 
+//    Profile Activity fragments indexes
+    public static final int EditProfile = 101;
 
 
 

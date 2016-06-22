@@ -29,7 +29,9 @@
         android:layout_below="@+id/pic"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
-        android:text="Ekaruz Technology"
+        android:text="Ekaruz Technology hhhj jjjj "
+        android:ellipsize="end"
+        android:maxLines="1"
         android:textColor="@color/schedule_title_bg_color"
         android:textSize="12sp"
         android:textStyle="bold" />

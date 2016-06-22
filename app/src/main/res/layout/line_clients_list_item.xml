@@ -27,9 +27,11 @@
             android:layout_toRightOf="@+id/pic"
             android:layout_marginLeft="15dp"
             android:layout_toLeftOf="@+id/check"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:text="Emily Emmanuel"
             android:textColor="@color/schedule_title_bg_color"
-            android:textSize="14sp" />
+            android:textSize="13sp" />
 
 
     </RelativeLayout>

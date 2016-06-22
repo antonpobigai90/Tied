@@ -62,7 +62,7 @@
                         android:paddingLeft="4dp"
                         android:text="First Name"
                         android:textColor="@color/schedule_title_bg_color"
-                        android:textSize="15sp" />
+                        android:textSize="12sp" />
 
                     <EditText
                         android:id="@+id/f_name"
@@ -72,7 +72,7 @@
                         android:inputType="text"
                         android:text="Emily"
                         android:textColor="@color/schedule_title_bg_color"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -89,7 +89,7 @@
                         android:paddingLeft="4dp"
                         android:text="Last Name"
                         android:textColor="@color/schedule_title_bg_color"
-                        android:textSize="15sp" />
+                        android:textSize="12sp" />
 
                     <EditText
                         android:id="@+id/l_name"
@@ -98,7 +98,7 @@
                         android:backgroundTint="@android:color/transparent"
                         android:text="Emmanuel"
                         android:textColor="@color/schedule_title_bg_color"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -126,7 +126,7 @@
                     android:paddingLeft="4dp"
                     android:text="Email"
                     android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="15sp" />
+                    android:textSize="12sp" />
 
                 <EditText
                     android:id="@+id/email"
@@ -135,7 +135,7 @@
                     android:backgroundTint="@android:color/transparent"
                     android:text="emily@gmail.com"
                     android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -159,7 +159,7 @@
                     android:paddingLeft="4dp"
                     android:text="Fax Number"
                     android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="15sp" />
+                    android:textSize="12sp" />
 
                 <EditText
                     android:id="@+id/fax"
@@ -168,7 +168,7 @@
                     android:backgroundTint="@android:color/transparent"
                     android:text="922-809-2341"
                     android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -201,7 +201,7 @@
                         android:paddingLeft="4dp"
                         android:text="Password"
                         android:textColor="@color/schedule_title_bg_color"
-                        android:textSize="15sp" />
+                        android:textSize="12sp" />
 
                     <EditText
                         android:id="@+id/password"
@@ -210,7 +210,7 @@
                         android:text="........."
                         android:inputType="textPassword"
                         android:textColor="@color/schedule_title_bg_color"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -223,7 +223,7 @@
                     android:layout_weight="1"
                     android:text="CHANGE"
                     android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
 
 
             </LinearLayout>
@@ -248,7 +248,7 @@
                     android:paddingLeft="4dp"
                     android:text="Company Legal Name"
                     android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="15sp" />
+                    android:textSize="12sp" />
 
                 <EditText
                     android:id="@+id/company"
@@ -257,7 +257,7 @@
                     android:text="Emily Emmanuel LBC"
                     android:textColor="@color/schedule_title_bg_color"
                     android:backgroundTint="@android:color/transparent"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -288,7 +288,7 @@
                         android:paddingLeft="4dp"
                         android:text="Industry"
                         android:textColor="@color/schedule_title_bg_color"
-                        android:textSize="15sp" />
+                        android:textSize="12sp" />
 
                     <EditText
                         android:id="@+id/industry_date"
@@ -297,7 +297,7 @@
                         android:text="Date"
                         android:textColor="@color/schedule_title_bg_color"
                         android:backgroundTint="@android:color/transparent"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -316,7 +316,7 @@
                         android:paddingLeft="4dp"
                         android:text=""
                         android:textColor="@color/schedule_title_bg_color"
-                        android:textSize="14sp" />
+                        android:textSize="12sp" />
 
                     <EditText
                         android:id="@+id/industry1"
@@ -326,7 +326,7 @@
                         android:text="Art,Fashion,Furnitures"
                         android:textColor="@color/schedule_title_bg_color"
                         android:backgroundTint="@android:color/transparent"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>
@@ -340,8 +340,8 @@
 
                     <ImageView
                         android:id="@+id/add"
-                        android:layout_width="wrap_content"
-                        android:layout_height="50dp"
+                        android:layout_width="30dp"
+                        android:layout_height="40dp"
                         android:layout_gravity="right"
                         android:layout_centerVertical="true"
                         android:src="@mipmap/plus_add" />
@@ -371,7 +371,7 @@
                     android:paddingLeft="4dp"
                     android:text="Home Address"
                     android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="15sp" />
+                    android:textSize="12sp" />
 
                 <EditText
                     android:id="@+id/home_address"
@@ -380,7 +380,7 @@
                     android:text="530 Obalende Suit 739"
                     android:textColor="@color/schedule_title_bg_color"
                     android:backgroundTint="@android:color/transparent"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -405,7 +405,7 @@
                     android:paddingLeft="4dp"
                     android:text="Office Address"
                     android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="15sp" />
+                    android:textSize="12sp" />
 
                 <EditText
                     android:id="@+id/office_address"
@@ -415,7 +415,7 @@
                     android:text="581 Meagan Ferry Suit 685"
                     android:textColor="@color/schedule_title_bg_color"
                     android:backgroundTint="@android:color/transparent"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
             </LinearLayout>
 

@@ -27,7 +27,6 @@ import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.HelpActivity;
 import com.tied.android.tiedapp.ui.activities.ProfileActivity;
-import com.tied.android.tiedapp.ui.fragments.UIFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.AddBossFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.AddBossNowFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.AddInviteFragment;
@@ -87,8 +86,8 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
         User user = User.getUser(getApplicationContext());
         if(user != null && user.getId() != null){
             Log.d(TAG, user.toString());
-            user.setSign_up_stage(50);
-            user.save(getApplicationContext());
+//            user.setSign_up_stage(4);
+//            user.save(getApplicationContext());
             Log.d(TAG +" : 3", user.toString());
             Bundle bundle = new Bundle();
             Gson gson = new Gson();
@@ -122,142 +121,65 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
 
         this.bundle = bundle;
 
-        if(pos == Constants.EmailSignUp){
-            fragment = new EmailSignUpFragment();
+        switch (pos) {
+            case Constants.EmailSignUp:
+                fragment = new EmailSignUpFragment();
+                break;
+            case Constants.Password:
+                fragment = new PasswordFragment();
+                break;
+            case Constants.Picture:
+                fragment = new PictureFragment();
+                break;
+            case Constants.Name:
+                fragment = new NameFragment();
+                fragment.setArguments(bundle);
+                break;
+            case Constants.PhoneAndFax:
+                fragment = new PhoneFaxFragment();
+                fragment.setArguments(bundle);
+                break;
+            case Constants.EnterCode:
+                fragment = new VerifyCodeFragment();
+                fragment.setArguments(bundle);
+                break;
+            case Constants.OfficeAddress:
+                fragment = new OfficeAddressFragment();
+                break;
+            case Constants.HomeAddress:
+                fragment = new HomeAddressFragment();
+                break;
+            case Constants.Territory:
+                fragment = new TerritoryFragment();
+                break;
+            case Constants.SalesRep:
+                fragment = new SalesRepFragment();
+                fragment.setArguments(bundle);
+                break;
+            case Constants.GroupDesc:
+                fragment = new GroupDescFragment();
+                break;
+            case Constants.Industry:
+                fragment = new IndustryFragment();
+                break;
+            case Constants.AddBoss:
+                fragment = new AddBossFragment();
+                break;
+            case Constants.AddBossNow:
+                fragment = new AddBossNowFragment();
+                break;
+            case Constants.CoWorkerCount:
+                fragment = new CoWorkerCountFragment();
+                break;
+            case Constants.AddOptions:
+                fragment = new AddInviteFragment();
+                break;
+            case Constants.CoWorker:
+                fragment = new CoWorkerFragment();
+                break;
+            default: finish();
         }
-        else if(pos == Constants.Password){
-            fragment = new PasswordFragment();
-        }
-        else if(pos == Constants.Picture){
-            fragment = new PictureFragment();
-        }
-        else if(pos == Constants.Name){
-            fragment = new NameFragment();
-        }
-        else if(pos == Constants.PhoneAndFax){
-            fragment = new PhoneFaxFragment();
-        }
-        else if(pos == Constants.EnterCode){
-            fragment = new VerifyCodeFragment();
-        }
-        else if(pos == Constants.OfficeAddress){
-            fragment = new OfficeAddressFragment();
-        }
-        else if(pos == Constants.HomeAddress){
-            fragment = new HomeAddressFragment();
-        }
-        else if(pos == Constants.Territory){
-            fragment = new TerritoryFragment();
-        }
-        else if(pos == Constants.SalesRep){
-            fragment = new SalesRepFragment();
-        }
-        else if(pos == Constants.GroupDesc){
-            fragment = new GroupDescFragment();
-        }
-        else if(pos == Constants.Industry){
-            fragment = new IndustryFragment();
-        }
-        else if(pos == Constants.AddBoss){
-            fragment = new AddBossFragment();
-        }
-        else if(pos == Constants.AddBossNow){
-            fragment = new AddBossNowFragment();
-        }
-        else if(pos == Constants.CoWorkerCount){
-            fragment = new CoWorkerCountFragment();
-        }
-        else if(pos == Constants.AddOptions){
-            fragment = new AddInviteFragment();
-        }
-        else if(pos == Constants.CoWorker){
-            fragment = new CoWorkerFragment();
-        }
-        else if(pos == Constants.Lines){
-            fragment = new UIFragment();
-        }
-        else{
-            finish();
-        }
-
         fragment.setArguments(bundle);
-
-
-//        switch (pos) {
-//            case Constants.EmailSignUp:
-//                fragment = new EmailSignUpFragment();
-//                fragment.setArguments(bundle);
-//                break;
-//            case Constants.Password:
-//                fragment = new PasswordFragment();
-//                fragment.setArguments(bundle);
-//                break;
-//            case Constants.Picture:
-//                fragment = new PictureFragment();
-//                fragment.setArguments(bundle);
-//                break;
-//            case Constants.Name:
-//                fragment = new NameFragment();
-//                fragment.setArguments(bundle);
-//                break;
-//            case Constants.PhoneAndFax:
-//                fragment = new PhoneFaxFragment();
-//                fragment.setArguments(bundle);
-//                break;
-//            case Constants.EnterCode:
-//                fragment = new VerifyCodeFragment();
-//                fragment.setArguments(bundle);
-//                break;
-//            case Constants.OfficeAddress:
-//                fragment = new OfficeAddressFragment();
-//                fragment.setArguments(bundle);
-//                break;
-//            case Constants.HomeAddress:
-//                fragment = new HomeAddressFragment();
-//                fragment.setArguments(bundle);
-//                break;
-//            case Constants.Territory:
-//                fragment = new TerritoryFragment();
-//                fragment.setArguments(bundle);
-//                break;
-//            case Constants.SalesRep:
-//                fragment = new SalesRepFragment();
-//                fragment.setArguments(bundle);
-//                break;
-//            case Constants.GroupDesc:
-//                fragment = new GroupDescFragment();
-//                fragment.setArguments(bundle);
-//                break;
-//            case Constants.Industry:
-//                fragment = new IndustryFragment();
-//                fragment.setArguments(bundle);
-//                break;
-//            case Constants.AddBoss:
-//                fragment = new AddBossFragment();
-//                fragment.setArguments(bundle);
-//                break;
-//            case Constants.AddBossNow:
-//                fragment = new AddBossNowFragment();
-//                fragment.setArguments(bundle);
-//                break;
-//            case Constants.CoWorkerCount:
-//                fragment = new CoWorkerCountFragment();
-//                fragment.setArguments(bundle);
-//                break;
-//            case Constants.AddOptions:
-//                fragment = new AddInviteFragment();
-//                fragment.setArguments(bundle);
-//                break;
-//            case Constants.CoWorker:
-//                fragment = new CoWorkerFragment();
-//                fragment.setArguments(bundle);
-//                break;
-//            case Constants.Help:
-//                fragment = new HelpFragment();
-//                fragment.setArguments(bundle);
-//                break;
-//            default: finish();
-//        }
 
         if (fragment != null) {
             Log.d(TAG, getSupportFragmentManager().getBackStackEntryCount() + "");
@@ -293,14 +215,12 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
 
     @Override
     public void onFragmentInteraction(int action, Bundle bundle) {
-        Log.d(TAG, " onFragmentInteraction "+action);
         switch (action){
             case Constants.USE_ADDRESS_NAME:
                 break;
             default:
                 launchFragment(action, bundle);
         }
-
     }
 
     private void handleCrop(Uri outputUri) {

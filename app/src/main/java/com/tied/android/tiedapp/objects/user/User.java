@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Location;
+import com.tied.android.tiedapp.ui.activities.ProfileActivity;
 import com.tied.android.tiedapp.ui.activities.signups.WalkThroughActivity;
 
 import java.io.Serializable;
@@ -42,8 +43,6 @@ public class User implements Serializable {
 
     public Boss boss;
 
-    public Profile profile;
-
     private String createdAt;
     private String updatedAt;
 
@@ -52,7 +51,7 @@ public class User implements Serializable {
     public User(String id, String email, String first_name, String last_name, String phone, String fax, String password,
                 String avatar, String avatar_uri, String sale_type, String co_workers, String group_description,
                 ArrayList<String> territories, ArrayList<String> industries, int sign_up_stage, Location home_address,
-                Location office_address, Boss boss, Profile profile, String createdAt, String updatedAt, String token) {
+                Location office_address, Boss boss,String createdAt, String updatedAt, String token) {
         this.id = id;
         this.email = email;
         this.first_name = first_name;
@@ -71,7 +70,6 @@ public class User implements Serializable {
         this.home_address = home_address;
         this.office_address = office_address;
         this.boss = boss;
-        this.profile = profile;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.token = token;
@@ -98,7 +96,6 @@ public class User implements Serializable {
 
     public boolean save(Context context){
         User user = this;
-
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor prefsEditor = mPrefs.edit();
         Gson gson = new Gson();
@@ -106,6 +103,27 @@ public class User implements Serializable {
         prefsEditor.putString(Constants.CURRENT_USER, json);
         prefsEditor.apply();
         return true;
+    }
+
+    public static boolean isUserLoggedIn(Context context){
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return mPrefs.getBoolean(Constants.LOGGED_IN_USER, false);
+    }
+
+    public void LogIn(Context context){
+        User user = this;
+        boolean saved = user.save(context);
+        if(saved){
+
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putBoolean(Constants.LOGGED_IN_USER,true);
+            editor.apply();
+
+            Intent intent = new Intent(context, ProfileActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            context.startActivity(intent);
+        }
     }
 
 
@@ -116,7 +134,7 @@ public class User implements Serializable {
 
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
             SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putBoolean(Constants.LOGGED_OUT_USER,true);
+            editor.putBoolean(Constants.LOGGED_IN_USER,false);
             editor.commit();
 
             Intent intent = new Intent(context, WalkThroughActivity.class);
@@ -208,14 +226,6 @@ public class User implements Serializable {
 
     public void setBoss(Boss boss) {
         this.boss = boss;
-    }
-
-    public Profile getProfile() {
-        return profile;
-    }
-
-    public void setProfile(Profile profile) {
-        this.profile = profile;
     }
 
     public String getCreatedAt() {
@@ -323,7 +333,6 @@ public class User implements Serializable {
                 ", home_address=" + home_address +
                 ", office_address=" + office_address +
                 ", boss=" + boss +
-                ", profile=" + profile +
                 ", createdAt='" + createdAt + '\'' +
                 ", updatedAt='" + updatedAt + '\'' +
                 ", token='" + token + '\'' +
