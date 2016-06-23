@@ -77,9 +77,14 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="190dip"
+                android:layout_height="200dip"
                 android:orientation="vertical">
 
+                <fragment
+                    android:id="@+id/map"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    class="com.google.android.gms.maps.MapFragment"/>
 
             </LinearLayout>
 
@@ -141,7 +146,7 @@
                         android:id="@+id/name"
                         android:textColor="@color/schedule_title_bg_color"
                         android:text="All day"
-                        android:textSize="12sp" />
+                        android:textSize="13sp" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -192,7 +197,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/schedule_title_bg_color"
                     android:text="@string/schedule_string_appointment"
-                    android:textSize="12sp"/>
+                    android:textSize="14sp"/>
             </LinearLayout>
 
             <View
@@ -203,20 +208,22 @@
             <LinearLayout
                 android:id="@+id/tab_bar"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="55dp"
+                android:weightSum="4"
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:layout_weight="0.2"
+                    android:layout_weight="1"
                     android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
+                        android:paddingTop="3dp"
+                        android:gravity="center_horizontal|center_vertical"
                         android:orientation="horizontal"
                         android:paddingBottom="3dp">
 
@@ -233,7 +240,7 @@
                             android:layout_height="wrap_content"
                             android:text="58°"
                             android:textColor="@color/schedule_title_bg_color"
-                            android:textSize="25sp" />
+                            android:textSize="20sp" />
 
                     </LinearLayout>
 
@@ -244,7 +251,7 @@
                         android:text="Las vegas"
                         android:layout_gravity="center_horizontal"
                         android:textColor="@color/schedule_title_bg_color"
-                        android:textSize="11sp" />
+                        android:textSize="10sp" />
 
                 </LinearLayout>
 
@@ -254,10 +261,10 @@
                     android:background="@android:color/darker_gray" />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:layout_weight="0.2"
+                    android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView
@@ -286,10 +293,10 @@
                     android:background="@android:color/darker_gray" />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:layout_weight="0.2"
+                    android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView
@@ -318,10 +325,10 @@
                     android:background="@android:color/darker_gray" />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
-                    android:layout_weight="0.2"
+                    android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView

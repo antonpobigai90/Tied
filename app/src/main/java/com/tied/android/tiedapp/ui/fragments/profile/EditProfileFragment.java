@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -21,6 +22,7 @@ import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.ProfileActivity;
 import com.tied.android.tiedapp.ui.listeners.ProfileFragmentListener;
 import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.util.PasswordDialog;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,6 +38,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
     private EditText first_name, last_name, email, fax, company_name;
     private String firstNameText, lastNameText, emailText, faxText, companyNameText, homeAddressText, officeAddressText;
+    TextView change;
 
     private ImageView confirm_edit, img_close;
     private Bundle bundle;
@@ -63,6 +66,9 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         email = (EditText) view.findViewById(R.id.email);
         fax = (EditText) view.findViewById(R.id.fax);
         company_name = (EditText) view.findViewById(R.id.company_name);
+
+        change = (TextView) view.findViewById(R.id.change);
+        change.setOnClickListener(this);
 
         confirm_edit = (ImageView) view.findViewById(R.id.confirm_edit);
         img_close = (ImageView) view.findViewById(R.id.img_close);
@@ -158,6 +164,10 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                 break;
             case R.id.img_close:
                 nextAction(bundle);
+                break;
+            case R.id.change:
+                PasswordDialog alert = new PasswordDialog();
+                alert.showDialog(getActivity());
                 break;
         }
     }

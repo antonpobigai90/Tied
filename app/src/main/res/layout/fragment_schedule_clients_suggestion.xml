@@ -155,7 +155,7 @@
                     <RelativeLayout
                         android:layout_width="160dp"
                         android:layout_height="180dp"
-                        android:background="@drawable/curve_background_white"
+                        android:background="@drawable/curve_white_background_with_stroke"
                         android:padding="10dp"
                         android:layout_marginRight="10dp">
 
@@ -252,7 +252,7 @@
                     <RelativeLayout
                         android:layout_width="160dp"
                         android:layout_height="180dp"
-                        android:background="@drawable/curve_background_white"
+                        android:background="@drawable/curve_white_background_with_stroke"
                         android:layout_marginRight="10dp"
                         android:padding="10dp">
 
@@ -349,7 +349,7 @@
                     <RelativeLayout
                         android:layout_width="160dp"
                         android:layout_height="180dp"
-                        android:background="@drawable/curve_background_white"
+                        android:background="@drawable/curve_white_background_with_stroke"
                         android:layout_marginRight="10dp"
                         android:padding="10dp">
 
