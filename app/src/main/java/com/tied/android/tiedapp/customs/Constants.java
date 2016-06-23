@@ -35,6 +35,7 @@ public class Constants {
     public static final String AVATAR_STATE_SAVED = "avatar_state";
 
     public static final String TOKEN = "token";
+    public static final String TOKEN_HEADER = "x-access-token";
 
     public static final String TWITTER_API_KEY = "6b2QdtehythOUVjBwEyHKeFGl";
     public static final String TWITTER_API_SECRET = "hyjXQqyRekDAcpeXb1nrb1zVwjmiovXaoTVJNuZy80D0MuNBiR";
@@ -74,10 +75,7 @@ public class Constants {
 
     public static final int CreateSchedule = 30;
 
-
-
     public static final int Profile = 40;
-
 
     public static final int Lines = 50;
 

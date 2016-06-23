@@ -107,6 +107,7 @@ public class User implements Serializable {
 
     public static boolean isUserLoggedIn(Context context){
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String json = mPrefs.getString(Constants.CURRENT_USER, "");
         return mPrefs.getBoolean(Constants.LOGGED_IN_USER, false);
     }
 

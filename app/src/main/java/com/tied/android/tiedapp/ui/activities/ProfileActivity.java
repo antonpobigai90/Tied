@@ -14,8 +14,10 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.soundcloud.android.crop.Crop;
+import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.fragments.profile.AvatarProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.EditProfileFragment;
@@ -24,6 +26,8 @@ import com.tied.android.tiedapp.ui.listeners.ProfileFragmentListener;
 
 import java.io.File;
 import java.io.IOException;
+
+import retrofit2.Retrofit;
 
 public class ProfileActivity extends FragmentActivity implements ProfileFragmentListener {
 
@@ -47,12 +51,15 @@ public class ProfileActivity extends FragmentActivity implements ProfileFragment
 
     public Uri imageUri = null, outputUri = null;
 
+    public Retrofit retrofit;
+    public SignUpApi service;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         boolean userLoggedIn = User.isUserLoggedIn(getApplicationContext());
-
+        Log.d(TAG, "userLoggedIn : "+userLoggedIn);
         if(!userLoggedIn ){
             User.LogOut(getApplicationContext());
         }
@@ -62,6 +69,10 @@ public class ProfileActivity extends FragmentActivity implements ProfileFragment
         Gson gson = new Gson();
         String user_json = gson.toJson(user);
         bundle.putString(Constants.USER, user_json);
+        launchFragment(Constants.Profile, bundle);
+
+        retrofit = MainApplication.getInstance().getRetrofit();
+        service = retrofit.create(SignUpApi.class);
     }
 
 
@@ -95,7 +106,6 @@ public class ProfileActivity extends FragmentActivity implements ProfileFragment
             outputUri = Uri.fromFile(new File(getFilesDir(), "cropped.jpg"));
             Crop.of(selectedImage, outputUri).asSquare().start(this);
         }
-
     }
 
     public void OnFragmentInteractionListener(int action, Bundle bundle) {
@@ -104,11 +114,11 @@ public class ProfileActivity extends FragmentActivity implements ProfileFragment
 
     }
 
-
-
     public void launchFragment(int pos, Bundle bundle) {
         fragment_index = pos;
         fragment = null;
+
+        Log.d(TAG, "position "+pos);
 
         switch (pos) {
             case Constants.Profile:

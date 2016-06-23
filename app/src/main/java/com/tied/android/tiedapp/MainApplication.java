@@ -2,6 +2,7 @@ package com.tied.android.tiedapp;
 
 import android.app.Application;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -55,20 +56,24 @@ public class MainApplication extends Application {
 //        }
     }
 
+    public OkHttpClient getOkHttpClient(){
+        Log.d(TAG, "OkHttpClient");
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .readTimeout(60, TimeUnit.SECONDS)
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .build();
+        return okHttpClient;
+    }
+
     public Retrofit getRetrofit() {
         if (retrofit == null) {
-            OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                    .readTimeout(60, TimeUnit.SECONDS)
-                    .connectTimeout(60, TimeUnit.SECONDS)
-                    .build();
-
+            OkHttpClient okHttpClient = getOkHttpClient();
             retrofit = new Retrofit.Builder()
                     .baseUrl(Constants.HOST)
                     .client(okHttpClient)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
-
         return retrofit;
     }
 

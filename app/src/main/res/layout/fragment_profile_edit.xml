@@ -28,6 +28,14 @@
             android:textIsSelectable="false"
             android:textSize="18sp"
             android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/confirm_edit"
+            android:layout_width="25dp"
+            android:layout_height="40dp"
+            android:src="@mipmap/btn_close"
+            android:layout_alignTop="@+id/txt_title"
+            android:layout_alignParentEnd="true" />
     </RelativeLayout>
 
     <ScrollView
@@ -65,7 +73,7 @@
                         android:textSize="12sp" />
 
                     <EditText
-                        android:id="@+id/f_name"
+                        android:id="@+id/first_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@android:color/transparent"
@@ -92,7 +100,7 @@
                         android:textSize="12sp" />
 
                     <EditText
-                        android:id="@+id/l_name"
+                        android:id="@+id/last_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@android:color/transparent"
@@ -251,10 +259,10 @@
                     android:textSize="12sp" />
 
                 <EditText
-                    android:id="@+id/company"
+                    android:id="@+id/company_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Emily Emmanuel LBC"
+                    android:text=""
                     android:textColor="@color/schedule_title_bg_color"
                     android:backgroundTint="@android:color/transparent"
                     android:textSize="14sp"

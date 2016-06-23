@@ -6,7 +6,6 @@ package com.tied.android.tiedapp.ui.fragments.profile;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -33,7 +32,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     public static final String TAG = ProfileFragment.class
             .getSimpleName();
 
-    PagerAdapter mPagerAdapter;
 
     public ImageView avatar, img_edit;
 
@@ -42,6 +40,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    private PagerAdapter mPagerAdapter;
     private Bundle bundle;
 
     public ProfileFragment() {
@@ -50,23 +49,20 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_profile, container, false);
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
         initComponent(view);
+        Log.d(TAG, "AM HERE AGAIN");
+        return view;
     }
 
     public void initComponent(View view) {
 
         mPagerAdapter = new PagerAdapter(getFragmentManager());
 
-
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
         mViewPager.setAdapter(mPagerAdapter);
+        mPagerAdapter.notifyDataSetChanged();
         CircleIndicator indicator = (CircleIndicator) view.findViewById(R.id.indicator);
         indicator.setViewPager(mViewPager);
 

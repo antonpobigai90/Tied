@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
+import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
 import com.tied.android.tiedapp.util.DemoData;
 import com.tied.lib.coverflow.CoverFlow;
@@ -37,16 +39,16 @@ public class WalkThroughActivity extends Activity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_welcome);
 
-//        User user = User.getUser(getApplicationContext());
-//        if(user != null && user.getId() != null && user.getSign_up_stage() < Constants.Password){
-//            Intent intent = new Intent(this, SignUpActivity.class);
-//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//            startActivity(intent);
-//        }else if(user != null && user.getId() != null && user.getSign_up_stage() > Constants.Password){
-//            Intent intent = new Intent(this, SignInActivity.class);
-//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//            startActivity(intent);
-//        }
+        User user = User.getUser(getApplicationContext());
+        if(user != null && user.getId() != null && user.getSign_up_stage() < Constants.Completed){
+            Intent intent = new Intent(this, SignUpActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }else if(user != null && user.getId() != null && user.getSign_up_stage() > Constants.Password){
+            Intent intent = new Intent(this, SignInActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }
         initComponent();
     }
 

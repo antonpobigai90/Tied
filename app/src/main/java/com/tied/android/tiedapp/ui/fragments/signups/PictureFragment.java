@@ -166,14 +166,14 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
 
             SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
             // finally, execute the request
-            Call<UpdateAvatar> call = signUpApi.uploadAvatar(id, token, stage, body);
+            Call<UpdateAvatar> call = signUpApi.uploadAvatar(user.getToken() ,id, stage, body);
             call.enqueue(new Callback<UpdateAvatar>() {
 
                 @Override
                 public void onResponse(Call<UpdateAvatar> call, Response<UpdateAvatar> updateAvatarResponse) {
                     if (getActivity() == null) return;
                     UpdateAvatar updateAvatar = updateAvatarResponse.body();
-//                    Log.d(TAG,updateAvatar.toString() );
+                    Log.d(TAG,updateAvatar.toString() );
                     if(updateAvatar.isSuccess()){
                         Gson gson = new Gson();
                         Bundle bundle = getArguments();

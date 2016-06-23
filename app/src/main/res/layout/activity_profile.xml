@@ -108,13 +108,18 @@
         </LinearLayout>
     </LinearLayout>
 
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <FrameLayout
         android:id="@+id/fragment"
-        android:name="com.tied.android.tiedapp.ui.fragments.profile.ProfileFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout="@layout/fragment_profile" />
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+
+    <!--<fragment xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--xmlns:tools="http://schemas.android.com/tools"-->
+        <!--android:id="@+id/fragment"-->
+        <!--android:name="com.tied.android.tiedapp.ui.fragments.profile.ProfileFragment"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--tools:layout="@layout/fragment_profile" />-->
 
     <!--<RelativeLayout-->
         <!--android:id="@+id/fragment_place"-->

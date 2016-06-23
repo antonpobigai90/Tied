@@ -131,7 +131,7 @@
     <!-- Schedule -->
     <string name="schedule_add_an_activity">Add an Activity</string>
     <string name="schedule_hint_string">You have not created any schedule yet. Let#s do this%</string>
-    <string name="schedule_employee_hint_string">You have'nt added an employee yet, Adding them is easy. Add to follow their activities</string>
+    <string name="schedule_employee_hint_string">You have\'nt added an employee yet, Adding them is easy. Add to follow their activities</string>
     <string name="schedule_create_schedule_btn">+ CREATE SCHEDULE</string>
     <string name="schedule_hint_string1">Oops! We can%t find any client in your list</string>
     <string name="schedule_hint_string2">Create New Client to Schedule that you would like to schedule an appointment with</string>
