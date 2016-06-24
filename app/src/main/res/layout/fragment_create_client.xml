@@ -127,8 +127,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingTop="10dp"
-                android:visibility="gone">
+                android:paddingTop="10dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -268,7 +267,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -352,8 +350,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingBottom="5dp"
-                android:paddingTop="5dp"
-                android:visibility="gone">
+                android:paddingTop="5dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -392,16 +389,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.1dp"
                 android:layout_marginBottom="5dp"
-                android:background="@android:color/darker_gray"
-                android:visibility="gone" />
+                android:background="@android:color/darker_gray"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingBottom="5dp"
-                android:paddingTop="5dp"
-                android:visibility="gone">
+                android:paddingTop="5dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -440,11 +435,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="0.1dp"
                 android:layout_marginBottom="5dp"
-                android:background="@android:color/darker_gray"
-                android:visibility="gone" />
+                android:background="@android:color/darker_gray" />
 
             <LinearLayout
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -576,7 +569,6 @@
                 android:background="@android:color/darker_gray" />
 
             <LinearLayout
-                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -632,7 +624,7 @@
 
                     <LinearLayout
                         android:orientation="horizontal"
-                        android:layout_width="fill_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
                         <LinearLayout
@@ -647,19 +639,19 @@
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
                                 android:src="@mipmap/circle_check2"
-                                android:id="@+id/weekly" />
+                                android:id="@+id/wimg_weekly" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Weekly"
                                 android:textColor="@color/schedule_title_bg_color"
-                                android:id="@+id/txt_sms"
+                                android:id="@+id/txt_weekly"
                                 android:layout_marginLeft="7dp" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:id="@+id/2weeks_layout"
+                            android:id="@+id/two_weeks_layout"
                             android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -667,21 +659,22 @@
                             android:gravity="center_vertical">
 
                             <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/img_email" />
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@mipmap/circle_uncheck"
+                                android:id="@+id/img_two_weeks" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="2 Weeks"
                                 android:textColor="@color/schedule_title_bg_color"
-                                android:id="@+id/txt_email1"
+                                android:id="@+id/txt_two_weeks"
                                 android:layout_marginLeft="7dp" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:id="@+id/no_invite_layout"
+                            android:id="@+id/three_weeks_layout"
                             android:orientation="horizontal"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -689,62 +682,68 @@
                             android:gravity="center_vertical">
 
                             <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/img_no_invite" />
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@mipmap/circle_uncheck"
+                                android:id="@+id/img_three_weeks" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/str_no_invite"
-                                android:id="@+id/txt_no_invite"
+                                android:text="3 Weeks"
+                                android:textColor="@color/schedule_title_bg_color"
+                                android:id="@+id/txt_three_weeks"
                                 android:layout_marginLeft="7dp" />
-
                         </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/monthly_layout"
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:src="@mipmap/circle_uncheck"
+                                android:id="@+id/img_monthly" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Monthly"
+                                android:textColor="@color/schedule_title_bg_color"
+                                android:id="@+id/txt_monthly"
+                                android:layout_marginLeft="7dp" />
+                        </LinearLayout>
+
                     </LinearLayout>
+
                 </LinearLayout>
+
             </LinearLayout>
-
-
-
 
         </LinearLayout>
 
-
     </ScrollView>
 
-    <RelativeLayout
-        android:id="@+id/continue_btn"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/button_bg"
-        android:clickable="true"
-        android:focusable="true"
-        android:visibility="gone">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:layout_gravity="center_horizontal"
-            android:text="NEXT"
-            android:textColor="@color/white"
-            android:textSize="20sp" />
 
-        <ImageView
-            android:id="@+id/img_next_arrow"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
-            android:clickable="false"
-            android:focusable="false"
-            android:src="@mipmap/btn_next_arrow" />
-
-    </RelativeLayout>
+        <Button
+            android:id="@+id/button_import"
+            android:layout_marginBottom="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/curve_blue_background"
+            android:gravity="center_vertical|center_horizontal"
+            android:text="Import via phone contact"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:textColor="@color/white" />
 
 
 </RelativeLayout>
