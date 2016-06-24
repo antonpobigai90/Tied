@@ -7,8 +7,9 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -28,8 +29,11 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_schedule_view);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+        MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
+//
+//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+//                .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
 //        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -37,7 +41,6 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
 //        }else {
 //
 //        }
-
     }
 
 
@@ -49,13 +52,14 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
 
         myMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        myMap.addMarker(new MarkerOptions().position(sydney));
-        myMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-
+        LatLng MELBOURNE = new LatLng(-37.81319, 144.96298);
+        Marker melbourne = myMap.addMarker(new MarkerOptions()
+                            .position(MELBOURNE)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+        myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(MELBOURNE,15));
 
         myMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
+        melbourne.showInfoWindow();
 
     }
 
