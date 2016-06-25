@@ -51,6 +51,7 @@ public class Constants {
 
     public static final String PREVIOUS = "previous";
 
+    public static final int Help = 0;
     public static final int SignInUser = 1;
     public static final int Reset = 2;
     public static final int DoneReset = 3;

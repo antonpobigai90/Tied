@@ -29,7 +29,6 @@ public class HelpActivityFragment extends Fragment implements AdapterView.OnItem
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididun","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididun",
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididun"};
 
-
     private ArrayList<HelpModel> helpArrayList;
     private HelpAdapter helpAdapter;
 
