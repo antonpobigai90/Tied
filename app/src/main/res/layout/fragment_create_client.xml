@@ -142,7 +142,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
-                    android:text="Emily Shaibu"
+                    android:text=""
                     android:textColor="@color/schedule_title_bg_color"
                     android:textSize="13sp"
                     android:textStyle="bold" />
@@ -175,7 +175,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
-                    android:text="6559 Abiodun Pearl Suite 1"
+                    android:text=""
                     android:textColor="@color/schedule_title_bg_color"
                     android:textSize="13sp"
                     android:textStyle="bold" />
@@ -217,7 +217,7 @@
                         android:backgroundTint="@android:color/transparent"
                         android:inputType="text"
                         android:maxLines="1"
-                        android:text="080-675-9871"
+                        android:text=""
                         android:textColor="@color/schedule_title_bg_color"
                         android:textSize="13sp"
                         android:textStyle="bold" />
@@ -250,7 +250,7 @@
                         android:layout_height="wrap_content"
                         android:backgroundTint="@android:color/transparent"
                         android:maxLines="1"
-                        android:text="exe@gmail.com"
+                        android:text=""
                         android:textColor="@color/schedule_title_bg_color"
                         android:textSize="13sp"
                         android:textStyle="bold" />
@@ -296,7 +296,7 @@
                         android:backgroundTint="@android:color/transparent"
                         android:inputType="text"
                         android:maxLines="1"
-                        android:text="080-675-9871"
+                        android:text=""
                         android:textColor="@color/schedule_title_bg_color"
                         android:textSize="13sp"
                         android:textStyle="bold" />
@@ -329,7 +329,7 @@
                         android:layout_height="wrap_content"
                         android:backgroundTint="@android:color/transparent"
                         android:maxLines="1"
-                        android:text="Denton Tap"
+                        android:text=""
                         android:textColor="@color/schedule_title_bg_color"
                         android:textSize="13sp"
                         android:textStyle="bold" />
@@ -370,7 +370,7 @@
                         android:layout_height="wrap_content"
                         android:layout_toLeftOf="@+id/dollar"
                         android:backgroundTint="@android:color/transparent"
-                        android:text="919,200,123"
+                        android:text=""
                         android:textColor="@color/schedule_title_bg_color"
                         android:textSize="13sp"
                         android:textStyle="bold" />
@@ -416,7 +416,7 @@
                         android:layout_height="wrap_content"
                         android:layout_toLeftOf="@+id/dollar1"
                         android:backgroundTint="@android:color/transparent"
-                        android:text="919,200,123"
+                        android:text=""
                         android:textColor="@color/schedule_title_bg_color"
                         android:textSize="13sp"
                         android:textStyle="bold" />
@@ -728,8 +728,6 @@
         </LinearLayout>
 
     </ScrollView>
-
-
 
         <Button
             android:id="@+id/button_import"

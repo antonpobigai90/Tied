@@ -79,7 +79,7 @@
                         android:layout_height="wrap_content"
                         android:backgroundTint="@android:color/transparent"
                         android:inputType="text"
-                        android:text="Emily"
+                        android:text=""
                         android:textColor="@color/schedule_title_bg_color"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -105,7 +105,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@android:color/transparent"
-                        android:text="Emmanuel"
+                        android:text=""
                         android:textColor="@color/schedule_title_bg_color"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -142,10 +142,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
-                    android:text="emily@gmail.com"
+                    android:text=""
                     android:textColor="@color/schedule_title_bg_color"
                     android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:enabled="false" />
             </LinearLayout>
 
             <View
@@ -175,7 +176,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
-                    android:text="922-809-2341"
+                    android:text=""
                     android:textColor="@color/schedule_title_bg_color"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -264,7 +265,7 @@
                     android:id="@+id/company_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Hello"
+                    android:text=""
                     android:textColor="@color/schedule_title_bg_color"
                     android:backgroundTint="@android:color/transparent"
                     android:textSize="14sp"
@@ -306,7 +307,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="4dp"
-                        android:text="Art,Fashion,Furnitures"
+                        android:text=""
                         android:textColor="@color/schedule_title_bg_color"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -339,6 +340,7 @@
                 android:background="@android:color/darker_gray" />
 
             <LinearLayout
+                android:id="@+id/home_address"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -357,11 +359,10 @@
                     android:textSize="12sp" />
 
                 <TextView
-                    android:id="@+id/home_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="4dp"
-                    android:text="530 Obalende Suit 739"
+                    android:text=""
                     android:textColor="@color/schedule_title_bg_color"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -373,6 +374,7 @@
                 android:background="@android:color/darker_gray" />
 
             <LinearLayout
+                android:id="@+id/office_address"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -392,12 +394,11 @@
                     android:textSize="12sp" />
 
                 <TextView
-                    android:id="@+id/office_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="4dp"
                     android:layout_centerVertical="true"
-                    android:text="581 Meagan Ferry Suit 685"
+                    android:text=""
                     android:textColor="@color/schedule_title_bg_color"
                     android:textSize="14sp"
                     android:textStyle="bold" />

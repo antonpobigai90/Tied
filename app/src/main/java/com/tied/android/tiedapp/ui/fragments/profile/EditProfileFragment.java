@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +45,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     private Bundle bundle;
     private User user;
 
+    private LinearLayout home_address, office_address;
     public ProfileFragmentListener mListener;
 
     @Override
@@ -67,8 +69,13 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         fax = (EditText) view.findViewById(R.id.fax);
         company_name = (EditText) view.findViewById(R.id.company_name);
 
+        home_address = (LinearLayout) view.findViewById(R.id.home_address);
+        office_address = (LinearLayout) view.findViewById(R.id.office_address);
+
         change = (TextView) view.findViewById(R.id.change);
         change.setOnClickListener(this);
+        office_address.setOnClickListener(this);
+        home_address.setOnClickListener(this);
 
         confirm_edit = (ImageView) view.findViewById(R.id.confirm_edit);
         img_close = (ImageView) view.findViewById(R.id.img_close);
@@ -99,16 +106,21 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         }
     }
 
-    public void nextAction(Bundle bundle) {
+    public void nextAction(int action,Bundle bundle) {
         if (mListener != null) {
-            mListener.OnFragmentInteractionListener(Constants.Profile, bundle);
+            mListener.OnFragmentInteractionListener(action, bundle);
         }
     }
-
 
     private void confirmEdit(){
         if(validate()){
             DialogUtils.displayProgress(getActivity());
+
+            user.setFirst_name(firstNameText);
+            user.setLast_name(lastNameText);
+            user.setFax(faxText);
+            user.setCo_workers(companyNameText);
+
             SignUpApi signUpApi = ((ProfileActivity) getActivity()).service;
             Call<ServerInfo> response = signUpApi.updateUser(user);
             response.enqueue(new Callback<ServerInfo>() {
@@ -125,7 +137,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                             String json = gson.toJson(user);
                             bundle.putString(Constants.USER, json);
                             DialogUtils.closeProgress();
-                            nextAction(bundle);
+                            nextAction(Constants.Profile,bundle);
                         } else {
                             DialogUtils.closeProgress();
                             Toast.makeText(getActivity(), "user info  was not updated", Toast.LENGTH_LONG).show();
@@ -163,7 +175,13 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                 confirmEdit();
                 break;
             case R.id.img_close:
-                nextAction(bundle);
+                nextAction(Constants.Profile,bundle);
+                break;
+            case R.id.home_address:
+                nextAction(Constants.ProfileAddress, bundle);
+                break;
+            case R.id.office_address:
+                nextAction(Constants.ProfileAddress, bundle);
                 break;
             case R.id.change:
                 PasswordDialog alert = new PasswordDialog();

@@ -8,7 +8,7 @@ import android.preference.PreferenceManager;
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Location;
-import com.tied.android.tiedapp.ui.activities.ProfileActivity;
+import com.tied.android.tiedapp.ui.activities.schedule.ScheduleActivity;
 import com.tied.android.tiedapp.ui.activities.signups.WalkThroughActivity;
 
 import java.io.Serializable;
@@ -36,6 +36,7 @@ public class User implements Serializable {
     private ArrayList<String> territories;
     private ArrayList<String> industries;
 
+    private String company_name;
     private int sign_up_stage;
 
     public Location home_address;
@@ -48,10 +49,11 @@ public class User implements Serializable {
 
     private String token;
 
-    public User(String id, String email, String first_name, String last_name, String phone, String fax, String password,
-                String avatar, String avatar_uri, String sale_type, String co_workers, String group_description,
-                ArrayList<String> territories, ArrayList<String> industries, int sign_up_stage, Location home_address,
-                Location office_address, Boss boss,String createdAt, String updatedAt, String token) {
+    public User(String id, String email, String first_name, String last_name, String phone, String fax,
+                String password, String avatar, String avatar_uri, String sale_type, String co_workers,
+                String group_description, ArrayList<String> territories, ArrayList<String> industries,
+                String company_name, int sign_up_stage, Location home_address,
+                Location office_address, Boss boss, String createdAt, String updatedAt, String token) {
         this.id = id;
         this.email = email;
         this.first_name = first_name;
@@ -66,6 +68,7 @@ public class User implements Serializable {
         this.group_description = group_description;
         this.territories = territories;
         this.industries = industries;
+        this.company_name = company_name;
         this.sign_up_stage = sign_up_stage;
         this.home_address = home_address;
         this.office_address = office_address;
@@ -85,13 +88,23 @@ public class User implements Serializable {
     public User() {
     }
 
-
-
     public static User getUser(Context context){
         Gson gson = new Gson();
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         String json = mPrefs.getString(Constants.CURRENT_USER, "");
         return gson.fromJson(json, User.class);
+    }
+
+    public boolean isNewUser(Context context){
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return mPrefs.getBoolean(Constants.NEW_USER, false);
+    }
+
+    public void setIsNewUser(Context context){
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor prefsEditor = mPrefs.edit();
+        prefsEditor.putBoolean(Constants.NEW_USER, true);
+        prefsEditor.apply();
     }
 
     public boolean save(Context context){
@@ -121,12 +134,11 @@ public class User implements Serializable {
             editor.putBoolean(Constants.LOGGED_IN_USER,true);
             editor.apply();
 
-            Intent intent = new Intent(context, ProfileActivity.class);
+            Intent intent = new Intent(context, ScheduleActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             context.startActivity(intent);
         }
     }
-
 
     public static void LogOut(Context context){
         User user = new User();
@@ -136,13 +148,21 @@ public class User implements Serializable {
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putBoolean(Constants.LOGGED_IN_USER,false);
-            editor.commit();
+            editor.apply();
 
             Intent intent = new Intent(context, WalkThroughActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             context.startActivity(intent);
         }
+    }
+
+    public String getCompany_name() {
+        return company_name;
+    }
+
+    public void setCompany_name(String company_name) {
+        this.company_name = company_name;
     }
 
     public String getId() {

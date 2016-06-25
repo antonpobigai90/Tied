@@ -9,7 +9,9 @@ import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -19,6 +21,7 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.ui.fragments.profile.AddressFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.AvatarProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.EditProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.ProfileFragment;
@@ -47,6 +50,8 @@ public class ProfileActivity extends FragmentActivity implements ProfileFragment
     public Fragment profileFragment = null;
     private int fragment_index = 0;
 
+    private LinearLayout tab_bar,relativeLayout,selectedlayout, more;
+
     public Bitmap bitmap;
 
     public Uri imageUri = null, outputUri = null;
@@ -57,12 +62,12 @@ public class ProfileActivity extends FragmentActivity implements ProfileFragment
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
-        boolean userLoggedIn = User.isUserLoggedIn(getApplicationContext());
-        Log.d(TAG, "userLoggedIn : "+userLoggedIn);
-        if(!userLoggedIn ){
-            User.LogOut(getApplicationContext());
-        }
+        setContentView(R.layout.activity_main);
+
+        relativeLayout = (LinearLayout) findViewById(R.id.linearLayout);
+
+        selectedlayout = (LinearLayout) findViewById(R.id.more);
+        selectedlayout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
 
         user = User.getUser(getApplicationContext());
         bundle = new Bundle();
@@ -75,6 +80,12 @@ public class ProfileActivity extends FragmentActivity implements ProfileFragment
         service = retrofit.create(SignUpApi.class);
     }
 
+    @Override
+    public void onBackPressed() {
+        if(fragment_index == Constants.Profile){
+            finish();
+        }
+    }
 
     private void handleCrop(Uri outputUri) {
         ImageView avatar =  ((AvatarProfileFragment) profileFragment).avatar;
@@ -122,10 +133,14 @@ public class ProfileActivity extends FragmentActivity implements ProfileFragment
 
         switch (pos) {
             case Constants.Profile:
+                relativeLayout.setVisibility(View.GONE);
                 fragment = new ProfileFragment();
                 break;
             case Constants.EditProfile:
                 fragment = new EditProfileFragment();
+                break;
+            case Constants.ProfileAddress:
+                fragment = new AddressFragment();
                 break;
             default:
                 finish();
@@ -140,7 +155,7 @@ public class ProfileActivity extends FragmentActivity implements ProfileFragment
             }
 
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment, fragment)
+                    .replace(R.id.fragment_place, fragment)
                     .addToBackStack(fragment.getClass().getSimpleName())
                     .commit();
         }

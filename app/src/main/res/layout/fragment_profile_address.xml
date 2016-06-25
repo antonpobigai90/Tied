@@ -90,10 +90,10 @@
                     android:textSize="12sp" />
 
                 <EditText
-                    android:id="@+id/str_addresss"
+                    android:id="@+id/office_street"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="581 Meagan Ferry Suit 685"
+                    android:text=""
                     android:backgroundTint="@android:color/transparent"
                     android:textColor="@color/schedule_title_bg_color"
                     android:textSize="14sp"
@@ -123,11 +123,11 @@
                     android:textSize="12sp" />
 
                 <EditText
-                    android:id="@+id/zip"
+                    android:id="@+id/office_zip"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
-                    android:text="76019"
+                    android:text=""
                     android:textColor="@color/schedule_title_bg_color"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -156,11 +156,11 @@
                     android:textSize="12sp" />
 
                 <EditText
-                    android:id="@+id/city"
+                    android:id="@+id/office_city"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
-                    android:text="Lagos"
+                    android:text=""
                     android:textColor="@color/schedule_title_bg_color"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -212,11 +212,11 @@
                     android:textSize="12sp" />
 
                 <EditText
-                    android:id="@+id/home_str_addresss"
+                    android:id="@+id/home_street"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
-                    android:text="530 Obalende Suit 739"
+                    android:text=""
                     android:textColor="@color/schedule_title_bg_color"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -249,7 +249,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
-                    android:text="76019"
+                    android:text=""
                     android:textColor="@color/schedule_title_bg_color"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -282,7 +282,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
-                    android:text="Lagos"
+                    android:text=""
                     android:textColor="@color/schedule_title_bg_color"
                     android:textSize="14sp"
                     android:textStyle="bold" />

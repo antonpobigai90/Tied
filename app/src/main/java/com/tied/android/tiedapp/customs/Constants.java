@@ -29,6 +29,7 @@ public class Constants {
     public static final String CODE = "code";
     public static final String SERVER_INFO = "server_info";
     public static final String CURRENT_USER = "current_user";
+    public static final String NEW_USER = "new_user";
     public static final String SPLASH_SCREEN_DONE = "splash_screen_done";
     public static final String LOGGED_OUT_USER = "logout";
     public static final String LOGGED_IN_USER = "login";
@@ -74,6 +75,10 @@ public class Constants {
     public static final int Completed = 25;
 
     public static final int CreateSchedule = 30;
+    public static final int ActivitySchedule = 31;
+    public static final int HomeSchedule = 32;
+    public static final int Schedules = 33;
+    public static final int TabActivities = 34;
 
     public static final int Profile = 40;
 
@@ -82,6 +87,7 @@ public class Constants {
 
 //    Profile Activity fragments indexes
     public static final int EditProfile = 101;
+    public static final int ProfileAddress = 102;
 
 
 
