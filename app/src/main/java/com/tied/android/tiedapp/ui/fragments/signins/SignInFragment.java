@@ -106,6 +106,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
         response.enqueue(new Callback<LoginUser>() {
             @Override
             public void onResponse(Call<LoginUser> call, Response<LoginUser> LoginResponse) {
+                if (getActivity() == null) return;
                 LoginUser LoginUser = LoginResponse.body();
                 Log.d(TAG, LoginUser.toString());
                 if (LoginUser.isSuccess()) {

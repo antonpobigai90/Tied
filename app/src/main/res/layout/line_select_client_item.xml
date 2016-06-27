@@ -33,8 +33,6 @@
             android:textColor="@color/schedule_title_bg_color"
             android:textSize="13sp" />
 
-
-
         <ImageView
             android:id="@+id/check"
             android:layout_width="35dp"

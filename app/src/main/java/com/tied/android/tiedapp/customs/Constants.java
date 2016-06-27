@@ -22,6 +22,7 @@ public class Constants {
     public static final String GET_AVATAR_ENDPOINT = HOST + "uploads/avatars/";
 
     public static final String USER_UPDATE_INFO = API_PATH + "users/me";
+    public static final String USER_CHANGE_PASSWORD = API_PATH + "users/changePassword";
 
     public static final String GET_INDUSTRIES = API_PATH + "config/industries";
 
@@ -34,6 +35,7 @@ public class Constants {
     public static final String LOGGED_OUT_USER = "logout";
     public static final String LOGGED_IN_USER = "login";
     public static final String AVATAR_STATE_SAVED = "avatar_state";
+    public static final String EditingProfile = "editing_profile";
 
     public static final String TOKEN = "token";
     public static final String TOKEN_HEADER = "x-access-token";
@@ -48,6 +50,11 @@ public class Constants {
     public static final String STREET = "street";
     public static final String LONGITUDE = "longitude";
     public static final String LATITUDE = "latitude";
+    public static final String FIRST_NAME = "first_name";
+    public static final String LAST_NAME = "last_name";
+    public static final String EMAIL = "email";
+    public static final String FAX = "fax";
+    public static final String COMPANY_NAME = "company_name";
 
     public static final String PREVIOUS = "previous";
 
@@ -80,6 +87,7 @@ public class Constants {
     public static final int HomeSchedule = 32;
     public static final int Schedules = 33;
     public static final int TabActivities = 34;
+    public static final int AddScheduleActiity = 35;
 
     public static final int Profile = 40;
 
@@ -89,6 +97,7 @@ public class Constants {
 //    Profile Activity fragments indexes
     public static final int EditProfile = 101;
     public static final int ProfileAddress = 102;
+    public static final int Notification = 103;
 
 
 

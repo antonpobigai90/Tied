@@ -16,7 +16,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.objects.auth.ServerInfo;
+import com.tied.android.tiedapp.objects.auth.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
 import com.tied.android.tiedapp.util.Utility;
@@ -74,12 +74,12 @@ public class VerifyCodeFragment extends Fragment implements View.OnClickListener
 
 
         bundle = getArguments();
-        String serverInfo_str = bundle.getString(Constants.SERVER_INFO);
+        String ServerRes_str = bundle.getString(Constants.SERVER_INFO);
         Gson gson = new Gson();
-        ServerInfo serverInfo = gson.fromJson(serverInfo_str, ServerInfo.class);
-        if(serverInfo!= null && serverInfo.isSuccess()){
-            code = serverInfo.getCode()+"";
-            Log.d(TAG +" Code", serverInfo.getCode()+"");
+        ServerRes ServerRes = gson.fromJson(ServerRes_str, ServerRes.class);
+        if(ServerRes!= null && ServerRes.isSuccess()){
+            code = ServerRes.getCode()+"";
+            Log.d(TAG +" Code", ServerRes.getCode()+"");
         }else{
             nextAction(Constants.PhoneAndFax, bundle);
         }

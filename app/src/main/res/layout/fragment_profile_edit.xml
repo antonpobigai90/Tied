@@ -322,7 +322,7 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:id="@+id/add"
+                        android:id="@+id/add_industry"
                         android:layout_width="30dp"
                         android:layout_height="40dp"
                         android:layout_gravity="right"
@@ -359,6 +359,7 @@
                     android:textSize="12sp" />
 
                 <TextView
+                    android:id="@+id/home_address_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="4dp"
@@ -394,6 +395,7 @@
                     android:textSize="12sp" />
 
                 <TextView
+                    android:id="@+id/office_address_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingLeft="4dp"

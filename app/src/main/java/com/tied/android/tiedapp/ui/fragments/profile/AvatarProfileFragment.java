@@ -8,15 +8,18 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.tied.android.tiedapp.R;
+import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.activities.ProfileActivity;
+import com.tied.android.tiedapp.ui.activities.MainActivity;
 
 import java.io.File;
 
@@ -43,12 +46,22 @@ public class AvatarProfileFragment extends Fragment implements View.OnClickListe
         avatar = (ImageView) view.findViewById(R.id.avatar);
         avatar.setOnClickListener(this);
 
-        User user = User.getUser(getActivity().getApplicationContext());
-        if (user.getAvatar() != null && !user.getAvatar().equals("")) {
-            Picasso.with(getActivity()).
-                    load(user.getAvatar())
-                    .resize(80, 80)
-                    .into(avatar);
+        bundle = getArguments();
+        if (bundle != null) {
+            Log.d(TAG, "bundle not null");
+            Gson gson = new Gson();
+            String user_json = bundle.getString("user");
+            User user = gson.fromJson(user_json, User.class);
+            Log.d(TAG, user.toString());
+            if (user.getAvatar_uri() != null) {
+                Uri myUri = Uri.parse(user.getAvatar_uri());
+                avatar.setImageURI(myUri);
+            }else{
+                Picasso.with(getActivity()).
+                        load(Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg")
+                        .resize(80, 80)
+                        .into(avatar);
+            }
         }
         return view;
     }
@@ -56,7 +69,7 @@ public class AvatarProfileFragment extends Fragment implements View.OnClickListe
     @Override
     public void onResume() {
         super.onResume();
-        Uri myUri = ((ProfileActivity) getActivity()).outputUri;
+        Uri myUri = ((MainActivity) getActivity()).outputUri;
         if(myUri != null){
             avatar.setImageURI(myUri);
         }
@@ -84,7 +97,7 @@ public class AvatarProfileFragment extends Fragment implements View.OnClickListe
                                 Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
                                 File photo = new File(Environment.getExternalStorageDirectory(), "Pic.jpg");
                                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
-                                ((ProfileActivity) getActivity()).imageUri = Uri.fromFile(photo);
+                                ((MainActivity) getActivity()).imageUri = Uri.fromFile(photo);
                                 getActivity().startActivityForResult(intent, REQUEST_TAKE_PHOTO);
                                 break;
 

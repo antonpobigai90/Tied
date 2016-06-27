@@ -22,7 +22,7 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.MyAsyncTask;
 import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
 import com.tied.android.tiedapp.objects.Location;
-import com.tied.android.tiedapp.objects.auth.ServerInfo;
+import com.tied.android.tiedapp.objects.auth.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
@@ -220,14 +220,14 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
             }
 
             SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
-            Call<ServerInfo> response = signUpApi.updateUser(user);
-            response.enqueue(new Callback<ServerInfo>() {
+            Call<ServerRes> response = signUpApi.updateUser(user);
+            response.enqueue(new Callback<ServerRes>() {
                 @Override
-                public void onResponse(Call<ServerInfo> call, Response<ServerInfo> UpdateUserResponse) {
+                public void onResponse(Call<ServerRes> call, Response<ServerRes> ServerResResponse) {
                     if (getActivity() == null) return;
-                    ServerInfo UpdateUser = UpdateUserResponse.body();
-                    Log.d(TAG + " onFailure", UpdateUserResponse.body().toString());
-                    if (UpdateUser.isSuccess()) {
+                    ServerRes ServerRes = ServerResResponse.body();
+                    Log.d(TAG + " onFailure", ServerResResponse.body().toString());
+                    if (ServerRes.isSuccess()) {
                         Bundle bundle = new Bundle();
                         boolean saved = user.save(getActivity().getApplicationContext());
                         if (saved) {
@@ -246,13 +246,13 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
                             Toast.makeText(getActivity(), "user info  was not updated", Toast.LENGTH_LONG).show();
                         }
                     } else {
-                        Toast.makeText(getActivity(), UpdateUser.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), ServerRes.getMessage(), Toast.LENGTH_LONG).show();
                     }
                     DialogUtils.closeProgress();
                 }
 
                 @Override
-                public void onFailure(Call<ServerInfo> UpdateUserCall, Throwable t) {
+                public void onFailure(Call<ServerRes> ServerResCall, Throwable t) {
                     Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
                     Log.d(TAG + " onFailure", t.toString());
                     DialogUtils.closeProgress();

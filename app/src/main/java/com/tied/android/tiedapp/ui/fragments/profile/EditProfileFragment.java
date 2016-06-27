@@ -18,12 +18,14 @@ import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
-import com.tied.android.tiedapp.objects.auth.ServerInfo;
+import com.tied.android.tiedapp.objects.auth.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.activities.ProfileActivity;
-import com.tied.android.tiedapp.ui.listeners.ProfileFragmentListener;
+import com.tied.android.tiedapp.ui.activities.MainActivity;
+import com.tied.android.tiedapp.ui.listeners.FragmentInterationListener;
 import com.tied.android.tiedapp.util.DialogUtils;
 import com.tied.android.tiedapp.util.PasswordDialog;
+
+import org.apache.commons.lang.StringUtils;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -41,12 +43,14 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     private String firstNameText, lastNameText, emailText, faxText, companyNameText, homeAddressText, officeAddressText;
     TextView change;
 
-    private ImageView confirm_edit, img_close;
+    private ImageView confirm_edit, img_close, add_industry;
     private Bundle bundle;
     private User user;
 
+    private TextView office_address_text, home_address_text, industry_list;
+
     private LinearLayout home_address, office_address;
-    public ProfileFragmentListener mListener;
+    public FragmentInterationListener mListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -61,6 +65,24 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         initComponent(view);
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        firstNameText = first_name.getText().toString();
+        lastNameText = last_name.getText().toString();
+        emailText = email.getText().toString();
+        faxText = fax.getText().toString();
+        companyNameText = company_name.getText().toString();
+
+        outState.putString(Constants.FIRST_NAME, firstNameText);
+        outState.putString(Constants.LAST_NAME, lastNameText);
+        outState.putString(Constants.EMAIL, emailText);
+        outState.putString(Constants.FAX, faxText);
+        outState.putString(Constants.COMPANY_NAME, companyNameText);
+
+    }
+
     public void initComponent(View view) {
 
         first_name = (EditText) view.findViewById(R.id.first_name);
@@ -69,11 +91,18 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         fax = (EditText) view.findViewById(R.id.fax);
         company_name = (EditText) view.findViewById(R.id.company_name);
 
-        home_address = (LinearLayout) view.findViewById(R.id.home_address);
-        office_address = (LinearLayout) view.findViewById(R.id.office_address);
+        industry_list = (TextView) view.findViewById(R.id.industry_list);
 
+        home_address = (LinearLayout) view.findViewById(R.id.home_address);
+        home_address_text = (TextView) view.findViewById(R.id.home_address_text);
+
+        office_address = (LinearLayout) view.findViewById(R.id.office_address);
+        office_address_text = (TextView) view.findViewById(R.id.office_address_text);
+
+        add_industry = (ImageView) view.findViewById(R.id.add_industry);
         change = (TextView) view.findViewById(R.id.change);
         change.setOnClickListener(this);
+        add_industry.setOnClickListener(this);
         office_address.setOnClickListener(this);
         home_address.setOnClickListener(this);
 
@@ -92,14 +121,28 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
             last_name.setText(user.getLast_name());
             email.setText(user.getEmail());
             fax.setText(user.getFax());
+            company_name.setText(user.getCompany_name());
+
+            if(user.getOffice_address() != null){
+                office_address_text.setText(user.getOffice_address().getLocationAddress());
+            }
+
+            if(user.getHome_address() != null){
+                home_address_text.setText(user.getHome_address().getLocationAddress());
+            }
+
+            if(user.getIndustries().size() > 0){
+                String indust =  StringUtils.join( user.getIndustries().toArray(), ", ");
+                industry_list.setText(indust);
+            }
         }
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof ProfileFragmentListener) {
-            mListener = (ProfileFragmentListener) context;
+        if (context instanceof FragmentInterationListener) {
+            mListener = (FragmentInterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -121,35 +164,38 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
             user.setFax(faxText);
             user.setCo_workers(companyNameText);
 
-            SignUpApi signUpApi = ((ProfileActivity) getActivity()).service;
-            Call<ServerInfo> response = signUpApi.updateUser(user);
-            response.enqueue(new Callback<ServerInfo>() {
+            SignUpApi signUpApi = ((MainActivity) getActivity()).service;
+            Call<ServerRes> response = signUpApi.updateUser(user);
+            response.enqueue(new Callback<ServerRes>() {
                 @Override
-                public void onResponse(Call<ServerInfo> call, Response<ServerInfo> UpdateUserResponse) {
+                public void onResponse(Call<ServerRes> call, Response<ServerRes> ServerResponseResponse) {
                     if (getActivity() == null) return;
-                    ServerInfo UpdateUser = UpdateUserResponse.body();
-                    Log.d(TAG + " onFailure", UpdateUserResponse.body().toString());
-                    if (UpdateUser.isSuccess()) {
-                        Bundle bundle = new Bundle();
+                    ServerRes ServerRes = ServerResponseResponse.body();
+                    Log.d(TAG + " onFailure", ServerResponseResponse.body().toString());
+                    if (ServerRes.isAuthFailed()){
+                        DialogUtils.closeProgress();
+                        User.LogOut(getActivity());
+                    }
+                    else if (ServerRes.isSuccess()) {
                         boolean saved = user.save(getActivity().getApplicationContext());
                         if (saved) {
                             Gson gson = new Gson();
                             String json = gson.toJson(user);
                             bundle.putString(Constants.USER, json);
                             DialogUtils.closeProgress();
-                            nextAction(Constants.Profile,bundle);
+                            Toast.makeText(getActivity(), ServerRes.getMessage(), Toast.LENGTH_LONG).show();
                         } else {
                             DialogUtils.closeProgress();
                             Toast.makeText(getActivity(), "user info  was not updated", Toast.LENGTH_LONG).show();
                         }
                     } else {
-                        Toast.makeText(getActivity(), UpdateUser.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), ServerRes.getMessage(), Toast.LENGTH_LONG).show();
                     }
                     DialogUtils.closeProgress();
                 }
 
                 @Override
-                public void onFailure(Call<ServerInfo> UpdateUserCall, Throwable t) {
+                public void onFailure(Call<ServerRes> ServerResponseCall, Throwable t) {
                     Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
                     Log.d(TAG + " onFailure", t.toString());
                     DialogUtils.closeProgress();
@@ -185,7 +231,11 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                 break;
             case R.id.change:
                 PasswordDialog alert = new PasswordDialog();
-                alert.showDialog(getActivity());
+                alert.showDialog(getActivity(), user);
+                break;
+            case R.id.add_industry:
+                bundle.putBoolean(Constants.EditingProfile, true);
+                nextAction(Constants.Industry, bundle);
                 break;
         }
     }

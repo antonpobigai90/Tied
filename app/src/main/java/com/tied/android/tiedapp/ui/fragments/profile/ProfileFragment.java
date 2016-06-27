@@ -8,18 +8,20 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.ui.activities.ProfileActivity;
-import com.tied.android.tiedapp.ui.listeners.ProfileFragmentListener;
+import com.tied.android.tiedapp.ui.activities.MainActivity;
+import com.tied.android.tiedapp.ui.listeners.FragmentInterationListener;
 import com.tied.android.tiedapp.util.DemoData;
 
 import me.relex.circleindicator.CircleIndicator;
@@ -34,13 +36,16 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
 
 
     public ImageView avatar, img_edit;
+    private LinearLayout back_layout;
+    private RelativeLayout notification;
 
-    public ProfileFragmentListener mListener;
+    public FragmentInterationListener mListener;
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
     private PagerAdapter mPagerAdapter;
+    private CircleIndicator indicator;
     private Bundle bundle;
 
     public ProfileFragment() {
@@ -56,37 +61,43 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     }
 
     public void initComponent(View view) {
-
-        mPagerAdapter = new PagerAdapter(getFragmentManager());
-
         // Set up the ViewPager with the sections adapter.
+
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
+        indicator = (CircleIndicator) view.findViewById(R.id.indicator);
         mViewPager.setAdapter(mPagerAdapter);
-        mPagerAdapter.notifyDataSetChanged();
-        CircleIndicator indicator = (CircleIndicator) view.findViewById(R.id.indicator);
         indicator.setViewPager(mViewPager);
 
+        notification = (RelativeLayout) view.findViewById(R.id.notification);
+        back_layout = (LinearLayout) view.findViewById(R.id.back_layout);
         img_edit = (ImageView) view.findViewById(R.id.img_edit);
+        back_layout.setOnClickListener(this);
+        notification.setOnClickListener(this);
         img_edit.setOnClickListener(this);
 
-        bundle = ((ProfileActivity) getActivity()).bundle;
+        bundle = getArguments();
 
+        Log.d(TAG, "am her 1");
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof ProfileFragmentListener) {
-            mListener = (ProfileFragmentListener) context;
+        Log.d(TAG, "am her 2");
+        if(mPagerAdapter == null){
+            mPagerAdapter = new PagerAdapter(getFragmentManager());
+        }
+        if (context instanceof FragmentInterationListener) {
+            mListener = (FragmentInterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
     }
 
-    public void nextAction(Bundle bundle) {
+    public void nextAction(int action,Bundle bundle) {
         if (mListener != null) {
-            mListener.OnFragmentInteractionListener(Constants.EditProfile, bundle);
+            mListener.OnFragmentInteractionListener(action, bundle);
         }
     }
 
@@ -94,12 +105,18 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.img_edit:
-                nextAction(bundle);
+                nextAction(Constants.EditProfile, bundle);
+                break;
+            case R.id.back_layout:
+                nextAction(Constants.CreateSchedule, bundle);
+                break;
+            case R.id.notification:
+                nextAction(Constants.Notification, bundle);
                 break;
         }
     }
 
-    public class PagerAdapter extends FragmentPagerAdapter {
+    public class PagerAdapter extends FragmentStatePagerAdapter {
 
         public PagerAdapter(FragmentManager fm) {
             super(fm);
@@ -112,7 +129,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
             switch (position){
                 case 0:
                     fragment = new AvatarProfileFragment();
-                    ((ProfileActivity) getActivity()).profileFragment =  fragment;
+                    ((MainActivity) getActivity()).profileFragment =  fragment;
                     break;
                 case 1:
                     fragment = new GoalProfileFragment();

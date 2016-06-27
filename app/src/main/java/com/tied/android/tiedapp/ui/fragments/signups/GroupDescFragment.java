@@ -19,7 +19,7 @@ import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
-import com.tied.android.tiedapp.objects.auth.ServerInfo;
+import com.tied.android.tiedapp.objects.auth.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
@@ -151,14 +151,14 @@ public class GroupDescFragment extends Fragment implements View.OnClickListener{
         user.setSign_up_stage(Constants.Industry);
 
         SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
-        Call<ServerInfo> response = signUpApi.updateUser(user);
-        response.enqueue(new Callback<ServerInfo>() {
+        Call<ServerRes> response = signUpApi.updateUser(user);
+        response.enqueue(new Callback<ServerRes>() {
             @Override
-            public void onResponse(Call<ServerInfo> call, Response<ServerInfo> UpdateUserResponse) {
+            public void onResponse(Call<ServerRes> call, Response<ServerRes> ServerResponseResponse) {
                 if (getActivity() == null) return;
-                ServerInfo UpdateUser = UpdateUserResponse.body();
-                Log.d(TAG +" onResponse", UpdateUserResponse.body().toString());
-                if(UpdateUser.isSuccess()){
+                ServerRes ServerRes = ServerResponseResponse.body();
+                Log.d(TAG +" onResponse", ServerResponseResponse.body().toString());
+                if(ServerRes.isSuccess()){
                     Bundle bundle = new Bundle();
                     boolean saved = user.save(getActivity().getApplicationContext());
                     if(saved){
@@ -172,13 +172,13 @@ public class GroupDescFragment extends Fragment implements View.OnClickListener{
                         Toast.makeText(getActivity(), "user info  was not updated", Toast.LENGTH_LONG).show();
                     }
                 }else{
-                    Toast.makeText(getActivity(), UpdateUser.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), ServerRes.getMessage(), Toast.LENGTH_LONG).show();
                 }
                 DialogUtils.closeProgress();
             }
 
             @Override
-            public void onFailure(Call<ServerInfo> UpdateUserCall, Throwable t) {
+            public void onFailure(Call<ServerRes> ServerResponseCall, Throwable t) {
                 Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
                 Log.d(TAG +" onFailure", t.toString());
                 DialogUtils.closeProgress();

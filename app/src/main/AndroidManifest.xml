@@ -84,7 +84,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activities.schedule.ScheduleActivity"
+            android:name=".ui.activities.MainActivity"
             android:label="@string/title_activity_main" />
         <activity android:name=".ui.activities.signups.InviteContactActivity">
 
@@ -110,7 +110,7 @@
         <activity
             android:name=".ui.activities.ProfileActivity"
             android:label="@string/title_activity_profile"
-            android:parentActivityName=".ui.activities.schedule.ScheduleActivity"
+            android:parentActivityName=".ui.activities.MainActivity"
             />
         <activity
             android:name=".ui.activities.SwipeActivity"
@@ -123,7 +123,7 @@
             android:name=".ui.activities.client.AddClientActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".ui.activities.schedule.ScheduleActivity"
+            android:parentActivityName=".ui.activities.MainActivity"
             android:windowSoftInputMode="adjustResize">
         </activity>
 

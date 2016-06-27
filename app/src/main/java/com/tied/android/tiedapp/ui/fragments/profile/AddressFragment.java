@@ -19,15 +19,16 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.MyListAsyncTask;
 import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
 import com.tied.android.tiedapp.objects.Location;
-import com.tied.android.tiedapp.objects.auth.ServerInfo;
+import com.tied.android.tiedapp.objects.auth.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.activities.ProfileActivity;
-import com.tied.android.tiedapp.ui.listeners.ProfileFragmentListener;
+import com.tied.android.tiedapp.ui.activities.MainActivity;
+import com.tied.android.tiedapp.ui.listeners.FragmentInterationListener;
 import com.tied.android.tiedapp.util.DialogUtils;
 
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -43,7 +44,7 @@ public class AddressFragment extends Fragment implements View.OnClickListener{
     public static final String TAG = AddressFragment.class
             .getSimpleName();
 
-    public ProfileFragmentListener mListener;
+    public FragmentInterationListener mListener;
 
     private EditText office_zip, office_street, office_city, home_zip, home_street, home_city;
     private String office_zipName, office_streetName, office_cityName, home_zipName, home_streetName, home_cityName;
@@ -60,6 +61,7 @@ public class AddressFragment extends Fragment implements View.OnClickListener{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile_address, container, false);
+        initComponent(view);
         return view;
     }
 
@@ -70,7 +72,7 @@ public class AddressFragment extends Fragment implements View.OnClickListener{
                 confirmEdit();
                 break;
             case R.id.img_close:
-                nextAction(Constants.Profile,bundle);
+                nextAction(Constants.EditProfile,bundle);
                 break;
         }
     }
@@ -97,7 +99,7 @@ public class AddressFragment extends Fragment implements View.OnClickListener{
             String user_json = bundle.getString("user");
             user = gson.fromJson(user_json, User.class);
 
-            Location office_location = user.getOffice_address();
+            office_location = user.getOffice_address();
             Log.d(TAG, office_location.toString());
             if(office_location != null){
                 office_zip.setText(office_location.getZip());
@@ -105,7 +107,7 @@ public class AddressFragment extends Fragment implements View.OnClickListener{
                 office_city.setText(office_location.getCity());
             }
 
-            Location home_location = user.getHome_address();
+            home_location = user.getHome_address();
             if(home_location != null){
                 home_zip.setText(home_location.getZip());
                 home_street.setText(home_location.getStreet());
@@ -117,8 +119,8 @@ public class AddressFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof ProfileFragmentListener) {
-            mListener = (ProfileFragmentListener) context;
+        if (context instanceof FragmentInterationListener) {
+            mListener = (FragmentInterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -146,7 +148,6 @@ public class AddressFragment extends Fragment implements View.OnClickListener{
     private void confirmEdit(){
         if(validate()) {
             DialogUtils.displayProgress(getActivity());
-
             office_location.setStreet(office_streetName);
             office_location.setCity(office_cityName);
             office_location.setZip(office_zipName);
@@ -174,13 +175,13 @@ public class AddressFragment extends Fragment implements View.OnClickListener{
         @Override
         protected List<Address> doInBackground(Void... params) {
             Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
-            List<Address> addresses = null;
+            List<Address> addresses = new ArrayList<Address>();
 
             if (fetchType == Constants.USE_ADDRESS_NAME) {
                 try {
                     Log.d(TAG, office_location.getLocationAddress());
-                    addresses = geocoder.getFromLocationName(office_location.getLocationAddress(), 1);
-                    addresses = geocoder.getFromLocationName(home_location.getLocationAddress(), 1);
+                    addresses.add(geocoder.getFromLocationName(office_location.getLocationAddress(), 1).get(0));
+                    addresses.add(geocoder.getFromLocationName(home_location.getLocationAddress(), 1).get(0));
                 } catch (IOException e) {
                     errorMessage = "Service not available";
                     Log.e(TAG, errorMessage, e);
@@ -190,20 +191,22 @@ public class AddressFragment extends Fragment implements View.OnClickListener{
                 Log.e(TAG, errorMessage);
             }
 
-            if (addresses != null && addresses.size() > 0)
+            if (addresses != null && addresses.size() > 0){
+                Log.d(TAG, addresses.toString());
                 return addresses;
+            }
 
             return null;
         }
 
         protected void onPostExecute(List<Address> addresses) {
             if (getActivity() == null) return;
-            if (addresses.get(0) != null) {
+            if (addresses != null && addresses.get(0) != null) {
                 office_location.setLatitude(addresses.get(0).getLatitude());
                 office_location.setLongitude(addresses.get(0).getLongitude());
             }
 
-            if (addresses.get(1) != null) {
+            if (addresses != null && addresses.get(1) != null) {
                 home_location.setLatitude(addresses.get(1).getLatitude());
                 home_location.setLongitude(addresses.get(1).getLongitude());
             }
@@ -211,15 +214,19 @@ public class AddressFragment extends Fragment implements View.OnClickListener{
             user.setOffice_address(office_location);
             user.setHome_address(home_location);
 
-            SignUpApi signUpApi = ((ProfileActivity) getActivity()).service;
-            Call<ServerInfo> response = signUpApi.updateUser(user);
-            response.enqueue(new Callback<ServerInfo>() {
+            SignUpApi signUpApi = ((MainActivity) getActivity()).service;
+            Call<ServerRes> response = signUpApi.updateUser(user);
+            response.enqueue(new Callback<ServerRes>() {
                 @Override
-                public void onResponse(Call<ServerInfo> call, Response<ServerInfo> UpdateUserResponse) {
+                public void onResponse(Call<ServerRes> call, Response<ServerRes> ServerResponseResponse) {
                     if (getActivity() == null) return;
-                    ServerInfo UpdateUser = UpdateUserResponse.body();
-                    Log.d(TAG + " onFailure", UpdateUserResponse.body().toString());
-                    if (UpdateUser.isSuccess()) {
+                    ServerRes ServerRes = ServerResponseResponse.body();
+                    Log.d(TAG + " onFailure", ServerResponseResponse.body().toString());
+                    if (ServerRes.isAuthFailed()){
+                        DialogUtils.closeProgress();
+                        User.LogOut(getActivity());
+                    }
+                    else if (ServerRes.isSuccess()) {
                         Bundle bundle = new Bundle();
                         boolean saved = user.save(getActivity().getApplicationContext());
                         if (saved) {
@@ -227,25 +234,24 @@ public class AddressFragment extends Fragment implements View.OnClickListener{
                             String json = gson.toJson(user);
                             bundle.putString(Constants.USER, json);
                             DialogUtils.closeProgress();
-                            nextAction(Constants.Profile,bundle);
+                            nextAction(Constants.EditProfile,bundle);
                         } else {
                             DialogUtils.closeProgress();
                             Toast.makeText(getActivity(), "user info  was not updated", Toast.LENGTH_LONG).show();
                         }
                     } else {
-                        Toast.makeText(getActivity(), UpdateUser.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), ServerRes.getMessage(), Toast.LENGTH_LONG).show();
                     }
                     DialogUtils.closeProgress();
                 }
 
                 @Override
-                public void onFailure(Call<ServerInfo> UpdateUserCall, Throwable t) {
+                public void onFailure(Call<ServerRes> ServerResponseCall, Throwable t) {
                     Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
                     Log.d(TAG + " onFailure", t.toString());
                     DialogUtils.closeProgress();
                 }
             });
-
         }
     }
 }

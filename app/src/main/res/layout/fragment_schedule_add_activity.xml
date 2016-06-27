@@ -30,8 +30,8 @@
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="75dp"
-        android:layout_marginTop="15dp"
+        android:layout_height="65dp"
+        android:layout_marginTop="0dp"
         android:id="@+id/sale_layout">
 
         <ImageView
@@ -69,7 +69,7 @@
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="75dp"
+        android:layout_height="65dp"
         android:id="@+id/schedule_layout">
 
         <ImageView
@@ -107,7 +107,7 @@
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="75dp"
+        android:layout_height="65dp"
         android:id="@+id/client_layout">
 
         <ImageView
@@ -145,7 +145,7 @@
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="75dp"
+        android:layout_height="65dp"
         android:id="@+id/line_layout">
 
         <ImageView
@@ -183,7 +183,7 @@
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="75dp"
+        android:layout_height="65dp"
         android:id="@+id/employee_layout">
 
         <ImageView
@@ -221,7 +221,7 @@
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="75dp"
+        android:layout_height="65dp"
         android:id="@+id/goal_layout">
 
         <ImageView

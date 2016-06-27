@@ -13,7 +13,7 @@ import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.activities.schedule.ScheduleActivity;
+import com.tied.android.tiedapp.ui.activities.MainActivity;
 
 
 /**
@@ -43,7 +43,7 @@ public class SplashActivity extends Activity {
         boolean done = mPrefs.getBoolean(Constants.SPLASH_SCREEN_DONE, false);
         if (done) {
             User user = User.getUser(getApplicationContext());
-            User.LogOut(getApplicationContext());
+//            User.LogOut(getApplicationContext());
             Log.d(TAG, user.toString());
             if (User.isUserLoggedIn(getApplicationContext())) {
                 Log.d(TAG, user.toString());
@@ -51,7 +51,7 @@ public class SplashActivity extends Activity {
                 Gson gson = new Gson();
                 String user_json = gson.toJson(user);
                 bundle.putString(Constants.USER, user_json);
-                Intent intent = new Intent(this, ScheduleActivity.class);
+                Intent intent = new Intent(this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             } else {

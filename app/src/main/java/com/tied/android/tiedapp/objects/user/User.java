@@ -8,8 +8,8 @@ import android.preference.PreferenceManager;
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Location;
-import com.tied.android.tiedapp.ui.activities.schedule.ScheduleActivity;
-import com.tied.android.tiedapp.ui.activities.signups.WalkThroughActivity;
+import com.tied.android.tiedapp.ui.activities.MainActivity;
+import com.tied.android.tiedapp.ui.activities.signups.SignInActivity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -134,7 +134,7 @@ public class User implements Serializable {
             editor.putBoolean(Constants.LOGGED_IN_USER,true);
             editor.apply();
 
-            Intent intent = new Intent(context, ScheduleActivity.class);
+            Intent intent = new Intent(context, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             context.startActivity(intent);
         }
@@ -150,7 +150,7 @@ public class User implements Serializable {
             editor.putBoolean(Constants.LOGGED_IN_USER,false);
             editor.apply();
 
-            Intent intent = new Intent(context, WalkThroughActivity.class);
+            Intent intent = new Intent(context, SignInActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             context.startActivity(intent);
