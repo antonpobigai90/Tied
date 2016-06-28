@@ -1,6 +1,7 @@
 package com.tied.android.tiedapp.ui.fragments.schedule;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
-import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.ui.activities.schedule.SelectClientActivity;
 import com.tied.android.tiedapp.ui.listeners.FragmentInterationListener;
 
 /**
@@ -67,7 +68,9 @@ public class CreateScheduleFragment extends Fragment implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.txt_create_schedule:
-                nextAction(Constants.ActivitySchedule, bundle);
+//                nextAction(Constants.ActivitySchedule, bundle);
+                Intent intent = new Intent(getActivity(), SelectClientActivity.class);
+                startActivity(intent);
                 break;
         }
     }

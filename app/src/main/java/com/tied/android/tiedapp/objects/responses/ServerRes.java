@@ -1,21 +1,26 @@
-package com.tied.android.tiedapp.objects.auth;
+package com.tied.android.tiedapp.objects.responses;
 
 import com.tied.android.tiedapp.objects.user.User;
 
 /**
- * Created by Emmanuel on 6/2/2016.
+ * Created by Emmanuel on 5/30/2016.
  */
-public class LoginUser {
+public class ServerRes {
 
     private boolean success;
     private String message;
-    private String token;
+    private boolean authFailed;
+    private int code;
     private User user;
 
-    public LoginUser(boolean success, String message, String token, User user) {
+    public ServerRes() {
+    }
+
+    public ServerRes(boolean success, String message, boolean authFailed, int code, User user) {
         this.success = success;
         this.message = message;
-        this.token = token;
+        this.authFailed = authFailed;
+        this.code = code;
         this.user = user;
     }
 
@@ -35,12 +40,20 @@ public class LoginUser {
         this.message = message;
     }
 
-    public String getToken() {
-        return token;
+    public boolean isAuthFailed() {
+        return authFailed;
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setAuthFailed(boolean authFailed) {
+        this.authFailed = authFailed;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
     }
 
     public User getUser() {
@@ -53,10 +66,11 @@ public class LoginUser {
 
     @Override
     public String toString() {
-        return "LoginUser{" +
+        return "ServerRes{" +
                 "success=" + success +
                 ", message='" + message + '\'' +
-                ", token='" + token + '\'' +
+                ", authFailed=" + authFailed +
+                ", code=" + code +
                 ", user=" + user +
                 '}';
     }

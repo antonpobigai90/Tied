@@ -44,7 +44,7 @@ public class SplashActivity extends Activity {
         if (done) {
             User user = User.getUser(getApplicationContext());
 //            User.LogOut(getApplicationContext());
-            Log.d(TAG, user.toString());
+            //Log.d(TAG, user.toString());
             if (User.isUserLoggedIn(getApplicationContext())) {
                 Log.d(TAG, user.toString());
                 Bundle bundle = new Bundle();

@@ -78,24 +78,6 @@ public class InviteContactActivity extends Activity implements View.OnClickListe
 
         search = (EditText) findViewById(R.id.search);
 
-        //*** setOnQueryTextListener ***
-//        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                // TODO Auto-generated method stub
-//
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                // TODO Auto-generated method stub
-//                adapter.filter(newText);
-//                return false;
-//            }
-//        });
-
         search.addTextChangedListener(new TextWatcher() {
 
             @Override

@@ -1,4 +1,4 @@
-package com.tied.android.tiedapp.objects.auth;
+package com.tied.android.tiedapp.objects.responses;
 
 import java.io.Serializable;
 

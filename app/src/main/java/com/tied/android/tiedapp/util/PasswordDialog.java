@@ -13,7 +13,7 @@ import android.widget.Toast;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.interfaces.retrofits.ProfileApi;
-import com.tied.android.tiedapp.objects.auth.ServerRes;
+import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 
 import retrofit2.Call;

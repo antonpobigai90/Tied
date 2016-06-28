@@ -19,6 +19,8 @@ public class Client implements Serializable {
     private String email;
     private Location address;
 
+    int image;
+
     public Client(int user_id, int line_id, String full_name, String company,
                   String logo, String description, String phone, String email, Location address) {
         this.user_id = user_id;
@@ -29,6 +31,12 @@ public class Client implements Serializable {
         this.description = description;
         this.phone = phone;
         this.email = email;
+        this.address = address;
+    }
+
+    public Client(String full_name,int image, Location address){
+        this.full_name = full_name;
+        this.image = image;
         this.address = address;
     }
 
@@ -102,6 +110,15 @@ public class Client implements Serializable {
 
     public void setAddress(Location address) {
         this.address = address;
+    }
+
+    //for dummy images
+    public int getImage() {
+        return image;
+    }
+
+    public void setImage(int image) {
+        this.image = image;
     }
 
     @Override

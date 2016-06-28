@@ -2,10 +2,10 @@ package com.tied.android.tiedapp.interfaces.retrofits;
 
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.model.IndustryModel;
-import com.tied.android.tiedapp.objects.auth.CheckEmail;
-import com.tied.android.tiedapp.objects.auth.LoginUser;
-import com.tied.android.tiedapp.objects.auth.ServerRes;
-import com.tied.android.tiedapp.objects.auth.SignUpLogin;
+import com.tied.android.tiedapp.objects.responses.CheckEmail;
+import com.tied.android.tiedapp.objects.responses.LoginUser;
+import com.tied.android.tiedapp.objects.responses.ServerRes;
+import com.tied.android.tiedapp.objects.responses.SignUpLogin;
 import com.tied.android.tiedapp.objects.user.User;
 
 import java.util.List;

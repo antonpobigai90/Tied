@@ -1,13 +1,47 @@
 package com.tied.android.tiedapp.objects;
 
+import java.io.Serializable;
+
 /**
  * Created by Emmanuel on 5/30/2016.
  */
-public class _Meta {
+public class _Meta implements Serializable {
     private int status_code;
     private String developer_message;
     private String user_message;
     private String response_time;
+
+    public int getStatus_code() {
+        return status_code;
+    }
+
+    public void setStatus_code(int status_code) {
+        this.status_code = status_code;
+    }
+
+    public String getDeveloper_message() {
+        return developer_message;
+    }
+
+    public void setDeveloper_message(String developer_message) {
+        this.developer_message = developer_message;
+    }
+
+    public String getUser_message() {
+        return user_message;
+    }
+
+    public void setUser_message(String user_message) {
+        this.user_message = user_message;
+    }
+
+    public String getResponse_time() {
+        return response_time;
+    }
+
+    public void setResponse_time(String response_time) {
+        this.response_time = response_time;
+    }
 
     public _Meta() {
     }

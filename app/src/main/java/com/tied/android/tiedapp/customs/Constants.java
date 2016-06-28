@@ -24,6 +24,9 @@ public class Constants {
     public static final String USER_UPDATE_INFO = API_PATH + "users/me";
     public static final String USER_CHANGE_PASSWORD = API_PATH + "users/changePassword";
 
+
+    public static final String USER_CLIENTS = API_PATH + "users/me/clients";
+
     public static final String GET_INDUSTRIES = API_PATH + "config/industries";
 
     public static final String USER = "user";

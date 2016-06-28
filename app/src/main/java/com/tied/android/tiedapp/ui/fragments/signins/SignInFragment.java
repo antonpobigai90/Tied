@@ -18,7 +18,7 @@ import android.widget.Toast;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
-import com.tied.android.tiedapp.objects.auth.LoginUser;
+import com.tied.android.tiedapp.objects.responses.LoginUser;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.signups.SignInActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
