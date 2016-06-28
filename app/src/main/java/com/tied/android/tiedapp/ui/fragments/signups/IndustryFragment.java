@@ -1,7 +1,7 @@
 package com.tied.android.tiedapp.ui.fragments.signups;
 
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -23,10 +24,11 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.model.IndustryModel;
 import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
-import com.tied.android.tiedapp.objects.auth.ServerInfo;
+import com.tied.android.tiedapp.objects.auth.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
-import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
+import com.tied.android.tiedapp.ui.listeners.FragmentInterationListener;
 import com.tied.android.tiedapp.util.DialogUtils;
 
 import java.util.ArrayList;
@@ -51,13 +53,15 @@ public class IndustryFragment extends Fragment implements View.OnClickListener {
     SearchAdapter industry_adapter;
 
     Context context;
-    SharedPreferences prefs;
-    String str_industry;
-    String[] selected_id;
+    private SignUpApi signUpApi;
+    private boolean editProfile;
+    private TextView txt_hint_string, txt_signup_label;
 
-    private SignUpFragmentListener mListener;
+    private FragmentInterationListener mListener;
 
     ArrayList<String> industries = new ArrayList<String>();
+    private RelativeLayout top_layout;
+    private LinearLayout bottom_layout;
 
     private Bundle bundle;
     // Reference to our image view we will use
@@ -82,8 +86,8 @@ public class IndustryFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SignUpFragmentListener) {
-            mListener = (SignUpFragmentListener) context;
+        if (context instanceof FragmentInterationListener) {
+            mListener = (FragmentInterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -92,23 +96,43 @@ public class IndustryFragment extends Fragment implements View.OnClickListener {
 
     public void nextAction(Bundle bundle) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(Constants.AddBoss, bundle);
+            int action = Constants.AddBoss;
+            if(editProfile){
+                action = Constants.EditProfile;
+            }
+            mListener.OnFragmentInteractionListener(action, bundle);
         }
     }
 
-    public void initComponent(View view) {
+    public void iniEditProfileComponent(View view){
+        top_layout = (RelativeLayout) view.findViewById(R.id.top_layout);
+        txt_signup_label = (TextView) view.findViewById(R.id.txt_signup_label);
+        txt_signup_label.setText("Edit Industry");
+        txt_hint_string = (TextView) view.findViewById(R.id.txt_hint_string);
+    }
 
+    public void initComponent(View view) {
+        bundle = getArguments();
+        editProfile = bundle.getBoolean(Constants.EditingProfile);
+        if(editProfile){
+            signUpApi = ((MainActivity) getActivity()).service;
+            iniEditProfileComponent(view);
+        }else{
+            signUpApi = ((SignUpActivity) getActivity()).service;
+        }
         continue_btn = (RelativeLayout) view.findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(this);
 
         img_user_picture = (ImageView) view.findViewById(R.id.img_user_picture);
-        bundle = getArguments();
         if (bundle != null) {
             Gson gson = new Gson();
             String user_json = bundle.getString("user");
             User user = gson.fromJson(user_json, User.class);
-            ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
-
+            if(editProfile){
+                ((MainActivity) getActivity()).loadAvatar(user, img_user_picture);
+            }else{
+                ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
+            }
         }
 
         industry_listview = (ListView) view.findViewById(R.id.industry_listview);
@@ -129,7 +153,6 @@ public class IndustryFragment extends Fragment implements View.OnClickListener {
             }
         });
         DialogUtils.displayProgress(getActivity());
-        SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
         Call<List<IndustryModel>> response = signUpApi.getIndustries();
         response.enqueue(new Callback<List<IndustryModel>>() {
             @Override
@@ -161,6 +184,14 @@ public class IndustryFragment extends Fragment implements View.OnClickListener {
                     }
                 }
                 continue_action();
+                break;
+            case R.id.profile_layout:
+                if(!editProfile){
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                }
+                nextAction(bundle);
                 break;
         }
     }
@@ -216,15 +247,17 @@ public class IndustryFragment extends Fragment implements View.OnClickListener {
             final User user = gson.fromJson(user_json, User.class);
             user.setIndustries(industries);
             user.setSign_up_stage(Constants.AddBoss);
-
-            SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
-            Call<ServerInfo> response = signUpApi.updateUser(user);
-            response.enqueue(new Callback<ServerInfo>() {
+            Call<ServerRes> response = signUpApi.updateUser(user);
+            response.enqueue(new Callback<ServerRes>() {
                 @Override
-                public void onResponse(Call<ServerInfo> call, Response<ServerInfo> UpdateUserResponse) {
-                    ServerInfo UpdateUser = UpdateUserResponse.body();
-                    Log.d(TAG + " onResponse", UpdateUserResponse.body().toString());
-                    if (UpdateUser.isSuccess()) {
+                public void onResponse(Call<ServerRes> call, Response<ServerRes> ServerResponseResponse) {
+                    ServerRes ServerRes = ServerResponseResponse.body();
+                    Log.d(TAG + " onResponse", ServerResponseResponse.body().toString());
+                    if (ServerRes.isAuthFailed()){
+                        DialogUtils.closeProgress();
+                        User.LogOut(getActivity());
+                    }
+                    if (ServerRes.isSuccess()) {
                         Bundle bundle = new Bundle();
                         boolean saved = user.save(getActivity().getApplicationContext());
                         if (saved) {
@@ -238,13 +271,13 @@ public class IndustryFragment extends Fragment implements View.OnClickListener {
                             Toast.makeText(getActivity(), "user info  was not updated", Toast.LENGTH_LONG).show();
                         }
                     } else {
-                        Toast.makeText(getActivity(), UpdateUser.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), ServerRes.getMessage(), Toast.LENGTH_LONG).show();
                     }
                     DialogUtils.closeProgress();
                 }
 
                 @Override
-                public void onFailure(Call<ServerInfo> UpdateUserCall, Throwable t) {
+                public void onFailure(Call<ServerRes> ServerResponseCall, Throwable t) {
                     Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
                     Log.d(TAG + " onFailure", t.toString());
                     DialogUtils.closeProgress();

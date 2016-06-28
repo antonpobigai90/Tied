@@ -13,7 +13,7 @@ import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.activities.schedule.ScheduleActivity;
+import com.tied.android.tiedapp.ui.activities.MainActivity;
 
 
 /**
@@ -43,23 +43,21 @@ public class SplashActivity extends Activity {
         boolean done = mPrefs.getBoolean(Constants.SPLASH_SCREEN_DONE, false);
         if (done) {
             User user = User.getUser(getApplicationContext());
+//            User.LogOut(getApplicationContext());
             Log.d(TAG, user.toString());
-            if (user != null && user.getId() != null && user.getSign_up_stage() == Constants.Completed) {
+            if (User.isUserLoggedIn(getApplicationContext())) {
                 Log.d(TAG, user.toString());
                 Bundle bundle = new Bundle();
                 Gson gson = new Gson();
                 String user_json = gson.toJson(user);
                 bundle.putString(Constants.USER, user_json);
-                Intent intent = new Intent(this, ScheduleActivity.class);
-                intent.putExtra(Constants.USER, bundle);
+                Intent intent = new Intent(this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
-                finish();
             } else {
                 Intent intent = new Intent(sPlashScreen, WalkThroughActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
-                finish();
             }
 
         } else {
@@ -94,7 +92,6 @@ public class SplashActivity extends Activity {
                     }
                 }
             };
-
             splashTread.start();
         }
     }

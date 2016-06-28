@@ -21,6 +21,7 @@ import com.tied.android.tiedapp.objects.auth.SignUpLogin;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
+import com.tied.android.tiedapp.util.DialogUtils;
 import com.tied.android.tiedapp.util.Utility;
 
 import retrofit2.Call;
@@ -43,7 +44,7 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
     LinearLayout alert_valid_password;
     private EditText password;
 
-    private String usernameText, passwordText;
+    private String passwordText;
     private Bundle bundle;
 
     public PasswordFragment() {
@@ -61,7 +62,6 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
 
         initComponent(view);
     }
-
 
     public void initComponent(View view) {
 
@@ -88,7 +88,6 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-
     public void nextAction(int action, Bundle bundle) {
         if (mListener != null) {
             mListener.onFragmentInteraction(action, bundle);
@@ -96,10 +95,11 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
     }
 
     public void continue_action() {
-
+        DialogUtils.displayProgress(getActivity());
         Gson gson = new Gson();
-        String user_json = bundle.getString("user");
-        User user = gson.fromJson(user_json, User.class);
+        final String user_json = bundle.getString("user");
+        final User user = gson.fromJson(user_json, User.class);
+        Log.d(TAG, user.toString());
         SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
         Call<SignUpLogin> response = signUpApi.LoginSignUpUser(user.getEmail(), passwordText, Constants.Picture);
         Log.d(TAG, response.request().url().toString());
@@ -112,6 +112,10 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
                 Log.d(TAG, signUpLogin.toString());
                 if (loggedIn_user.getToken() != null) {
                     loggedIn_user.setSign_up_stage(Constants.Picture);
+                    loggedIn_user.setPassword(passwordText);
+                    loggedIn_user.setAvatar(user.getAvatar());
+                    loggedIn_user.setFirst_name(user.getFirst_name());
+                    loggedIn_user.setLast_name(user.getLast_name());
                     boolean saved = loggedIn_user.save(getActivity().getApplicationContext());
                     if (saved) {
                         Bundle bundle = new Bundle();
@@ -122,14 +126,16 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
                     } else {
                         Toast.makeText(getActivity(), "user not save", Toast.LENGTH_LONG).show();
                     }
-                    Log.d(TAG, loggedIn_user.toString());
+                    DialogUtils.closeProgress();
                 } else {
+                    DialogUtils.closeProgress();
                     Toast.makeText(getActivity(), "user not created", Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
             public void onFailure(Call<SignUpLogin> checkEmailCall, Throwable t) {
+                DialogUtils.closeProgress();
                 Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
                 Log.d(TAG + " onFailure", t.toString());
             }

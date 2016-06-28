@@ -26,6 +26,7 @@
             android:id="@+id/img_help"
             android:layout_width="35dp"
             android:layout_height="35dp"
+            android:onClick="helpButtonClicked"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
@@ -92,6 +93,7 @@
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:onClick="profileButtonClicked"
             android:background="@color/white"
             android:gravity="center_vertical"
             android:orientation="horizontal">
@@ -147,6 +149,14 @@
                     android:text="@string/str_continue"
                     android:textColor="@color/white"
                     android:textSize="15dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3/20"
+                    android:id="@+id/stage"
+                    android:layout_below="@+id/txt_continue_label"
+                    android:layout_centerInParent="true" />
 
             </RelativeLayout>
         </RelativeLayout>

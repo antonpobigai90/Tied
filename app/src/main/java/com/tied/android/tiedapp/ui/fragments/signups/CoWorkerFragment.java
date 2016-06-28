@@ -25,10 +25,11 @@ import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.MyAsyncTask;
+import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.objects.user.Boss;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.activities.schedule.ScheduleActivity;
+import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
 import com.tied.android.tiedapp.util.DialogUtils;
@@ -217,8 +218,8 @@ public class CoWorkerFragment extends Fragment implements View.OnClickListener{
         protected void onPostExecute(Address address) {
             if(getActivity() == null) return;
             if (address != null) {
-                location.setLatitude(address.getLatitude());
-                location.setLongitude(address.getLongitude());
+                Coordinate coordinate = new Coordinate(address.getLatitude(), address.getLongitude());
+                location.setCoordinate(coordinate);
             }
 
             boss = new Boss(emailText, phoneText, location);
@@ -237,7 +238,7 @@ public class CoWorkerFragment extends Fragment implements View.OnClickListener{
             boolean saved = user.save(getActivity().getApplicationContext());
             if(saved){
                 DialogUtils.closeProgress();
-                Intent intent = new Intent(getActivity(), ScheduleActivity.class);
+                Intent intent = new Intent(getActivity(), MainActivity.class);
                 intent.putExtra(Constants.USER, user);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);

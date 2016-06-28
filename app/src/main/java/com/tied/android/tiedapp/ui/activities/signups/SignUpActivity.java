@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
@@ -19,11 +20,14 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.soundcloud.android.crop.Crop;
+import com.squareup.picasso.Picasso;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.ui.activities.HelpActivity;
+import com.tied.android.tiedapp.ui.activities.ProfileActivity;
 import com.tied.android.tiedapp.ui.fragments.signups.AddBossFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.AddBossNowFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.AddInviteFragment;
@@ -31,7 +35,6 @@ import com.tied.android.tiedapp.ui.fragments.signups.CoWorkerCountFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.CoWorkerFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.EmailSignUpFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.GroupDescFragment;
-import com.tied.android.tiedapp.ui.fragments.signups.HelpFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.HomeAddressFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.IndustryFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.NameFragment;
@@ -63,7 +66,9 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
     // Activity result key for camera
     public final int REQUEST_TAKE_PHOTO = 11111;
 
-    public final int REQUEST_FACEBOOK_LOGIN = 129742;
+    public final int REQUEST_FACEBOOK_LOGIN = 64206;
+
+    public final int REQUEST_TWITTER_LOGIN = 140;
 
     public Bitmap bitmap;
 
@@ -82,15 +87,14 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
         User user = User.getUser(getApplicationContext());
         if(user != null && user.getId() != null){
             Log.d(TAG, user.toString());
-//            user.setSign_up_stage(20);
+//            user.setSign_up_stage(4);
 //            user.save(getApplicationContext());
-            Log.d(TAG +" 3", user.toString());
+            Log.d(TAG +" : 3", user.toString());
             Bundle bundle = new Bundle();
             Gson gson = new Gson();
             String user_json = gson.toJson(user);
             bundle.putString(Constants.USER, user_json);
             launchFragment(user.getSign_up_stage(), bundle);
-//            launchFragment(Constants.Help, null);
         }else{
             launchFragment(Constants.EmailSignUp, null);
         }
@@ -103,6 +107,11 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
         if (user.getAvatar_uri() != null){
             Uri myUri = Uri.parse(user.getAvatar_uri());
             img_user_picture.setImageURI(myUri);
+        }else if(user.getAvatar() != null && !user.getAvatar().equals("")){
+            Picasso.with(this).
+                    load(user.getAvatar())
+                    .resize(35,35)
+                    .into(img_user_picture);
         }
     }
 
@@ -115,15 +124,12 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
         switch (pos) {
             case Constants.EmailSignUp:
                 fragment = new EmailSignUpFragment();
-                fragment.setArguments(bundle);
                 break;
             case Constants.Password:
                 fragment = new PasswordFragment();
-                fragment.setArguments(bundle);
                 break;
             case Constants.Picture:
                 fragment = new PictureFragment();
-                fragment.setArguments(bundle);
                 break;
             case Constants.Name:
                 fragment = new NameFragment();
@@ -139,15 +145,12 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
                 break;
             case Constants.OfficeAddress:
                 fragment = new OfficeAddressFragment();
-                fragment.setArguments(bundle);
                 break;
             case Constants.HomeAddress:
                 fragment = new HomeAddressFragment();
-                fragment.setArguments(bundle);
                 break;
             case Constants.Territory:
                 fragment = new TerritoryFragment();
-                fragment.setArguments(bundle);
                 break;
             case Constants.SalesRep:
                 fragment = new SalesRepFragment();
@@ -155,38 +158,28 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
                 break;
             case Constants.GroupDesc:
                 fragment = new GroupDescFragment();
-                fragment.setArguments(bundle);
                 break;
             case Constants.Industry:
                 fragment = new IndustryFragment();
-                fragment.setArguments(bundle);
                 break;
             case Constants.AddBoss:
                 fragment = new AddBossFragment();
-                fragment.setArguments(bundle);
                 break;
             case Constants.AddBossNow:
                 fragment = new AddBossNowFragment();
-                fragment.setArguments(bundle);
                 break;
             case Constants.CoWorkerCount:
                 fragment = new CoWorkerCountFragment();
-                fragment.setArguments(bundle);
                 break;
             case Constants.AddOptions:
                 fragment = new AddInviteFragment();
-                fragment.setArguments(bundle);
                 break;
             case Constants.CoWorker:
                 fragment = new CoWorkerFragment();
-                fragment.setArguments(bundle);
-                break;
-            case Constants.Help:
-                fragment = new HelpFragment();
-                fragment.setArguments(bundle);
                 break;
             default: finish();
         }
+        fragment.setArguments(bundle);
 
         if (fragment != null) {
             Log.d(TAG, getSupportFragmentManager().getBackStackEntryCount() + "");
@@ -194,7 +187,8 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
                 getSupportFragmentManager().popBackStackImmediate();
             }
 
-            getSupportFragmentManager().beginTransaction()
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.setCustomAnimations(R.anim.fragment_slide_left_enter, R.anim.fragment_slide_right_exit)
                     .replace(R.id.fragment_container, fragment)
                     .addToBackStack(fragment.getClass().getSimpleName())
                     .commit();
@@ -222,14 +216,12 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
 
     @Override
     public void onFragmentInteraction(int action, Bundle bundle) {
-        Log.d(TAG, " onFragmentInteraction "+action);
         switch (action){
             case Constants.USE_ADDRESS_NAME:
                 break;
             default:
                 launchFragment(action, bundle);
         }
-
     }
 
     private void handleCrop(Uri outputUri) {
@@ -252,8 +244,12 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
      */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.d("requestCode",requestCode+"");
         if(requestCode == REQUEST_FACEBOOK_LOGIN && resultCode == Activity.RESULT_OK){
             ((EmailSignUpFragment) fragment).callbackManager.onActivityResult(requestCode, resultCode, data);
+        }
+        else if(requestCode == REQUEST_TWITTER_LOGIN){
+            ((EmailSignUpFragment) fragment).authClient.onActivityResult(requestCode, resultCode, data);
         }
         else if (requestCode == Crop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
             handleCrop(outputUri);
@@ -268,7 +264,6 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
         }
 
     }
-
 
     public class IncomingSms extends BroadcastReceiver {
 
@@ -317,4 +312,14 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
         }
     }
 
+    public void helpButtonClicked(View v){
+        Intent invite_intent = new Intent(this, HelpActivity.class);
+        startActivity(invite_intent);
+    }
+
+
+    public void profileButtonClicked(View v){
+        Intent invite_intent = new Intent(this, ProfileActivity.class);
+        startActivity(invite_intent);
+    }
 }

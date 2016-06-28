@@ -6,6 +6,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+        <item name="android:textViewStyle">@style/RobotoTextViewStyle</item>
     </style>
 
     <style name="AppBaseTheme" parent="Theme.AppCompat">
@@ -20,6 +22,7 @@
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
         <item name="android:textViewStyle">@style/RobotoTextViewStyle</item>
+        <!--<item name="android:calendarViewStyle">@style/Widget.CalendarView.Custom</item>-->
     </style>
 
     <style name="TextAppearence.App.TextInputLayout" parent="@android:style/TextAppearance">
@@ -35,5 +38,13 @@
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:backgroundDimAmount">0.6</item>
     </style>
+
+    <!--<style name="Widget.CalendarView.Custom" parent="android:Widget.CalendarView">-->
+        <!--<item name="android:weekNumberColor">@color/schedule_title_bg_color</item>-->
+        <!--<item name="android:focusedMonthDateColor">@color/colorPrimaryDark</item>-->
+        <!--<item name="android:weekNumberColor">@color/colorAccent</item>-->
+        <!--<item name="android:weekDayTextAppearance">@style/RobotoTextViewStyle</item>-->
+        <!--<item name="android:dateTextAppearance">@style/RobotoTextViewStyle</item>-->
+    <!--</style>-->
 
 </resources>

@@ -20,10 +20,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
-import com.tied.android.tiedapp.objects.auth.UpdateAvatar;
+import com.tied.android.tiedapp.objects.auth.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
@@ -80,7 +81,6 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
         initComponent(view);
     }
 
-
     public void initComponent(View view) {
         select_pics = (TextView) view.findViewById(R.id.select_pics);
         avatar = (ImageView) view.findViewById(R.id.avatar);
@@ -93,6 +93,24 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
         continue_btn.setOnClickListener(this);
 
         bundle = getArguments();
+        if (bundle != null) {
+            Gson gson = new Gson();
+            String user_json = bundle.getString("user");
+            User user = gson.fromJson(user_json, User.class);
+            ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
+
+            if (user.getAvatar_uri() != null){
+                Uri myUri = Uri.parse(user.getAvatar_uri());
+                img_user_picture.setImageURI(myUri);
+                avatar.setImageURI(myUri);
+            }
+            else if(user.getAvatar() != null && !user.getAvatar().equals("")){
+                Picasso.with(getActivity()).
+                        load(user.getAvatar())
+                        .resize(100,100)
+                        .into(avatar);
+            }
+        }
     }
 
     @Override
@@ -148,23 +166,22 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
 
             SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
             // finally, execute the request
-            Call<UpdateAvatar> call = signUpApi.uploadAvatar(id, token, stage, body);
-            call.enqueue(new Callback<UpdateAvatar>() {
+            Call<ServerRes> call = signUpApi.uploadAvatar(user.getToken() ,id, stage, body);
+            call.enqueue(new Callback<ServerRes>() {
 
                 @Override
-                public void onResponse(Call<UpdateAvatar> call, Response<UpdateAvatar> updateAvatarResponse) {
+                public void onResponse(Call<ServerRes> call, Response<ServerRes> updateAvatarResponse) {
                     if (getActivity() == null) return;
-                    UpdateAvatar updateAvatar = updateAvatarResponse.body();
-//                    Log.d(TAG,updateAvatar.toString() );
-                    if(updateAvatar.isSuccess()){
+                    ServerRes ServerRes = updateAvatarResponse.body();
+                    Log.d(TAG, ServerRes.toString() );
+                    if(ServerRes.isSuccess()){
                         Gson gson = new Gson();
                         Bundle bundle = getArguments();
                         String user_json = bundle.getString(Constants.USER, "");
                         User user = gson.fromJson(user_json, User.class);
                         user.setSign_up_stage(Constants.Name);
                         user.setAvatar_uri(String.valueOf(uri));
-                        user.setAvatar_uri("avatar_"+user.getId()+".jpg");
-                        user.setAvatar(updateAvatar.getAvatar());
+                        user.setAvatar(ServerRes.getUser().getAvatar());
                         boolean saved = user.save(getActivity().getApplicationContext());
                         if(saved){
                             DialogUtils.closeProgress();
@@ -177,12 +194,12 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
                         }
                     }else{
                         DialogUtils.closeProgress();
-                        Toast.makeText(getActivity(), updateAvatar.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), ServerRes.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }
 
                 @Override
-                public void onFailure(Call<UpdateAvatar> call, Throwable t) {
+                public void onFailure(Call<ServerRes> call, Throwable t) {
                     Log.e("Upload error:", t.getMessage());
                 }
             });

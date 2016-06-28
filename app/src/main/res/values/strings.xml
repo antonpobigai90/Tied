@@ -1,11 +1,11 @@
 <resources>
     <string name="app_name">My Tied</string>
     <string name="action_settings">Settings</string>
-    <string name="facebook_app_id">668816599936060</string>
+    <string name="facebook_app_id">796858453781859</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="map_api_key">AIzaSyAMy78wKfpM8eKXtr94jqS38jsgQMDKQzA</string>
+    <string name="map_api_key">AIzaSyDVusiCotzBPLpJMQ9FFWl7JvlWO4_A49s</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="Logout">Logout</string>
 
@@ -22,18 +22,18 @@
     <string name="str_reset_success">We just sent you an email with instructions to reset your password</string>
 
     <string-array name="str_walkthrough">
-        <item >Manage your tasks quickly and efficiently</item>
-        <item >Keep your clients close to you and the activities</item>
-        <item >See analytics about your sales from clients and lines</item>
-        <item >Your clients sometimes are located close enough</item>
+        <item>Manage your tasks quickly and efficiently</item>
+        <item>Keep your clients close to you and the activities</item>
+        <item>See analytics about your sales from clients and lines</item>
+        <item>Your clients sometimes are located close enough</item>
     </string-array>
 
     <string-array name="help_description">
-        <item >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt</item>
-        <item >incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</item>
-        <item >How much does it cost?","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod</item>
-        <item >How much does it cost?","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod</item>
-        <item >How much does it cost?","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod</item>
+        <item>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt</item>
+        <item>incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</item>
+        <item>How much does it cost?","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod</item>
+        <item>How much does it cost?","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod</item>
+        <item>How much does it cost?","Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod</item>
     </string-array>
 
     <!-- Sign Up -->
@@ -68,14 +68,14 @@
     <string name="str_signup_hint11">How would you describe yourself for this group?</string>
     <string name="str_signup_hint12">What is your industry?</string>
     <string-array name="str_industry">
-        <item >News</item>
-        <item >Business</item>
-        <item >Furnitures</item>
-        <item >Technology</item>
-        <item >Travel</item>
-        <item >Food</item>
-        <item >Test1</item>
-        <item >Tes21</item>
+        <item>News</item>
+        <item>Business</item>
+        <item>Furnitures</item>
+        <item>Technology</item>
+        <item>Travel</item>
+        <item>Food</item>
+        <item>Test1</item>
+        <item>Tes21</item>
     </string-array>
 
     <string name="str_signup_hint13">ADD BOSS INFO</string>
@@ -115,28 +115,31 @@
     </string>
 
     <string-array name="str_help_title">
-        <item >How does Tied work?</item>
-        <item >how can I add multiple clients?</item>
-        <item >Who can use Tied?</item>
-        <item >is Tied that helpful?</item>
+        <item>How does Tied work?</item>
+        <item>how can I add multiple clients?</item>
+        <item>Who can use Tied?</item>
+        <item>is Tied that helpful?</item>
     </string-array>
 
     <string-array name="str_help_content">
-        <item >Last night, Darth Vader came down from planet Vulcan. And he otld me that if didn#t take Lerraine, That he had melt my brain.</item>
-        <item >Oh, please to meet you, Calvin Marty Klein. Do you mind if I sit here? Look, there is a ceremonial reitual coming up.</item>
-        <item >Last night, Darth Vader came down from planet Vulcan. And he otld me that if didn#t take Lerraine, That he had melt my brain.</item>
-        <item >Oh, please to meet you, Calvin Marty Klein. Do you mind if I sit here? Look, there is a ceremonial reitual coming up.</item>
+        <item>Last night, Darth Vader came down from planet Vulcan. And he otld me that if didn#t take Lerraine, That he had melt my brain.</item>
+        <item>Oh, please to meet you, Calvin Marty Klein. Do you mind if I sit here? Look, there is a ceremonial reitual coming up.</item>
+        <item>Last night, Darth Vader came down from planet Vulcan. And he otld me that if didn#t take Lerraine, That he had melt my brain.</item>
+        <item>Oh, please to meet you, Calvin Marty Klein. Do you mind if I sit here? Look, there is a ceremonial reitual coming up.</item>
     </string-array>
 
     <!-- Schedule -->
     <string name="schedule_add_an_activity">Add an Activity</string>
     <string name="schedule_hint_string">You have not created any schedule yet. Let#s do this%</string>
+    <string name="schedule_employee_hint_string">You have\'nt added an employee yet, Adding them is easy. Add to follow their activities</string>
     <string name="schedule_create_schedule_btn">+ CREATE SCHEDULE</string>
     <string name="schedule_hint_string1">Oops! We can%t find any client in your list</string>
     <string name="schedule_hint_string2">Create New Client to Schedule that you would like to schedule an appointment with</string>
     <string name="schedule_hint_string3">You have more lots of clients? Import via CSV, Excel using our website. It#s easy GO</string>
     <string name="schedule_add_client_btn">+ ADD CLIENT</string>
     <string name="schedule_create_new_schedule_btn">+ CREATE NEW SCHEDULE</string>
+    <string name="schedule_add_employee_btn">+ ADD EMPLOYEE</string>
+    <string name="schedule_string_appointment">Lorem ipsum dolor sit amet, hello you there i mean you consectetur adipiscing elit. Etiam molestie tortor sed tellus posuere auctor. Nullam ultricies semper purus, et rhoncus leo efficitur consectetur</string>
 
     <string name="alert_valide_email">*Please enter a valid email address</string>
     <string name="alert_valide_password">*Please enter password</string>
@@ -162,5 +165,9 @@
     <string name="profile_notification">Notifications</string>
     <string name="profile_address">Address</string>
     <string name="profile_edit">Profile Edit</string>
+    <string name="title_activity_help">HelpActivity</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+    <string name="title_activity_pager">PagerActivity</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 
 </resources>

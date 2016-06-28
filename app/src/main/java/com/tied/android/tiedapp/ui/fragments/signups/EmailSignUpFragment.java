@@ -40,6 +40,11 @@ import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
 import com.tied.android.tiedapp.util.AppDialog;
 import com.tied.android.tiedapp.util.DialogUtils;
 import com.tied.android.tiedapp.util.Utility;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterAuthToken;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -67,7 +72,10 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
 
     private RelativeLayout continue_btn;
     LinearLayout alert_valid_email;
-    private ImageView btn_close, img_facebook;
+    private ImageView btn_close, img_facebook, img_twitter, img_help;
+    public TwitterAuthClient authClient = new TwitterAuthClient();
+    private TwitterSession session;
+    private TwitterAuthToken authToken;
 
     boolean m_bExit = false;
     AppDialog alertDialog;
@@ -112,11 +120,16 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
         email = (EditText) view.findViewById(R.id.email);
 
         btn_close = (ImageView) view.findViewById(R.id.img_close);
+        img_help = (ImageView) view.findViewById(R.id.img_help);
         img_facebook = (ImageView) view.findViewById(R.id.img_facebook);
+        img_twitter = (ImageView) view.findViewById(R.id.img_twitter);
         continue_btn = (RelativeLayout) view.findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(this);
         btn_close.setOnClickListener(this);
+
+        initializeFaceBook();
         img_facebook.setOnClickListener(this);
+        img_twitter.setOnClickListener(this);
 
         Bundle bundle = getArguments();
         if(bundle != null){
@@ -126,8 +139,6 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
             User user = gson.fromJson(user_json, User.class);
             email.setText(user.getEmail());
         }
-
-        initializeFaceBook();
 
         alert_valid_email = (LinearLayout) view.findViewById(R.id.alert_valid);
         alert_valid_email.setVisibility(View.GONE);
@@ -148,6 +159,9 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
                     Bundle bundle = new Bundle();
                     User user = new User();
                     user.setEmail(emailText);
+                    user.setFirst_name(firstName);
+                    user.setLast_name(lastName);
+                    user.setAvatar(avatar);
                     Gson gson = new Gson();
                     String user_json = gson.toJson(user);
                     bundle.putString("user", user_json);
@@ -185,10 +199,43 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
                 startActivity(intent);
                 break;
             case R.id.img_facebook:
-                LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"));
+                LoginManager.getInstance().logInWithReadPermissions(getActivity(), Arrays.asList("public_profile", "email"));
+                break;
+            case R.id.img_twitter:
+                loginTwitter();
                 break;
         }
     }
+
+    private void loginTwitter(){
+
+        authClient.authorize(getActivity(), new com.twitter.sdk.android.core.Callback<TwitterSession>(){
+            @Override
+            public void success(Result<TwitterSession> twitterSessionResult) {
+                session = twitterSessionResult.data;
+                authToken = session.getAuthToken();
+
+                authClient.requestEmail(session, new com.twitter.sdk.android.core.Callback<String>() {
+                    @Override
+                    public void success(Result<String> result) {
+                        Toast.makeText(getActivity(), result.data, Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void failure(TwitterException e) {
+                        Log.d(TAG, e.getMessage());
+                        Toast.makeText(getActivity(),e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            @Override
+            public void failure(TwitterException e) {
+                Toast.makeText(getActivity(),e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
 
     private void initializeFaceBook() {
         FacebookSdk.sdkInitialize(getActivity());
@@ -205,12 +252,14 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
 
                     @Override
                     public void onCancel() {
+                        Toast.makeText(getActivity(), "Login Cancel", Toast.LENGTH_LONG).show();
                     }
 
                     @Override
                     public void onError(FacebookException exception) {
                         Toast.makeText(getActivity(), exception.getMessage(),
                                 Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, exception.getMessage());
                     }
                 });
 
@@ -241,6 +290,9 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
                             firstName = obj.getString("first_name");
                             lastName = obj.getString("last_name");
                             emailText = obj.getString("email");
+
+                            Toast.makeText(getActivity(), emailText,Toast.LENGTH_LONG).show();
+                            Log.d("response email ", obj.getString("email")+"");
 
                             continue_action();
 

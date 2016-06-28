@@ -21,7 +21,7 @@ import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
-import com.tied.android.tiedapp.objects.auth.ServerInfo;
+import com.tied.android.tiedapp.objects.auth.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
@@ -117,6 +117,8 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
     
     public void continue_action(){
         phoneText = phone.getText().toString();
+//        phoneText = phoneText.replaceAll("[)(-]","");
+//        phoneText = "+"+phoneText.replace(" ","");
         faxText = fax.getText().toString();
 
         DialogUtils.displayProgress(getActivity());
@@ -129,32 +131,32 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
         user.setSign_up_stage(Constants.EnterCode);
 
         SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
-        Call<ServerInfo> response = signUpApi.updateUser(user);
-        response.enqueue(new Callback<ServerInfo>() {
+        Call<ServerRes> response = signUpApi.updateUser(user);
+        response.enqueue(new Callback<ServerRes>() {
             @Override
-            public void onResponse(Call<ServerInfo> call, Response<ServerInfo> UpdateUserResponse) {
+            public void onResponse(Call<ServerRes> call, Response<ServerRes> ServerResResponse) {
                 if(getActivity() == null) return;
-                ServerInfo UpdateUser = UpdateUserResponse.body();
-                Log.d(TAG +" onFailure", UpdateUserResponse.body().toString());
-                if(UpdateUser.isSuccess()){
+                ServerRes ServerRes = ServerResResponse.body();
+                if(ServerRes.isSuccess()){
                     Gson gson = new Gson();
                     boolean saved = user.save(getActivity().getApplicationContext());
                     if(saved){
                         String user_json = bundle.getString("user");
                         User user = gson.fromJson(user_json, User.class);
+                        Log.d(TAG +" number", phoneText);
                         call_send_phone_vc(user);
                     }else{
                         DialogUtils.closeProgress();
                         Toast.makeText(getActivity(), "user info  was not updated", Toast.LENGTH_LONG).show();
                     }
                 }else{
-                    Toast.makeText(getActivity(), UpdateUser.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), ServerRes.getMessage(), Toast.LENGTH_LONG).show();
                 }
                 DialogUtils.closeProgress();
             }
 
             @Override
-            public void onFailure(Call<ServerInfo> UpdateUserCall, Throwable t) {
+            public void onFailure(Call<ServerRes> ServerResCall, Throwable t) {
                 Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
                 Log.d(TAG +" onFailure", t.toString());
                 DialogUtils.closeProgress();
@@ -165,26 +167,26 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
     private void call_send_phone_vc(User user) {
 
         SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
-        Call<ServerInfo> response = signUpApi.sendPhoneCode(user.getId(), "+2348022020231");
-        response.enqueue(new Callback<ServerInfo>() {
+        Call<ServerRes> response = signUpApi.sendPhoneCode(user.getId(), "+2348022020231");
+        response.enqueue(new Callback<ServerRes>() {
             @Override
-            public void onResponse(Call<ServerInfo> call, Response<ServerInfo> UpdateUserResponse) {
+            public void onResponse(Call<ServerRes> call, Response<ServerRes> ServerResResponse) {
                 if(getActivity() == null) return;
-                ServerInfo serverInfo = UpdateUserResponse.body();
-                if(serverInfo.isSuccess()){
+                ServerRes ServerRes = ServerResResponse.body();
+                if(ServerRes.isSuccess()){
                     Gson gson = new Gson();
-                    String json = gson.toJson(serverInfo);
+                    String json = gson.toJson(ServerRes);
                     bundle.putString(Constants.SERVER_INFO,json);
                     nextAction(bundle);
-                    Log.d(TAG +" Sms enter", UpdateUserResponse.body().toString());
+                    Log.d(TAG +" Sms enter", ServerResResponse.body().toString());
                     DialogUtils.closeProgress();
                 }else{
-                    Toast.makeText(getActivity(), serverInfo.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), ServerRes.getMessage(), Toast.LENGTH_LONG).show();
                 }
             }
 
             @Override
-            public void onFailure(Call<ServerInfo> UpdateUserCall, Throwable t) {
+            public void onFailure(Call<ServerRes> ServerResCall, Throwable t) {
                 Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
                 Log.d(TAG +" onFailure", t.toString());
                 DialogUtils.closeProgress();

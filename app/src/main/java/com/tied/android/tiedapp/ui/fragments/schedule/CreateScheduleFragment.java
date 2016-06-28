@@ -1,22 +1,17 @@
 package com.tied.android.tiedapp.ui.fragments.schedule;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.ui.listeners.FragmentInterationListener;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -27,69 +22,53 @@ public class CreateScheduleFragment extends Fragment implements View.OnClickList
             .getSimpleName();
 
     private Bundle bundle;
-    // Reference to our image view we will use
-    public ImageView img_user_picture;
+
+    private TextView txt_create_schedule;
+
+    private FragmentInterationListener fragmentInterationListener;
 
     public CreateScheduleFragment() {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_create_schedule, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         initComponent(view);
     }
 
-    public void initComponent(View view) {
-
-        img_user_picture = (ImageView) view.findViewById(R.id.img_user_picture);
-
-        bundle = getArguments();
-        if (bundle != null) {
-            Gson gson = new Gson();
-            String user_json = bundle.getString("user");
-            User user = gson.fromJson(user_json, User.class);
-            if (user.getAvatar_uri() != null) {
-                Uri myUri = Uri.parse(user.getAvatar_uri());
-                img_user_picture.setImageURI(myUri);
-            }else{
-                Picasso.with(getActivity()).
-                        load(Constants.GET_AVATAR_ENDPOINT+"avatar_"+user.getId()+".jpg")
-                        .resize(35,35)
-                        .into(target);
-            }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof FragmentInterationListener) {
+            fragmentInterationListener = (FragmentInterationListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
         }
     }
 
-    private Target target = new Target() {
-        @Override
-        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-            if(bitmap != null){
-                img_user_picture.setImageBitmap(bitmap);
-            }
+    public void nextAction(int action, Bundle bundle) {
+        if (fragmentInterationListener != null) {
+            fragmentInterationListener.OnFragmentInteractionListener(action,bundle);
         }
+    }
 
-        @Override
-        public void onBitmapFailed(Drawable errorDrawable) {
-
-        }
-
-        @Override
-        public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-        }
-    };
+    public void initComponent(View view) {
+        txt_create_schedule = (TextView) view.findViewById(R.id.txt_create_schedule);
+        txt_create_schedule.setOnClickListener(this);
+    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-
+            case R.id.txt_create_schedule:
+                nextAction(Constants.ActivitySchedule, bundle);
+                break;
         }
     }
 }
