@@ -18,6 +18,7 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.MyListAsyncTask;
 import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
+import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.objects.auth.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
@@ -202,13 +203,13 @@ public class AddressFragment extends Fragment implements View.OnClickListener{
         protected void onPostExecute(List<Address> addresses) {
             if (getActivity() == null) return;
             if (addresses != null && addresses.get(0) != null) {
-                office_location.setLatitude(addresses.get(0).getLatitude());
-                office_location.setLongitude(addresses.get(0).getLongitude());
+                Coordinate coordinate = new Coordinate(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
+                office_location.setCoordinate(coordinate);
             }
 
             if (addresses != null && addresses.get(1) != null) {
-                home_location.setLatitude(addresses.get(1).getLatitude());
-                home_location.setLongitude(addresses.get(1).getLongitude());
+                Coordinate coordinate = new Coordinate(addresses.get(1).getLatitude(), addresses.get(1).getLongitude());
+                home_location.setCoordinate(coordinate);
             }
 
             user.setOffice_address(office_location);

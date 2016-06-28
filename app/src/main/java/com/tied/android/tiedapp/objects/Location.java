@@ -11,17 +11,15 @@ public class Location implements Serializable {
     private String state;
     private String country;
     private String street;
-    private double longitude;
-    private double latitude;
+    private Coordinate coordinate;
 
-    public Location(String city, String zip, String state, String country, String street, double longitude, double latitude) {
+    public Location(String city, String zip, String state, String country, String street, Coordinate coordinate) {
         this.city = city;
         this.zip = zip;
         this.state = state;
         this.country = country;
         this.street = street;
-        this.longitude = longitude;
-        this.latitude = latitude;
+        this.coordinate = coordinate;
     }
 
     public Location(String city, String zip, String state, String street) {
@@ -75,20 +73,13 @@ public class Location implements Serializable {
         this.street = street;
     }
 
-    public double getLongitude() {
-        return longitude;
+
+    public Coordinate getCoordinate() {
+        return coordinate;
     }
 
-    public void setLongitude(double longitude) {
-        this.longitude = longitude;
-    }
-
-    public double getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(double latitude) {
-        this.latitude = latitude;
+    public void setCoordinate(Coordinate coordinate) {
+        this.coordinate = coordinate;
     }
 
     @Override
@@ -99,8 +90,7 @@ public class Location implements Serializable {
                 ", state='" + state + '\'' +
                 ", country='" + country + '\'' +
                 ", street='" + street + '\'' +
-                ", longitude=" + longitude +
-                ", latitude=" + latitude +
+                ", coordinate=" + coordinate +
                 '}';
     }
 }

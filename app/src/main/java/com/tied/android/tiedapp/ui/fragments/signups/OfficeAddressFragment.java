@@ -21,6 +21,7 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.MyAsyncTask;
 import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
+import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.objects.auth.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
@@ -203,8 +204,8 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
         protected void onPostExecute(Address address) {
             if (getActivity() == null) return;
             if (address != null) {
-                location.setLatitude(address.getLatitude());
-                location.setLongitude(address.getLongitude());
+                Coordinate coordinate = new Coordinate(address.getLatitude(), address.getLongitude());
+                location.setCoordinate(coordinate);
             }
 
             Log.d(TAG," Location : "+  location.toString());

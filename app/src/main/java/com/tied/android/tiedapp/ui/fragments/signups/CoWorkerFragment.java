@@ -25,6 +25,7 @@ import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.MyAsyncTask;
+import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.objects.user.Boss;
 import com.tied.android.tiedapp.objects.user.User;
@@ -217,8 +218,8 @@ public class CoWorkerFragment extends Fragment implements View.OnClickListener{
         protected void onPostExecute(Address address) {
             if(getActivity() == null) return;
             if (address != null) {
-                location.setLatitude(address.getLatitude());
-                location.setLongitude(address.getLongitude());
+                Coordinate coordinate = new Coordinate(address.getLatitude(), address.getLongitude());
+                location.setCoordinate(coordinate);
             }
 
             boss = new Boss(emailText, phoneText, location);

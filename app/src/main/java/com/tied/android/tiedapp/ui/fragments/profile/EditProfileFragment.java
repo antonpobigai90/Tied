@@ -131,7 +131,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                 home_address_text.setText(user.getHome_address().getLocationAddress());
             }
 
-            if(user.getIndustries().size() > 0){
+            if(user.getIndustries() != null && user.getIndustries().size() > 0){
                 String indust =  StringUtils.join( user.getIndustries().toArray(), ", ");
                 industry_list.setText(indust);
             }

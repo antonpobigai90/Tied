@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -197,8 +198,9 @@ public class MainActivity extends FragmentActivity implements FragmentInteration
                 getSupportFragmentManager().popBackStackImmediate();
             }
 
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_place, fragment)
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//            ft.setCustomAnimations(R.anim.fragment_slide_left_enter, R.anim.fragment_slide_right_exit)
+                    ft.replace(R.id.fragment_place, fragment)
                     .addToBackStack(fragment.getClass().getSimpleName())
                     .commit();
         }

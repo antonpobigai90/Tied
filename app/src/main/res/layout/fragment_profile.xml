@@ -101,7 +101,7 @@
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:padding="15dp"
+                android:padding="10dp"
                 android:background="@color/schedule_create_appointment_bg_color"
                 android:layout_marginTop="0dp"
                 android:paddingLeft="20dp">

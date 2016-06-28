@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
@@ -186,7 +187,8 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
                 getSupportFragmentManager().popBackStackImmediate();
             }
 
-            getSupportFragmentManager().beginTransaction()
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.setCustomAnimations(R.anim.fragment_slide_left_enter, R.anim.fragment_slide_right_exit)
                     .replace(R.id.fragment_container, fragment)
                     .addToBackStack(fragment.getClass().getSimpleName())
                     .commit();

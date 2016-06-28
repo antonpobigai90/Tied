@@ -92,7 +92,6 @@ public class SplashActivity extends Activity {
                     }
                 }
             };
-
             splashTread.start();
         }
     }
