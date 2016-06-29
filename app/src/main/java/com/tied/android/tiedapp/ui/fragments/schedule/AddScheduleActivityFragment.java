@@ -14,7 +14,7 @@ import android.widget.TextView;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.activities.client.AddClientActivity;
+import com.tied.android.tiedapp.ui.activities.client.ClientActivity;
 import com.tied.android.tiedapp.ui.activities.lines.AddLinesActivity;
 import com.tied.android.tiedapp.ui.listeners.FragmentInterationListener;
 
@@ -108,7 +108,7 @@ public class AddScheduleActivityFragment extends Fragment implements View.OnClic
 
                 break;
             case R.id.client_layout:
-                intent = new Intent(getActivity(), AddClientActivity.class);
+                intent = new Intent(getActivity(), ClientActivity.class);
                 startActivity(intent);
                 break;
             case R.id.employee_layout:

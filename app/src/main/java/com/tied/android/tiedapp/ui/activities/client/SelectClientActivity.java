@@ -1,5 +1,6 @@
-package com.tied.android.tiedapp.ui.activities.schedule;
+package com.tied.android.tiedapp.ui.activities.client;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +21,7 @@ import com.tied.android.tiedapp.objects.Client;
 import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.ui.activities.schedule.CreateApointmentActivity;
 import com.tied.android.tiedapp.ui.adapters.ClientAdapter;
 import com.tied.android.tiedapp.util.DialogUtils;
 
@@ -31,7 +33,9 @@ import retrofit2.Response;
 
 public class SelectClientActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
-    public static final String TAG = "Client";
+    public static final String TAG = SelectClientActivity.class
+            .getSimpleName();
+
 
     private ArrayList<Client> clients;
     private ListView listView;
@@ -102,15 +106,15 @@ public class SelectClientActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.d("search", "here---------------- listener");
-
         Client data = clients.get(position);
-
         Log.d("SelectContact", data.toString());
+
+        Intent intent = new Intent(this, CreateApointmentActivity.class);
+        startActivity(intent);
     }
 
-
     private void initClient(){
-        final ClientApi clientApi =  MainApplication.getInstance().getRetrofit().create(ClientApi.class);
+        ClientApi clientApi =  MainApplication.getInstance().getRetrofit().create(ClientApi.class);
         Call<ClientRes> response = clientApi.getClients(user.getToken());
         response.enqueue(new Callback<ClientRes>() {
             @Override
@@ -140,8 +144,6 @@ public class SelectClientActivity extends AppCompatActivity implements View.OnCl
             }
         });
     }
-
-
 
     // Load data on background
     class LoadClient extends AsyncTask<Void, Void, Void> {

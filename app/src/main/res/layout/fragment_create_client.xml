@@ -60,17 +60,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/top_layout"
-            android:layout_marginBottom="15dp"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp">
+            android:padding="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toLeftOf="@+id/camera"
                 android:orientation="vertical"
-                android:paddingBottom="20dp"
-                android:paddingTop="20dp">
+                android:paddingBottom="10dp"
+                android:layout_marginRight="20dp"
+                android:paddingTop="10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -80,8 +79,9 @@
                     android:textColor="@color/white"
                     android:textSize="14sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/company"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingRight="10dp"
                     android:text="Apple Incorporation"
@@ -98,10 +98,14 @@
                 android:layout_alignParentRight="true"
                 android:orientation="horizontal">
 
-                <ImageView
+                <de.hdodenhof.circleimageview.CircleImageView
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/avatar"
+                    android:layout_centerHorizontal="true"
                     android:layout_width="60dp"
-                    android:layout_height="80dp"
-                    android:src="@mipmap/camera_icon_white" />
+                    android:layout_height="60dp"
+                    android:src="@mipmap/default_avatar"
+                    android:layout_marginTop="0dp" />
 
             </LinearLayout>
 
@@ -142,7 +146,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
-                    android:text=""
+                    android:text="Desmond Elliot"
                     android:textColor="@color/schedule_title_bg_color"
                     android:textSize="13sp"
                     android:textStyle="bold" />
@@ -175,7 +179,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
-                    android:text=""
+                    android:text="Surulere Lagos"
                     android:textColor="@color/schedule_title_bg_color"
                     android:textSize="13sp"
                     android:textStyle="bold" />
@@ -245,7 +249,7 @@
                         android:textSize="12sp" />
 
                     <EditText
-                        android:id="@+id/email"
+                        android:id="@+id/state"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@android:color/transparent"
@@ -324,7 +328,7 @@
                         android:textSize="12sp" />
 
                     <EditText
-                        android:id="@+id/territoty"
+                        android:id="@+id/territory"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@android:color/transparent"
@@ -556,7 +560,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
-                    android:text="@string/schedule_string_appointment"
+                    android:text=""
                     android:textColor="@color/schedule_title_bg_color"
                     android:textSize="13sp"
                     android:textStyle="bold" />

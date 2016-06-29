@@ -35,6 +35,7 @@ import com.tied.android.tiedapp.ui.fragments.schedule.AddActivityFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.AddScheduleActivityFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.CreateScheduleFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.HomeScheduleFragment;
+import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleSuggestionFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.IndustryFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentInterationListener;
 
@@ -118,7 +119,8 @@ public class MainActivity extends FragmentActivity implements FragmentInteration
         if(user.isNewUser(getApplicationContext())){
             launchFragment(Constants.HomeSchedule, bundle);
         }else{
-            launchFragment(Constants.CreateSchedule, bundle);
+//            launchFragment(Constants.CreateSchedule, bundle);
+            launchFragment(Constants.ScheduleSuggestions, bundle);
         }
 
         retrofit = MainApplication.getInstance().getRetrofit();
@@ -152,6 +154,10 @@ public class MainActivity extends FragmentActivity implements FragmentInteration
                 tab_bar.setVisibility(View.GONE);
                 relativeLayout.setVisibility(View.GONE);
                 fragment = new HomeScheduleFragment();
+                break;
+            case Constants.ScheduleSuggestions:
+                relativeLayout.setVisibility(View.GONE);
+                fragment = new ScheduleSuggestionFragment();
                 break;
             case Constants.TabActivities:
                 fragment = new EmployeesFragment();

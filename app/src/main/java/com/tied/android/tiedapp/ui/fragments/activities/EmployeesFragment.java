@@ -8,9 +8,6 @@ import android.view.ViewGroup;
 
 import com.tied.android.tiedapp.R;
 
-/**
- * Created by Ratan on 7/29/2015.
- */
 public class EmployeesFragment extends Fragment {
 
     @Override

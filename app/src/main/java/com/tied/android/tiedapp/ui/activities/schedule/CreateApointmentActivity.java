@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
+import com.tied.android.tiedapp.ui.activities.MainActivity;
 
 
 /**
@@ -15,8 +16,8 @@ import com.tied.android.tiedapp.R;
  */
 public class CreateApointmentActivity extends Activity implements View.OnClickListener{
 
-    TextView txt_cancel, txt_title, txt_description, txt_date, txt_time, txt_location, txt_reminder;
-    ImageView img_avatar, img_plus, img_plus1, img_location, img_reminder;
+    TextView txt_title, txt_description, txt_date, txt_time, txt_location, txt_reminder;
+    ImageView img_avatar, img_plus, img_plus1, img_location, img_reminder,img_cancel;
     TextView txt_create_schedule;
 
     @Override
@@ -24,8 +25,8 @@ public class CreateApointmentActivity extends Activity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_appointment);
 
-        txt_cancel = (TextView) findViewById(R.id.txt_cancel);
-        txt_cancel.setOnClickListener(this);
+        img_cancel = (ImageView) findViewById(R.id.img_close);
+        img_cancel.setOnClickListener(this);
 
         txt_create_schedule = (TextView) findViewById(R.id.txt_create_schedule);
         txt_create_schedule.setOnClickListener(this);
@@ -54,7 +55,7 @@ public class CreateApointmentActivity extends Activity implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        Intent intent = null;
+//        Intent intent = null;
         switch (v.getId()) {
             case R.id.txt_cancel:
                 finish();
@@ -73,6 +74,8 @@ public class CreateApointmentActivity extends Activity implements View.OnClickLi
                 break;
             case R.id.txt_create_schedule:
 
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
                 break;
         }
     }

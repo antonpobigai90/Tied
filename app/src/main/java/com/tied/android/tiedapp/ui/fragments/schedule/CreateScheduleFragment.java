@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
-import com.tied.android.tiedapp.ui.activities.schedule.SelectClientActivity;
+import com.tied.android.tiedapp.ui.activities.client.SelectClientActivity;
 import com.tied.android.tiedapp.ui.listeners.FragmentInterationListener;
 
 /**

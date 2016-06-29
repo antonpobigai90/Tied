@@ -1,4 +1,4 @@
-package com.tied.android.tiedapp.ui.activities;
+package com.tied.android.tiedapp.ui.activities.schedule;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

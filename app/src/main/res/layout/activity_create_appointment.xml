@@ -9,14 +9,13 @@
         android:layout_height="54dp"
         android:background="@color/schedule_title_bg_color">
 
-        <TextView
-            android:layout_width="80dp"
+        <ImageView
+            android:id="@+id/img_close"
+            android:layout_width="25dp"
             android:layout_height="match_parent"
-            android:text="CANCEL"
-            android:id="@+id/txt_cancel"
-            android:textColor="@color/button_bg"
-            android:textSize="16sp"
-            android:gravity="center_vertical|center_horizontal" />
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:src="@mipmap/btn_close" />
 
         <TextView
             android:layout_width="wrap_content"

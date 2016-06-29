@@ -21,6 +21,9 @@ public class Client implements Serializable {
 
     int image;
 
+    public Client() {
+    }
+
     public Client(int user_id, int line_id, String full_name, String company,
                   String logo, String description, String phone, String email, Location address) {
         this.user_id = user_id;

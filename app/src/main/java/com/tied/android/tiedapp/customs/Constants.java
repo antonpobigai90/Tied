@@ -25,6 +25,7 @@ public class Constants {
     public static final String USER_CHANGE_PASSWORD = API_PATH + "users/changePassword";
 
 
+    public static final String CLIENTS = API_PATH + "clients";
     public static final String USER_CLIENTS = API_PATH + "users/me/clients";
 
     public static final String GET_INDUSTRIES = API_PATH + "config/industries";
@@ -91,11 +92,13 @@ public class Constants {
     public static final int Schedules = 33;
     public static final int TabActivities = 34;
     public static final int AddScheduleActiity = 35;
+    public static final int ScheduleSuggestions = 36;
 
     public static final int Profile = 40;
 
     public static final int Lines = 50;
 
+    public static final int AddClient = 60;
 
 //    Profile Activity fragments indexes
     public static final int EditProfile = 101;
