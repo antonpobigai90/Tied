@@ -27,6 +27,7 @@ public class Constants {
 
     public static final String CLIENTS = API_PATH + "clients";
     public static final String USER_CLIENTS = API_PATH + "users/me/clients";
+    public static final String USER_GE0_CLIENTS = API_PATH + "users/me/clients/geo";
 
     public static final String GET_INDUSTRIES = API_PATH + "config/industries";
 

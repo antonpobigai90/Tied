@@ -2,8 +2,6 @@ package com.tied.android.tiedapp.ui.adapters;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.Client;
 import com.tied.android.tiedapp.util.RoundImage;
@@ -24,6 +23,8 @@ import java.util.Locale;
  * Created by Emmanuel on 6/28/2016.
  */
 public class ClientAdapter extends BaseAdapter {
+    public static final String TAG = ClientAdapter.class
+            .getSimpleName();
 
     public List<Client> _data;
     private ArrayList<Client> arraylist;
@@ -74,28 +75,9 @@ public class ClientAdapter extends BaseAdapter {
 
         v.address.setText(data.getAddress().getLocationAddress());
 
-        // Set image if exists
-        try {
-
-            if (data.getImage() != 0) {
-                // Setting round image
-//                Bitmap bm = data.getImage();
-                Bitmap bm = BitmapFactory.decodeResource(view.getResources(), data.getImage()); // Load default image
-                roundedImage = new RoundImage(bm);
-                v.imageView.setImageDrawable(roundedImage);
-            } else {
-                // Setting round image
-                Bitmap bm = BitmapFactory.decodeResource(view.getResources(), R.mipmap.default_avatar); // Load default image
-                roundedImage = new RoundImage(bm);
-                v.imageView.setImageDrawable(roundedImage);
-            }
-
-        } catch (OutOfMemoryError e) {
-            // Add default picture
-            v.imageView.setImageDrawable(this._c.getDrawable(R.mipmap.default_avatar));
-            e.printStackTrace();
-        }
-
+        Picasso.with(_c).
+                load(data.getLogo())
+                .into(v.imageView);
         view.setTag(data);
         return view;
     }

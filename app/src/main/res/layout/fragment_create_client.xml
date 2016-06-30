@@ -45,7 +45,7 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/img_edit"
+                android:id="@+id/img_done"
                 android:layout_width="35dp"
                 android:layout_height="30dp"
                 android:layout_alignParentRight="true"
@@ -118,7 +118,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/top"
-        android:paddingBottom="70dp">
+        android:paddingBottom="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -162,27 +162,40 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp">
 
-                <TextView
-                    android:layout_width="match_parent"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="4dp"
-                    android:text="LOCATION"
-                    android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="12sp" />
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/street"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@android:color/transparent"
-                    android:text="Surulere Lagos"
-                    android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="4dp"
+                        android:text="Location"
+                        android:textColor="@color/schedule_title_bg_color"
+                        android:textSize="12sp" />
+
+                    <EditText
+                        android:id="@+id/street"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@android:color/transparent"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:text="Eric Moore"
+                        android:textColor="@color/schedule_title_bg_color"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+
+                </LinearLayout>
+
             </LinearLayout>
 
             <View
@@ -190,6 +203,168 @@
                 android:layout_height="0.1dp"
                 android:layout_marginBottom="5dp"
                 android:background="@android:color/darker_gray" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:weightSum="2">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="4dp"
+                        android:text="city"
+                        android:textColor="@color/schedule_title_bg_color"
+                        android:textSize="12sp" />
+
+                    <EditText
+                        android:id="@+id/city"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@android:color/transparent"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:textColor="@color/schedule_title_bg_color"
+                        android:textSize="13sp"
+                        android:textStyle="bold"
+                        android:text="Surulere" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.1dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@android:color/darker_gray" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="4dp"
+                        android:text="Zip"
+                        android:textColor="@color/schedule_title_bg_color"
+                        android:textSize="12sp" />
+
+                    <EditText
+                        android:id="@+id/zip"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@android:color/transparent"
+                        android:maxLines="1"
+                        android:text="10001"
+                        android:textColor="@color/schedule_title_bg_color"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.1dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@android:color/darker_gray" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:weightSum="2">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="4dp"
+                        android:text="State"
+                        android:textColor="@color/schedule_title_bg_color"
+                        android:textSize="12sp" />
+
+                    <EditText
+                        android:id="@+id/state"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@android:color/transparent"
+                        android:maxLines="1"
+                        android:text="Lagos"
+                        android:textColor="@color/schedule_title_bg_color"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.1dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@android:color/darker_gray" />
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="4dp"
+                        android:text="FAX"
+                        android:textColor="@color/schedule_title_bg_color"
+                        android:textSize="12sp" />
+
+                    <EditText
+                        android:id="@+id/fax"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@android:color/transparent"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:text="534"
+                        android:textColor="@color/schedule_title_bg_color"
+                        android:textSize="13sp"
+                        android:textStyle="bold" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.1dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@android:color/darker_gray" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -221,10 +396,10 @@
                         android:backgroundTint="@android:color/transparent"
                         android:inputType="text"
                         android:maxLines="1"
-                        android:text=""
                         android:textColor="@color/schedule_title_bg_color"
                         android:textSize="13sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:text="2539278" />
 
                     <View
                         android:layout_width="match_parent"
@@ -244,99 +419,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingLeft="4dp"
-                        android:text="STATE"
+                        android:text="Email"
                         android:textColor="@color/schedule_title_bg_color"
                         android:textSize="12sp" />
 
                     <EditText
-                        android:id="@+id/state"
+                        android:id="@+id/email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@android:color/transparent"
                         android:maxLines="1"
-                        android:text=""
                         android:textColor="@color/schedule_title_bg_color"
                         android:textSize="13sp"
-                        android:textStyle="bold" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.1dp"
-                        android:layout_marginBottom="5dp"
-                        android:background="@android:color/darker_gray" />
-
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"
-                android:weightSum="2">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="20dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="4dp"
-                        android:text="FAX"
-                        android:textColor="@color/schedule_title_bg_color"
-                        android:textSize="12sp" />
-
-                    <EditText
-                        android:id="@+id/fax"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@android:color/transparent"
-                        android:inputType="text"
-                        android:maxLines="1"
-                        android:text=""
-                        android:textColor="@color/schedule_title_bg_color"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.1dp"
-                        android:layout_marginBottom="5dp"
-                        android:background="@android:color/darker_gray" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="4dp"
-                        android:text="TERRITORY"
-                        android:textColor="@color/schedule_title_bg_color"
-                        android:textSize="12sp" />
-
-                    <EditText
-                        android:id="@+id/territory"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@android:color/transparent"
-                        android:maxLines="1"
-                        android:text=""
-                        android:textColor="@color/schedule_title_bg_color"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:text="marto@gmail.com" />
 
                     <View
                         android:layout_width="match_parent"
@@ -374,7 +470,8 @@
                         android:layout_height="wrap_content"
                         android:layout_toLeftOf="@+id/dollar"
                         android:backgroundTint="@android:color/transparent"
-                        android:text=""
+                        android:text="1200000"
+                        android:inputType="number"
                         android:textColor="@color/schedule_title_bg_color"
                         android:textSize="13sp"
                         android:textStyle="bold" />
@@ -420,7 +517,8 @@
                         android:layout_height="wrap_content"
                         android:layout_toLeftOf="@+id/dollar1"
                         android:backgroundTint="@android:color/transparent"
-                        android:text=""
+                        android:text="1233400"
+                        android:inputType="number"
                         android:textColor="@color/schedule_title_bg_color"
                         android:textSize="13sp"
                         android:textStyle="bold" />
@@ -560,7 +658,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
-                    android:text=""
+                    android:text="This is just a small note for this client"
                     android:textColor="@color/schedule_title_bg_color"
                     android:textSize="13sp"
                     android:textStyle="bold" />
@@ -733,19 +831,19 @@
 
     </ScrollView>
 
-        <Button
-            android:id="@+id/button_import"
-            android:layout_marginBottom="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp"
-            android:layout_alignParentBottom="true"
-            android:background="@drawable/curve_blue_background"
-            android:gravity="center_vertical|center_horizontal"
-            android:text="Import via phone contact"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            android:textColor="@color/white" />
+        <!--<Button-->
+            <!--android:id="@+id/button_import"-->
+            <!--android:layout_marginBottom="20dp"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="40dp"-->
+            <!--android:layout_marginLeft="50dp"-->
+            <!--android:layout_marginRight="50dp"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:background="@drawable/curve_blue_background"-->
+            <!--android:gravity="center_vertical|center_horizontal"-->
+            <!--android:text="Import via phone contact"-->
+            <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"-->
+            <!--android:textColor="@color/white" />-->
 
 
 </RelativeLayout>

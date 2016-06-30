@@ -1,4 +1,4 @@
-package com.tied.android.tiedapp.interfaces.retrofits;
+package com.tied.android.tiedapp.retrofits.services;
 
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.responses.ServerRes;

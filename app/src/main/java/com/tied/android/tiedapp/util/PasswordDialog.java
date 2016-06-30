@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
-import com.tied.android.tiedapp.interfaces.retrofits.ProfileApi;
+import com.tied.android.tiedapp.retrofits.services.ProfileApi;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 

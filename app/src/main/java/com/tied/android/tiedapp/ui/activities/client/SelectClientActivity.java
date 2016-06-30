@@ -1,7 +1,6 @@
 package com.tied.android.tiedapp.ui.activities.client;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -16,11 +15,13 @@ import android.widget.Toast;
 
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
-import com.tied.android.tiedapp.interfaces.retrofits.ClientApi;
 import com.tied.android.tiedapp.objects.Client;
+import com.tied.android.tiedapp.objects.ClientLocation;
+import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.ui.activities.schedule.CreateApointmentActivity;
 import com.tied.android.tiedapp.ui.adapters.ClientAdapter;
 import com.tied.android.tiedapp.util.DialogUtils;
@@ -31,7 +32,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SelectClientActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class SelectClientActivity extends AppCompatActivity
+        implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     public static final String TAG = SelectClientActivity.class
             .getSimpleName();
@@ -51,7 +53,6 @@ public class SelectClientActivity extends AppCompatActivity implements View.OnCl
     int[] IMAGE = {R.mipmap.avatar_profile, R.mipmap.avatar_schedule, R.mipmap.default_avatar};
     String[] NAME = {"Emily Emmanuel","Johnson Good","Nonso Lagos"};
     Location[] ADDRESS = {new Location("Ikeja","123","Lagos","Ikunna"),new Location("Old Town","546","NY","Mile street"),new Location("LA","567","Carlifornia","Myles Strt")};
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,8 +115,11 @@ public class SelectClientActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void initClient(){
+
+        ClientLocation clientLocation = new ClientLocation("1200km", new Coordinate(0.0, 0.0));
+
         ClientApi clientApi =  MainApplication.getInstance().getRetrofit().create(ClientApi.class);
-        Call<ClientRes> response = clientApi.getClients(user.getToken());
+        Call<ClientRes> response = clientApi.getClientsByLocation(user.getToken(), clientLocation);
         response.enqueue(new Callback<ClientRes>() {
             @Override
             public void onResponse(Call<ClientRes> call, Response<ClientRes> resResponse) {
@@ -143,42 +147,6 @@ public class SelectClientActivity extends AppCompatActivity implements View.OnCl
                 DialogUtils.closeProgress();
             }
         });
-    }
-
-    // Load data on background
-    class LoadClient extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            // Get Contact list from Phone
-
-            if (NAME.length > 0) {
-
-                for (int i = 0; i < NAME.length; i++) {
-
-                    Client detail = new Client(NAME[i], IMAGE[i],ADDRESS[i]);
-                    clients.add(detail);
-
-                }
-            } else {
-                Toast.makeText(SelectClientActivity.this, "No clients.", Toast.LENGTH_LONG).show();
-            }
-            //phones.close();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            adapter = new ClientAdapter(clients, SelectClientActivity.this);
-            listView.setAdapter(adapter);
-            listView.setFastScrollEnabled(true);
-        }
     }
 
     @Override

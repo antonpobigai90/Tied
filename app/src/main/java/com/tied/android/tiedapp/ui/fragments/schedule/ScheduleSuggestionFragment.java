@@ -3,12 +3,12 @@ package com.tied.android.tiedapp.ui.fragments.schedule;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,15 +16,24 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.Client;
 import com.tied.android.tiedapp.objects.Location;
+import com.tied.android.tiedapp.objects.responses.ClientRes;
+import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.ui.activities.schedule.ViewSchedule;
 import com.tied.android.tiedapp.ui.adapters.ClientScheduleAdapter;
 import com.tied.android.tiedapp.ui.adapters.ClientScheduleHorizontalAdapter;
 import com.tied.android.tiedapp.ui.listeners.FragmentInterationListener;
+import com.tied.android.tiedapp.util.DialogUtils;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,6 +42,8 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
 
     public static final String TAG = ScheduleSuggestionFragment.class
             .getSimpleName();
+
+    private User user;
 
     private Bundle bundle;
 
@@ -94,12 +105,11 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
         horizontalManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         horizontalList.setLayoutManager(horizontalManager);
 
-
-        LoadClient loadClient = new LoadClient();
-        loadClient.execute();
-
         view_schedule = (TextView) view.findViewById(R.id.view_schedule);
         view_schedule.setOnClickListener(this);
+
+        user = User.getUser(getActivity().getApplicationContext());
+        initClient();
     }
 
     @Override
@@ -113,39 +123,41 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
         }
     }
 
-    class LoadClient extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
 
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            // Get Contact list from Phone
-            if (NAME.length > 0) {
-                for (int i = 0; i < NAME.length; i++) {
-                    Client detail = new Client(NAME[i], IMAGE[i],ADDRESS[i]);
-                    clients.add(detail);
+    private void initClient(){
+        ClientApi clientApi =  MainApplication.getInstance().getRetrofit().create(ClientApi.class);
+        Call<ClientRes> response = clientApi.getClients(user.getToken());
+        response.enqueue(new Callback<ClientRes>() {
+            @Override
+            public void onResponse(Call<ClientRes> call, Response<ClientRes> resResponse) {
+                if (getActivity() == null) return;
+                DialogUtils.closeProgress();
+                ClientRes clientRes = resResponse.body();
+                if(clientRes.isAuthFailed()){
+                    User.LogOut(getActivity());
                 }
-            } else {
-                Toast.makeText(getActivity(), "No clients.", Toast.LENGTH_LONG).show();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            adapter = new ClientScheduleAdapter(clients, getActivity());
-            horizontalAdapter = new ClientScheduleHorizontalAdapter(clients,getActivity());
+                else if(clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200){
+                    clients = clientRes.getClients();
+                    adapter = new ClientScheduleAdapter(clients, getActivity());
+                    horizontalAdapter = new ClientScheduleHorizontalAdapter(clients,getActivity());
 //            verticalAdapter = new ClientScheduleHorizontalAdapter(clients,getActivity());
 
-            horizontalList.setAdapter(horizontalAdapter);
+                    horizontalList.setAdapter(horizontalAdapter);
 //            verticallList.setAdapter(horizontalAdapter);
-            listView.setAdapter(adapter);
-            listView.setFastScrollEnabled(true);
-        }
+                    listView.setAdapter(adapter);
+                    listView.setFastScrollEnabled(true);
+                }else{
+                    Toast.makeText(getActivity(), clientRes.getMessage(), Toast.LENGTH_LONG).show();
+                }
+                Log.d(TAG + " onResponse", resResponse.body().toString());
+            }
+
+            @Override
+            public void onFailure(Call<ClientRes> call, Throwable t) {
+                Log.d(TAG + " onFailure", t.toString());
+                DialogUtils.closeProgress();
+            }
+        });
     }
 
 }

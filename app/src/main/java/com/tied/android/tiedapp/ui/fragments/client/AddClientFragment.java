@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -14,7 +16,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,16 +25,26 @@ import com.google.gson.Gson;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.interfaces.retrofits.ClientApi;
+import com.tied.android.tiedapp.customs.MyAsyncTask;
+import com.tied.android.tiedapp.customs.model.IndustryModel;
 import com.tied.android.tiedapp.objects.Client;
-import com.tied.android.tiedapp.objects.responses.ServerRes;
+import com.tied.android.tiedapp.objects.Coordinate;
+import com.tied.android.tiedapp.objects.Location;
+import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.retrofits.services.ClientApi;
+import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.client.ClientActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.listeners.FragmentInterationListener;
 import com.tied.android.tiedapp.util.DialogUtils;
 
+import org.json.JSONObject;
+
 import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -52,11 +63,12 @@ public class AddClientFragment extends Fragment implements View.OnClickListener{
 
 
     public ImageView avatar;
-    private EditText company,name, street, phone, territory, fax, revenue, ytd_revenue,note, birthday;
-    private Button button_import;
+    private EditText company,name, street, state, city, phone, zip, territory, fax, revenue, ytd_revenue, birthday, note;
+    private ImageView img_done;
     private TextView industry, select_line;
 
-    private String companyText, nameText, streetText;
+    private String companyText, nameText, streetText, cityText, stateText, zipText, noteText, birthdayText;
+    private Location location;
 
     // Code for our image picker select action.
     public final int IMAGE_PICKER_SELECT = 999;
@@ -83,21 +95,42 @@ public class AddClientFragment extends Fragment implements View.OnClickListener{
         initComponent(view);
     }
 
+    public void initIndustry(){
+        Call<List<IndustryModel>> response = MainApplication.getInstance().getRetrofit().create(SignUpApi.class).getIndustries();
+        response.enqueue(new Callback<List<IndustryModel>>() {
+            @Override
+            public void onResponse(Call<List<IndustryModel>> call, Response<List<IndustryModel>> listResponse) {
+                if (getActivity() == null) return;
+                DialogUtils.closeProgress();
+                List<IndustryModel> industryModelList = listResponse.body();
+                Log.d(TAG + " onResponse", industryModelList.toString());
+            }
+
+            @Override
+            public void onFailure(Call<List<IndustryModel>> call, Throwable t) {
+                Log.d(TAG + " onFailure", t.toString());
+                DialogUtils.closeProgress();
+            }
+        });
+    }
+
     public void initComponent(View view) {
         company = (EditText) view.findViewById(R.id.company);
         name = (EditText) view.findViewById(R.id.name);
-//        street = (EditText) view.findViewById(R.id.street);
-//        phone = (EditText) view.findViewById(R.id.phone);
-//        territory = (EditText) view.findViewById(R.id.territory);
-//        fax = (EditText) view.findViewById(R.id.fax);
-//        revenue = (EditText) view.findViewById(R.id.revenue);
-//        ytd_revenue = (EditText) view.findViewById(R.id.ytd_revenue);
-//        note = (EditText) view.findViewById(R.id.note);
-//        birthday = (EditText) view.findViewById(R.id.birthday);
+        street = (EditText) view.findViewById(R.id.street);
+        zip = (EditText) view.findViewById(R.id.zip);
+        city = (EditText) view.findViewById(R.id.city);
+        state = (EditText) view.findViewById(R.id.state);
+        phone = (EditText) view.findViewById(R.id.phone);
+        fax = (EditText) view.findViewById(R.id.fax);
+        revenue = (EditText) view.findViewById(R.id.revenue);
+        ytd_revenue = (EditText) view.findViewById(R.id.ytd_revenue);
+        note = (EditText) view.findViewById(R.id.note);
+        birthday = (EditText) view.findViewById(R.id.birthday);
 
         avatar = (ImageView) view.findViewById(R.id.avatar);
-        button_import = (Button) view.findViewById(R.id.button_import);
-        button_import.setOnClickListener(this);
+        img_done = (ImageView) view.findViewById(R.id.img_done);
+        img_done.setOnClickListener(this);
         avatar.setOnClickListener(this);
 
         bundle = getArguments();
@@ -125,18 +158,34 @@ public class AddClientFragment extends Fragment implements View.OnClickListener{
         }
     }
 
+    private boolean validated() {
+        streetText = street.getText().toString();
+        cityText = city.getText().toString();
+        zipText = zip.getText().toString();
+        stateText = state.getText().toString();
+        location = new Location(cityText, zipText, stateText, streetText);
+        birthdayText = birthday.getText().toString();
+        noteText = note.getText().toString();
+        return !streetText.equals("");
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.button_import:
-                createClient();
+            case R.id.img_done:
+                uri = ((ClientActivity) getActivity()).outputUri;
+                if(uri == null){
+                    Toast.makeText(getActivity(), "Upload user image", Toast.LENGTH_LONG).show();
+                }
+                else if (validated()) {
+                    new GeocodeAsyncTask().execute();
+                }
                 break;
             case R.id.avatar:
                 showChooser();
                 break;
         }
     }
-
 
     public void showChooser() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -177,12 +226,65 @@ public class AddClientFragment extends Fragment implements View.OnClickListener{
         builder.show();
     }
 
-    private void createClient(){
-        Client client = new Client();
+    class GeocodeAsyncTask extends MyAsyncTask {
+
+        String errorMessage = "";
+        JSONObject jObject;
+        JSONObject places = null;
+        String lat;
+
+        @Override
+        protected void onPreExecute() {
+            DialogUtils.displayProgress(getActivity());
+        }
+
+        @Override
+        protected Address doInBackground(Void... params) {
+            Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+            List<Address> addresses = null;
+
+            try {
+                Log.d(TAG, location.getLocationAddress());
+                addresses = geocoder.getFromLocationName(location.getLocationAddress(), 1);
+            } catch (IOException e) {
+                errorMessage = "Service not available";
+                Log.e(TAG, errorMessage, e);
+            }
+
+            if (addresses != null && addresses.size() > 0)
+                return addresses.get(0);
+
+            return null;
+        }
+
+        protected void onPostExecute(Address address) {
+            if (getActivity() == null) return;
+            if (address != null) {
+                Coordinate coordinate = new Coordinate(address.getLatitude(), address.getLongitude());
+                location.setCoordinate(coordinate);
+                createClient();
+            }else{
+                DialogUtils.closeProgress();
+                Toast.makeText(getActivity(), "sorry location cannot be found in map", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+
+    private void createClient() {
         companyText = company.getText().toString();
         nameText = name.getText().toString();
 
-        uri = ((ClientActivity) getActivity()).outputUri;
+        Client client = new Client();
+        client.setFull_name(nameText);
+        client.setCompany(companyText);
+        client.setAddress(location);
+        client.setLine_id(1);
+        client.setIndustry_id(1);
+        client.setVisit_id(1);
+        client.setBirthday(birthdayText);
+        client.setDescription(noteText);
+
         File file = new File(uri.getPath());
 
         Log.d("Uri", uri.getPath());
@@ -194,52 +296,36 @@ public class AddClientFragment extends Fragment implements View.OnClickListener{
                 RequestBody.create(MediaType.parse("multipart/form-data"), file);
 
         // MultipartBody.Part is used to send also the actual file name
-        MultipartBody.Part body =
+        final MultipartBody.Part body =
                 MultipartBody.Part.createFormData("logo", file.getName(), requestFile);
 
-        RequestBody address =
+        RequestBody clientReq =
                 RequestBody.create(
-                        MediaType.parse("multipart/form-data"), new Gson().toJson(user.getOffice_address()));
+                        MediaType.parse("multipart/form-data"), new Gson().toJson(client));
 
-        RequestBody full_name =
-                RequestBody.create(
-                        MediaType.parse("multipart/form-data"), nameText);
-
-        RequestBody company_name =
-                RequestBody.create(
-                        MediaType.parse("multipart/form-data"), companyText);
-
-        ClientApi clientApi =  MainApplication.getInstance().getRetrofit().create(ClientApi.class);
-        Call<ServerRes> response = clientApi.createClient(user.getToken(), company_name, full_name, address, body );
-        response.enqueue(new Callback<ServerRes>() {
+        ClientApi clientApi = MainApplication.getInstance().getRetrofit().create(ClientApi.class);
+        Call<ClientRes> response = clientApi.createClient(user.getToken(), clientReq, body);
+        response.enqueue(new Callback<ClientRes>() {
             @Override
-            public void onResponse(Call<ServerRes> call, Response<ServerRes> ServerResponseResponse) {
+            public void onResponse(Call<ClientRes> call, Response<ClientRes> resResponse) {
                 if (getActivity() == null) return;
-//                ServerRes ServerRes = ServerResponseResponse.body();
-//                Log.d(TAG +" onResponse", ServerResponseResponse.body().toString());
-//                if(ServerRes.isSuccess()){
-//                    Bundle bundle = new Bundle();
-//                    boolean saved = user.save(getActivity().getApplicationContext());
-//                    if(saved){
-//                        Gson gson = new Gson();
-//                        String json = gson.toJson(user);
-//                        bundle.putString(Constants.USER, json);
-//                        DialogUtils.closeProgress();
-//                        nextAction(bundle);
-//                    }else{
-//                        DialogUtils.closeProgress();
-//                        Toast.makeText(getActivity(), "user info  was not updated", Toast.LENGTH_LONG).show();
-//                    }
-//                }else{
-//                    Toast.makeText(getActivity(), ServerRes.getMessage(), Toast.LENGTH_LONG).show();
-//                }
-                DialogUtils.closeProgress();
+                Log.d(TAG + " onResponse", resResponse.body().toString());
+                ClientRes clientRes = resResponse.body();
+                if (clientRes.isAuthFailed()) {
+                    User.LogOut(getActivity().getApplicationContext());
+                } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200) {
+                    Log.d(TAG + " client good", clientRes.getClient().toString());
+                    nextAction(bundle);
+                } else {
+                    DialogUtils.closeProgress();
+                    Toast.makeText(getActivity(), clientRes.getMessage(), Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
-            public void onFailure(Call<ServerRes> ServerResponseCall, Throwable t) {
+            public void onFailure(Call<ClientRes> ClientResponseCall, Throwable t) {
                 Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
-                Log.d(TAG +" onFailure", t.toString());
+                Log.d(TAG + " onFailure", t.toString());
                 DialogUtils.closeProgress();
             }
         });

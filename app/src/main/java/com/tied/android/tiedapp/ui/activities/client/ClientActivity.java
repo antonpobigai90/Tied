@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -47,11 +48,8 @@ public class ClientActivity extends FragmentActivity implements View.OnClickList
     // Activity result key for camera
     public final int REQUEST_TAKE_PHOTO = 11111;
 
-    public final int REQUEST_FACEBOOK_LOGIN = 64206;
-
-    public final int REQUEST_TWITTER_LOGIN = 140;
-
     public Bitmap bitmap;
+    private boolean isLaunched = false;
 
     public Uri imageUri = null, outputUri = null;
 
@@ -66,7 +64,6 @@ public class ClientActivity extends FragmentActivity implements View.OnClickList
         Gson gson = new Gson();
         String user_json = gson.toJson(user);
         bundle.putString(Constants.USER, user_json);
-
         launchFragment(Constants.AddClient, bundle);
     }
 
@@ -91,12 +88,12 @@ public class ClientActivity extends FragmentActivity implements View.OnClickList
         if (requestCode == Crop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
             handleCrop(outputUri);
         } else if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
-            outputUri = Uri.fromFile(new File(getFilesDir(), "cropped.jpg"));
+            outputUri = Uri.fromFile(new File(getFilesDir(), "client.jpg"));
             Uri selectedImage = imageUri;
             Crop.of(selectedImage, outputUri).asSquare().start(this);
         } else if (requestCode == IMAGE_PICKER_SELECT && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
             Uri selectedImage = data.getData();
-            outputUri = Uri.fromFile(new File(getFilesDir(), "cropped.jpg"));
+            outputUri = Uri.fromFile(new File(getFilesDir(), "client.jpg"));
             Crop.of(selectedImage, outputUri).asSquare().start(this);
         }
     }
@@ -122,10 +119,9 @@ public class ClientActivity extends FragmentActivity implements View.OnClickList
             while (getSupportFragmentManager().getBackStackEntryCount() > 1) {
                 getSupportFragmentManager().popBackStackImmediate();
             }
-
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragment_place, fragment)
-                    .addToBackStack(fragment.getClass().getSimpleName())
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.fragment_place, fragment);
+            ft.addToBackStack(fragment.getClass().getSimpleName())
                     .commit();
         }
     }
@@ -133,7 +129,13 @@ public class ClientActivity extends FragmentActivity implements View.OnClickList
     public void OnFragmentInteractionListener(int action, Bundle bundle) {
         Log.d(TAG, " onFragmentInteraction "+action);
         launchFragment(action, bundle);
+    }
 
+    @Override
+    public void onBackPressed() {
+        if(fragment_index == Constants.AddClient){
+            finish();
+        }
     }
 
     @Override
