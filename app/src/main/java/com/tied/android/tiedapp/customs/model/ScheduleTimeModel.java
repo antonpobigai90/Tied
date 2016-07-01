@@ -9,7 +9,7 @@ public class ScheduleTimeModel {
     private String time;
     private String title;
 
-    public ScheduleTimeModel(String title, String id, String time) {
+    public ScheduleTimeModel(String id, String title, String time) {
         this.title = title;
         this.id = id;
         this.time = time;

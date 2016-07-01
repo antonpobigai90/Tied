@@ -4,10 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+
 
         <LinearLayout
             android:id="@+id/tab_bar"
@@ -19,6 +16,7 @@
             android:paddingBottom="5dp">
 
             <LinearLayout
+                android:id="@+id/week_tab"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.2"
@@ -34,7 +32,7 @@
                     android:layout_marginBottom="10dp"
                     android:textSize="12sp"
                     android:textStyle="bold" />
-                <View
+                <TextView
                     android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
@@ -43,6 +41,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/today_tab"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
                 android:gravity="bottom"
@@ -59,7 +58,7 @@
                     android:textSize="12sp"
                     android:textStyle="bold" />
 
-                <View
+                <TextView
                     android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
@@ -67,6 +66,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/next_week_tab"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.2"
@@ -82,7 +82,7 @@
                     android:layout_marginBottom="10dp"
                     android:textSize="12sp"
                     android:textStyle="bold" />
-                <View
+                <TextView
                     android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
@@ -90,6 +90,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/month_tab"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="0.2"
@@ -105,7 +106,7 @@
                     android:layout_marginBottom="10dp"
                     android:textSize="12sp"
                     android:textStyle="bold" />
-                <View
+                <TextView
                     android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
@@ -114,7 +115,6 @@
 
 
         </LinearLayout>
-    </LinearLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"

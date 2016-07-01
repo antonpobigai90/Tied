@@ -36,6 +36,7 @@ import com.tied.android.tiedapp.ui.fragments.schedule.AddScheduleActivityFragmen
 import com.tied.android.tiedapp.ui.fragments.schedule.CreateScheduleFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.HomeScheduleFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleSuggestionFragment;
+import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleTimeLineFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.IndustryFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentInterationListener;
 
@@ -121,7 +122,8 @@ public class MainActivity extends FragmentActivity implements FragmentInteration
         if(user.isNewUser(getApplicationContext())){
             launchFragment(Constants.HomeSchedule, bundle);
         }else{
-            launchFragment(Constants.CreateSchedule, bundle);
+//            launchFragment(Constants.CreateSchedule, bundle);
+            launchFragment(Constants.AppointmentList, bundle);
         }
 
         retrofit = MainApplication.getInstance().getRetrofit();
@@ -190,6 +192,10 @@ public class MainActivity extends FragmentActivity implements FragmentInteration
             case Constants.ActivityFragment:
                 activity_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
                 fragment = new ActivityFragment();
+                break;
+            case Constants.AppointmentList:
+                activity_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
+                fragment = new ScheduleTimeLineFragment();
                 break;
             default:
                 finish();
@@ -277,7 +283,7 @@ public class MainActivity extends FragmentActivity implements FragmentInteration
                 break;
             case R.id.txt_schedules:
                 tab_actvity_schedule.setBackgroundResource(R.mipmap.base_schedule);
-                launchFragment(Constants.CreateSchedule, bundle);
+                launchFragment(Constants.AppointmentList, bundle);
                 break;
             case R.id.more:
                 launchFragment(Constants.Profile, bundle);

@@ -57,13 +57,13 @@ public class ActivityFragment extends Fragment implements View.OnClickListener {
         if (mViewPager != null) {
             mViewPager.setAdapter(mPagerAdapter);
             mViewPager.setCurrentItem(0);
-            selectTab(0);
+            selectTab(tab_bar, 0);
         }
 
         onCustomSelected(mViewPager);
     }
 
-    public void selectTab(int position){
+    public void selectTab(LinearLayout tab_bar, int position){
         int index = 0;
         for(int i = 0; i < tab_bar.getChildCount(); i++){
             if(tab_bar.getChildAt(i) instanceof LinearLayout){
@@ -103,7 +103,7 @@ public class ActivityFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onPageSelected(int position) {
                 Toast.makeText(getActivity(),"Selected page position: " + position, Toast.LENGTH_SHORT).show();
-                selectTab(position);
+                selectTab(tab_bar, position);
             }
 
             // This method will be invoked when the current page is scrolled

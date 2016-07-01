@@ -19,9 +19,9 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
-import com.tied.android.tiedapp.ui.fragments.schedule.SelectClientDistanceFragment;
-import com.tied.android.tiedapp.ui.fragments.schedule.SelectClientListFragment;
-import com.tied.android.tiedapp.ui.fragments.schedule.SelectClientMapFragment;
+import com.tied.android.tiedapp.ui.fragments.client.SelectClientDistanceFragment;
+import com.tied.android.tiedapp.ui.fragments.client.SelectClientListFragment;
+import com.tied.android.tiedapp.ui.fragments.client.SelectClientMapFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentInterationListener;
 import com.tied.android.tiedapp.util.DemoData;
 

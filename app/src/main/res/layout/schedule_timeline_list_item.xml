@@ -10,16 +10,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="10dp"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
         android:paddingTop="10dp">
 
         <LinearLayout
             android:id="@+id/date"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
-            android:paddingRight="5dp"
-            android:paddingLeft="5dp"
             android:orientation="vertical"
             android:layout_centerVertical="true">
 
@@ -31,7 +27,7 @@
                 android:layout_gravity="center_horizontal"
                 android:text="18"
                 android:textStyle="bold"
-                android:textSize="22sp" />
+                android:textSize="20sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -39,18 +35,19 @@
                 android:id="@+id/week_day"
                 android:layout_gravity="center_horizontal"
                 android:textColor="@color/schedule_title_bg_color"
-                android:text="TODAY"
-                android:textSize="10sp" />
+                android:text="TOMMOROW"
+                android:textSize="9sp" />
 
 
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/timeline"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingTop="5dp"
-            android:layout_toLeftOf="@+id/weather"
+            android:layout_toLeftOf="@+id/weather_info"
             android:paddingLeft="15dp"
             android:layout_toRightOf="@+id/date">
 
@@ -60,7 +57,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/weather"
+            android:id="@+id/weather_info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -71,20 +68,20 @@
                 android:layout_height="match_parent"
                 android:id="@+id/temperature"
                 android:gravity="center_vertical"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="3dp"
                 android:text="72°"
                 android:textStyle="bold"
                 android:textColor="@color/schedule_title_bg_color"
-                android:textSize="13sp" />
+                android:textSize="11sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:id="@+id/info"
+                android:id="@+id/weather"
                 android:gravity="center_vertical"
                 android:text="Cloudy"
-                android:textColor="@color/schedule_title_bg_color"
-                android:textSize="12sp" />
+                android:textColor="@color/semi_transparent_black"
+                android:textSize="10sp" />
 
         </LinearLayout>
 
@@ -93,7 +90,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.1dp"
-        android:layout_marginLeft="12dp"
         android:background="@android:color/darker_gray" />
 
 </LinearLayout>

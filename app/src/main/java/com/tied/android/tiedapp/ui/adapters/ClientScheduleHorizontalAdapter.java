@@ -3,6 +3,8 @@ package com.tied.android.tiedapp.ui.adapters;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.Client;
 import com.tied.android.tiedapp.ui.activities.schedule.CreateAppointmentActivity;
@@ -50,14 +53,24 @@ public class ClientScheduleHorizontalAdapter extends RecyclerView.Adapter<Client
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
-    public void onBindViewHolder(ClientScheduleHorizontalAdapter.ViewHolder viewHolder, final int position) {
+    public void onBindViewHolder(final ClientScheduleHorizontalAdapter.ViewHolder viewHolder, final int position) {
 
         final Client data = (Client) _data.get(position);
         viewHolder.name.setText(data.getFull_name());
 
         Picasso.with(activity).
                 load(data.getLogo())
-                .into(viewHolder.pic);
+                .into(new Target() {
+                    @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        if (bitmap != null){
+                            viewHolder.pic.setImageBitmap(bitmap);
+                        }else{
+                            viewHolder.pic.setImageResource(R.mipmap.default_avatar);
+                        }
+                    }
+                    @Override public void onBitmapFailed(Drawable errorDrawable) { }
+                    @Override public void onPrepareLoad(Drawable placeHolderDrawable) { }
+                });
 
         viewHolder.menue_icon.setOnClickListener(new View.OnClickListener() {
             @Override

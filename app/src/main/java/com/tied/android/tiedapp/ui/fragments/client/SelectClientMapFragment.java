@@ -1,4 +1,4 @@
-package com.tied.android.tiedapp.ui.fragments.schedule;
+package com.tied.android.tiedapp.ui.fragments.client;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

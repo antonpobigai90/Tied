@@ -1,4 +1,4 @@
-package com.tied.android.tiedapp.ui.fragments.schedule;
+package com.tied.android.tiedapp.ui.fragments.client;
 
 import android.content.Context;
 import android.os.Bundle;

@@ -34,8 +34,7 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
 
     public FragmentInterationListener mListener;
 
-    TextView txt_emp,txt_you, indicator_emp,indicator_you;
-    LinearLayout emp_tab, you_tab;
+    LinearLayout week_tab, today_tab,month_tab,next_week_tab, tab_bar;
 
 
     @Override
@@ -52,15 +51,16 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
 
         bundle = getArguments();
 
-        txt_emp = (TextView) view.findViewById(R.id.txt_emp);
-        txt_you = (TextView) view.findViewById(R.id.txt_you);
-        indicator_emp = (TextView) view.findViewById(R.id.indicator_emp);
-        indicator_you = (TextView) view.findViewById(R.id.indicator_you);
-        emp_tab = (LinearLayout) view.findViewById(R.id.emp_tab);
-        you_tab = (LinearLayout) view.findViewById(R.id.you_tab);
+        tab_bar = (LinearLayout) view.findViewById(R.id.tab_bar);
+        week_tab = (LinearLayout) view.findViewById(R.id.week_tab);
+        today_tab = (LinearLayout) view.findViewById(R.id.today_tab);
+        next_week_tab = (LinearLayout) view.findViewById(R.id.next_week_tab);
+        month_tab = (LinearLayout) view.findViewById(R.id.month_tab);
 
-        emp_tab.setOnClickListener(this);
-        you_tab.setOnClickListener(this);
+        week_tab.setOnClickListener(this);
+        today_tab.setOnClickListener(this);
+        month_tab.setOnClickListener(this);
+        next_week_tab.setOnClickListener(this);
 
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
 
@@ -68,8 +68,7 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
         if (mViewPager != null) {
             mViewPager.setAdapter(mPagerAdapter);
             mViewPager.setCurrentItem(0);
-            indicator_you.setVisibility(View.VISIBLE);
-            txt_you.setTextColor(getResources().getColor(R.color.button_bg));
+            selectTab(tab_bar, 0);
         }
 
         onCustomSelected(mViewPager);
@@ -80,11 +79,17 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.emp_tab:
+            case R.id.week_tab:
+                mViewPager.setCurrentItem(0);
+                break;
+            case R.id.today_tab:
                 mViewPager.setCurrentItem(1);
                 break;
-            case R.id.you_tab:
-                mViewPager.setCurrentItem(0);
+            case R.id.next_week_tab:
+                mViewPager.setCurrentItem(2);
+                break;
+            case R.id.month_tab:
+                mViewPager.setCurrentItem(3);
                 break;
         }
     }
@@ -98,23 +103,7 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
             public void onPageSelected(int position) {
                 Toast.makeText(getActivity(),"Selected page position: " + position, Toast.LENGTH_SHORT).show();
 
-                switch(position){
-                    case 0:
-                        indicator_you.setVisibility(View.VISIBLE);
-                        indicator_emp.setVisibility(View.GONE);
-
-                        txt_you.setTextColor(getResources().getColor(R.color.button_bg));
-                        txt_emp.setTextColor(getResources().getColor(R.color.semi_transparent_black));
-                        break;
-                    case 1:
-                        indicator_emp.setVisibility(View.VISIBLE);
-                        indicator_you.setVisibility(View.GONE);
-
-                        txt_you.setTextColor(getResources().getColor(R.color.semi_transparent_black));
-                        txt_emp.setTextColor(getResources().getColor(R.color.button_bg));
-                        break;
-
-                }
+                selectTab(tab_bar, position);
             }
 
             // This method will be invoked when the current page is scrolled
@@ -153,25 +142,37 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
         }
     }
 
-
+    public void selectTab(LinearLayout tab_bar, int position){
+        int index = 0;
+        for(int i = 0; i < tab_bar.getChildCount(); i++){
+            if(tab_bar.getChildAt(i) instanceof LinearLayout){
+                LinearLayout child = (LinearLayout) tab_bar.getChildAt(i);
+                Log.d(TAG, "am here != position "+child.getChildAt(i));
+                TextView title = (TextView) child.getChildAt(0);
+                TextView indicator = (TextView) child.getChildAt(1);
+                if(position != index){
+                    indicator.setVisibility(View.GONE);
+                    title.setTextColor(getResources().getColor(R.color.semi_transparent_black));
+                }else{
+                    indicator.setVisibility(View.VISIBLE);
+                    title.setTextColor(getResources().getColor(R.color.button_bg));
+                }
+                index++;
+            }
+        }
+    }
 
     public class PagerAdapter extends FragmentStatePagerAdapter {
-
         public PagerAdapter(FragmentManager fm) {
             super(fm);
         }
-
         @Override
         public Fragment getItem(int position) {
-            Fragment fragment = null;
             Log.d(TAG, "position : "+position);
-
-            fragment = ScheduleListFragment.newInstance(position);
-
+            Fragment fragment = ScheduleListFragment.newInstance(position);
             fragment.setArguments(bundle);
             return fragment;
         }
-
         @Override
         public int getCount() {
             return 4;

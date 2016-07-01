@@ -1,20 +1,27 @@
 package com.tied.android.tiedapp.customs.model;
 
+import java.util.ArrayList;
+
 /**
  * Created by Emmanuel on 7/1/2016.
  */
 public class ScheduleDataModel {
 
     private String day;
-    private ScheduleTimeModel scheduleTimeModel;
+    private String week_day;
+    private ArrayList<ScheduleTimeModel> scheduleTimeModel;
     private String temperature;
     private String weather;
 
-    public ScheduleDataModel(String day, ScheduleTimeModel scheduleTimeModel, String weather, String temperature) {
+    public ScheduleDataModel(String day, String week_day, String temperature, String weather, ArrayList<ScheduleTimeModel> scheduleTimeModel) {
         this.day = day;
-        this.scheduleTimeModel = scheduleTimeModel;
-        this.weather = weather;
+        this.week_day = week_day;
         this.temperature = temperature;
+        this.weather = weather;
+        this.scheduleTimeModel = scheduleTimeModel;
+    }
+
+    public ScheduleDataModel() {
     }
 
     public String getDay() {
@@ -25,12 +32,12 @@ public class ScheduleDataModel {
         this.day = day;
     }
 
-    public ScheduleTimeModel getScheduleTimeModel() {
-        return scheduleTimeModel;
+    public String getWeek_day() {
+        return week_day;
     }
 
-    public void setScheduleTimeModel(ScheduleTimeModel scheduleTimeModel) {
-        this.scheduleTimeModel = scheduleTimeModel;
+    public void setWeek_day(String week_day) {
+        this.week_day = week_day;
     }
 
     public String getTemperature() {
@@ -49,10 +56,19 @@ public class ScheduleDataModel {
         this.weather = weather;
     }
 
+    public ArrayList<ScheduleTimeModel> getScheduleTimeModel() {
+        return scheduleTimeModel;
+    }
+
+    public void setScheduleTimeModel(ArrayList<ScheduleTimeModel> scheduleTimeModel) {
+        this.scheduleTimeModel = scheduleTimeModel;
+    }
+
     @Override
     public String toString() {
         return "ScheduleDataModel{" +
                 "day='" + day + '\'' +
+                ", week_day='" + week_day + '\'' +
                 ", scheduleTimeModel=" + scheduleTimeModel +
                 ", temperature='" + temperature + '\'' +
                 ", weather='" + weather + '\'' +

@@ -2,6 +2,8 @@ package com.tied.android.tiedapp.ui.adapters;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.Client;
 import com.tied.android.tiedapp.util.RoundImage;
@@ -77,7 +80,17 @@ public class ClientAdapter extends BaseAdapter {
 
         Picasso.with(_c).
                 load(data.getLogo())
-                .into(v.imageView);
+                .into(new Target() {
+                    @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        if (bitmap != null){
+                            v.imageView.setImageBitmap(bitmap);
+                        }else{
+                            v.imageView.setImageResource(R.mipmap.default_avatar);
+                        }
+                    }
+                    @Override public void onBitmapFailed(Drawable errorDrawable) { }
+                    @Override public void onPrepareLoad(Drawable placeHolderDrawable) { }
+                });
         view.setTag(data);
         return view;
     }

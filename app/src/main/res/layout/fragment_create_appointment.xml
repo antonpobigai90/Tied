@@ -276,7 +276,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:paddingLeft="4dp"
-                                    android:text="City"
+                                    android:text="Street"
                                     android:textColor="@color/accentColor"
                                     android:textSize="14sp" />
 
@@ -289,7 +289,7 @@
                                     android:maxLines="1"
                                     android:textColor="@color/schedule_title_bg_color"
                                     android:textSize="16sp"
-                                    android:text="Surulere" />
+                                    android:text="Eric Moore" />
 
                                 <View
                                     android:layout_width="match_parent"
@@ -309,7 +309,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:paddingLeft="4dp"
-                                    android:text="Zip"
+                                    android:text="City"
                                     android:textColor="@color/schedule_title_bg_color"
                                     android:textSize="14sp" />
 
@@ -319,7 +319,7 @@
                                     android:layout_height="wrap_content"
                                     android:backgroundTint="@android:color/transparent"
                                     android:maxLines="1"
-                                    android:text="10001"
+                                    android:text="Surulere"
                                     android:textColor="@color/schedule_title_bg_color"
                                     android:textSize="16sp" />
 
@@ -384,9 +384,10 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:paddingLeft="4dp"
-                                    android:text="FAX"
+                                    android:text="Zip"
                                     android:textColor="@color/accentColor"
-                                    android:textSize="14sp" />
+                                    android:textSize="14sp"
+                                    android:id="@+id/zip" />
 
                                 <EditText
                                     android:id="@+id/fax"
@@ -395,7 +396,7 @@
                                     android:backgroundTint="@android:color/transparent"
                                     android:inputType="text"
                                     android:maxLines="1"
-                                    android:text="534"
+                                    android:text="10001"
                                     android:textColor="@color/schedule_title_bg_color"
                                     android:textSize="16sp" />
 

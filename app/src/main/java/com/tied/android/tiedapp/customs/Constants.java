@@ -29,6 +29,10 @@ public class Constants {
     public static final String USER_CLIENTS = API_PATH + "users/me/clients";
     public static final String USER_GE0_CLIENTS = API_PATH + "users/me/clients/geo";
 
+    public static final String SCHEDULE = API_PATH + "schedules";
+    public static final String USER_SCHEDULE = API_PATH + "users/me/schedules";
+    public static final String USER_GE0_SCHEDULE = API_PATH + "users/me/schedules/geo";
+
     public static final String GET_INDUSTRIES = API_PATH + "config/industries";
 
     public static final String USER = "user";
@@ -96,6 +100,7 @@ public class Constants {
     public static final int ActivityFragment = 36;
     public static final int CreateAppointment = 37;
     public static final int Appointment = 38;
+    public static final int AppointmentList = 39;
 
     public static final int Profile = 40;
 
