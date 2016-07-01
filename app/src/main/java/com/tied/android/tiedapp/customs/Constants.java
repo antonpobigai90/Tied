@@ -91,9 +91,11 @@ public class Constants {
     public static final int ActivitySchedule = 31;
     public static final int HomeSchedule = 32;
     public static final int Schedules = 33;
-    public static final int TabActivities = 34;
-    public static final int AddScheduleActiity = 35;
-    public static final int ScheduleSuggestions = 36;
+    public static final int AddScheduleActivity = 34;
+    public static final int ScheduleSuggestions = 35;
+    public static final int ActivityFragment = 36;
+    public static final int CreateAppointment = 37;
+    public static final int Appointment = 38;
 
     public static final int Profile = 40;
 

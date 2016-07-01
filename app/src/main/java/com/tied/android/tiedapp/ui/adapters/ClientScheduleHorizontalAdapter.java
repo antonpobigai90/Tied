@@ -15,8 +15,9 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.Client;
-import com.tied.android.tiedapp.ui.activities.schedule.CreateApointmentActivity;
+import com.tied.android.tiedapp.ui.activities.schedule.CreateAppointmentActivity;
 import com.tied.android.tiedapp.util.RoundImage;
+import com.tied.android.tiedapp.util.ScheduleDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,11 +59,19 @@ public class ClientScheduleHorizontalAdapter extends RecyclerView.Adapter<Client
                 load(data.getLogo())
                 .into(viewHolder.pic);
 
+        viewHolder.menue_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ScheduleDialog alert = new ScheduleDialog();
+                alert.showDialog(activity);
+            }
+        });
+
         viewHolder.schedule.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(activity, "Position clicked: " + position, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(activity, CreateApointmentActivity.class);
+                Intent intent = new Intent(activity, CreateAppointmentActivity.class);
                 activity.startActivity(intent);
             }
         });

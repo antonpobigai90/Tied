@@ -11,10 +11,10 @@ import com.tied.android.tiedapp.R;
 /**
  * Created by Ratan on 7/29/2015.
  */
-public class PersonalFragment extends Fragment {
+public class YouFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_activity_personal,null);
+        return inflater.inflate(R.layout.fragment_you_timeline,null);
     }
 }

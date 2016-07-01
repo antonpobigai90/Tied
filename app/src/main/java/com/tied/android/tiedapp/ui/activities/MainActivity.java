@@ -25,7 +25,7 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
-import com.tied.android.tiedapp.ui.fragments.activities.EmployeesFragment;
+import com.tied.android.tiedapp.ui.fragments.activities.ActivityFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.AddressFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.AvatarProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.EditProfileFragment;
@@ -59,7 +59,7 @@ public class MainActivity extends FragmentActivity implements FragmentInteration
     public Fragment profileFragment = null;
     private int fragment_index = 0;
 
-    private LinearLayout tab_bar,relativeLayout,activity_layout, add_layout, more_layout;
+    private LinearLayout tab_bar,relativeLayout,activity_layout, add_layout, more_layout,tab_actvity_schedule;
 
     private TextView txt_schedules, txt_activities;
 
@@ -86,6 +86,8 @@ public class MainActivity extends FragmentActivity implements FragmentInteration
 
         relativeLayout = (LinearLayout) findViewById(R.id.linearLayout);
         tab_bar = (LinearLayout) findViewById(R.id.tab_bar);
+
+        tab_actvity_schedule = (LinearLayout) findViewById(R.id.tab_activity_schedule);
 
         more_layout = (LinearLayout) findViewById(R.id.more);
         activity_layout = (LinearLayout) findViewById(R.id.activity);
@@ -119,8 +121,7 @@ public class MainActivity extends FragmentActivity implements FragmentInteration
         if(user.isNewUser(getApplicationContext())){
             launchFragment(Constants.HomeSchedule, bundle);
         }else{
-//            launchFragment(Constants.CreateSchedule, bundle);
-            launchFragment(Constants.ScheduleSuggestions, bundle);
+            launchFragment(Constants.CreateSchedule, bundle);
         }
 
         retrofit = MainApplication.getInstance().getRetrofit();
@@ -131,11 +132,6 @@ public class MainActivity extends FragmentActivity implements FragmentInteration
         fragment_index = pos;
         fragment = null;
 
-        if(bundle == null){
-            bundle = this.bundle;
-        }
-
-
         more_layout.setBackground(null);
         activity_layout.setBackground(null);
         add_layout.setBackground(null);
@@ -143,6 +139,7 @@ public class MainActivity extends FragmentActivity implements FragmentInteration
 
         switch (pos) {
             case Constants.CreateSchedule:
+                tab_actvity_schedule.setBackgroundResource(R.mipmap.base_schedule);
                 activity_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
                 fragment = new CreateScheduleFragment();
                 break;
@@ -159,10 +156,7 @@ public class MainActivity extends FragmentActivity implements FragmentInteration
                 relativeLayout.setVisibility(View.GONE);
                 fragment = new ScheduleSuggestionFragment();
                 break;
-            case Constants.TabActivities:
-                fragment = new EmployeesFragment();
-                break;
-            case Constants.AddScheduleActiity:
+            case Constants.AddScheduleActivity:
                 add_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
                 relativeLayout.setVisibility(View.GONE);
                 fragment = new AddScheduleActivityFragment();
@@ -192,6 +186,10 @@ public class MainActivity extends FragmentActivity implements FragmentInteration
                 tab_bar.setVisibility(View.GONE);
                 more_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
                 fragment = new IndustryFragment();
+                break;
+            case Constants.ActivityFragment:
+                activity_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
+                fragment = new ActivityFragment();
                 break;
             default:
                 finish();
@@ -271,12 +269,14 @@ public class MainActivity extends FragmentActivity implements FragmentInteration
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.add:
-                launchFragment(Constants.AddScheduleActiity, bundle);
+                launchFragment(Constants.AddScheduleActivity, bundle);
                 break;
             case R.id.txt_activities:
-                launchFragment(Constants.TabActivities, bundle);
+                tab_actvity_schedule.setBackgroundResource(R.mipmap.base_activities);
+                launchFragment(Constants.ActivityFragment, bundle);
                 break;
             case R.id.txt_schedules:
+                tab_actvity_schedule.setBackgroundResource(R.mipmap.base_schedule);
                 launchFragment(Constants.CreateSchedule, bundle);
                 break;
             case R.id.more:
