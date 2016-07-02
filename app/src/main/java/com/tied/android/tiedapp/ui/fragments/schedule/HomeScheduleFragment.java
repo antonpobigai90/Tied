@@ -1,10 +1,13 @@
 package com.tied.android.tiedapp.ui.fragments.schedule;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +15,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.johnhiott.darkskyandroidlib.RequestBuilder;
+import com.johnhiott.darkskyandroidlib.models.DataPoint;
+import com.johnhiott.darkskyandroidlib.models.Request;
+import com.johnhiott.darkskyandroidlib.models.WeatherResponse;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
@@ -21,6 +29,10 @@ import com.tied.android.tiedapp.ui.listeners.FragmentInterationListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -35,7 +47,7 @@ public class HomeScheduleFragment extends Fragment implements View.OnClickListen
     private ImageView img_user_picture;
 
 
-    private TextView btn_got, date, greeting;
+    private TextView btn_got, date, greeting, temperature;
     private User user;
 
     private FragmentInterationListener fragmentInterationListener;
@@ -69,7 +81,7 @@ public class HomeScheduleFragment extends Fragment implements View.OnClickListen
 
     public void nextAction(int action, Bundle bundle) {
         if (fragmentInterationListener != null) {
-            fragmentInterationListener.OnFragmentInteractionListener(action,bundle);
+            fragmentInterationListener.OnFragmentInteractionListener(action, bundle);
         }
     }
 
@@ -78,6 +90,7 @@ public class HomeScheduleFragment extends Fragment implements View.OnClickListen
         bundle = getArguments();
 
         img_user_picture = (ImageView) view.findViewById(R.id.img_user_picture);
+        temperature = (TextView) view.findViewById(R.id.weather);
         btn_got = (TextView) view.findViewById(R.id.btn_got);
         greeting = (TextView) view.findViewById(R.id.greeting);
         date = (TextView) view.findViewById(R.id.date);
@@ -93,35 +106,105 @@ public class HomeScheduleFragment extends Fragment implements View.OnClickListen
         if (user.getAvatar_uri() != null) {
             Uri myUri = Uri.parse(user.getAvatar_uri());
             img_user_picture.setImageURI(myUri);
-        }else{
+        } else {
             Picasso.with(getActivity()).
-                    load(Constants.GET_AVATAR_ENDPOINT+"avatar_"+user.getId()+".jpg")
-                    .resize(35,35)
-                    .into(img_user_picture);
+                    load(Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg")
+                    .resize(35, 35)
+                    .into(new Target() {
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            if (bitmap != null) {
+                                img_user_picture.setImageBitmap(bitmap);
+                            } else {
+                                img_user_picture.setImageResource(R.mipmap.default_avatar);
+                            }
+                        }
+
+                        @Override
+                        public void onBitmapFailed(Drawable errorDrawable) {
+                        }
+
+                        @Override
+                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+                        }
+                    });
         }
 
         Calendar cal = Calendar.getInstance();
 
-        String greet = getTimeOfTheDay() +", "+user.getLast_name();
+        String greet = getTimeOfTheDay() + ", " + user.getLast_name();
         greeting.setText(greet);
 
         SimpleDateFormat format = new SimpleDateFormat("MMMM dd, yyyy");
-        String date_string = format.format(Date.parse(cal.getTime().toString()));
+        final String date_string = format.format(Date.parse(cal.getTime().toString()));
         date.setText(date_string);
+
+        final RequestBuilder weather = new RequestBuilder();
+
+        Request request = new Request();
+        request.setLat("32.00");
+        request.setLng("-81.00");
+        request.setUnits(Request.Units.US);
+        request.setLanguage(Request.Language.ENGLISH);
+        request.addExcludeBlock(Request.Block.CURRENTLY);
+
+        weather.getWeather(request, new Callback<WeatherResponse>() {
+            @Override
+            public void success(WeatherResponse weatherResponse, Response response) {
+                for(DataPoint dataPoint : weatherResponse.getDaily().getData()){
+                    Log.d(TAG, dataPoint.getIcon() +" -on- "+dataPoint.getSummary());
+                }
+                int temp_max = (int) weatherResponse.getDaily().getData().get(0).getApparentTemperatureMax();
+                int temp = (int) weatherResponse.getDaily().getData().get(0).getApparentTemperatureMax();
+                String icon = weatherResponse.getDaily().getData().get(0).getIcon();
+
+                Log.d(TAG, "temperature : "+weatherResponse.getDaily().getData().get(0).getTemperature()+"");
+
+                temperature.setText(temp_max+"°");
+            }
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                Log.d(TAG, "Error while calling: " + retrofitError.getUrl());
+            }
+        });
     }
 
-    private String getTimeOfTheDay(){
+    public void getWeatherIcon(String icon){
+        switch (icon){
+            case Constants.CLEAR_DAY:
+                break;
+            case Constants.CLEAR_NIGHT:
+                break;
+            case Constants.PARTLY_CLOUDY_DAY:
+                break;
+            case Constants.PARTLY_CLOUDY_NIGHT:
+                break;
+            case Constants.RAIN:
+                break;
+            case Constants.FOG:
+                break;
+            case Constants.SLEET:
+                break;
+            case Constants.SNOW:
+                break;
+            case Constants.WIND:
+                break;
+        }
+
+    }
+
+    private String getTimeOfTheDay() {
         String time_of_the_day = "";
         Calendar c = Calendar.getInstance();
         int timeOfDay = c.get(Calendar.HOUR_OF_DAY);
 
-        if(timeOfDay >= 0 && timeOfDay < 12){
+        if (timeOfDay >= 0 && timeOfDay < 12) {
             time_of_the_day = "Good Morning";
-        }else if(timeOfDay >= 12 && timeOfDay < 16){
-            time_of_the_day =  "Good Afternoon";
-        }else if(timeOfDay >= 16 && timeOfDay < 21){
-            time_of_the_day =  "Good Evening";
-        }else if(timeOfDay >= 21 && timeOfDay < 24){
+        } else if (timeOfDay >= 12 && timeOfDay < 16) {
+            time_of_the_day = "Good Afternoon";
+        } else if (timeOfDay >= 16 && timeOfDay < 21) {
+            time_of_the_day = "Good Evening";
+        } else if (timeOfDay >= 21 && timeOfDay < 24) {
             time_of_the_day = "Good Night";
         }
         return time_of_the_day;

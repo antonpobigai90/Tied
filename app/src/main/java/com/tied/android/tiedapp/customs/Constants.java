@@ -24,6 +24,15 @@ public class Constants {
     public static final String USER_UPDATE_INFO = API_PATH + "users/me";
     public static final String USER_CHANGE_PASSWORD = API_PATH + "users/changePassword";
 
+
+    public static final String CLIENTS = API_PATH + "clients";
+    public static final String USER_CLIENTS = API_PATH + "users/me/clients";
+    public static final String USER_GE0_CLIENTS = API_PATH + "users/me/clients/geo";
+
+    public static final String SCHEDULE = API_PATH + "schedules";
+    public static final String USER_SCHEDULE = API_PATH + "users/me/schedules";
+    public static final String USER_GE0_SCHEDULE = API_PATH + "users/me/schedules/geo";
+
     public static final String GET_INDUSTRIES = API_PATH + "config/industries";
 
     public static final String USER = "user";
@@ -86,13 +95,18 @@ public class Constants {
     public static final int ActivitySchedule = 31;
     public static final int HomeSchedule = 32;
     public static final int Schedules = 33;
-    public static final int TabActivities = 34;
-    public static final int AddScheduleActiity = 35;
+    public static final int AddScheduleActivity = 34;
+    public static final int ScheduleSuggestions = 35;
+    public static final int ActivityFragment = 36;
+    public static final int CreateAppointment = 37;
+    public static final int Appointment = 38;
+    public static final int AppointmentList = 39;
 
     public static final int Profile = 40;
 
     public static final int Lines = 50;
 
+    public static final int AddClient = 60;
 
 //    Profile Activity fragments indexes
     public static final int EditProfile = 101;
@@ -109,6 +123,18 @@ public class Constants {
     public static final int SUCCESS_RESULT = 0;
     public static final String RESULT_ADDRESS = "address";
     public static final String RESULT_DATA_KEY = "data_key";
+
+
+    public static final String RAIN = "rain";
+    public static final String CLEAR_DAY = "clear-day";
+    public static final String CLEAR_NIGHT = "clear-night";
+    public static final String SNOW = "snow";
+    public static final String SLEET = "sleet";
+    public static final String FOG = "fog";
+    public static final String WIND = "wind";
+    public static final String PARTLY_CLOUDY_DAY = "partly-cloudy-day";
+    public static final String PARTLY_CLOUDY_NIGHT = "partly-cloudy-night";
+
 
 
 

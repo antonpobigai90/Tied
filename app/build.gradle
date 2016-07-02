@@ -11,6 +11,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'io.fabric'
 
 repositories {
+    maven { url "https://jitpack.io" }
     maven { url 'https://maven.fabric.io/public' }
 }
 
@@ -62,7 +63,9 @@ dependencies {
     compile('com.crashlytics.sdk.android:crashlytics:2.5.6@aar') {
         transitive = true;
     }
+    compile 'com.android.support:recyclerview-v7:+'
     compile 'com.google.android.gms:play-services-gcm:8.4.0'
+    compile files('libs/org-apache-commons-lang.jar')
     compile 'com.google.android.gms:play-services-gcm:8.4.0'
     compile 'me.relex:circleindicator:1.2.1@aar'
     compile 'com.facebook.android:facebook-android-sdk:4.+'
@@ -81,5 +84,6 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.android.support:support-v13:23.4.0'
-    compile files('libs/org-apache-commons-lang.jar')
+
+    compile 'com.github.johnhiott:DarkSkyApi:v0.1.4'
 }

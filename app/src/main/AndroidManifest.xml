@@ -65,6 +65,7 @@
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
 
+
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
         </activity>
@@ -85,10 +86,10 @@
         </activity>
         <activity
             android:name=".ui.activities.MainActivity"
-            android:label="@string/title_activity_main" />
-        <activity android:name=".ui.activities.signups.InviteContactActivity">
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
-        </activity>
+        <activity android:name=".ui.activities.signups.InviteContactActivity"></activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -106,36 +107,30 @@
 
         <activity
             android:name=".ui.activities.HelpActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/title_activity_help" />
-        <activity
-            android:name=".ui.activities.ProfileActivity"
-            android:label="@string/title_activity_profile"
-            android:parentActivityName=".ui.activities.MainActivity"
-            />
-        <activity
-            android:name=".ui.activities.SwipeActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize">
-        </activity>
 
         <activity
-            android:name=".ui.activities.client.AddClientActivity"
+            android:name=".ui.activities.client.ClientActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".ui.activities.MainActivity"
-            android:windowSoftInputMode="adjustResize">
-        </activity>
-
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize"></activity>
         <activity
-            android:name=".ui.activities.ViewSchedule"
+            android:name=".ui.activities.schedule.ViewSchedule"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
-            <!--<intent-filter>-->
-            <!--<action android:name="android.intent.action.MAIN" />-->
 
-            <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+        </activity>
+        <activity
+            android:name=".ui.activities.client.SelectClientActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity
+            android:name=".ui.activities.schedule.CreateAppointmentActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 

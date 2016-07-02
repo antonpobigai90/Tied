@@ -18,9 +18,19 @@ public class Client implements Serializable {
     private String phone;
     private String email;
     private Location address;
+    private String birthday;
 
-    public Client(int user_id, int line_id, String full_name, String company,
-                  String logo, String description, String phone, String email, Location address) {
+    private int Industry_id;
+    private int visit_id;
+
+    int image;
+
+    public Client() {
+    }
+
+
+    public Client(int user_id, int line_id, String full_name, String company, String logo, String
+            description, String phone, String email, Location address, String birthday, int industry_id, int visit_id, int image) {
         this.user_id = user_id;
         this.line_id = line_id;
         this.full_name = full_name;
@@ -30,7 +40,12 @@ public class Client implements Serializable {
         this.phone = phone;
         this.email = email;
         this.address = address;
+        this.birthday = birthday;
+        Industry_id = industry_id;
+        this.visit_id = visit_id;
+        this.image = image;
     }
+
 
     public int getUser_id() {
         return user_id;
@@ -104,6 +119,39 @@ public class Client implements Serializable {
         this.address = address;
     }
 
+    //for dummy images
+    public int getImage() {
+        return image;
+    }
+
+    public void setImage(int image) {
+        this.image = image;
+    }
+
+    public int getIndustry_id() {
+        return Industry_id;
+    }
+
+    public void setIndustry_id(int industry_id) {
+        Industry_id = industry_id;
+    }
+
+    public int getVisit_id() {
+        return visit_id;
+    }
+
+    public void setVisit_id(int visit_id) {
+        this.visit_id = visit_id;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
     @Override
     public String toString() {
         return "Client{" +
@@ -116,7 +164,10 @@ public class Client implements Serializable {
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
                 ", address=" + address +
+                ", birthday='" + birthday + '\'' +
+                ", Industry_id=" + Industry_id +
+                ", visit_id=" + visit_id +
+                ", image=" + image +
                 '}';
     }
-
 }

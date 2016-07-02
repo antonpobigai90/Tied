@@ -16,8 +16,8 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
-import com.tied.android.tiedapp.objects.auth.ServerRes;
+import com.tied.android.tiedapp.retrofits.services.SignUpApi;
+import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
@@ -73,7 +73,7 @@ public class AddBossNowFragment extends Fragment implements View.OnClickListener
         bundle = getArguments();
         if (bundle != null) {
             Gson gson = new Gson();
-            String user_json = bundle.getString("user");
+            String user_json = bundle.getString(Constants.USER);
             User user = gson.fromJson(user_json, User.class);
             ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
         }

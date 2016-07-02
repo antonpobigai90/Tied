@@ -24,10 +24,9 @@ import com.squareup.picasso.Picasso;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
+import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.HelpActivity;
-import com.tied.android.tiedapp.ui.activities.ProfileActivity;
 import com.tied.android.tiedapp.ui.fragments.signups.AddBossFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.AddBossNowFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.AddInviteFragment;
@@ -188,10 +187,12 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
             }
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.setCustomAnimations(R.anim.fragment_slide_left_enter, R.anim.fragment_slide_right_exit)
-                    .replace(R.id.fragment_container, fragment)
-                    .addToBackStack(fragment.getClass().getSimpleName())
-                    .commit();
+            if(getSupportFragmentManager().getBackStackEntryCount() == 0)
+                ft.add(R.id.fragment_container, fragment);
+            else
+                ft.replace(R.id.fragment_container, fragment);
+            ft.addToBackStack(fragment.getClass().getSimpleName())
+            .commit();
         }
     }
 
@@ -314,12 +315,6 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
 
     public void helpButtonClicked(View v){
         Intent invite_intent = new Intent(this, HelpActivity.class);
-        startActivity(invite_intent);
-    }
-
-
-    public void profileButtonClicked(View v){
-        Intent invite_intent = new Intent(this, ProfileActivity.class);
         startActivity(invite_intent);
     }
 }
