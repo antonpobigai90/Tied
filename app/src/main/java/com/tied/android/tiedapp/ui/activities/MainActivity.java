@@ -119,7 +119,7 @@ public class MainActivity extends FragmentActivity implements FragmentInteration
         Gson gson = new Gson();
         String user_json = gson.toJson(user);
         bundle.putString(Constants.USER, user_json);
-        if(user.isNewUser(getApplicationContext())){
+        if(!user.isNewUser(getApplicationContext())){
             launchFragment(Constants.HomeSchedule, bundle);
         }else{
 //            launchFragment(Constants.CreateSchedule, bundle);

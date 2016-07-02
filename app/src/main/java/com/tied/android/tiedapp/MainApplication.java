@@ -8,6 +8,7 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
+import com.johnhiott.darkskyandroidlib.ForecastApi;
 import com.tied.android.tiedapp.customs.Constants;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
@@ -35,6 +36,8 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        ForecastApi.create("c6b01fe1df9d21e3f3c55a48243781f1");
 
         TwitterAuthConfig authConfig = new TwitterAuthConfig(Constants.TWITTER_API_KEY, Constants.TWITTER_API_SECRET);
         Fabric.with(this, new TwitterCore(authConfig));
