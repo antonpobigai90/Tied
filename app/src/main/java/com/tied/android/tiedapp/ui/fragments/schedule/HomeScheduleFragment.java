@@ -214,7 +214,7 @@ public class HomeScheduleFragment extends Fragment implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_got:
-                nextAction(Constants.Schedules, bundle);
+                nextAction(Constants.AppointmentList, bundle);
                 break;
         }
     }

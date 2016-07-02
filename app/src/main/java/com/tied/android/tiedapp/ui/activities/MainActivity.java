@@ -196,6 +196,7 @@ public class MainActivity extends FragmentActivity implements FragmentInteration
             case Constants.AppointmentList:
                 activity_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
                 fragment = new ScheduleTimeLineFragment();
+                tab_bar.setVisibility(View.VISIBLE);
                 break;
             default:
                 finish();
