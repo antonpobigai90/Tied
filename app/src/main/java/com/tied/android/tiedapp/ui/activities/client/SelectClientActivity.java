@@ -22,10 +22,10 @@ import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.fragments.client.SelectClientDistanceFragment;
 import com.tied.android.tiedapp.ui.fragments.client.SelectClientListFragment;
 import com.tied.android.tiedapp.ui.fragments.client.SelectClientMapFragment;
-import com.tied.android.tiedapp.ui.listeners.FragmentInterationListener;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.DemoData;
 
-public class SelectClientActivity extends AppCompatActivity implements FragmentInterationListener, View.OnClickListener{
+public class SelectClientActivity extends AppCompatActivity implements FragmentIterationListener, View.OnClickListener{
 
     public static final String TAG = SelectClientActivity.class
             .getSimpleName();

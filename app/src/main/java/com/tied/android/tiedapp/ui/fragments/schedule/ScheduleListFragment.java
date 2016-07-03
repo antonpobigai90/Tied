@@ -27,7 +27,7 @@ import com.tied.android.tiedapp.objects.responses.ScheduleRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
 import com.tied.android.tiedapp.ui.adapters.ScheduleListAdapter;
-import com.tied.android.tiedapp.ui.listeners.FragmentInterationListener;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.DialogUtils;
 
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class ScheduleListFragment extends Fragment
     public static final String TAG = ScheduleListFragment.class
             .getSimpleName();
 
-    public FragmentInterationListener mListener;
+    public FragmentIterationListener mListener;
 
 
     private ArrayList<ScheduleDataModel> schedules;
@@ -211,7 +211,7 @@ public class ScheduleListFragment extends Fragment
             do {
                 Schedule schedule = new Schedule();
                 schedule.setId(c.getString((c.getColumnIndex(ScheduleTable.KEY_ID))));
-                schedule.setUser_id(c.getInt((c.getColumnIndex(ScheduleTable.KEY_USER_ID))));
+                schedule.setUser_id(c.getString((c.getColumnIndex(ScheduleTable.KEY_USER_ID))));
                 schedule.setClient_id(c.getString((c.getColumnIndex(ScheduleTable.KEY_CLIENT_ID))));
                 schedule.setTitle(c.getString((c.getColumnIndex(ScheduleTable.KEY_TITLE))));
                 schedule.setDate(c.getString((c.getColumnIndex(ScheduleTable.KEY_DATE))));
@@ -230,8 +230,8 @@ public class ScheduleListFragment extends Fragment
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof FragmentInterationListener) {
-            mListener = (FragmentInterationListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");

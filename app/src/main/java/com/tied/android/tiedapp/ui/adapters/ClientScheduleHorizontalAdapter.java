@@ -12,11 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.tied.android.tiedapp.R;
+import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Client;
 import com.tied.android.tiedapp.ui.activities.schedule.CreateAppointmentActivity;
 import com.tied.android.tiedapp.util.RoundImage;
@@ -72,28 +72,39 @@ public class ClientScheduleHorizontalAdapter extends RecyclerView.Adapter<Client
                     @Override public void onPrepareLoad(Drawable placeHolderDrawable) { }
                 });
 
-        viewHolder.menue_icon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ScheduleDialog alert = new ScheduleDialog();
-                alert.showDialog(activity);
-            }
-        });
-
-        viewHolder.schedule.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(activity, "Position clicked: " + position, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(activity, CreateAppointmentActivity.class);
-                activity.startActivity(intent);
-            }
-        });
+        MyListener myListener = new MyListener(data);
+        viewHolder.schedule.setOnClickListener(myListener);
+        viewHolder.menue_icon.setOnClickListener(myListener);
     }
 
     @Override
     public int getItemCount() {
         return (null != _data ? _data.size() : 0);
     }
+
+
+    private class MyListener implements View.OnClickListener{
+        private Client client;
+        public MyListener(Client client){
+            this.client = client;
+        }
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.schedule:
+                    Intent intent = new Intent(activity, CreateAppointmentActivity.class);
+                    intent.putExtra(Constants.CLIENT, client);
+                    activity.startActivity(intent);
+                    break;
+                case R.id.menu_icon:
+                    ScheduleDialog alert = new ScheduleDialog();
+                    alert.showDialog(client, activity);
+                    break;
+            }
+        }
+    }
+
+
 
     /**
      * View holder to display each RecylerView item

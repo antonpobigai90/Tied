@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.listeners.FragmentInterationListener;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.DemoData;
 
 public class ActivityFragment extends Fragment implements View.OnClickListener {
@@ -29,7 +29,7 @@ public class ActivityFragment extends Fragment implements View.OnClickListener {
     private Bundle bundle;
     private User user;
 
-    public FragmentInterationListener mListener;
+    public FragmentIterationListener mListener;
     LinearLayout emp_tab, you_tab, tab_bar;
 
     @Override
@@ -128,8 +128,8 @@ public class ActivityFragment extends Fragment implements View.OnClickListener {
         if(mPagerAdapter == null){
             mPagerAdapter = new PagerAdapter(getFragmentManager());
         }
-        if (context instanceof FragmentInterationListener) {
-            mListener = (FragmentInterationListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");

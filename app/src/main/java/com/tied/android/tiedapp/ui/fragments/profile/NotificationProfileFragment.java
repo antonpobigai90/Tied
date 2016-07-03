@@ -10,14 +10,14 @@ import android.widget.ImageView;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.ui.listeners.FragmentInterationListener;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 
 /**
  * Created by Emmanuel on 6/22/2016.
  */
 public class NotificationProfileFragment extends Fragment implements View.OnClickListener{
 
-    public FragmentInterationListener mListener;
+    public FragmentIterationListener mListener;
 
     private Bundle bundle;
     private ImageView img_close;
@@ -38,8 +38,8 @@ public class NotificationProfileFragment extends Fragment implements View.OnClic
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof FragmentInterationListener) {
-            mListener = (FragmentInterationListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");

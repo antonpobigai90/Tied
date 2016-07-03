@@ -21,7 +21,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="15dp"
-        android:src="@mipmap/avatar_profile" />
+        android:src="@mipmap/default_avatar" />
 
     <TextView
         android:id="@+id/name"

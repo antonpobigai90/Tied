@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
+import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Client;
 import com.tied.android.tiedapp.objects.ClientLocation;
 import com.tied.android.tiedapp.objects.Coordinate;
@@ -29,7 +30,7 @@ import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.ui.activities.schedule.CreateAppointmentActivity;
 import com.tied.android.tiedapp.ui.adapters.ClientAdapter;
-import com.tied.android.tiedapp.ui.listeners.FragmentInterationListener;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.DialogUtils;
 
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class SelectClientListFragment extends Fragment
     public static final String TAG = SelectClientListFragment.class
             .getSimpleName();
 
-    public FragmentInterationListener mListener;
+    public FragmentIterationListener mListener;
 
 
     private ArrayList<Client> clients;
@@ -134,6 +135,7 @@ public class SelectClientListFragment extends Fragment
         Log.d("SelectContact", data.toString());
 
         Intent intent = new Intent(getActivity(), CreateAppointmentActivity.class);
+        intent.putExtra(Constants.CLIENT, data);
         startActivity(intent);
     }
 
@@ -175,8 +177,8 @@ public class SelectClientListFragment extends Fragment
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof FragmentInterationListener) {
-            mListener = (FragmentInterationListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");

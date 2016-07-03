@@ -27,7 +27,7 @@ public class ScheduleTable {
     // Database creation sql statement
     public static final String CREATE_TABLE_SCHEDULES = "CREATE TABLE " + TABLE_SCHEDULE
             + "(" + KEY_ID + " TEXT PRIMARY KEY,"
-            + KEY_USER_ID + " INTEGER,"
+            + KEY_USER_ID + " TEXT,"
             + KEY_CLIENT_ID + " TEXT,"
             + KEY_TITLE + " TEXT,"
             + KEY_REMINDER + " INTEGER,"

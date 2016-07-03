@@ -11,17 +11,20 @@ import android.view.View;
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.objects.Client;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.fragments.DatePickerFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.AppointmentCalendarFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.CreateAppointmentFragment;
-import com.tied.android.tiedapp.ui.listeners.FragmentInterationListener;
+import com.tied.android.tiedapp.ui.fragments.schedule.CreateScheduleFragment;
+import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleSuggestionFragment;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 
 
 /**
  * Created by Daniel on 5/3/2016.
  */
-public class CreateAppointmentActivity extends FragmentActivity implements FragmentInterationListener{
+public class CreateAppointmentActivity extends FragmentActivity implements FragmentIterationListener {
     public static final String TAG = CreateAppointmentFragment.class
             .getSimpleName();
 
@@ -38,10 +41,14 @@ public class CreateAppointmentActivity extends FragmentActivity implements Fragm
         setContentView(R.layout.activity_fragment_container);
 
         user = User.getUser(getApplicationContext());
+        Client client = (Client) getIntent().getSerializableExtra(Constants.CLIENT);
         bundle = new Bundle();
         Gson gson = new Gson();
         String user_json = gson.toJson(user);
+        String client_json = gson.toJson(client);
+
         bundle.putString(Constants.USER, user_json);
+        bundle.putString(Constants.CLIENT, client_json);
         launchFragment(Constants.CreateAppointment, bundle);
     }
 
@@ -71,8 +78,14 @@ public class CreateAppointmentActivity extends FragmentActivity implements Fragm
             case Constants.CreateAppointment:
                 fragment = new CreateAppointmentFragment();
                 break;
-            case Constants.Appointment:
+            case Constants.CreateSchedule:
+                fragment = new CreateScheduleFragment();
+                break;
+            case Constants.AppointmentCalendar:
                 fragment = new AppointmentCalendarFragment();
+                break;
+            case Constants.ScheduleSuggestions:
+                fragment = new ScheduleSuggestionFragment();
                 break;
             default:
                 finish();

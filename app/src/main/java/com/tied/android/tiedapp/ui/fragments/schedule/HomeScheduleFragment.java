@@ -24,7 +24,8 @@ import com.squareup.picasso.Target;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.listeners.FragmentInterationListener;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.util.HelperMethods;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -46,11 +47,10 @@ public class HomeScheduleFragment extends Fragment implements View.OnClickListen
 
     private ImageView img_user_picture;
 
-
     private TextView btn_got, date, greeting, temperature;
     private User user;
 
-    private FragmentInterationListener fragmentInterationListener;
+    private FragmentIterationListener fragmentIterationListener;
 
     public HomeScheduleFragment() {
     }
@@ -71,8 +71,8 @@ public class HomeScheduleFragment extends Fragment implements View.OnClickListen
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof FragmentInterationListener) {
-            fragmentInterationListener = (FragmentInterationListener) context;
+        if (context instanceof FragmentIterationListener) {
+            fragmentIterationListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -80,8 +80,8 @@ public class HomeScheduleFragment extends Fragment implements View.OnClickListen
     }
 
     public void nextAction(int action, Bundle bundle) {
-        if (fragmentInterationListener != null) {
-            fragmentInterationListener.OnFragmentInteractionListener(action, bundle);
+        if (fragmentIterationListener != null) {
+            fragmentIterationListener.OnFragmentInteractionListener(action, bundle);
         }
     }
 
@@ -159,7 +159,7 @@ public class HomeScheduleFragment extends Fragment implements View.OnClickListen
                 String icon = weatherResponse.getDaily().getData().get(0).getIcon();
 
                 Log.d(TAG, "temperature : "+weatherResponse.getDaily().getData().get(0).getTemperature()+"");
-
+                temp_max = (int) HelperMethods.convertFahrenheitToCelcius(temp_max);
                 temperature.setText(temp_max+"°");
             }
             @Override
@@ -190,7 +190,6 @@ public class HomeScheduleFragment extends Fragment implements View.OnClickListen
             case Constants.WIND:
                 break;
         }
-
     }
 
     private String getTimeOfTheDay() {
@@ -214,7 +213,7 @@ public class HomeScheduleFragment extends Fragment implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_got:
-                nextAction(Constants.Schedules, bundle);
+                nextAction(Constants.AppointmentList, bundle);
                 break;
         }
     }

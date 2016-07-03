@@ -80,10 +80,10 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="7dp"
                     android:layout_toRightOf="@+id/tick"
-                    android:src="@mipmap/avatar_profile" />
+                    android:src="@mipmap/default_avatar" />
 
                 <TextView
-                    android:id="@+id/name_line"
+                    android:id="@+id/company_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"

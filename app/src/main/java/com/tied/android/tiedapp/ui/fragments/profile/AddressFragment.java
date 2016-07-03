@@ -23,7 +23,7 @@ import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
-import com.tied.android.tiedapp.ui.listeners.FragmentInterationListener;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.DialogUtils;
 
 import org.json.JSONObject;
@@ -45,7 +45,7 @@ public class AddressFragment extends Fragment implements View.OnClickListener{
     public static final String TAG = AddressFragment.class
             .getSimpleName();
 
-    public FragmentInterationListener mListener;
+    public FragmentIterationListener mListener;
 
     private EditText office_zip, office_street, office_city, home_zip, home_street, home_city;
     private String office_zipName, office_streetName, office_cityName, home_zipName, home_streetName, home_cityName;
@@ -120,8 +120,8 @@ public class AddressFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof FragmentInterationListener) {
-            mListener = (FragmentInterationListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");

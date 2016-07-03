@@ -28,7 +28,7 @@ import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
-import com.tied.android.tiedapp.ui.listeners.FragmentInterationListener;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.DialogUtils;
 
 import java.util.ArrayList;
@@ -57,7 +57,7 @@ public class IndustryFragment extends Fragment implements View.OnClickListener {
     private boolean editProfile;
     private TextView txt_hint_string, txt_signup_label;
 
-    private FragmentInterationListener mListener;
+    private FragmentIterationListener mListener;
 
     ArrayList<String> industries = new ArrayList<String>();
     private RelativeLayout top_layout;
@@ -86,8 +86,8 @@ public class IndustryFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof FragmentInterationListener) {
-            mListener = (FragmentInterationListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");

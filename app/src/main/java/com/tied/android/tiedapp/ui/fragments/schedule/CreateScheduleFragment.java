@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.ui.activities.client.SelectClientActivity;
-import com.tied.android.tiedapp.ui.listeners.FragmentInterationListener;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -26,7 +26,7 @@ public class CreateScheduleFragment extends Fragment implements View.OnClickList
 
     private TextView txt_create_schedule;
 
-    private FragmentInterationListener fragmentInterationListener;
+    private FragmentIterationListener fragmentIterationListener;
 
     public CreateScheduleFragment() {
     }
@@ -45,8 +45,8 @@ public class CreateScheduleFragment extends Fragment implements View.OnClickList
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof FragmentInterationListener) {
-            fragmentInterationListener = (FragmentInterationListener) context;
+        if (context instanceof FragmentIterationListener) {
+            fragmentIterationListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -54,8 +54,8 @@ public class CreateScheduleFragment extends Fragment implements View.OnClickList
     }
 
     public void nextAction(int action, Bundle bundle) {
-        if (fragmentInterationListener != null) {
-            fragmentInterationListener.OnFragmentInteractionListener(action,bundle);
+        if (fragmentIterationListener != null) {
+            fragmentIterationListener.OnFragmentInteractionListener(action,bundle);
         }
     }
 

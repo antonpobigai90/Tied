@@ -9,14 +9,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
-import com.tied.android.tiedapp.ui.listeners.FragmentInterationListener;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 
 /**
  * Created by Emmanuel on 6/30/2016.
  */
 public class SelectClientDistanceFragment extends Fragment implements View.OnClickListener{
 
-    public FragmentInterationListener mListener;
+    public FragmentIterationListener mListener;
     private TextView txt_distance;
 
     @Override
@@ -44,8 +44,8 @@ public class SelectClientDistanceFragment extends Fragment implements View.OnCli
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof FragmentInterationListener) {
-            mListener = (FragmentInterationListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");

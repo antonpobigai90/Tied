@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.fragments.activities.ActivityFragment;
-import com.tied.android.tiedapp.ui.listeners.FragmentInterationListener;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 
 /**
  * Created by Emmanuel on 7/1/2016.
@@ -32,7 +32,7 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
     private Bundle bundle;
     private User user;
 
-    public FragmentInterationListener mListener;
+    public FragmentIterationListener mListener;
 
     LinearLayout week_tab, today_tab,month_tab,next_week_tab, tab_bar;
 
@@ -128,8 +128,8 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
         if(mPagerAdapter == null){
             mPagerAdapter = new PagerAdapter(getFragmentManager());
         }
-        if (context instanceof FragmentInterationListener) {
-            mListener = (FragmentInterationListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");

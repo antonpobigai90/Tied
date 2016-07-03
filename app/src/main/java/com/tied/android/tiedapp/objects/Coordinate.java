@@ -1,9 +1,11 @@
 package com.tied.android.tiedapp.objects;
 
+import java.io.Serializable;
+
 /**
  * Created by Emmanuel on 6/28/2016.
  */
-public class Coordinate {
+public class Coordinate implements Serializable {
     private double lat;
     private double lon;
 

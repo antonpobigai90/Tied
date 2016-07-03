@@ -23,6 +23,11 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
         <item name="android:textViewStyle">@style/RobotoTextViewStyle</item>
         <!--<item name="android:calendarViewStyle">@style/Widget.CalendarView.Custom</item>-->
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+
     </style>
 
     <style name="TextAppearence.App.TextInputLayout" parent="@android:style/TextAppearance">

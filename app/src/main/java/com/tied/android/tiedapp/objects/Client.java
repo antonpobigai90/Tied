@@ -9,8 +9,9 @@ public class Client implements Serializable {
 
     public static final String TAG = Client.class.getSimpleName();
 
-    private int user_id;
-    private int line_id;
+    private String id;
+    private String user_id;
+    private String line_id;
     private String full_name;
     private String company;
     private String logo;
@@ -28,38 +29,27 @@ public class Client implements Serializable {
     public Client() {
     }
 
-
-    public Client(int user_id, int line_id, String full_name, String company, String logo, String
-            description, String phone, String email, Location address, String birthday, int industry_id, int visit_id, int image) {
-        this.user_id = user_id;
-        this.line_id = line_id;
-        this.full_name = full_name;
-        this.company = company;
-        this.logo = logo;
-        this.description = description;
-        this.phone = phone;
-        this.email = email;
-        this.address = address;
-        this.birthday = birthday;
-        Industry_id = industry_id;
-        this.visit_id = visit_id;
-        this.image = image;
+    public String getId() {
+        return id;
     }
 
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    public int getUser_id() {
+    public String getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(int user_id) {
+    public void setUser_id(String user_id) {
         this.user_id = user_id;
     }
 
-    public int getLine_id() {
+    public String getLine_id() {
         return line_id;
     }
 
-    public void setLine_id(int line_id) {
+    public void setLine_id(String line_id) {
         this.line_id = line_id;
     }
 
@@ -155,8 +145,9 @@ public class Client implements Serializable {
     @Override
     public String toString() {
         return "Client{" +
-                "user_id=" + user_id +
-                ", line_id=" + line_id +
+                "id='" + id + '\'' +
+                ", user_id='" + user_id + '\'' +
+                ", line_id='" + line_id + '\'' +
                 ", full_name='" + full_name + '\'' +
                 ", company='" + company + '\'' +
                 ", logo='" + logo + '\'' +

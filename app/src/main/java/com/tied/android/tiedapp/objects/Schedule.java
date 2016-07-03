@@ -8,9 +8,10 @@ import java.io.Serializable;
 public class Schedule implements Serializable{
 
     private String id;
-    private int user_id;
+    private String user_id;
     private String client_id;
     private String title;
+    private String description;
     private int reminder;
     private boolean visited;
     private String date;
@@ -21,20 +22,6 @@ public class Schedule implements Serializable{
     public Schedule() {
     }
 
-    public Schedule(String id, int user_id, String client_id, String title, int reminder,
-                    boolean visited, String date, String start_time, String end_time, Location location) {
-        this.id = id;
-        this.user_id = user_id;
-        this.client_id = client_id;
-        this.title = title;
-        this.reminder = reminder;
-        this.visited = visited;
-        this.date = date;
-        this.start_time = start_time;
-        this.end_time = end_time;
-        this.location = location;
-    }
-
     public String getId() {
         return id;
     }
@@ -43,11 +30,11 @@ public class Schedule implements Serializable{
         this.id = id;
     }
 
-    public int getUser_id() {
+    public String getUser_id() {
         return user_id;
     }
 
-    public void setUser_id(int user_id) {
+    public void setUser_id(String user_id) {
         this.user_id = user_id;
     }
 
@@ -115,14 +102,22 @@ public class Schedule implements Serializable{
         this.location = location;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
     @Override
     public String toString() {
         return "Schedule{" +
                 "id='" + id + '\'' +
-                ", user_id=" + user_id +
+                ", user_id='" + user_id + '\'' +
                 ", client_id='" + client_id + '\'' +
                 ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
                 ", reminder=" + reminder +
                 ", visited=" + visited +
                 ", date='" + date + '\'' +

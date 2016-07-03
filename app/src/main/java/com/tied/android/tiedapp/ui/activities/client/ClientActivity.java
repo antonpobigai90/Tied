@@ -21,7 +21,7 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.fragments.client.AddClientFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.TerritoryFragment;
-import com.tied.android.tiedapp.ui.listeners.FragmentInterationListener;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +29,7 @@ import java.io.IOException;
 /**
  * Created by Daniel on 5/3/2016.
  */
-public class ClientActivity extends FragmentActivity implements View.OnClickListener, FragmentInterationListener {
+public class ClientActivity extends FragmentActivity implements View.OnClickListener, FragmentIterationListener {
 
     public static final String TAG = ClientActivity.class
             .getSimpleName();

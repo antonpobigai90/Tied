@@ -59,31 +59,31 @@
                         android:layout_height="wrap_content">
 
                         <RelativeLayout
-                            android:layout_width="100dp"
+                            android:layout_width="120dp"
                             android:layout_height="70dp"
                             android:layout_alignParentRight="true"
                             android:id="@+id/right_layout">
 
-                            <ImageView
-                                android:layout_width="50dp"
+                            <de.hdodenhof.circleimageview.CircleImageView
+                                android:layout_width="match_parent"
+                                android:layout_gravity="center"
                                 android:layout_height="60dp"
                                 android:id="@+id/img_avatar_schedule"
-                                android:src="@mipmap/avatar_schedule"
-                                android:layout_alignParentRight="true"
-                                android:layout_alignParentBottom="false"
+                                android:src="@mipmap/default_avatar"
                                 android:layout_above="@+id/txt_creative_co_op"
                                 android:layout_marginBottom="4dp" />
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Creative Co-op"
-                                android:textSize="14sp"
+                                android:text="Company name"
+                                android:textSize="11sp"
+                                android:textAlignment="center"
                                 android:id="@+id/txt_creative_co_op"
-                                android:layout_alignParentRight="true"
                                 android:layout_alignParentBottom="true"
                                 android:textColor="@color/schedule_title_bg_color"
-                                android:layout_marginBottom="4dp" />
+                                android:layout_marginBottom="4dp"
+                                android:layout_gravity="center" />
                         </RelativeLayout>
 
                         <LinearLayout
@@ -193,8 +193,8 @@
                             <EditText
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Tuesday, Februray 16, 2016"
                                 android:id="@+id/date"
+                                android:enabled="false"
                                 android:backgroundTint="@android:color/transparent"
                                 android:textColor="@color/schedule_title_bg_color"
                                 android:textSize="16sp"/>
@@ -235,12 +235,12 @@
                                 android:textColor="@color/accentColor"
                                 android:textSize="14sp" />
 
-                            <EditText
+                            <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="9:00 AM - 12:00 PM"
                                 android:backgroundTint="@android:color/transparent"
                                 android:id="@+id/time"
+                                android:textStyle="bold"
                                 android:textColor="@color/schedule_title_bg_color"
                                 android:textSize="16sp" />
                         </LinearLayout>
@@ -281,15 +281,14 @@
                                     android:textSize="14sp" />
 
                                 <EditText
-                                    android:id="@+id/city"
+                                    android:id="@+id/street"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:backgroundTint="@android:color/transparent"
                                     android:inputType="text"
                                     android:maxLines="1"
                                     android:textColor="@color/schedule_title_bg_color"
-                                    android:textSize="16sp"
-                                    android:text="Eric Moore" />
+                                    android:textSize="16sp" />
 
                                 <View
                                     android:layout_width="match_parent"
@@ -314,12 +313,11 @@
                                     android:textSize="14sp" />
 
                                 <EditText
-                                    android:id="@+id/zip"
+                                    android:id="@+id/city"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:backgroundTint="@android:color/transparent"
                                     android:maxLines="1"
-                                    android:text="Surulere"
                                     android:textColor="@color/schedule_title_bg_color"
                                     android:textSize="16sp" />
 
@@ -362,7 +360,6 @@
                                     android:layout_height="wrap_content"
                                     android:backgroundTint="@android:color/transparent"
                                     android:maxLines="1"
-                                    android:text="Lagos"
                                     android:textColor="@color/schedule_title_bg_color"
                                     android:textSize="16sp" />
 
@@ -386,17 +383,15 @@
                                     android:paddingLeft="4dp"
                                     android:text="Zip"
                                     android:textColor="@color/accentColor"
-                                    android:textSize="14sp"
-                                    android:id="@+id/zip" />
+                                    android:textSize="14sp" />
 
                                 <EditText
-                                    android:id="@+id/fax"
+                                    android:id="@+id/zip"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:backgroundTint="@android:color/transparent"
                                     android:inputType="text"
                                     android:maxLines="1"
-                                    android:text="10001"
                                     android:textColor="@color/schedule_title_bg_color"
                                     android:textSize="16sp" />
 

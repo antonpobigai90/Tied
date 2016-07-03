@@ -14,6 +14,6 @@ public class TestActivity extends AppCompatActivity {
         setContentView(R.layout.fragment_create_line);
 
         ScheduleDialog alert = new ScheduleDialog();
-        alert.showDialog(this);
+        alert.showDialog(null,this);
     }
 }

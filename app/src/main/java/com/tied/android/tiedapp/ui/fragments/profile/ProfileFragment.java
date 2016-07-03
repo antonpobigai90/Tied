@@ -21,7 +21,7 @@ import android.widget.RelativeLayout;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
-import com.tied.android.tiedapp.ui.listeners.FragmentInterationListener;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.DemoData;
 
 import me.relex.circleindicator.CircleIndicator;
@@ -39,7 +39,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     private LinearLayout back_layout;
     private RelativeLayout notification;
 
-    public FragmentInterationListener mListener;
+    public FragmentIterationListener mListener;
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -87,8 +87,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
         if(mPagerAdapter == null){
             mPagerAdapter = new PagerAdapter(getFragmentManager());
         }
-        if (context instanceof FragmentInterationListener) {
-            mListener = (FragmentInterationListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");

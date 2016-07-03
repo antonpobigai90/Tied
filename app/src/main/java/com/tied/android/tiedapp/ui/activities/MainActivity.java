@@ -3,6 +3,7 @@ package com.tied.android.tiedapp.ui.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -19,11 +20,12 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.soundcloud.android.crop.Crop;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.fragments.activities.ActivityFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.AddressFragment;
@@ -38,7 +40,8 @@ import com.tied.android.tiedapp.ui.fragments.schedule.HomeScheduleFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleSuggestionFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleTimeLineFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.IndustryFragment;
-import com.tied.android.tiedapp.ui.listeners.FragmentInterationListener;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.ui.listeners.ImageReadyForUploadListener;
 
 import java.io.File;
 import java.io.IOException;
@@ -49,12 +52,13 @@ import retrofit2.Retrofit;
 /**
  * Created by Daniel on 5/3/2016.
  */
-public class MainActivity extends FragmentActivity implements FragmentInterationListener, View.OnClickListener{
+public class MainActivity extends FragmentActivity implements FragmentIterationListener, View.OnClickListener{
 
     public static final String TAG = SignUpActivity.class
             .getSimpleName();
 
     public ImageView img_user_picture, add;
+    private ImageReadyForUploadListener imageReadyForUploadListener;
 
     private Fragment fragment = null;
     public Fragment profileFragment = null;
@@ -106,24 +110,34 @@ public class MainActivity extends FragmentActivity implements FragmentInteration
 
         img_user_picture = (ImageView) findViewById(R.id.img_user_picture);
         user = User.getUser(getApplicationContext());
-        if (user.getAvatar_uri() != null) {
+        if (user.getAvatar_uri() != null && new File(user.getAvatar_uri()).exists()) {
             Uri myUri = Uri.parse(user.getAvatar_uri());
             img_user_picture.setImageURI(myUri);
         }else{
             Picasso.with(this).
                     load(Constants.GET_AVATAR_ENDPOINT+"avatar_"+user.getId()+".jpg")
                     .resize(35,35)
-                    .into(img_user_picture);
+                    .into(new Target() {
+                        @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            if (bitmap != null){
+                                img_user_picture.setImageBitmap(bitmap);
+                            }else{
+                                img_user_picture.setImageResource(R.mipmap.default_avatar);
+                            }
+                        }
+                        @Override public void onBitmapFailed(Drawable errorDrawable) { }
+                        @Override public void onPrepareLoad(Drawable placeHolderDrawable) { }
+                    });
         }
         bundle = new Bundle();
         Gson gson = new Gson();
         String user_json = gson.toJson(user);
         bundle.putString(Constants.USER, user_json);
-        if(!user.isNewUser(getApplicationContext())){
+        if(user.isNewUser(getApplicationContext())){
             launchFragment(Constants.HomeSchedule, bundle);
         }else{
-//            launchFragment(Constants.CreateSchedule, bundle);
-            launchFragment(Constants.AppointmentList, bundle);
+            launchFragment(Constants.CreateSchedule, bundle);
+//            launchFragment(Constants.AppointmentCalendar, bundle);
         }
 
         retrofit = MainApplication.getInstance().getRetrofit();
@@ -194,9 +208,15 @@ public class MainActivity extends FragmentActivity implements FragmentInteration
                 fragment = new ActivityFragment();
                 break;
             case Constants.AppointmentList:
+                tab_bar.setVisibility(View.VISIBLE);
                 activity_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
                 fragment = new ScheduleTimeLineFragment();
                 break;
+//            case Constants.AppointmentCalendar:
+//                tab_bar.setVisibility(View.GONE);
+//                relativeLayout.setVisibility(View.GONE);
+//                fragment = new AppointmentCalendarFragment();
+//                break;
             default:
                 finish();
         }
@@ -221,25 +241,37 @@ public class MainActivity extends FragmentActivity implements FragmentInteration
         finish();
     }
 
-    public void loadAvatar(User user, ImageView img_user_picture){
-        if (user.getAvatar_uri() != null){
+    public void loadAvatar(User user, final ImageView img_user_picture){
+        if (user.getAvatar_uri() != null && new File(user.getAvatar_uri()).exists()){
             Uri myUri = Uri.parse(user.getAvatar_uri());
             img_user_picture.setImageURI(myUri);
         }else if(user.getAvatar() != null && !user.getAvatar().equals("")){
             Picasso.with(this).
                     load(user.getAvatar())
                     .resize(35,35)
-                    .into(img_user_picture);
+                    .into(new Target() {
+                        @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            if (bitmap != null){
+                                img_user_picture.setImageBitmap(bitmap);
+                            }else{
+                                img_user_picture.setImageResource(R.mipmap.default_avatar);
+                            }
+                        }
+                        @Override public void onBitmapFailed(Drawable errorDrawable) { }
+                        @Override public void onPrepareLoad(Drawable placeHolderDrawable) { }
+                    });
         }
     }
 
     private void handleCrop(Uri outputUri) {
+        imageReadyForUploadListener = (AvatarProfileFragment) profileFragment;
         ImageView avatar =  ((AvatarProfileFragment) profileFragment).avatar;
         bundle.putString(Constants.AVATAR_STATE_SAVED, outputUri.toString());
         avatar.setImageBitmap(null);
         try {
             bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), outputUri);
             avatar.setImageBitmap(bitmap);
+            imageReadyForUploadListener.imageReadyUri(outputUri);
         } catch (IOException e) {
             Toast.makeText(this, " error : " + e.getMessage(), Toast.LENGTH_LONG).show();
         }

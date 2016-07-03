@@ -3,6 +3,8 @@ package com.tied.android.tiedapp.ui.fragments.schedule;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,21 +14,27 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
+import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Client;
 import com.tied.android.tiedapp.objects.Location;
+import com.tied.android.tiedapp.objects.Schedule;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.ui.activities.schedule.ViewSchedule;
 import com.tied.android.tiedapp.ui.adapters.ClientScheduleAdapter;
 import com.tied.android.tiedapp.ui.adapters.ClientScheduleHorizontalAdapter;
-import com.tied.android.tiedapp.ui.listeners.FragmentInterationListener;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.DialogUtils;
 
 import java.util.ArrayList;
@@ -47,9 +55,12 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
 
     private Bundle bundle;
 
-    private TextView view_schedule;
+    private TextView view_schedule, company_name;
     private ArrayList<Client> clients;
     private ListView listView;
+    private Client client;
+    private Schedule schedule;
+    private ImageView pic_client;
 
     private RecyclerView horizontalList;
     LinearLayoutManager horizontalManager;
@@ -61,7 +72,7 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
     String[] NAME = {"Emily Emmanuel","Johnson Good","Nonso Lagos"};
     Location[] ADDRESS = {new Location("Ikeja","123","Lagos","Ikunna"),new Location("Old Town","546","NY","Mile street"),new Location("LA","567","Carlifornia","Myles Strt")};
 
-    private FragmentInterationListener fragmentInterationListener;
+    private FragmentIterationListener fragmentIterationListener;
 
     public ScheduleSuggestionFragment() {
     }
@@ -80,8 +91,8 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof FragmentInterationListener) {
-            fragmentInterationListener = (FragmentInterationListener) context;
+        if (context instanceof FragmentIterationListener) {
+            fragmentIterationListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -89,8 +100,8 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
     }
 
     public void nextAction(int action, Bundle bundle) {
-        if (fragmentInterationListener != null) {
-            fragmentInterationListener.OnFragmentInteractionListener(action,bundle);
+        if (fragmentIterationListener != null) {
+            fragmentIterationListener.OnFragmentInteractionListener(action,bundle);
         }
     }
 
@@ -98,6 +109,9 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
 
         clients = new ArrayList<Client>();
         listView = (ListView) view.findViewById(R.id.list);
+
+        pic_client = (ImageView) view.findViewById(R.id.pic_client);
+        company_name = (TextView) view.findViewById(R.id.company_name);
 
         horizontalList = (RecyclerView)view.findViewById(R.id.horizontal_list);
 
@@ -108,7 +122,32 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
         view_schedule = (TextView) view.findViewById(R.id.view_schedule);
         view_schedule.setOnClickListener(this);
 
-        user = User.getUser(getActivity().getApplicationContext());
+        bundle = getArguments();
+        if (bundle != null) {
+            Log.d(TAG, "bundle not null");
+            Gson gson = new Gson();
+            String user_json = bundle.getString(Constants.USER);
+            String client_json = bundle.getString(Constants.CLIENT);
+            String schedule_json = bundle.getString(Constants.CLIENT);
+            user = gson.fromJson(user_json, User.class);
+            client = gson.fromJson(client_json, Client.class);
+            schedule = gson.fromJson(schedule_json, Schedule.class);
+            company_name.setText(client.getCompany());
+
+            Picasso.with(getActivity()).
+                    load(client.getLogo())
+                    .into(new Target() {
+                        @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            if (bitmap != null){
+                                pic_client.setImageBitmap(bitmap);
+                            }else{
+                                pic_client.setImageResource(R.mipmap.default_avatar);
+                            }
+                        }
+                        @Override public void onBitmapFailed(Drawable errorDrawable) { }
+                        @Override public void onPrepareLoad(Drawable placeHolderDrawable) { }
+                    });
+        }
         initClient();
     }
 
@@ -116,8 +155,9 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.view_schedule:
-//                nextAction(Constants.ActivitySchedule, bundle);
                 Intent intent = new Intent(getActivity(), ViewSchedule.class);
+                intent.putExtra(Constants.CLIENT, client);
+                intent.putExtra(Constants.SCHEDULE, schedule);
                 startActivity(intent);
                 break;
         }

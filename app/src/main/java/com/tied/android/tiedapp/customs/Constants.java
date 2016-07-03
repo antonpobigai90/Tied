@@ -36,6 +36,7 @@ public class Constants {
     public static final String GET_INDUSTRIES = API_PATH + "config/industries";
 
     public static final String USER = "user";
+    public static final String CLIENT = "client";
     public static final String CODE = "code";
     public static final String SERVER_INFO = "server_info";
     public static final String CURRENT_USER = "current_user";
@@ -52,6 +53,8 @@ public class Constants {
     public static final String TWITTER_API_KEY = "6b2QdtehythOUVjBwEyHKeFGl";
     public static final String TWITTER_API_SECRET = "hyjXQqyRekDAcpeXb1nrb1zVwjmiovXaoTVJNuZy80D0MuNBiR";
 
+    public static final String SELECTED_DATE = "selected_date";
+    public static final String SHOW_SELECTED_DATE = "show_selected_date";
     public static final String CITY = "city";
     public static final String ZIP = "zip";
     public static final String STATE = "state";
@@ -101,6 +104,7 @@ public class Constants {
     public static final int CreateAppointment = 37;
     public static final int Appointment = 38;
     public static final int AppointmentList = 39;
+    public static final int AppointmentCalendar = 41;
 
     public static final int Profile = 40;
 

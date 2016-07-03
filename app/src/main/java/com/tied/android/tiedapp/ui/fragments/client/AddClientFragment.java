@@ -36,7 +36,7 @@ import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.client.ClientActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
-import com.tied.android.tiedapp.ui.listeners.FragmentInterationListener;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.DialogUtils;
 
 import org.json.JSONObject;
@@ -67,7 +67,7 @@ public class AddClientFragment extends Fragment implements View.OnClickListener{
     private ImageView img_done;
     private TextView industry, select_line;
 
-    private String companyText, nameText, streetText, cityText, stateText, zipText, noteText, birthdayText;
+    private String companyText, nameText, streetText, cityText, stateText, zipText, phoneText, noteText, birthdayText;
     private Location location;
 
     // Code for our image picker select action.
@@ -80,7 +80,7 @@ public class AddClientFragment extends Fragment implements View.OnClickListener{
     private Bundle bundle;
     private Uri uri;
 
-    FragmentInterationListener mListener;
+    FragmentIterationListener mListener;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -128,6 +128,7 @@ public class AddClientFragment extends Fragment implements View.OnClickListener{
         note = (EditText) view.findViewById(R.id.note);
         birthday = (EditText) view.findViewById(R.id.birthday);
 
+
         avatar = (ImageView) view.findViewById(R.id.avatar);
         img_done = (ImageView) view.findViewById(R.id.img_done);
         img_done.setOnClickListener(this);
@@ -144,8 +145,8 @@ public class AddClientFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof FragmentInterationListener) {
-            mListener = (FragmentInterationListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -154,7 +155,7 @@ public class AddClientFragment extends Fragment implements View.OnClickListener{
 
     public void nextAction(Bundle bundle) {
         if (mListener != null) {
-            mListener.OnFragmentInteractionListener(Constants.Name, bundle);
+            mListener.OnFragmentInteractionListener(Constants.CreateSchedule, bundle);
         }
     }
 
@@ -166,6 +167,7 @@ public class AddClientFragment extends Fragment implements View.OnClickListener{
         location = new Location(cityText, zipText, stateText, streetText);
         birthdayText = birthday.getText().toString();
         noteText = note.getText().toString();
+        phoneText = phone.getText().toString();
         return !streetText.equals("");
     }
 
@@ -276,10 +278,11 @@ public class AddClientFragment extends Fragment implements View.OnClickListener{
         nameText = name.getText().toString();
 
         Client client = new Client();
+        client.setPhone(phoneText);
         client.setFull_name(nameText);
         client.setCompany(companyText);
         client.setAddress(location);
-        client.setLine_id(1);
+        client.setLine_id("1");
         client.setIndustry_id(1);
         client.setVisit_id(1);
         client.setBirthday(birthdayText);
@@ -313,7 +316,7 @@ public class AddClientFragment extends Fragment implements View.OnClickListener{
                 ClientRes clientRes = resResponse.body();
                 if (clientRes.isAuthFailed()) {
                     User.LogOut(getActivity().getApplicationContext());
-                } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200) {
+                } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 201) {
                     Log.d(TAG + " client good", clientRes.getClient().toString());
                     nextAction(bundle);
                 } else {
