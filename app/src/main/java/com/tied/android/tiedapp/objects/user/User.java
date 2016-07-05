@@ -8,7 +8,8 @@ import android.preference.PreferenceManager;
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Location;
-import com.tied.android.tiedapp.ui.activities.signups.WalkThroughActivity;
+import com.tied.android.tiedapp.ui.activities.MainActivity;
+import com.tied.android.tiedapp.ui.activities.signups.SignInActivity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ public class User implements Serializable {
     private String fax;
     private String password;
     private String avatar;
+    private String avatar_uri;
 
     private String sale_type;
     private String co_workers;
@@ -34,6 +36,7 @@ public class User implements Serializable {
     private ArrayList<String> territories;
     private ArrayList<String> industries;
 
+    private String company_name;
     private int sign_up_stage;
 
     public Location home_address;
@@ -41,17 +44,16 @@ public class User implements Serializable {
 
     public Boss boss;
 
-    public Profile profile;
-
     private String createdAt;
     private String updatedAt;
 
     private String token;
 
     public User(String id, String email, String first_name, String last_name, String phone, String fax,
-                String password, String avatar, String sale_type, String co_workers, String group_description,
-                ArrayList<String> territories, ArrayList<String> industries, int sign_up_stage, Location home_address,
-                Location office_address, Boss boss, Profile profile, String createdAt, String updatedAt, String token) {
+                String password, String avatar, String avatar_uri, String sale_type, String co_workers,
+                String group_description, ArrayList<String> territories, ArrayList<String> industries,
+                String company_name, int sign_up_stage, Location home_address,
+                Location office_address, Boss boss, String createdAt, String updatedAt, String token) {
         this.id = id;
         this.email = email;
         this.first_name = first_name;
@@ -60,16 +62,17 @@ public class User implements Serializable {
         this.fax = fax;
         this.password = password;
         this.avatar = avatar;
+        this.avatar_uri = avatar_uri;
         this.sale_type = sale_type;
         this.co_workers = co_workers;
         this.group_description = group_description;
         this.territories = territories;
         this.industries = industries;
+        this.company_name = company_name;
         this.sign_up_stage = sign_up_stage;
         this.home_address = home_address;
         this.office_address = office_address;
         this.boss = boss;
-        this.profile = profile;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.token = token;
@@ -85,8 +88,6 @@ public class User implements Serializable {
     public User() {
     }
 
-
-
     public static User getUser(Context context){
         Gson gson = new Gson();
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -94,9 +95,20 @@ public class User implements Serializable {
         return gson.fromJson(json, User.class);
     }
 
+    public boolean isNewUser(Context context){
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return mPrefs.getBoolean(Constants.NEW_USER, false);
+    }
+
+    public void setIsNewUser(Context context){
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor prefsEditor = mPrefs.edit();
+        prefsEditor.putBoolean(Constants.NEW_USER, true);
+        prefsEditor.apply();
+    }
+
     public boolean save(Context context){
         User user = this;
-
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor prefsEditor = mPrefs.edit();
         Gson gson = new Gson();
@@ -106,6 +118,27 @@ public class User implements Serializable {
         return true;
     }
 
+    public static boolean isUserLoggedIn(Context context){
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String json = mPrefs.getString(Constants.CURRENT_USER, "");
+        return mPrefs.getBoolean(Constants.LOGGED_IN_USER, false);
+    }
+
+    public void LogIn(Context context){
+        User user = this;
+        boolean saved = user.save(context);
+        if(saved){
+
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putBoolean(Constants.LOGGED_IN_USER,true);
+            editor.apply();
+
+            Intent intent = new Intent(context, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            context.startActivity(intent);
+        }
+    }
 
     public static void LogOut(Context context){
         User user = new User();
@@ -114,14 +147,22 @@ public class User implements Serializable {
 
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
             SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putBoolean(Constants.LOGGED_OUT_USER,true);
-            editor.commit();
+            editor.putBoolean(Constants.LOGGED_IN_USER,false);
+            editor.apply();
 
-            Intent intent = new Intent(context, WalkThroughActivity.class);
+            Intent intent = new Intent(context, SignInActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             context.startActivity(intent);
         }
+    }
+
+    public String getCompany_name() {
+        return company_name;
+    }
+
+    public void setCompany_name(String company_name) {
+        this.company_name = company_name;
     }
 
     public String getId() {
@@ -208,14 +249,6 @@ public class User implements Serializable {
         this.boss = boss;
     }
 
-    public Profile getProfile() {
-        return profile;
-    }
-
-    public void setProfile(Profile profile) {
-        this.profile = profile;
-    }
-
     public String getCreatedAt() {
         return createdAt;
     }
@@ -292,6 +325,14 @@ public class User implements Serializable {
         this.co_workers = co_workers;
     }
 
+    public String getAvatar_uri() {
+        return avatar_uri;
+    }
+
+    public void setAvatar_uri(String avatar_uri) {
+        this.avatar_uri = avatar_uri;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -303,6 +344,7 @@ public class User implements Serializable {
                 ", fax='" + fax + '\'' +
                 ", password='" + password + '\'' +
                 ", avatar='" + avatar + '\'' +
+                ", avatar_uri='" + avatar_uri + '\'' +
                 ", sale_type='" + sale_type + '\'' +
                 ", co_workers='" + co_workers + '\'' +
                 ", group_description='" + group_description + '\'' +
@@ -312,7 +354,6 @@ public class User implements Serializable {
                 ", home_address=" + home_address +
                 ", office_address=" + office_address +
                 ", boss=" + boss +
-                ", profile=" + profile +
                 ", createdAt='" + createdAt + '\'' +
                 ", updatedAt='" + updatedAt + '\'' +
                 ", token='" + token + '\'' +

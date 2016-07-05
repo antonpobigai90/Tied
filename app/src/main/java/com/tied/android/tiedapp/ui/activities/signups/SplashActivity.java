@@ -24,7 +24,6 @@ public class SplashActivity extends Activity {
     public static final String TAG = SplashActivity.class
             .getSimpleName();
 
-
     Context context;
     protected boolean _active = true;
     protected int _splashTime = 3000;
@@ -44,25 +43,21 @@ public class SplashActivity extends Activity {
         boolean done = mPrefs.getBoolean(Constants.SPLASH_SCREEN_DONE, false);
         if (done) {
             User user = User.getUser(getApplicationContext());
-            if (user != null && user.getId() != null && user.getSign_up_stage() == Constants.Completed) {
-//                user.setSign_up_stage(7);
-//                user.save(getApplicationContext());
+//            User.LogOut(getApplicationContext());
+            //Log.d(TAG, user.toString());
+            if (User.isUserLoggedIn(getApplicationContext())) {
                 Log.d(TAG, user.toString());
                 Bundle bundle = new Bundle();
                 Gson gson = new Gson();
                 String user_json = gson.toJson(user);
                 bundle.putString(Constants.USER, user_json);
                 Intent intent = new Intent(this, MainActivity.class);
-                intent.putExtra(Constants.USER, bundle);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
-                finish();
-
             } else {
                 Intent intent = new Intent(sPlashScreen, WalkThroughActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
-                finish();
             }
 
         } else {
@@ -97,7 +92,6 @@ public class SplashActivity extends Activity {
                     }
                 }
             };
-
             splashTread.start();
         }
     }

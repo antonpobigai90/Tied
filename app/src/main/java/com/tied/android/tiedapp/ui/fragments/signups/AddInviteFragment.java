@@ -8,8 +8,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ProgressBar;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -17,6 +19,8 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
+import com.tied.android.tiedapp.ui.activities.signups.InviteContactActivity;
+import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
 
 /**
@@ -29,10 +33,14 @@ public class AddInviteFragment extends Fragment implements View.OnClickListener{
 
     private SignUpFragmentListener mListener;
 
-    private Button continue_btn, later, via_app, vai_sms, via_email;
-    private ProgressBar progressBar;
+    private RelativeLayout continue_btn;
+    private TextView txt_add_later;
+    LinearLayout via_email_layout, via_sms_layout, via_add_app, import_excel;
 
-    private String emailText, passwordText;
+    Bundle bundle;
+    // Reference to our image view we will use
+    public ImageView img_user_picture;
+
 
     public AddInviteFragment() {
     }
@@ -53,18 +61,34 @@ public class AddInviteFragment extends Fragment implements View.OnClickListener{
 
     public void initComponent(View view){
 
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-
-        vai_sms = (Button) view.findViewById(R.id.vai_sms);
-        via_email = (Button) view.findViewById(R.id.via_email);
-        via_app = (Button) view.findViewById(R.id.via_app);
-        later = (Button) view.findViewById(R.id.later);
-        continue_btn = (Button) view.findViewById(R.id.continue_btn);
+        txt_add_later = (TextView) view.findViewById(R.id.txt_add_later);
+        continue_btn = (RelativeLayout) view.findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(this);
-        later.setOnClickListener(this);
-        via_email.setOnClickListener(this);
-        vai_sms.setOnClickListener(this);
-        via_app.setOnClickListener(this);
+        txt_add_later.setOnClickListener(this);
+
+        via_email_layout = (LinearLayout) view.findViewById(R.id.via_email_layout);
+        via_email_layout.setOnClickListener(this);
+
+        via_sms_layout = (LinearLayout) view.findViewById(R.id.via_sms_layout);
+        via_sms_layout.setOnClickListener(this);
+
+        via_add_app = (LinearLayout) view.findViewById(R.id.via_add_app);
+        via_add_app.setOnClickListener(this);
+
+        import_excel = (LinearLayout) view.findViewById(R.id.import_excel);
+        import_excel.setOnClickListener(this);
+
+
+        img_user_picture = (ImageView) view.findViewById(R.id.img_user_picture);
+
+        bundle = getArguments();
+        if (bundle != null) {
+            Gson gson = new Gson();
+            String user_json = bundle.getString("user");
+            User user = gson.fromJson(user_json, User.class);
+            ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
+        }
+
     }
 
     @Override
@@ -102,20 +126,26 @@ public class AddInviteFragment extends Fragment implements View.OnClickListener{
             case R.id.continue_btn:
                 continue_action();
                 break;
-            case R.id.via_app:
+            case R.id.via_add_app:
                 user.setSign_up_stage(Constants.CoWorker);
                 boolean saved = user.save(getActivity().getApplicationContext());
                 if(saved){
                     String json = gson.toJson(user);
                     bundle.putString(Constants.USER, json);
-                    progressBar.setVisibility(View.INVISIBLE);
                     nextAction(Constants.CoWorker, bundle);
                 }else{
-                    progressBar.setVisibility(View.INVISIBLE);
                     Toast.makeText(getActivity(), "user info  was not updated", Toast.LENGTH_LONG).show();
                 }
                 break;
-            case R.id.later:
+            case R.id.via_email_layout:
+                Intent invite_intent = new Intent(getActivity(), InviteContactActivity.class);
+                startActivity(invite_intent);
+                break;
+            case R.id.via_sms_layout:
+                Intent sms_intent = new Intent(getActivity(), InviteContactActivity.class);
+                startActivity(sms_intent);
+                break;
+            case R.id.txt_add_later:
                 user.setSign_up_stage(Constants.Completed);
                 saved = user.save(getActivity().getApplicationContext());
                 if(saved){
@@ -124,7 +154,6 @@ public class AddInviteFragment extends Fragment implements View.OnClickListener{
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 }else{
-                    progressBar.setVisibility(View.INVISIBLE);
                     Toast.makeText(getActivity(), "user info  was not updated", Toast.LENGTH_LONG).show();
                 }
                 break;

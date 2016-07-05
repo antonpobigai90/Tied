@@ -1,26 +1,32 @@
 package com.tied.android.tiedapp.ui.fragments.signups;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
-import com.tied.android.tiedapp.objects.auth.UpdateUser;
+import com.tied.android.tiedapp.retrofits.services.SignUpApi;
+import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
+import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.util.Utility;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,11 +41,14 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
             .getSimpleName();
 
     private EditText phone,fax;
-    private Button continue_btn;
-
-    private ProgressBar progressBar;
+    private RelativeLayout continue_btn;
+    LinearLayout alert_valid;
 
     String phoneText, faxText;
+
+    // Reference to our image view we will use
+    public ImageView img_user_picture;
+    private Bundle bundle;
 
     private SignUpFragmentListener mListener;
 
@@ -59,14 +68,34 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
         initComponent(view);
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void initComponent(View view){
 
         phone = (EditText) view.findViewById(R.id.phone);
         fax = (EditText) view.findViewById(R.id.fax);
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
-        continue_btn = (Button) view.findViewById(R.id.continue_btn);
+        alert_valid = (LinearLayout) view.findViewById(R.id.alert_valid);
+        alert_valid.setVisibility(View.GONE);
+
+
+        continue_btn = (RelativeLayout)view.findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(this);
+
+        img_user_picture = (ImageView) view.findViewById(R.id.img_user_picture);
+
+        bundle = getArguments();
+        if(bundle != null){
+            Gson gson = new Gson();
+            String user_json = bundle.getString("user");
+            User user = gson.fromJson(user_json, User.class);
+            phone.setText(user.getPhone());
+            fax.setText(user.getFax());
+            ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
+        }
+
+        phone.addTextChangedListener(new PhoneNumberFormattingTextWatcher("US"));
+//        fax.addTextChangedListener(new FaxNumberTextWatcher(fax));
+
     }
 
     @Override
@@ -80,7 +109,6 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-
     public void nextAction(Bundle bundle) {
         if (mListener != null) {
             mListener.onFragmentInteraction(Constants.EnterCode, bundle);
@@ -89,79 +117,104 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
     
     public void continue_action(){
         phoneText = phone.getText().toString();
+//        phoneText = phoneText.replaceAll("[)(-]","");
+//        phoneText = "+"+phoneText.replace(" ","");
         faxText = fax.getText().toString();
-        if(validated()){
-            progressBar.setVisibility(View.VISIBLE);
 
-            final Bundle bundle = getArguments();
+        DialogUtils.displayProgress(getActivity());
+        bundle = getArguments();
+        final Gson gson = new Gson();
+        String user_json = bundle.getString("user");
+        final User user = gson.fromJson(user_json, User.class);
+        user.setPhone(phoneText);
+        user.setFax(faxText);
+        user.setSign_up_stage(Constants.EnterCode);
 
-            final Gson gson = new Gson();
-            String user_json = bundle.getString("user");
-            final User user = gson.fromJson(user_json, User.class);
-            user.setPhone(phoneText);
-            user.setFax(faxText);
-            user.setSign_up_stage(Constants.EnterCode);
-
-            SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
-            Call<UpdateUser> response = signUpApi.updateUser(user);
-            response.enqueue(new Callback<UpdateUser>() {
-                @Override
-                public void onResponse(Call<UpdateUser> call, Response<UpdateUser> UpdateUserResponse) {
-                    UpdateUser UpdateUser = UpdateUserResponse.body();
-                    Log.d(TAG +" onFailure", UpdateUserResponse.body().toString());
-                    if(UpdateUser.isSuccess()){
-                        Gson gson = new Gson();
-                        boolean saved = user.save(getActivity().getApplicationContext());
-                        if(saved){
-                            String user_json = bundle.getString("user");
-                            User user = gson.fromJson(user_json, User.class);
-                            String json = gson.toJson(user);
-                            bundle.putString(Constants.USER, json);
-                            call_send_phone_vc(bundle);
-                        }else{
-                            progressBar.setVisibility(View.INVISIBLE);
-                            Toast.makeText(getActivity(), "user info  was not updated", Toast.LENGTH_LONG).show();
-                        }
+        SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
+        Call<ServerRes> response = signUpApi.updateUser(user);
+        response.enqueue(new Callback<ServerRes>() {
+            @Override
+            public void onResponse(Call<ServerRes> call, Response<ServerRes> ServerResResponse) {
+                if(getActivity() == null) return;
+                ServerRes ServerRes = ServerResResponse.body();
+                if(ServerRes.isSuccess()){
+                    Gson gson = new Gson();
+                    boolean saved = user.save(getActivity().getApplicationContext());
+                    if(saved){
+                        String user_json = bundle.getString("user");
+                        User user = gson.fromJson(user_json, User.class);
+                        Log.d(TAG +" number", phoneText);
+                        call_send_phone_vc(user);
                     }else{
-                        Toast.makeText(getActivity(), UpdateUser.getMessage(), Toast.LENGTH_LONG).show();
+                        DialogUtils.closeProgress();
+                        Toast.makeText(getActivity(), "user info  was not updated", Toast.LENGTH_LONG).show();
                     }
-                    progressBar.setVisibility(View.INVISIBLE);
+                }else{
+                    Toast.makeText(getActivity(), ServerRes.getMessage(), Toast.LENGTH_LONG).show();
                 }
+                DialogUtils.closeProgress();
+            }
 
-                @Override
-                public void onFailure(Call<UpdateUser> UpdateUserCall, Throwable t) {
-                    Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
-                    Log.d(TAG +" onFailure", t.toString());
-                    progressBar.setVisibility(View.INVISIBLE);
-                }
-            });
-
-        }else{
-            Toast.makeText(getActivity(), "Invalid input", Toast.LENGTH_LONG).show();
-        }
+            @Override
+            public void onFailure(Call<ServerRes> ServerResCall, Throwable t) {
+                Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
+                Log.d(TAG +" onFailure", t.toString());
+                DialogUtils.closeProgress();
+            }
+        });
     }
 
-    private void call_send_phone_vc(Bundle bundle) {
+    private void call_send_phone_vc(User user) {
 
-        //Todo api request for phone verification code to be sent
-        Gson gson = new Gson();
-        String code = "123456";
-        bundle.putString(Constants.CODE,code);
-        Toast.makeText(getActivity(), "your code is 123456", Toast.LENGTH_LONG).show();
-        progressBar.setVisibility(View.INVISIBLE);
-        nextAction(bundle);
-    }
+        SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
+        Call<ServerRes> response = signUpApi.sendPhoneCode(user.getId(), "+2348022020231");
+        response.enqueue(new Callback<ServerRes>() {
+            @Override
+            public void onResponse(Call<ServerRes> call, Response<ServerRes> ServerResResponse) {
+                if(getActivity() == null) return;
+                ServerRes ServerRes = ServerResResponse.body();
+                if(ServerRes.isSuccess()){
+                    Gson gson = new Gson();
+                    String json = gson.toJson(ServerRes);
+                    bundle.putString(Constants.SERVER_INFO,json);
+                    nextAction(bundle);
+                    Log.d(TAG +" Sms enter", ServerResResponse.body().toString());
+                    DialogUtils.closeProgress();
+                }else{
+                    Toast.makeText(getActivity(), ServerRes.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
 
-    public boolean validated(){
-        
-        return !phone.equals("") && !fax.equals("");
+            @Override
+            public void onFailure(Call<ServerRes> ServerResCall, Throwable t) {
+                Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
+                Log.d(TAG +" onFailure", t.toString());
+                DialogUtils.closeProgress();
+            }
+        });
+
+//        //Todo api request for phone verification code to be sent
+//        Gson gson = new Gson();
+//        String json = gson.toJson(user);
+//        String code = "123456";
+//        Bundle bundle = new Bundle();
+//        bundle.putString(Constants.USER, json);
+//        bundle.putString(Constants.CODE,code);
+//        Toast.makeText(getActivity(), "your code is 12345", Toast.LENGTH_LONG).show();
+//        DialogUtils.closeProgress();
+//        nextAction(bundle);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.continue_btn:
-                continue_action();
+                if (phone.getText().length() == 0) {
+                    alert_valid.setVisibility(View.VISIBLE);
+                    Utility.moveViewToScreenCenter( alert_valid, Utility.getResourceString(getActivity(), R.string.alert_valide_phone_number));
+                } else {
+                    continue_action();
+                }
                 break;
         }
     }

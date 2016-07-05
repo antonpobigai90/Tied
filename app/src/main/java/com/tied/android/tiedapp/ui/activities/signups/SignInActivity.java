@@ -1,5 +1,6 @@
 package com.tied.android.tiedapp.ui.activities.signups;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,7 +11,7 @@ import android.util.Log;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
+import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.fragments.signins.DoneResetFragment;
 import com.tied.android.tiedapp.ui.fragments.signins.ResetFragment;
 import com.tied.android.tiedapp.ui.fragments.signins.SignInFragment;
@@ -78,9 +79,15 @@ public class SignInActivity extends AppCompatActivity implements SignUpFragmentL
 
     @Override
     public void onBackPressed() {
-        Log. d(TAG, "fragment_index " + fragment_index);
+        Log.d(TAG, "fragment_index " + fragment_index);
         if (fragment_index == Constants.Reset) {
             launchFragment(Constants.SignInUser, null);
+        }
+        else if (fragment_index == Constants.SignInUser) {
+            Log.d(TAG, "am in fragment_index " + fragment_index);
+            Intent intent = new Intent(this, WalkThroughActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
         } else {
             finish();
         }
@@ -88,7 +95,7 @@ public class SignInActivity extends AppCompatActivity implements SignUpFragmentL
 
     @Override
     public void onFragmentInteraction(int action, Bundle bundle) {
-        Log.d(TAG, " onFragmentInteraction "+action);
+        Log.d(TAG, " onFragmentInteraction " + action);
         launchFragment(action, bundle);
     }
 

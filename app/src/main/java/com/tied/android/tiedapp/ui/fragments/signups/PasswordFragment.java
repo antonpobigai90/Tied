@@ -8,19 +8,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
-import com.tied.android.tiedapp.objects.auth.SignUpLogin;
+import com.tied.android.tiedapp.retrofits.services.SignUpApi;
+import com.tied.android.tiedapp.objects.responses.SignUpLogin;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
+import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.util.Utility;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,11 +38,14 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
 
     private SignUpFragmentListener mListener;
 
-    private Button continue_btn;
-    private ProgressBar progressBar;
+//    private Button continue_btn;
+    private LinearLayout back_btn;
+    private RelativeLayout continue_btn;
+    LinearLayout alert_valid_password;
     private EditText password;
 
-    private String usernameText, passwordText;
+    private String passwordText;
+    private Bundle bundle;
 
     public PasswordFragment() {
     }
@@ -58,14 +63,18 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
         initComponent(view);
     }
 
-
     public void initComponent(View view) {
 
-        password = (EditText) view.findViewById(R.id.password);
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+        bundle = getArguments();
 
-        continue_btn = (Button) view.findViewById(R.id.continue_btn);
+        password = (EditText) view.findViewById(R.id.password);
+        back_btn = (LinearLayout) view.findViewById(R.id.back_layout);
+        continue_btn = (RelativeLayout)view.findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(this);
+        back_btn.setOnClickListener(this);
+
+        alert_valid_password = (LinearLayout) view.findViewById(R.id.alert_valid);
+        alert_valid_password.setVisibility(View.GONE);
     }
 
     @Override
@@ -79,74 +88,75 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-
-    public void nextAction(Bundle bundle) {
+    public void nextAction(int action, Bundle bundle) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(Constants.Picture, bundle);
+            mListener.onFragmentInteraction(action, bundle);
         }
     }
 
     public void continue_action() {
-
-        if (validated()) {
-            Bundle bundle = getArguments();
-
-            Gson gson = new Gson();
-            String user_json = bundle.getString("user");
-            User user = gson.fromJson(user_json, User.class);
-            progressBar.setVisibility(View.VISIBLE);
-            SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
-            Call<SignUpLogin> response = signUpApi.LoginSignUpUser(user.getEmail(), passwordText, Constants.Picture);
-            Log.d(TAG, response.request().url().toString());
-            response.enqueue(new Callback<SignUpLogin>() {
-                @Override
-                public void onResponse(Call<SignUpLogin> call, Response<SignUpLogin> LoginResponse) {
-                    SignUpLogin signUpLogin = LoginResponse.body();
-
-                    User loggedIn_user = signUpLogin.getUser();
-                    Log.d(TAG, signUpLogin.toString());
-                    if (loggedIn_user.getToken() != null) {
-                        loggedIn_user.setSign_up_stage(Constants.Picture);
-                        boolean saved = loggedIn_user.save(getActivity().getApplicationContext());
-                        if (saved) {
-                            Bundle bundle = new Bundle();
-                            Gson gson = new Gson();
-                            String user_json = gson.toJson(loggedIn_user);
-                            bundle.putString("user", user_json);
-                            nextAction(bundle);
-                        } else {
-                            Toast.makeText(getActivity(), "user not save", Toast.LENGTH_LONG).show();
-                        }
-                        Log.d(TAG, loggedIn_user.toString());
+        DialogUtils.displayProgress(getActivity());
+        Gson gson = new Gson();
+        final String user_json = bundle.getString("user");
+        final User user = gson.fromJson(user_json, User.class);
+        Log.d(TAG, user.toString());
+        SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
+        Call<SignUpLogin> response = signUpApi.LoginSignUpUser(user.getEmail(), passwordText, Constants.Picture);
+        Log.d(TAG, response.request().url().toString());
+        response.enqueue(new Callback<SignUpLogin>() {
+            @Override
+            public void onResponse(Call<SignUpLogin> call, Response<SignUpLogin> LoginResponse) {
+                if (getActivity() == null) return;
+                SignUpLogin signUpLogin = LoginResponse.body();
+                User loggedIn_user = signUpLogin.getUser();
+                Log.d(TAG, signUpLogin.toString());
+                if (loggedIn_user.getToken() != null) {
+                    loggedIn_user.setSign_up_stage(Constants.Picture);
+                    loggedIn_user.setPassword(passwordText);
+                    loggedIn_user.setAvatar(user.getAvatar());
+                    loggedIn_user.setFirst_name(user.getFirst_name());
+                    loggedIn_user.setLast_name(user.getLast_name());
+                    boolean saved = loggedIn_user.save(getActivity().getApplicationContext());
+                    if (saved) {
+                        Bundle bundle = new Bundle();
+                        Gson gson = new Gson();
+                        String user_json = gson.toJson(loggedIn_user);
+                        bundle.putString("user", user_json);
+                        nextAction(Constants.Picture, bundle);
                     } else {
-                        Toast.makeText(getActivity(), "user not created", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "user not save", Toast.LENGTH_LONG).show();
                     }
-                    progressBar.setVisibility(View.INVISIBLE);
+                    DialogUtils.closeProgress();
+                } else {
+                    DialogUtils.closeProgress();
+                    Toast.makeText(getActivity(), "user not created", Toast.LENGTH_LONG).show();
                 }
+            }
 
-                @Override
-                public void onFailure(Call<SignUpLogin> checkEmailCall, Throwable t) {
-                    Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
-                    Log.d(TAG + " onFailure", t.toString());
-                    progressBar.setVisibility(View.INVISIBLE);
-                }
-            });
-        } else {
-            Toast.makeText(getActivity(), "Invalid input", Toast.LENGTH_LONG).show();
-        }
+            @Override
+            public void onFailure(Call<SignUpLogin> checkEmailCall, Throwable t) {
+                DialogUtils.closeProgress();
+                Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
+                Log.d(TAG + " onFailure", t.toString());
+            }
+        });
     }
 
-    public boolean validated() {
-        passwordText = password.getText().toString();
-
-        return !passwordText.equals("");
-    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.continue_btn:
-                continue_action();
+                passwordText = password.getText().toString();
+                if (passwordText.length() == 0) {
+                    alert_valid_password.setVisibility(View.VISIBLE);
+                    Utility.moveViewToScreenCenter( alert_valid_password, Utility.getResourceString(getActivity(), R.string.alert_valide_password));
+                } else {
+                    continue_action();
+                }
+                break;
+            case R.id.back_layout:
+                nextAction(Constants.EmailSignUp,bundle);
                 break;
         }
     }
