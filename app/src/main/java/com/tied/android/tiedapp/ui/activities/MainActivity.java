@@ -110,25 +110,27 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
 
         img_user_picture = (ImageView) findViewById(R.id.img_user_picture);
         user = User.getUser(getApplicationContext());
-        if (user.getAvatar_uri() != null && new File(user.getAvatar_uri()).exists()) {
-            Uri myUri = Uri.parse(user.getAvatar_uri());
-            img_user_picture.setImageURI(myUri);
-        }else{
-            Picasso.with(this).
-                    load(Constants.GET_AVATAR_ENDPOINT+"avatar_"+user.getId()+".jpg")
-                    .resize(35,35)
-                    .into(new Target() {
-                        @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                            if (bitmap != null){
-                                img_user_picture.setImageBitmap(bitmap);
-                            }else{
-                                img_user_picture.setImageResource(R.mipmap.default_avatar);
+
+        Log.d(TAG, "Avatar Url : "+Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg");
+
+        Picasso.with(this).
+                load(Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg")
+                .resize(35, 35)
+                .into(new Target() {
+                    @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        if (bitmap != null){
+                            img_user_picture.setImageBitmap(bitmap);
+                        }else{
+                            img_user_picture.setImageResource(R.mipmap.default_avatar);
+                            if (user.getAvatar_uri() != null) {
+                                Uri myUri = Uri.parse(user.getAvatar_uri());
+                                img_user_picture.setImageURI(myUri);
                             }
                         }
-                        @Override public void onBitmapFailed(Drawable errorDrawable) { }
-                        @Override public void onPrepareLoad(Drawable placeHolderDrawable) { }
-                    });
-        }
+                    }
+                    @Override public void onBitmapFailed(Drawable errorDrawable) { }
+                    @Override public void onPrepareLoad(Drawable placeHolderDrawable) { }
+                });
         bundle = new Bundle();
         Gson gson = new Gson();
         String user_json = gson.toJson(user);
@@ -137,7 +139,6 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
             launchFragment(Constants.HomeSchedule, bundle);
         }else{
             launchFragment(Constants.CreateSchedule, bundle);
-//            launchFragment(Constants.AppointmentCalendar, bundle);
         }
 
         retrofit = MainApplication.getInstance().getRetrofit();
@@ -212,11 +213,6 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 activity_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
                 fragment = new ScheduleTimeLineFragment();
                 break;
-//            case Constants.AppointmentCalendar:
-//                tab_bar.setVisibility(View.GONE);
-//                relativeLayout.setVisibility(View.GONE);
-//                fragment = new AppointmentCalendarFragment();
-//                break;
             default:
                 finish();
         }
@@ -241,26 +237,32 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         finish();
     }
 
-    public void loadAvatar(User user, final ImageView img_user_picture){
-        if (user.getAvatar_uri() != null && new File(user.getAvatar_uri()).exists()){
-            Uri myUri = Uri.parse(user.getAvatar_uri());
-            img_user_picture.setImageURI(myUri);
-        }else if(user.getAvatar() != null && !user.getAvatar().equals("")){
-            Picasso.with(this).
-                    load(user.getAvatar())
-                    .resize(35,35)
-                    .into(new Target() {
-                        @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                            if (bitmap != null){
-                                img_user_picture.setImageBitmap(bitmap);
-                            }else{
-                                img_user_picture.setImageResource(R.mipmap.default_avatar);
+    public void loadAvatar(final User user, final ImageView img_user_picture){
+        Picasso.with(this).
+                load(Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg")
+                .resize(35, 35)
+                .into(new Target() {
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        if (bitmap != null) {
+                            img_user_picture.setImageBitmap(bitmap);
+                        } else {
+                            img_user_picture.setImageResource(R.mipmap.default_avatar);
+                            if (user.getAvatar_uri() != null && new File(user.getAvatar_uri()).exists()) {
+                                Uri myUri = Uri.parse(user.getAvatar_uri());
+                                img_user_picture.setImageURI(myUri);
                             }
                         }
-                        @Override public void onBitmapFailed(Drawable errorDrawable) { }
-                        @Override public void onPrepareLoad(Drawable placeHolderDrawable) { }
-                    });
-        }
+                    }
+
+                    @Override
+                    public void onBitmapFailed(Drawable errorDrawable) {
+                    }
+
+                    @Override
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+                    }
+                });
     }
 
     private void handleCrop(Uri outputUri) {
