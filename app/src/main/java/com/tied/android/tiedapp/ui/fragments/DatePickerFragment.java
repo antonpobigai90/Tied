@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
-import android.widget.EditText;
+import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
 
@@ -20,6 +20,7 @@ import java.util.Locale;
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
     String[] MONTHS_LIST = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
     String[] WEEK_LIST = {"", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday","Sunday"};
+
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -43,7 +44,11 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         int dayOfWeek=gregorianCalendar.get(gregorianCalendar.DAY_OF_WEEK);
         String dayOfWeekName= WEEK_LIST[dayOfWeek];
 
-        EditText tv1 = (EditText) getActivity().findViewById(R.id.date);
+        TextView tv1 = (TextView) getActivity().findViewById(R.id.date);
         tv1.setText(""+ dayOfWeekName +" " + month_name + " " + view.getDayOfMonth() + ", " + view.getYear());
+
+        String selected = year +"-"+String.format("%02d", month)+"-"+String.format("%02d", day);
+        TextView tv2 = (TextView) getActivity().findViewById(R.id.date_selected);
+        tv2.setText(selected);
     }
 }

@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +27,7 @@ import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.MyAsyncTask;
+import com.tied.android.tiedapp.customs.model.ScheduleNotifyModel;
 import com.tied.android.tiedapp.objects.Client;
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Location;
@@ -37,6 +39,7 @@ import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.fragments.DatePickerFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.util.ScheduleNotifyDialog;
 
 import org.json.JSONObject;
 
@@ -55,23 +58,28 @@ import retrofit2.Response;
  * A placeholder fragment containing a simple view.
  */
 public class CreateAppointmentFragment extends Fragment implements View.OnClickListener,
-        TimeRangePickerDialog.OnTimeRangeSelectedListener {
+        TimeRangePickerDialog.OnTimeRangeSelectedListener, ScheduleNotifyDialog.SelectedListener {
 
     public static final String TAG = CreateAppointmentFragment.class
             .getSimpleName();
 
-    TextView txt_title, txt_description, txt_date, txt_time, txt_creative_co_op, txt_reminder;
+    TextView txt_title, txt_description, txt_date, txt_time, txt_creative_co_op, txt_reminder, txt_date_selected;
     ImageView img_avatar, img_plus_date, img_plus1, img_location, img_reminder, img_close;
-    private EditText street, city, zip, state, date;
+    private EditText street, city, zip, state;
 
     private Bundle bundle;
     private User user;
 
     private Client client;
     private Location location;
+    int notify_id = 1;
+    private ScheduleNotifyModel scheduleNotifyModel;
 
     private String endTimeText, stateTimeText, dateText, titleText, streetText, cityText, stateText, zipText;
-    private TextView txt_create_schedule;
+    private TextView txt_create_schedule, date;
+    RelativeLayout layout_date, layout_time, layout_reminder;
+
+    ScheduleNotifyDialog alert;
 
     private FragmentIterationListener fragmentIterationListener;
 
@@ -108,6 +116,14 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
 
     public void initComponent(View view) {
 
+        layout_date = (RelativeLayout) view.findViewById(R.id.layout_date);
+        layout_time = (RelativeLayout) view.findViewById(R.id.layout_time);
+        layout_reminder = (RelativeLayout) view.findViewById(R.id.layout_reminder);
+
+        layout_date.setOnClickListener(this);
+        layout_time.setOnClickListener(this);
+        layout_reminder.setOnClickListener(this);
+
         txt_create_schedule = (TextView) view.findViewById(R.id.txt_create_schedule);
         txt_create_schedule.setOnClickListener(this);
 
@@ -115,11 +131,12 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
         txt_title = (TextView) view.findViewById(R.id.txt_title);
         txt_description = (TextView) view.findViewById(R.id.txt_description);
         txt_date = (TextView) view.findViewById(R.id.date);
+        txt_date_selected = (TextView) view.findViewById(R.id.date_selected);
         txt_time = (TextView) view.findViewById(R.id.time);
         txt_reminder = (TextView) view.findViewById(R.id.reminder);
 
 
-        date = (EditText) view.findViewById(R.id.date);
+        date = (TextView) view.findViewById(R.id.date);
         street = (EditText) view.findViewById(R.id.street);
         state = (EditText) view.findViewById(R.id.state);
         city = (EditText) view.findViewById(R.id.city);
@@ -175,14 +192,7 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
                         public void onPrepareLoad(Drawable placeHolderDrawable) {
                         }
                     });
-
-            String show_selected_date = bundle.getString(Constants.SHOW_SELECTED_DATE);
-            if (show_selected_date != null) {
-                date.setText(show_selected_date);
-                dateText = bundle.getString(Constants.SELECTED_DATE);
-            }
         }
-
 
     }
 
@@ -213,9 +223,9 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
                 getActivity().startActivity(intent);
                 break;
             case R.id.img_plus_date:
-                nextAction(Constants.AppointmentCalendar, bundle);
-//                DialogFragment newFragment = new DatePickerFragment();
-//                newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
+//                nextAction(Constants.AppointmentCalendar, bundle);
+                DialogFragment newFragment = new DatePickerFragment();
+                newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
                 break;
             case R.id.img_plus1:
                 TimeRangePickerDialog timePickerDialog = TimeRangePickerDialog.newInstance(
@@ -223,7 +233,21 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
                 timePickerDialog.show(getActivity().getSupportFragmentManager(), TAG);
                 break;
             case R.id.img_reminder:
-
+                ScheduleNotifyDialog alert = new ScheduleNotifyDialog();
+                alert.showDialog(this);
+                break;
+            case R.id.layout_date:
+                DialogFragment dateFragment = new DatePickerFragment();
+                dateFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
+                break;
+            case R.id.layout_time:
+                TimeRangePickerDialog timePickerDialog2 = TimeRangePickerDialog.newInstance(
+                        CreateAppointmentFragment.this, false);
+                timePickerDialog2.show(getActivity().getSupportFragmentManager(), TAG);
+                break;
+            case R.id.layout_reminder:
+                ScheduleNotifyDialog alert2 = new ScheduleNotifyDialog();
+                alert2.showDialog(this);
                 break;
             case R.id.txt_create_schedule:
                 if (validated()) {
@@ -245,6 +269,7 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
     }
 
     public boolean validated() {
+        dateText = txt_date_selected.getText().toString();
         titleText = txt_title.getText().toString();
         streetText = street.getText().toString();
         cityText = city.getText().toString();
@@ -266,6 +291,12 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
         return dateText != null;
     }
 
+    @Override
+    public void selectedNow(ScheduleNotifyModel scheduleNotifyModel) {
+        String text_notify = "Notify me " + scheduleNotifyModel.getTxt_notify() + " before time";
+        txt_reminder.setText(text_notify);
+        notify_id = scheduleNotifyModel.getId();
+    }
 
     class GeocodeAsyncTask extends MyAsyncTask {
 
@@ -317,7 +348,7 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
         schedule.setClient_id(client.getId());
         schedule.setUser_id(user.getId());
         schedule.setVisited(true);
-        schedule.setReminder(1);
+        schedule.setReminder(notify_id);
         schedule.setStart_time(stateTimeText);
         schedule.setEnd_time(endTimeText);
         schedule.setDate(dateText);
