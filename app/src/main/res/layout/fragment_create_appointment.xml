@@ -474,7 +474,7 @@
         android:text="@string/schedule_create_new_schedule_btn"
         android:id="@+id/txt_create_schedule"
         android:textColor="@color/white"
-        android:textSize="18dp"
+        android:textSize="18sp"
         android:textStyle="bold"
         android:gravity="center_vertical|center_horizontal"
         android:layout_alignParentBottom="true"

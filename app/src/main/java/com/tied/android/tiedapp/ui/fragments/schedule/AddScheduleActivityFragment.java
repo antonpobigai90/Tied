@@ -16,6 +16,7 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.client.ClientActivity;
 import com.tied.android.tiedapp.ui.activities.client.SelectClientActivity;
+import com.tied.android.tiedapp.ui.activities.lines.AddLinesActivity;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 
 /**
@@ -116,8 +117,8 @@ public class AddScheduleActivityFragment extends Fragment implements View.OnClic
 
                 break;
             case R.id.line_layout:
-//                intent = new Intent(getActivity(), AddLinesActivity.class);
-//                startActivity(intent);
+                intent = new Intent(getActivity(), AddLinesActivity.class);
+                startActivity(intent);
                 break;
             case R.id.goal_layout:
 
