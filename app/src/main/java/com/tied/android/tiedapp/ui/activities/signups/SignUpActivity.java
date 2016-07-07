@@ -92,7 +92,7 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
             Bundle bundle = new Bundle();
             Gson gson = new Gson();
             String user_json = gson.toJson(user);
-            bundle.putString(Constants.USER, user_json);
+            bundle.putString(Constants.USER_DATA, user_json);
             launchFragment(user.getSign_up_stage(), bundle);
         }else{
             launchFragment(Constants.EmailSignUp, null);

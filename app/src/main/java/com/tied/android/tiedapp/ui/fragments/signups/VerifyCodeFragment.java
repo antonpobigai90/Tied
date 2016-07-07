@@ -166,7 +166,7 @@ public class VerifyCodeFragment extends Fragment implements View.OnClickListener
                         boolean saved = user.save(getActivity().getApplicationContext());
                         if(saved){
                             String json = gson.toJson(user);
-                            bundle.putString(Constants.USER, json);
+                            bundle.putString(Constants.USER_DATA, json);
                             nextAction(Constants.OfficeAddress, bundle);
                         }else{
                             Toast.makeText(getActivity(), "user info  was not updated", Toast.LENGTH_LONG).show();

@@ -198,7 +198,7 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
 //        String json = gson.toJson(user);
 //        String code = "123456";
 //        Bundle bundle = new Bundle();
-//        bundle.putString(Constants.USER, json);
+//        bundle.putString(Constants.USER_DATA, json);
 //        bundle.putString(Constants.CODE,code);
 //        Toast.makeText(getActivity(), "your code is 12345", Toast.LENGTH_LONG).show();
 //        DialogUtils.closeProgress();

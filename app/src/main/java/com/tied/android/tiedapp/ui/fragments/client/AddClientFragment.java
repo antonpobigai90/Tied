@@ -27,13 +27,14 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.MyAsyncTask;
 import com.tied.android.tiedapp.customs.model.IndustryModel;
-import com.tied.android.tiedapp.objects.Client;
+import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
+import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.client.ClientActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
@@ -137,7 +138,7 @@ public class AddClientFragment extends Fragment implements View.OnClickListener{
         bundle = getArguments();
         if (bundle != null) {
             Gson gson = new Gson();
-            String user_json = bundle.getString(Constants.USER);
+            String user_json = bundle.getString(Constants.USER_DATA);
             user = gson.fromJson(user_json, User.class);
         }
     }
@@ -318,7 +319,10 @@ public class AddClientFragment extends Fragment implements View.OnClickListener{
                     User.LogOut(getActivity().getApplicationContext());
                 } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 201) {
                     Log.d(TAG + " client good", clientRes.getClient().toString());
-                    nextAction(bundle);
+                    DialogUtils.closeProgress();
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
                 } else {
                     DialogUtils.closeProgress();
                     Toast.makeText(getActivity(), clientRes.getMessage(), Toast.LENGTH_LONG).show();

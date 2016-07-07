@@ -104,7 +104,7 @@ public class TestActivity extends AppCompatActivity
                     startLocationUpdates();
                 } else {
                     // permission denied
-                    //pointless
+
                 }
             }
         }

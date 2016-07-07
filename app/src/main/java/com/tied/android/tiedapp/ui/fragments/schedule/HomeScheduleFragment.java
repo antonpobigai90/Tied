@@ -100,7 +100,7 @@ public class HomeScheduleFragment extends Fragment implements View.OnClickListen
         img_user_picture.setOnClickListener(this);
 
         Gson gson = new Gson();
-        String user_json = bundle.getString(Constants.USER);
+        String user_json = bundle.getString(Constants.USER_DATA);
         user = gson.fromJson(user_json, User.class);
 
         if (user.getAvatar_uri() != null) {

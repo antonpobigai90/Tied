@@ -25,10 +25,12 @@ import com.squareup.picasso.Target;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.objects.Client;
+import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Location;
-import com.tied.android.tiedapp.objects.Schedule;
+import com.tied.android.tiedapp.objects.client.Client;
+import com.tied.android.tiedapp.objects.client.ClientLocation;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
+import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.ui.activities.schedule.ViewSchedule;
@@ -126,13 +128,15 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
         if (bundle != null) {
             Log.d(TAG, "bundle not null");
             Gson gson = new Gson();
-            String user_json = bundle.getString(Constants.USER);
-            String client_json = bundle.getString(Constants.CLIENT);
-            String schedule_json = bundle.getString(Constants.CLIENT);
+            String user_json = bundle.getString(Constants.USER_DATA);
+            String client_json = bundle.getString(Constants.CLIENT_DATA);
+            String schedule_json = bundle.getString(Constants.SCHEDULE_DATA);
             user = gson.fromJson(user_json, User.class);
             client = gson.fromJson(client_json, Client.class);
             schedule = gson.fromJson(schedule_json, Schedule.class);
             company_name.setText(client.getCompany());
+
+            Log.d(TAG + " schedule", schedule.getLocation().getCoordinate().toString());
 
             Picasso.with(getActivity()).
                     load(client.getLogo())
@@ -147,8 +151,9 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
                         @Override public void onBitmapFailed(Drawable errorDrawable) { }
                         @Override public void onPrepareLoad(Drawable placeHolderDrawable) { }
                     });
+
+            initClient();
         }
-        initClient();
     }
 
     @Override
@@ -156,21 +161,26 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
         switch (v.getId()) {
             case R.id.view_schedule:
                 Intent intent = new Intent(getActivity(), ViewSchedule.class);
-                intent.putExtra(Constants.CLIENT, client);
-                intent.putExtra(Constants.SCHEDULE, schedule);
+                intent.putExtra(Constants.CLIENT_DATA, client);
+                intent.putExtra(Constants.SCHEDULE_DATA, schedule);
                 startActivity(intent);
                 break;
         }
     }
 
-
     private void initClient(){
+
+        Coordinate coordinate = new Coordinate(0.0, 0.0);
+        if(schedule.getLocation() != null){
+            coordinate = schedule.getLocation().getCoordinate();
+        }
+        ClientLocation clientLocation = new ClientLocation("10km", coordinate);
         ClientApi clientApi =  MainApplication.getInstance().getRetrofit().create(ClientApi.class);
-        Call<ClientRes> response = clientApi.getClients(user.getToken());
+        Call<ClientRes> response = clientApi.getClientsByLocation(user.getToken(), clientLocation);
         response.enqueue(new Callback<ClientRes>() {
             @Override
             public void onResponse(Call<ClientRes> call, Response<ClientRes> resResponse) {
-                if (getActivity() == null) return;
+                if ( getActivity() == null ) return;
                 DialogUtils.closeProgress();
                 ClientRes clientRes = resResponse.body();
                 if(clientRes.isAuthFailed()){
@@ -199,5 +209,4 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
             }
         });
     }
-
 }

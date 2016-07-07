@@ -234,12 +234,12 @@ public class CoWorkerFragment extends Fragment implements View.OnClickListener{
             user.setBoss(boss);
             user.setSign_up_stage(Constants.Completed);
             String json = gson.toJson(user);
-            bundle.putString(Constants.USER, json);
+            bundle.putString(Constants.USER_DATA, json);
             boolean saved = user.save(getActivity().getApplicationContext());
             if(saved){
                 DialogUtils.closeProgress();
                 Intent intent = new Intent(getActivity(), MainActivity.class);
-                intent.putExtra(Constants.USER, user);
+                intent.putExtra(Constants.USER_DATA, user);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             }else{

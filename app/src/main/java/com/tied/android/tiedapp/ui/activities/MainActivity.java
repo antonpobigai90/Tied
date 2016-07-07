@@ -134,11 +134,11 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         bundle = new Bundle();
         Gson gson = new Gson();
         String user_json = gson.toJson(user);
-        bundle.putString(Constants.USER, user_json);
+        bundle.putString(Constants.USER_DATA, user_json);
         if(user.isNewUser(getApplicationContext())){
             launchFragment(Constants.HomeSchedule, bundle);
         }else{
-            launchFragment(Constants.CreateSchedule, bundle);
+            launchFragment(Constants.AppointmentList, bundle);
         }
 
         retrofit = MainApplication.getInstance().getRetrofit();
@@ -325,7 +325,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
 //                startActivity(intent);
                 break;
             case R.id.activity:
-                launchFragment(Constants.CreateSchedule, bundle);
+                launchFragment(Constants.AppointmentList, bundle);
                 break;
             case Constants.Profile:
                 relativeLayout.setVisibility(View.GONE);

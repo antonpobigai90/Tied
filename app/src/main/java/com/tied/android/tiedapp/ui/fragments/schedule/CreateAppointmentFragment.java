@@ -28,11 +28,12 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.MyAsyncTask;
 import com.tied.android.tiedapp.customs.model.ScheduleNotifyModel;
-import com.tied.android.tiedapp.objects.Client;
+import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Location;
-import com.tied.android.tiedapp.objects.Schedule;
+import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.responses.ScheduleRes;
+import com.tied.android.tiedapp.objects.schedule.TimeRange;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
@@ -75,7 +76,7 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
     int notify_id = 1;
     private ScheduleNotifyModel scheduleNotifyModel;
 
-    private String endTimeText, stateTimeText, dateText, titleText, streetText, cityText, stateText, zipText;
+    private String endTimeText, startTimeText, dateText, titleText, streetText, cityText, stateText, zipText;
     private TextView txt_create_schedule, date;
     RelativeLayout layout_date, layout_time, layout_reminder;
 
@@ -161,8 +162,8 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
         if (bundle != null) {
             Log.d(TAG, "bundle not null");
             Gson gson = new Gson();
-            String user_json = bundle.getString(Constants.USER);
-            String client_json = bundle.getString(Constants.CLIENT);
+            String user_json = bundle.getString(Constants.USER_DATA);
+            String client_json = bundle.getString(Constants.CLIENT_DATA);
             user = gson.fromJson(user_json, User.class);
             client = gson.fromJson(client_json, Client.class);
 
@@ -263,9 +264,7 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
         String[] split_hour_min = time.split(":");
         String hour = String.format("%02d", Integer.parseInt(split_hour_min[0]));
         String min = String.format("%02d", Integer.parseInt(split_hour_min[1]));
-        String sec = "00";
-
-        return hour+":"+min+":"+sec;
+        return hour+":"+min;
     }
 
     public boolean validated() {
@@ -282,11 +281,8 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
         String from = time[0].replace(" ", "");
         String to = time[1].replace(" ", "");
 
-        from = timeFormat(from);
-        to = timeFormat(to);
-
-        stateTimeText = dateText + " " + from;
-        endTimeText = dateText + " " + to;
+        startTimeText = timeFormat(from);
+        endTimeText = timeFormat(to);
 
         return dateText != null;
     }
@@ -349,10 +345,13 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
         schedule.setUser_id(user.getId());
         schedule.setVisited(true);
         schedule.setReminder(notify_id);
-        schedule.setStart_time(stateTimeText);
+        TimeRange timeRange = new TimeRange(startTimeText, endTimeText);
+        schedule.setTime_range(timeRange);
         schedule.setEnd_time(endTimeText);
         schedule.setDate(dateText);
         schedule.setLocation(location);
+
+        Log.d(TAG + " schedule", schedule.toString());
 
             DialogUtils.displayProgress(getActivity());
             ScheduleApi scheduleApi = MainApplication.getInstance().getRetrofit().create(ScheduleApi.class);
@@ -368,11 +367,11 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
                         User.LogOut(getActivity());
                     }
                     else if (scheduleRes.get_meta() != null && scheduleRes.get_meta().getStatus_code() == 201) {
-                        Log.d(TAG + " Schedule", scheduleRes.toString());
+                        Log.d(TAG + " Schedule", scheduleRes.getSchedule().toString());
                         Gson gson = new Gson();
                         Schedule mainSchedule = scheduleRes.getSchedule();
                         String schedule_string = gson.toJson(mainSchedule, Schedule.class);
-                        bundle.putSerializable(Constants.SCHEDULE, schedule_string);
+                        bundle.putSerializable(Constants.SCHEDULE_DATA, schedule_string);
                         nextAction(Constants.ScheduleSuggestions, bundle);
                     } else {
                         nextAction(Constants.CreateSchedule, bundle);
@@ -392,8 +391,8 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
 
     @Override
     public void onTimeRangeSelected(int startHour, int startMin, int endHour, int endMin) {
-        stateTimeText = startHour + " : " + startMin;
-        endTimeText = endHour + " : " + endMin;
-        txt_time.setText(stateTimeText + " - " + endTimeText);
+        startTimeText = startHour + ":" + startMin;
+        endTimeText = endHour + ":" + endMin;
+        txt_time.setText(startTimeText + "-" + endTimeText);
     }
 }

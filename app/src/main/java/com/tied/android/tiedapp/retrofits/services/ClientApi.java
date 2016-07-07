@@ -1,7 +1,7 @@
 package com.tied.android.tiedapp.retrofits.services;
 
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.objects.ClientLocation;
+import com.tied.android.tiedapp.objects.client.ClientLocation;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
 
 import okhttp3.MultipartBody;

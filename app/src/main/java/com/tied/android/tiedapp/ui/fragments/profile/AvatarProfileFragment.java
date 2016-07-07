@@ -66,7 +66,7 @@ public class AvatarProfileFragment extends Fragment implements View.OnClickListe
         if (bundle != null) {
             Log.d(TAG, "bundle not null");
             Gson gson = new Gson();
-            String user_json = bundle.getString("user");
+            String user_json = bundle.getString(Constants.USER_DATA);
             User user = gson.fromJson(user_json, User.class);
             Log.d(TAG, user.toString());
             if (user.getAvatar_uri() != null && new File(user.getAvatar_uri()).exists()) {
@@ -188,7 +188,7 @@ public class AvatarProfileFragment extends Fragment implements View.OnClickListe
                 if(ServerRes.isSuccess()){
                     Gson gson = new Gson();
                     Bundle bundle = getArguments();
-                    String user_json = bundle.getString(Constants.USER, "");
+                    String user_json = bundle.getString(Constants.USER_DATA, "");
                     User user = gson.fromJson(user_json, User.class);
                     user.setAvatar_uri(String.valueOf(uri));
                     user.setAvatar(ServerRes.getUser().getAvatar());
@@ -196,7 +196,7 @@ public class AvatarProfileFragment extends Fragment implements View.OnClickListe
                     if(saved){
                         DialogUtils.closeProgress();
                         user_json = gson.toJson(user);
-                        bundle.putString(Constants.USER, user_json);
+                        bundle.putString(Constants.USER_DATA, user_json);
                         Toast.makeText(getActivity(), ServerRes.getMessage(), Toast.LENGTH_LONG).show();
                     }else {
                         DialogUtils.closeProgress();

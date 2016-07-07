@@ -166,7 +166,7 @@ public class TerritoryFragment extends Fragment implements View.OnClickListener{
                         if(saved){
                             Gson gson = new Gson();
                             String json = gson.toJson(user);
-                            bundle.putString(Constants.USER, json);
+                            bundle.putString(Constants.USER_DATA, json);
                             DialogUtils.closeProgress();
                             nextAction(bundle);
                         }else{

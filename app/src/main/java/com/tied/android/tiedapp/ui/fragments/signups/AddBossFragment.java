@@ -229,7 +229,7 @@ public class AddBossFragment extends Fragment implements View.OnClickListener{
             user.setBoss(boss);
             user.setSign_up_stage(Constants.AddBossNow);
             String json = gson.toJson(user);
-            bundle.putString(Constants.USER, json);
+            bundle.putString(Constants.USER_DATA, json);
             if(uri != null)
                 bundle.putString("avatar", uri.toString());
             DialogUtils.closeProgress();

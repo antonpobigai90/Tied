@@ -25,6 +25,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class MainApplication extends Application {
+
     public static final String TAG = MainApplication.class
             .getSimpleName();
 

@@ -24,24 +24,26 @@ public class Constants {
     public static final String USER_UPDATE_INFO = API_PATH + "users/me";
     public static final String USER_CHANGE_PASSWORD = API_PATH + "users/changePassword";
 
-
     public static final String CLIENTS = API_PATH + "clients";
     public static final String USER_CLIENTS = API_PATH + "users/me/clients";
     public static final String USER_GE0_CLIENTS = API_PATH + "users/me/clients/geo";
 
-    public static final String SCHEDULE = API_PATH + "schedules";
+    public static final String SCHEDULES = API_PATH + "schedules";
     public static final String USER_SCHEDULE = API_PATH + "users/me/schedules";
     public static final String USER_GE0_SCHEDULE = API_PATH + "users/me/schedules/geo";
+    public static final String USER_SCHEDULES_BY_DATE = API_PATH + "users/me/schedules/date";
 
     public static final String GET_INDUSTRIES = API_PATH + "config/industries";
 
-    public static final String USER = "user";
-    public static final String CLIENT = "client";
+    public static final String USER_DATA = "user_data";
+    public static final String CLIENT_DATA = "client_data";
+    public static final String SCHEDULE_DATA = "schedule_data";
+    public static final String SCHEDULE_DATE_FILTER = "schedule_date_filter";
     public static final String CODE = "code";
     public static final String SERVER_INFO = "server_info";
     public static final String CURRENT_USER = "current_user";
     public static final String NEW_USER = "new_user";
-    public static final String SPLASH_SCREEN_DONE = "splash_screen_done";
+    public static final String SPLASH_SCREEN_DONE = "sp lash_screen_done";
     public static final String LOGGED_OUT_USER = "logout";
     public static final String LOGGED_IN_USER = "login";
     public static final String AVATAR_STATE_SAVED = "avatar_state";
@@ -55,6 +57,7 @@ public class Constants {
 
     public static final String SELECTED_DATE = "selected_date";
     public static final String SHOW_SELECTED_DATE = "show_selected_date";
+    public static final String SCHEDULE_DATA_FILTER_INDEX = "filter";
     public static final String CITY = "city";
     public static final String ZIP = "zip";
     public static final String STATE = "state";
@@ -138,9 +141,5 @@ public class Constants {
     public static final String WIND = "wind";
     public static final String PARTLY_CLOUDY_DAY = "partly-cloudy-day";
     public static final String PARTLY_CLOUDY_NIGHT = "partly-cloudy-night";
-
-
-
-
 
 }

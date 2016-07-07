@@ -21,10 +21,8 @@ import com.google.gson.Gson;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.objects.Client;
-import com.tied.android.tiedapp.objects.ClientLocation;
-import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Location;
+import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
@@ -113,7 +111,7 @@ public class SelectClientListFragment extends Fragment
         bundle = getArguments();
         if (bundle != null) {
             Gson gson = new Gson();
-            String user_json = bundle.getString("user");
+            String user_json = bundle.getString(Constants.USER_DATA);
             user = gson.fromJson(user_json, User.class);
         }
         initClient();
@@ -135,20 +133,18 @@ public class SelectClientListFragment extends Fragment
         Log.d("SelectContact", data.toString());
 
         Intent intent = new Intent(getActivity(), CreateAppointmentActivity.class);
-        intent.putExtra(Constants.CLIENT, data);
+        intent.putExtra(Constants.CLIENT_DATA, data);
         startActivity(intent);
     }
 
     private void initClient(){
 
-        ClientLocation clientLocation = new ClientLocation("1200km", new Coordinate(0.0, 0.0));
-
         ClientApi clientApi =  MainApplication.getInstance().getRetrofit().create(ClientApi.class);
-        Call<ClientRes> response = clientApi.getClientsByLocation(user.getToken(), clientLocation);
+        Call<ClientRes> response = clientApi.getClients(user.getToken());
         response.enqueue(new Callback<ClientRes>() {
             @Override
             public void onResponse(Call<ClientRes> call, Response<ClientRes> resResponse) {
-                if (getActivity() == null) return;
+                if ( getActivity() == null ) return;
                 DialogUtils.closeProgress();
                 ClientRes clientRes = resResponse.body();
                 if(clientRes.isAuthFailed()){

@@ -73,7 +73,7 @@ public class AddBossNowFragment extends Fragment implements View.OnClickListener
         bundle = getArguments();
         if (bundle != null) {
             Gson gson = new Gson();
-            String user_json = bundle.getString(Constants.USER);
+            String user_json = bundle.getString(Constants.USER_DATA);
             User user = gson.fromJson(user_json, User.class);
             ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
         }
@@ -122,7 +122,7 @@ public class AddBossNowFragment extends Fragment implements View.OnClickListener
                         if(saved){
                             Gson gson = new Gson();
                             String json = gson.toJson(user);
-                            bundle.putString(Constants.USER, json);
+                            bundle.putString(Constants.USER_DATA, json);
                             DialogUtils.closeProgress();
                             nextAction(Constants.CoWorkerCount, bundle);
                         }else{
@@ -169,7 +169,7 @@ public class AddBossNowFragment extends Fragment implements View.OnClickListener
 //                boolean saved = user.save(getActivity().getApplicationContext());
 //                if(saved){
 //                    String json = gson.toJson(user);
-//                    bundle.putString(Constants.USER, json);
+//                    bundle.putString(Constants.USER_DATA, json);
 //                    progressBar.setVisibility(View.INVISIBLE);
 //                    nextAction(Constants.CoWorkerCount, bundle);
 //                }else{

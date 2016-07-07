@@ -29,7 +29,7 @@ import java.io.IOException;
 /**
  * Created by Daniel on 5/3/2016.
  */
-public class ClientActivity extends FragmentActivity implements View.OnClickListener, FragmentIterationListener {
+public class ClientActivity extends FragmentActivity implements View.OnClickListener, FragmentIterationListener{
 
     public static final String TAG = ClientActivity.class
             .getSimpleName();
@@ -63,12 +63,12 @@ public class ClientActivity extends FragmentActivity implements View.OnClickList
         bundle = new Bundle();
         Gson gson = new Gson();
         String user_json = gson.toJson(user);
-        bundle.putString(Constants.USER, user_json);
+        bundle.putString(Constants.USER_DATA, user_json);
         launchFragment(Constants.AddClient, bundle);
     }
 
     private void handleCrop(Uri outputUri) {
-        ImageView avatar =  ((AddClientFragment) fragment).avatar;
+        ImageView avatar = ((AddClientFragment) fragment).avatar;
         avatar.setImageBitmap(null);
         Log.d("path * ", outputUri.getPath());
         try {
@@ -84,7 +84,7 @@ public class ClientActivity extends FragmentActivity implements View.OnClickList
      */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("requestCode",requestCode+"");
+        Log.d("requestCode", requestCode + "");
         if (requestCode == Crop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
             handleCrop(outputUri);
         } else if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
@@ -101,7 +101,7 @@ public class ClientActivity extends FragmentActivity implements View.OnClickList
     public void launchFragment(int pos, Bundle bundle) {
         fragment_index = pos;
         fragment = null;
-        Log.d(TAG, "position "+pos);
+        Log.d(TAG, "position " + pos);
         switch (pos) {
             case Constants.AddClient:
                 fragment = new AddClientFragment();
@@ -127,13 +127,13 @@ public class ClientActivity extends FragmentActivity implements View.OnClickList
     }
 
     public void OnFragmentInteractionListener(int action, Bundle bundle) {
-        Log.d(TAG, " onFragmentInteraction "+action);
+        Log.d(TAG, " onFragmentInteraction " + action);
         launchFragment(action, bundle);
     }
 
     @Override
     public void onBackPressed() {
-        if(fragment_index == Constants.AddClient){
+        if (fragment_index == Constants.AddClient) {
             finish();
         }
     }
@@ -147,4 +147,5 @@ public class ClientActivity extends FragmentActivity implements View.OnClickList
                 break;
         }
     }
+
 }

@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.tied.android.tiedapp.R;
-import com.tied.android.tiedapp.objects.Client;
+import com.tied.android.tiedapp.objects.client.Client;
 
 /**
  * Created by Emmanuel on 6/21/2016.

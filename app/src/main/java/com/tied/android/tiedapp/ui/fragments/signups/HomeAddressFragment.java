@@ -211,7 +211,7 @@ public class HomeAddressFragment extends Fragment implements View.OnClickListene
                         if (saved) {
                             Gson gson = new Gson();
                             String json = gson.toJson(user);
-                            bundle.putString(Constants.USER, json);
+                            bundle.putString(Constants.USER_DATA, json);
                             DialogUtils.closeProgress();
                             nextAction(Constants.Territory,bundle);
                             Log.d(TAG, "location: " + json);

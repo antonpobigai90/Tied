@@ -41,7 +41,6 @@ public class SelectClientActivity extends AppCompatActivity implements FragmentI
 
     private ImageView img_close;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +71,7 @@ public class SelectClientActivity extends AppCompatActivity implements FragmentI
         bundle = new Bundle();
         Gson gson = new Gson();
         String user_json = gson.toJson(user);
-        bundle.putString(Constants.USER, user_json);
+        bundle.putString(Constants.USER_DATA, user_json);
 
         mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
         if (mViewPager != null) {
@@ -106,11 +105,6 @@ public class SelectClientActivity extends AppCompatActivity implements FragmentI
         }
     }
 
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
 
     public void onCustomSelected(ViewPager vpPager){
         // Attaching the page change listener inside the activity

@@ -1,4 +1,6 @@
-package com.tied.android.tiedapp.objects;
+package com.tied.android.tiedapp.objects.client;
+
+import com.tied.android.tiedapp.objects.Coordinate;
 
 /**
  * Created by Emmanuel on 6/30/2016.

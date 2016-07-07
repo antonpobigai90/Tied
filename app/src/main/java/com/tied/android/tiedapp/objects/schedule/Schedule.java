@@ -1,4 +1,6 @@
-package com.tied.android.tiedapp.objects;
+package com.tied.android.tiedapp.objects.schedule;
+
+import com.tied.android.tiedapp.objects.Location;
 
 import java.io.Serializable;
 
@@ -15,7 +17,7 @@ public class Schedule implements Serializable{
     private int reminder;
     private boolean visited;
     private String date;
-    private String start_time;
+    private TimeRange time_range;
     private String end_time;
     private Location location;
 
@@ -78,12 +80,12 @@ public class Schedule implements Serializable{
         this.visited = visited;
     }
 
-    public String getStart_time() {
-        return start_time;
+    public TimeRange getTime_range() {
+        return time_range;
     }
 
-    public void setStart_time(String start_time) {
-        this.start_time = start_time;
+    public void setTime_range(TimeRange time_range) {
+        this.time_range = time_range;
     }
 
     public String getEnd_time() {
@@ -121,7 +123,7 @@ public class Schedule implements Serializable{
                 ", reminder=" + reminder +
                 ", visited=" + visited +
                 ", date='" + date + '\'' +
-                ", start_time='" + start_time + '\'' +
+                ", time_range=" + time_range +
                 ", end_time='" + end_time + '\'' +
                 ", location=" + location +
                 '}';

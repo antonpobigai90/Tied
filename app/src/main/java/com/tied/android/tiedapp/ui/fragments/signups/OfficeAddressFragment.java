@@ -234,7 +234,7 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
                         if (saved) {
                             Gson gson = new Gson();
                             String json = gson.toJson(user);
-                            bundle.putString(Constants.USER, json);
+                            bundle.putString(Constants.USER_DATA, json);
                             DialogUtils.closeProgress();
                             if (same) {
                                 nextAction(Constants.Territory, bundle);
