@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,6 +71,10 @@ public class AddClientFragment extends Fragment implements View.OnClickListener{
 
     private String companyText, nameText, streetText, cityText, stateText, zipText, phoneText, noteText, birthdayText;
     private Location location;
+
+    private int visit_frequency = 1;
+    private ImageView img_weekly, img_two_weeks,img_monthly,img_three_weeks;
+    LinearLayout visit_radio;
 
     // Code for our image picker select action.
     public final int IMAGE_PICKER_SELECT = 999;
@@ -129,6 +134,17 @@ public class AddClientFragment extends Fragment implements View.OnClickListener{
         note = (EditText) view.findViewById(R.id.note);
         birthday = (EditText) view.findViewById(R.id.birthday);
 
+        visit_radio = (LinearLayout) view.findViewById(R.id.visit_radio);
+        img_weekly = (ImageView) view.findViewById(R.id.img_weekly);
+        img_two_weeks = (ImageView) view.findViewById(R.id.img_two_weeks);
+        img_three_weeks = (ImageView) view.findViewById(R.id.img_three_weeks);
+        img_monthly = (ImageView) view.findViewById(R.id.img_monthly);
+        img_weekly.setOnClickListener(this);
+        img_two_weeks.setOnClickListener(this);
+        img_three_weeks.setOnClickListener(this);
+        img_monthly.setOnClickListener(this);
+        selectRadio(visit_radio,0);
+
 
         avatar = (ImageView) view.findViewById(R.id.avatar);
         img_done = (ImageView) view.findViewById(R.id.img_done);
@@ -184,9 +200,42 @@ public class AddClientFragment extends Fragment implements View.OnClickListener{
                     new GeocodeAsyncTask().execute();
                 }
                 break;
+            case R.id.img_weekly:
+                selectRadio(visit_radio,0);
+                break;
+            case R.id.img_two_weeks:
+                selectRadio(visit_radio,1);
+                break;
+            case R.id.img_three_weeks:
+                selectRadio(visit_radio,2);
+                break;
+            case R.id.img_monthly:
+                selectRadio(visit_radio,3);
+                break;
             case R.id.avatar:
                 showChooser();
                 break;
+        }
+    }
+
+    public void selectRadio(LinearLayout visit_radio, int position){
+        int index = 0;
+        for(int i = 0; i < visit_radio.getChildCount(); i++){
+            if(visit_radio.getChildAt(i) instanceof LinearLayout){
+                LinearLayout child = (LinearLayout) visit_radio.getChildAt(i);
+                ImageView img_radio = (ImageView) child.getChildAt(0);
+                TextView title = (TextView) child.getChildAt(1);
+                if(position != index){
+                    img_radio.setBackgroundResource(R.mipmap.circle_uncheck);
+                    title.setTextColor(getResources().getColor(R.color.semi_transparent_black));
+                }else{
+                    img_radio.setBackgroundResource(R.mipmap.circle_check2);
+                    title.setTextColor(getResources().getColor(R.color.button_bg));
+                    visit_frequency = i+1;
+                    Log.d(TAG, "radio_value"+visit_frequency);
+                }
+                index++;
+            }
         }
     }
 

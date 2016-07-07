@@ -5,39 +5,10 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <RelativeLayout
-        android:id="@+id/top_layout"
-        android:layout_width="fill_parent"
-        android:layout_height="54dp"
-        android:background="@color/schedule_title_bg_color">
-
-        <ImageView
-            android:id="@+id/img_close"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:src="@mipmap/btn_close" />
-
-        <TextView
-            android:id="@+id/txt_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center_horizontal"
-            android:color="@color/white"
-            android:text="Creative Co-op Line"
-            android:textIsSelectable="false"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-    </RelativeLayout>
-
     <LinearLayout
         android:id="@+id/upper_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/top_layout"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -97,40 +68,8 @@
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/bottom_layout"
         android:layout_below="@+id/upper_layout"
         android:listSelector="@android:color/transparent"
         android:scrollbars="none" />
-
-    <RelativeLayout
-        android:id="@+id/bottom_layout"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/button_bg">
-
-        <ImageView
-            android:id="@+id/tick"
-            android:layout_width="35dp"
-            android:layout_height="30dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="50dp"
-            android:src="@mipmap/checkmark" />
-
-        <TextView
-            android:id="@+id/txt_continue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="CONTINUE"
-            android:textColor="@color/white"
-            android:layout_centerInParent="true"
-            android:gravity="center_horizontal"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-
-    </RelativeLayout>
-
-
 
 </RelativeLayout>

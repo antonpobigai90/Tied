@@ -17,6 +17,7 @@
     <color name="background_tab_pressed">#6633B5E5</color>
     <color name="primary">#002943</color>
     <color name="icon_green">#38df22</color>
+    <color name="color_green">#23af10</color>
 
     <color name="off_white">#FAFAFA</color>
     <color name="background2">#E0E0E0</color>

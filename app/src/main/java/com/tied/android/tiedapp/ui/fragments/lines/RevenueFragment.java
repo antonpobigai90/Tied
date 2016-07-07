@@ -17,7 +17,7 @@ public class RevenueFragment extends Fragment implements View.OnClickListener{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.profile2, container, false);
+        View view = inflater.inflate(R.layout.fragment_line_revenue, container, false);
         return view;
     }
 
