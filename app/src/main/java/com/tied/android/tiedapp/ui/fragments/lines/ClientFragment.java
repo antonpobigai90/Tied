@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.tied.android.tiedapp.R;
-import com.tied.android.tiedapp.objects.Client;
+import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.ui.adapters.LineClientAdapter;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 
