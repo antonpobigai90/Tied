@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,20 +14,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
-import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.objects.schedule.DateRange;
-import com.tied.android.tiedapp.objects.schedule.ScheduleDate;
-import com.tied.android.tiedapp.objects.schedule.TimeRange;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.fragments.activities.ActivityFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 /**
  * Created by Emmanuel on 7/1/2016.
@@ -78,7 +67,7 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
         mPagerAdapter = new PagerAdapter(getActivity().getSupportFragmentManager());
         if (mViewPager != null) {
             mViewPager.setAdapter(mPagerAdapter);
-            mViewPager.setCurrentItem(0);
+            mViewPager.setCurrentItem(2);
             selectTab(tab_bar, 0);
         }
 
@@ -108,15 +97,12 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
     public void onCustomSelected(ViewPager vpPager){
         // Attaching the page change listener inside the activity
         vpPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
             // This method will be invoked when a new page becomes selected.
             @Override
             public void onPageSelected(int position) {
                 Toast.makeText(getActivity(),"Selected page position: " + position, Toast.LENGTH_SHORT).show();
-
                 selectTab(tab_bar, position);
             }
-
             // This method will be invoked when the current page is scrolled
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -174,72 +160,14 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
     }
 
 
-    public Pair<String,String> getWeekRange(int year, int week_no) {
-
-        Calendar cal = Calendar.getInstance();
-
-        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-        cal.set(Calendar.YEAR, year);
-        cal.set(Calendar.WEEK_OF_YEAR, week_no);
-        Date monday = cal.getTime();
-
-        cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-        cal.set(Calendar.YEAR, year);
-        cal.set(Calendar.WEEK_OF_YEAR, week_no);
-        Date sunday = cal.getTime();
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        return new Pair<String,String>(sdf.format(monday), sdf.format(sunday));
-    }
-
     public class PagerAdapter extends FragmentPagerAdapter {
         public PagerAdapter(FragmentManager fm) {
             super(fm);
         }
         @Override
         public Fragment getItem(int position) {
-
             Log.d(TAG, "position : "+position);
-            TimeRange timeRange = null;
-            DateRange dateRange = null;
-            Calendar cal = Calendar.getInstance();
-            Date now = cal.getTime();
-            Pair<String,String> date_range_pairs = null;
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-            String  today = sdf.format(now);
-            int index = 0;
-            switch (position){
-                case 1:
-                    index = 1;
-                    date_range_pairs = getWeekRange(cal.get(Calendar.YEAR), cal.get(Calendar.WEEK_OF_YEAR));
-                    timeRange = new TimeRange("00:00","23:59");
-                    dateRange = new DateRange(date_range_pairs.first,date_range_pairs.second);
-                    break;
-                case 2:
-                    index = 2;
-                    timeRange = new TimeRange("00:00","23:59");
-                    dateRange = new DateRange(today,today);
-                    break;
-                case 3:
-                    index = 3;
-                    date_range_pairs = getWeekRange(cal.get(Calendar.YEAR), cal.get(Calendar.WEEK_OF_YEAR) + 1);
-                    timeRange = new TimeRange("00:00","23:59");
-                    dateRange = new DateRange(date_range_pairs.first,date_range_pairs.second);
-                    break;
-                case 4:
-                    index = 2;
-                    timeRange = new TimeRange("00:00","23:59");
-                    dateRange = new DateRange("2016-07-01","2016-07-31");
-                    break;
-            }
-
-            ScheduleDate scheduleDate = new ScheduleDate(timeRange, dateRange);
-            Gson gson = new Gson();
-            String scheduleDate_json = gson.toJson(scheduleDate);
-            bundle.putString(Constants.SCHEDULE_DATE_FILTER, scheduleDate_json);
-            bundle.putInt(Constants.SCHEDULE_DATA_FILTER_INDEX, index);
-            Fragment fragment = ScheduleListFragment.newInstance();
-            fragment.setArguments(bundle);
+            Fragment fragment = ScheduleListFragment.newInstance(position, bundle);
             return fragment;
         }
         @Override

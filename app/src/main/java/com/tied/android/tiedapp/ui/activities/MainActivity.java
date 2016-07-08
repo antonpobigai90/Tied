@@ -24,16 +24,17 @@ import com.squareup.picasso.Target;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.objects.responses.Count;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
-import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.fragments.activities.ActivityFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.AddressFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.AvatarProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.EditProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.NotificationProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.ProfileFragment;
-import com.tied.android.tiedapp.ui.fragments.schedule.AddActivityFragment;
+import com.tied.android.tiedapp.ui.fragments.client.ClientAddFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.AddScheduleActivityFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.CreateScheduleFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.HomeScheduleFragment;
@@ -42,10 +43,14 @@ import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleTimeLineFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.IndustryFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.ui.listeners.ImageReadyForUploadListener;
+import com.tied.android.tiedapp.util.DialogUtils;
 
 import java.io.File;
 import java.io.IOException;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 
 
@@ -54,7 +59,7 @@ import retrofit2.Retrofit;
  */
 public class MainActivity extends FragmentActivity implements FragmentIterationListener, View.OnClickListener{
 
-    public static final String TAG = SignUpActivity.class
+    public static final String TAG = MainActivity.class
             .getSimpleName();
 
     public ImageView img_user_picture, add;
@@ -138,7 +143,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         if(user.isNewUser(getApplicationContext())){
             launchFragment(Constants.HomeSchedule, bundle);
         }else{
-            launchFragment(Constants.AppointmentList, bundle);
+            checkIfScheduleExist();
         }
 
         retrofit = MainApplication.getInstance().getRetrofit();
@@ -160,9 +165,15 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 activity_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
                 fragment = new CreateScheduleFragment();
                 break;
+            case Constants.ClientAdd:
+                relativeLayout.setVisibility(View.GONE);
+                tab_actvity_schedule.setBackgroundResource(R.mipmap.base_schedule);
+                activity_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
+                fragment = new ClientAddFragment();
+                break;
             case Constants.ActivitySchedule:
                 relativeLayout.setVisibility(View.GONE);
-                fragment = new AddActivityFragment();
+                fragment = new ClientAddFragment();
                 break;
             case Constants.HomeSchedule:
                 tab_bar.setVisibility(View.GONE);
@@ -230,6 +241,37 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                     .addToBackStack(fragment.getClass().getSimpleName())
                     .commit();
         }
+    }
+
+    public void checkIfScheduleExist(){
+        DialogUtils.displayProgress(this);
+        ScheduleApi scheduleApi = MainApplication.getInstance().getRetrofit().create(ScheduleApi.class);
+        Call<Count> response = scheduleApi.getScheduleCount(user.getToken());
+        response.enqueue(new Callback<Count>() {
+            @Override
+            public void onResponse(Call<Count> call, Response<Count> countResponse) {
+                if (MainActivity.this == null) return;
+                DialogUtils.closeProgress();
+                Count count = countResponse.body();
+                Log.d(TAG + "Count", count.toString());
+                if (count != null && count.isAuthFailed()){
+                    User.LogOut(MainActivity.this);
+                } else if (count != null && count.isSuccess()) {
+                    if(count.getCount() > 0){
+                        launchFragment(Constants.AppointmentList, bundle);
+                    }else{
+                        launchFragment(Constants.CreateSchedule, bundle);
+                    }
+                } else {
+                    launchFragment(Constants.CreateSchedule, bundle);
+                }
+            }
+            @Override
+            public void onFailure(Call<Count> call, Throwable t) {
+                Log.d(TAG + " onFailure", t.toString());
+                DialogUtils.closeProgress();
+            }
+        });
     }
 
     @Override
@@ -321,11 +363,9 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 break;
             case R.id.more:
                 launchFragment(Constants.Profile, bundle);
-//                Intent intent = new Intent(this, ProfileActivity.class);
-//                startActivity(intent);
                 break;
             case R.id.activity:
-                launchFragment(Constants.AppointmentList, bundle);
+                checkIfScheduleExist();
                 break;
             case Constants.Profile:
                 relativeLayout.setVisibility(View.GONE);

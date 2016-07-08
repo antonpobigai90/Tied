@@ -26,10 +26,12 @@ public class Constants {
 
     public static final String CLIENTS = API_PATH + "clients";
     public static final String USER_CLIENTS = API_PATH + "users/me/clients";
+    public static final String USER_CLIENTS_COUNT = API_PATH + "users/me/clients_count";
     public static final String USER_GE0_CLIENTS = API_PATH + "users/me/clients/geo";
 
     public static final String SCHEDULES = API_PATH + "schedules";
     public static final String USER_SCHEDULE = API_PATH + "users/me/schedules";
+    public static final String USER_SCHEDULE_COUNT = API_PATH + "users/me/schedules_count";
     public static final String USER_GE0_SCHEDULE = API_PATH + "users/me/schedules/geo";
     public static final String USER_SCHEDULES_BY_DATE = API_PATH + "users/me/schedules/date";
 
@@ -100,7 +102,7 @@ public class Constants {
     public static final int CreateSchedule = 30;
     public static final int ActivitySchedule = 31;
     public static final int HomeSchedule = 32;
-    public static final int Schedules = 33;
+    public static final int ClientAdd = 33;
     public static final int AddScheduleActivity = 34;
     public static final int ScheduleSuggestions = 35;
     public static final int ActivityFragment = 36;

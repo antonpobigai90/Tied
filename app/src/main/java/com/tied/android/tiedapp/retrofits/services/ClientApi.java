@@ -3,6 +3,7 @@ package com.tied.android.tiedapp.retrofits.services;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.client.ClientLocation;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
+import com.tied.android.tiedapp.objects.responses.Count;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -27,6 +28,9 @@ public interface ClientApi {
 
     @GET(Constants.USER_CLIENTS)
     Call<ClientRes> getClients(@Header(Constants.TOKEN_HEADER) String token);
+
+    @GET(Constants.USER_CLIENTS_COUNT)
+    Call<Count> getClientsCount(@Header(Constants.TOKEN_HEADER) String token);
 
     @POST(Constants.USER_GE0_CLIENTS)
     Call<ClientRes> getClientsByLocation(@Header(Constants.TOKEN_HEADER) String token, @Body ClientLocation user);
