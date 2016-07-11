@@ -1,4 +1,4 @@
-package com.tied.android.tiedapp.ui.fragments.schedule;
+package com.tied.android.tiedapp.ui.fragments.client;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,25 +18,24 @@ import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class AddActivityFragment extends Fragment implements View.OnClickListener {
+public class ClientAddFragment extends Fragment implements View.OnClickListener {
 
-    public static final String TAG = AddActivityFragment.class
+    public static final String TAG = ClientAddFragment.class
             .getSimpleName();
 
     private Bundle bundle;
-
 
     private TextView txt_cancel, txt_add_client;
 
     private FragmentIterationListener fragmentIterationListener;
 
-    public AddActivityFragment() {
+    public ClientAddFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_add_activity, container, false);
+        return inflater.inflate(R.layout.fragment_add_client, container, false);
     }
 
     @Override
