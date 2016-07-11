@@ -59,7 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/top_layout"
-            android:paddingBottom="5dp"
+            android:paddingBottom="2dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp">
 
@@ -68,8 +68,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
                 android:backgroundTint="@android:color/transparent"
                 android:gravity="center_horizontal"
                 android:hint="What's Line Name?"
