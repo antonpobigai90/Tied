@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,9 +30,9 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.MyAsyncTask;
 import com.tied.android.tiedapp.customs.model.IndustryModel;
-import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Location;
+import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
@@ -38,7 +40,9 @@ import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.client.ClientActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
+import com.tied.android.tiedapp.ui.fragments.ClientDatePickerFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.util.ClientSelectIndustryDialog;
 import com.tied.android.tiedapp.util.DialogUtils;
 
 import org.json.JSONObject;
@@ -58,23 +62,26 @@ import retrofit2.Response;
 /**
  * Created by Emmanuel on 6/22/2016.
  */
-public class AddClientFragment extends Fragment implements View.OnClickListener{
+public class AddClientFragment extends Fragment implements View.OnClickListener, ClientSelectIndustryDialog.SelectedListener{
 
     public static final String TAG = AddClientFragment.class
             .getSimpleName();
 
 
     public ImageView avatar;
-    private EditText company,name, street, state, city, phone, zip, territory, fax, revenue, ytd_revenue, birthday, note;
+    private EditText company,name, street, state, city, phone, zip, territory, fax, revenue, ytd_revenue, note;
     private ImageView img_done;
-    private TextView industry, select_line;
+    private TextView industry, select_line, birthday;
 
     private String companyText, nameText, streetText, cityText, stateText, zipText, phoneText, noteText, birthdayText;
     private Location location;
 
     private int visit_frequency = 1;
     private ImageView img_weekly, img_two_weeks,img_monthly,img_three_weeks;
-    LinearLayout visit_radio;
+    LinearLayout visit_radio, birthday_layout;
+    RelativeLayout industry_layout;
+
+    int industry_id = 1;
 
     // Code for our image picker select action.
     public final int IMAGE_PICKER_SELECT = 999;
@@ -132,7 +139,14 @@ public class AddClientFragment extends Fragment implements View.OnClickListener{
         revenue = (EditText) view.findViewById(R.id.revenue);
         ytd_revenue = (EditText) view.findViewById(R.id.ytd_revenue);
         note = (EditText) view.findViewById(R.id.note);
-        birthday = (EditText) view.findViewById(R.id.birthday);
+        birthday = (TextView) view.findViewById(R.id.birthday);
+        birthday_layout = (LinearLayout) view.findViewById(R.id.birthday_layout);
+        birthday_layout.setOnClickListener(this);
+
+        industry_layout = (RelativeLayout) view.findViewById(R.id.industry_layout);
+        industry = (TextView) view.findViewById(R.id.industry);
+        industry_layout.setOnClickListener(this);
+
 
         visit_radio = (LinearLayout) view.findViewById(R.id.visit_radio);
         img_weekly = (ImageView) view.findViewById(R.id.img_weekly);
@@ -212,6 +226,14 @@ public class AddClientFragment extends Fragment implements View.OnClickListener{
             case R.id.img_monthly:
                 selectRadio(visit_radio,3);
                 break;
+            case R.id.birthday_layout:
+                DialogFragment dateFragment = new ClientDatePickerFragment();
+                dateFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
+                break;
+            case R.id.industry_layout:
+                ClientSelectIndustryDialog alert = new ClientSelectIndustryDialog();
+                alert.showDialog(this);
+                break;
             case R.id.avatar:
                 showChooser();
                 break;
@@ -238,6 +260,14 @@ public class AddClientFragment extends Fragment implements View.OnClickListener{
             }
         }
     }
+
+    @Override
+    public void selectedNow(IndustryModel industryModel) {
+        String text_industry = "- " + industryModel.getName() + " -";
+        industry.setText(text_industry);
+        industry_id = industryModel.getId();
+    }
+
 
     public void showChooser() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
