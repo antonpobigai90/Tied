@@ -7,11 +7,14 @@ import com.tied.android.tiedapp.objects.Coordinate;
  */
 public class ClientLocation {
     private String distance;
-    private Coordinate location;
+    private Coordinate coordinate;
 
-    public ClientLocation(String distance, Coordinate location) {
+    public ClientLocation() {
+    }
+
+    public ClientLocation(String distance, Coordinate coordinate) {
         this.distance = distance;
-        this.location = location;
+        this.coordinate = coordinate;
     }
 
     public String getDistance() {
@@ -22,19 +25,19 @@ public class ClientLocation {
         this.distance = distance;
     }
 
-    public Coordinate getLocation() {
-        return location;
+    public Coordinate getCoordinate() {
+        return coordinate;
     }
 
-    public void setLocation(Coordinate location) {
-        this.location = location;
+    public void setCoordinate(Coordinate coordinate) {
+        this.coordinate = coordinate;
     }
 
     @Override
     public String toString() {
         return "ClientLocation{" +
                 "distance='" + distance + '\'' +
-                ", location=" + location +
+                ", coordinate=" + coordinate +
                 '}';
     }
 }

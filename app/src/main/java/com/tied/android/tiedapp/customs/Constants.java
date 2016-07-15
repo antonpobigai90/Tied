@@ -4,10 +4,10 @@ package com.tied.android.tiedapp.customs;
  * Created by Emmanuel on 4/23/2016.
  */
 public class Constants {
+    public static final String TAG = Constants.class
+            .getSimpleName();
 
     public static final String SERVER_URL = "http://tied.goattale.com:8102/api/v1/";
-
-    static final String TAG = "Tied App";
 
     public static final String HOST = "http://tied.goattale.com:8102/";
 

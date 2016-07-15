@@ -21,8 +21,9 @@ import com.google.gson.Gson;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.objects.Location;
+import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.client.Client;
+import com.tied.android.tiedapp.objects.client.ClientLocation;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
@@ -59,10 +60,6 @@ public class SelectClientListFragment extends Fragment
     private User user;
 
     private TextView txt_continue;
-
-    int[] IMAGE = {R.mipmap.avatar_profile, R.mipmap.avatar_schedule, R.mipmap.default_avatar};
-    String[] NAME = {"Emily Emmanuel","Johnson Good","Nonso Lagos"};
-    Location[] ADDRESS = {new Location("Ikeja","123","Lagos","Ikunna"),new Location("Old Town","546","NY","Mile street"),new Location("LA","567","Carlifornia","Myles Strt")};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -139,8 +136,12 @@ public class SelectClientListFragment extends Fragment
 
     private void initClient(){
 
+        ClientLocation clientLocation = new ClientLocation();
+        clientLocation.setDistance("100000000m");
+        clientLocation.setCoordinate(new Coordinate(0.0, 0.0));
+
         ClientApi clientApi =  MainApplication.getInstance().getRetrofit().create(ClientApi.class);
-        Call<ClientRes> response = clientApi.getClients(user.getToken());
+        Call<ClientRes> response = clientApi.getClientsByLocation(user.getToken(), clientLocation);
         response.enqueue(new Callback<ClientRes>() {
             @Override
             public void onResponse(Call<ClientRes> call, Response<ClientRes> resResponse) {
