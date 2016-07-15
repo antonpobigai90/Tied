@@ -78,8 +78,9 @@ public class ClientAdapter extends BaseAdapter {
 
         v.address.setText(data.getAddress().getLocationAddress());
 
+        String logo = data.getLogo().equals("") ? null  : data.getLogo();
         Picasso.with(_c).
-                load(data.getLogo())
+                load(logo)
                 .into(new Target() {
                     @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                         if (bitmap != null){

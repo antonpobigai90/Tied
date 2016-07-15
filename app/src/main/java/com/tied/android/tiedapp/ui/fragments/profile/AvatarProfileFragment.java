@@ -154,7 +154,7 @@ public class AvatarProfileFragment extends Fragment implements View.OnClickListe
 
         DialogUtils.displayProgress(getActivity());
         Gson gson = new Gson();
-        String user_json = bundle.getString("user");
+        String user_json = bundle.getString(Constants.USER_DATA);
         User user = gson.fromJson(user_json, User.class);
 
         File file = new File(uri.getPath());

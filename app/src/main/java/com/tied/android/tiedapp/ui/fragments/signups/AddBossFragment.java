@@ -110,7 +110,7 @@ public class AddBossFragment extends Fragment implements View.OnClickListener{
         bundle = getArguments();
         if (bundle != null) {
             Gson gson = new Gson();
-            String user_json = bundle.getString("user");
+            String user_json = bundle.getString(Constants.USER_DATA);
             User user = gson.fromJson(user_json, User.class);
             ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
         }
@@ -224,7 +224,7 @@ public class AddBossFragment extends Fragment implements View.OnClickListener{
             Uri uri = ((SignUpActivity) getActivity()).outputUri;
 
             Gson gson = new Gson();
-            String user_json = bundle.getString("user");
+            String user_json = bundle.getString(Constants.USER_DATA);
             final User user = gson.fromJson(user_json, User.class);
             user.setBoss(boss);
             user.setSign_up_stage(Constants.AddBossNow);

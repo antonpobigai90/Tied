@@ -160,7 +160,7 @@ public class VerifyCodeFragment extends Fragment implements View.OnClickListener
                     if (code != null && code.equals(txt_verify_code.getText().toString())) {
                         bundle = getArguments();
                         Gson gson = new Gson();
-                        String user_json = bundle.getString("user");
+                        String user_json = bundle.getString(Constants.USER_DATA);
                         User user = gson.fromJson(user_json, User.class);
                         user.setSign_up_stage(Constants.OfficeAddress);
                         boolean saved = user.save(getActivity().getApplicationContext());

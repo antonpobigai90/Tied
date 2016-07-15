@@ -123,7 +123,7 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
         bundle = getArguments();
         if (bundle != null) {
             Gson gson = new Gson();
-            String user_json = bundle.getString("user");
+            String user_json = bundle.getString(Constants.USER_DATA);
             User user = gson.fromJson(user_json, User.class);
             ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
         }
@@ -213,7 +213,7 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
             Bundle bundle = getArguments();
 
             Gson gson = new Gson();
-            String user_json = bundle.getString("user");
+            String user_json = bundle.getString(Constants.USER_DATA);
             final User user = gson.fromJson(user_json, User.class);
             user.setOffice_address(location);
             if (same) {

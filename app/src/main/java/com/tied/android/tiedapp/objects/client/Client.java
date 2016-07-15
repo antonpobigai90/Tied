@@ -1,5 +1,10 @@
 package com.tied.android.tiedapp.objects.client;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
+import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Location;
 
 import java.io.Serializable;
@@ -29,6 +34,19 @@ public class Client implements Serializable {
     int image;
 
     public Client() {
+    }
+
+
+    public static void clientCreated(Context context){
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor prefsEditor = mPrefs.edit();
+        prefsEditor.putBoolean(Constants.CLIENT_CREATED, true );
+        prefsEditor.apply();
+    }
+
+    public static boolean isClientCreated(Context context){
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return mPrefs.getBoolean(Constants.CLIENT_CREATED, false);
     }
 
     public Client(int image, String full_name) {

@@ -369,6 +369,7 @@ public class AddClientFragment extends Fragment implements View.OnClickListener{
                 } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 201) {
                     Log.d(TAG + " client good", clientRes.getClient().toString());
                     DialogUtils.closeProgress();
+                    Client.clientCreated(getActivity().getApplicationContext());
                     Intent intent = new Intent(getActivity(), MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);

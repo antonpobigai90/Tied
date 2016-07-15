@@ -86,7 +86,7 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
         bundle = getArguments();
         if(bundle != null){
             Gson gson = new Gson();
-            String user_json = bundle.getString("user");
+            String user_json = bundle.getString(Constants.USER_DATA);
             User user = gson.fromJson(user_json, User.class);
             phone.setText(user.getPhone());
             fax.setText(user.getFax());
@@ -124,7 +124,7 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
         DialogUtils.displayProgress(getActivity());
         bundle = getArguments();
         final Gson gson = new Gson();
-        String user_json = bundle.getString("user");
+        String user_json = bundle.getString(Constants.USER_DATA);
         final User user = gson.fromJson(user_json, User.class);
         user.setPhone(phoneText);
         user.setFax(faxText);
@@ -141,7 +141,7 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
                     Gson gson = new Gson();
                     boolean saved = user.save(getActivity().getApplicationContext());
                     if(saved){
-                        String user_json = bundle.getString("user");
+                        String user_json = bundle.getString(Constants.USER_DATA);
                         User user = gson.fromJson(user_json, User.class);
                         Log.d(TAG +" number", phoneText);
                         call_send_phone_vc(user);

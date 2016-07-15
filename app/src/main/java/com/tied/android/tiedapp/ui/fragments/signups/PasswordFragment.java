@@ -97,7 +97,7 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
     public void continue_action() {
         DialogUtils.displayProgress(getActivity());
         Gson gson = new Gson();
-        final String user_json = bundle.getString("user");
+        final String user_json = bundle.getString(Constants.USER_DATA);
         final User user = gson.fromJson(user_json, User.class);
         Log.d(TAG, user.toString());
         SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
@@ -121,7 +121,7 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
                         Bundle bundle = new Bundle();
                         Gson gson = new Gson();
                         String user_json = gson.toJson(loggedIn_user);
-                        bundle.putString("user", user_json);
+                        bundle.putString(Constants.USER_DATA, user_json);
                         nextAction(Constants.Picture, bundle);
                     } else {
                         Toast.makeText(getActivity(), "user not save", Toast.LENGTH_LONG).show();

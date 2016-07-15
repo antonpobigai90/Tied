@@ -372,6 +372,7 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
                         Schedule mainSchedule = scheduleRes.getSchedule();
                         String schedule_string = gson.toJson(mainSchedule, Schedule.class);
                         bundle.putSerializable(Constants.SCHEDULE_DATA, schedule_string);
+                        Schedule.scheduleCreated(getActivity().getApplicationContext());
                         nextAction(Constants.ScheduleSuggestions, bundle);
                     } else {
                         nextAction(Constants.CreateSchedule, bundle);

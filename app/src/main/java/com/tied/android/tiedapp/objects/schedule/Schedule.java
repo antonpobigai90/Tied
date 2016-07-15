@@ -1,5 +1,10 @@
 package com.tied.android.tiedapp.objects.schedule;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
+import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Location;
 
 import java.io.Serializable;
@@ -23,6 +28,20 @@ public class Schedule implements Serializable{
 
     public Schedule() {
     }
+
+
+    public static void scheduleCreated(Context context){
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor prefsEditor = mPrefs.edit();
+        prefsEditor.putBoolean(Constants.SCHEDULE_CREATED, true );
+        prefsEditor.apply();
+    }
+
+    public static boolean isScheduleCreated(Context context){
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return mPrefs.getBoolean(Constants.SCHEDULE_CREATED, false);
+    }
+
 
     public String getId() {
         return id;

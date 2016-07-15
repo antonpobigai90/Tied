@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.responses.Count;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
@@ -88,7 +89,13 @@ public class CreateScheduleFragment extends Fragment implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.txt_create_schedule:
-                checkIfClientExist(user);
+                if(!Client.isClientCreated(getActivity().getApplicationContext())){
+                    checkIfClientExist(user);
+                }else{
+                    Intent intent = new Intent(getActivity(), SelectClientActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                }
                 break;
         }
     }

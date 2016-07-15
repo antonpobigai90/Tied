@@ -114,7 +114,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         bundle = getArguments();
         if (bundle != null) {
             Gson gson = new Gson();
-            String user_json = bundle.getString("user");
+            String user_json = bundle.getString(Constants.USER_DATA);
             user = gson.fromJson(user_json, User.class);
 
             first_name.setText(user.getFirst_name());

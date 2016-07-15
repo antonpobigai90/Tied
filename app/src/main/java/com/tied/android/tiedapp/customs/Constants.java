@@ -5,11 +5,11 @@ package com.tied.android.tiedapp.customs;
  */
 public class Constants {
 
-    public static final String SERVER_URL = "http://tied.goattale.com:8100/api/v1/";
+    public static final String SERVER_URL = "http://tied.goattale.com:8102/api/v1/";
 
     static final String TAG = "Tied App";
 
-    public static final String HOST = "https://tied-api.herokuapp.com/";
+    public static final String HOST = "http://tied.goattale.com:8102/";
 
     public static final int PORT = 3000;
     public static final String API_PATH = "api/v1/";
@@ -144,4 +144,6 @@ public class Constants {
     public static final String PARTLY_CLOUDY_DAY = "partly-cloudy-day";
     public static final String PARTLY_CLOUDY_NIGHT = "partly-cloudy-night";
 
+    public static final String SCHEDULE_CREATED = "schedule_created";
+    public static final String CLIENT_CREATED = "client_created";
 }
