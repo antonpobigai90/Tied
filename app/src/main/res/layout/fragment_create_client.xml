@@ -555,6 +555,7 @@
                     android:textSize="12sp" />
 
                 <RelativeLayout
+                    android:id="@+id/industry_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="8dp">
@@ -565,7 +566,6 @@
                         android:layout_height="wrap_content"
                         android:layout_toLeftOf="@+id/arrow"
                         android:paddingLeft="4dp"
-                        android:text="Food"
                         android:textColor="@color/schedule_title_bg_color"
                         android:textSize="13sp"
                         android:textStyle="bold" />
@@ -671,11 +671,12 @@
                 android:background="@android:color/darker_gray" />
 
             <LinearLayout
+                android:id="@+id/birthday_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingBottom="5dp"
-                android:paddingTop="5dp">
+                android:paddingTop="8dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -685,11 +686,12 @@
                     android:textColor="@color/schedule_title_bg_color"
                     android:textSize="12sp" />
 
-                <EditText
+                <TextView
                     android:id="@+id/birthday"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@android:color/transparent"
+                    android:paddingLeft="4dp"
+                    android:paddingTop="6dp"
                     android:text="15th May, 2015"
                     android:textColor="@color/schedule_title_bg_color"
                     android:textSize="13sp"

@@ -29,7 +29,7 @@
                     android:text="REVENUE INFO"
                     android:textColor="@color/schedule_title_bg_color"
                     android:textIsSelectable="false"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -137,12 +137,12 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="50dp">
+                android:layout_marginTop="40dp">
 
                 <TextView
                     android:id="@+id/btn_add_new_sale"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp"
+                    android:layout_height="40dp"
                     android:layout_gravity="center_horizontal"
                     android:background="@drawable/white_fill_blue_stroke"
                     android:gravity="center_vertical|center_horizontal"
@@ -156,7 +156,7 @@
                 <TextView
                     android:id="@+id/btn_view_revenue"
                     android:layout_width="match_parent"
-                    android:layout_height="45dp"
+                    android:layout_height="40dp"
                     android:layout_marginTop="20dp"
                     android:layout_gravity="center_horizontal"
                     android:background="@drawable/white_fill_blue_stroke"
