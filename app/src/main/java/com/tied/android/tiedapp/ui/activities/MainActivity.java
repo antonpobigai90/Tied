@@ -229,6 +229,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 tab_bar.setVisibility(View.VISIBLE);
                 activity_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
                 fragment = new ScheduleTimeLineFragment();
+                tab_bar.setVisibility(View.VISIBLE);
                 break;
             default:
                 finish();
