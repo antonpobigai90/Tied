@@ -58,8 +58,9 @@ public class ClientScheduleHorizontalAdapter extends RecyclerView.Adapter<Client
         final Client data = (Client) _data.get(position);
         viewHolder.name.setText(data.getFull_name());
 
+        String logo = data.getLogo().equals("") ? null  : data.getLogo();
         Picasso.with(activity).
-                load(data.getLogo())
+                load(logo)
                 .into(new Target() {
                     @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                         if (bitmap != null){

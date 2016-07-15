@@ -74,8 +74,9 @@ public class ClientScheduleAdapter extends BaseAdapter {
         final Client data = (Client) _data.get(i);
         v.name.setText(data.getFull_name());
 
+        String logo = data.getLogo().equals("") ? null  : data.getLogo();
         Picasso.with(_c).
-                load(data.getLogo())
+                load(logo)
                 .into(new Target() {
                     @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                         if (bitmap != null){

@@ -138,8 +138,9 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
 
             Log.d(TAG + " schedule", schedule.getLocation().getCoordinate().toString());
 
+            String logo = client.getLogo().equals("") ? null  : client.getLogo();
             Picasso.with(getActivity()).
-                    load(client.getLogo())
+                    load(logo)
                     .into(new Target() {
                         @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                             if (bitmap != null){

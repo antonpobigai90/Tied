@@ -14,4 +14,10 @@ public class HelperMethods {
     public static float convertCelciusToFahrenheit(float celsius) {
         return ((celsius * 9) / 5) + 32;
     }
+
+    public static double kilometerToMile(double km){
+        double miles;
+        miles = km * 0.621371192;
+        return miles;
+    }
 }

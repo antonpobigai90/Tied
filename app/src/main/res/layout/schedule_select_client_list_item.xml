@@ -14,7 +14,7 @@
         android:paddingRight="40dp"
         android:paddingTop="15dp">
 
-        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/pic"
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -102,7 +102,7 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.1dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginLeft="0dp"
         android:background="@android:color/darker_gray" />
 
 </LinearLayout>
