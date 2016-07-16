@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +17,10 @@ import android.widget.Toast;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.fragments.activities.ActivityFragment;
+import com.tied.android.tiedapp.ui.fragments.schedule.tabs.AllScheduleFragment;
+import com.tied.android.tiedapp.ui.fragments.schedule.tabs.ThisMonthScheduleFragment;
+import com.tied.android.tiedapp.ui.fragments.schedule.tabs.ThisWeekScheduleFragment;
+import com.tied.android.tiedapp.ui.fragments.schedule.tabs.TodayScheduleFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 
 /**
@@ -34,7 +38,7 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
 
     public FragmentIterationListener mListener;
 
-    LinearLayout week_tab, today_tab,month_tab,next_week_tab, tab_bar;
+    LinearLayout all_tab, today_tab,this_week_tab,next_week_tab, tab_bar;
 
 
     @Override
@@ -52,25 +56,25 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
         bundle = getArguments();
 
         tab_bar = (LinearLayout) view.findViewById(R.id.tab_bar);
-        week_tab = (LinearLayout) view.findViewById(R.id.week_tab);
+        all_tab = (LinearLayout) view.findViewById(R.id.all_tab);
         today_tab = (LinearLayout) view.findViewById(R.id.today_tab);
+        this_week_tab = (LinearLayout) view.findViewById(R.id.this_week_tab);
         next_week_tab = (LinearLayout) view.findViewById(R.id.next_week_tab);
-        month_tab = (LinearLayout) view.findViewById(R.id.month_tab);
 
-        week_tab.setOnClickListener(this);
+        all_tab.setOnClickListener(this);
         today_tab.setOnClickListener(this);
-        month_tab.setOnClickListener(this);
+        this_week_tab.setOnClickListener(this);
         next_week_tab.setOnClickListener(this);
 
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
 
         mPagerAdapter = new PagerAdapter(getActivity().getSupportFragmentManager());
         if (mViewPager != null) {
+            mViewPager.setOffscreenPageLimit(4);
             mViewPager.setAdapter(mPagerAdapter);
-            mViewPager.setCurrentItem(2);
+            mViewPager.setCurrentItem(0);
             selectTab(tab_bar, 0);
         }
-
         onCustomSelected(mViewPager);
 
         Log.d(TAG, "am her 1");
@@ -79,16 +83,16 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.week_tab:
+            case R.id.all_tab:
                 mViewPager.setCurrentItem(0);
                 break;
             case R.id.today_tab:
                 mViewPager.setCurrentItem(1);
                 break;
-            case R.id.next_week_tab:
+            case R.id.this_week_tab:
                 mViewPager.setCurrentItem(2);
                 break;
-            case R.id.month_tab:
+            case R.id.next_week_tab:
                 mViewPager.setCurrentItem(3);
                 break;
         }
@@ -160,14 +164,31 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
     }
 
 
-    public class PagerAdapter extends FragmentPagerAdapter {
+    public class PagerAdapter extends FragmentStatePagerAdapter {
         public PagerAdapter(FragmentManager fm) {
             super(fm);
         }
         @Override
         public Fragment getItem(int position) {
+            Fragment fragment = null;
             Log.d(TAG, "position : "+position);
-            Fragment fragment = ScheduleListFragment.newInstance(position, bundle);
+            switch (position){
+                case 0:
+                    fragment = new AllScheduleFragment();
+                    break;
+                case 1:
+                    fragment = new TodayScheduleFragment();
+                    break;
+                case 2:
+                    fragment = new ThisWeekScheduleFragment();
+                    break;
+                case 3:
+                    fragment = new ThisMonthScheduleFragment();
+                    break;
+                default:
+                    return null;
+            }
+            fragment.setArguments(bundle);
             return fragment;
         }
         @Override

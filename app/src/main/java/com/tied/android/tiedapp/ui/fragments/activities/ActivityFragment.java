@@ -153,7 +153,6 @@ public class ActivityFragment extends Fragment implements View.OnClickListener {
         @Override
         public Fragment getItem(int position) {
             Fragment fragment = null;
-            Log.d(TAG, "position : "+position);
             switch (position){
                 case 0:
                     fragment = new YouFragment();

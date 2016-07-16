@@ -21,12 +21,14 @@ import com.google.gson.Gson;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Distance;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.client.ClientLocation;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
+import com.tied.android.tiedapp.ui.activities.client.SelectClientActivity;
 import com.tied.android.tiedapp.ui.activities.schedule.CreateAppointmentActivity;
 import com.tied.android.tiedapp.ui.adapters.ClientAdapter;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
@@ -142,8 +144,12 @@ public class SelectClientListFragment extends Fragment
     private void initClient(){
 
         ClientLocation clientLocation = new ClientLocation();
-        clientLocation.setDistance("0");
-        clientLocation.setCoordinate(user.getOffice_address().getCoordinate());
+        clientLocation.setDistance("0km");
+        Coordinate coordinate = ((SelectClientActivity) getActivity()).coordinate;
+        if( coordinate == null ){
+            coordinate = user.getOffice_address().getCoordinate();
+        }
+        clientLocation.setCoordinate(coordinate);
 
         ClientApi clientApi =  MainApplication.getInstance().getRetrofit().create(ClientApi.class);
         Call<ClientRes> response = clientApi.getClientsByLocation(user.getToken(), clientLocation);
@@ -212,7 +218,7 @@ public class SelectClientListFragment extends Fragment
 
         if(clients.size() > 0){
             String lower = range[rangeIndex]+"";
-            String upper = "More";
+            String upper = "n";
             Distance distance = new Distance(lower, upper, "Miles");
             data.add(distance);
             data.addAll(clients);

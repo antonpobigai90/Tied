@@ -27,6 +27,7 @@ import com.tied.android.tiedapp.ui.fragments.schedule.AppointmentCalendarFragmen
 import com.tied.android.tiedapp.ui.fragments.schedule.CreateAppointmentFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.CreateScheduleFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleSuggestionFragment;
+import com.tied.android.tiedapp.ui.fragments.schedule.ViewScheduleFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 
 
@@ -107,6 +108,9 @@ public class CreateAppointmentActivity extends FragmentActivity implements Fragm
                 break;
             case Constants.ScheduleSuggestions:
                 fragment = new ScheduleSuggestionFragment();
+                break;
+            case Constants.ViewSchedule:
+                fragment = new ViewScheduleFragment();
                 break;
             default:
                 finish();

@@ -72,8 +72,8 @@ dependencies {
     compile 'com.google.android.gms:play-services-auth:8.4.0'
     compile 'com.google.android.gms:play-services-location:8.4.0'
     compile 'com.google.android.gms:play-services-maps:8.4.0'
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:design:23.4.0'
+    compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.android.support:design:23.0.1'
     compile 'com.soundcloud.android:android-crop:1.0.1@aar'
     compile 'com.dubsmash.volley:library:2.0.0'
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
@@ -83,7 +83,6 @@ dependencies {
     compile 'com.github.moondroid.coverflow:library:1.0'
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.android.support:support-v13:23.4.0'
     compile 'com.github.johnhiott:DarkSkyApi:v0.1.4'
     compile 'com.github.tittojose:timerangepicker-library:0.2'
 }

@@ -144,11 +144,12 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         if(user.isNewUser(getApplicationContext())){
             launchFragment(Constants.HomeSchedule, bundle);
         }else{
-            if(!Schedule.isScheduleCreated(getApplicationContext())){
-                checkIfScheduleExist();
-            }else{
-                launchFragment(Constants.CreateSchedule, bundle);
-            }
+            checkIfScheduleExist();
+//            if(!Schedule.isScheduleCreated(getApplicationContext())){
+//                checkIfScheduleExist();
+//            }else{
+//                launchFragment(Constants.CreateSchedule, bundle);
+//            }
         }
 
         retrofit = MainApplication.getInstance().getRetrofit();
