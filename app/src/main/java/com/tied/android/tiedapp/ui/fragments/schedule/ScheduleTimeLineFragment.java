@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.fragments.schedule.tabs.AllScheduleFragment;
-import com.tied.android.tiedapp.ui.fragments.schedule.tabs.ThisMonthScheduleFragment;
+import com.tied.android.tiedapp.ui.fragments.schedule.tabs.NextWeekScheduleFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.tabs.ThisWeekScheduleFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.tabs.TodayScheduleFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
@@ -101,6 +101,7 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
             @Override
             public void onPageSelected(int position) {
                 Toast.makeText(getActivity(),"Selected page position: " + position, Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "position real: "+position);
                 selectTab(tab_bar, position);
             }
             // This method will be invoked when the current page is scrolled
@@ -157,7 +158,6 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
         }
     }
 
-
     public class PagerAdapter extends FragmentPagerAdapter {
         public PagerAdapter(FragmentManager fm) {
             super(fm);
@@ -177,8 +177,11 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
                     fragment = new ThisWeekScheduleFragment();
                     break;
                 case 3:
-                    fragment = new ThisMonthScheduleFragment();
+                    fragment = new NextWeekScheduleFragment();
                     break;
+//                case 3:
+//                    fragment = new ThisMonthScheduleFragment();
+//                    break;
                 default:
                     return null;
             }

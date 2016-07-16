@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.Pair;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,7 +33,10 @@ import com.tied.android.tiedapp.util.HelperMethods;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,11 +48,6 @@ import retrofit2.Response;
 public abstract class SchedulesFragment extends Fragment implements View.OnClickListener {
     protected static final String TAG = SchedulesFragment.class
             .getSimpleName();
-
-    String[] MONTHS_LIST = {"January", "Febebuary", "March", "April", "May", "June", "July", "August", "September",
-            "October", "November", "December"};
-    String[] WEEK_LIST = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-
 
     public FragmentIterationListener mListener;
 
@@ -73,8 +72,6 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        Log.d(TAG, "Fragment changed");
         initComponent(view);
     }
 
@@ -105,9 +102,8 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
                 } else if (scheduleRes != null && scheduleRes.get_meta() != null && scheduleRes.get_meta().getStatus_code() == 200) {
                     ArrayList<Schedule> scheduleArrayList = scheduleRes.getSchedules();
                     ArrayList<ScheduleDataModel> scheduleDataModels = null;
-                    Log.d(TAG + " scheduleArrayList", scheduleArrayList.toString());
+                    Log.d(TAG + " scheduleArrayList : ", scheduleArrayList.toString());
                     scheduleDataModels = parseSchedules(scheduleArrayList);
-
                     ScheduleListAdapter adapter = new ScheduleListAdapter(scheduleDataModels, getActivity());
                     listView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
@@ -135,10 +131,8 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
         }
     }
 
-    public ArrayList<ScheduleDataModel> parseSchedules(ArrayList<Schedule> scheduleArrayList) {
-
+    protected ArrayList<ScheduleDataModel> parseSchedules(ArrayList<Schedule> scheduleArrayList) {
         Log.d(TAG + " parseSchedules", scheduleArrayList.toString());
-
         ArrayList<ScheduleDataModel> scheduleDataModels = new ArrayList<>();
         for (int i = 0; i < scheduleArrayList.size(); i++) {
             Schedule schedule = scheduleArrayList.get(i);
@@ -146,22 +140,25 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
             ScheduleDataModel scheduleDataModel = new ScheduleDataModel();
 
             ScheduleTimeModel scheduleTimeModel = new ScheduleTimeModel(schedule.getId(),
-                    schedule.getTitle(), schedule.getTime_range().getStart_time());
+                    schedule.getTitle(), schedule.getTime_range().getStart_time(), schedule.getTime_range().getEnd_time());
 
             ArrayList<ScheduleTimeModel> scheduleTimeModels = new ArrayList<ScheduleTimeModel>();
             scheduleTimeModels.add(scheduleTimeModel);
-            for (int j = 1; j < scheduleArrayList.size(); j++) {
+            for (int j = i + 1; j < scheduleArrayList.size(); j++) {
                 Schedule this_schedule = scheduleArrayList.get(j);
                 if (isSameDay(schedule.getDate(), this_schedule.getDate())) {
-                    scheduleTimeModel = new ScheduleTimeModel(schedule.getId(),
-                            schedule.getTitle(), schedule.getTime_range().getStart_time());
+                    scheduleTimeModel = new ScheduleTimeModel(this_schedule.getId(),
+                            this_schedule.getTitle(), this_schedule.getTime_range().getStart_time(), this_schedule.getTime_range().getEnd_time());
                     scheduleTimeModels.add(scheduleTimeModel);
-                    scheduleArrayList.remove(j);
+                    Log.d(TAG, "SAME "+schedule.getTitle() + " and "+this_schedule.getTitle());
+                    scheduleArrayList.remove(j--);
                 }
             }
 
+            long diff_in_date = HelperMethods.getDateDifferenceWithToday(schedule.getDate());
+
             String day = String.format("%02d", HelperMethods.getDayFromSchedule(schedule.getDate()));
-            String week_day = WEEK_LIST[HelperMethods.getDayOfTheWeek(schedule.getDate()) - 1];
+            String week_day = getWeekDay(schedule);
 
             scheduleDataModel.setScheduleTimeModel(scheduleTimeModels);
             scheduleDataModel.setTemperature("80");
@@ -171,8 +168,30 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
 
             scheduleDataModels.add(scheduleDataModel);
         }
+        Collections.reverse(scheduleDataModels);
         return scheduleDataModels;
     }
+
+    protected String getWeekDay(Schedule schedule){
+        int diff = (int) HelperMethods.getDateDifferenceWithToday(schedule.getDate());
+        String result;
+        if(diff < 7 && diff >= 0){
+            switch (diff){
+                case 0:
+                    result = "Today";
+                    break;
+                case 1:
+                    result = "Tomorrow";
+                    break;
+                default:
+                    result = HelperMethods.getDayOfTheWeek(schedule.getDate());
+            }
+        }else{
+            result = HelperMethods.getMonthOfTheYear(schedule.getDate());
+        }
+        return result;
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -196,5 +215,23 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
         if (mListener != null) {
             mListener.OnFragmentInteractionListener(action, bundle);
         }
+    }
+
+    public static Pair<String,String> getWeekRange(int year, int week_no) {
+
+        Calendar cal = Calendar.getInstance();
+
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.WEEK_OF_YEAR, week_no);
+        Date monday = cal.getTime();
+
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.WEEK_OF_YEAR, week_no);
+        Date sunday = cal.getTime();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        return new Pair<String,String>(sdf.format(monday), sdf.format(sunday));
     }
 }

@@ -82,18 +82,23 @@ public class ScheduleListAdapter extends BaseAdapter {
         v.timeLine = (LinearLayout) view.findViewById(R.id.timeline);
 
         ArrayList<ScheduleTimeModel> scheduleTimeModels = data.getScheduleTimeModel();
-        for (ScheduleTimeModel schedule : scheduleTimeModels) {
+        for (ScheduleTimeModel scheduleTimeModel : scheduleTimeModels) {
             View schedule_view = LayoutInflater.from(_c).inflate(R.layout.schedule_list_item, null);
             LinearLayout linearLayout = (LinearLayout) schedule_view.findViewById(R.id.schedule);
             TextView time = (TextView) linearLayout.findViewById(R.id.time);
             TextView message = (TextView) linearLayout.findViewById(R.id.message);
-            time.setText(schedule.getTime());
-            message.setText(schedule.getTitle());
+            String timeRange = getTimeRange(scheduleTimeModel);
+            time.setText(timeRange);
+            message.setText(scheduleTimeModel.getTitle());
             v.timeLine.addView(linearLayout);
         }
 
         view.setTag(data);
         return view;
+    }
+
+    public String getTimeRange(ScheduleTimeModel scheduleTimeModel){
+        return scheduleTimeModel.getStart_time() +" - "+scheduleTimeModel.getEnd_time();
     }
 
 

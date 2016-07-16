@@ -20,6 +20,7 @@ import java.util.Locale;
 /**
  * Created by Emmanuel on 7/15/2016.
  */
+
 public class TodayScheduleFragment extends SchedulesFragment implements View.OnClickListener {
 
     public static final String TAG = TodayScheduleFragment.class
@@ -36,7 +37,8 @@ public class TodayScheduleFragment extends SchedulesFragment implements View.OnC
         super.initComponent(view);
     }
 
-    public ArrayList<ScheduleDataModel> parseSchedules(ArrayList<Schedule> scheduleArrayList) {
+    @Override
+    protected ArrayList<ScheduleDataModel> parseSchedules(ArrayList<Schedule> scheduleArrayList) {
 
         Log.d(TAG + " parseSchedules", scheduleArrayList.toString());
 
@@ -47,13 +49,13 @@ public class TodayScheduleFragment extends SchedulesFragment implements View.OnC
             ScheduleDataModel scheduleDataModel = new ScheduleDataModel();
 
             ScheduleTimeModel scheduleTimeModel = new ScheduleTimeModel(schedule.getId(),
-                    schedule.getTitle(), schedule.getTime_range().getStart_time());
+                    schedule.getTitle(), schedule.getTime_range().getStart_time(), schedule.getTime_range().getEnd_time());
 
             ArrayList<ScheduleTimeModel> scheduleTimeModels = new ArrayList<ScheduleTimeModel>();
             scheduleTimeModels.add(scheduleTimeModel);
 
             String day = String.format("%02d", HelperMethods.getDayFromSchedule(schedule.getDate()));
-            String week_day = WEEK_LIST[HelperMethods.getDayOfTheWeek(schedule.getDate()) - 1];
+            String week_day = HelperMethods.getDayOfTheWeek(schedule.getDate());
 
             scheduleDataModel.setScheduleTimeModel(scheduleTimeModels);
             scheduleDataModel.setTemperature("80");
@@ -63,6 +65,7 @@ public class TodayScheduleFragment extends SchedulesFragment implements View.OnC
 
             scheduleDataModels.add(scheduleDataModel);
         }
+
         return scheduleDataModels;
     }
 }

@@ -51,11 +51,6 @@ public class ScheduleListFragment extends Fragment
     public static final String TAG = ScheduleListFragment.class
             .getSimpleName();
 
-    String[] MONTHS_LIST = {"January", "Febebuary", "March", "April", "May", "June", "July", "August", "September",
-            "October", "November", "December"};
-    String[] WEEK_LIST = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-
-
     public FragmentIterationListener mListener;
 
     private ArrayList<ScheduleDataModel> schedules;
@@ -213,13 +208,13 @@ public class ScheduleListFragment extends Fragment
             ScheduleDataModel scheduleDataModel = new ScheduleDataModel();
 
             ScheduleTimeModel scheduleTimeModel = new ScheduleTimeModel(schedule.getId(),
-                    schedule.getTitle(), schedule.getTime_range().getStart_time());
+                    schedule.getTitle(), schedule.getTime_range().getStart_time(), schedule.getTime_range().getEnd_time());
 
             ArrayList<ScheduleTimeModel> scheduleTimeModels = new ArrayList<ScheduleTimeModel>();
             scheduleTimeModels.add(scheduleTimeModel);
 
             String day = String.format("%02d", HelperMethods.getDayFromSchedule(schedule.getDate()));
-            String week_day = WEEK_LIST[HelperMethods.getDayOfTheWeek(schedule.getDate()) - 1];
+            String week_day = HelperMethods.getDayOfTheWeek(schedule.getDate());
 
             scheduleDataModel.setScheduleTimeModel(scheduleTimeModels);
             scheduleDataModel.setTemperature("80");
@@ -240,7 +235,7 @@ public class ScheduleListFragment extends Fragment
             ScheduleDataModel scheduleDataModel = new ScheduleDataModel();
 
             ScheduleTimeModel scheduleTimeModel = new ScheduleTimeModel(schedule.getId(),
-                    schedule.getTitle(), schedule.getTime_range().getStart_time());
+                    schedule.getTitle(), schedule.getTime_range().getStart_time(), schedule.getTime_range().getEnd_time());
 
             ArrayList<ScheduleTimeModel> scheduleTimeModels = new ArrayList<ScheduleTimeModel>();
             scheduleTimeModels.add(scheduleTimeModel);
@@ -248,14 +243,14 @@ public class ScheduleListFragment extends Fragment
                 Schedule this_schedule = scheduleArrayList.get(j);
                 if (isSameDay(schedule.getDate(), this_schedule.getDate())) {
                     scheduleTimeModel = new ScheduleTimeModel(schedule.getId(),
-                            schedule.getTitle(), schedule.getTime_range().getStart_time());
+                            schedule.getTitle(), schedule.getTime_range().getStart_time(), schedule.getTime_range().getEnd_time());
                     scheduleTimeModels.add(scheduleTimeModel);
                     scheduleArrayList.remove(j);
                 }
             }
 
             String day = String.format("%02d", HelperMethods.getDayFromSchedule(schedule.getDate()));
-            String week_day = WEEK_LIST[HelperMethods.getDayOfTheWeek(schedule.getDate()) - 1];
+            String week_day = HelperMethods.getDayOfTheWeek(schedule.getDate());
 
             scheduleDataModel.setScheduleTimeModel(scheduleTimeModels);
             scheduleDataModel.setTemperature("80");
