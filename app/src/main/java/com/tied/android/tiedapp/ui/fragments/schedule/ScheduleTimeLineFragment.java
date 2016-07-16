@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.fragments.activities.ActivityFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.tabs.AllScheduleFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.tabs.ThisMonthScheduleFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.tabs.ThisWeekScheduleFragment;
@@ -28,7 +27,7 @@ import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
  */
 public class ScheduleTimeLineFragment extends Fragment implements View.OnClickListener {
 
-    public static final String TAG = ActivityFragment.class
+    public static final String TAG = ScheduleTimeLineFragment.class
             .getSimpleName();
 
     private ViewPager mViewPager;
@@ -70,14 +69,11 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
 
         mPagerAdapter = new PagerAdapter(getActivity().getSupportFragmentManager());
         if (mViewPager != null) {
-            mViewPager.setOffscreenPageLimit(4);
             mViewPager.setAdapter(mPagerAdapter);
             mViewPager.setCurrentItem(0);
             selectTab(tab_bar, 0);
         }
         onCustomSelected(mViewPager);
-
-        Log.d(TAG, "am her 1");
     }
 
     @Override
@@ -125,7 +121,6 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        Log.d(TAG, "am her 2");
         if(mPagerAdapter == null){
             mPagerAdapter = new PagerAdapter(getFragmentManager());
         }
@@ -148,7 +143,6 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
         for(int i = 0; i < tab_bar.getChildCount(); i++){
             if(tab_bar.getChildAt(i) instanceof LinearLayout){
                 LinearLayout child = (LinearLayout) tab_bar.getChildAt(i);
-                Log.d(TAG, "am here != position "+child.getChildAt(i));
                 TextView title = (TextView) child.getChildAt(0);
                 TextView indicator = (TextView) child.getChildAt(1);
                 if(position != index){
@@ -164,7 +158,7 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
     }
 
 
-    public class PagerAdapter extends FragmentStatePagerAdapter {
+    public class PagerAdapter extends FragmentPagerAdapter {
         public PagerAdapter(FragmentManager fm) {
             super(fm);
         }

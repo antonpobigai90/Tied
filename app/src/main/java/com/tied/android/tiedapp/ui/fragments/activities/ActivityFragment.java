@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,7 +67,6 @@ public class ActivityFragment extends Fragment implements View.OnClickListener {
         for(int i = 0; i < tab_bar.getChildCount(); i++){
             if(tab_bar.getChildAt(i) instanceof LinearLayout){
                 LinearLayout child = (LinearLayout) tab_bar.getChildAt(i);
-                Log.d(TAG, "am here != position "+child.getChildAt(i));
                 TextView title = (TextView) child.getChildAt(0);
                 TextView indicator = (TextView) child.getChildAt(1);
                 if(position != index){
@@ -124,7 +122,6 @@ public class ActivityFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        Log.d(TAG, "am her 2");
         if(mPagerAdapter == null){
             mPagerAdapter = new PagerAdapter(getFragmentManager());
         }
