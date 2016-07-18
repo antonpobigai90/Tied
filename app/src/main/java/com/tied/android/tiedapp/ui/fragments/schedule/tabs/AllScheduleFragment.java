@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.tied.android.tiedapp.MainApplication;
-import com.tied.android.tiedapp.customs.model.ScheduleDataModel;
 import com.tied.android.tiedapp.objects.responses.ScheduleRes;
 import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.user.User;
@@ -45,15 +44,10 @@ public class AllScheduleFragment extends SchedulesFragment implements View.OnCli
                     User.LogOut(getActivity());
                 } else if (scheduleRes != null && scheduleRes.get_meta() != null && scheduleRes.get_meta().getStatus_code() == 200) {
                     ArrayList<Schedule> scheduleArrayList = scheduleRes.getSchedules();
-                    ArrayList<ScheduleDataModel> scheduleDataModels = null;
-
-                    Log.d(TAG + " scheduleArrayList", scheduleArrayList.toString());
-
                     scheduleDataModels = parseSchedules(scheduleArrayList);
-                    ScheduleListAdapter adapter = new ScheduleListAdapter(scheduleDataModels, getActivity());
+                    adapter = new ScheduleListAdapter(scheduleDataModels, getActivity(), bundle);
                     listView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
-
                 } else {
                     Toast.makeText(getActivity(), "encountered error with server", Toast.LENGTH_LONG).show();
                 }

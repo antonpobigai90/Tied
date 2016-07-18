@@ -22,6 +22,7 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.client.Client;
+import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.fragments.schedule.AppointmentCalendarFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.CreateAppointmentFragment;
@@ -64,10 +65,17 @@ public class CreateAppointmentActivity extends FragmentActivity implements Fragm
 
         user = User.getUser(getApplicationContext());
         Client client = (Client) getIntent().getSerializableExtra(Constants.CLIENT_DATA);
+
         bundle = new Bundle();
         Gson gson = new Gson();
         String user_json = gson.toJson(user);
         String client_json = gson.toJson(client);
+
+        Schedule schedule = (Schedule) getIntent().getSerializableExtra(Constants.SCHEDULE_DATA);
+        if(schedule != null){
+            String schedule_json = gson.toJson(schedule);
+            bundle.putString(Constants.SCHEDULE_DATA, schedule_json);
+        }
 
         bundle.putString(Constants.USER_DATA, user_json);
         bundle.putString(Constants.CLIENT_DATA, client_json);

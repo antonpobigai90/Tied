@@ -2,6 +2,7 @@ package com.tied.android.tiedapp.ui.fragments.schedule;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
+import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.adapters.ClientScheduleAdapter;
 import com.tied.android.tiedapp.ui.adapters.ClientScheduleHorizontalAdapter;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
@@ -56,6 +58,7 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
     private Bundle bundle;
 
     private TextView view_schedule, company_name;
+    private ImageView img_activity;
     private ArrayList<Client> clients;
     private ListView listView;
     private Client client;
@@ -75,6 +78,7 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
     private FragmentIterationListener fragmentIterationListener;
 
     public ScheduleSuggestionFragment() {
+
     }
 
     @Override
@@ -107,6 +111,8 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
 
     public void initComponent(View view) {
 
+        img_activity = (ImageView) view.findViewById(R.id.img_activity);
+
         clients = new ArrayList<Client>();
         listView = (ListView) view.findViewById(R.id.list);
 
@@ -121,6 +127,7 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
 
         view_schedule = (TextView) view.findViewById(R.id.view_schedule);
         view_schedule.setOnClickListener(this);
+        img_activity.setOnClickListener(this);
 
         bundle = getArguments();
         if (bundle != null) {
@@ -160,11 +167,11 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
         switch (v.getId()) {
             case R.id.view_schedule:
                 nextAction(Constants.ViewSchedule,bundle);
-//                Intent intent = new Intent(getActivity(), ViewSchedule.class);
-//                intent.putExtra(Constants.CLIENT_DATA, client);
-//                intent.putExtra(Constants.SCHEDULE_DATA, schedule);
-//                startActivity(intent);
-
+                break;
+            case R.id.img_activity:
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                intent.putExtra(Constants.APP_DATA, bundle);
+                startActivity(intent);
                 break;
         }
     }

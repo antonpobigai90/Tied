@@ -6,7 +6,7 @@
     <color name="white">#ffffff</color>
     <color name="white2">#f5f5f5</color>
     <color name="button_bg">#3c96ff</color>
-    <color name="semi_transparent_black">#32000000</color>
+    <color name="semi_transparent_black">#40000000</color>
     <color name="accentColor">#898989</color>
     <color name="lineColor">#6074c2</color>
     <color name="text_disable_color">#b4d0e8</color>
@@ -24,4 +24,8 @@
     <color name="indigo">#3F51B5</color>
     <color name="blue">#ffffff</color>
     <color name="grey">#757575</color>
+
+    <color name="red_color">#ff1414</color>
+    <color name="orange_color">#feb414</color>
+    <color name="green_color">#00e500</color>
 </resources>

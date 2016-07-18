@@ -1,9 +1,11 @@
 package com.tied.android.tiedapp.objects.schedule;
 
+import java.io.Serializable;
+
 /**
  * Created by Emmanuel on 7/7/2016.
  */
-public class TimeRange {
+public class TimeRange implements Serializable{
     private String start_time;
     private String end_time;
 
@@ -26,6 +28,10 @@ public class TimeRange {
 
     public void setEnd_time(String end_time) {
         this.end_time = end_time;
+    }
+
+    public String getRange(){
+        return start_time +"-"+end_time;
     }
 
     @Override

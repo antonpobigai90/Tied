@@ -18,7 +18,6 @@ import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.model.ScheduleDataModel;
-import com.tied.android.tiedapp.customs.model.ScheduleTimeModel;
 import com.tied.android.tiedapp.objects.responses.ScheduleRes;
 import com.tied.android.tiedapp.objects.schedule.DateRange;
 import com.tied.android.tiedapp.objects.schedule.Schedule;
@@ -183,7 +182,7 @@ public class ScheduleListFragment extends Fragment
                     Log.d(TAG + " scheduleArrayList", scheduleArrayList.toString());
 
                     scheduleDataModels = parseSchedules(scheduleArrayList);
-                    ScheduleListAdapter adapter = new ScheduleListAdapter(scheduleDataModels, getActivity());
+                    ScheduleListAdapter adapter = new ScheduleListAdapter(scheduleDataModels, getActivity(), bundle);
                     listView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
 
@@ -207,16 +206,13 @@ public class ScheduleListFragment extends Fragment
 
             ScheduleDataModel scheduleDataModel = new ScheduleDataModel();
 
-            ScheduleTimeModel scheduleTimeModel = new ScheduleTimeModel(schedule.getId(),
-                    schedule.getTitle(), schedule.getTime_range().getStart_time(), schedule.getTime_range().getEnd_time());
-
-            ArrayList<ScheduleTimeModel> scheduleTimeModels = new ArrayList<ScheduleTimeModel>();
-            scheduleTimeModels.add(scheduleTimeModel);
+            ArrayList<Schedule> schedules = new ArrayList<Schedule>();
+            schedules.add(schedule);
 
             String day = String.format("%02d", HelperMethods.getDayFromSchedule(schedule.getDate()));
             String week_day = HelperMethods.getDayOfTheWeek(schedule.getDate());
 
-            scheduleDataModel.setScheduleTimeModel(scheduleTimeModels);
+            scheduleDataModel.setSchedules(schedules);
             scheduleDataModel.setTemperature("80");
             scheduleDataModel.setWeather("cloudy");
             scheduleDataModel.setDay(day);
@@ -234,17 +230,12 @@ public class ScheduleListFragment extends Fragment
 
             ScheduleDataModel scheduleDataModel = new ScheduleDataModel();
 
-            ScheduleTimeModel scheduleTimeModel = new ScheduleTimeModel(schedule.getId(),
-                    schedule.getTitle(), schedule.getTime_range().getStart_time(), schedule.getTime_range().getEnd_time());
-
-            ArrayList<ScheduleTimeModel> scheduleTimeModels = new ArrayList<ScheduleTimeModel>();
-            scheduleTimeModels.add(scheduleTimeModel);
+            ArrayList<Schedule> schedules = new ArrayList<Schedule>();
+            schedules.add(schedule);
             for (int j = 1; j < scheduleArrayList.size(); j++) {
                 Schedule this_schedule = scheduleArrayList.get(j);
                 if (isSameDay(schedule.getDate(), this_schedule.getDate())) {
-                    scheduleTimeModel = new ScheduleTimeModel(schedule.getId(),
-                            schedule.getTitle(), schedule.getTime_range().getStart_time(), schedule.getTime_range().getEnd_time());
-                    scheduleTimeModels.add(scheduleTimeModel);
+                    schedules.add(schedule);
                     scheduleArrayList.remove(j);
                 }
             }
@@ -252,7 +243,7 @@ public class ScheduleListFragment extends Fragment
             String day = String.format("%02d", HelperMethods.getDayFromSchedule(schedule.getDate()));
             String week_day = HelperMethods.getDayOfTheWeek(schedule.getDate());
 
-            scheduleDataModel.setScheduleTimeModel(scheduleTimeModels);
+            scheduleDataModel.setSchedules(schedules);
             scheduleDataModel.setTemperature("80");
             scheduleDataModel.setWeather("cloudy");
             scheduleDataModel.setDay(day);

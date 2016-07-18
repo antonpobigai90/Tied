@@ -58,7 +58,7 @@ import retrofit2.Retrofit;
 /**
  * Created by Daniel on 5/3/2016.
  */
-public class MainActivity extends FragmentActivity implements FragmentIterationListener, View.OnClickListener{
+public class MainActivity extends FragmentActivity implements FragmentIterationListener, View.OnClickListener {
 
     public static final String TAG = MainActivity.class
             .getSimpleName();
@@ -70,7 +70,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
     public Fragment profileFragment = null;
     private int fragment_index = 0;
 
-    private LinearLayout tab_bar,relativeLayout,activity_layout, add_layout, more_layout,tab_actvity_schedule;
+    private LinearLayout tab_bar, relativeLayout, activity_layout, add_layout, more_layout, tab_actvity_schedule;
 
     private TextView txt_schedules, txt_activities;
 
@@ -117,16 +117,17 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         img_user_picture = (ImageView) findViewById(R.id.img_user_picture);
         user = User.getUser(getApplicationContext());
 
-        Log.d(TAG, "Avatar Url : "+Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg");
+        Log.d(TAG, "Avatar Url : " + Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg");
 
         Picasso.with(this).
                 load(Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg")
                 .resize(35, 35)
                 .into(new Target() {
-                    @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        if (bitmap != null){
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        if (bitmap != null) {
                             img_user_picture.setImageBitmap(bitmap);
-                        }else{
+                        } else {
                             img_user_picture.setImageResource(R.mipmap.default_avatar);
                             if (user.getAvatar_uri() != null) {
                                 Uri myUri = Uri.parse(user.getAvatar_uri());
@@ -134,16 +135,22 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                             }
                         }
                     }
-                    @Override public void onBitmapFailed(Drawable errorDrawable) { }
-                    @Override public void onPrepareLoad(Drawable placeHolderDrawable) { }
+
+                    @Override
+                    public void onBitmapFailed(Drawable errorDrawable) {
+                    }
+
+                    @Override
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+                    }
                 });
         bundle = new Bundle();
         Gson gson = new Gson();
         String user_json = gson.toJson(user);
         bundle.putString(Constants.USER_DATA, user_json);
-        if(user.isNewUser(getApplicationContext())){
+        if (user.isNewUser(getApplicationContext())) {
             launchFragment(Constants.HomeSchedule, bundle);
-        }else{
+        } else {
             checkIfScheduleExist();
 //            if(!Schedule.isScheduleCreated(getApplicationContext())){
 //                checkIfScheduleExist();
@@ -245,13 +252,13 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
 
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 //            ft.setCustomAnimations(R.anim.fragment_slide_left_enter, R.anim.fragment_slide_right_exit)
-                    ft.replace(R.id.fragment_place, fragment)
+            ft.replace(R.id.fragment_place, fragment)
                     .addToBackStack(fragment.getClass().getSimpleName())
                     .commit();
         }
     }
 
-    public void checkIfScheduleExist(){
+    public void checkIfScheduleExist() {
         DialogUtils.displayProgress(this);
         ScheduleApi scheduleApi = MainApplication.getInstance().getRetrofit().create(ScheduleApi.class);
         Call<Count> response = scheduleApi.getScheduleCount(user.getToken());
@@ -262,18 +269,19 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 DialogUtils.closeProgress();
                 Count count = countResponse.body();
                 Log.d(TAG + "Count", count.toString());
-                if (count != null && count.isAuthFailed()){
+                if (count != null && count.isAuthFailed()) {
                     User.LogOut(MainActivity.this);
                 } else if (count != null && count.isSuccess()) {
-                    if(count.getCount() > 0){
+                    if (count.getCount() > 0) {
                         launchFragment(Constants.AppointmentList, bundle);
-                    }else{
+                    } else {
                         launchFragment(Constants.CreateSchedule, bundle);
                     }
                 } else {
                     launchFragment(Constants.CreateSchedule, bundle);
                 }
             }
+
             @Override
             public void onFailure(Call<Count> call, Throwable t) {
                 Log.d(TAG + " onFailure", t.toString());
@@ -287,7 +295,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         finish();
     }
 
-    public void loadAvatar(final User user, final ImageView img_user_picture){
+    public void loadAvatar(final User user, final ImageView img_user_picture) {
         Picasso.with(this).
                 load(Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg")
                 .resize(35, 35)
@@ -317,7 +325,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
 
     private void handleCrop(Uri outputUri) {
         imageReadyForUploadListener = (AvatarProfileFragment) profileFragment;
-        ImageView avatar =  ((AvatarProfileFragment) profileFragment).avatar;
+        ImageView avatar = ((AvatarProfileFragment) profileFragment).avatar;
         bundle.putString(Constants.AVATAR_STATE_SAVED, outputUri.toString());
         avatar.setImageBitmap(null);
         try {
@@ -340,8 +348,6 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
      */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("requestCode",requestCode+"");
-
         if (requestCode == Crop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
             handleCrop(outputUri);
         } else if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
@@ -357,7 +363,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.add:
                 launchFragment(Constants.AddScheduleActivity, bundle);
                 break;
@@ -367,9 +373,9 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 break;
             case R.id.txt_schedules:
                 tab_actvity_schedule.setBackgroundResource(R.mipmap.base_schedule);
-                if(!Schedule.isScheduleCreated(getApplicationContext())){
+                if (!Schedule.isScheduleCreated(getApplicationContext())) {
                     checkIfScheduleExist();
-                }else{
+                } else {
                     launchFragment(Constants.CreateSchedule, bundle);
                 }
                 break;
@@ -377,9 +383,9 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 launchFragment(Constants.Profile, bundle);
                 break;
             case R.id.activity:
-                if(!Schedule.isScheduleCreated(getApplicationContext())){
+                if (!Schedule.isScheduleCreated(getApplicationContext())) {
                     checkIfScheduleExist();
-                }else{
+                } else {
                     launchFragment(Constants.CreateSchedule, bundle);
                 }
                 break;

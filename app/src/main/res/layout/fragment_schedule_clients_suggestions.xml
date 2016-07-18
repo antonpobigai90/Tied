@@ -12,7 +12,7 @@
         android:background="@color/schedule_title_bg_color">
 
         <ImageView
-            android:id="@+id/img_close"
+            android:id="@+id/img_activity"
             android:layout_width="30dp"
             android:layout_height="25dp"
             android:layout_centerVertical="true"

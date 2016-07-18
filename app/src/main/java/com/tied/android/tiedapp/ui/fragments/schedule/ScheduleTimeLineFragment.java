@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +20,7 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.fragments.schedule.tabs.AllScheduleFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.tabs.NextWeekScheduleFragment;
+import com.tied.android.tiedapp.ui.fragments.schedule.tabs.ThisMonthScheduleFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.tabs.ThisWeekScheduleFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.tabs.TodayScheduleFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
@@ -37,8 +40,8 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
 
     public FragmentIterationListener mListener;
 
-    LinearLayout all_tab, today_tab,this_week_tab,next_week_tab, tab_bar;
-
+    LinearLayout all_tab, today_tab,this_week_tab,next_week_tab, tab_bar, this_month;
+    HorizontalScrollView tab_scroll;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,11 +62,14 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
         today_tab = (LinearLayout) view.findViewById(R.id.today_tab);
         this_week_tab = (LinearLayout) view.findViewById(R.id.this_week_tab);
         next_week_tab = (LinearLayout) view.findViewById(R.id.next_week_tab);
+        this_month = (LinearLayout) view.findViewById(R.id.this_month);
+        tab_scroll = (HorizontalScrollView) view.findViewById(R.id.tab_scroll);
 
         all_tab.setOnClickListener(this);
         today_tab.setOnClickListener(this);
         this_week_tab.setOnClickListener(this);
         next_week_tab.setOnClickListener(this);
+        this_month.setOnClickListener(this);
 
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
 
@@ -90,6 +96,9 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
                 break;
             case R.id.next_week_tab:
                 mViewPager.setCurrentItem(3);
+                break;
+            case R.id.this_month:
+                mViewPager.setCurrentItem(4);
                 break;
         }
     }
@@ -139,12 +148,12 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
         }
     }
 
-    public void selectTab(LinearLayout tab_bar, int position){
+    public void selectTab(LinearLayout tab_bar, final int position){
         int index = 0;
         for(int i = 0; i < tab_bar.getChildCount(); i++){
             if(tab_bar.getChildAt(i) instanceof LinearLayout){
                 LinearLayout child = (LinearLayout) tab_bar.getChildAt(i);
-                TextView title = (TextView) child.getChildAt(0);
+                final TextView title = (TextView) child.getChildAt(0);
                 TextView indicator = (TextView) child.getChildAt(1);
                 if(position != index){
                     indicator.setVisibility(View.GONE);
@@ -152,6 +161,23 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
                 }else{
                     indicator.setVisibility(View.VISIBLE);
                     title.setTextColor(getResources().getColor(R.color.button_bg));
+                    ViewTreeObserver vto = tab_scroll.getViewTreeObserver();
+                    vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener(){
+                        @Override
+                        public void onGlobalLayout() {
+                            tab_scroll.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                            if(position == 4 || position == 3){
+                                tab_scroll.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
+                            }
+                            else if(position == 0){
+                                tab_scroll.fullScroll(HorizontalScrollView.FOCUS_LEFT);
+                            }
+                            else{
+                                tab_scroll.scrollTo((int) title.getScaleX(), 0);
+                            }
+
+                        }
+                    });
                 }
                 index++;
             }
@@ -179,9 +205,9 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
                 case 3:
                     fragment = new NextWeekScheduleFragment();
                     break;
-//                case 3:
-//                    fragment = new ThisMonthScheduleFragment();
-//                    break;
+                case 4:
+                    fragment = new ThisMonthScheduleFragment();
+                    break;
                 default:
                     return null;
             }
@@ -190,7 +216,7 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
         }
         @Override
         public int getCount() {
-            return 4;
+            return 5;
         }
     }
 }

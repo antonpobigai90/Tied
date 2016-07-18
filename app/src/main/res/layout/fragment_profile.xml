@@ -31,14 +31,14 @@
             <LinearLayout
                 android:id="@+id/back_layout"
                 android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
+                android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/img_close"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="10dp"
                     android:src="@mipmap/btn_back_arrow" />
@@ -51,13 +51,13 @@
                     android:layout_toRightOf="@+id/img_close"
                     android:text="@string/str_back"
                     android:textColor="@color/white"
-                    android:textSize="20sp" />
+                    android:textSize="17sp" />
             </LinearLayout>
 
             <ImageView
                 android:id="@+id/img_edit"
-                android:layout_width="35dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="15dp"
@@ -127,8 +127,8 @@
                 android:id="@+id/notification">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:id="@+id/icon_bell"
                     android:src="@mipmap/icon_bell"
                     android:layout_centerVertical="true" />
@@ -138,14 +138,14 @@
                     android:layout_height="wrap_content"
                     android:text="NOTIFICATIONS"
                     android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="20sp"
+                    android:textSize="17sp"
                     android:layout_toRightOf="@+id/icon_bell"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp" />
 
                 <ImageView
                     android:layout_width="20dp"
-                    android:layout_height="30dp"
+                    android:layout_height="20dp"
                     android:src="@mipmap/right_arrow"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
@@ -166,8 +166,8 @@
                 android:id="@+id/account_info">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:id="@+id/icon_info"
                     android:src="@mipmap/icon_info"
                     android:layout_centerVertical="true" />
@@ -177,14 +177,14 @@
                     android:layout_height="wrap_content"
                     android:text="ACCOUNT INFO"
                     android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="20sp"
+                    android:textSize="17sp"
                     android:layout_toRightOf="@+id/icon_info"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp" />
 
                 <ImageView
                     android:layout_width="20dp"
-                    android:layout_height="30dp"
+                    android:layout_height="20dp"
                     android:src="@mipmap/right_arrow"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
@@ -205,8 +205,8 @@
                 android:id="@+id/privacy">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:id="@+id/icon_privacy"
                     android:src="@mipmap/icon_info"
                     android:layout_centerVertical="true" />
@@ -222,7 +222,7 @@
                         android:layout_height="wrap_content"
                         android:text="PRIVACY"
                         android:textColor="@color/schedule_title_bg_color"
-                        android:textSize="20sp"
+                        android:textSize="17sp"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="15dp" />
 
@@ -240,7 +240,7 @@
 
                 <ImageView
                     android:layout_width="20dp"
-                    android:layout_height="30dp"
+                    android:layout_height="20dp"
                     android:src="@mipmap/right_arrow"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
@@ -261,8 +261,8 @@
                 android:id="@+id/help">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:id="@+id/icon_help"
                     android:src="@mipmap/icon_help"
                     android:layout_centerVertical="true" />
@@ -272,14 +272,14 @@
                     android:layout_height="wrap_content"
                     android:text="HELP"
                     android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="20sp"
+                    android:textSize="17sp"
                     android:layout_toRightOf="@+id/icon_help"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp" />
 
                 <ImageView
                     android:layout_width="20dp"
-                    android:layout_height="30dp"
+                    android:layout_height="20dp"
                     android:src="@mipmap/right_arrow"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"

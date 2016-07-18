@@ -4,7 +4,6 @@ import android.util.Log;
 import android.view.View;
 
 import com.tied.android.tiedapp.customs.model.ScheduleDataModel;
-import com.tied.android.tiedapp.customs.model.ScheduleTimeModel;
 import com.tied.android.tiedapp.objects.schedule.DateRange;
 import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.schedule.ScheduleDate;
@@ -48,16 +47,13 @@ public class TodayScheduleFragment extends SchedulesFragment implements View.OnC
 
             ScheduleDataModel scheduleDataModel = new ScheduleDataModel();
 
-            ScheduleTimeModel scheduleTimeModel = new ScheduleTimeModel(schedule.getId(),
-                    schedule.getTitle(), schedule.getTime_range().getStart_time(), schedule.getTime_range().getEnd_time());
-
-            ArrayList<ScheduleTimeModel> scheduleTimeModels = new ArrayList<ScheduleTimeModel>();
-            scheduleTimeModels.add(scheduleTimeModel);
+            ArrayList<Schedule> schedules = new ArrayList<Schedule>();
+            schedules.add(schedule);
 
             String day = String.format("%02d", HelperMethods.getDayFromSchedule(schedule.getDate()));
             String week_day = HelperMethods.getDayOfTheWeek(schedule.getDate());
 
-            scheduleDataModel.setScheduleTimeModel(scheduleTimeModels);
+            scheduleDataModel.setSchedules(schedules);
             scheduleDataModel.setTemperature("80");
             scheduleDataModel.setWeather("cloudy");
             scheduleDataModel.setDay(day);

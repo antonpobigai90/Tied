@@ -28,11 +28,11 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.MyAsyncTask;
 import com.tied.android.tiedapp.customs.model.ScheduleNotifyModel;
-import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Location;
-import com.tied.android.tiedapp.objects.schedule.Schedule;
+import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.responses.ScheduleRes;
+import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.schedule.TimeRange;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
@@ -40,9 +40,8 @@ import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.fragments.DatePickerFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.util.HelperMethods;
 import com.tied.android.tiedapp.util.ScheduleNotifyDialog;
-
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.List;
@@ -71,13 +70,14 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
     private Bundle bundle;
     private User user;
 
+    private Schedule schedule;
     private Client client;
     private Location location;
     int notify_id = 1;
     private ScheduleNotifyModel scheduleNotifyModel;
 
     private String endTimeText, startTimeText, dateText, titleText, streetText, cityText, stateText, zipText;
-    private TextView txt_create_schedule, date;
+    private TextView txt_create_schedule;
     RelativeLayout layout_date, layout_time, layout_reminder;
 
     ScheduleNotifyDialog alert;
@@ -136,8 +136,6 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
         txt_time = (TextView) view.findViewById(R.id.time);
         txt_reminder = (TextView) view.findViewById(R.id.reminder);
 
-
-        date = (TextView) view.findViewById(R.id.date);
         street = (EditText) view.findViewById(R.id.street);
         state = (EditText) view.findViewById(R.id.state);
         city = (EditText) view.findViewById(R.id.city);
@@ -166,12 +164,28 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
             String client_json = bundle.getString(Constants.CLIENT_DATA);
             user = gson.fromJson(user_json, User.class);
             client = gson.fromJson(client_json, Client.class);
-
-            street.setText(client.getAddress().getStreet());
-            city.setText(client.getAddress().getCity());
-            zip.setText(client.getAddress().getZip());
-            state.setText(client.getAddress().getState());
             txt_creative_co_op.setText(client.getCompany());
+
+            String schedule_json = bundle.getString(Constants.SCHEDULE_DATA);
+            Log.d(TAG, "schedule_json "+schedule_json);
+            if(schedule_json != null){
+                schedule = gson.fromJson(schedule_json, Schedule.class);
+                txt_title.setText(schedule.getTitle());
+                street.setText(schedule.getLocation().getStreet());
+                city.setText(schedule.getLocation().getCity());
+                zip.setText(schedule.getLocation().getZip());
+                state.setText(schedule.getLocation().getState());
+                txt_time.setText(schedule.getTime_range().getRange());
+                txt_date_selected.setText(schedule.getDate());
+                txt_date.setText(HelperMethods.getFormatedDate(schedule.getDate()));
+                txt_create_schedule.setText("UPDATE SCHEDULE");
+
+            }else{
+                street.setText(client.getAddress().getStreet());
+                city.setText(client.getAddress().getCity());
+                zip.setText(client.getAddress().getZip());
+                state.setText(client.getAddress().getState());
+            }
 
             String logo = client.getLogo().equals("") ? null  : client.getLogo();
             Picasso.with(getActivity()).
@@ -299,10 +313,6 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
     class GeocodeAsyncTask extends MyAsyncTask {
 
         String errorMessage = "";
-        JSONObject jObject;
-        JSONObject places = null;
-        String lat;
-
         @Override
         protected void onPreExecute() {
             DialogUtils.displayProgress(getActivity());
@@ -332,7 +342,11 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
             if (address != null) {
                 Coordinate coordinate = new Coordinate(address.getLatitude(), address.getLongitude());
                 location.setCoordinate(coordinate);
-                createAppointment();
+                if(schedule == null){
+                    createAppointment();
+                }else {
+                    updateAppointment();
+                }
             } else {
                 DialogUtils.closeProgress();
                 Toast.makeText(getActivity(), "sorry location cannot be found in map", Toast.LENGTH_LONG).show();
@@ -355,41 +369,93 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
 
         Log.d(TAG + " schedule", schedule.toString());
 
-            DialogUtils.displayProgress(getActivity());
-            ScheduleApi scheduleApi = MainApplication.getInstance().getRetrofit().create(ScheduleApi.class);
-            Call<ScheduleRes> response = scheduleApi.createSchedule(user.getToken(), schedule);
-            response.enqueue(new Callback<ScheduleRes>() {
-                @Override
-                public void onResponse(Call<ScheduleRes> call, Response<ScheduleRes> scheduleResResponse) {
-                    if (getActivity() == null) return;
-                    ScheduleRes scheduleRes = scheduleResResponse.body();
-                    Log.d(TAG + " onFailure", scheduleRes.toString());
-                    if (scheduleRes.isAuthFailed()){
-                        DialogUtils.closeProgress();
-                        User.LogOut(getActivity());
-                    }
-                    else if (scheduleRes.get_meta() != null && scheduleRes.get_meta().getStatus_code() == 201) {
-                        Log.d(TAG + " Schedule", scheduleRes.getSchedule().toString());
-                        Gson gson = new Gson();
-                        Schedule mainSchedule = scheduleRes.getSchedule();
-                        String schedule_string = gson.toJson(mainSchedule, Schedule.class);
+        DialogUtils.displayProgress(getActivity());
+        ScheduleApi scheduleApi = MainApplication.getInstance().getRetrofit().create(ScheduleApi.class);
+        Call<ScheduleRes> response = scheduleApi.createSchedule(user.getToken(), schedule);
+        response.enqueue(new Callback<ScheduleRes>() {
+            @Override
+            public void onResponse(Call<ScheduleRes> call, Response<ScheduleRes> scheduleResResponse) {
+                if (getActivity() == null) return;
+                ScheduleRes scheduleRes = scheduleResResponse.body();
+                Log.d(TAG + " onFailure", scheduleRes.toString());
+                if (scheduleRes.isAuthFailed()) {
+                    DialogUtils.closeProgress();
+                    User.LogOut(getActivity());
+                } else if (scheduleRes.get_meta() != null && scheduleRes.get_meta().getStatus_code() == 201) {
+                    Log.d(TAG + " Schedule", scheduleRes.getSchedule().toString());
+                    Gson gson = new Gson();
+                    Schedule mainSchedule = scheduleRes.getSchedule();
+                    String schedule_string = gson.toJson(mainSchedule, Schedule.class);
+                    bundle.putSerializable(Constants.SCHEDULE_DATA, schedule_string);
+                    Schedule.scheduleCreated(getActivity().getApplicationContext());
+                    DialogUtils.closeProgress();
+                    nextAction(Constants.ScheduleSuggestions, bundle);
+                } else {
+                    DialogUtils.closeProgress();
+                    nextAction(Constants.CreateSchedule, bundle);
+                    Toast.makeText(getActivity(), scheduleRes.toString(), Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ScheduleRes> ScheduleResponseCall, Throwable t) {
+                Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
+                Log.d(TAG + " onFailure", t.toString());
+                DialogUtils.closeProgress();
+            }
+        });
+    }
+
+    public void updateAppointment() {
+        schedule.setTitle(titleText);
+        schedule.setClient_id(client.getId());
+        schedule.setUser_id(user.getId());
+        schedule.setVisited(true);
+        schedule.setReminder(notify_id);
+        TimeRange timeRange = new TimeRange(startTimeText, endTimeText);
+        schedule.setTime_range(timeRange);
+        schedule.setEnd_time(endTimeText);
+        schedule.setDate(dateText);
+        schedule.setLocation(location);
+
+        Log.d(TAG + " schedule", schedule.toString());
+
+        DialogUtils.displayProgress(getActivity());
+        final ScheduleApi scheduleApi = MainApplication.getInstance().getRetrofit().create(ScheduleApi.class);
+        Call<ScheduleRes> response = scheduleApi.updateSchedule(user.getToken(), schedule.getId(), schedule);
+        response.enqueue(new Callback<ScheduleRes>() {
+            @Override
+            public void onResponse(Call<ScheduleRes> call, Response<ScheduleRes> scheduleResResponse) {
+                if (getActivity() == null) return;
+                ScheduleRes scheduleRes = scheduleResResponse.body();
+                if (scheduleRes != null && scheduleRes.isAuthFailed()){
+                    DialogUtils.closeProgress();
+                    User.LogOut(getActivity());
+                }
+                else if (scheduleRes != null && scheduleRes.get_meta() != null && scheduleRes.get_meta().getStatus_code() == 200) {
+                    Log.d(TAG + " Schedule", scheduleRes.getSchedule().toString());
+                    Gson gson = new Gson();
+                    Schedule updatedSchedule = scheduleRes.getSchedule();
+                    if(updatedSchedule.getId().equals(schedule.getId())){
+                        String schedule_string = gson.toJson(schedule, Schedule.class);
                         bundle.putSerializable(Constants.SCHEDULE_DATA, schedule_string);
                         Schedule.scheduleCreated(getActivity().getApplicationContext());
+                        DialogUtils.closeProgress();
                         nextAction(Constants.ScheduleSuggestions, bundle);
-                    } else {
-                        nextAction(Constants.CreateSchedule, bundle);
-                        Toast.makeText(getActivity(), scheduleResResponse.toString(), Toast.LENGTH_LONG).show();
                     }
+                } else {
+                    Toast.makeText(getActivity(), scheduleRes.toString(), Toast.LENGTH_LONG).show();
                     DialogUtils.closeProgress();
                 }
+            }
 
-                @Override
-                public void onFailure(Call<ScheduleRes> ScheduleResponseCall, Throwable t) {
-                    Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
-                    Log.d(TAG + " onFailure", t.toString());
-                    DialogUtils.closeProgress();
-                }
-            });
+            @Override
+            public void onFailure(Call<ScheduleRes> ScheduleResponseCall, Throwable t) {
+                Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
+                Log.d(TAG + " onFailure", t.toString());
+                DialogUtils.closeProgress();
+            }
+        });
     }
 
     @Override

@@ -169,29 +169,6 @@ public class HomeScheduleFragment extends Fragment implements View.OnClickListen
         });
     }
 
-    public void getWeatherIcon(String icon){
-        switch (icon){
-            case Constants.CLEAR_DAY:
-                break;
-            case Constants.CLEAR_NIGHT:
-                break;
-            case Constants.PARTLY_CLOUDY_DAY:
-                break;
-            case Constants.PARTLY_CLOUDY_NIGHT:
-                break;
-            case Constants.RAIN:
-                break;
-            case Constants.FOG:
-                break;
-            case Constants.SLEET:
-                break;
-            case Constants.SNOW:
-                break;
-            case Constants.WIND:
-                break;
-        }
-    }
-
     private String getTimeOfTheDay() {
         String time_of_the_day = "";
         Calendar c = Calendar.getInstance();
@@ -217,4 +194,7 @@ public class HomeScheduleFragment extends Fragment implements View.OnClickListen
                 break;
         }
     }
+
+
+
 }
