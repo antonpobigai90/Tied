@@ -25,6 +25,7 @@ import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.responses.Count;
+import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
@@ -144,6 +145,11 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
             launchFragment(Constants.HomeSchedule, bundle);
         }else{
             checkIfScheduleExist();
+//            if(!Schedule.isScheduleCreated(getApplicationContext())){
+//                checkIfScheduleExist();
+//            }else{
+//                launchFragment(Constants.CreateSchedule, bundle);
+//            }
         }
 
         retrofit = MainApplication.getInstance().getRetrofit();
@@ -154,6 +160,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         fragment_index = pos;
         fragment = null;
 
+        tab_bar.setVisibility(View.VISIBLE);
         more_layout.setBackground(null);
         activity_layout.setBackground(null);
         add_layout.setBackground(null);
@@ -223,6 +230,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 tab_bar.setVisibility(View.VISIBLE);
                 activity_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
                 fragment = new ScheduleTimeLineFragment();
+                tab_bar.setVisibility(View.VISIBLE);
                 break;
             default:
                 finish();
@@ -359,13 +367,21 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 break;
             case R.id.txt_schedules:
                 tab_actvity_schedule.setBackgroundResource(R.mipmap.base_schedule);
-                launchFragment(Constants.AppointmentList, bundle);
+                if(!Schedule.isScheduleCreated(getApplicationContext())){
+                    checkIfScheduleExist();
+                }else{
+                    launchFragment(Constants.CreateSchedule, bundle);
+                }
                 break;
             case R.id.more:
                 launchFragment(Constants.Profile, bundle);
                 break;
             case R.id.activity:
-                checkIfScheduleExist();
+                if(!Schedule.isScheduleCreated(getApplicationContext())){
+                    checkIfScheduleExist();
+                }else{
+                    launchFragment(Constants.CreateSchedule, bundle);
+                }
                 break;
             case Constants.Profile:
                 relativeLayout.setVisibility(View.GONE);

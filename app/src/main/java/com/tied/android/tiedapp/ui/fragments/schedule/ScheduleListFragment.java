@@ -29,6 +29,7 @@ import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
 import com.tied.android.tiedapp.ui.adapters.ScheduleListAdapter;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.util.HelperMethods;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -49,11 +50,6 @@ public class ScheduleListFragment extends Fragment
 
     public static final String TAG = ScheduleListFragment.class
             .getSimpleName();
-
-    String[] MONTHS_LIST = {"January", "Febebuary", "March", "April", "May", "June", "July", "August", "September",
-            "October", "November", "December"};
-    String[] WEEK_LIST = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
-
 
     public FragmentIterationListener mListener;
 
@@ -182,13 +178,13 @@ public class ScheduleListFragment extends Fragment
                     User.LogOut(getActivity());
                 } else if (scheduleRes != null && scheduleRes.get_meta() != null && scheduleRes.get_meta().getStatus_code() == 200) {
                     ArrayList<Schedule> scheduleArrayList = scheduleRes.getSchedules();
-                    Log.d(TAG, "index : "+index +" size "+scheduleArrayList.size());
                     ArrayList<ScheduleDataModel> scheduleDataModels = null;
+
+                    Log.d(TAG + " scheduleArrayList", scheduleArrayList.toString());
 
                     scheduleDataModels = parseSchedules(scheduleArrayList);
                     ScheduleListAdapter adapter = new ScheduleListAdapter(scheduleDataModels, getActivity());
                     listView.setAdapter(adapter);
-                    Log.d(TAG + " scheduleArrayList", scheduleArrayList.toString());
                     adapter.notifyDataSetChanged();
 
                 } else {
@@ -212,13 +208,13 @@ public class ScheduleListFragment extends Fragment
             ScheduleDataModel scheduleDataModel = new ScheduleDataModel();
 
             ScheduleTimeModel scheduleTimeModel = new ScheduleTimeModel(schedule.getId(),
-                    schedule.getTitle(), schedule.getTime_range().getStart_time());
+                    schedule.getTitle(), schedule.getTime_range().getStart_time(), schedule.getTime_range().getEnd_time());
 
             ArrayList<ScheduleTimeModel> scheduleTimeModels = new ArrayList<ScheduleTimeModel>();
             scheduleTimeModels.add(scheduleTimeModel);
 
-            String day = String.format("%02d", getDayFromSchedule(schedule.getDate()));
-            String week_day = WEEK_LIST[getDayOfTheWeek(schedule.getDate()) - 1];
+            String day = String.format("%02d", HelperMethods.getDayFromSchedule(schedule.getDate()));
+            String week_day = HelperMethods.getDayOfTheWeek(schedule.getDate());
 
             scheduleDataModel.setScheduleTimeModel(scheduleTimeModels);
             scheduleDataModel.setTemperature("80");
@@ -239,7 +235,7 @@ public class ScheduleListFragment extends Fragment
             ScheduleDataModel scheduleDataModel = new ScheduleDataModel();
 
             ScheduleTimeModel scheduleTimeModel = new ScheduleTimeModel(schedule.getId(),
-                    schedule.getTitle(), schedule.getTime_range().getStart_time());
+                    schedule.getTitle(), schedule.getTime_range().getStart_time(), schedule.getTime_range().getEnd_time());
 
             ArrayList<ScheduleTimeModel> scheduleTimeModels = new ArrayList<ScheduleTimeModel>();
             scheduleTimeModels.add(scheduleTimeModel);
@@ -247,14 +243,14 @@ public class ScheduleListFragment extends Fragment
                 Schedule this_schedule = scheduleArrayList.get(j);
                 if (isSameDay(schedule.getDate(), this_schedule.getDate())) {
                     scheduleTimeModel = new ScheduleTimeModel(schedule.getId(),
-                            schedule.getTitle(), schedule.getTime_range().getStart_time());
+                            schedule.getTitle(), schedule.getTime_range().getStart_time(), schedule.getTime_range().getEnd_time());
                     scheduleTimeModels.add(scheduleTimeModel);
                     scheduleArrayList.remove(j);
                 }
             }
 
-            String day = String.format("%02d", getDayFromSchedule(schedule.getDate()));
-            String week_day = WEEK_LIST[getDayOfTheWeek(schedule.getDate()) - 1];
+            String day = String.format("%02d", HelperMethods.getDayFromSchedule(schedule.getDate()));
+            String week_day = HelperMethods.getDayOfTheWeek(schedule.getDate());
 
             scheduleDataModel.setScheduleTimeModel(scheduleTimeModels);
             scheduleDataModel.setTemperature("80");
@@ -267,31 +263,6 @@ public class ScheduleListFragment extends Fragment
         return scheduleDataModels;
     }
 
-    public int getDayOfTheWeek(String day) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            Date date = sdf.parse(day);
-            Calendar c = Calendar.getInstance();
-            int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
-            c.setTime(date);
-            return dayOfWeek;
-        } catch (ParseException e) {
-            return 0;
-        }
-    }
-
-    private int getDayFromSchedule(String day) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            Date date = sdf.parse(day);
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(date);
-            int month = cal.get(Calendar.DAY_OF_MONTH);
-            return month;
-        } catch (ParseException e) {
-            return 0;
-        }
-    }
 
     private boolean isSameDay(String day1, String day2) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -303,6 +274,8 @@ public class ScheduleListFragment extends Fragment
             return false;
         }
     }
+
+
 
     @Override
     public void onAttach(Context context) {

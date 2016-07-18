@@ -2,7 +2,6 @@ package com.tied.android.tiedapp.ui.fragments.schedule;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -33,7 +32,6 @@ import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
-import com.tied.android.tiedapp.ui.activities.schedule.ViewSchedule;
 import com.tied.android.tiedapp.ui.adapters.ClientScheduleAdapter;
 import com.tied.android.tiedapp.ui.adapters.ClientScheduleHorizontalAdapter;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
@@ -138,8 +136,9 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
 
             Log.d(TAG + " schedule", schedule.getLocation().getCoordinate().toString());
 
+            String logo = client.getLogo().equals("") ? null  : client.getLogo();
             Picasso.with(getActivity()).
-                    load(client.getLogo())
+                    load(logo)
                     .into(new Target() {
                         @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                             if (bitmap != null){
@@ -160,10 +159,12 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.view_schedule:
-                Intent intent = new Intent(getActivity(), ViewSchedule.class);
-                intent.putExtra(Constants.CLIENT_DATA, client);
-                intent.putExtra(Constants.SCHEDULE_DATA, schedule);
-                startActivity(intent);
+                nextAction(Constants.ViewSchedule,bundle);
+//                Intent intent = new Intent(getActivity(), ViewSchedule.class);
+//                intent.putExtra(Constants.CLIENT_DATA, client);
+//                intent.putExtra(Constants.SCHEDULE_DATA, schedule);
+//                startActivity(intent);
+
                 break;
         }
     }

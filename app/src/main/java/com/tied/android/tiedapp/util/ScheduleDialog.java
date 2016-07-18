@@ -42,8 +42,9 @@ public class ScheduleDialog {
         distance.setText("0.5 miles");
         phone.setText(client.getPhone());
 
+        String logo = client.getLogo().equals("") ? null  : client.getLogo();
         Picasso.with(activity).
-                load(client.getLogo())
+                load(logo)
                 .into(new Target() {
                     @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                         if (bitmap != null){
@@ -63,8 +64,6 @@ public class ScheduleDialog {
                 dialog.dismiss();
             }
         });
-
         dialog.show();
-
     }
 }

@@ -1,8 +1,15 @@
 package com.tied.android.tiedapp.objects.client;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
+import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Location;
+import com.tied.android.tiedapp.util.HelperMethods;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * Created by Emmanuel on 6/28/2016.
@@ -26,14 +33,23 @@ public class Client implements Serializable {
     private int Industry_id;
     private int visit_id;
 
-    int image;
+    private int dis_from;
+    private ArrayList _score;
 
     public Client() {
     }
 
-    public Client(int image, String full_name) {
-        this.image = image;
-        this.full_name = full_name;
+
+    public static void clientCreated(Context context){
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor prefsEditor = mPrefs.edit();
+        prefsEditor.putBoolean(Constants.CLIENT_CREATED, true );
+        prefsEditor.apply();
+    }
+
+    public static boolean isClientCreated(Context context){
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return mPrefs.getBoolean(Constants.CLIENT_CREATED, false);
     }
 
     public String getId() {
@@ -116,15 +132,6 @@ public class Client implements Serializable {
         this.address = address;
     }
 
-    //for dummy images
-    public int getImage() {
-        return image;
-    }
-
-    public void setImage(int image) {
-        this.image = image;
-    }
-
     public int getIndustry_id() {
         return Industry_id;
     }
@@ -149,6 +156,28 @@ public class Client implements Serializable {
         this.birthday = birthday;
     }
 
+    public int getDis_from() {
+
+        double result = 0.0;
+        if(get_score() != null && get_score().size() > 0) {
+            result = (double) get_score().get(0);
+        }
+        result = HelperMethods.kilometerToMile(result);
+        return (int) result;
+    }
+
+    public void setDis_from(int dis_from) {
+        this.dis_from = dis_from;
+    }
+
+    public ArrayList get_score() {
+        return _score;
+    }
+
+    public void set_score(ArrayList _score) {
+        this._score = _score;
+    }
+
     @Override
     public String toString() {
         return "Client{" +
@@ -165,7 +194,8 @@ public class Client implements Serializable {
                 ", birthday='" + birthday + '\'' +
                 ", Industry_id=" + Industry_id +
                 ", visit_id=" + visit_id +
-                ", image=" + image +
+                ", dis_from=" + dis_from +
+                ", _score=" + _score +
                 '}';
     }
 }

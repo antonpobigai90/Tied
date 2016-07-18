@@ -173,8 +173,9 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
             state.setText(client.getAddress().getState());
             txt_creative_co_op.setText(client.getCompany());
 
+            String logo = client.getLogo().equals("") ? null  : client.getLogo();
             Picasso.with(getActivity()).
-                    load(client.getLogo())
+                    load(logo)
                     .into(new Target() {
                         @Override
                         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -278,13 +279,14 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
 
         String range = txt_time.getText().toString();
         String[] time = range.split("-");
-        String from = time[0].replace(" ", "");
-        String to = time[1].replace(" ", "");
+        if(time.length == 2){
+            String from = time[0].replace(" ", "");
+            String to = time[1].replace(" ", "");
+            startTimeText = timeFormat(from);
+            endTimeText = timeFormat(to);
+        }
 
-        startTimeText = timeFormat(from);
-        endTimeText = timeFormat(to);
-
-        return dateText != null;
+        return dateText != null && endTimeText!= null && startTimeText != null;
     }
 
     @Override
@@ -372,6 +374,7 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
                         Schedule mainSchedule = scheduleRes.getSchedule();
                         String schedule_string = gson.toJson(mainSchedule, Schedule.class);
                         bundle.putSerializable(Constants.SCHEDULE_DATA, schedule_string);
+                        Schedule.scheduleCreated(getActivity().getApplicationContext());
                         nextAction(Constants.ScheduleSuggestions, bundle);
                     } else {
                         nextAction(Constants.CreateSchedule, bundle);

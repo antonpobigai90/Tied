@@ -6,13 +6,15 @@ package com.tied.android.tiedapp.customs.model;
 public class ScheduleTimeModel {
 
     private String id;
-    private String time;
     private String title;
+    private String start_time;
+    private String end_time;
 
-    public ScheduleTimeModel(String id, String title, String time) {
-        this.title = title;
+    public ScheduleTimeModel(String id, String title, String start_time, String end_time) {
         this.id = id;
-        this.time = time;
+        this.title = title;
+        this.start_time = start_time;
+        this.end_time = end_time;
     }
 
     public String getId() {
@@ -23,14 +25,6 @@ public class ScheduleTimeModel {
         this.id = id;
     }
 
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
     public String getTitle() {
         return title;
     }
@@ -39,12 +33,29 @@ public class ScheduleTimeModel {
         this.title = title;
     }
 
+    public String getStart_time() {
+        return start_time;
+    }
+
+    public void setStart_time(String start_time) {
+        this.start_time = start_time;
+    }
+
+    public String getEnd_time() {
+        return end_time;
+    }
+
+    public void setEnd_time(String end_time) {
+        this.end_time = end_time;
+    }
+
     @Override
     public String toString() {
         return "ScheduleTimeModel{" +
                 "id='" + id + '\'' +
-                ", time='" + time + '\'' +
                 ", title='" + title + '\'' +
+                ", start_time='" + start_time + '\'' +
+                ", end_time='" + end_time + '\'' +
                 '}';
     }
 }

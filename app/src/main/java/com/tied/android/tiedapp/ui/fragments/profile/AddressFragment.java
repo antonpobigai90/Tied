@@ -97,7 +97,7 @@ public class AddressFragment extends Fragment implements View.OnClickListener{
         if (bundle != null) {
             Log.d(TAG, "bundle not null");
             Gson gson = new Gson();
-            String user_json = bundle.getString("user");
+            String user_json = bundle.getString(Constants.USER_DATA);
             user = gson.fromJson(user_json, User.class);
 
             office_location = user.getOffice_address();

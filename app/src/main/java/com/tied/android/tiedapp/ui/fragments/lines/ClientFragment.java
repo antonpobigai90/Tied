@@ -94,7 +94,8 @@ public class ClientFragment extends Fragment implements View.OnClickListener{
 
     private void initClient(){
         for(int i = 0; i < NAME.length; i++){
-            Client client = new Client(IMAGE[i],NAME[i]);
+            Client client = new Client();
+            client.setFull_name(NAME[i]);
             clients.add(client);
         }
         adapter = new LineClientAdapter(clients,getActivity());

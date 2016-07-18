@@ -104,7 +104,7 @@ public class AddBossNowFragment extends Fragment implements View.OnClickListener
             Bundle bundle = getArguments();
 
             Gson gson = new Gson();
-            String user_json = bundle.getString("user");
+            String user_json = bundle.getString(Constants.USER_DATA);
             final User user = gson.fromJson(user_json, User.class);
             user.setSign_up_stage(Constants.CoWorkerCount);
 
@@ -163,7 +163,7 @@ public class AddBossNowFragment extends Fragment implements View.OnClickListener
 //                Bundle bundle = getArguments();
 //
 //                Gson gson = new Gson();
-//                String user_json = bundle.getString("user");
+//                String user_json = bundle.getString(Constants.USER_DATA);
 //                final User user = gson.fromJson(user_json, User.class);
 //                user.setSign_up_stage(Constants.CoWorkerCount);
 //                boolean saved = user.save(getActivity().getApplicationContext());

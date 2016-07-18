@@ -21,11 +21,14 @@ import com.google.gson.Gson;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.objects.Location;
+import com.tied.android.tiedapp.objects.Coordinate;
+import com.tied.android.tiedapp.objects.Distance;
 import com.tied.android.tiedapp.objects.client.Client;
+import com.tied.android.tiedapp.objects.client.ClientLocation;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
+import com.tied.android.tiedapp.ui.activities.client.SelectClientActivity;
 import com.tied.android.tiedapp.ui.activities.schedule.CreateAppointmentActivity;
 import com.tied.android.tiedapp.ui.adapters.ClientAdapter;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
@@ -49,8 +52,11 @@ public class SelectClientListFragment extends Fragment
     public FragmentIterationListener mListener;
 
 
-    private ArrayList<Client> clients;
+    private ArrayList clientsWithDistance;
     private ListView listView;
+
+    private int[] range = {0,500,1000,2000,5000};
+    private boolean[] added;
 
     // Pop up
     private EditText search;
@@ -59,10 +65,6 @@ public class SelectClientListFragment extends Fragment
     private User user;
 
     private TextView txt_continue;
-
-    int[] IMAGE = {R.mipmap.avatar_profile, R.mipmap.avatar_schedule, R.mipmap.default_avatar};
-    String[] NAME = {"Emily Emmanuel","Johnson Good","Nonso Lagos"};
-    Location[] ADDRESS = {new Location("Ikeja","123","Lagos","Ikunna"),new Location("Old Town","546","NY","Mile street"),new Location("LA","567","Carlifornia","Myles Strt")};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -76,7 +78,7 @@ public class SelectClientListFragment extends Fragment
     }
 
     public void initComponent(View view) {
-        clients = new ArrayList<Client>();
+        clientsWithDistance = new ArrayList<Client>();
         listView = (ListView) view.findViewById(R.id.list);
 
         txt_continue = (TextView) view.findViewById(R.id.txt_continue);
@@ -129,18 +131,28 @@ public class SelectClientListFragment extends Fragment
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.d("search", "here---------------- listener");
-        Client data = clients.get(position);
-        Log.d("SelectContact", data.toString());
+        if(clientsWithDistance.get(position) instanceof Client){
+            Client data = (Client) clientsWithDistance.get(position);
+            Log.d("SelectContact", data.toString());
 
-        Intent intent = new Intent(getActivity(), CreateAppointmentActivity.class);
-        intent.putExtra(Constants.CLIENT_DATA, data);
-        startActivity(intent);
+            Intent intent = new Intent(getActivity(), CreateAppointmentActivity.class);
+            intent.putExtra(Constants.CLIENT_DATA, data);
+            startActivity(intent);
+        }
     }
 
     private void initClient(){
 
+        ClientLocation clientLocation = new ClientLocation();
+        clientLocation.setDistance("0km");
+        Coordinate coordinate = ((SelectClientActivity) getActivity()).coordinate;
+        if( coordinate == null ){
+            coordinate = user.getOffice_address().getCoordinate();
+        }
+        clientLocation.setCoordinate(coordinate);
+
         ClientApi clientApi =  MainApplication.getInstance().getRetrofit().create(ClientApi.class);
-        Call<ClientRes> response = clientApi.getClients(user.getToken());
+        Call<ClientRes> response = clientApi.getClientsByLocation(user.getToken(), clientLocation);
         response.enqueue(new Callback<ClientRes>() {
             @Override
             public void onResponse(Call<ClientRes> call, Response<ClientRes> resResponse) {
@@ -151,9 +163,10 @@ public class SelectClientListFragment extends Fragment
                     User.LogOut(getActivity());
                 }
                 else if(clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200){
-                    clients = clientRes.getClients();
+                    ArrayList<Client> clients = clientRes.getClients();
                     Log.d(TAG + "", clients.toString());
-                    adapter = new ClientAdapter(clients, getActivity());
+                    clientsWithDistance = getClientsWithLocationDistance(clients);
+                    adapter = new ClientAdapter(clientsWithDistance, getActivity());
                     listView.setAdapter(adapter);
                     listView.setFastScrollEnabled(true);
                 }else{
@@ -168,6 +181,50 @@ public class SelectClientListFragment extends Fragment
                 DialogUtils.closeProgress();
             }
         });
+    }
+
+    public void initAdded(){
+        added = new boolean[range.length-1];
+    }
+
+    public ArrayList getClientsWithLocationDistance(ArrayList<Client> clients){
+
+        initAdded();
+
+        ArrayList data = new ArrayList();
+        int rangeIndex = 0;
+        int minIndex = range[0];
+        for(int i = 0; i < range.length - 1; i++){
+            for(int j = 0; j < clients.size(); j++ ) {
+                Client this_client = clients.get(j);
+                if(this_client.getDis_from() >= range[rangeIndex] && this_client.getDis_from() <= range[rangeIndex + 1]){
+                    if(!added[rangeIndex]){
+                        String lower = minIndex+"";
+                        String upper = range[rangeIndex + 1]+"";
+                        Distance distance = new Distance(lower, upper, "Miles");
+                        data.add(distance);
+                        added[rangeIndex] = true;
+                        Log.d(TAG, "DISTANCE IS RANGE: "+distance.toString() +" j = "+j);
+                        minIndex = range[rangeIndex + 1];
+                    }
+                    Log.d(TAG, "this_client DISTANCE IS : "+this_client.getDis_from() +" name "+this_client.getFull_name() +" j = "+j);
+                    data.add(this_client);
+                    clients.remove(j);
+                    j--;
+                }
+            }
+            rangeIndex++;
+        }
+
+        if(clients.size() > 0){
+            String lower = range[rangeIndex]+"";
+            String upper = "n";
+            Distance distance = new Distance(lower, upper, "Miles");
+            data.add(distance);
+            data.addAll(clients);
+        }
+
+        return data;
     }
 
     @Override
