@@ -47,7 +47,6 @@ public class AllScheduleFragment extends SchedulesFragment implements View.OnCli
                     scheduleDataModels = parseSchedules(scheduleArrayList);
                     adapter = new ScheduleListAdapter(scheduleDataModels, getActivity(), bundle);
                     listView.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(getActivity(), "encountered error with server", Toast.LENGTH_LONG).show();
                 }

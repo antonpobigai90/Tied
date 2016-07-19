@@ -175,7 +175,6 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
                             else{
                                 tab_scroll.scrollTo((int) title.getScaleX(), 0);
                             }
-
                         }
                     });
                 }

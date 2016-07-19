@@ -111,7 +111,6 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
                     Log.d(TAG + "scheduleDataModels", scheduleDataModels.toString());
                     adapter = new ScheduleListAdapter(scheduleDataModels, getActivity(), bundle);
                     listView.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(getActivity(), "encountered error with server", Toast.LENGTH_LONG).show();
                 }
@@ -159,8 +158,6 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
             String week_day = getWeekDay(schedule);
 
             scheduleDataModel.setSchedules(schedules);
-//            scheduleDataModel.setTemperature("80");
-//            scheduleDataModel.setWeather("cloudy");
             scheduleDataModel.setDay(day);
             scheduleDataModel.setWeek_day(week_day);
 
