@@ -30,7 +30,7 @@
                     android:layout_height="25dp"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp"
-                    android:src="@mipmap/search" />
+                    android:src="@drawable/search" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/img_user_picture"
@@ -39,7 +39,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="15dp"
-                    android:src="@mipmap/default_avatar" />
+                    android:src="@drawable/default_avatar" />
 
                 <LinearLayout
                     android:id="@+id/tab_activity_schedule"
@@ -50,7 +50,7 @@
                     android:layout_marginRight="20dp"
                     android:layout_toLeftOf="@+id/img_user_picture"
                     android:layout_toRightOf="@+id/img_search"
-                    android:background="@mipmap/base_schedule"
+                    android:background="@drawable/base_schedule"
                     android:orientation="horizontal">
 
                     <TextView
@@ -106,7 +106,7 @@
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:src="@mipmap/analytics" />
+                android:src="@drawable/analytics" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -127,7 +127,7 @@
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:src="@mipmap/map" />
+                android:src="@drawable/map" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -150,7 +150,7 @@
                 android:id="@+id/add"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/plus" />
+                android:src="@drawable/plus" />
         </LinearLayout>
 
         <LinearLayout
@@ -164,7 +164,7 @@
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:src="@mipmap/sale" />
+                android:src="@drawable/sale" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -185,7 +185,7 @@
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:src="@mipmap/lists" />
+                android:src="@drawable/lists" />
 
             <TextView
                 android:layout_width="wrap_content"
