@@ -24,7 +24,7 @@
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:src="@mipmap/analytics" />
+                android:src="@drawable/analytics" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -45,7 +45,7 @@
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:src="@mipmap/map" />
+                android:src="@drawable/map" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -66,7 +66,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/plus_blue_background" />
+                android:src="@drawable/plus" />
         </LinearLayout>
 
         <LinearLayout
@@ -80,7 +80,7 @@
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:src="@mipmap/sale" />
+                android:src="@drawable/sale" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -101,7 +101,7 @@
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:src="@mipmap/lists" />
+                android:src="@drawable/lists" />
 
             <TextView
                 android:layout_width="wrap_content"
