@@ -13,7 +13,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="30dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:orientation="vertical">
@@ -35,7 +36,7 @@
                 android:textColor="@color/schedule_title_bg_color"
                 android:gravity="center_horizontal"
                 android:text="Are you sure you want to delete this data"
-                android:textSize="16sp"/>
+                android:textSize="15sp"/>
 
 
         </LinearLayout>
@@ -46,32 +47,40 @@
         android:layout_gravity="center_horizontal"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
+        android:weightSum="2"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/cancel"
             android:layout_weight="1"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="50dp"
             android:gravity="center_horizontal|center_vertical"
             android:background="@drawable/bottom_curve_white_background"
-            android:layout_marginRight="7dp"
+            android:layout_marginRight="3dp"
             android:text="CANCEL"
             android:textStyle="bold"
+            android:paddingLeft="7dp"
+            android:paddingRight="7dp"
             android:textColor="@color/schedule_title_bg_color"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/yes"
             android:layout_weight="1"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:layout_marginLeft="3dp"
             android:gravity="center_horizontal|center_vertical"
             android:background="@drawable/bottom_curve_white_background"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:paddingLeft="7dp"
+            android:paddingRight="7dp"
             android:text="YES DONE"
             android:textStyle="bold"
             android:textColor="@color/color_green"
-            android:textSize="18sp" />
+            android:textSize="14sp" />
 
 
     </LinearLayout>
