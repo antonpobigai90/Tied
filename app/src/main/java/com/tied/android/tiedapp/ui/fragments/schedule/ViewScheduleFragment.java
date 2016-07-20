@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -53,6 +54,8 @@ public class ViewScheduleFragment extends Fragment implements View.OnClickListen
     private Client client;
     private Schedule schedule;
 
+    private LinearLayout back_layout;
+
     private TextView description, temperature, title, schedule_title;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -67,6 +70,9 @@ public class ViewScheduleFragment extends Fragment implements View.OnClickListen
     }
 
     public void initComponent(View view) {
+
+        back_layout = (LinearLayout) view.findViewById(R.id.back_layout);
+        back_layout.setOnClickListener(this);
 
         bundle = getArguments();
         if (bundle != null) {

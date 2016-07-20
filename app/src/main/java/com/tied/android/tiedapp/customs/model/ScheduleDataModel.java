@@ -1,5 +1,7 @@
 package com.tied.android.tiedapp.customs.model;
 
+import com.tied.android.tiedapp.objects.schedule.Schedule;
+
 import java.util.ArrayList;
 
 /**
@@ -9,16 +11,16 @@ public class ScheduleDataModel {
 
     private String day;
     private String week_day;
-    private ArrayList<ScheduleTimeModel> scheduleTimeModel;
+    private ArrayList<Schedule> schedules;
     private String temperature;
     private String weather;
 
-    public ScheduleDataModel(String day, String week_day, String temperature, String weather, ArrayList<ScheduleTimeModel> scheduleTimeModel) {
+    public ScheduleDataModel(String day, String week_day, ArrayList<Schedule> schedules, String temperature, String weather) {
         this.day = day;
         this.week_day = week_day;
+        this.schedules = schedules;
         this.temperature = temperature;
         this.weather = weather;
-        this.scheduleTimeModel = scheduleTimeModel;
     }
 
     public ScheduleDataModel() {
@@ -40,6 +42,14 @@ public class ScheduleDataModel {
         this.week_day = week_day;
     }
 
+    public ArrayList<Schedule> getSchedules() {
+        return schedules;
+    }
+
+    public void setSchedules(ArrayList<Schedule> schedules) {
+        this.schedules = schedules;
+    }
+
     public String getTemperature() {
         return temperature;
     }
@@ -56,20 +66,12 @@ public class ScheduleDataModel {
         this.weather = weather;
     }
 
-    public ArrayList<ScheduleTimeModel> getScheduleTimeModel() {
-        return scheduleTimeModel;
-    }
-
-    public void setScheduleTimeModel(ArrayList<ScheduleTimeModel> scheduleTimeModel) {
-        this.scheduleTimeModel = scheduleTimeModel;
-    }
-
     @Override
     public String toString() {
         return "ScheduleDataModel{" +
                 "day='" + day + '\'' +
                 ", week_day='" + week_day + '\'' +
-                ", scheduleTimeModel=" + scheduleTimeModel +
+                ", schedules=" + schedules +
                 ", temperature='" + temperature + '\'' +
                 ", weather='" + weather + '\'' +
                 '}';

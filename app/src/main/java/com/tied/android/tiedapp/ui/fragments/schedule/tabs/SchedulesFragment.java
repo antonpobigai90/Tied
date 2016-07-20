@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -17,7 +18,6 @@ import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.model.ScheduleDataModel;
-import com.tied.android.tiedapp.customs.model.ScheduleTimeModel;
 import com.tied.android.tiedapp.objects.responses.ScheduleRes;
 import com.tied.android.tiedapp.objects.schedule.DateRange;
 import com.tied.android.tiedapp.objects.schedule.Schedule;
@@ -45,7 +45,7 @@ import retrofit2.Response;
 /**
  * Created by Emmanuel on 7/15/2016.
  */
-public abstract class SchedulesFragment extends Fragment implements View.OnClickListener {
+public abstract class SchedulesFragment extends Fragment implements View.OnClickListener , AdapterView.OnItemClickListener{
     protected static final String TAG = SchedulesFragment.class
             .getSimpleName();
 
@@ -53,7 +53,7 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
 
     protected ScheduleDate scheduleDate;
 
-    protected ArrayList<ScheduleDataModel> schedules;
+    protected ArrayList<ScheduleDataModel> scheduleDataModels;
     protected ListView listView;
 
     protected TimeRange timeRange = null;
@@ -77,6 +77,7 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
 
     protected void initComponent(View view){
         listView = (ListView) view.findViewById(R.id.list);
+        listView.setOnItemClickListener(this);
         bundle = getArguments();
         if (bundle != null) {
             Gson gson = new Gson();
@@ -84,6 +85,12 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
             user = gson.fromJson(user_json, User.class);
             initSchedule();
         }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        Log.d("schedules at ", position +"here---------------- "+scheduleDataModels.toString());
     }
 
     protected void initSchedule() {
@@ -94,19 +101,16 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
             @Override
             public void onResponse(Call<ScheduleRes> call, Response<ScheduleRes> resResponse) {
                 if (getActivity() == null) return;
-                Log.d(TAG + "ScheduleRes", resResponse.toString());
                 DialogUtils.closeProgress();
                 ScheduleRes scheduleRes = resResponse.body();
                 if (scheduleRes != null && scheduleRes.isAuthFailed()) {
                     User.LogOut(getActivity());
                 } else if (scheduleRes != null && scheduleRes.get_meta() != null && scheduleRes.get_meta().getStatus_code() == 200) {
                     ArrayList<Schedule> scheduleArrayList = scheduleRes.getSchedules();
-                    ArrayList<ScheduleDataModel> scheduleDataModels = null;
-                    Log.d(TAG + " scheduleArrayList : ", scheduleArrayList.toString());
                     scheduleDataModels = parseSchedules(scheduleArrayList);
-                    ScheduleListAdapter adapter = new ScheduleListAdapter(scheduleDataModels, getActivity());
+                    Log.d(TAG + "scheduleDataModels", scheduleDataModels.toString());
+                    adapter = new ScheduleListAdapter(scheduleDataModels, getActivity(), bundle);
                     listView.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(getActivity(), "encountered error with server", Toast.LENGTH_LONG).show();
                 }
@@ -136,20 +140,13 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
         ArrayList<ScheduleDataModel> scheduleDataModels = new ArrayList<>();
         for (int i = 0; i < scheduleArrayList.size(); i++) {
             Schedule schedule = scheduleArrayList.get(i);
-
             ScheduleDataModel scheduleDataModel = new ScheduleDataModel();
-
-            ScheduleTimeModel scheduleTimeModel = new ScheduleTimeModel(schedule.getId(),
-                    schedule.getTitle(), schedule.getTime_range().getStart_time(), schedule.getTime_range().getEnd_time());
-
-            ArrayList<ScheduleTimeModel> scheduleTimeModels = new ArrayList<ScheduleTimeModel>();
-            scheduleTimeModels.add(scheduleTimeModel);
+            ArrayList<Schedule> schedules = new ArrayList<Schedule>();
+            schedules.add(schedule);
             for (int j = i + 1; j < scheduleArrayList.size(); j++) {
                 Schedule this_schedule = scheduleArrayList.get(j);
                 if (isSameDay(schedule.getDate(), this_schedule.getDate())) {
-                    scheduleTimeModel = new ScheduleTimeModel(this_schedule.getId(),
-                            this_schedule.getTitle(), this_schedule.getTime_range().getStart_time(), this_schedule.getTime_range().getEnd_time());
-                    scheduleTimeModels.add(scheduleTimeModel);
+                    schedules.add(this_schedule);
                     Log.d(TAG, "SAME "+schedule.getTitle() + " and "+this_schedule.getTitle());
                     scheduleArrayList.remove(j--);
                 }
@@ -160,9 +157,7 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
             String day = String.format("%02d", HelperMethods.getDayFromSchedule(schedule.getDate()));
             String week_day = getWeekDay(schedule);
 
-            scheduleDataModel.setScheduleTimeModel(scheduleTimeModels);
-            scheduleDataModel.setTemperature("80");
-            scheduleDataModel.setWeather("cloudy");
+            scheduleDataModel.setSchedules(schedules);
             scheduleDataModel.setDay(day);
             scheduleDataModel.setWeek_day(week_day);
 

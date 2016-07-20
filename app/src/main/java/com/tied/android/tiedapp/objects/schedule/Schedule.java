@@ -25,6 +25,28 @@ public class Schedule implements Serializable{
     private TimeRange time_range;
     private String end_time;
     private Location location;
+    private int status;
+
+    public Schedule(String id) {
+        this.id = id;
+    }
+
+    public Schedule(String id, String user_id, String client_id, String title, String description,
+                    int reminder, boolean visited, String date, TimeRange time_range,
+                    String end_time, Location location, int status) {
+        this.id = id;
+        this.user_id = user_id;
+        this.client_id = client_id;
+        this.title = title;
+        this.description = description;
+        this.reminder = reminder;
+        this.visited = visited;
+        this.date = date;
+        this.time_range = time_range;
+        this.end_time = end_time;
+        this.location = location;
+        this.status = status;
+    }
 
     public Schedule() {
     }
@@ -42,6 +64,13 @@ public class Schedule implements Serializable{
         return mPrefs.getBoolean(Constants.SCHEDULE_CREATED, false);
     }
 
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 
     public String getId() {
         return id;
@@ -145,6 +174,7 @@ public class Schedule implements Serializable{
                 ", time_range=" + time_range +
                 ", end_time='" + end_time + '\'' +
                 ", location=" + location +
+                ", status=" + status +
                 '}';
     }
 }

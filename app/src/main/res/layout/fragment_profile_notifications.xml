@@ -6,14 +6,14 @@
     android:orientation="vertical">
 
     <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="60dp"
-        android:background="@mipmap/background">
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:background="@drawable/background_layout">
 
         <ImageView
             android:id="@+id/img_close"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:src="@mipmap/btn_close" />

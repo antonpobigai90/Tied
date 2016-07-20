@@ -1,5 +1,9 @@
 package com.tied.android.tiedapp.util;
 
+import android.util.Log;
+
+import com.tied.android.tiedapp.customs.Constants;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -11,13 +15,61 @@ import java.util.Locale;
  * Created by Emmanuel on 7/3/2016.
  */
 public class HelperMethods {
+
     protected static final String TAG = HelperMethods.class
             .getSimpleName();
 
     public static String[] MONTHS_LIST = {"January", "Febuary", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"};
 
-    public static String[] WEEK_LIST = {"", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday","Sunday"};
+    public static String[] WEEK_LIST = {"", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+
+    public static String getFormatedDate(String string_date){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Calendar c = Calendar.getInstance();
+            Date date = sdf.parse(string_date);
+            c.setTime(date);
+
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+
+            String month_name=MONTHS_LIST[month];
+            GregorianCalendar gregorianCalendar = getGCalendar(string_date);
+
+            int dayOfWeek=gregorianCalendar.get(gregorianCalendar.DAY_OF_WEEK);
+            String dayOfWeekName= WEEK_LIST[dayOfWeek];
+
+            return ""+ dayOfWeekName +", " + month_name + " " + dayOfWeek + ", " + year;
+
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
+    public static void getWeatherIcon(String icon){
+        switch (icon){
+            case Constants.CLEAR_DAY:
+                break;
+            case Constants.CLEAR_NIGHT:
+                break;
+            case Constants.PARTLY_CLOUDY_DAY:
+                break;
+            case Constants.PARTLY_CLOUDY_NIGHT:
+                break;
+            case Constants.RAIN:
+                break;
+            case Constants.FOG:
+                break;
+            case Constants.SLEET:
+                break;
+            case Constants.SNOW:
+                break;
+            case Constants.WIND:
+                break;
+        }
+    }
 
     // Converts to celcius
     public static float convertFahrenheitToCelcius(float fahrenheit) {
@@ -29,7 +81,7 @@ public class HelperMethods {
         return ((celsius * 9) / 5) + 32;
     }
 
-    public static double kilometerToMile(double km){
+    public static double kilometerToMile(double km) {
         double miles;
         miles = km * 0.621371192;
         return miles;
@@ -37,8 +89,8 @@ public class HelperMethods {
 
     public static String getDayOfTheWeek(String string_date) {
         GregorianCalendar gregorianCalendar = getGCalendar(string_date);
-        int dayOfWeek=gregorianCalendar.get(gregorianCalendar.DAY_OF_WEEK);
-        String dayOfWeekName= WEEK_LIST[dayOfWeek];
+        int dayOfWeek = gregorianCalendar.get(gregorianCalendar.DAY_OF_WEEK);
+        String dayOfWeekName = WEEK_LIST[dayOfWeek];
         return dayOfWeekName;
     }
 
@@ -52,7 +104,7 @@ public class HelperMethods {
             int year = c.get(Calendar.YEAR);
             int month = c.get(Calendar.MONTH);
             int day = c.get(Calendar.DAY_OF_MONTH);
-            GregorianCalendar gregorianCalendar = new GregorianCalendar(year, month, day -1);
+            GregorianCalendar gregorianCalendar = new GregorianCalendar(year, month, day - 1);
             return gregorianCalendar;
         } catch (ParseException e) {
             return null;
@@ -62,7 +114,7 @@ public class HelperMethods {
     public static String getMonthOfTheYear(String string_date) {
         GregorianCalendar gregorianCalendar = getGCalendar(string_date);
         int montOfyear = gregorianCalendar.get(gregorianCalendar.MONTH);
-        String montOfyearName= MONTHS_LIST[montOfyear];
+        String montOfyearName = MONTHS_LIST[montOfyear];
         return montOfyearName;
     }
 
@@ -79,7 +131,7 @@ public class HelperMethods {
         }
     }
 
-    public static long getDateDifference(String startDate, String endDate){
+    public static long getDateDifference(String startDate, String endDate) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
             Date s_date = sdf.parse(startDate);
@@ -101,15 +153,44 @@ public class HelperMethods {
         }
     }
 
-    public static long getDateDifferenceWithToday(String date){
+    public static long getTimeDifference(String startDate, String endDate) {
+        try {
+            Calendar cal = Calendar.getInstance();
+            Date now = cal.getTime();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            String today = sdf.format(now);
+
+            String date1 = today +" "+startDate+":00";
+            String date2 = today +" "+endDate+":00";
+
+            SimpleDateFormat this_sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.getDefault());
+            Date s_date = this_sdf.parse(date1);
+            Date e_date = this_sdf.parse(date2);
+
+            long mills = e_date.getTime() - s_date.getTime();
+
+            long Hours = mills / (1000 * 60 * 60);
+            long Mins = mills % (1000 * 60 * 60);
+
+            Log.d(TAG, "difference in time between " + date1 + " and " + date2 + " is "+Hours);
+
+            return Hours;
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Log.d(TAG, "ParseException HERE");
+            return 0;
+        }
+    }
+
+    public static long getDateDifferenceWithToday(String date) {
         return getDateDifference(date, getTodayDate());
     }
 
-    public static String getTodayDate(){
+    public static String getTodayDate() {
         Calendar cal = Calendar.getInstance();
         Date now = cal.getTime();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        String  today = sdf.format(now);
+        String today = sdf.format(now);
         return today;
     }
 }

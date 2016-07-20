@@ -88,7 +88,6 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
             Log.d(TAG, user.toString());
 //            user.setSign_up_stage(4);
 //            user.save(getApplicationContext());
-            Log.d(TAG +" : 3", user.toString());
             Bundle bundle = new Bundle();
             Gson gson = new Gson();
             String user_json = gson.toJson(user);
@@ -200,7 +199,6 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
     public void onBackPressed() {
         Log. d(TAG, "fragment_index " + fragment_index);
         if (fragment_index == Constants.EmailSignUp || fragment_index == Constants.SignInUser) {
-            Log. d(TAG, "am in fragment_index " + fragment_index);
             Intent intent = new Intent(this, WalkThroughActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);

@@ -29,6 +29,10 @@ public class Constants {
     public static final String USER_CLIENTS_COUNT = API_PATH + "users/me/clients_count";
     public static final String USER_GE0_CLIENTS = API_PATH + "users/me/clients/geo";
 
+
+    public static final String GET_CLIENT_WITH_ID = API_PATH + "client/{client_id}";
+    public static final String UPDATE_SCHEDULE_WITH_ID = API_PATH + "schedules/{schedule_id}";
+
     public static final String SCHEDULES = API_PATH + "schedules";
     public static final String USER_SCHEDULE = API_PATH + "users/me/schedules";
     public static final String USER_SCHEDULE_COUNT = API_PATH + "users/me/schedules_count";
@@ -37,6 +41,7 @@ public class Constants {
 
     public static final String GET_INDUSTRIES = API_PATH + "config/industries";
 
+    public static final String APP_DATA = "app_data";
     public static final String USER_DATA = "user_data";
     public static final String CLIENT_DATA = "client_data";
     public static final String SCHEDULE_DATA = "schedule_data";
@@ -132,7 +137,6 @@ public class Constants {
     public static final int SUCCESS_RESULT = 0;
     public static final String RESULT_ADDRESS = "address";
     public static final String RESULT_DATA_KEY = "data_key";
-
 
     public static final String RAIN = "rain";
     public static final String CLEAR_DAY = "clear-day";
