@@ -13,5 +13,7 @@
     <dimen name="tab_height">48dp</dimen>
 
     <dimen name="pager_margin">-30dp</dimen>
+    <dimen name="action_bar_icon_height">35dip</dimen>
+    <dimen name="action_bar_icon_padding">5dip</dimen>
 </resources>
 

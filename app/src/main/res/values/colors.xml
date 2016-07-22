@@ -23,7 +23,8 @@
     <color name="background2">#E0E0E0</color>
     <color name="indigo">#3F51B5</color>
     <color name="blue">#ffffff</color>
-    <color name="grey">#757575</color>
+    <color name="grey">#32323A</color>
+    <color name="light_gray">#DAE1E4</color>
 
     <color name="red_color">#ff1414</color>
     <color name="orange_color">#feb414</color>

@@ -10,6 +10,8 @@ import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
 import com.johnhiott.darkskyandroidlib.ForecastApi;
 import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.util.FontsOverride;
+import com.tied.android.tiedapp.util.Logger;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 
@@ -45,6 +47,14 @@ public class MainApplication extends Application {
 
         Fabric.with(this, new Crashlytics());
         mInstance = this;
+        Logger.write("apppppppppppppp started");
+        FontsOverride.setDefaultFont(this, "MONOSPACE", "fonts/brandon_reg.ttf");
+        FontsOverride.setDefaultFont(this, "monospace", "fonts/brandon_reg.ttf");
+
+        FontsOverride.setDefaultFont(this, "DEFAULT", "fonts/brandon_reg.ttf");
+        FontsOverride.setDefaultFont(this, "MONOSPACE", "fonts/brandon_reg.ttf");
+        FontsOverride.setDefaultFont(this, "SERIF", "fonts/brandon_reg.ttf");
+        FontsOverride.setDefaultFont(this, "SANS_SERIF", "fonts/brandon_reg.ttf");
 
 //        try {
 //            PackageInfo info = getPackageManager().getPackageInfo(

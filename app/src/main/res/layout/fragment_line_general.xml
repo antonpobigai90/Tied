@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/top"
-        android:paddingBottom="70dp">
+        android:paddingBottom="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,27 +29,24 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="4dp"
                     android:text="ADD DESCRIPTION"
-                    android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="12sp" />
+                    style="@style/FieldLabels"
+                   />
 
-                <EditText
+                <com.tied.android.tiedapp.customs.ui.MyEditText
                     android:id="@+id/description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
                     android:text="Note ...."
-                    android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
+                    android:textColor="@color/grey"
+                   />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="@color/schedule_create_appointment_bg_color"
-                android:paddingLeft="20dp">
+                style="@style/SectionLayout"
+                >
 
                 <TextView
                     android:id="@+id/txt_title1"
@@ -57,10 +54,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="SHIP FROM"
-                    android:textColor="@color/schedule_title_bg_color"
+                    style="@style/SectionText"
+                    android:textColor="@color/grey"
                     android:textIsSelectable="false"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                   />
             </LinearLayout>
 
             <LinearLayout
@@ -75,26 +72,24 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="4dp"
+                    style="@style/FieldLabels"
                     android:text="STREET ADDRESS"
-                    android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="12sp" />
 
-                <EditText
+                   />
+
+                <com.tied.android.tiedapp.customs.ui.MyEditText
                     android:id="@+id/street"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
                     android:text="6559 Abiodun Pearl Suite 1"
-                    android:textColor="@color/schedule_title_bg_color"
+                    android:textColor="@color/grey"
                     android:textSize="13sp"
-                    android:textStyle="bold" />
+                    />
             </LinearLayout>
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="0.1dp"
-                android:background="@android:color/darker_gray" />
+                    style="@style/SectionDivider"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -116,21 +111,19 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="4dp"
+                        style="@style/FieldLabels"
                         android:text="CITY"
-                        android:textColor="@color/schedule_title_bg_color"
-                        android:textSize="12sp" />
+                        />
 
-                    <EditText
+                    <com.tied.android.tiedapp.customs.ui.MyEditText
                         android:id="@+id/city"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@android:color/transparent"
                         android:inputType="text"
                         android:text="Dallas"
-                        android:textColor="@color/schedule_title_bg_color"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
+                        android:textColor="@color/grey"
+                         />
 
                 </LinearLayout>
 
@@ -143,20 +136,18 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="4dp"
+                        style="@style/FieldLabels"
                         android:text="STATE"
-                        android:textColor="@color/schedule_title_bg_color"
-                        android:textSize="12sp" />
+                        />
 
-                    <EditText
-                        android:id="@+id/l_name"
+                    <Spinner
+                        android:id="@+id/state"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@android:color/transparent"
-                        android:text="LG"
-                        android:textColor="@color/schedule_title_bg_color"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
+                        android:layout_height="30dip"
+                        android:background="@android:drawable/btn_dropdown"
+
+                        android:textColor="@color/grey"
+                         />
 
                 </LinearLayout>
 
@@ -164,9 +155,7 @@
             </LinearLayout>
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="0.1dp"
-                android:background="@android:color/darker_gray" />
+               style="@style/SectionDivider"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -180,43 +169,36 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="4dp"
+                    style="@style/FieldLabels"
                     android:text="ZIP CODE"
-                    android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="12sp" />
-
-                <EditText
+                    android:textSize="12sp"></TextView>
+                <com.tied.android.tiedapp.customs.ui.MyEditText
                     android:id="@+id/zip"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
                     android:text="91920"
-                    android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
+                    android:textColor="@color/grey"
+                    />
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.1dp"
-                android:background="@android:color/darker_gray" />
+
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="40dp"
-                android:background="@color/schedule_create_appointment_bg_color"
-                android:paddingLeft="20dp">
+                style="@style/SectionLayout">
 
                 <TextView
                     android:id="@+id/title2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    style="@style/SectionText"
+
                     android:text="TERRITORY"
                     android:textColor="@color/schedule_title_bg_color"
                     android:textIsSelectable="false"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                     />
             </LinearLayout>
 
             <LinearLayout
@@ -227,6 +209,7 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="15dp"
                 android:paddingTop="5dp"
+                android:layout_marginBottom="5dip"
                 android:weightSum="7">
 
                 <LinearLayout
@@ -238,20 +221,19 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="4dp"
                         android:text="WHAT TERRITORY DOES THIS LINE COVERS"
-                        android:textColor="@color/schedule_title_bg_color"
-                        android:textSize="12sp" />
+                        style="@style/FieldLabels"
+                        />
 
-                    <EditText
+                    <com.tied.android.tiedapp.customs.ui.MyEditText
                         android:id="@+id/industry_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@android:color/transparent"
                         android:text="Lagos, Mansfield, Kano"
-                        android:textColor="@color/schedule_title_bg_color"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
+                        android:textColor="@color/grey"
+
+                     />
 
                 </LinearLayout>
 
@@ -267,7 +249,7 @@
                         android:layout_width="30dp"
                         android:layout_height="40dp"
                         android:layout_gravity="right"
-                        android:src="@mipmap/plus_add" />
+                        android:src="@drawable/plus_add" />
 
                 </LinearLayout>
 
@@ -275,15 +257,14 @@
             </LinearLayout>
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="0.1dp"
-                android:background="@android:color/darker_gray" />
+                    style="@style/SectionDivider"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingBottom="3dp"
+                android:layout_marginTop="3dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="15dp">
 
@@ -303,10 +284,10 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingLeft="4dp"
+                            style="@style/FieldLabels"
                             android:text="ADD CLIENT TO THIS LINE"
-                            android:textColor="@color/schedule_title_bg_color"
-                            android:textSize="14sp" />
+                            android:textColor="@color/grey"
+                            android:textSize="12sp" />
 
                     </LinearLayout>
 
@@ -322,7 +303,7 @@
                             android:layout_width="30dp"
                             android:layout_height="40dp"
                             android:layout_gravity="right"
-                            android:src="@mipmap/plus_add" />
+                            android:src="@drawable/plus_add" />
 
                     </LinearLayout>
                 </LinearLayout>
@@ -330,6 +311,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="4dp"
                     android:orientation="horizontal">
 
                     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -338,14 +320,14 @@
                         android:layout_height="40dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginRight="10dp"
-                        android:src="@mipmap/avatar_profile" />
+                        android:src="@drawable/avatar_profile" />
 
                     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginRight="10dp"
-                        android:src="@mipmap/avatar_profile" />
+                        android:src="@drawable/avatar_profile" />
 
                     <!--<TextView-->
                         <!--android:layout_width="40dp"-->
@@ -362,9 +344,7 @@
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="40dp"
-                android:background="@color/schedule_create_appointment_bg_color"
-                android:paddingLeft="20dp">
+                style="@style/SectionLayout">
 
                 <TextView
                     android:id="@+id/title3"
@@ -372,10 +352,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="OTHER RELEVANT INFO"
-                    android:textColor="@color/schedule_title_bg_color"
+                    style="@style/SectionText"
                     android:textIsSelectable="false"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+              />
             </LinearLayout>
 
             <LinearLayout
@@ -391,26 +370,23 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="4dp"
+                    style="@style/FieldLabels"
                     android:text="WEBSITE"
-                    android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="12sp" />
+                    />
 
-                <EditText
+                <com.tied.android.tiedapp.customs.ui.MyEditText
                     android:id="@+id/website"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
                     android:text="http://"
-                    android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
+                    android:textColor="@color/grey"
+                  />
             </LinearLayout>
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="0.1dp"
-                android:background="@android:color/darker_gray" />
+                    android:visibility="gone"
+                    style="@style/SectionDivider"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -419,33 +395,31 @@
                 android:paddingBottom="2dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="15dp"
+                android:visibility="gone"
                 android:paddingTop="10dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="4dp"
-                    android:text="COUNTYS SPECIAL REQUEST"
-                    android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="12sp" />
+                    style="@style/FieldLabels"
 
-                <EditText
+                    android:text="COUNTYS SPECIAL REQUEST"
+                    />
+
+                <com.tied.android.tiedapp.customs.ui.MyEditText
                     android:id="@+id/reuest"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
                     android:text="35,120,230"
-                    android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
+                    android:textColor="@color/grey"
+                    />
             </LinearLayout>
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="0.1dp"
-                android:background="@android:color/darker_gray" />
+                    style="@style/SectionDivider"/>
 
-            <LinearLayout
+           <!-- <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -453,9 +427,10 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="15dp"
                 android:paddingTop="5dp"
+                android:layout_marginTop="3dip"
                 android:weightSum="2">
 
-                <LinearLayout
+            <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="20dp"
@@ -465,21 +440,19 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="4dp"
+                        style="@style/FieldLabels"
                         android:text="OPENINGS"
-                        android:textColor="@color/schedule_title_bg_color"
-                        android:textSize="12sp" />
+                        />
 
-                    <EditText
+                    <com.tied.android.tiedapp.customs.ui.MyEditText
                         android:id="@+id/openings"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@android:color/transparent"
                         android:inputType="text"
                         android:text="Dallas"
-                        android:textColor="@color/schedule_title_bg_color"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
+                        android:textColor="@color/grey"
+                       />
 
                 </LinearLayout>
 
@@ -492,27 +465,23 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="4dp"
+                        style="@style/FieldLabels"
                         android:text="REORDERS"
-                        android:textColor="@color/schedule_title_bg_color"
-                        android:textSize="12sp" />
+                       />
 
-                    <EditText
+                    <com.tied.android.tiedapp.customs.ui.MyEditText
                         android:id="@+id/re_orders"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@android:color/transparent"
                         android:text="LG"
-                        android:textColor="@color/schedule_title_bg_color"
-                        android:textSize="13sp"
-                        android:textStyle="bold" />
+                        android:textColor="@color/grey" />
 
                 </LinearLayout>
 
-
             </LinearLayout>
 
-
+-->
         </LinearLayout>
 
 
@@ -546,7 +515,7 @@
             android:layout_marginRight="10dp"
             android:clickable="false"
             android:focusable="false"
-            android:src="@mipmap/btn_next_arrow" />
+            android:src="@drawable/btn_next_arrow" />
 
     </RelativeLayout>
 

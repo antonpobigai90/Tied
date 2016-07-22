@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -15,8 +15,7 @@
         <RelativeLayout
             android:id="@+id/top_layout"
             android:layout_width="match_parent"
-            android:layout_height="54dp">
-
+            android:layout_height="wrap_content">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -24,46 +23,50 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="15dp"
                 android:text="Add New Line"
+                android:layout_alignParentTop="true"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="15sp" />
 
             <LinearLayout
                 android:id="@+id/back_layout"
                 android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
+                android:layout_height="wrap_content"
                 android:gravity="center_vertical"
+                android:layout_alignParentTop="true"
                 android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/img_close"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_centerVertical="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/action_bar_icon_height"
+
+                    android:padding="@dimen/action_bar_icon_padding"
                     android:layout_marginLeft="10dp"
-                    android:src="@mipmap/btn_close" />
+                    android:src="@drawable/btn_close" />
 
             </LinearLayout>
 
             <ImageView
                 android:id="@+id/img_edit"
-                android:layout_width="35dp"
-                android:layout_height="30dp"
+                android:layout_alignParentTop="true"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/action_bar_icon_height"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="15dp"
                 android:src="@drawable/checkmark" />
 
         </RelativeLayout>
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="2dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/top_layout"
-            android:paddingBottom="2dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
-
-            <EditText
+        <EditText
                 android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -74,7 +77,19 @@
                 android:gravity="center_horizontal"
                 android:hint="What's Line Name?"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                style="@style/EditTextStyle"
+                android:textSize="18sp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/top_layout"
+            android:paddingBottom="2dp"
+            android:layout_alignParentBottom="true"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+
 
             <LinearLayout
                 android:id="@+id/tab_bar"
@@ -82,6 +97,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/name"
                 android:gravity="bottom"
+                android:layout_alignParentBottom="true"
                 android:orientation="horizontal"
                 android:paddingTop="10dp">
 
@@ -98,8 +114,9 @@
                         android:text="GENERAL"
                         android:layout_gravity="center_horizontal"
                         android:textColor="@color/white2"
-                        android:textSize="14sp"
+
                         android:paddingBottom="3dp"
+                        style="@style/TabTextStyle"
                         android:textStyle="bold" />
 
                     <TextView
@@ -124,7 +141,8 @@
                         android:text="REVENUE"
                         android:textColor="@color/white2"
                         android:paddingBottom="3dp"
-                        android:textSize="14sp"
+
+                        style="@style/TabTextStyle"
                         android:textStyle="bold" />
 
                     <TextView
@@ -148,7 +166,8 @@
                         android:text="GOAL"
                         android:textColor="@color/white2"
                         android:paddingBottom="3dp"
-                        android:textSize="14sp"
+
+                        style="@style/TabTextStyle"
                         android:textStyle="bold" />
 
                     <TextView
@@ -173,11 +192,13 @@
                         android:text="CLIENT"
                         android:textColor="@color/white2"
                         android:paddingBottom="3dp"
-                        android:textSize="14sp"
+
+                        style="@style/TabTextStyle"
                         android:textStyle="bold" />
 
                     <TextView
                         android:visibility="gone"
+                        style="@style/TabTextStyle"
                         android:layout_width="match_parent"
                         android:layout_height="2dp"
                         android:background="@color/white" />
@@ -187,7 +208,7 @@
             </LinearLayout>
 
 
-        </RelativeLayout>
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -198,4 +219,4 @@
         android:layout_height="wrap_content" />
 
 
-</RelativeLayout>
+</LinearLayout>

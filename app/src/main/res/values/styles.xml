@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:editTextStyle">@style/AppEditTextStyle</item>
         <!--<item name="android:windowBackground">@color/white</item>-->
         <item name="android:textViewStyle">@style/RobotoTextViewStyle</item>
     </style>
@@ -24,6 +25,8 @@
         <item name="android:textViewStyle">@style/RobotoTextViewStyle</item>
         <!--<item name="android:calendarViewStyle">@style/Widget.CalendarView.Custom</item>-->
         <!-- Customize your theme here. -->
+        <item name="android:editTextStyle">@style/AppEditTextStyle</item>
+        <item name="editTextStyle">@style/AppEditTextStyle</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -36,12 +39,65 @@
 
     <style name="RobotoTextViewStyle" parent="android:Widget.TextView">
         <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+    <style name="AppEditTextStyle"  parent="android:Widget.EditText">
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+    <style name="EditTextStyle" parent="RobotoTextViewStyle">
+        <item name="android:textColor">@color/tw__medium_gray</item>
+
+    </style>
+    <style name="TabTextStyle" parent="RobotoTextViewStyle">
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">@color/white</item>
+
+    </style>
+    <style name="HeadingText" parent="RobotoTextViewStyle">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="SectionText" parent="RobotoTextViewStyle">
+        <item name="android:textSize">11sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:textColor">@color/tw__light_gray</item>
+    </style>
+    <style name="FieldLabels" parent="RobotoTextViewStyle">
+        <item name="android:textSize">11sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:layout_marginTop">10dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:textColor">@color/tw__medium_gray</item>
     </style>
 
     <style name="AppDialog" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:background">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:backgroundDimAmount">0.6</item>
+    </style>
+
+    <style name="SectionLayout" parent="AppTheme">
+        <item name="android:background">@color/light_gray</item>
+        <item name="android:paddingTop">8dip</item>
+        <item name="android:paddingBottom">8dip</item>
+        <item name="android:paddingLeft">20dip</item>
+        <item name="android:paddingRight">20dip</item>
+        <item name="android:layout_marginTop">8dip</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="SectionDivider" parent="AppTheme">
+        <item name="android:background">@color/light_gray</item>
+        <item name="android:paddingBottom">3dip</item>
+        <item name="android:layout_marginTop">3dip</item>
+        <item name="android:layout_height">1dip</item>
+        <item name="android:layout_width">1dip</item>
     </style>
 
     <!--<style name="Widget.CalendarView.Custom" parent="android:Widget.CalendarView">-->
