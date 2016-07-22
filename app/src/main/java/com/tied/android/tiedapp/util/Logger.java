@@ -12,12 +12,12 @@ import java.util.Date;
 
 public abstract class Logger {
 	//static boolean debugMode=true;
-	//public static boolean debugMode=true;
+	public static boolean debugMode=true;
 	public static void write(String fileName, String text) {
        // if(text.contains("ball")) Log.e("femi", ""+Integer.parseInt(text));
 		//else
 		//
-		if(BuildConfig.DEBUG) Log.wtf("ERROOOOOOOOOOR", text);
+		if(BuildConfig.DEBUG || debugMode) Log.wtf("ERROOOOOOOOOOR", text);
 		if(fileName.length()==0) fileName="Log";
 		/*
 		String rootPath= Constants.DIR_ROOT.getPath();
@@ -43,7 +43,7 @@ public abstract class Logger {
 			for(int i=0; i<elements.length; i++) {
 				string+=elements[i].getLineNumber()+"->"+elements[i].getMethodName()+"->"+elements[i].getClassName()+"->"+elements[i].getFileName()+"\n";
 			}			
-			if(BuildConfig.DEBUG) write(tag, string);
+			if(BuildConfig.DEBUG || debugMode) write(tag, string);
 		 Log.wtf(tag, pv.getMessage(), pv);
 	 }
 	 public static void write(Exception pv) {
