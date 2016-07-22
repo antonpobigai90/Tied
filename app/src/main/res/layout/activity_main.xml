@@ -175,8 +175,7 @@
                 android:id="@+id/add"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/plus" />
-                android:src="@mipmap/plus_blue_background" />
+                android:src="@drawable/plus"/>
         </LinearLayout>
 
         <LinearLayout
