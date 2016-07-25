@@ -15,5 +15,6 @@
     <dimen name="pager_margin">-30dp</dimen>
     <dimen name="action_bar_icon_height">35dip</dimen>
     <dimen name="action_bar_icon_padding">5dip</dimen>
+    <dimen name="action_bar_height">50dip</dimen>
 </resources>
 

@@ -8,11 +8,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.tied.android.tiedapp.R;
+import com.tied.android.tiedapp.ui.fragments.MyFormFragment;
+
+import java.util.Map;
 
 /**
  * Created by Emmanuel on 6/22/2016.
  */
-public class RevenueFragment extends Fragment implements View.OnClickListener{
+public class RevenueFragment extends MyFormFragment implements View.OnClickListener{
     private ImageView avatar;
 
     @Override
@@ -28,5 +31,8 @@ public class RevenueFragment extends Fragment implements View.OnClickListener{
 
                 break;
         }
+    }
+    public Map getFields() {
+ return myFieldsMap;
     }
 }

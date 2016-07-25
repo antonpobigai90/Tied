@@ -15,8 +15,8 @@
 
         <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/pic"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:layout_centerVertical="true"
             android:src="@mipmap/avatar_profile" />
 
@@ -31,10 +31,31 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:text="Emily Emmanuel"
-            android:textColor="@color/schedule_title_bg_color"
-            android:textSize="13sp" />
+            android:textColor="@color/grey"
+            android:textSize="14sp" />
 
+        <TextView
+                android:id="@+id/description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/pic"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_toLeftOf="@+id/check"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:layout_below="@+id/name"
+                android:text="ewewe"
+                android:textColor="@color/light_gray"
+                android:textSize="13sp" />
 
+<ImageView android:layout_width="30dp"
+          android:layout_alignParentRight="true"
+           android:layout_centerVertical="true"
+           android:layout_height="30dip"
+           android:id="@+id/selector"
+           android:layout_marginRight="15dip"
+android:src="@drawable/unselectd_bg"/>
     </RelativeLayout>
 
     <View

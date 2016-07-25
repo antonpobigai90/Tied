@@ -1,24 +1,18 @@
 package com.tied.android.tiedapp.ui.fragments.lines;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.text.InputFilter;
-import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 
 import android.widget.Spinner;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.ui.MyEditText;
 import com.tied.android.tiedapp.ui.fragments.MyFormFragment;
-import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -29,6 +23,7 @@ public class GeneralFragment extends MyFormFragment implements View.OnClickListe
     MyEditText note;
 
     Spinner stateSpinner;
+    View addClientBut;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,6 +42,11 @@ public class GeneralFragment extends MyFormFragment implements View.OnClickListe
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(), R.layout.my_spinner_item, MyUtils.States.asArrayList());
         adapter.setDropDownViewResource(R.layout.my_spinner_dropdown);
         stateSpinner.setAdapter(adapter);
+       // addClientBut=view.findViewById(R.id.add_client);
+        //addClientBut.setOnClickListener(this);
+        addViewToMap(stateSpinner);
+
+
 
     }
     public void loadData() {
@@ -59,7 +59,15 @@ public class GeneralFragment extends MyFormFragment implements View.OnClickListe
             case R.id.avatar:
 
                 break;
+           /* case R.id.add_client:
+                GeneralSelectObjectActivity.setType(GeneralSelectObjectActivity.SELECT_CLIENT_TYPE, true);
+                MyUtils.startActivity(getActivity(), GeneralSelectObjectActivity.class);
+                break; */
         }
+    }
+    public Map getFields() {
+        return myFieldsMap;
+
     }
 
 

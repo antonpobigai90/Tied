@@ -7,7 +7,7 @@ public class Distance {
     private String lower_bound;
     private String upper_bound;
     private String measurement;
-
+    public static final String UNIT_MILES="m", UNIT_KILOMETERS="km";
     public Distance() {
     }
 

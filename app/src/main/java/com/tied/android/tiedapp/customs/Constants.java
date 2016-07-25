@@ -55,6 +55,7 @@ public class Constants {
     public static final String LOGGED_IN_USER = "login";
     public static final String AVATAR_STATE_SAVED = "avatar_state";
     public static final String EditingProfile = "editing_profile";
+    public static final String DISTANCE_UNIT = "distance_unit";
 
     public static final String TOKEN = "token";
     public static final String TOKEN_HEADER = "x-access-token";
@@ -150,4 +151,5 @@ public class Constants {
 
     public static final String SCHEDULE_CREATED = "a_schedule_exist";
     public static final String CLIENT_CREATED = "a_client_exist";
+    public static final String LINE_CREATED = "a_line_exist";
 }

@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
+import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.fragments.lines.ClientFragment;
 import com.tied.android.tiedapp.ui.fragments.lines.GeneralFragment;
@@ -30,6 +31,8 @@ public class AddLinesActivity extends AppCompatActivity implements FragmentItera
     private PagerAdapter mPagerAdapter;
     private Bundle bundle;
     private User user;
+    public TextView lineName;
+    public Line line;
 
     LinearLayout general_tab, revenue_tab, goal_tab, client_tab,tab_bar;
 
@@ -48,6 +51,7 @@ public class AddLinesActivity extends AppCompatActivity implements FragmentItera
         goal_tab = (LinearLayout) findViewById(R.id.goal_tab);
         client_tab = (LinearLayout) findViewById(R.id.client_tab);
         tab_bar = (LinearLayout) findViewById(R.id.tab_bar);
+        lineName = (TextView) findViewById(R.id.name);
 
         revenue_tab.setOnClickListener(this);
         general_tab.setOnClickListener(this);
@@ -61,6 +65,12 @@ public class AddLinesActivity extends AppCompatActivity implements FragmentItera
             mViewPager.setAdapter(mPagerAdapter);
             mViewPager.setCurrentItem(0);
             selectTab(tab_bar, 0);
+        }
+
+        bundle = getIntent().getExtras();
+
+        if(bundle!=null) {
+            line=(Line)bundle.getSerializable("line");
         }
 
         onCustomSelected(mViewPager);
@@ -169,5 +179,8 @@ public class AddLinesActivity extends AppCompatActivity implements FragmentItera
         public int getCount() {
             return 4;
         }
+    }
+    public void goBack(View v) {
+        onBackPressed();
     }
 }

@@ -13,24 +13,38 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="top"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="@color/schedule_create_appointment_bg_color"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_marginTop="0dip"
+                style="@style/SectionLayout"
+                android:orientation="horizontal"
                 android:paddingLeft="20dp">
 
                 <TextView
                     android:id="@+id/txt_title1"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dip"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:text="REVENUE INFO"
-                    android:textColor="@color/schedule_title_bg_color"
-                    android:textIsSelectable="false"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    style="@style/SectionText" />
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                    <ImageView
+                            android:id="@+id/add"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:src="@drawable/plus_add" />
+
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -45,19 +59,16 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="4dp"
                     android:text="MONTHLY NUMBRERS FROM LAST YEAR (USD)"
-                    android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="12sp" />
+                    style="@style/FieldLabels"
+                    />
 
-                <EditText
+                <com.tied.android.tiedapp.customs.ui.MyEditText
                     android:id="@+id/numbers_last_year"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@android:color/transparent"
                     android:text="10,000,000"
-                    android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="13sp"
+                    style="@style/MyEditTextStyle"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -78,19 +89,17 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="4dp"
                     android:text="MONTHLY NUMBERS FROM YTD (USD)"
-                    android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="12sp" />
+                    style="@style/FieldLabels"
+                     />
 
-                <EditText
+                <com.tied.android.tiedapp.customs.ui.MyEditText
                     android:id="@+id/numbers_from_ytd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
                     android:text="35,123,567"
-                    android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="13sp"
+                    style="@style/MyEditTextStyle"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -99,33 +108,7 @@
                 android:layout_height="0.1dp"
                 android:background="@android:color/darker_gray" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingBottom="2dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="15dp"
-                android:paddingTop="5dp">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="4dp"
-                    android:text="ZIP CODE"
-                    android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="12sp" />
-
-                <EditText
-                    android:id="@+id/zip"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@android:color/transparent"
-                    android:text="74501"
-                    android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
@@ -137,7 +120,7 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="40dp">
+                android:layout_marginTop="60dp">
 
                 <TextView
                     android:id="@+id/btn_add_new_sale"
@@ -188,7 +171,7 @@
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
             android:gravity="center_vertical"
-            android:text="NEXT"
+            android:text="CREATE LINE"
             android:textStyle="bold"
             android:textColor="@color/white"
             android:textSize="20sp" />
@@ -196,6 +179,7 @@
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
+            android:visibility="gone"
             android:clickable="false"
             android:focusable="false"
             android:id="@+id/img_next_arrow"

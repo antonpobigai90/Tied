@@ -32,6 +32,9 @@ public class MyFormFragment extends Fragment {
     public void addViewToMap(Integer resourceID) {
         myFieldsMap.put(resourceID, view.findViewById(resourceID));
     }
+    public void addViewToMap(View v) {
+        myFieldsMap.put(v.getId(), view);
+    }
     public Map getFields() {
         return myFieldsMap;
     }

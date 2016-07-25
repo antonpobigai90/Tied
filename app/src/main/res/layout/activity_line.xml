@@ -21,9 +21,9 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="15dp"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="0dp"
                 android:text="Add New Line"
-                android:layout_alignParentTop="true"
                 android:textColor="@color/white"
                 android:textSize="15sp" />
 
@@ -39,6 +39,7 @@
                     android:id="@+id/img_close"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/action_bar_icon_height"
+                    android:onClick="goBack"
 
                     android:padding="@dimen/action_bar_icon_padding"
                     android:layout_marginLeft="10dp"
@@ -46,15 +47,24 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                    android:id="@+id/ok_but"
+                    android:layout_width="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:gravity="center"
+                    android:layout_height="@dimen/action_bar_icon_height"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:orientation="horizontal">
             <ImageView
                 android:id="@+id/img_edit"
-                android:layout_alignParentTop="true"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/action_bar_icon_height"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
+                android:gravity="center"
+
                 android:layout_marginRight="15dp"
                 android:src="@drawable/checkmark" />
+            </LinearLayout>
 
         </RelativeLayout>
         <LinearLayout
@@ -65,17 +75,25 @@
                 android:layout_marginBottom="20dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp">
+            <LinearLayout android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+            android:focusable="true"
+                          android:focusableInTouchMode="true"
+            android:descendantFocusability="beforeDescendants"></LinearLayout>
 
         <EditText
                 android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:nextFocusUp="@+id/name"
+                android:nextFocusLeft="@+id/name"
+
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
                 android:backgroundTint="@android:color/transparent"
                 android:gravity="center_horizontal"
-                android:hint="What's Line Name?"
+                android:hint="Enter Line Name..."
                 android:textColor="@color/white"
                 style="@style/EditTextStyle"
                 android:textSize="18sp" />
