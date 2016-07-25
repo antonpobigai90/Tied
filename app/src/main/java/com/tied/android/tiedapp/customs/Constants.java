@@ -122,6 +122,7 @@ public class Constants {
     public static final int Lines = 50;
 
     public static final int AddClient = 60;
+    public static final int ViewClient = 61;
 
 //    Profile Activity fragments indexes
     public static final int EditProfile = 101;

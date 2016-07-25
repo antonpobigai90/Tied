@@ -18,8 +18,10 @@ import com.google.gson.Gson;
 import com.soundcloud.android.crop.Crop;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.fragments.client.AddClientFragment;
+import com.tied.android.tiedapp.ui.fragments.client.ViewClientFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.TerritoryFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 
@@ -60,11 +62,15 @@ public class ClientActivity extends FragmentActivity implements View.OnClickList
         setContentView(R.layout.activity_client);
 
         user = User.getUser(getApplicationContext());
+        Client client = (Client) getIntent().getSerializableExtra(Constants.CLIENT_DATA);
         bundle = new Bundle();
         Gson gson = new Gson();
         String user_json = gson.toJson(user);
+        String client_json = gson.toJson(client);
         bundle.putString(Constants.USER_DATA, user_json);
-        launchFragment(Constants.AddClient, bundle);
+        bundle.putString(Constants.CLIENT_DATA, client_json);
+//        launchFragment(Constants.AddClient, bundle);
+        launchFragment(Constants.ViewClient, bundle);
     }
 
     private void handleCrop(Uri outputUri) {
@@ -108,6 +114,9 @@ public class ClientActivity extends FragmentActivity implements View.OnClickList
                 break;
             case Constants.Territory:
                 fragment = new TerritoryFragment();
+                break;
+            case Constants.ViewClient:
+                fragment = new ViewClientFragment();
                 break;
             default:
                 finish();

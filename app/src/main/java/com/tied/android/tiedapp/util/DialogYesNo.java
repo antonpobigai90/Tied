@@ -14,7 +14,22 @@ import com.tied.android.tiedapp.R;
 public class DialogYesNo {
     private TextView heading, content, cancel, yes;
 
-        public void showDialog(Activity activity, String txt_heading, String txt_content, String txt_yes){
+    Activity activity;
+    String txt_heading;
+    String txt_content;
+    String txt_yes;
+    int color, type;
+
+    public DialogYesNo(Activity activity, String txt_heading, String txt_content, String txt_yes, int color, int type){
+        this.activity = activity;
+        this.color = color;
+        this.type = type;
+        this.txt_heading = txt_heading;
+        this.txt_content = txt_content;
+        this.txt_yes = txt_yes;
+    }
+
+    public void showDialog(){
         final Dialog dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
@@ -27,12 +42,28 @@ public class DialogYesNo {
         heading.setText(txt_heading);
         content.setText(txt_content);
         yes.setText(txt_yes);
+//        yes.setTextColor(activity.getResources().getColor(R.color.semi_transparent_black));
+        yes.setTextColor(color);
 
         cancel = (TextView) dialog.findViewById(R.id.cancel);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+            }
+        });
+
+        yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (type){
+                    case 0:
+                        dialog.dismiss();
+                        break;
+                    case 1:
+
+                        break;
+                }
             }
         });
 

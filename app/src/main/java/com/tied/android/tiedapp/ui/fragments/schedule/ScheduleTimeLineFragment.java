@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -40,7 +42,7 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
 
     public FragmentIterationListener mListener;
 
-    LinearLayout all_tab, today_tab,this_week_tab,next_week_tab, tab_bar, this_month;
+    LinearLayout all_tab, today_tab,this_week_tab,next_week_tab, tab_bar, this_month, alert_edit_msg;
     HorizontalScrollView tab_scroll;
 
     @Override
@@ -64,6 +66,9 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
         next_week_tab = (LinearLayout) view.findViewById(R.id.next_week_tab);
         this_month = (LinearLayout) view.findViewById(R.id.this_month);
         tab_scroll = (HorizontalScrollView) view.findViewById(R.id.tab_scroll);
+
+        alert_edit_msg = (LinearLayout) getActivity().findViewById(R.id.alert_edit_msg);
+        moveViewToScreenCenter( alert_edit_msg, "Your edit was successful");
 
         all_tab.setOnClickListener(this);
         today_tab.setOnClickListener(this);
@@ -101,6 +106,37 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
                 mViewPager.setCurrentItem(4);
                 break;
         }
+    }
+
+    public static void moveViewToScreenCenter(final View view, String message )
+    {
+        view.setVisibility(View.VISIBLE);
+        TextView txt_alert = (TextView) view.findViewById(R.id.info_msg);
+        txt_alert.setText(message);
+
+        TranslateAnimation anim = new TranslateAnimation( 0, 0 , 0, -130);
+        anim.setFillAfter(true);
+        anim.setDuration(2500);
+        anim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                view.clearAnimation();
+                view.setVisibility(View.GONE);
+//                view.setAnimation(null);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        view.startAnimation(anim);
+
     }
 
     public void onCustomSelected(ViewPager vpPager){
