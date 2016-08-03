@@ -20,15 +20,25 @@ public class Line implements Serializable {
         private String user_id;
         private String description;
         private Location address;
+        private String name;
 
         private int dis_from;
         private ArrayList _score;
+
 
         public Line() {
         }
 
 
-        public static void lineCreated(Context context){
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public static void lineCreated(Context context){
             SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
             SharedPreferences.Editor prefsEditor = mPrefs.edit();
             prefsEditor.putBoolean(Constants.LINE_CREATED, true );

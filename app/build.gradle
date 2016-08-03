@@ -43,6 +43,13 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+    }
 }
 
 dependencies {
@@ -56,8 +63,14 @@ dependencies {
         transitive = true;
     }
     compile files('libs/apache-mime4j-0.6.jar')
-    compile files('libs/httpclient-4.2.3.jar')
-    compile files('libs/httpcore-4.2.3.jar')
+    compile ('cz.msebera.android:httpclient:4.3.6') {
+        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
+    }
+   /* compile ('org.apache.commons:commons-lang3:3.0')  {
+        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
+    }*/
+    compile 'com.loopj.android:android-async-http:1.4.9'
+   /* compile files('libs/httpcore-4.2.3.jar')*/
     compile files('libs/httpmime-4.0.1.jar')
     compile files('libs/urlimageviewhelper-1.0.4.jar')
     compile('com.crashlytics.sdk.android:crashlytics:2.5.6@aar') {
@@ -66,7 +79,6 @@ dependencies {
     compile files('libs/org-apache-commons-lang.jar')
     compile 'com.google.android.gms:play-services-gcm:9.0.2'
     compile 'com.android.support:recyclerview-v7:23.4.0'
-    compile 'com.google.android.gms:play-services-gcm:8.4.0'
     compile 'me.relex:circleindicator:1.2.1@aar'
     compile 'com.facebook.android:facebook-android-sdk:4.+'
     compile 'com.google.android.gms:play-services-auth:9.0.2'

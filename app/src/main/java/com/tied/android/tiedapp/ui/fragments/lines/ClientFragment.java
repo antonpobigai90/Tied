@@ -16,6 +16,7 @@ import android.widget.ListView;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.ui.adapters.LineClientAdapter;
+import com.tied.android.tiedapp.ui.fragments.MyFormFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 /**
  * Created by Emmanuel on 6/22/2016.
  */
-public class ClientFragment extends Fragment implements View.OnClickListener{
+public class ClientFragment extends MyFormFragment implements View.OnClickListener{
     private ImageView avatar;
 
     public static final String TAG = ClientFragment.class

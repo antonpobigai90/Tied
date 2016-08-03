@@ -18,30 +18,7 @@
             android:orientation="horizontal"
             android:paddingBottom="5dp">
 
-            <LinearLayout
-                android:id="@+id/all_tab"
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
-                android:gravity="bottom"
-                android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal"
-                    android:layout_marginBottom="10dp"
-                    android:text="ALL"
-                    android:textColor="@color/semi_transparent_black"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="@color/button_bg"
-                    android:visibility="gone" />
-
-            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/today_tab"
@@ -65,6 +42,30 @@
                     android:layout_height="2dp"
                     android:background="@color/button_bg"
                     android:visibility="gone" />
+            </LinearLayout>
+            <LinearLayout
+                    android:id="@+id/all_tab"
+                    android:layout_width="100dp"
+                    android:layout_height="match_parent"
+                    android:gravity="bottom"
+                    android:orientation="vertical">
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:layout_marginBottom="10dp"
+                        android:text="ALL"
+                        android:textColor="@color/semi_transparent_black"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/button_bg"
+                        android:visibility="gone" />
+
             </LinearLayout>
 
             <LinearLayout

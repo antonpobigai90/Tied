@@ -67,9 +67,11 @@ public class IndustryFragment extends Fragment implements View.OnClickListener {
     // Reference to our image view we will use
     public ImageView img_user_picture;
 
-    public IndustryFragment() {
+    public static Fragment newInstance (Bundle bundle) {
+        Fragment fragment=new IndustryFragment();
+        fragment.setArguments(bundle);
+        return fragment;
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

@@ -77,8 +77,10 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
 
     private FragmentIterationListener fragmentIterationListener;
 
-    public ScheduleSuggestionFragment() {
-
+    public static Fragment newInstance (Bundle bundle) {
+        Fragment fragment=new ScheduleSuggestionFragment();
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     @Override

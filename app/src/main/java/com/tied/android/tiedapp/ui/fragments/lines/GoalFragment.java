@@ -8,11 +8,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.tied.android.tiedapp.R;
+import com.tied.android.tiedapp.ui.fragments.MyFormFragment;
 
 /**
  * Created by Emmanuel on 6/22/2016.
  */
-public class GoalFragment extends Fragment implements View.OnClickListener{
+public class GoalFragment extends MyFormFragment implements View.OnClickListener{
     private ImageView avatar;
 
     @Override

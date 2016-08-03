@@ -76,7 +76,7 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
             String client_json = bundle.getString(Constants.CLIENT_DATA);
             user = gson.fromJson(user_json, User.class);
             client = gson.fromJson(client_json, Client.class);
-
+            if(client==null) return;
             String logo = client.getLogo().equals("") ? null  : client.getLogo();
             Picasso.with(getActivity()).
                     load(logo)

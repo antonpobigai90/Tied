@@ -26,6 +26,9 @@ public class MyFormFragment extends Fragment {
     public void loadData() {
 
     }
+    public void initComponents() {
+
+    }
     public void addEditTextToMap(Integer resourceID) {
         myFieldsMap.put(resourceID, (MyEditText)view.findViewById(resourceID));
     }

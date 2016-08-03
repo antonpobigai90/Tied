@@ -12,14 +12,21 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.ui.fragments.MyFormFragment;
 import com.tied.android.tiedapp.ui.fragments.lines.ClientFragment;
 import com.tied.android.tiedapp.ui.fragments.lines.GeneralFragment;
 import com.tied.android.tiedapp.ui.fragments.lines.GoalFragment;
 import com.tied.android.tiedapp.ui.fragments.lines.RevenueFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.util.Logger;
+import com.tied.android.tiedapp.util.MyUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Daniel on 5/3/2016.
@@ -31,15 +38,24 @@ public class AddLinesActivity extends AppCompatActivity implements FragmentItera
     private PagerAdapter mPagerAdapter;
     private Bundle bundle;
     private User user;
-    public TextView lineName;
-    public Line line;
-
+    public TextView lineNameTextView;
+    public Line line=null;
+    Gson gson = new Gson();
     LinearLayout general_tab, revenue_tab, goal_tab, client_tab,tab_bar;
+    List<Fragment> fragments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_line);
+        this.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
+        setContentView(R.layout.activity_add_line);
+
+        bundle = getIntent().getExtras();
+        user = MyUtils.getUserFromBundle(bundle);
+        if(bundle!=null) {
+             line=(Line)bundle.getSerializable("line");
+
+        }
 
         initComponent();
     }
@@ -51,7 +67,7 @@ public class AddLinesActivity extends AppCompatActivity implements FragmentItera
         goal_tab = (LinearLayout) findViewById(R.id.goal_tab);
         client_tab = (LinearLayout) findViewById(R.id.client_tab);
         tab_bar = (LinearLayout) findViewById(R.id.tab_bar);
-        lineName = (TextView) findViewById(R.id.name);
+        lineNameTextView = (TextView) findViewById(R.id.name);
 
         revenue_tab.setOnClickListener(this);
         general_tab.setOnClickListener(this);
@@ -59,19 +75,21 @@ public class AddLinesActivity extends AppCompatActivity implements FragmentItera
         goal_tab.setOnClickListener(this);
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
+        fragments=new ArrayList<Fragment>();
+        fragments.add(new GeneralFragment());
+        fragments.add(new RevenueFragment());
+        fragments.add(new GoalFragment());
+        fragments.add(new ClientFragment());
 
-        mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
+
+        mPagerAdapter = new PagerAdapter(getSupportFragmentManager(),fragments);
         if (mViewPager != null) {
             mViewPager.setAdapter(mPagerAdapter);
             mViewPager.setCurrentItem(0);
             selectTab(tab_bar, 0);
         }
 
-        bundle = getIntent().getExtras();
 
-        if(bundle!=null) {
-            line=(Line)bundle.getSerializable("line");
-        }
 
         onCustomSelected(mViewPager);
     }
@@ -94,7 +112,9 @@ public class AddLinesActivity extends AppCompatActivity implements FragmentItera
                 break;
         }
     }
-
+public void moveNext() {
+    mViewPager.setCurrentItem(mViewPager.getCurrentItem()+1);
+}
     protected void onCustomSelected(ViewPager vpPager){
         // Attaching the page change listener inside the activity
         vpPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -119,6 +139,26 @@ public class AddLinesActivity extends AppCompatActivity implements FragmentItera
                 // Code goes here
             }
         });
+    }
+
+    public Line getLine() {
+        return line;
+    }
+
+    public void setLine(Line line) {
+        this.line = line;
+        for(int i=0; i<mPagerAdapter.getCount(); i++) {
+            try {
+                ((MyFormFragment) mPagerAdapter.getItem(i)).initComponents();
+            }catch (Exception e) {
+                Logger.write(e);
+            }
+        }
+
+    }
+
+    public User getUser() {
+        return user;
     }
 
     public void selectTab(LinearLayout tab_bar, int position){
@@ -148,15 +188,17 @@ public class AddLinesActivity extends AppCompatActivity implements FragmentItera
 
     public class PagerAdapter extends FragmentStatePagerAdapter {
 
-        public PagerAdapter(FragmentManager fm) {
+        List<Fragment> fragmentList;
+        public PagerAdapter(FragmentManager fm, List<Fragment> fragments) {
             super(fm);
+            this.fragmentList=fragments;
         }
 
         @Override
         public Fragment getItem(int position) {
-            Fragment fragment = null;
+            Fragment fragment = fragmentList.get(position);
             Log.d(TAG, "position : "+position);
-            switch (position){
+            /*switch (position){
                 case 0:
                     fragment = new GeneralFragment();
                     break;
@@ -169,18 +211,23 @@ public class AddLinesActivity extends AppCompatActivity implements FragmentItera
                 case 3:
                     fragment = new ClientFragment();
                     break;
-            }
-            assert fragment != null;
-            fragment.setArguments(bundle);
+            }*/
+         //   assert fragment != null;
+//            fragment.setArguments(bundle);
             return fragment;
         }
 
         @Override
         public int getCount() {
-            return 4;
+            return fragmentList.size();
         }
     }
     public void goBack(View v) {
         onBackPressed();
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
     }
 }

@@ -142,9 +142,8 @@ public class ClientActivity extends FragmentActivity implements View.OnClickList
 
     @Override
     public void onBackPressed() {
-        if (fragment_index == Constants.AddClient) {
-            finish();
-        }
+        super.onBackPressed();
+
     }
 
     @Override

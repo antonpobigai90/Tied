@@ -1,5 +1,9 @@
 package com.tied.android.tiedapp.customs;
 
+import com.loopj.android.http.PersistentCookieStore;
+
+import java.io.File;
+
 /**
  * Created by Emmanuel on 4/23/2016.
  */
@@ -25,6 +29,7 @@ public class Constants {
     public static final String USER_CHANGE_PASSWORD = API_PATH + "users/changePassword";
 
     public static final String CLIENTS = API_PATH + "clients";
+    public static final String LINES = API_PATH + "lines";
     public static final String USER_CLIENTS = API_PATH + "users/me/clients";
     public static final String USER_CLIENTS_COUNT = API_PATH + "users/me/clients_count";
     public static final String USER_GE0_CLIENTS = API_PATH + "users/me/clients/geo";
@@ -56,6 +61,7 @@ public class Constants {
     public static final String AVATAR_STATE_SAVED = "avatar_state";
     public static final String EditingProfile = "editing_profile";
     public static final String DISTANCE_UNIT = "distance_unit";
+    public static final String LAST_TIME_APP_RAN = "last_ran";
 
     public static final String TOKEN = "token";
     public static final String TOKEN_HEADER = "x-access-token";
@@ -153,4 +159,14 @@ public class Constants {
     public static final String SCHEDULE_CREATED = "a_schedule_exist";
     public static final String CLIENT_CREATED = "a_client_exist";
     public static final String LINE_CREATED = "a_line_exist";
+    public static final String GOOGLE_REVERSE_GEOCODING_URL="https://maps.googleapis.com/maps/api/geocode/json?sensor=true&key=AIzaSyDdWKslIGOEWJMa5RJFwH2dowBc7rEQ14g&latlng=";
+    public static PersistentCookieStore MY_COOKIE_STORE=null;
+    public static final String USER_LINES = API_PATH + "users/me/lines";
+    public static final String USER_LINE_REVENUES = API_PATH + "users/me/lines/{line_id}/revenues/{page_number}";
+    public static final String GET_LINE_WITH_ID =  API_PATH + "lines/";
+    public static final String USER_LINE_COUNT=  API_PATH + "lines/count";
+    public static final String USER_GE0_LINES =  API_PATH + "lines/geo";
+    public static File DIR_ROOT = new File("StreamLive"),
+            DIR_CACHE = new File("cache"), DIR_HTML_CACHE = new File("html"), DIR_DOWNLOADS = new File("downloads"), DIR_MEDIA = new File("media");
+
 }

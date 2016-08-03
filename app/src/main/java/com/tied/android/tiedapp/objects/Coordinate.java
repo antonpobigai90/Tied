@@ -1,5 +1,7 @@
 package com.tied.android.tiedapp.objects;
 
+import com.google.gson.Gson;
+
 import java.io.Serializable;
 
 /**
@@ -36,5 +38,9 @@ public class Coordinate implements Serializable {
                 "lat=" + lat +
                 ", lon=" + lon +
                 '}';
+    }
+    public String toJSONString() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 }
