@@ -31,6 +31,12 @@ public class ActivityFragment extends Fragment implements View.OnClickListener {
     public FragmentIterationListener mListener;
     LinearLayout emp_tab, you_tab, tab_bar;
 
+    public static Fragment newInstance (Bundle bundle) {
+        Fragment fragment=new ActivityFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_swipe_activity,null);

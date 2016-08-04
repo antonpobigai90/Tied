@@ -38,7 +38,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
-                    android:text="Note ...."
+                    android:hint="Note ..."
                     android:textColor="@color/grey"
                    />
             </LinearLayout>
@@ -81,7 +81,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
-                    android:text="6559 Abiodun Pearl Suite 1"
+                    android:text="6408 Rocksprings drive"
                     android:textColor="@color/grey"
                     android:textSize="13sp"
                     />
@@ -183,7 +183,7 @@ c
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
-                    android:text="91920"
+                    android:text="76001"
                     android:textColor="@color/grey"
                     />
             </LinearLayout>
@@ -232,7 +232,7 @@ c
                         />
 
                     <com.tied.android.tiedapp.customs.ui.MyEditText
-                        android:id="@+id/industry_date"
+                        android:id="@+id/territory_et"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@android:color/transparent"

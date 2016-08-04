@@ -25,6 +25,8 @@
     <color name="blue">#ffffff</color>
     <color name="grey">#32323A</color>
     <color name="light_gray">#DAE1E4</color>
+    <color name="light_gray2">#BBBBBB</color>
+    <color name="drawer_background">@color/light_gray</color>
 
     <color name="red_color">#ff1414</color>
     <color name="orange_color">#feb414</color>

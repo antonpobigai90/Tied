@@ -58,6 +58,11 @@ public class AddressFragment extends Fragment implements View.OnClickListener{
     private Location office_location, home_location;
 
     int fetchType = Constants.USE_ADDRESS_NAME;
+    public static Fragment newInstance (Bundle bundle) {
+        Fragment fragment=new AddressFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

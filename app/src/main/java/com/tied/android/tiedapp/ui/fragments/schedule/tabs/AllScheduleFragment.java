@@ -1,7 +1,13 @@
 package com.tied.android.tiedapp.ui.fragments.schedule.tabs;
 
+import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.tied.android.tiedapp.MainApplication;
@@ -14,6 +20,7 @@ import com.tied.android.tiedapp.util.DialogUtils;
 
 import java.util.ArrayList;
 
+import com.tied.android.tiedapp.util.Logger;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -25,12 +32,35 @@ public class AllScheduleFragment extends SchedulesFragment implements View.OnCli
 
     public static final String TAG = AllScheduleFragment.class
             .getSimpleName();
+    int page=1;
+    Parcelable mListViewState;
+    public AllScheduleFragment() {
+        super();
+        //Logger.write("HEloaodfai opija poifjdpaoijdfo");
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if(mListViewState != null) {
+             Logger.write("Restoring the listview's state.");
+            listView.onRestoreInstanceState(mListViewState);
+        }
+
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
 
     protected void initComponent(View view) {
         super.initComponent(view);
     }
 
     protected void initSchedule() {
+        Logger.write("Initedddddddddddddddddddddddddd");
         ScheduleApi scheduleApi = MainApplication.getInstance().getRetrofit().create(ScheduleApi.class);
         Call<ScheduleRes> response = scheduleApi.getSchedule(user.getToken());
         response.enqueue(new Callback<ScheduleRes>() {
@@ -58,5 +88,22 @@ public class AllScheduleFragment extends SchedulesFragment implements View.OnCli
                 DialogUtils.closeProgress();
             }
         });
+    }
+    public void loadData() {
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+       // initSchedule();
+       // Logger.write("Resummmmmdddddddddddddddddd");
+    }
+
+    @Override
+    public void onPause() {
+
+        mListViewState = listView.onSaveInstanceState();
+        super.onPause();
     }
 }

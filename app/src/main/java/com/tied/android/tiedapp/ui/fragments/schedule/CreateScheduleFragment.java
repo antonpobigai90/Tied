@@ -42,9 +42,11 @@ public class CreateScheduleFragment extends Fragment implements View.OnClickList
 
     private FragmentIterationListener fragmentIterationListener;
 
-    public CreateScheduleFragment() {
+    public static Fragment newInstance (Bundle bundle) {
+        Fragment fragment=new CreateScheduleFragment();
+        fragment.setArguments(bundle);
+        return fragment;
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_create_schedule, container, false);

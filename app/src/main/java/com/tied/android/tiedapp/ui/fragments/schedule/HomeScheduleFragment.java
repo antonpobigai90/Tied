@@ -52,9 +52,11 @@ public class HomeScheduleFragment extends Fragment implements View.OnClickListen
 
     private FragmentIterationListener fragmentIterationListener;
 
-    public HomeScheduleFragment() {
+    public static Fragment newInstance (Bundle bundle) {
+        Fragment fragment=new HomeScheduleFragment();
+        fragment.setArguments(bundle);
+        return fragment;
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

@@ -131,6 +131,29 @@
         <item name="android:textSize">13sp</item>
     </style>
 
+    <style name="DrawerMenuItem" parent="AppTheme">
+
+        <item name="android:padding">5dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:background">@color/drawer_background</item>
+    </style>
+    <style name="DrawerMenuIcon" parent="AppTheme">
+        <item name="android:padding">0dp</item>
+        <item name="android:layout_width">25dp</item>
+        <item name="android:layout_height">25dp</item>
+        <item name="android:layout_marginLeft">10dp</item>
+
+    <item name="android:layout_centerVertical">true</item>
+            </style>
+
+    <style name="DrawerMenuText" parent="AppTheme">
+        <item name="android:textColor">@color/grey</item>
+        <item name="android:layout_marginLeft">60dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_alignParentLeft">true</item>
+    </style>
     <!--<style name="Widget.CalendarView.Custom" parent="android:Widget.CalendarView">-->
         <!--<item name="android:weekNumberColor">@color/schedule_title_bg_color</item>-->
         <!--<item name="android:focusedMonthDateColor">@color/colorPrimaryDark</item>-->

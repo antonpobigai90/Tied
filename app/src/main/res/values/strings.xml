@@ -10,6 +10,7 @@
     <string name="Logout">Logout</string>
 
     <string name="str_splash">Your tool to be an exceptional rep for your clients and business</string>
+    <string name="connection_error">Error connecting to server.</string>
 
     <string name="str_register">REGISTER</string>
     <string name="str_signin">SIGN IN</string>

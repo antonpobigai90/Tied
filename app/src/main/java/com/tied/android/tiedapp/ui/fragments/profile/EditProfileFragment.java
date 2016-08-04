@@ -51,6 +51,11 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
     private LinearLayout home_address, office_address;
     public FragmentIterationListener mListener;
+    public static Fragment newInstance (Bundle bundle) {
+        Fragment fragment=new EditProfileFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
