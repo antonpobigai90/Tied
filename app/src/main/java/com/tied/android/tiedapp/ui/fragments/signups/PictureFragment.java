@@ -14,20 +14,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.interfaces.retrofits.SignUpApi;
-import com.tied.android.tiedapp.objects.auth.UpdateAvatar;
+import com.tied.android.tiedapp.retrofits.services.SignUpApi;
+import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
+import com.tied.android.tiedapp.util.DialogUtils;
 
 import java.io.File;
 
@@ -52,15 +53,16 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
     // Activity result key for camera
     public final int REQUEST_TAKE_PHOTO = 11111;
 
-    private Button continue_btn;
-    private ImageButton select_pics;
+    private RelativeLayout continue_btn;
+    private TextView select_pics;
+
+    private Uri uri;
 
     // Reference to our image view we will use
-    public ImageView avatar;
-
-    private ProgressBar progressBar;
+    public ImageView avatar, img_user_picture;
 
     private SignUpFragmentListener mListener;
+    Bundle bundle;
 
     public PictureFragment() {
 
@@ -79,18 +81,36 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
         initComponent(view);
     }
 
-
     public void initComponent(View view) {
-        select_pics = (ImageButton) view.findViewById(R.id.select_pics);
-
+        select_pics = (TextView) view.findViewById(R.id.select_pics);
         avatar = (ImageView) view.findViewById(R.id.avatar);
+        img_user_picture = (ImageView) view.findViewById(R.id.img_user_picture);
 
-        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
-
-        continue_btn = (Button) view.findViewById(R.id.continue_btn);
+        continue_btn = (RelativeLayout)view.findViewById(R.id.continue_btn);
 
         select_pics.setOnClickListener(this);
+        avatar.setOnClickListener(this);
         continue_btn.setOnClickListener(this);
+
+        bundle = getArguments();
+        if (bundle != null) {
+            Gson gson = new Gson();
+            String user_json = bundle.getString(Constants.USER_DATA);
+            User user = gson.fromJson(user_json, User.class);
+            ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
+
+            if (user.getAvatar_uri() != null){
+                Uri myUri = Uri.parse(user.getAvatar_uri());
+                img_user_picture.setImageURI(myUri);
+                avatar.setImageURI(myUri);
+            }
+            else if(user.getAvatar() != null && !user.getAvatar().equals("")){
+                Picasso.with(getActivity()).
+                        load(user.getAvatar())
+                        .resize(100,100)
+                        .into(avatar);
+            }
+        }
     }
 
     @Override
@@ -113,14 +133,11 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
     public void continue_action() {
 
         if (validated()) {
-            progressBar.setVisibility(View.VISIBLE);
-            Bundle bundle = getArguments();
-
+            DialogUtils.displayProgress(getActivity());
             Gson gson = new Gson();
-            String user_json = bundle.getString("user");
+            String user_json = bundle.getString(Constants.USER_DATA);
             User user = gson.fromJson(user_json, User.class);
 
-            Uri uri = ((SignUpActivity) getActivity()).outputUri;
             File file = new File(uri.getPath());
 
             Log.d("Uri", uri.getPath());
@@ -149,50 +166,65 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
 
             SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
             // finally, execute the request
-            Call<UpdateAvatar> call = signUpApi.uploadAvatar(id, token, stage, body);
-            call.enqueue(new Callback<UpdateAvatar>() {
+            Call<ServerRes> call = signUpApi.uploadAvatar(user.getToken() ,id, stage, body);
+            call.enqueue(new Callback<ServerRes>() {
 
                 @Override
-                public void onResponse(Call<UpdateAvatar> call, Response<UpdateAvatar> updateAvatarResponse) {
-                    UpdateAvatar updateAvatar = updateAvatarResponse.body();
-                    Log.d(TAG,updateAvatarResponse.toString() );
-                    if(updateAvatar.isSuccess()){
+                public void onResponse(Call<ServerRes> call, Response<ServerRes> updateAvatarResponse) {
+                    if (getActivity() == null) return;
+                    ServerRes ServerRes = updateAvatarResponse.body();
+                    Log.d(TAG, ServerRes.toString() );
+                    if(ServerRes.isSuccess()){
                         Gson gson = new Gson();
                         Bundle bundle = getArguments();
-                        String user_json = bundle.getString(Constants.USER, "");
+                        String user_json = bundle.getString(Constants.USER_DATA, "");
                         User user = gson.fromJson(user_json, User.class);
                         user.setSign_up_stage(Constants.Name);
-                        user.setAvatar(updateAvatar.getAvatar());
+                        user.setAvatar_uri(String.valueOf(uri));
+                        user.setAvatar(ServerRes.getUser().getAvatar());
                         boolean saved = user.save(getActivity().getApplicationContext());
                         if(saved){
-                            progressBar.setVisibility(View.INVISIBLE);
+                            DialogUtils.closeProgress();
                             user_json = gson.toJson(user);
-                            bundle.putString(Constants.USER, user_json);
+                            bundle.putString(Constants.USER_DATA, user_json);
                             nextAction(bundle);
                         }else {
-                            progressBar.setVisibility(View.INVISIBLE);
-                            Toast.makeText(getActivity(), "user infor  was not updated", Toast.LENGTH_LONG).show();
+                            DialogUtils.closeProgress();
+                            Toast.makeText(getActivity(), "user information  was not updated", Toast.LENGTH_LONG).show();
                         }
                     }else{
-                        progressBar.setVisibility(View.INVISIBLE);
-                        Toast.makeText(getActivity(), updateAvatar.getMessage(), Toast.LENGTH_LONG).show();
+                        DialogUtils.closeProgress();
+                        Toast.makeText(getActivity(), ServerRes.getMessage(), Toast.LENGTH_LONG).show();
                     }
-                    Log.d("Upload", "success");
                 }
 
                 @Override
-                public void onFailure(Call<UpdateAvatar> call, Throwable t) {
+                public void onFailure(Call<ServerRes> call, Throwable t) {
                     Log.e("Upload error:", t.getMessage());
                 }
             });
         } else {
-            Toast.makeText(getActivity(), "Invalid input", Toast.LENGTH_LONG).show();
+            Gson gson = new Gson();
+            String user_json = bundle.getString(Constants.USER_DATA, "");
+            User user = gson.fromJson(user_json, User.class);
+            user.setSign_up_stage(Constants.Name);
+            boolean saved = user.save(getActivity().getApplicationContext());
+            if(saved){
+                DialogUtils.closeProgress();
+                user_json = gson.toJson(user);
+                bundle.putString(Constants.USER_DATA, user_json);
+                nextAction(bundle);
+            }else {
+                DialogUtils.closeProgress();
+                Toast.makeText(getActivity(), "user information  was not updated", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
     //Todo validate file extenson to be image extension.
     public boolean validated(){
-        return true;
+        uri = ((SignUpActivity) getActivity()).outputUri;
+        return uri != null;
     }
 
 
@@ -242,6 +274,9 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
                 continue_action();
                 break;
             case R.id.select_pics:
+                showChooser();
+                break;
+            case R.id.avatar:
                 showChooser();
                 break;
         }

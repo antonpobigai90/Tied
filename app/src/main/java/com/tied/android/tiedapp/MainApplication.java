@@ -2,14 +2,22 @@ package com.tied.android.tiedapp;
 
 import android.app.Application;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.crashlytics.android.Crashlytics;
+import com.johnhiott.darkskyandroidlib.ForecastApi;
 import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.util.FontsOverride;
+import com.tied.android.tiedapp.util.Logger;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterCore;
 
 import java.util.concurrent.TimeUnit;
 
+import io.fabric.sdk.android.Fabric;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -19,6 +27,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class MainApplication extends Application {
+
     public static final String TAG = MainApplication.class
             .getSimpleName();
 
@@ -30,23 +39,55 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        ForecastApi.create("c6b01fe1df9d21e3f3c55a48243781f1");
+
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(Constants.TWITTER_API_KEY, Constants.TWITTER_API_SECRET);
+        Fabric.with(this, new TwitterCore(authConfig));
+
+        Fabric.with(this, new Crashlytics());
         mInstance = this;
+        Logger.write("apppppppppppppp started");
+        FontsOverride.setDefaultFont(this, "MONOSPACE", "fonts/brandon_reg.ttf");
+        FontsOverride.setDefaultFont(this, "monospace", "fonts/brandon_reg.ttf");
+
+        FontsOverride.setDefaultFont(this, "DEFAULT", "fonts/brandon_reg.ttf");
+        FontsOverride.setDefaultFont(this, "MONOSPACE", "fonts/brandon_reg.ttf");
+        FontsOverride.setDefaultFont(this, "SERIF", "fonts/brandon_reg.ttf");
+        FontsOverride.setDefaultFont(this, "SANS_SERIF", "fonts/brandon_reg.ttf");
+
+//        try {
+//            PackageInfo info = getPackageManager().getPackageInfo(
+//                    "com.tied.android.tiedapp",
+//                    PackageManager.GET_SIGNATURES);
+//            for (Signature signature : info.signatures) {
+//                MessageDigest md = MessageDigest.getInstance("SHA");
+//                md.update(signature.toByteArray());
+//                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+//            }
+//        } catch (PackageManager.NameNotFoundException | NoSuchAlgorithmException e) {
+//            Log.d("KeyHash:", e.getMessage());
+//        }
+    }
+
+    public OkHttpClient getOkHttpClient(){
+        Log.d(TAG, "OkHttpClient");
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .readTimeout(60, TimeUnit.SECONDS)
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .build();
+        return okHttpClient;
     }
 
     public Retrofit getRetrofit() {
         if (retrofit == null) {
-            OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                    .readTimeout(60, TimeUnit.SECONDS)
-                    .connectTimeout(60, TimeUnit.SECONDS)
-                    .build();
-
+            OkHttpClient okHttpClient = getOkHttpClient();
             retrofit = new Retrofit.Builder()
                     .baseUrl(Constants.HOST)
                     .client(okHttpClient)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
-
         return retrofit;
     }
 
@@ -77,4 +118,6 @@ public class MainApplication extends Application {
             mRequestQueue.cancelAll(tag);
         }
     }
+
+
 }

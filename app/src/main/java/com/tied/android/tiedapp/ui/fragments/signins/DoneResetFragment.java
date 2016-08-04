@@ -1,34 +1,33 @@
 package com.tied.android.tiedapp.ui.fragments.signins;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
+import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class DoneResetFragment extends Fragment{
+public class DoneResetFragment extends Fragment implements View.OnClickListener {
 
     public static final String TAG = DoneResetFragment.class
             .getSimpleName();
 
     private SignUpFragmentListener mListener;
-
-    private Button sign_in, register;
-    private ProgressBar progressBar;
-    private EditText email, password;
-
-    private String emailText, passwordText;
+    TextView txt_login;
+    LinearLayout back_layout;
+    ImageView img_check;
 
     public DoneResetFragment() {
     }
@@ -42,6 +41,19 @@ public class DoneResetFragment extends Fragment{
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+
+
+        initComponent(view);
+    }
+
+    public void initComponent(View view){
+
+        back_layout = (LinearLayout) view.findViewById(R.id.back_layout);
+        back_layout.setOnClickListener(this);
+
+        txt_login = (TextView) view.findViewById(R.id.txt_login);
+        txt_login.setOnClickListener(this);
     }
 
     @Override
@@ -58,6 +70,19 @@ public class DoneResetFragment extends Fragment{
     public void nextAction(int action, Bundle bundle) {
         if (mListener != null) {
             mListener.onFragmentInteraction(action,bundle);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent intent = null;
+        switch (v.getId()) {
+            case R.id.back_layout:
+                nextAction(Constants.SignInUser, null);
+                break;
+            case R.id.txt_login:
+                nextAction(Constants.SignInUser, null);
+                break;
         }
     }
 }

@@ -3,4 +3,18 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="label_padding">10dp</dimen>
+    <dimen name="editext_padding">18dp</dimen>
+
+    <dimen name="brother_pager_width">150dp</dimen>
+
+    <dimen name="cover_pager_height">220dp</dimen>
+
+    <dimen name="tab_height">48dp</dimen>
+
+    <dimen name="pager_margin">-30dp</dimen>
+    <dimen name="action_bar_icon_height">35dip</dimen>
+    <dimen name="action_bar_icon_padding">5dip</dimen>
+    <dimen name="action_bar_height">50dip</dimen>
 </resources>
+
