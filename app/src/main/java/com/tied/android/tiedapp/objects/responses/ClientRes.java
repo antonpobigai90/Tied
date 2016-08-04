@@ -1,6 +1,6 @@
 package com.tied.android.tiedapp.objects.responses;
 
-import com.tied.android.tiedapp.objects.Client;
+import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects._Meta;
 
 import java.io.Serializable;

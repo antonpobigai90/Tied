@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.tied.android.tiedapp.R;
-import com.tied.android.tiedapp.objects.Client;
+import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.util.RoundImage;
 
 import java.util.ArrayList;
@@ -74,8 +74,9 @@ public class ClientScheduleAdapter extends BaseAdapter {
         final Client data = (Client) _data.get(i);
         v.name.setText(data.getFull_name());
 
+        String logo = data.getLogo().equals("") ? null  : data.getLogo();
         Picasso.with(_c).
-                load(data.getLogo())
+                load(logo)
                 .into(new Target() {
                     @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                         if (bitmap != null){

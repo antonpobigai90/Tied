@@ -51,6 +51,11 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
     private LinearLayout home_address, office_address;
     public FragmentIterationListener mListener;
+    public static Fragment newInstance (Bundle bundle) {
+        Fragment fragment=new EditProfileFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -114,7 +119,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         bundle = getArguments();
         if (bundle != null) {
             Gson gson = new Gson();
-            String user_json = bundle.getString("user");
+            String user_json = bundle.getString(Constants.USER_DATA);
             user = gson.fromJson(user_json, User.class);
 
             first_name.setText(user.getFirst_name());
@@ -181,7 +186,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                         if (saved) {
                             Gson gson = new Gson();
                             String json = gson.toJson(user);
-                            bundle.putString(Constants.USER, json);
+                            bundle.putString(Constants.USER_DATA, json);
                             DialogUtils.closeProgress();
                             Toast.makeText(getActivity(), ServerRes.getMessage(), Toast.LENGTH_LONG).show();
                         } else {

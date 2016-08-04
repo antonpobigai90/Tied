@@ -3,6 +3,10 @@
 /local.properties
 /.idea/workspace.xml
 /.idea/libraries
+/.idea/modules.xml
+/.idea
 .DS_Store
 /build
 /captures
+.idea/modules/
+app/src/main/java/com/tied/android/tiedapp/ui/activities/goals/

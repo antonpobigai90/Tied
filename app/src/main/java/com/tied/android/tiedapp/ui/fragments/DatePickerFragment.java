@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.widget.DatePicker;
-import android.widget.EditText;
+import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
 
@@ -18,8 +18,11 @@ import java.util.Locale;
  * Created by Emmanuel on 6/30/2016.
  */
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
-    String[] MONTHS_LIST = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
-    String[] WEEK_LIST = {"", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday","Sunday"};
+
+    String[] MONTHS_LIST = {"January", "Febuary", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"};
+    String[] WEEK_LIST = {"", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -37,13 +40,17 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
         // Do something with the date chosen by the user
-        String month_name=MONTHS_LIST[view.getMonth()];
-        GregorianCalendar gregorianCalendar = new GregorianCalendar(view.getYear(), view.getMonth(), view.getDayOfMonth()-1);
+        String month_name = MONTHS_LIST[view.getMonth()];
+        GregorianCalendar gregorianCalendar = new GregorianCalendar(view.getYear(), view.getMonth(), view.getDayOfMonth() - 1);
 
-        int dayOfWeek=gregorianCalendar.get(gregorianCalendar.DAY_OF_WEEK);
-        String dayOfWeekName= WEEK_LIST[dayOfWeek];
+        int dayOfWeek = gregorianCalendar.get(gregorianCalendar.DAY_OF_WEEK);
+        String dayOfWeekName = WEEK_LIST[dayOfWeek];
 
-        EditText tv1 = (EditText) getActivity().findViewById(R.id.date);
-        tv1.setText(""+ dayOfWeekName +" " + month_name + " " + view.getDayOfMonth() + ", " + view.getYear());
+        TextView tv1 = (TextView) getActivity().findViewById(R.id.date);
+        tv1.setText("" + dayOfWeekName + " " + month_name + " " + view.getDayOfMonth() + ", " + view.getYear());
+
+        String selected = year + "-" + String.format("%02d", month + 1) + "-" + String.format("%02d", day);
+        TextView tv2 = (TextView) getActivity().findViewById(R.id.date_selected);
+        tv2.setText(selected);
     }
 }

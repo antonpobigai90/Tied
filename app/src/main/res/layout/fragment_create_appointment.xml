@@ -164,6 +164,7 @@
                     android:paddingRight="15dp">
 
                     <RelativeLayout
+                        android:id="@+id/layout_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
@@ -190,14 +191,23 @@
                                 android:textColor="@color/accentColor"
                                 android:textSize="14sp" />
 
-                            <EditText
+                            <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/date"
                                 android:enabled="false"
-                                android:backgroundTint="@android:color/transparent"
                                 android:textColor="@color/schedule_title_bg_color"
                                 android:textSize="16sp"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/date_selected"
+                                android:visibility="gone"
+                                android:enabled="false"
+                                android:textColor="@color/schedule_title_bg_color"
+                                android:textSize="16sp"/>
+
                         </LinearLayout>
 
                     </RelativeLayout>
@@ -209,6 +219,7 @@
                         android:background="@android:color/darker_gray" />
 
                     <RelativeLayout
+                        android:id="@+id/layout_time"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
@@ -238,8 +249,8 @@
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:backgroundTint="@android:color/transparent"
                                 android:id="@+id/time"
+                                android:paddingTop="4dp"
                                 android:textStyle="bold"
                                 android:textColor="@color/schedule_title_bg_color"
                                 android:textSize="16sp" />
@@ -410,6 +421,7 @@
 
 
                     <RelativeLayout
+                        android:id="@+id/layout_reminder"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
@@ -436,11 +448,12 @@
                                 android:textColor="@color/accentColor"
                                 android:textSize="14sp" />
 
-                            <EditText
+                            <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:paddingLeft="4dp"
+                                android:paddingTop="4dp"
                                 android:text="Notify Me 20 mins before time"
-                                android:backgroundTint="@android:color/transparent"
                                 android:id="@+id/reminder"
                                 android:textColor="@color/schedule_title_bg_color"
                                 android:textSize="16sp" />
@@ -461,7 +474,7 @@
         android:text="@string/schedule_create_new_schedule_btn"
         android:id="@+id/txt_create_schedule"
         android:textColor="@color/white"
-        android:textSize="18dp"
+        android:textSize="18sp"
         android:textStyle="bold"
         android:gravity="center_vertical|center_horizontal"
         android:layout_alignParentBottom="true"

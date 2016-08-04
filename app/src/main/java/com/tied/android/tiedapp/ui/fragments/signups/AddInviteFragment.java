@@ -84,7 +84,7 @@ public class AddInviteFragment extends Fragment implements View.OnClickListener{
         bundle = getArguments();
         if (bundle != null) {
             Gson gson = new Gson();
-            String user_json = bundle.getString("user");
+            String user_json = bundle.getString(Constants.USER_DATA);
             User user = gson.fromJson(user_json, User.class);
             ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
         }
@@ -120,7 +120,7 @@ public class AddInviteFragment extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
         Bundle bundle = getArguments();
         Gson gson = new Gson();
-        String user_json = bundle.getString("user");
+        String user_json = bundle.getString(Constants.USER_DATA);
         User user = gson.fromJson(user_json, User.class);
         switch (v.getId()){
             case R.id.continue_btn:
@@ -131,7 +131,7 @@ public class AddInviteFragment extends Fragment implements View.OnClickListener{
                 boolean saved = user.save(getActivity().getApplicationContext());
                 if(saved){
                     String json = gson.toJson(user);
-                    bundle.putString(Constants.USER, json);
+                    bundle.putString(Constants.USER_DATA, json);
                     nextAction(Constants.CoWorker, bundle);
                 }else{
                     Toast.makeText(getActivity(), "user info  was not updated", Toast.LENGTH_LONG).show();
@@ -150,7 +150,7 @@ public class AddInviteFragment extends Fragment implements View.OnClickListener{
                 saved = user.save(getActivity().getApplicationContext());
                 if(saved){
                     Intent intent = new Intent(getActivity(), MainActivity.class);
-                    intent.putExtra(Constants.USER, user);
+                    intent.putExtra(Constants.USER_DATA, user);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 }else{

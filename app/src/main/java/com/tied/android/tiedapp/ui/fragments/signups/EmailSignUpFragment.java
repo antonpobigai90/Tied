@@ -134,7 +134,7 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
         Bundle bundle = getArguments();
         if(bundle != null){
             Gson gson = new Gson();
-            String user_json = bundle.getString("user");
+            String user_json = bundle.getString(Constants.USER_DATA);
             Log.d(TAG, user_json);
             User user = gson.fromJson(user_json, User.class);
             email.setText(user.getEmail());
@@ -164,7 +164,7 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
                     user.setAvatar(avatar);
                     Gson gson = new Gson();
                     String user_json = gson.toJson(user);
-                    bundle.putString("user", user_json);
+                    bundle.putString(Constants.USER_DATA, user_json);
                     nextAction(bundle);
                 }else{
                     Toast.makeText(getActivity(), checkEmail.getMessage(), Toast.LENGTH_LONG).show();

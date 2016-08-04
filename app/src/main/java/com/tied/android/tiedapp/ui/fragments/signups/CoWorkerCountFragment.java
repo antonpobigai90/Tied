@@ -113,7 +113,7 @@ public class CoWorkerCountFragment extends Fragment implements View.OnClickListe
         bundle = getArguments();
         if (bundle != null) {
             Gson gson = new Gson();
-            String user_json = bundle.getString("user");
+            String user_json = bundle.getString(Constants.USER_DATA);
             User user = gson.fromJson(user_json, User.class);
             ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
         }
@@ -149,7 +149,7 @@ public class CoWorkerCountFragment extends Fragment implements View.OnClickListe
         Bundle bundle = getArguments();
 
         Gson gson = new Gson();
-        String user_json = bundle.getString("user");
+        String user_json = bundle.getString(Constants.USER_DATA);
         final User user = gson.fromJson(user_json, User.class);
         user.setCo_workers(coWorkerCountText);
         user.setSign_up_stage(Constants.AddOptions);
@@ -168,7 +168,7 @@ public class CoWorkerCountFragment extends Fragment implements View.OnClickListe
                     if(saved){
                         Gson gson = new Gson();
                         String json = gson.toJson(user);
-                        bundle.putString(Constants.USER, json);
+                        bundle.putString(Constants.USER_DATA, json);
                         DialogUtils.closeProgress();
                         nextAction(bundle);
                     }else{

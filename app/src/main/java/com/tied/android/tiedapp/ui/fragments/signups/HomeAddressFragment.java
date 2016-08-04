@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.customs.MyAsyncTask;
+import com.tied.android.tiedapp.customs.MyAddressAsyncTask;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Location;
@@ -113,7 +113,7 @@ public class HomeAddressFragment extends Fragment implements View.OnClickListene
         bundle = getArguments();
         if (bundle != null) {
             Gson gson = new Gson();
-            String user_json = bundle.getString("user");
+            String user_json = bundle.getString(Constants.USER_DATA);
             User user = gson.fromJson(user_json, User.class);
             ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
         }
@@ -147,7 +147,7 @@ public class HomeAddressFragment extends Fragment implements View.OnClickListene
         }
     }
 
-    class GeocodeAsyncTask extends MyAsyncTask {
+    class GeocodeAsyncTask extends MyAddressAsyncTask {
 
         String errorMessage = "";
         JSONObject jObject;
@@ -193,7 +193,7 @@ public class HomeAddressFragment extends Fragment implements View.OnClickListene
             Bundle bundle = getArguments();
 
             Gson gson = new Gson();
-            String user_json = bundle.getString("user");
+            String user_json = bundle.getString(Constants.USER_DATA);
             final User user = gson.fromJson(user_json, User.class);
             user.setHome_address(location);
 
@@ -211,7 +211,7 @@ public class HomeAddressFragment extends Fragment implements View.OnClickListene
                         if (saved) {
                             Gson gson = new Gson();
                             String json = gson.toJson(user);
-                            bundle.putString(Constants.USER, json);
+                            bundle.putString(Constants.USER_DATA, json);
                             DialogUtils.closeProgress();
                             nextAction(Constants.Territory,bundle);
                             Log.d(TAG, "location: " + json);

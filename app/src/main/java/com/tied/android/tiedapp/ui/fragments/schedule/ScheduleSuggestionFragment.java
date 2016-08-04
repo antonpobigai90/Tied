@@ -25,13 +25,15 @@ import com.squareup.picasso.Target;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.objects.Client;
+import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Location;
-import com.tied.android.tiedapp.objects.Schedule;
+import com.tied.android.tiedapp.objects.client.Client;
+import com.tied.android.tiedapp.objects.client.ClientLocation;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
+import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
-import com.tied.android.tiedapp.ui.activities.schedule.ViewSchedule;
+import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.adapters.ClientScheduleAdapter;
 import com.tied.android.tiedapp.ui.adapters.ClientScheduleHorizontalAdapter;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
@@ -56,6 +58,7 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
     private Bundle bundle;
 
     private TextView view_schedule, company_name;
+    private ImageView img_activity;
     private ArrayList<Client> clients;
     private ListView listView;
     private Client client;
@@ -74,7 +77,10 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
 
     private FragmentIterationListener fragmentIterationListener;
 
-    public ScheduleSuggestionFragment() {
+    public static Fragment newInstance (Bundle bundle) {
+        Fragment fragment=new ScheduleSuggestionFragment();
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     @Override
@@ -107,6 +113,8 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
 
     public void initComponent(View view) {
 
+        img_activity = (ImageView) view.findViewById(R.id.img_activity);
+
         clients = new ArrayList<Client>();
         listView = (ListView) view.findViewById(R.id.list);
 
@@ -121,21 +129,25 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
 
         view_schedule = (TextView) view.findViewById(R.id.view_schedule);
         view_schedule.setOnClickListener(this);
+        img_activity.setOnClickListener(this);
 
         bundle = getArguments();
         if (bundle != null) {
             Log.d(TAG, "bundle not null");
             Gson gson = new Gson();
-            String user_json = bundle.getString(Constants.USER);
-            String client_json = bundle.getString(Constants.CLIENT);
-            String schedule_json = bundle.getString(Constants.CLIENT);
+            String user_json = bundle.getString(Constants.USER_DATA);
+            String client_json = bundle.getString(Constants.CLIENT_DATA);
+            String schedule_json = bundle.getString(Constants.SCHEDULE_DATA);
             user = gson.fromJson(user_json, User.class);
             client = gson.fromJson(client_json, Client.class);
             schedule = gson.fromJson(schedule_json, Schedule.class);
             company_name.setText(client.getCompany());
 
+            Log.d(TAG + " schedule", schedule.getLocation().getCoordinate().toString());
+
+            String logo = client.getLogo().equals("") ? null  : client.getLogo();
             Picasso.with(getActivity()).
-                    load(client.getLogo())
+                    load(logo)
                     .into(new Target() {
                         @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                             if (bitmap != null){
@@ -147,30 +159,38 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
                         @Override public void onBitmapFailed(Drawable errorDrawable) { }
                         @Override public void onPrepareLoad(Drawable placeHolderDrawable) { }
                     });
+
+            initClient();
         }
-        initClient();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.view_schedule:
-                Intent intent = new Intent(getActivity(), ViewSchedule.class);
-                intent.putExtra(Constants.CLIENT, client);
-                intent.putExtra(Constants.SCHEDULE, schedule);
+                nextAction(Constants.ViewSchedule,bundle);
+                break;
+            case R.id.img_activity:
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                intent.putExtra(Constants.APP_DATA, bundle);
                 startActivity(intent);
                 break;
         }
     }
 
-
     private void initClient(){
+
+        Coordinate coordinate = new Coordinate(0.0, 0.0);
+        if(schedule.getLocation() != null){
+            coordinate = schedule.getLocation().getCoordinate();
+        }
+        ClientLocation clientLocation = new ClientLocation("10km", coordinate);
         ClientApi clientApi =  MainApplication.getInstance().getRetrofit().create(ClientApi.class);
-        Call<ClientRes> response = clientApi.getClients(user.getToken());
+        Call<ClientRes> response = clientApi.getClientsByLocation(user.getToken(), clientLocation);
         response.enqueue(new Callback<ClientRes>() {
             @Override
             public void onResponse(Call<ClientRes> call, Response<ClientRes> resResponse) {
-                if (getActivity() == null) return;
+                if ( getActivity() == null ) return;
                 DialogUtils.closeProgress();
                 ClientRes clientRes = resResponse.body();
                 if(clientRes.isAuthFailed()){
@@ -199,5 +219,4 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
             }
         });
     }
-
 }

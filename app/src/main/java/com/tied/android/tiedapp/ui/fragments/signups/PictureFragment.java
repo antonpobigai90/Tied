@@ -95,7 +95,7 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
         bundle = getArguments();
         if (bundle != null) {
             Gson gson = new Gson();
-            String user_json = bundle.getString("user");
+            String user_json = bundle.getString(Constants.USER_DATA);
             User user = gson.fromJson(user_json, User.class);
             ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
 
@@ -135,7 +135,7 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
         if (validated()) {
             DialogUtils.displayProgress(getActivity());
             Gson gson = new Gson();
-            String user_json = bundle.getString("user");
+            String user_json = bundle.getString(Constants.USER_DATA);
             User user = gson.fromJson(user_json, User.class);
 
             File file = new File(uri.getPath());
@@ -177,7 +177,7 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
                     if(ServerRes.isSuccess()){
                         Gson gson = new Gson();
                         Bundle bundle = getArguments();
-                        String user_json = bundle.getString(Constants.USER, "");
+                        String user_json = bundle.getString(Constants.USER_DATA, "");
                         User user = gson.fromJson(user_json, User.class);
                         user.setSign_up_stage(Constants.Name);
                         user.setAvatar_uri(String.valueOf(uri));
@@ -186,7 +186,7 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
                         if(saved){
                             DialogUtils.closeProgress();
                             user_json = gson.toJson(user);
-                            bundle.putString(Constants.USER, user_json);
+                            bundle.putString(Constants.USER_DATA, user_json);
                             nextAction(bundle);
                         }else {
                             DialogUtils.closeProgress();
@@ -205,14 +205,14 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
             });
         } else {
             Gson gson = new Gson();
-            String user_json = bundle.getString(Constants.USER, "");
+            String user_json = bundle.getString(Constants.USER_DATA, "");
             User user = gson.fromJson(user_json, User.class);
             user.setSign_up_stage(Constants.Name);
             boolean saved = user.save(getActivity().getApplicationContext());
             if(saved){
                 DialogUtils.closeProgress();
                 user_json = gson.toJson(user);
-                bundle.putString(Constants.USER, user_json);
+                bundle.putString(Constants.USER_DATA, user_json);
                 nextAction(bundle);
             }else {
                 DialogUtils.closeProgress();

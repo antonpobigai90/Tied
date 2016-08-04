@@ -1,12 +1,10 @@
 package com.tied.android.tiedapp.ui.fragments.schedule;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.Pair;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,20 +16,26 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
-import com.tied.android.tiedapp.customs.db.DatabaseHelper;
-import com.tied.android.tiedapp.customs.db.table.ScheduleTable;
+import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.model.ScheduleDataModel;
-import com.tied.android.tiedapp.customs.model.ScheduleTimeModel;
-import com.tied.android.tiedapp.objects.Schedule;
 import com.tied.android.tiedapp.objects.responses.ScheduleRes;
+import com.tied.android.tiedapp.objects.schedule.DateRange;
+import com.tied.android.tiedapp.objects.schedule.Schedule;
+import com.tied.android.tiedapp.objects.schedule.ScheduleDate;
+import com.tied.android.tiedapp.objects.schedule.TimeRange;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
 import com.tied.android.tiedapp.ui.adapters.ScheduleListAdapter;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.util.HelperMethods;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -48,7 +52,6 @@ public class ScheduleListFragment extends Fragment
 
     public FragmentIterationListener mListener;
 
-
     private ArrayList<ScheduleDataModel> schedules;
     private ListView listView;
 
@@ -56,49 +59,98 @@ public class ScheduleListFragment extends Fragment
     private Bundle bundle;
     private User user;
 
-    String[] DAY = {"18","20","21"};
-    String[] WEEK_DAY = {"Mon","Wed","Thu"};
-    String[] TEMPERATURE = {"72°","40°","32°"};
-    String[] WEATHER = {"Sunny","Cloudy","Normal"};
-    ScheduleTimeModel[] scheduleTimeModel = {new ScheduleTimeModel("1","Birthday","All day"),new ScheduleTimeModel("2","Birthday Gurl","All day"),new ScheduleTimeModel("3","Birthday Boy","2pm")};
+    public static Fragment newInstance(int position, Bundle f_bundle) {
 
-    ArrayList<ScheduleTimeModel> timeModel = new ArrayList<>();
-
-    public static Fragment newInstance(int index){
-        Bundle bundle2 = new Bundle();
-        switch (index){
-
+        TimeRange timeRange = null;
+        DateRange dateRange = null;
+        Calendar cal = Calendar.getInstance();
+        Date now = cal.getTime();
+        Pair<String,String> date_range_pairs = null;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String  today = sdf.format(now);
+        int index = 0;
+        switch (position){
+            case 1:
+                index = 1;
+                date_range_pairs = getWeekRange(cal.get(Calendar.YEAR), cal.get(Calendar.WEEK_OF_YEAR));
+                timeRange = new TimeRange("00:00","23:59");
+                dateRange = new DateRange(date_range_pairs.first,date_range_pairs.second);
+                break;
+            case 2:
+                index = 2;
+                timeRange = new TimeRange("00:00","23:59");
+                dateRange = new DateRange(today,today);
+                break;
+            case 3:
+                index = 3;
+                date_range_pairs = getWeekRange(cal.get(Calendar.YEAR), cal.get(Calendar.WEEK_OF_YEAR) + 1);
+                timeRange = new TimeRange("00:00","23:59");
+                dateRange = new DateRange(date_range_pairs.first,date_range_pairs.second);
+                break;
+            case 4:
+                index = 2;
+                timeRange = new TimeRange("00:00","23:59");
+                dateRange = new DateRange("2016-07-01","2016-07-31");
+                break;
         }
 
+        ScheduleDate scheduleDate = new ScheduleDate(timeRange, dateRange);
+        Gson gson = new Gson();
+        String scheduleDate_json = gson.toJson(scheduleDate);
+        f_bundle.putString(Constants.SCHEDULE_DATE_FILTER, scheduleDate_json);
+        f_bundle.putInt(Constants.SCHEDULE_DATA_FILTER_INDEX, index);
+
+
         ScheduleListFragment scheduleListFragment = new ScheduleListFragment();
-        scheduleListFragment.setArguments(bundle2);
-        return  scheduleListFragment;
+        scheduleListFragment.setArguments(f_bundle);
+        return scheduleListFragment;
     }
+
+    public static Pair<String,String> getWeekRange(int year, int week_no) {
+
+        Calendar cal = Calendar.getInstance();
+
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.WEEK_OF_YEAR, week_no);
+        Date monday = cal.getTime();
+
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.WEEK_OF_YEAR, week_no);
+        Date sunday = cal.getTime();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        return new Pair<String,String>(sdf.format(monday), sdf.format(sunday));
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.schedule_list,null);
+        return inflater.inflate(R.layout.schedule_list, null);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        Log.d(TAG, "Fragment changed");
         initComponent(view);
     }
 
     public void initComponent(View view) {
-        schedules = new ArrayList<ScheduleDataModel>();
         listView = (ListView) view.findViewById(R.id.list);
         bundle = getArguments();
         if (bundle != null) {
             Gson gson = new Gson();
-            String user_json = bundle.getString("user");
+            String user_json = bundle.getString(Constants.USER_DATA);
             user = gson.fromJson(user_json, User.class);
+
+            int index = bundle.getInt(Constants.SCHEDULE_DATA_FILTER_INDEX);
+            String scheduleDate_json = bundle.getString(Constants.SCHEDULE_DATE_FILTER);
+            ScheduleDate scheduleDate = gson.fromJson(scheduleDate_json, ScheduleDate.class);
+            initSchedule(scheduleDate, index);
         }
-//        initSchedule();
-        ArrayList<ScheduleDataModel> scheduleDataModels = parseScheduleList();
-        adapter = new ScheduleListAdapter(scheduleDataModels, getActivity());
-        listView.setAdapter(adapter);
     }
 
     @Override
@@ -111,32 +163,31 @@ public class ScheduleListFragment extends Fragment
 
     }
 
-    private void initSchedule(){
-
-        ScheduleApi scheduleApi =  MainApplication.getInstance().getRetrofit().create(ScheduleApi.class);
-        Call<ScheduleRes> response = scheduleApi.getSchedule(user.getToken());
+    private void initSchedule(ScheduleDate scheduleDate, final int index) {
+        ScheduleApi scheduleApi = MainApplication.getInstance().getRetrofit().create(ScheduleApi.class);
+        Call<ScheduleRes> response = scheduleApi.getScheduleByDate(user.getToken(), scheduleDate);
         response.enqueue(new Callback<ScheduleRes>() {
             @Override
             public void onResponse(Call<ScheduleRes> call, Response<ScheduleRes> resResponse) {
                 if (getActivity() == null) return;
-                Log.d(TAG + " here", resResponse.toString());
+                Log.d(TAG + "ScheduleRes", resResponse.toString());
                 DialogUtils.closeProgress();
                 ScheduleRes scheduleRes = resResponse.body();
-                if(scheduleRes.isAuthFailed()){
+                if (scheduleRes != null && scheduleRes.isAuthFailed()) {
                     User.LogOut(getActivity());
-                }
-                else if(scheduleRes.get_meta() != null && scheduleRes.get_meta().getStatus_code() == 200){
+                } else if (scheduleRes != null && scheduleRes.get_meta() != null && scheduleRes.get_meta().getStatus_code() == 200) {
                     ArrayList<Schedule> scheduleArrayList = scheduleRes.getSchedules();
-                    for (Schedule schedule: scheduleArrayList){
-                        storeScheduleToDb(schedule);
-                    }
+                    ArrayList<ScheduleDataModel> scheduleDataModels = null;
 
-                    ArrayList<ScheduleDataModel> scheduleDataModels = parseScheduleList();
-                    Log.d(TAG + " here", scheduleDataModels.toString());
-                    adapter = new ScheduleListAdapter(scheduleDataModels, getActivity());
+                    Log.d(TAG + " scheduleArrayList", scheduleArrayList.toString());
+
+                    scheduleDataModels = parseSchedules(scheduleArrayList);
+                    ScheduleListAdapter adapter = new ScheduleListAdapter(scheduleDataModels, getActivity(), bundle);
                     listView.setAdapter(adapter);
-                }else{
-                    Toast.makeText(getActivity(), scheduleRes.getMessage(), Toast.LENGTH_LONG).show();
+                    adapter.notifyDataSetChanged();
+
+                } else {
+                    Toast.makeText(getActivity(), "encountered error with server", Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -148,84 +199,74 @@ public class ScheduleListFragment extends Fragment
         });
     }
 
-    private ArrayList<ScheduleDataModel> parseScheduleList(){
-        ArrayList<ScheduleDataModel> scheduleDataModelArrayList = new ArrayList<ScheduleDataModel>();
+    public ArrayList<ScheduleDataModel> parseDailySchedule(ArrayList<Schedule> scheduleArrayList) {
+        ArrayList<ScheduleDataModel> scheduleDataModels = new ArrayList<>();
+        for (int i = 0; i < scheduleArrayList.size(); i++) {
+            Schedule schedule = scheduleArrayList.get(i);
 
-        ArrayList<ScheduleTimeModel> scheduleTimeModelArrayList = new ArrayList<>();
-        for (Schedule schedule: retrieveSchedulesFromBD()){
             ScheduleDataModel scheduleDataModel = new ScheduleDataModel();
 
-            ScheduleTimeModel scheduleTimeModel = new ScheduleTimeModel(schedule.getId(), schedule.getTitle(), schedule.getId());
-            scheduleTimeModelArrayList.add(scheduleTimeModel);
-            scheduleDataModel.setScheduleTimeModel(scheduleTimeModelArrayList);
-            scheduleDataModelArrayList.add(scheduleDataModel);
+            ArrayList<Schedule> schedules = new ArrayList<Schedule>();
+            schedules.add(schedule);
+
+            String day = String.format("%02d", HelperMethods.getDayFromSchedule(schedule.getDate()));
+            String week_day = HelperMethods.getDayOfTheWeek(schedule.getDate());
+
+            scheduleDataModel.setSchedules(schedules);
+            scheduleDataModel.setTemperature("80");
+            scheduleDataModel.setWeather("cloudy");
+            scheduleDataModel.setDay(day);
+            scheduleDataModel.setWeek_day(week_day);
+
+            scheduleDataModels.add(scheduleDataModel);
         }
-        return scheduleDataModelArrayList;
+        return scheduleDataModels;
     }
 
-    /*
- * Creating a todo
- */
-    public long storeScheduleToDb(Schedule schedule) {
-        DatabaseHelper db = new DatabaseHelper(getActivity().getApplicationContext());
-        SQLiteDatabase sqLiteDatabase = db.getWritableDatabase();
+    public ArrayList<ScheduleDataModel> parseSchedules(ArrayList<Schedule> scheduleArrayList) {
+        ArrayList<ScheduleDataModel> scheduleDataModels = new ArrayList<>();
+        for (int i = 0; i < scheduleArrayList.size(); i++) {
+            Schedule schedule = scheduleArrayList.get(i);
 
-        ContentValues values = new ContentValues();
-        values.put(ScheduleTable.KEY_TITLE, schedule.getTitle());
-        values.put(ScheduleTable.KEY_USER_ID, schedule.getUser_id());
-        values.put(ScheduleTable.KEY_CLIENT_ID, schedule.getClient_id());
-        values.put(ScheduleTable.KEY_DATE, schedule.getDate());
-        values.put(ScheduleTable.KEY_REMINDER, 1);
-        values.put(ScheduleTable.KEY_VISITED, 0);
-        values.put(ScheduleTable.KEY_START_TIME, schedule.getStart_time());
-        values.put(ScheduleTable.KEY_END_TIME, schedule.getEnd_time());
-        values.put(ScheduleTable.KEY_LAT, schedule.getLocation().getCoordinate().getLat());
-        values.put(ScheduleTable.KEY_LON, schedule.getLocation().getCoordinate().getLon());
+            ScheduleDataModel scheduleDataModel = new ScheduleDataModel();
 
-        Log.d(TAG + " ContentValues ", values.toString());
+            ArrayList<Schedule> schedules = new ArrayList<Schedule>();
+            schedules.add(schedule);
+            for (int j = 1; j < scheduleArrayList.size(); j++) {
+                Schedule this_schedule = scheduleArrayList.get(j);
+                if (isSameDay(schedule.getDate(), this_schedule.getDate())) {
+                    schedules.add(schedule);
+                    scheduleArrayList.remove(j);
+                }
+            }
 
-        long schedule_id = sqLiteDatabase.insert(ScheduleTable.TABLE_SCHEDULE, null, values);
-        if(schedule_id != -1){
-            Log.d(TAG, "inserted id = "+schedule_id);
+            String day = String.format("%02d", HelperMethods.getDayFromSchedule(schedule.getDate()));
+            String week_day = HelperMethods.getDayOfTheWeek(schedule.getDate());
+
+            scheduleDataModel.setSchedules(schedules);
+            scheduleDataModel.setTemperature("80");
+            scheduleDataModel.setWeather("cloudy");
+            scheduleDataModel.setDay(day);
+            scheduleDataModel.setWeek_day(week_day);
+
+            scheduleDataModels.add(scheduleDataModel);
         }
-        return schedule_id;
+        return scheduleDataModels;
     }
 
 
-    /*
- * get single todo
- */
-    public List<Schedule> retrieveSchedulesFromBD() {
-        DatabaseHelper db = new DatabaseHelper(getActivity().getApplicationContext());
-        SQLiteDatabase sqLiteDatabase = db.getReadableDatabase();
-
-        List<Schedule> schedules = new ArrayList<Schedule>();
-        String selectQuery = "SELECT  * FROM " + ScheduleTable.TABLE_SCHEDULE;
-
-        Log.d(TAG, selectQuery);
-
-        Cursor c = sqLiteDatabase.rawQuery(selectQuery, null);
-
-        // looping through all rows and adding to list
-        if (c.moveToFirst()) {
-            do {
-                Schedule schedule = new Schedule();
-                schedule.setId(c.getString((c.getColumnIndex(ScheduleTable.KEY_ID))));
-                schedule.setUser_id(c.getString((c.getColumnIndex(ScheduleTable.KEY_USER_ID))));
-                schedule.setClient_id(c.getString((c.getColumnIndex(ScheduleTable.KEY_CLIENT_ID))));
-                schedule.setTitle(c.getString((c.getColumnIndex(ScheduleTable.KEY_TITLE))));
-                schedule.setDate(c.getString((c.getColumnIndex(ScheduleTable.KEY_DATE))));
-                schedule.setEnd_time(c.getString((c.getColumnIndex(ScheduleTable.KEY_END_TIME))));
-                schedule.setStart_time(c.getString((c.getColumnIndex(ScheduleTable.KEY_START_TIME))));
-                schedule.setReminder((c.getInt(c.getColumnIndex(ScheduleTable.KEY_REMINDER))));
-                schedule.setVisited(true);
-
-                schedules.add(schedule);
-            } while (c.moveToNext());
+    private boolean isSameDay(String day1, String day2) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date date1 = sdf.parse(day1);
+            Date date2 = sdf.parse(day2);
+            return date1.compareTo(date2) == 0;
+        } catch (ParseException e) {
+            return false;
         }
-
-        return schedules;
     }
+
+
 
     @Override
     public void onAttach(Context context) {
@@ -238,7 +279,7 @@ public class ScheduleListFragment extends Fragment
         }
     }
 
-    public void nextAction(int action,Bundle bundle) {
+    public void nextAction(int action, Bundle bundle) {
         if (mListener != null) {
             mListener.OnFragmentInteractionListener(action, bundle);
         }

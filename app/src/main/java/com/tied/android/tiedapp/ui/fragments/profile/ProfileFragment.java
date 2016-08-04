@@ -48,7 +48,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     private CircleIndicator indicator;
     private Bundle bundle;
 
-    public ProfileFragment() {
+    public static Fragment newInstance (Bundle bundle) {
+        Fragment fragment=new ProfileFragment();
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     @Override

@@ -24,9 +24,9 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.objects.Client;
+import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.Location;
-import com.tied.android.tiedapp.objects.Schedule;
+import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.util.HelperMethods;
 
@@ -55,8 +55,8 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.fragment_schedule_view);
 
         user = User.getUser(getApplicationContext());
-        client = (Client) getIntent().getSerializableExtra(Constants.CLIENT);
-        schedule = (Schedule) getIntent().getSerializableExtra(Constants.SCHEDULE);
+        client = (Client) getIntent().getSerializableExtra(Constants.CLIENT_DATA);
+        schedule = (Schedule) getIntent().getSerializableExtra(Constants.SCHEDULE_DATA);
 
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);

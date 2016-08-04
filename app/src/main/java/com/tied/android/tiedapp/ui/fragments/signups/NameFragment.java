@@ -85,7 +85,7 @@ public class NameFragment extends Fragment implements View.OnClickListener {
         if (bundle != null) {
             Gson gson = new Gson();
             bundle = getArguments();
-            String user_json = bundle.getString("user");
+            String user_json = bundle.getString(Constants.USER_DATA);
             user = gson.fromJson(user_json, User.class);
             first_name.setText(user.getFirst_name());
             last_name.setText(user.getLast_name());
@@ -132,7 +132,7 @@ public class NameFragment extends Fragment implements View.OnClickListener {
                     if (saved) {
                         Gson gson = new Gson();
                         String json = gson.toJson(user);
-                        bundle.putString(Constants.USER, json);
+                        bundle.putString(Constants.USER_DATA, json);
                         DialogUtils.closeProgress();
                         nextAction(bundle);
                     } else {

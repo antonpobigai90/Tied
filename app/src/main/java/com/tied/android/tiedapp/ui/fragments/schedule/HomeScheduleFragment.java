@@ -52,9 +52,11 @@ public class HomeScheduleFragment extends Fragment implements View.OnClickListen
 
     private FragmentIterationListener fragmentIterationListener;
 
-    public HomeScheduleFragment() {
+    public static Fragment newInstance (Bundle bundle) {
+        Fragment fragment=new HomeScheduleFragment();
+        fragment.setArguments(bundle);
+        return fragment;
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -100,7 +102,7 @@ public class HomeScheduleFragment extends Fragment implements View.OnClickListen
         img_user_picture.setOnClickListener(this);
 
         Gson gson = new Gson();
-        String user_json = bundle.getString(Constants.USER);
+        String user_json = bundle.getString(Constants.USER_DATA);
         user = gson.fromJson(user_json, User.class);
 
         if (user.getAvatar_uri() != null) {
@@ -169,29 +171,6 @@ public class HomeScheduleFragment extends Fragment implements View.OnClickListen
         });
     }
 
-    public void getWeatherIcon(String icon){
-        switch (icon){
-            case Constants.CLEAR_DAY:
-                break;
-            case Constants.CLEAR_NIGHT:
-                break;
-            case Constants.PARTLY_CLOUDY_DAY:
-                break;
-            case Constants.PARTLY_CLOUDY_NIGHT:
-                break;
-            case Constants.RAIN:
-                break;
-            case Constants.FOG:
-                break;
-            case Constants.SLEET:
-                break;
-            case Constants.SNOW:
-                break;
-            case Constants.WIND:
-                break;
-        }
-    }
-
     private String getTimeOfTheDay() {
         String time_of_the_day = "";
         Calendar c = Calendar.getInstance();
@@ -217,4 +196,7 @@ public class HomeScheduleFragment extends Fragment implements View.OnClickListen
                 break;
         }
     }
+
+
+
 }

@@ -58,6 +58,11 @@ public class AddressFragment extends Fragment implements View.OnClickListener{
     private Location office_location, home_location;
 
     int fetchType = Constants.USE_ADDRESS_NAME;
+    public static Fragment newInstance (Bundle bundle) {
+        Fragment fragment=new AddressFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -97,7 +102,7 @@ public class AddressFragment extends Fragment implements View.OnClickListener{
         if (bundle != null) {
             Log.d(TAG, "bundle not null");
             Gson gson = new Gson();
-            String user_json = bundle.getString("user");
+            String user_json = bundle.getString(Constants.USER_DATA);
             user = gson.fromJson(user_json, User.class);
 
             office_location = user.getOffice_address();
@@ -233,7 +238,7 @@ public class AddressFragment extends Fragment implements View.OnClickListener{
                         if (saved) {
                             Gson gson = new Gson();
                             String json = gson.toJson(user);
-                            bundle.putString(Constants.USER, json);
+                            bundle.putString(Constants.USER_DATA, json);
                             DialogUtils.closeProgress();
                             nextAction(Constants.EditProfile,bundle);
                         } else {

@@ -17,7 +17,7 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.objects.Client;
+import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.ui.activities.schedule.CreateAppointmentActivity;
 import com.tied.android.tiedapp.util.RoundImage;
 import com.tied.android.tiedapp.util.ScheduleDialog;
@@ -58,8 +58,9 @@ public class ClientScheduleHorizontalAdapter extends RecyclerView.Adapter<Client
         final Client data = (Client) _data.get(position);
         viewHolder.name.setText(data.getFull_name());
 
+        String logo = data.getLogo().equals("") ? null  : data.getLogo();
         Picasso.with(activity).
-                load(data.getLogo())
+                load(logo)
                 .into(new Target() {
                     @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                         if (bitmap != null){
@@ -93,7 +94,7 @@ public class ClientScheduleHorizontalAdapter extends RecyclerView.Adapter<Client
             switch (v.getId()){
                 case R.id.schedule:
                     Intent intent = new Intent(activity, CreateAppointmentActivity.class);
-                    intent.putExtra(Constants.CLIENT, client);
+                    intent.putExtra(Constants.CLIENT_DATA, client);
                     activity.startActivity(intent);
                     break;
                 case R.id.menu_icon:

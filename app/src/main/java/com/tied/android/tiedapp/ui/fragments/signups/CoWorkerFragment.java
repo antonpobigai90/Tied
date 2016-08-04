@@ -24,7 +24,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.customs.MyAsyncTask;
+import com.tied.android.tiedapp.customs.MyAddressAsyncTask;
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.objects.user.Boss;
@@ -124,7 +124,7 @@ public class CoWorkerFragment extends Fragment implements View.OnClickListener{
         bundle = getArguments();
         if (bundle != null) {
             Gson gson = new Gson();
-            String user_json = bundle.getString("user");
+            String user_json = bundle.getString(Constants.USER_DATA);
             User user = gson.fromJson(user_json, User.class);
             ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
         }
@@ -182,7 +182,7 @@ public class CoWorkerFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-    class GeocodeAsyncTask extends MyAsyncTask {
+    class GeocodeAsyncTask extends MyAddressAsyncTask {
 
         String errorMessage = "";
 
@@ -229,17 +229,17 @@ public class CoWorkerFragment extends Fragment implements View.OnClickListener{
             Uri uri = ((SignUpActivity) getActivity()).outputUri;
 
             Gson gson = new Gson();
-            String user_json = bundle.getString("user");
+            String user_json = bundle.getString(Constants.USER_DATA);
             final User user = gson.fromJson(user_json, User.class);
             user.setBoss(boss);
             user.setSign_up_stage(Constants.Completed);
             String json = gson.toJson(user);
-            bundle.putString(Constants.USER, json);
+            bundle.putString(Constants.USER_DATA, json);
             boolean saved = user.save(getActivity().getApplicationContext());
             if(saved){
                 DialogUtils.closeProgress();
                 Intent intent = new Intent(getActivity(), MainActivity.class);
-                intent.putExtra(Constants.USER, user);
+                intent.putExtra(Constants.USER_DATA, user);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             }else{

@@ -21,7 +21,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.customs.MyAsyncTask;
+import com.tied.android.tiedapp.customs.MyAddressAsyncTask;
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.objects.user.Boss;
@@ -110,7 +110,7 @@ public class AddBossFragment extends Fragment implements View.OnClickListener{
         bundle = getArguments();
         if (bundle != null) {
             Gson gson = new Gson();
-            String user_json = bundle.getString("user");
+            String user_json = bundle.getString(Constants.USER_DATA);
             User user = gson.fromJson(user_json, User.class);
             ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
         }
@@ -177,7 +177,7 @@ public class AddBossFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-    class GeocodeAsyncTask extends MyAsyncTask {
+    class GeocodeAsyncTask extends MyAddressAsyncTask {
 
         String errorMessage = "";
 
@@ -224,12 +224,12 @@ public class AddBossFragment extends Fragment implements View.OnClickListener{
             Uri uri = ((SignUpActivity) getActivity()).outputUri;
 
             Gson gson = new Gson();
-            String user_json = bundle.getString("user");
+            String user_json = bundle.getString(Constants.USER_DATA);
             final User user = gson.fromJson(user_json, User.class);
             user.setBoss(boss);
             user.setSign_up_stage(Constants.AddBossNow);
             String json = gson.toJson(user);
-            bundle.putString(Constants.USER, json);
+            bundle.putString(Constants.USER_DATA, json);
             if(uri != null)
                 bundle.putString("avatar", uri.toString());
             DialogUtils.closeProgress();

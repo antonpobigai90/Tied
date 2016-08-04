@@ -27,7 +27,7 @@ public class UIFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_create_line, container, false);
+        return inflater.inflate(R.layout.fragment_line_general, container, false);
     }
 
     @Override

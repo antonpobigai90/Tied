@@ -67,9 +67,11 @@ public class IndustryFragment extends Fragment implements View.OnClickListener {
     // Reference to our image view we will use
     public ImageView img_user_picture;
 
-    public IndustryFragment() {
+    public static Fragment newInstance (Bundle bundle) {
+        Fragment fragment=new IndustryFragment();
+        fragment.setArguments(bundle);
+        return fragment;
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -126,7 +128,7 @@ public class IndustryFragment extends Fragment implements View.OnClickListener {
         img_user_picture = (ImageView) view.findViewById(R.id.img_user_picture);
         if (bundle != null) {
             Gson gson = new Gson();
-            String user_json = bundle.getString("user");
+            String user_json = bundle.getString(Constants.USER_DATA);
             User user = gson.fromJson(user_json, User.class);
             if(editProfile){
                 ((MainActivity) getActivity()).loadAvatar(user, img_user_picture);
@@ -243,7 +245,7 @@ public class IndustryFragment extends Fragment implements View.OnClickListener {
             bundle = getArguments();
 
             Gson gson = new Gson();
-            String user_json = bundle.getString("user");
+            String user_json = bundle.getString(Constants.USER_DATA);
             final User user = gson.fromJson(user_json, User.class);
             user.setIndustries(industries);
             user.setSign_up_stage(Constants.AddBoss);
@@ -263,7 +265,7 @@ public class IndustryFragment extends Fragment implements View.OnClickListener {
                         if (saved) {
                             Gson gson = new Gson();
                             String json = gson.toJson(user);
-                            bundle.putString(Constants.USER, json);
+                            bundle.putString(Constants.USER_DATA, json);
                             DialogUtils.closeProgress();
                             nextAction(bundle);
                         } else {

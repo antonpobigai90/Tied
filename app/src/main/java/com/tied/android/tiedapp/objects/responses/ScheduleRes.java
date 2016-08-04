@@ -1,6 +1,6 @@
 package com.tied.android.tiedapp.objects.responses;
 
-import com.tied.android.tiedapp.objects.Schedule;
+import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects._Meta;
 
 import java.io.Serializable;

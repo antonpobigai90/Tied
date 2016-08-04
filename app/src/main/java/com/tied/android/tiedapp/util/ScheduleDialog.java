@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -13,7 +15,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.tied.android.tiedapp.R;
-import com.tied.android.tiedapp.objects.Client;
+import com.tied.android.tiedapp.objects.client.Client;
 
 /**
  * Created by Emmanuel on 6/21/2016.
@@ -29,7 +31,13 @@ public class ScheduleDialog {
         final Dialog dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setCancelable(false);
+
+        // Setting dialogview
+        Window window = dialog.getWindow();
+
         dialog.setContentView(R.layout.schedule_dialog);
+        window.setGravity(Gravity.BOTTOM);
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
         name = (TextView) dialog.findViewById(R.id.name);
         address = (TextView) dialog.findViewById(R.id.address);
@@ -42,8 +50,9 @@ public class ScheduleDialog {
         distance.setText("0.5 miles");
         phone.setText(client.getPhone());
 
+        String logo = client.getLogo().equals("") ? null  : client.getLogo();
         Picasso.with(activity).
-                load(client.getLogo())
+                load(logo)
                 .into(new Target() {
                     @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                         if (bitmap != null){
@@ -63,8 +72,6 @@ public class ScheduleDialog {
                 dialog.dismiss();
             }
         });
-
         dialog.show();
-
     }
 }

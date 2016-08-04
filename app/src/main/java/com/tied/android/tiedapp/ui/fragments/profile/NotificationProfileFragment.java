@@ -22,6 +22,12 @@ public class NotificationProfileFragment extends Fragment implements View.OnClic
     private Bundle bundle;
     private ImageView img_close;
 
+    public static Fragment newInstance (Bundle bundle) {
+        Fragment fragment=new NotificationProfileFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile_notifications, container, false);

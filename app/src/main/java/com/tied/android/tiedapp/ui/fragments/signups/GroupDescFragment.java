@@ -105,7 +105,7 @@ public class GroupDescFragment extends Fragment implements View.OnClickListener{
         bundle = getArguments();
         if (bundle != null) {
             Gson gson = new Gson();
-            String user_json = bundle.getString("user");
+            String user_json = bundle.getString(Constants.USER_DATA);
             User user = gson.fromJson(user_json, User.class);
             ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
         }
@@ -142,7 +142,7 @@ public class GroupDescFragment extends Fragment implements View.OnClickListener{
         Bundle bundle = getArguments();
 
         Gson gson = new Gson();
-        String user_json = bundle.getString("user");
+        String user_json = bundle.getString(Constants.USER_DATA);
         final User user = gson.fromJson(user_json, User.class);
         user.setGroup_description(getResources().getString(R.string.str_principal));
         if(type_index == 1){
@@ -164,7 +164,7 @@ public class GroupDescFragment extends Fragment implements View.OnClickListener{
                     if(saved){
                         Gson gson = new Gson();
                         String json = gson.toJson(user);
-                        bundle.putString(Constants.USER, json);
+                        bundle.putString(Constants.USER_DATA, json);
                         DialogUtils.closeProgress();
                         nextAction(bundle);
                     }else{
