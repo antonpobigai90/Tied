@@ -15,13 +15,34 @@ public class DialogUtils {
 		appDialog.show();
 	}
 	    
-    public static void displayProgress(Context context){
-        if(progressIndicator == null){
-            progressIndicator = new ProgressIndicator(context);
-        }
+    public static void displayProgress(final Context context){
 
-        if(!((Activity)context).isFinishing() && !progressIndicator.isShowing())
-            progressIndicator.show();
+            if(progressIndicator == null){
+                if(context instanceof Activity) {
+                    ((Activity)context).runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            progressIndicator = new ProgressIndicator(context);
+                        }
+                    });
+                }else {
+                    progressIndicator = new ProgressIndicator(context);
+                }
+            }
+
+        if(!((Activity)context).isFinishing() && !progressIndicator.isShowing()) {
+            if(context instanceof Activity) {
+                ((Activity)context).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressIndicator.show();
+                    }
+                });
+            }else{
+                progressIndicator.show();
+            }
+
+        }
     }
 
     public static void closeProgress(){

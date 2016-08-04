@@ -9,7 +9,7 @@ import java.util.concurrent.*;
 /**
  * Created by FEMI on 11/22/2015.
  */
-public class MyAsyncTask extends AsyncTask<Void, Void, Address> {
+public class MyStringAsyncTask extends AsyncTask<Void, Void, String> {
 
 
     public void execute() {
@@ -28,7 +28,7 @@ public class MyAsyncTask extends AsyncTask<Void, Void, Address> {
     }
 
     @Override
-    protected Address doInBackground(Void... params) {
+    protected String doInBackground(Void... params) {
         return null;
     }
 }

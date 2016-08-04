@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.customs.MyAsyncTask;
+import com.tied.android.tiedapp.customs.MyAddressAsyncTask;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Location;
@@ -147,7 +147,7 @@ public class HomeAddressFragment extends Fragment implements View.OnClickListene
         }
     }
 
-    class GeocodeAsyncTask extends MyAsyncTask {
+    class GeocodeAsyncTask extends MyAddressAsyncTask {
 
         String errorMessage = "";
         JSONObject jObject;
