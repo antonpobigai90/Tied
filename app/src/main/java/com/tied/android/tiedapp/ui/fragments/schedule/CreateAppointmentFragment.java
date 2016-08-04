@@ -26,7 +26,7 @@ import com.squareup.picasso.Target;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.customs.MyAsyncTask;
+import com.tied.android.tiedapp.customs.MyAddressAsyncTask;
 import com.tied.android.tiedapp.customs.model.ScheduleNotifyModel;
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Location;
@@ -310,7 +310,7 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
         notify_id = scheduleNotifyModel.getId();
     }
 
-    class GeocodeAsyncTask extends MyAsyncTask {
+    class GeocodeAsyncTask extends MyAddressAsyncTask {
 
         String errorMessage = "";
         @Override

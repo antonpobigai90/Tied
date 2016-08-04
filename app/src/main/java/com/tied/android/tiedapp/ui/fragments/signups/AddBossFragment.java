@@ -21,7 +21,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.customs.MyAsyncTask;
+import com.tied.android.tiedapp.customs.MyAddressAsyncTask;
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.objects.user.Boss;
@@ -177,7 +177,7 @@ public class AddBossFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-    class GeocodeAsyncTask extends MyAsyncTask {
+    class GeocodeAsyncTask extends MyAddressAsyncTask {
 
         String errorMessage = "";
 

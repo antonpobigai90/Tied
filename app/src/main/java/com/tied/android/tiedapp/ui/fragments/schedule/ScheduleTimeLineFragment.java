@@ -271,7 +271,7 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
             return fragmentList.size();
         }
     }
-private static int mCurCheckPosition=0;
+    private static int mCurCheckPosition=0;
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -284,6 +284,6 @@ private static int mCurCheckPosition=0;
             // Restore last state for checked position.
             mCurCheckPosition = savedInstanceState.getInt("curChoice", 0);
         }
-        Logger.write("femiiiiiiiiiiiiiiiiiiiiiiiiiiii");
+        // Logger.write("femiiiiiiiiiiiiiiii");
     }
 }
