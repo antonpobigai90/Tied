@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.tied.android.tiedapp.MainApplication;
@@ -17,10 +16,10 @@ import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
 import com.tied.android.tiedapp.ui.adapters.ScheduleListAdapter;
 import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.util.Logger;
 
 import java.util.ArrayList;
 
-import com.tied.android.tiedapp.util.Logger;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,13 +35,11 @@ public class AllScheduleFragment extends SchedulesFragment implements View.OnCli
     Parcelable mListViewState;
     public AllScheduleFragment() {
         super();
-        //Logger.write("HEloaodfai opija poifjdpaoijdfo");
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -96,8 +93,6 @@ public class AllScheduleFragment extends SchedulesFragment implements View.OnCli
     @Override
     public void onResume() {
         super.onResume();
-       // initSchedule();
-       // Logger.write("Resummmmmdddddddddddddddddd");
     }
 
     @Override

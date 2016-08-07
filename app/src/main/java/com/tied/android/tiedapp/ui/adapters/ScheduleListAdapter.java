@@ -102,7 +102,6 @@ public class ScheduleListAdapter extends BaseAdapter {
             time.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    editSchedule(schedule);
                     DialogScheduleEventOptions alert = new DialogScheduleEventOptions();
                     alert.showDialog(schedule,_c,bundle);
                 }

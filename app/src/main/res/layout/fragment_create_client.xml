@@ -84,7 +84,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingRight="10dp"
-                    android:text="Apple Incorporation"
+                    android:text=""
                     android:textColor="@color/white"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -146,7 +146,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
-                    android:text="Desmond Elliot"
+                    android:text=""
                     android:textColor="@color/schedule_title_bg_color"
                     android:textSize="13sp"
                     android:textStyle="bold" />
@@ -188,7 +188,7 @@
                         android:backgroundTint="@android:color/transparent"
                         android:inputType="text"
                         android:maxLines="1"
-                        android:text="Eric Moore"
+                        android:text=""
                         android:textColor="@color/schedule_title_bg_color"
                         android:textSize="13sp"
                         android:textStyle="bold" />
@@ -238,7 +238,7 @@
                         android:textColor="@color/schedule_title_bg_color"
                         android:textSize="13sp"
                         android:textStyle="bold"
-                        android:text="Surulere" />
+                        android:text="" />
 
                     <View
                         android:layout_width="match_parent"
@@ -268,7 +268,7 @@
                         android:layout_height="wrap_content"
                         android:backgroundTint="@android:color/transparent"
                         android:maxLines="1"
-                        android:text="10001"
+                        android:text=""
                         android:textColor="@color/schedule_title_bg_color"
                         android:textSize="13sp"
                         android:textStyle="bold" />
@@ -313,7 +313,7 @@
                         android:layout_height="wrap_content"
                         android:backgroundTint="@android:color/transparent"
                         android:maxLines="1"
-                        android:text="Lagos"
+                        android:text=""
                         android:textColor="@color/schedule_title_bg_color"
                         android:textSize="13sp"
                         android:textStyle="bold" />
@@ -349,7 +349,7 @@
                         android:backgroundTint="@android:color/transparent"
                         android:inputType="text"
                         android:maxLines="1"
-                        android:text="534"
+                        android:text=""
                         android:textColor="@color/schedule_title_bg_color"
                         android:textSize="13sp"
                         android:textStyle="bold" />
@@ -399,7 +399,7 @@
                         android:textColor="@color/schedule_title_bg_color"
                         android:textSize="13sp"
                         android:textStyle="bold"
-                        android:text="2539278" />
+                        android:text="" />
 
                     <View
                         android:layout_width="match_parent"
@@ -432,7 +432,7 @@
                         android:textColor="@color/schedule_title_bg_color"
                         android:textSize="13sp"
                         android:textStyle="bold"
-                        android:text="marto@gmail.com" />
+                        android:text="" />
 
                     <View
                         android:layout_width="match_parent"
@@ -470,7 +470,7 @@
                         android:layout_height="wrap_content"
                         android:layout_toLeftOf="@+id/dollar"
                         android:backgroundTint="@android:color/transparent"
-                        android:text="1200000"
+                        android:text=""
                         android:inputType="number"
                         android:textColor="@color/schedule_title_bg_color"
                         android:textSize="13sp"
@@ -517,7 +517,7 @@
                         android:layout_height="wrap_content"
                         android:layout_toLeftOf="@+id/dollar1"
                         android:backgroundTint="@android:color/transparent"
-                        android:text="1233400"
+                        android:text=""
                         android:inputType="number"
                         android:textColor="@color/schedule_title_bg_color"
                         android:textSize="13sp"
@@ -658,7 +658,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
-                    android:text="This is just a small note for this client"
+                    android:text=""
                     android:textColor="@color/schedule_title_bg_color"
                     android:textSize="13sp"
                     android:textStyle="bold" />
