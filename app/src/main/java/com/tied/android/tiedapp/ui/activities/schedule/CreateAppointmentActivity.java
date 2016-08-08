@@ -35,7 +35,6 @@ import com.tied.android.tiedapp.util.Logger;
 import java.util.HashMap;
 import java.util.Map;
 
-
 /**
  * Created by Daniel on 5/3/2016.
  */
