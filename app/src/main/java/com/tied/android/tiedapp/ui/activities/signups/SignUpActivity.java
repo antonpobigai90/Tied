@@ -27,6 +27,7 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.HelpActivity;
+import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.fragments.signups.AddBossFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.AddBossNowFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.AddInviteFragment;
@@ -84,8 +85,6 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
 
     public Uri imageUri = null, outputUri = null;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,8 +93,8 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
         User user = User.getUser(getApplicationContext());
         if(user != null && user.getId() != null){
             Log.d(TAG, user.toString());
-//            user.setSign_up_stage(Constants.PhoneAndFax);
-//            user.save(getApplicationContext());
+            user.setSign_up_stage(Constants.Picture);
+            user.save(getApplicationContext());
             Bundle bundle = new Bundle();
             Gson gson = new Gson();
             String user_json = gson.toJson(user);
@@ -342,5 +341,9 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
     public void helpButtonClicked(View v){
         Intent invite_intent = new Intent(this, HelpActivity.class);
         startActivity(invite_intent);
+    }
+
+    public void profileButtonClicked(View v){
+        MyUtils.startActivity(this, MainActivity.class, bundle);
     }
 }

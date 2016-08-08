@@ -250,6 +250,7 @@
         android:orientation="horizontal">
 
         <LinearLayout
+            android:onClick="profileButtonClicked"
             android:id="@+id/profile_layout"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"

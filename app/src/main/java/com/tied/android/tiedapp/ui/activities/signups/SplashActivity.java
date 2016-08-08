@@ -2,7 +2,6 @@ package com.tied.android.tiedapp.ui.activities.signups;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -14,6 +13,7 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
+import com.tied.android.tiedapp.util.MyUtils;
 
 
 /**
@@ -51,13 +51,9 @@ public class SplashActivity extends Activity {
                 Gson gson = new Gson();
                 String user_json = gson.toJson(user);
                 bundle.putString(Constants.USER_DATA, user_json);
-                Intent intent = new Intent(this, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
+                MyUtils.startActivity(this, MainActivity.class, bundle);
             } else {
-                Intent intent = new Intent(sPlashScreen, WalkThroughActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
+                MyUtils.startActivity(sPlashScreen, WalkThroughActivity.class);
             }
 
         } else {
@@ -83,10 +79,7 @@ public class SplashActivity extends Activity {
                                 SharedPreferences.Editor prefsEditor = mPrefs.edit();
                                 prefsEditor.putBoolean(Constants.SPLASH_SCREEN_DONE, true);
                                 prefsEditor.apply();
-                                Intent intent = new Intent(sPlashScreen, WalkThroughActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
-                                finish();
+                                MyUtils.startActivity(sPlashScreen, WalkThroughActivity.class);
                             }
                         });
                     }

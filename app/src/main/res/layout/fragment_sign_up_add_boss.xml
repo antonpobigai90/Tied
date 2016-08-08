@@ -437,6 +437,7 @@
             android:layout_weight="1"
             android:background="@color/white"
             android:gravity="center_vertical"
+            android:onClick="profileButtonClicked"
             android:id="@+id/profile_layout">
 
             <de.hdodenhof.circleimageview.CircleImageView

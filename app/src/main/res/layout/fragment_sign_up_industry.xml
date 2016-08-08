@@ -65,6 +65,7 @@
         android:id="@+id/bottom_layout">
 
         <LinearLayout
+            android:onClick="profileButtonClicked"
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
