@@ -13,8 +13,8 @@ public class Constants {
 
     public static final String SERVER_URL = "http://tied.goattale.com:8102/api/v1/";
 
-//    public static final String HOST = "http://tied.goattale.com:8102/";
-    public static final String HOST = "https://tied-api.herokuapp.com/";
+    public static final String HOST = "http://tied.goattale.com:8102/";
+//    public static final String HOST = "https://tied-api.herokuapp.com/";
 
     public static final int PORT = 3000;
     public static final String API_PATH = "api/v1/";
@@ -151,7 +151,7 @@ public class Constants {
     public static final String RAIN = "rain";
     public static final String CLEAR_DAY = "clear-day";
     public static final String CLEAR_NIGHT = "clear-night";
-    public static final String SNOW = "snow";
+    public static final String SNOW = "sn`ow";
     public static final String SLEET = "sleet";
     public static final String FOG = "fog";
     public static final String WIND = "wind";

@@ -95,6 +95,12 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
 
     FragmentIterationListener mListener;
 
+    public static Fragment newInstance(Bundle bundle) {
+        Fragment fragment=new AddClientFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_client, container, false);

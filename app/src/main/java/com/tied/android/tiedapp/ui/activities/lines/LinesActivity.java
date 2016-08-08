@@ -21,7 +21,6 @@ public class LinesActivity extends AppCompatActivity implements  View.OnClickLis
 
         bundle = getIntent().getExtras();
         user = MyUtils.getUserFromBundle(bundle);
-
         initComponent();
     }
 

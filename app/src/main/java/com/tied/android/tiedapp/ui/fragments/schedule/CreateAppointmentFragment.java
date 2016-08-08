@@ -84,6 +84,12 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
 
     private FragmentIterationListener fragmentIterationListener;
 
+    public static Fragment newInstance(Bundle bundle) {
+        Fragment fragment=new CreateAppointmentFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
     public CreateAppointmentFragment() {
     }
 

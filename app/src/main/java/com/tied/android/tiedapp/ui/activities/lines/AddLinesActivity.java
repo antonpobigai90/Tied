@@ -56,7 +56,6 @@ public class AddLinesActivity extends AppCompatActivity implements FragmentItera
             line = (Line) bundle.getSerializable("line");
 
         }
-
         initComponent();
     }
 

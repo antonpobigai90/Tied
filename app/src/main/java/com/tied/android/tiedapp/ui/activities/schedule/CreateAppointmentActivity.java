@@ -30,6 +30,10 @@ import com.tied.android.tiedapp.ui.fragments.schedule.CreateScheduleFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleSuggestionFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.ViewScheduleFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.util.Logger;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 /**
@@ -48,6 +52,9 @@ public class CreateAppointmentActivity extends FragmentActivity implements Fragm
     private int fragment_index = 0;
 
     public Coordinate coordinate;
+    int currentFragmentID=0;
+
+    Map<Integer, Fragment> fragments = new HashMap<Integer, Fragment>();
 
     User user;
     public Bundle bundle;
@@ -55,6 +62,7 @@ public class CreateAppointmentActivity extends FragmentActivity implements Fragm
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
         setContentView(R.layout.activity_fragment_container);
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -100,47 +108,57 @@ public class CreateAppointmentActivity extends FragmentActivity implements Fragm
         }
     }
 
+    Fragment currentFragment=null;
     public void launchFragment(int pos, Bundle bundle) {
-        fragment_index = pos;
         fragment = null;
+        fragment_index = pos;
 
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.setCustomAnimations(R.anim.slide_in_from_bottom, R.anim.slide_out_top);
+        currentFragmentID=pos;
         switch (pos) {
             case Constants.CreateAppointment:
-                fragment = new CreateAppointmentFragment();
+                if(fragments.get(pos)==null) {
+                    fragments.put(pos, CreateAppointmentFragment.newInstance(bundle) );
+                }
+                fragment = fragments.get(pos);
                 break;
             case Constants.CreateSchedule:
-                fragment = new CreateScheduleFragment();
+                if(fragments.get(pos)==null) {
+                    fragments.put(pos, CreateScheduleFragment.newInstance(bundle));
+                }
+                fragment = fragments.get(pos);
                 break;
             case Constants.AppointmentCalendar:
-                fragment = new AppointmentCalendarFragment();
+                if(fragments.get(pos)==null) {
+                    fragments.put(pos,  AppointmentCalendarFragment.newInstance(bundle) );
+                }
+                fragment = fragments.get(pos);
                 break;
             case Constants.ScheduleSuggestions:
-                fragment = new ScheduleSuggestionFragment();
+                if(fragments.get(pos)==null) {
+                    fragments.put(pos,  ScheduleSuggestionFragment.newInstance(bundle) );
+                }
+                fragment = fragments.get(pos);
                 break;
             case Constants.ViewSchedule:
-                fragment = new ViewScheduleFragment();
+                if(fragments.get(pos)==null) {
+                    fragments.put(pos,  ViewScheduleFragment.newInstance(bundle) );
+                }
+                fragment = fragments.get(pos);
                 break;
             default:
                 finish();
         }
 
-        fragment.setArguments(bundle);
         if (fragment != null) {
             Log.d(TAG, getSupportFragmentManager().getBackStackEntryCount() + "");
-            while (getSupportFragmentManager().getBackStackEntryCount() > 1) {
-                getSupportFragmentManager().popBackStackImmediate();
-            }
-
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//            ft.setCustomAnimations(R.anim.fragment_slide_left_enter, R.anim.fragment_slide_right_exit)
-            ft.replace(R.id.fragment_place, fragment)
-                    .addToBackStack(fragment.getClass().getSimpleName())
-                    .commit();
+            Logger.write("TAGGGG: "+ fragment.getClass().getName());
+            addFragment(ft, currentFragment, fragment, fragment.getClass().getName());
         }
+        currentFragment=fragment;
     }
-
-
-
+    static long backPressed=0;
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -196,6 +214,20 @@ public class CreateAppointmentActivity extends FragmentActivity implements Fragm
                     // permission denied
                 }
             }
+        }
+    }
+
+    public void addFragment(FragmentTransaction transaction, Fragment currentFragment, Fragment targetFragment, String tag) {
+
+        //transaction.setCustomAnimations(0,0,0,0);
+        if(currentFragment!=null) transaction.hide(currentFragment);
+        // use a fragment tag, so that later on we can find the currently displayed fragment
+        if(targetFragment.isAdded()) {
+            transaction.show(targetFragment).commit();
+        }else {
+            transaction.add(R.id.fragment_place, targetFragment, tag)
+                    .addToBackStack(tag)
+                    .commit();
         }
     }
 

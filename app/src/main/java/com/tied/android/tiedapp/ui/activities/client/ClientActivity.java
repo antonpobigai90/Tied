@@ -24,9 +24,12 @@ import com.tied.android.tiedapp.ui.fragments.client.AddClientFragment;
 import com.tied.android.tiedapp.ui.fragments.client.ViewClientFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.TerritoryFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.util.Logger;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Daniel on 5/3/2016.
@@ -36,13 +39,13 @@ public class ClientActivity extends FragmentActivity implements View.OnClickList
     public static final String TAG = ClientActivity.class
             .getSimpleName();
 
-
     private Fragment fragment = null;
     public Fragment profileFragment = null;
     private int fragment_index = 0;
 
     private User user;
     private Bundle bundle;
+    Map<Integer, Fragment> fragments = new HashMap<Integer, Fragment>();
 
     // Code for our image picker select action.
     public final int IMAGE_PICKER_SELECT = 999;
@@ -54,11 +57,14 @@ public class ClientActivity extends FragmentActivity implements View.OnClickList
     private boolean isLaunched = false;
 
     public Uri imageUri = null, outputUri = null;
+    int currentFragmentID=0;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
         setContentView(R.layout.activity_client);
 
         user = User.getUser(getApplicationContext());
@@ -104,36 +110,46 @@ public class ClientActivity extends FragmentActivity implements View.OnClickList
         }
     }
 
+    Fragment currentFragment=null;
     public void launchFragment(int pos, Bundle bundle) {
-        fragment_index = pos;
         fragment = null;
-        Log.d(TAG, "position " + pos);
+        fragment_index = pos;
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.setCustomAnimations(R.anim.slide_in_from_bottom, R.anim.slide_out_top);
+        currentFragmentID=pos;
         switch (pos) {
             case Constants.AddClient:
-                fragment = new AddClientFragment();
+                if(fragments.get(pos)==null) {
+                    fragments.put(pos, AddClientFragment.newInstance(bundle) );
+                }
+                fragment = fragments.get(pos);
                 break;
             case Constants.Territory:
-                fragment = new TerritoryFragment();
+                if(fragments.get(pos)==null) {
+                    fragments.put(pos, TerritoryFragment.newInstance(bundle));
+                }
+                fragment = fragments.get(pos);
                 break;
             case Constants.ViewClient:
-                fragment = new ViewClientFragment();
+                if(fragments.get(pos)==null) {
+                    fragments.put(pos,  ViewClientFragment.newInstance(bundle) );
+                }
+                fragment = fragments.get(pos);
                 break;
             default:
                 finish();
         }
-        fragment.setArguments(bundle);
 
         if (fragment != null) {
             Log.d(TAG, getSupportFragmentManager().getBackStackEntryCount() + "");
-            while (getSupportFragmentManager().getBackStackEntryCount() > 1) {
-                getSupportFragmentManager().popBackStackImmediate();
-            }
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.fragment_place, fragment);
-            ft.addToBackStack(fragment.getClass().getSimpleName())
-                    .commit();
+            Logger.write("TAGGGG: "+ fragment.getClass().getName());
+            addFragment(ft, currentFragment, fragment, fragment.getClass().getName());
         }
+        currentFragment=fragment;
     }
+
+    static long backPressed=0;
 
     public void OnFragmentInteractionListener(int action, Bundle bundle) {
         Log.d(TAG, " onFragmentInteraction " + action);
@@ -143,16 +159,31 @@ public class ClientActivity extends FragmentActivity implements View.OnClickList
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
+        if (Constants.AddClient == fragment_index){
+            finish();
+        }
     }
 
     @Override
     public void onClick(View v) {
-        Intent intent = null;
         switch (v.getId()) {
             case R.id.txt_done:
-                finish();
+                onBackPressed();
                 break;
+        }
+    }
+
+    public void addFragment(FragmentTransaction transaction, Fragment currentFragment, Fragment targetFragment, String tag) {
+
+        //transaction.setCustomAnimations(0,0,0,0);
+        if(currentFragment!=null) transaction.hide(currentFragment);
+        // use a fragment tag, so that later on we can find the currently displayed fragment
+        if(targetFragment.isAdded()) {
+            transaction.show(targetFragment).commit();
+        }else {
+            transaction.add(R.id.fragment_place, targetFragment, tag)
+                    .addToBackStack(tag)
+                    .commit();
         }
     }
 
