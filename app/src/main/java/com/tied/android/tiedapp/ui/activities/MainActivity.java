@@ -248,11 +248,8 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 break;
             case Constants.AppointmentList:
                 tab_bar.setVisibility(View.VISIBLE);
-                activity_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
-
                 if(fragments.get(pos)==null) {
                     fragments.put(pos,ScheduleTimeLineFragment.newInstance(bundle) );
-
                     Logger.write("it is new");
                 }
                 fragment = fragments.get(pos);
