@@ -3,7 +3,6 @@ package com.tied.android.tiedapp.ui.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -17,8 +16,6 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.soundcloud.android.crop.Crop;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
@@ -213,34 +210,34 @@ public class ProfileActivity extends FragmentActivity implements FragmentIterati
         }
     }
 
-
-    public void loadAvatar(final User user, final ImageView img_user_picture) {
-        Picasso.with(this).
-                load(Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg")
-                .resize(35, 35)
-                .into(new Target() {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        if (bitmap != null) {
-                            img_user_picture.setImageBitmap(bitmap);
-                        } else {
-                            img_user_picture.setImageResource(R.drawable.default_avatar);
-                            if (user.getAvatar_uri() != null && new File(user.getAvatar_uri()).exists()) {
-                                Uri myUri = Uri.parse(user.getAvatar_uri());
-                                img_user_picture.setImageURI(myUri);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onBitmapFailed(Drawable errorDrawable) {
-                    }
-
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-                    }
-                });
-    }
+//
+//    public void loadAvatar(final User user, final ImageView img_user_picture) {
+//        Picasso.with(this).
+//                load(Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg")
+//                .resize(35, 35)
+//                .into(new Target() {
+//                    @Override
+//                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+//                        if (bitmap != null) {
+//                            img_user_picture.setImageBitmap(bitmap);
+//                        } else {
+//                            img_user_picture.setImageResource(R.drawable.default_avatar);
+//                            if (user.getAvatar_uri() != null && new File(user.getAvatar_uri()).exists()) {
+//                                Uri myUri = Uri.parse(user.getAvatar_uri());
+//                                img_user_picture.setImageURI(myUri);
+//                            }
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onBitmapFailed(Drawable errorDrawable) {
+//                    }
+//
+//                    @Override
+//                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+//                    }
+//                });
+//    }
 
     public void addFragment(FragmentTransaction transaction, Fragment currentFragment, Fragment targetFragment, String tag) {
 

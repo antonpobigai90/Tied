@@ -22,13 +22,13 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ProfileApi;
-import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.ProfileActivity;
 import com.tied.android.tiedapp.ui.listeners.ImageReadyForUploadListener;
 import com.tied.android.tiedapp.util.DialogUtils;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import java.io.File;
+import java.util.Date;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -70,7 +70,7 @@ public class AvatarProfileFragment extends Fragment implements View.OnClickListe
                 Uri myUri = Uri.parse(user.getAvatar_uri());
                 avatar.setImageURI(myUri);
             }else{
-                MyUtils.Picasso.displayImage(Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg",avatar);
+                MyUtils.Picasso.displayImage(Constants.GET_AVATAR_ENDPOINT + user.getAvatar(),avatar);
             }
         }
         return view;
@@ -107,7 +107,7 @@ public class AvatarProfileFragment extends Fragment implements View.OnClickListe
                                 Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
                                 File photo = new File(Environment.getExternalStorageDirectory(), "Pic.jpg");
                                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
-                                ((MainActivity) getActivity()).imageUri = Uri.fromFile(photo);
+                                ((ProfileActivity) getActivity()).imageUri = Uri.fromFile(photo);
                                 getActivity().startActivityForResult(intent, REQUEST_TAKE_PHOTO);
                                 break;
 
@@ -175,7 +175,7 @@ public class AvatarProfileFragment extends Fragment implements View.OnClickListe
                     String user_json = bundle.getString(Constants.USER_DATA, "");
                     User user = gson.fromJson(user_json, User.class);
                     user.setAvatar_uri(String.valueOf(uri));
-                    user.setAvatar(ServerRes.getUser().getAvatar());
+                    user.setAvatar(ServerRes.getUser().getAvatar()+new Date().getTime());
                     boolean saved = user.save(getActivity().getApplicationContext());
                     if(saved){
                         DialogUtils.closeProgress();

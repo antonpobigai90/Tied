@@ -34,7 +34,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
     public static final String TAG = ProfileFragment.class
             .getSimpleName();
 
-
     public ImageView avatar, img_edit;
     private LinearLayout back_layout;
     private RelativeLayout notification;

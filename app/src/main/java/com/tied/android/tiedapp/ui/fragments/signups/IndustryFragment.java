@@ -129,9 +129,9 @@ public class IndustryFragment extends Fragment implements View.OnClickListener {
             String user_json = bundle.getString(Constants.USER_DATA);
             User user = gson.fromJson(user_json, User.class);
             if(editProfile){
-                ((ProfileActivity) getActivity()).loadAvatar(user, img_user_picture);
+                MyUtils.Picasso.displayImage(Constants.GET_AVATAR_ENDPOINT+user.getAvatar(), img_user_picture);
             }else{
-                ((ProfileActivity) getActivity()).loadAvatar(user, img_user_picture);
+                MyUtils.Picasso.displayImage(Constants.GET_AVATAR_ENDPOINT+user.getAvatar(), img_user_picture);
             }
         }
 
