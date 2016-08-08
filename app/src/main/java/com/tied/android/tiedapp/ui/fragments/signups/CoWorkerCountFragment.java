@@ -50,6 +50,12 @@ public class CoWorkerCountFragment extends Fragment implements View.OnClickListe
     public ImageView img_user_picture;
     private Bundle bundle;
 
+    public static Fragment newInstance(Bundle bundle) {
+        Fragment fragment=new CoWorkerCountFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
     public CoWorkerCountFragment() {
     }
 

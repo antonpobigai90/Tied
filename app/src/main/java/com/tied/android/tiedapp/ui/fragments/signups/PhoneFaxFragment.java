@@ -15,17 +15,17 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
 import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.util.MyUtils;
 import com.tied.android.tiedapp.util.Utility;
 
 import retrofit2.Call;
@@ -51,6 +51,12 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
     private Bundle bundle;
 
     private SignUpFragmentListener mListener;
+
+    public static Fragment newInstance (Bundle bundle) {
+        Fragment fragment=new PhoneFaxFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     public PhoneFaxFragment() {
     }
@@ -117,9 +123,16 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
     
     public void continue_action(){
         phoneText = phone.getText().toString();
-//        phoneText = phoneText.replaceAll("[)(-]","");
-//        phoneText = "+"+phoneText.replace(" ","");
+        phoneText = phoneText.replaceAll("[)(-]","").replace(" ","");
+        if(phoneText.charAt(0) == '0'){
+            phoneText = "+234" + phoneText.substring(1);
+        }
+        if(phoneText.charAt(0) != '+'){
+            phoneText = "+" +phoneText;
+        }
+
         faxText = fax.getText().toString();
+
 
         DialogUtils.displayProgress(getActivity());
         bundle = getArguments();
@@ -147,17 +160,18 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
                         call_send_phone_vc(user);
                     }else{
                         DialogUtils.closeProgress();
-                        Toast.makeText(getActivity(), "user info  was not updated", Toast.LENGTH_LONG).show();
+                        MyUtils.showToast("user info  was not updated");
                     }
                 }else{
-                    Toast.makeText(getActivity(), ServerRes.getMessage(), Toast.LENGTH_LONG).show();
+                    MyUtils.showToast(ServerRes.getMessage());
+                    DialogUtils.closeProgress();
                 }
                 DialogUtils.closeProgress();
             }
 
             @Override
             public void onFailure(Call<ServerRes> ServerResCall, Throwable t) {
-                Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
+                MyUtils.showToast("On failure : error encountered");
                 Log.d(TAG +" onFailure", t.toString());
                 DialogUtils.closeProgress();
             }
@@ -174,35 +188,21 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
                 if(getActivity() == null) return;
                 ServerRes ServerRes = ServerResResponse.body();
                 if(ServerRes.isSuccess()){
-                    Gson gson = new Gson();
-                    String json = gson.toJson(ServerRes);
-                    bundle.putString(Constants.SERVER_INFO,json);
                     nextAction(bundle);
                     Log.d(TAG +" Sms enter", ServerResResponse.body().toString());
                     DialogUtils.closeProgress();
                 }else{
-                    Toast.makeText(getActivity(), ServerRes.getMessage(), Toast.LENGTH_LONG).show();
+                    MyUtils.showToast(ServerRes.getMessage());
                 }
             }
 
             @Override
             public void onFailure(Call<ServerRes> ServerResCall, Throwable t) {
-                Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
+                MyUtils.showToast("On failure : error encountered");
                 Log.d(TAG +" onFailure", t.toString());
                 DialogUtils.closeProgress();
             }
         });
-
-//        //Todo api request for phone verification code to be sent
-//        Gson gson = new Gson();
-//        String json = gson.toJson(user);
-//        String code = "123456";
-//        Bundle bundle = new Bundle();
-//        bundle.putString(Constants.USER_DATA, json);
-//        bundle.putString(Constants.CODE,code);
-//        Toast.makeText(getActivity(), "your code is 12345", Toast.LENGTH_LONG).show();
-//        DialogUtils.closeProgress();
-//        nextAction(bundle);
     }
 
     @Override

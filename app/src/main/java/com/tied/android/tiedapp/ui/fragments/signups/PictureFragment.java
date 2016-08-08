@@ -64,6 +64,12 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
     private SignUpFragmentListener mListener;
     Bundle bundle;
 
+    public static Fragment newInstance (Bundle bundle) {
+        Fragment fragment=new PictureFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
     public PictureFragment() {
 
     }

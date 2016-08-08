@@ -14,20 +14,20 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.MyAddressAsyncTask;
-import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
 import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.util.MyUtils;
 
 import org.json.JSONObject;
 
@@ -63,7 +63,14 @@ public class HomeAddressFragment extends Fragment implements View.OnClickListene
     private String cityText, stateText, streetText, zipText;
     private Location location;
 
+
     int fetchType = Constants.USE_ADDRESS_NAME;
+
+    public static Fragment newInstance(Bundle bundle) {
+        Fragment fragment=new HomeAddressFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     public HomeAddressFragment() {
     }
@@ -136,7 +143,6 @@ public class HomeAddressFragment extends Fragment implements View.OnClickListene
         location = new Location(cityText, zipText, stateText, streetText);
         return !streetText.equals("");
     }
-
 
     @Override
     public void onClick(View v) {
@@ -217,17 +223,17 @@ public class HomeAddressFragment extends Fragment implements View.OnClickListene
                             Log.d(TAG, "location: " + json);
                         } else {
                             DialogUtils.closeProgress();
-                            Toast.makeText(getActivity(), "user info  was not updated", Toast.LENGTH_LONG).show();
+                            MyUtils.showToast("user info  was not updated");
                         }
                     }else{
-                        Toast.makeText(getActivity(), ServerRes.getMessage(), Toast.LENGTH_LONG).show();
+                        DialogUtils.closeProgress();
+                        MyUtils.showToast(ServerRes.getMessage());
                     }
-                    DialogUtils.closeProgress();
                 }
 
                 @Override
                 public void onFailure(Call<ServerRes> ServerResponseCall, Throwable t) {
-                    Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
+                    MyUtils.showToast("On failure : error encountered");
                     Log.d(TAG +" onFailure", t.toString());
                     DialogUtils.closeProgress();
                 }

@@ -61,6 +61,12 @@ public class TerritoryFragment extends Fragment implements View.OnClickListener{
 
     ArrayList<String> territories = new ArrayList<String>();
 
+    public static Fragment newInstance (Bundle bundle) {
+        Fragment fragment=new TerritoryFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
     public TerritoryFragment() {
     }
 

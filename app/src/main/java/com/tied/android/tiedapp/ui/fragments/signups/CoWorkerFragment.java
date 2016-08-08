@@ -70,6 +70,12 @@ public class CoWorkerFragment extends Fragment implements View.OnClickListener{
     public ImageView img_user_picture;
     private Bundle bundle;
 
+    public static Fragment newInstance(Bundle bundle) {
+        Fragment fragment=new CoWorkerFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
     public CoWorkerFragment() {
     }
 

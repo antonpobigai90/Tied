@@ -55,6 +55,12 @@ public class SalesRepFragment extends Fragment implements View.OnClickListener {
 
     private RequestQueue queue;
 
+    public static Fragment newInstance(Bundle bundle) {
+        Fragment fragment=new SalesRepFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
     public SalesRepFragment() {
     }
 

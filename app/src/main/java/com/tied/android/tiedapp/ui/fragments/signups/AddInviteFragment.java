@@ -42,6 +42,12 @@ public class AddInviteFragment extends Fragment implements View.OnClickListener{
     public ImageView img_user_picture;
 
 
+    public static Fragment newInstance(Bundle bundle) {
+        Fragment fragment=new AddInviteFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
     public AddInviteFragment() {
     }
 

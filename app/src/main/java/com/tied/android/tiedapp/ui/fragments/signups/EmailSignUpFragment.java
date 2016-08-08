@@ -84,6 +84,12 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
 
     String facebookId, firstName = "", lastName="", emailText="", avatar="";
 
+    public static Fragment newInstance (Bundle bundle) {
+        Fragment fragment=new EmailSignUpFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
     public EmailSignUpFragment() {}
 
     @Override
@@ -290,10 +296,6 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
                             firstName = obj.getString("first_name");
                             lastName = obj.getString("last_name");
                             emailText = obj.getString("email");
-
-                            Toast.makeText(getActivity(), emailText,Toast.LENGTH_LONG).show();
-                            Log.d("response email ", obj.getString("email")+"");
-
                             continue_action();
 
                         } catch (JSONException e) {

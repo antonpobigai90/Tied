@@ -13,7 +13,8 @@ public class Constants {
 
     public static final String SERVER_URL = "http://tied.goattale.com:8102/api/v1/";
 
-    public static final String HOST = "http://tied.goattale.com:8102/";
+//    public static final String HOST = "http://tied.goattale.com:8102/";
+    public static final String HOST = "https://tied-api.herokuapp.com/";
 
     public static final int PORT = 3000;
     public static final String API_PATH = "api/v1/";
@@ -22,6 +23,7 @@ public class Constants {
     public static final String AUTH_REGISTER_ENDPOINT = API_PATH + "auth/register";
     public static final String AUTH_LOGIN_ENDPOINT = API_PATH + "auth/login";
     public static final String AUTH_SEND_PHONE_CODE_ENDPOINT = API_PATH + "auth/send_phone_vc";
+    public static final String AUTH_VERIFY_PHONE_CODE_ENDPOINT = API_PATH + "auth/send_phone_vc";
 
     public static final String GET_AVATAR_ENDPOINT = HOST + "uploads/avatars/";
 

@@ -69,6 +69,12 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
 
     int fetchType = Constants.USE_ADDRESS_NAME;
 
+    public static Fragment newInstance(Bundle bundle) {
+        Fragment fragment=new OfficeAddressFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
     public OfficeAddressFragment() {
     }
 

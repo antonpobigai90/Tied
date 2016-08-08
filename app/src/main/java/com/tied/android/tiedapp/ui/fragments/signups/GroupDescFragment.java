@@ -53,6 +53,12 @@ public class GroupDescFragment extends Fragment implements View.OnClickListener{
 
     private SignUpFragmentListener mListener;
 
+    public static Fragment newInstance(Bundle bundle) {
+        Fragment fragment=new GroupDescFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
     public GroupDescFragment() {
     }
 

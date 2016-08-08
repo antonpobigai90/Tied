@@ -52,6 +52,12 @@ public class NameFragment extends Fragment implements View.OnClickListener {
     private Bundle bundle;
     private User user;
 
+    public static Fragment newInstance (Bundle bundle) {
+        Fragment fragment=new NameFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
     public NameFragment() {
     }
 

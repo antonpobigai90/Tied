@@ -20,7 +20,7 @@ import android.widget.RelativeLayout;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.ui.activities.MainActivity;
+import com.tied.android.tiedapp.ui.activities.ProfileActivity;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.DemoData;
 
@@ -132,7 +132,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener{
             switch (position){
                 case 0:
                     fragment = new AvatarProfileFragment();
-                    ((MainActivity) getActivity()).profileFragment =  fragment;
+                    ((ProfileActivity) getActivity()).profileFragment =  fragment;
                     break;
                 case 1:
                     fragment = new GoalProfileFragment();

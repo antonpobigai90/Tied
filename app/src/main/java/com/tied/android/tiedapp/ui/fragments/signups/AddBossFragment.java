@@ -67,6 +67,13 @@ public class AddBossFragment extends Fragment implements View.OnClickListener{
     public ImageView img_user_picture;
 
 
+    public static Fragment newInstance(Bundle bundle) {
+        Fragment fragment=new AddBossFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+
     public AddBossFragment() {
     }
 

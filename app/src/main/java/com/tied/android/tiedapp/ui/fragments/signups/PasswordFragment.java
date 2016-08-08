@@ -47,6 +47,12 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
     private String passwordText;
     private Bundle bundle;
 
+    public static Fragment newInstance (Bundle bundle) {
+        Fragment fragment=new PasswordFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
     public PasswordFragment() {
     }
 
