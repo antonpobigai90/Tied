@@ -18,7 +18,7 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
 import com.tied.android.tiedapp.util.APIManager;
-import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.Utility;
 
 import org.apache.http.NameValuePair;

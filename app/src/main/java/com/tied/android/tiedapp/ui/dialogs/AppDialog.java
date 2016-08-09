@@ -1,4 +1,4 @@
-package com.tied.android.tiedapp.util;
+package com.tied.android.tiedapp.ui.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;

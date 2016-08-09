@@ -17,14 +17,14 @@ import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.MyListAsyncTask;
-import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.activities.MainActivity;
+import com.tied.android.tiedapp.retrofits.services.SignUpApi;
+import com.tied.android.tiedapp.ui.activities.ProfileActivity;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
-import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 
 import org.json.JSONObject;
 
@@ -220,7 +220,7 @@ public class AddressFragment extends Fragment implements View.OnClickListener{
             user.setOffice_address(office_location);
             user.setHome_address(home_location);
 
-            SignUpApi signUpApi = ((MainActivity) getActivity()).service;
+            SignUpApi signUpApi = ((ProfileActivity) getActivity()).service;
             Call<ServerRes> response = signUpApi.updateUser(user);
             response.enqueue(new Callback<ServerRes>() {
                 @Override

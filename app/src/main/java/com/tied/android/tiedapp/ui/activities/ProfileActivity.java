@@ -210,34 +210,9 @@ public class ProfileActivity extends FragmentActivity implements FragmentIterati
         }
     }
 
-//
-//    public void loadAvatar(final User user, final ImageView img_user_picture) {
-//        Picasso.with(this).
-//                load(Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg")
-//                .resize(35, 35)
-//                .into(new Target() {
-//                    @Override
-//                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-//                        if (bitmap != null) {
-//                            img_user_picture.setImageBitmap(bitmap);
-//                        } else {
-//                            img_user_picture.setImageResource(R.drawable.default_avatar);
-//                            if (user.getAvatar_uri() != null && new File(user.getAvatar_uri()).exists()) {
-//                                Uri myUri = Uri.parse(user.getAvatar_uri());
-//                                img_user_picture.setImageURI(myUri);
-//                            }
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onBitmapFailed(Drawable errorDrawable) {
-//                    }
-//
-//                    @Override
-//                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-//                    }
-//                });
-//    }
+    public void profileButtonClicked(View v){
+        MyUtils.startActivity(this, MainActivity.class, bundle);
+    }
 
     public void addFragment(FragmentTransaction transaction, Fragment currentFragment, Fragment targetFragment, String tag) {
 

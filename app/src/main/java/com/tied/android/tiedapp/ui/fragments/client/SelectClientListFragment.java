@@ -32,7 +32,7 @@ import com.tied.android.tiedapp.ui.activities.client.SelectClientActivity;
 import com.tied.android.tiedapp.ui.activities.schedule.CreateAppointmentActivity;
 import com.tied.android.tiedapp.ui.adapters.ClientAdapter;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
-import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 
 import java.util.ArrayList;
 

@@ -15,7 +15,7 @@ import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
 import com.tied.android.tiedapp.ui.adapters.ScheduleListAdapter;
-import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.Logger;
 
 import java.util.ArrayList;
@@ -57,7 +57,6 @@ public class AllScheduleFragment extends SchedulesFragment implements View.OnCli
     }
 
     protected void initSchedule() {
-        Logger.write("Initedddddddddddddddddddddddddd");
         ScheduleApi scheduleApi = MainApplication.getInstance().getRetrofit().create(ScheduleApi.class);
         Call<ScheduleRes> response = scheduleApi.getSchedule(user.getToken());
         response.enqueue(new Callback<ScheduleRes>() {

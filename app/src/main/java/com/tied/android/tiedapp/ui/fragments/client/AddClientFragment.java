@@ -42,8 +42,8 @@ import com.tied.android.tiedapp.ui.activities.client.ClientActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.fragments.ClientDatePickerFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
-import com.tied.android.tiedapp.util.ClientSelectIndustryDialog;
-import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.ui.dialogs.ClientSelectIndustryDialog;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 
 import org.json.JSONObject;
 

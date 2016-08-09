@@ -39,6 +39,7 @@ public class Constants {
 
     public static final String GET_CLIENT_WITH_ID = API_PATH + "client/{client_id}";
     public static final String UPDATE_SCHEDULE_WITH_ID = API_PATH + "schedules/{schedule_id}";
+    public static final String DELETE_SCHEDULE_WITH_ID = API_PATH + "schedules/{schedule_id}";
 
     public static final String SCHEDULES = API_PATH + "schedules";
     public static final String USER_SCHEDULE = API_PATH + "users/me/schedules";

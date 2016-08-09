@@ -22,7 +22,7 @@ import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.ui.adapters.MyClientLineAdapter;
 import com.tied.android.tiedapp.ui.fragments.client.SelectClientListFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
-import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 
 import java.util.ArrayList;
 

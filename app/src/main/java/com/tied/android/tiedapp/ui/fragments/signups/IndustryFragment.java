@@ -26,7 +26,7 @@ import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.ProfileActivity;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
-import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import java.util.ArrayList;
@@ -184,12 +184,6 @@ public class IndustryFragment extends Fragment implements View.OnClickListener {
                     }
                 }
                 continue_action();
-                break;
-            case R.id.profile_layout:
-                if(!editProfile){
-                    MyUtils.startActivity(getActivity(), ProfileActivity.class, bundle);
-                }
-                nextAction(bundle);
                 break;
         }
     }

@@ -23,8 +23,8 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
-import com.tied.android.tiedapp.util.DialogClientOptions;
-import com.tied.android.tiedapp.util.DialogYesNo;
+import com.tied.android.tiedapp.ui.dialogs.DialogClientOptions;
+import com.tied.android.tiedapp.ui.dialogs.DialogYesNo;
 
 
 public class ViewClientFragment extends Fragment implements View.OnClickListener {

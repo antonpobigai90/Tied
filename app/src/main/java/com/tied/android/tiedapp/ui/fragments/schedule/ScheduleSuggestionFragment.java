@@ -36,7 +36,7 @@ import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.adapters.ClientScheduleAdapter;
 import com.tied.android.tiedapp.ui.adapters.ClientScheduleHorizontalAdapter;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
-import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import java.util.ArrayList;
