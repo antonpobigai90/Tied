@@ -150,7 +150,7 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
             public void onResponse(Call<ServerRes> call, Response<ServerRes> ServerResResponse) {
                 if(getActivity() == null) return;
                 ServerRes ServerRes = ServerResResponse.body();
-                if(ServerRes.isSuccess()){
+                if(ServerRes != null && ServerRes.isSuccess()){
                     Gson gson = new Gson();
                     boolean saved = user.save(getActivity().getApplicationContext());
                     if(saved){

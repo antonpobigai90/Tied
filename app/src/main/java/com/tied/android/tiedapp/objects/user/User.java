@@ -128,7 +128,6 @@ public class User implements Serializable {
         User user = this;
         boolean saved = user.save(context);
         if(saved){
-
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putBoolean(Constants.LOGGED_IN_USER,true);

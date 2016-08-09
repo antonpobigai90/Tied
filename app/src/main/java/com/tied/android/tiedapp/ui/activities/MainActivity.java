@@ -16,6 +16,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -50,7 +51,6 @@ import java.util.Map;
 
 import retrofit2.Retrofit;
 
-
 /**
  * Created by Daniel on 5/3/2016.
  */
@@ -67,7 +67,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
     private int fragment_index = 0;
 
     private LinearLayout tab_bar, relativeLayout, activity_layout, add_layout, more_layout, tab_actvity_schedule, alert_edit_msg;
-
+    private RelativeLayout invite_menu;
     private TextView txt_schedules, txt_activities;
 
     public Bitmap bitmap;
@@ -90,10 +90,10 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
     DrawerLayout drawerLayout;
     int currentFragmentID=0;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
         setContentView(R.layout.activity_main);
 
         navigationView=(NavigationView)findViewById(R.id.navigation_view);
@@ -108,6 +108,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         more_layout = (LinearLayout) findViewById(R.id.more);
         activity_layout = (LinearLayout) findViewById(R.id.activity);
         add_layout = (LinearLayout) findViewById(R.id.add_layout);
+        invite_menu = (RelativeLayout) findViewById(R.id.invite_menu);
 
         add = (ImageView) findViewById(R.id.add);
         txt_activities = (TextView) findViewById(R.id.txt_activities);
@@ -123,6 +124,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         txt_activities.setOnClickListener(this);
         activity_layout.setOnClickListener(this);
         img_user_picture.setOnClickListener(this);
+        invite_menu.setOnClickListener(this);
 
 
         Log.d(TAG, "Avatar Url : " + Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg");
@@ -166,7 +168,6 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 if(fragments.get(pos)==null) {
                     fragments.put(pos,CreateScheduleFragment.newInstance(bundle) );
                 }
-
                 fragment = fragments.get(pos);
                 break;
             case Constants.ClientAdd:
@@ -355,7 +356,6 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 launchFragment(Constants.ActivityFragment, bundle);
                 break;
             case Constants.Profile:
-//                relativeLayout.setVisibility(View.GONE);
                 fragment = new ProfileFragment();
                 break;
             case Constants.EditProfile:
@@ -370,10 +370,13 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
             case R.id.client_menu:
                 break;
 
-            case R.id.img_user_picture:
+            case R.id.img_user_picture : case R.id.user_picture_iv:
                 MyUtils.startActivity(MainActivity.this, ProfileActivity.class, bundle);
                 break;
 
+            case R.id.invite_menu:
+                MyUtils.startActivity(MainActivity.this, SendInviteActivity.class, bundle);
+                break;
             case R.id.logout:
                 User.LogOut(this);
                 break;

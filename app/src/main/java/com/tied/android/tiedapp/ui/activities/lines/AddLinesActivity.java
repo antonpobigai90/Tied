@@ -87,8 +87,6 @@ public class AddLinesActivity extends AppCompatActivity implements FragmentItera
             mViewPager.setCurrentItem(0);
             selectTab(tab_bar, 0);
         }
-
-
         onCustomSelected(mViewPager);
     }
 
