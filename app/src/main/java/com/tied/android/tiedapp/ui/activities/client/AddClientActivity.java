@@ -65,7 +65,7 @@ public class AddClientActivity extends FragmentActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
-        setContentView(R.layout.activity_client);
+        setContentView(R.layout.activity_client_layout);
 
         bundle = getIntent().getExtras();
         if(bundle == null){

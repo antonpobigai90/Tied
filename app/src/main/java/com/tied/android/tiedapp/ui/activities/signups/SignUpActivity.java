@@ -29,6 +29,7 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.HelpActivity;
+import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.fragments.signups.AddBossFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.AddBossNowFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.AddInviteFragment;
@@ -346,7 +347,7 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
             case R.id.profile_layout:
                 MyUtils.startActivity(this, MainActivity.class);
                 SharedPreferences.Editor e = PreferenceManager.getDefaultSharedPreferences(this).edit();
-               e.putBoolean(Constants.SPLASH_SCREEN_DONE, true);
+                e.putBoolean(Constants.SPLASH_SCREEN_DONE, true);
                 e.apply();
                 finish();
                 break;
