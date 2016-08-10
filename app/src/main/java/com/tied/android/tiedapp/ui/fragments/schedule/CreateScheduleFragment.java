@@ -1,7 +1,6 @@
 package com.tied.android.tiedapp.ui.fragments.schedule;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,8 +19,9 @@ import com.tied.android.tiedapp.objects.responses.Count;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.ui.activities.client.SelectClientActivity;
-import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.util.MyUtils;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -94,9 +94,7 @@ public class CreateScheduleFragment extends Fragment implements View.OnClickList
                 if(!Client.isClientCreated(getActivity().getApplicationContext())){
                     checkIfClientExist(user);
                 }else{
-                    Intent intent = new Intent(getActivity(), SelectClientActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
+                    MyUtils.startActivity(getActivity(), SelectClientActivity.class, bundle);
                 }
                 break;
         }
@@ -117,9 +115,7 @@ public class CreateScheduleFragment extends Fragment implements View.OnClickList
                     User.LogOut(getActivity());
                 } else if (count != null && count.isSuccess()) {
                     if(count.getCount() > 0){
-                        Intent intent = new Intent(getActivity(), SelectClientActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
+                        MyUtils.startActivity(getActivity(), SelectClientActivity.class, bundle);
                     }else{
                         nextAction(Constants.ClientAdd, bundle);
                     }

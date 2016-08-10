@@ -1,13 +1,7 @@
 package com.tied.android.tiedapp.ui.activities.client;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -20,15 +14,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.fragments.client.SelectClientDistanceFragment;
@@ -37,16 +25,10 @@ import com.tied.android.tiedapp.ui.fragments.client.SelectClientMapFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.DemoData;
 
-public class SelectClientActivity extends AppCompatActivity implements FragmentIterationListener, View.OnClickListener,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class SelectClientActivity extends AppCompatActivity implements FragmentIterationListener, View.OnClickListener{
 
     public static final String TAG = SelectClientActivity.class
             .getSimpleName();
-
-    public Coordinate coordinate;
-
-    private GoogleApiClient mGoogleApiClient;
-    private static final int FINE_LOCATION_PERMISSION = 1;
 
     private ViewPager mViewPager;
     private PagerAdapter mPagerAdapter;
@@ -63,13 +45,6 @@ public class SelectClientActivity extends AppCompatActivity implements FragmentI
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_swipe_select_client);
-
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-
 
         img_close = (ImageView) findViewById(R.id.img_close);
         img_close.setOnClickListener(this);
@@ -92,8 +67,11 @@ public class SelectClientActivity extends AppCompatActivity implements FragmentI
         txt_map = (TextView) findViewById(R.id.txt_map);
         txt_last_visited = (TextView) findViewById(R.id.txt_last_visited);
 
+        bundle = getIntent().getExtras();
+        if (bundle == null){
+            bundle = new Bundle();
+        }
         user = User.getUser(getApplicationContext());
-        bundle = new Bundle();
         Gson gson = new Gson();
         String user_json = gson.toJson(user);
         bundle.putString(Constants.USER_DATA, user_json);
@@ -107,12 +85,6 @@ public class SelectClientActivity extends AppCompatActivity implements FragmentI
         }
 
         onCustomSelected(mViewPager);
-    }
-
-
-    protected void onStart() {
-        mGoogleApiClient.connect();
-        super.onStart();
     }
 
     @Override
@@ -230,66 +202,4 @@ public class SelectClientActivity extends AppCompatActivity implements FragmentI
         }
     }
 
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        Log.i(TAG, "connected");
-        startLocationUpdates();
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        Log.i(TAG, "connection suspended");
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.i(TAG, "connection failed");
-    }
-
-    protected void startLocationUpdates() {
-        LocationRequest mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(10000);
-        mLocationRequest.setFastestInterval(5000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, FINE_LOCATION_PERMISSION);
-            return;
-        }
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        if (location != null) {
-            String lat = String.valueOf(location.getLatitude());
-            String lng = String.valueOf(location.getLongitude());
-            coordinate = new Coordinate(Double.parseDouble(lat), Double.parseDouble(lng));
-            Log.d(TAG, "location coordinate ....."+coordinate);
-        } else {
-            coordinate = null;
-            Log.d(TAG, "location is null ...............");
-        }
-    }
-
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case FINE_LOCATION_PERMISSION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission was granted
-                    startLocationUpdates();
-                } else {
-                    // permission denied
-                }
-            }
-        }
-    }
-
-    protected void onStop() {
-        mGoogleApiClient.disconnect();
-        super.onStop();
-    }
 }

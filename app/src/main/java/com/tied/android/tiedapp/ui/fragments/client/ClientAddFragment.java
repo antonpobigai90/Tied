@@ -12,7 +12,11 @@ import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
+<<<<<<< HEAD
 import com.tied.android.tiedapp.ui.activities.client.AddClientActivity;
+=======
+import com.tied.android.tiedapp.ui.activities.client.ClientActivity;
+>>>>>>> 21495db3f01e8526cd3336a2b9e4d65f5eb05f2d
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 
 /**
@@ -80,7 +84,11 @@ public class ClientAddFragment extends Fragment implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.txt_cancel:
-                nextAction(Constants.CreateSchedule, bundle);
+                if(bundle.getBoolean(Constants.NO_CLIENT_FOUND, true)){
+                    nextAction(Constants.CreateSchedule, bundle);
+                }else{
+                    nextAction(Constants.AppointmentList, bundle);
+                }
                 break;
             case R.id.txt_add_client:
                 Intent intent = new Intent(getActivity(), AddClientActivity.class);

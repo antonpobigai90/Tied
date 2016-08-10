@@ -28,11 +28,12 @@ import com.tied.android.tiedapp.objects.client.ClientLocation;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
-import com.tied.android.tiedapp.ui.activities.client.SelectClientActivity;
-import com.tied.android.tiedapp.ui.activities.schedule.CreateAppointmentActivity;
+import com.tied.android.tiedapp.ui.activities.MainActivity;
+import com.tied.android.tiedapp.ui.activities.client.ClientActivity;
 import com.tied.android.tiedapp.ui.adapters.ClientAdapter;
-import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.util.MyUtils;
 
 import java.util.ArrayList;
 
@@ -134,7 +135,8 @@ public class SelectClientListFragment extends Fragment
         if(clientsWithDistance.get(position) instanceof Client){
             Client data = (Client) clientsWithDistance.get(position);
             Log.d("SelectContact", data.toString());
-            Intent intent = new Intent(getActivity(), CreateAppointmentActivity.class);
+//            Intent intent = new Intent(getActivity(), CreateAppointmentActivity.class);
+            Intent intent = new Intent(getActivity(), ClientActivity.class);
             intent.putExtra(Constants.CLIENT_DATA, data);
             startActivity(intent);
         }
@@ -144,7 +146,7 @@ public class SelectClientListFragment extends Fragment
 
         ClientLocation clientLocation = new ClientLocation();
         clientLocation.setDistance("0km");
-        Coordinate coordinate = ((SelectClientActivity) getActivity()).coordinate;
+        Coordinate coordinate = MyUtils.getCurrentLocation();
         if( coordinate == null ){
             coordinate = user.getOffice_address().getCoordinate();
         }
@@ -164,10 +166,15 @@ public class SelectClientListFragment extends Fragment
                 else if(clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200){
                     ArrayList<Client> clients = clientRes.getClients();
                     Log.d(TAG + "", clients.toString());
-                    clientsWithDistance = getClientsWithLocationDistance(clients);
-                    adapter = new ClientAdapter(clientsWithDistance, getActivity());
-                    listView.setAdapter(adapter);
-                    listView.setFastScrollEnabled(true);
+                    if(clients.size() > 0){
+                        clientsWithDistance = getClientsWithLocationDistance(clients);
+                        adapter = new ClientAdapter(clientsWithDistance, getActivity());
+                        listView.setAdapter(adapter);
+                        listView.setFastScrollEnabled(true);
+                    }else{
+                        bundle.putBoolean(Constants.NO_CLIENT_FOUND, true);
+                        MyUtils.startActivity(getActivity(), MainActivity.class, bundle);
+                    }
                 }else{
                     Toast.makeText(getActivity(), clientRes.getMessage(), Toast.LENGTH_LONG).show();
                 }
