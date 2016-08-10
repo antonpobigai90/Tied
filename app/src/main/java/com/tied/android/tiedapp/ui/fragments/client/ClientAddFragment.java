@@ -12,8 +12,7 @@ import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.ui.activities.client.ClientActivity;
-import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleTimeLineFragment;
+import com.tied.android.tiedapp.ui.activities.client.AddClientActivity;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 
 /**
@@ -84,7 +83,7 @@ public class ClientAddFragment extends Fragment implements View.OnClickListener 
                 nextAction(Constants.CreateSchedule, bundle);
                 break;
             case R.id.txt_add_client:
-                Intent intent = new Intent(getActivity(), ClientActivity.class);
+                Intent intent = new Intent(getActivity(), AddClientActivity.class);
                 startActivity(intent);
                 break;
         }

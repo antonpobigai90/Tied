@@ -24,13 +24,11 @@ import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
-<<<<<<< HEAD
-import com.tied.android.tiedapp.util.DialogUtils;
+
 import com.tied.android.tiedapp.util.Logger;
-=======
+
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.MyUtils;
->>>>>>> 2afd2a3192d5c050bb8f327ed7c37d7bdd0bd5e2
 import com.tied.android.tiedapp.util.Utility;
 
 import retrofit2.Call;
@@ -192,28 +190,16 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
             @Override
             public void onResponse(Call<ServerRes> call, Response<ServerRes> ServerResResponse) {
                 if(getActivity() == null) return;
-<<<<<<< HEAD
-                ServerRes serverRes = ServerResResponse.body();
-                // if(serverRes.isSuccess()){
-                    Gson gson = new Gson();
-                    String json = gson.toJson(serverRes);
-                    bundle.putString(Constants.SERVER_INFO,json);
-=======
+
                 ServerRes ServerRes = ServerResResponse.body();
                 if(ServerRes.isSuccess()){
->>>>>>> 2afd2a3192d5c050bb8f327ed7c37d7bdd0bd5e2
                     nextAction(bundle);
                     //Log.d(TAG +" Sms enter", ServerResResponse.body().toString());
                     DialogUtils.closeProgress();
-<<<<<<< HEAD
-                // }else{
-                   // Toast.makeText(getActivity(), serverRes.getMessage(), Toast.LENGTH_LONG).show();
-                //}
-=======
+
                 }else{
                     MyUtils.showToast(ServerRes.getMessage());
                 }
->>>>>>> 2afd2a3192d5c050bb8f327ed7c37d7bdd0bd5e2
             }
 
             @Override

@@ -277,11 +277,7 @@
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-<<<<<<< HEAD
             android:onClick="onClick"
-=======
-            android:onClick="profileButtonClicked"
->>>>>>> 2afd2a3192d5c050bb8f327ed7c37d7bdd0bd5e2
             android:background="@color/white"
             android:gravity="center_vertical"
             android:orientation="horizontal">

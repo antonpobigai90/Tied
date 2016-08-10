@@ -115,7 +115,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.activities.client.ClientActivity"
+            android:name=".ui.activities.client.AddClientActivity"
             android:label="@string/app_name"
             android:parentActivityName=".ui.activities.MainActivity"
             android:screenOrientation="portrait"

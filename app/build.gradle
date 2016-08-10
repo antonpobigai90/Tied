@@ -66,11 +66,11 @@ dependencies {
     compile ('cz.msebera.android:httpclient:4.3.6') {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     }
-   /* compile ('org.apache.commons:commons-lang3:3.0')  {
-        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
-    }*/
+    /* compile ('org.apache.commons:commons-lang3:3.0')  {
+         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
+     }*/
     compile 'com.loopj.android:android-async-http:1.4.9'
-   /* compile files('libs/httpcore-4.2.3.jar')*/
+    /* compile files('libs/httpcore-4.2.3.jar')*/
     compile files('libs/httpmime-4.0.1.jar')
     compile files('libs/urlimageviewhelper-1.0.4.jar')
     compile('com.crashlytics.sdk.android:crashlytics:2.5.6@aar') {

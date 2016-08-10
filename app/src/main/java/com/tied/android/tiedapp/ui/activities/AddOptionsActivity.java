@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.activities.client.ClientActivity;
+import com.tied.android.tiedapp.ui.activities.client.AddClientActivity;
 import com.tied.android.tiedapp.ui.activities.client.SelectClientActivity;
 import com.tied.android.tiedapp.ui.activities.lines.AddLinesActivity;
 import com.tied.android.tiedapp.util.MyUtils;
@@ -77,7 +77,7 @@ public class AddOptionsActivity  extends AppCompatActivity implements  View.OnCl
                 MyUtils.startActivity(this, SelectClientActivity.class);
                 break;
             case R.id.client_layout:
-                MyUtils.startActivity(this, ClientActivity.class);
+                MyUtils.startActivity(this, AddClientActivity.class);
                 break;
             case R.id.employee_layout:
 

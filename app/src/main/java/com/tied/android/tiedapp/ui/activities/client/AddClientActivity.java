@@ -34,9 +34,9 @@ import java.util.Map;
 /**
  * Created by Daniel on 5/3/2016.
  */
-public class ClientActivity extends FragmentActivity implements View.OnClickListener, FragmentIterationListener{
+public class AddClientActivity extends FragmentActivity implements View.OnClickListener, FragmentIterationListener{
 
-    public static final String TAG = ClientActivity.class
+    public static final String TAG = AddClientActivity.class
             .getSimpleName();
 
     private Fragment fragment = null;

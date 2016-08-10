@@ -109,7 +109,6 @@ public class AddLinesActivity extends AppCompatActivity implements FragmentItera
                 break;
         }
     }
-<<<<<<< HEAD
     public void reloadData() {
         //((MyFormFragment)mPagerAdapter.getItem(1)).loadData();
         for(int i=0; i<mPagerAdapter.getCount(); i++) {
@@ -124,14 +123,7 @@ public void moveNext() {
     mViewPager.setCurrentItem(mViewPager.getCurrentItem()+1);
 }
     protected void onCustomSelected(ViewPager vpPager){
-=======
 
-    public void moveNext() {
-        mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
-    }
-
-    protected void onCustomSelected(ViewPager vpPager) {
->>>>>>> 2afd2a3192d5c050bb8f327ed7c37d7bdd0bd5e2
         // Attaching the page change listener inside the activity
         vpPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
@@ -163,9 +155,7 @@ public void moveNext() {
 
     public void setLine(Line line) {
         this.line = line;
-<<<<<<< HEAD
 
-=======
         for (int i = 0; i < mPagerAdapter.getCount(); i++) {
             try {
                 ((MyFormFragment) mPagerAdapter.getItem(i)).initComponents();
@@ -173,7 +163,6 @@ public void moveNext() {
                 Logger.write(e);
             }
         }
->>>>>>> 2afd2a3192d5c050bb8f327ed7c37d7bdd0bd5e2
 
     }
 

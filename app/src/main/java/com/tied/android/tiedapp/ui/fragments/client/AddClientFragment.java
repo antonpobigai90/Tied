@@ -38,7 +38,7 @@ import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
-import com.tied.android.tiedapp.ui.activities.client.ClientActivity;
+import com.tied.android.tiedapp.ui.activities.client.AddClientActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.fragments.ClientDatePickerFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
@@ -212,7 +212,7 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.img_done:
-                uri = ((ClientActivity) getActivity()).outputUri;
+                uri = ((AddClientActivity) getActivity()).outputUri;
                 if(uri == null){
                     Toast.makeText(getActivity(), "Upload user image", Toast.LENGTH_LONG).show();
                 }

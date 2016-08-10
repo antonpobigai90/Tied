@@ -159,7 +159,6 @@
 
         <LinearLayout
             android:id="@+id/profile_layout"
-            android:onClick="profileButtonClicked"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
