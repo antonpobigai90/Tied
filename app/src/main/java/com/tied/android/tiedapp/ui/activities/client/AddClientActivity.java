@@ -59,13 +59,15 @@ public class AddClientActivity extends FragmentActivity implements View.OnClickL
     public Uri imageUri = null, outputUri = null;
     int currentFragmentID=0;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
+<<<<<<< HEAD
         setContentView(R.layout.activity_client_layout);
+=======
+        setContentView(R.layout.activity_add_client);
+>>>>>>> f154a5abc33a966645571cdfc6b8043a5c73bb1a
 
         bundle = getIntent().getExtras();
         if(bundle == null){
@@ -78,8 +80,8 @@ public class AddClientActivity extends FragmentActivity implements View.OnClickL
         String client_json = gson.toJson(client);
         bundle.putString(Constants.USER_DATA, user_json);
         bundle.putString(Constants.CLIENT_DATA, client_json);
-//        launchFragment(Constants.AddClient, bundle);
-        launchFragment(Constants.ViewClient, bundle);
+        launchFragment(Constants.AddClient, bundle);
+//        launchFragment(Constants.ViewClient, bundle);
     }
 
     private void handleCrop(Uri outputUri) {
@@ -165,6 +167,11 @@ public class AddClientActivity extends FragmentActivity implements View.OnClickL
         if (Constants.AddClient == fragment_index){
             finish();
         }
+    }
+
+
+    public void goBack(View v) {
+        onBackPressed();
     }
 
     @Override

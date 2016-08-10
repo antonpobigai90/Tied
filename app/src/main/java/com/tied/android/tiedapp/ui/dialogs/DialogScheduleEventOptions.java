@@ -94,7 +94,10 @@ public class DialogScheduleEventOptions implements View.OnClickListener {
                 editSchedule(schedule);
                 break;
             case R.id.delete:
-                deleteSchedule(schedule);
+//                deleteSchedule(schedule);
+                dialog.dismiss();
+                DialogDeleteSchedule dialogDeleteSchedule = new DialogDeleteSchedule(schedule,adapter,_c,bundle);
+                dialogDeleteSchedule.showDialog();
                 break;
         }
     }
@@ -157,7 +160,7 @@ public class DialogScheduleEventOptions implements View.OnClickListener {
                     _Meta meta = generalResponse.getMeta();
                     if (meta.getStatus_code() == 200){
                         MyUtils.showToast(meta.getUser_message());
-                        adapter.notifyDataSetChanged();
+                        adapter.remove(schedule.getId());
                     }else{
                         MyUtils.showToast("Error encountered");
                     }

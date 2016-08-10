@@ -25,12 +25,10 @@ import com.tied.android.tiedapp.objects.schedule.ScheduleDate;
 import com.tied.android.tiedapp.objects.schedule.TimeRange;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
-import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.adapters.ScheduleListAdapter;
-import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.HelperMethods;
-import com.tied.android.tiedapp.util.MyUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -110,16 +108,11 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
                     User.LogOut(getActivity());
                 } else if (scheduleRes != null && scheduleRes.get_meta() != null && scheduleRes.get_meta().getStatus_code() == 200) {
                     ArrayList<Schedule> scheduleArrayList = scheduleRes.getSchedules();
-                    if(scheduleArrayList.size() > 0){
-                        scheduleDataModels = parseSchedules(scheduleArrayList);
-                        Log.d(TAG + "scheduleDataModels", scheduleDataModels.toString());
-                        bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
-                        adapter = new ScheduleListAdapter(scheduleDataModels, getActivity(), bundle);
-                        listView.setAdapter(adapter);
-                    }else{
-                        bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, true);
-                        MyUtils.startActivity(getActivity(), MainActivity.class, bundle);
-                    }
+                    scheduleDataModels = parseSchedules(scheduleArrayList);
+                    Log.d(TAG + "scheduleDataModels", scheduleDataModels.toString());
+                    bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
+                    adapter = new ScheduleListAdapter(scheduleDataModels, getActivity(), bundle);
+                    listView.setAdapter(adapter);
                 } else {
                     Toast.makeText(getActivity(), "encountered error with server", Toast.LENGTH_LONG).show();
                 }

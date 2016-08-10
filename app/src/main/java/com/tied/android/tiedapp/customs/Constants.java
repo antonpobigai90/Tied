@@ -26,6 +26,7 @@ public class Constants {
     public static final String AUTH_VERIFY_PHONE_CODE_ENDPOINT = API_PATH + "auth/send_phone_vc";
 
     public static final String GET_AVATAR_ENDPOINT = HOST + "uploads/avatars/";
+    public static final String GET_LOGO_ENDPOINT = HOST + "uploads/logos/";
 
     public static final String USER_UPDATE_INFO = API_PATH + "users/me";
     public static final String USER_CHANGE_PASSWORD = API_PATH + "users/changePassword";
@@ -38,9 +39,11 @@ public class Constants {
 
 
     public static final String GET_CLIENT_WITH_ID = API_PATH + "client/{client_id}";
+    public static final String UPDATE_CLIENT_WITH_ID = API_PATH + "clients/{client_id}";
+
+
     public static final String UPDATE_SCHEDULE_WITH_ID = API_PATH + "schedules/{schedule_id}";
     public static final String DELETE_SCHEDULE_WITH_ID = API_PATH + "schedules/{schedule_id}";
-
     public static final String SCHEDULES = API_PATH + "schedules";
     public static final String USER_SCHEDULE = API_PATH + "users/me/schedules";
     public static final String USER_SCHEDULE_COUNT = API_PATH + "users/me/schedules_count";
@@ -161,7 +164,10 @@ public class Constants {
     public static final String PARTLY_CLOUDY_DAY = "partly-cloudy-day";
     public static final String PARTLY_CLOUDY_NIGHT = "partly-cloudy-night";
 
+    public static final String CLIENT_EDITED = "client_updated";
+    public static final String SCHEDULE_EDITED = "schedule_updated";
     public static final String SCHEDULE_CREATED = "a_schedule_exist";
+    public static final String SCHEDULE_DELETED = "schedule_deleted";
     public static final String CLIENT_CREATED = "a_client_exist";
     public static final String NO_CLIENT_FOUND = "no_client_found";
     public static final String NO_SCHEDULE_FOUND = "no_schedule_found";

@@ -1,6 +1,5 @@
 package com.tied.android.tiedapp.ui.fragments.schedule;
 
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -14,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,8 +35,8 @@ import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.adapters.ClientScheduleAdapter;
 import com.tied.android.tiedapp.ui.adapters.ClientScheduleHorizontalAdapter;
-import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import java.util.ArrayList;
@@ -64,6 +64,7 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
     private Client client;
     private Schedule schedule;
     private ImageView pic_client;
+    private LinearLayout should_visit;
 
     private RecyclerView horizontalList;
     LinearLayoutManager horizontalManager;
@@ -114,6 +115,8 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
     public void initComponent(View view) {
 
         img_activity = (ImageView) view.findViewById(R.id.img_activity);
+
+        should_visit = (LinearLayout) view.findViewById(R.id.should_visit);
 
         clients = new ArrayList<Client>();
         listView = (ListView) view.findViewById(R.id.list);
@@ -196,14 +199,19 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
                 }
                 else if(clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200){
                     clients = clientRes.getClients();
-                    adapter = new ClientScheduleAdapter(clients, getActivity());
                     horizontalAdapter = new ClientScheduleHorizontalAdapter(clients,getActivity());
-//            verticalAdapter = new ClientScheduleHorizontalAdapter(clients,getActivity());
+                    should_visit.removeAllViews();
+                    for (Client client : clients) {
+                        View schedule_view = LayoutInflater.from(getActivity()).inflate(R.layout.schedule_clients_suggestion_list_item, null);
+                        LinearLayout linearLayout = (LinearLayout) schedule_view.findViewById(R.id.should_visit_list_item);
+                        TextView name = (TextView) linearLayout.findViewById(R.id.name);
+                        name.setText(client.getFull_name());
+                        ImageView imageView = (ImageView) linearLayout.findViewById(R.id.pic);
+                        MyUtils.Picasso.displayImage(client.getLogo(), imageView);
+                        should_visit.addView(linearLayout);
+                    }
 
                     horizontalList.setAdapter(horizontalAdapter);
-//            verticallList.setAdapter(horizontalAdapter);
-                    listView.setAdapter(adapter);
-                    listView.setFastScrollEnabled(true);
                 }else{
                     Toast.makeText(getActivity(), clientRes.getMessage(), Toast.LENGTH_LONG).show();
                 }

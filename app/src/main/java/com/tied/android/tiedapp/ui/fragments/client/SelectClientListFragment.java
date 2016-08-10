@@ -29,7 +29,11 @@ import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
+<<<<<<< HEAD
 import com.tied.android.tiedapp.ui.activities.client.AddClientActivity;
+=======
+import com.tied.android.tiedapp.ui.activities.schedule.CreateAppointmentActivity;
+>>>>>>> f154a5abc33a966645571cdfc6b8043a5c73bb1a
 import com.tied.android.tiedapp.ui.adapters.ClientAdapter;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
@@ -135,8 +139,12 @@ public class SelectClientListFragment extends Fragment
         if(clientsWithDistance.get(position) instanceof Client){
             Client data = (Client) clientsWithDistance.get(position);
             Log.d("SelectContact", data.toString());
+<<<<<<< HEAD
 //            Intent intent = new Intent(getActivity(), CreateAppointmentActivity.class);
             Intent intent = new Intent(getActivity(), AddClientActivity.class);
+=======
+            Intent intent = new Intent(getActivity(), CreateAppointmentActivity.class);
+>>>>>>> f154a5abc33a966645571cdfc6b8043a5c73bb1a
             intent.putExtra(Constants.CLIENT_DATA, data);
             startActivity(intent);
         }

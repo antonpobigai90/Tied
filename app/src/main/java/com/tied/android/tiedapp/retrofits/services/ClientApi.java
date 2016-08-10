@@ -1,6 +1,7 @@
 package com.tied.android.tiedapp.retrofits.services;
 
 import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.client.ClientLocation;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.responses.Count;
@@ -13,6 +14,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
 
@@ -27,6 +29,18 @@ public interface ClientApi {
                                  @Part("client") RequestBody client,
                                  @Part MultipartBody.Part file);
 
+    @Multipart
+    @PUT(Constants.UPDATE_CLIENT_WITH_ID)
+    Call<ClientRes> editClient(@Header(Constants.TOKEN_HEADER) String token,
+                                 @Path("client_id") String client_id,
+                                 @Part("client") RequestBody client,
+                                 @Part MultipartBody.Part file);
+
+    @PUT(Constants.UPDATE_CLIENT_WITH_ID)
+    Call<ClientRes> editNoAvatarClient(@Header(Constants.TOKEN_HEADER) String token,
+                               @Path("client_id") String client_id,
+                               @Body Client client);
+
     @GET(Constants.USER_CLIENTS)
     Call<ClientRes> getClients(@Header(Constants.TOKEN_HEADER) String token);
 
@@ -38,4 +52,5 @@ public interface ClientApi {
 
     @POST(Constants.USER_GE0_CLIENTS)
     Call<ClientRes> getClientsByLocation(@Header(Constants.TOKEN_HEADER) String token, @Body ClientLocation clientLocation);
+
 }

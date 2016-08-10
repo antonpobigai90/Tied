@@ -29,6 +29,10 @@ public class Client implements Serializable {
     private String email;
     private Location address;
     private String birthday;
+    private String fax;
+    private String note;
+    private String revenue;
+    private String ytd_revenue;
 
     private int Industry_id;
     private int visit_id;
@@ -50,6 +54,38 @@ public class Client implements Serializable {
     public static boolean isClientCreated(Context context){
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         return mPrefs.getBoolean(Constants.CLIENT_CREATED, false);
+    }
+
+    public String getFax() {
+        return fax;
+    }
+
+    public void setFax(String fax) {
+        this.fax = fax;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public String getRevenue() {
+        return revenue;
+    }
+
+    public void setRevenue(String revenue) {
+        this.revenue = revenue;
+    }
+
+    public String getYtd_revenue() {
+        return ytd_revenue;
+    }
+
+    public void setYtd_revenue(String ytd_revenue) {
+        this.ytd_revenue = ytd_revenue;
     }
 
     public String getId() {
@@ -192,6 +228,10 @@ public class Client implements Serializable {
                 ", email='" + email + '\'' +
                 ", address=" + address +
                 ", birthday='" + birthday + '\'' +
+                ", fax='" + fax + '\'' +
+                ", note='" + note + '\'' +
+                ", revenue='" + revenue + '\'' +
+                ", ytd_revenue='" + ytd_revenue + '\'' +
                 ", Industry_id=" + Industry_id +
                 ", visit_id=" + visit_id +
                 ", dis_from=" + dis_from +

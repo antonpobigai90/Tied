@@ -1,7 +1,7 @@
 package com.tied.android.tiedapp.retrofits.services;
 
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.customs.model.IndustryModel;
+import com.tied.android.tiedapp.customs.model.DataModel;
 import com.tied.android.tiedapp.objects.responses.CheckEmail;
 import com.tied.android.tiedapp.objects.responses.LoginUser;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
@@ -57,5 +57,5 @@ public interface SignUpApi {
     Call<ServerRes> updateUser(@Body User user);
 
     @GET(Constants.GET_INDUSTRIES)
-    Call<List<IndustryModel>>   getIndustries();
+    Call<List<DataModel>>   getIndustries();
 }
