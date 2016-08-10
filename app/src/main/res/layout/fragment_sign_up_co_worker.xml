@@ -467,13 +467,13 @@
         android:layout_alignParentBottom="true">
 
         <LinearLayout
-            android:onClick="profileButtonClicked"
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/white"
             android:gravity="center_vertical"
+            android:onClick="onClick"
             android:id="@+id/profile_layout">
 
             <de.hdodenhof.circleimageview.CircleImageView

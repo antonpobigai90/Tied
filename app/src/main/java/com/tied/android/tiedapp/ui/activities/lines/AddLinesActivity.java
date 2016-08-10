@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
+import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.fragments.MyFormFragment;
@@ -108,12 +109,21 @@ public class AddLinesActivity extends AppCompatActivity implements FragmentItera
                 break;
         }
     }
-
-    public void moveNext() {
-        mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
+    public void reloadData() {
+        //((MyFormFragment)mPagerAdapter.getItem(1)).loadData();
+        for(int i=0; i<mPagerAdapter.getCount(); i++) {
+            try {
+                ((MyFormFragment) mPagerAdapter.getItem(i)).initComponents();
+            }catch (Exception e) {
+                Logger.write(e);
+            }
+        }
     }
+public void moveNext() {
+    mViewPager.setCurrentItem(mViewPager.getCurrentItem()+1);
+}
+    protected void onCustomSelected(ViewPager vpPager){
 
-    protected void onCustomSelected(ViewPager vpPager) {
         // Attaching the page change listener inside the activity
         vpPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
@@ -145,6 +155,7 @@ public class AddLinesActivity extends AppCompatActivity implements FragmentItera
 
     public void setLine(Line line) {
         this.line = line;
+
         for (int i = 0; i < mPagerAdapter.getCount(); i++) {
             try {
                 ((MyFormFragment) mPagerAdapter.getItem(i)).initComponents();
@@ -230,5 +241,14 @@ public class AddLinesActivity extends AppCompatActivity implements FragmentItera
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_to_right);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode== Constants.ADD_SALES && resultCode==RESULT_OK) {
+
+            Logger.write(data.getSerializableExtra("selected").toString());
+        }
     }
 }

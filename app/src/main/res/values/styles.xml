@@ -154,6 +154,18 @@
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_alignParentLeft">true</item>
     </style>
+
+    <style name="SeperatorVertical" parent="AppTheme">
+        <item name="android:layout_width">0.1dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/light_gray</item>
+    </style>
+
+    <style name="SeperatorHorizontal" parent="AppTheme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0.1dp</item>
+        <item name="android:background">@color/light_gray</item>
+    </style>
     <!--<style name="Widget.CalendarView.Custom" parent="android:Widget.CalendarView">-->
         <!--<item name="android:weekNumberColor">@color/schedule_title_bg_color</item>-->
         <!--<item name="android:focusedMonthDateColor">@color/colorPrimaryDark</item>-->

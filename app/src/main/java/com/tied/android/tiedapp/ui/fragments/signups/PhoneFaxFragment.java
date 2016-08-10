@@ -24,6 +24,9 @@ import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
+
+import com.tied.android.tiedapp.util.Logger;
+
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.MyUtils;
 import com.tied.android.tiedapp.util.Utility;
@@ -156,7 +159,7 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
                     if(saved){
                         String user_json = bundle.getString(Constants.USER_DATA);
                         User user = gson.fromJson(user_json, User.class);
-                        Log.d(TAG +" number", phoneText);
+                        //Log.d(TAG +" number", phoneText);
                         call_send_phone_vc(user);
                     }else{
                         DialogUtils.closeProgress();
@@ -181,16 +184,19 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
     private void call_send_phone_vc(User user) {
 
         SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
-        Call<ServerRes> response = signUpApi.sendPhoneCode(user.getId(), "+2348022020231");
+        Call<ServerRes> response = signUpApi.sendPhoneCode(user.getId(), phoneText);
+        Logger.write(phoneText);
         response.enqueue(new Callback<ServerRes>() {
             @Override
             public void onResponse(Call<ServerRes> call, Response<ServerRes> ServerResResponse) {
                 if(getActivity() == null) return;
+
                 ServerRes ServerRes = ServerResResponse.body();
                 if(ServerRes.isSuccess()){
                     nextAction(bundle);
-                    Log.d(TAG +" Sms enter", ServerResResponse.body().toString());
+                    //Log.d(TAG +" Sms enter", ServerResResponse.body().toString());
                     DialogUtils.closeProgress();
+
                 }else{
                     MyUtils.showToast(ServerRes.getMessage());
                 }

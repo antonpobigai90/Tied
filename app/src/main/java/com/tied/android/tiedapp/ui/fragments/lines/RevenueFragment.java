@@ -9,14 +9,18 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
+import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Revenue;
 import com.tied.android.tiedapp.objects._Meta;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.LineApi;
 import com.tied.android.tiedapp.ui.activities.lines.AddLinesActivity;
+import com.tied.android.tiedapp.ui.activities.sales.ActivityAddSales;
 import com.tied.android.tiedapp.ui.adapters.RevenueAdapter;
 import com.tied.android.tiedapp.ui.fragments.MyFormFragment;
+
+import com.tied.android.tiedapp.ui.fragments.sales.AddSalesFragment;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
@@ -38,7 +42,7 @@ public class RevenueFragment extends MyFormFragment implements View.OnClickListe
     List<Revenue> revenueList;
     AddLinesActivity addLinesActivity;
     int page=1;
-    View view;
+    View view, addBut;
 
 
     @Override
@@ -57,18 +61,23 @@ public class RevenueFragment extends MyFormFragment implements View.OnClickListe
         switch (v.getId()){
             case R.id.avatar:
                 break;
+            case R.id.add_revenue:
+                MyUtils.startRequestActivity(getActivity(), ActivityAddSales.class, Constants.ADD_SALES);
+                break;
         }
     }
     @Override
     public void initComponents() {
         revenueLV=(ListView)view.findViewById(R.id.revenue_lv);
+        addBut = view.findViewById(R.id.add_revenue);
+        addBut.setOnClickListener(this);
         revenueLV.setAdapter(adapter);
         loadData();
     }
 
     @Override
     public void loadData() {
-        super.loadData();
+        //super.loadData();
         if(addLinesActivity.getLine()==null) return;
         Logger.write("Loading data");
         DialogUtils.displayProgress(getActivity());
@@ -98,7 +107,7 @@ public class RevenueFragment extends MyFormFragment implements View.OnClickListe
                         adapter.notifyDataSetChanged();
 
                     } else {
-                        MyUtils.showToast(getString(R.string.connection_error));
+                          MyUtils.showToast(getString(R.string.connection_error));
                     }
                 }catch (Exception e) {
                     Logger.write(e);

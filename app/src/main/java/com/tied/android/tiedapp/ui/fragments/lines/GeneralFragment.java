@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.customs.MyStringAsyncTask;
 import com.tied.android.tiedapp.objects._Meta;
+import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import okhttp3.ResponseBody;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
@@ -168,22 +169,22 @@ public class GeneralFragment extends MyFormFragment implements View.OnClickListe
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
                 if (getActivity() == null) return;
 
-                ResponseBody resp = resResponse.body();
+
                 try {
-                    JSONObject response=new JSONObject(resp.string());
-                    if (MyUtils.isAuthFailed(response)) {
-                        User.LogOut(getActivity().getApplicationContext());
+                    GeneralResponse response=new GeneralResponse(resResponse.body());
+                    if (response != null && response.isAuthFailed()) {
+                        User.LogOut(getActivity());
                         return;
                     }
-                    _Meta meta;
-                    if(( meta=MyUtils.getMeta(response)) !=null && meta.getStatus_code()==201) {
+                    _Meta meta=response.getMeta();
+                    if(meta !=null && meta.getStatus_code()==201) {
                         AddLinesActivity activity=(AddLinesActivity)getActivity();
-                        activity.setLine(gson.fromJson(response.getString("lines"), Line.class));
+                        activity.setLine(response.getData("lines", Line.class));
                         new MyStringAsyncTask() {
                             @Override
                             protected String doInBackground(Void... params) {
                                 try{
-                                    Thread.sleep(1000);
+                                    Thread.sleep(2000);
                                 }catch (Exception e) {
 
                                 }
@@ -192,6 +193,7 @@ public class GeneralFragment extends MyFormFragment implements View.OnClickListe
 
                             @Override
                             protected void onPostExecute(String s) {
+                                ((AddLinesActivity)getActivity()).reloadData();
                                 DialogUtils.closeProgress();
                                 ((AddLinesActivity)getActivity()).moveNext();
                             }
@@ -203,7 +205,7 @@ public class GeneralFragment extends MyFormFragment implements View.OnClickListe
                 }catch (IOException ioe) {
                     Logger.write(ioe);
                 }
-                catch (JSONException jo) {
+                catch (Exception jo) {
                     Logger.write(jo);
                 }
                 /*if (clientRes.isAuthFailed()) {
