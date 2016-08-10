@@ -167,6 +167,7 @@ public class Constants {
     public static final String CLIENT_EDITED = "client_updated";
     public static final String SCHEDULE_EDITED = "schedule_updated";
     public static final String SCHEDULE_CREATED = "a_schedule_exist";
+    public static final String SCHEDULE_DELETED = "schedule_deleted";
     public static final String CLIENT_CREATED = "a_client_exist";
     public static final String NO_CLIENT_FOUND = "no_client_found";
     public static final String NO_SCHEDULE_FOUND = "no_schedule_found";

@@ -151,8 +151,6 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         }
 
 
-
-
         Gson gson = new Gson();
         String user_json = gson.toJson(user);
 

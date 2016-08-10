@@ -94,7 +94,10 @@ public class DialogScheduleEventOptions implements View.OnClickListener {
                 editSchedule(schedule);
                 break;
             case R.id.delete:
-                deleteSchedule(schedule);
+//                deleteSchedule(schedule);
+                dialog.dismiss();
+                DialogDeleteSchedule dialogDeleteSchedule = new DialogDeleteSchedule(schedule,adapter,_c,bundle);
+                dialogDeleteSchedule.showDialog();
                 break;
         }
     }
