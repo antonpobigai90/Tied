@@ -78,8 +78,8 @@ public class ClientActivity extends FragmentActivity implements View.OnClickList
         String client_json = gson.toJson(client);
         bundle.putString(Constants.USER_DATA, user_json);
         bundle.putString(Constants.CLIENT_DATA, client_json);
-//        launchFragment(Constants.AddClient, bundle);
-        launchFragment(Constants.ViewClient, bundle);
+        launchFragment(Constants.AddClient, bundle);
+//        launchFragment(Constants.ViewClient, bundle);
     }
 
     private void handleCrop(Uri outputUri) {
@@ -165,6 +165,11 @@ public class ClientActivity extends FragmentActivity implements View.OnClickList
         if (Constants.AddClient == fragment_index){
             finish();
         }
+    }
+
+
+    public void goBack(View v) {
+        onBackPressed();
     }
 
     @Override

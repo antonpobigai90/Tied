@@ -153,6 +153,22 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
+                    <!--<RelativeLayout android:layout_width="100dip"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_toRightOf="@+id/txt_state_label">-->
+                        <!--<Spinner-->
+                            <!--android:id="@+id/state"-->
+                            <!--style="@style/SpinnerStyle"-->
+                            <!--/>-->
+                        <!--<ImageView android:layout_width="20dip"-->
+                            <!--android:padding="6dp"-->
+                            <!--android:layout_alignParentRight="true"-->
+                            <!--android:layout_centerVertical="true"-->
+                            <!--android:src="@drawable/arrow_down_blue"-->
+                            <!--android:layout_height="20dip"/>-->
+
+                    <!--</RelativeLayout>-->
+
                     <EditText
                         android:id="@+id/state"
                         android:layout_width="fill_parent"

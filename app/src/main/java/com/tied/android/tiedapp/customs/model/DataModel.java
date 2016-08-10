@@ -1,12 +1,12 @@
 package com.tied.android.tiedapp.customs.model;
 
-public class IndustryModel {
+public class DataModel {
 
 	int id;
 	String name;
 	boolean check_status;
 
-	public IndustryModel(int id, String name, boolean check_status) {
+	public DataModel(int id, String name, boolean check_status) {
 		this.id = id;
 		this.name = name;
 		this.check_status = check_status;
@@ -39,7 +39,7 @@ public class IndustryModel {
 
 	@Override
 	public String toString() {
-		return "IndustryModel{" +
+		return "DataModel{" +
 				"id=" + id +
 				", name='" + name + '\'' +
 				", check_status=" + check_status +

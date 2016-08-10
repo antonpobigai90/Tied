@@ -26,6 +26,7 @@ public class Constants {
     public static final String AUTH_VERIFY_PHONE_CODE_ENDPOINT = API_PATH + "auth/send_phone_vc";
 
     public static final String GET_AVATAR_ENDPOINT = HOST + "uploads/avatars/";
+    public static final String GET_LOGO_ENDPOINT = HOST + "uploads/logos/";
 
     public static final String USER_UPDATE_INFO = API_PATH + "users/me";
     public static final String USER_CHANGE_PASSWORD = API_PATH + "users/changePassword";
@@ -38,6 +39,7 @@ public class Constants {
 
 
     public static final String GET_CLIENT_WITH_ID = API_PATH + "client/{client_id}";
+    public static final String EDIT_CLIENT_WITH_ID = API_PATH + "client/{client_id}";
     public static final String UPDATE_SCHEDULE_WITH_ID = API_PATH + "schedules/{schedule_id}";
     public static final String DELETE_SCHEDULE_WITH_ID = API_PATH + "schedules/{schedule_id}";
 

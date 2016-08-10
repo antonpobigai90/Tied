@@ -20,7 +20,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.customs.model.IndustryModel;
+import com.tied.android.tiedapp.customs.model.DataModel;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
@@ -46,7 +46,7 @@ public class IndustryFragment extends Fragment implements View.OnClickListener {
 
     private RelativeLayout continue_btn;
 
-    ArrayList<IndustryModel> industry_data = new ArrayList<IndustryModel>();
+    ArrayList<DataModel> industry_data = new ArrayList<DataModel>();
     ListView industry_listview;
     SearchAdapter industry_adapter;
 
@@ -143,7 +143,7 @@ public class IndustryFragment extends Fragment implements View.OnClickListener {
         industry_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                IndustryModel item = industry_data.get(position);
+                DataModel item = industry_data.get(position);
                 if (item.isCheck_status()) {
                     item.setCheck_status(false);
                 } else {
@@ -153,20 +153,20 @@ public class IndustryFragment extends Fragment implements View.OnClickListener {
             }
         });
         DialogUtils.displayProgress(getActivity());
-        Call<List<IndustryModel>> response = signUpApi.getIndustries();
-        response.enqueue(new Callback<List<IndustryModel>>() {
+        Call<List<DataModel>> response = signUpApi.getIndustries();
+        response.enqueue(new Callback<List<DataModel>>() {
             @Override
-            public void onResponse(Call<List<IndustryModel>> call, Response<List<IndustryModel>> listResponse) {
+            public void onResponse(Call<List<DataModel>> call, Response<List<DataModel>> listResponse) {
                 if (getActivity() == null) return;
                 DialogUtils.closeProgress();
-                List<IndustryModel> industryModelList = listResponse.body();
-                industry_data.addAll(industryModelList);
+                List<DataModel> dataModelList = listResponse.body();
+                industry_data.addAll(dataModelList);
                 industry_adapter.notifyDataSetChanged();
-                Log.d(TAG + " onResponse", industryModelList.toString());
+                Log.d(TAG + " onResponse", dataModelList.toString());
             }
 
             @Override
-            public void onFailure(Call<List<IndustryModel>> call, Throwable t) {
+            public void onFailure(Call<List<DataModel>> call, Throwable t) {
                 Log.d(TAG + " onFailure", t.toString());
                 DialogUtils.closeProgress();
             }
@@ -178,7 +178,7 @@ public class IndustryFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.continue_btn:
                 for (int i = 0 ; i < industry_data.size() ; i++) {
-                    IndustryModel item = industry_data.get(i);
+                    DataModel item = industry_data.get(i);
                     if (item.isCheck_status()) {
                        industries.add(item.getName());
                     }
@@ -188,13 +188,13 @@ public class IndustryFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    class SearchAdapter extends ArrayAdapter<IndustryModel> {
+    class SearchAdapter extends ArrayAdapter<DataModel> {
 
-        private ArrayList<IndustryModel> itemList;
+        private ArrayList<DataModel> itemList;
         private Context context;
 
 
-        public SearchAdapter(ArrayList<IndustryModel> itemList, Context ctx) {
+        public SearchAdapter(ArrayList<DataModel> itemList, Context ctx) {
             super(ctx, android.R.layout.simple_list_item_1, itemList);
             this.itemList = itemList;
             this.context = ctx;
@@ -210,7 +210,7 @@ public class IndustryFragment extends Fragment implements View.OnClickListener {
                 v = inflater.inflate(R.layout.industry_list_item, null);
             }
 
-            final IndustryModel item = industry_data.get(position);
+            final DataModel item = industry_data.get(position);
 
             ImageView img_status = (ImageView) v.findViewById(R.id.img_status);
 
