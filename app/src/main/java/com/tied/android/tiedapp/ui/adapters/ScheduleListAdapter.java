@@ -63,6 +63,21 @@ public class ScheduleListAdapter extends BaseAdapter {
         return i;
     }
 
+    public void remove(String id){
+        for (int i = 0; i < _data.size(); i++){
+            ArrayList<Schedule> schedules = _data.get(i).getSchedules();
+            for (int j = 0; j < schedules.size(); j++){
+                if(schedules.get(j).getId().equals(id)){
+                    _data.get(i).getSchedules().remove(j);
+                    if (_data.get(i).getSchedules().size() == 0){
+                        _data.remove(i);
+                    }
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View getView(int i, View convertView, ViewGroup viewGroup) {
@@ -109,8 +124,9 @@ public class ScheduleListAdapter extends BaseAdapter {
             time.setText(timeRange);
             message.setText(schedule.getTitle());
             v.timeLine.addView(linearLayout);
+
+            getWeather(schedules.get(0), v.temperature, v.weather);
         }
-        getWeather(schedules.get(0), v.temperature, v.weather);
         view.setTag(data);
         return view;
     }

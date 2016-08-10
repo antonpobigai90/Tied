@@ -40,7 +40,7 @@ import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
-import com.tied.android.tiedapp.ui.activities.client.ClientActivity;
+import com.tied.android.tiedapp.ui.activities.client.AddClientActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.dialogs.SelectDataDialog;
@@ -222,7 +222,6 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
 
             String client_json = bundle.getString(Constants.CLIENT_DATA);
             client = gson.fromJson(client_json, Client.class);
-            Log.d("theclect", client.toString());
             if (client != null){
                 MyUtils.Picasso.displayImage(client.getLogo(), avatar);
                 name.setText(client.getFull_name());
@@ -276,7 +275,7 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.ok_but:
-                uri = ((ClientActivity) getActivity()).outputUri;
+                uri = ((AddClientActivity) getActivity()).outputUri;
                 if(client == null && uri == null){
                     Toast.makeText(getActivity(), "Upload user image", Toast.LENGTH_LONG).show();
                 }
@@ -542,6 +541,7 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
                     DialogUtils.closeProgress();
                     bundle.putBoolean(Constants.NO_CLIENT_FOUND, false);
                     Client.clientCreated(getActivity().getApplicationContext());
+                    bundle.putBoolean(Constants.CLIENT_EDITED, true);
                     MyUtils.startActivity(getActivity(), MainActivity.class, bundle);
                 } else {
                     DialogUtils.closeProgress();

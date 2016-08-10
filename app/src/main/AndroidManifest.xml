@@ -169,6 +169,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.tied.android.tiedapp.ui.activities.MainActivity" />
         </activity>
+
     </application>
 
 </manifest>

@@ -40,6 +40,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/action_bar_icon_height"
                     android:padding="@dimen/action_bar_icon_padding"
+                    android:onClick="goBack"
                     android:layout_marginLeft="10dp"
                     android:src="@drawable/btn_close" />
 

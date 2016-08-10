@@ -69,7 +69,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
 
     private LinearLayout tab_bar, relativeLayout, activity_layout, add_layout, more_layout, tab_actvity_schedule, alert_edit_msg;
     private RelativeLayout invite_menu;
-    private TextView txt_schedules, txt_activities;
+    private TextView txt_schedules, txt_activities, info_msg;
 
     public Bitmap bitmap;
 
@@ -138,7 +138,21 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         bundle = getIntent().getExtras();
         if(bundle == null){
             bundle = new Bundle();
+            alert_edit_msg = (LinearLayout) findViewById(R.id.alert_edit_msg);
+
         }
+
+        if(bundle.getBoolean(Constants.SCHEDULE_EDITED)){
+            ShowSuccessMessage("Schedule successfully updated",Constants.SCHEDULE_EDITED);
+        }
+
+        if(bundle.getBoolean(Constants.CLIENT_EDITED)){
+            ShowSuccessMessage("Client successfully updated",Constants.CLIENT_EDITED);
+        }
+
+
+
+
         Gson gson = new Gson();
         String user_json = gson.toJson(user);
 
@@ -399,6 +413,44 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         } else {
             drawerLayout.openDrawer(Gravity.RIGHT);
         }
+    }
+
+    public void ShowSuccessMessage(String message, final String forWhat){
+        info_msg = (TextView) findViewById(R.id.info_msg);
+        info_msg.setText(message);
+        alert_edit_msg = (LinearLayout) findViewById(R.id.alert_edit_msg);
+        final int _splashTime = 3000;
+        alert_edit_msg.setVisibility(View.VISIBLE);
+        final boolean _active = true;
+        final int time = 3000;
+        final Thread splashTread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    int waited = 0;
+                    while (_active && waited < time) {
+                        sleep(100);
+                        if (_active) {
+                            waited += 100;
+                        }
+                    }
+                } catch (final InterruptedException e) {
+                    // do nothing
+                } finally {
+
+                    runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            alert_edit_msg.setVisibility(View.GONE);
+                            bundle.putBoolean(forWhat, false);
+                        }
+                    });
+                }
+            }
+        };
+        splashTread.start();
+        alert_edit_msg.setVisibility(View.VISIBLE);
     }
 
     public void addFragment(FragmentTransaction transaction, Fragment currentFragment, Fragment targetFragment, String tag) {

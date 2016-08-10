@@ -157,7 +157,7 @@ public class DialogScheduleEventOptions implements View.OnClickListener {
                     _Meta meta = generalResponse.getMeta();
                     if (meta.getStatus_code() == 200){
                         MyUtils.showToast(meta.getUser_message());
-                        adapter.notifyDataSetChanged();
+                        adapter.remove(schedule.getId());
                     }else{
                         MyUtils.showToast("Error encountered");
                     }

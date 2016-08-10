@@ -164,6 +164,8 @@ public class Constants {
     public static final String PARTLY_CLOUDY_DAY = "partly-cloudy-day";
     public static final String PARTLY_CLOUDY_NIGHT = "partly-cloudy-night";
 
+    public static final String CLIENT_EDITED = "client_updated";
+    public static final String SCHEDULE_EDITED = "schedule_updated";
     public static final String SCHEDULE_CREATED = "a_schedule_exist";
     public static final String CLIENT_CREATED = "a_client_exist";
     public static final String NO_CLIENT_FOUND = "no_client_found";
