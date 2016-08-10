@@ -42,10 +42,10 @@ import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.client.ClientActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.ui.dialogs.SelectDataDialog;
 import com.tied.android.tiedapp.ui.fragments.ClientDatePickerFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
-import com.tied.android.tiedapp.ui.dialogs.SelectDataDialog;
-import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import org.json.JSONObject;
@@ -85,6 +85,7 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
     private EditText company,name, street, city, phone, zip, territory, fax, revenue, ytd_revenue, note;
     private LinearLayout ok_but;
     private TextView industry, line, birthday;
+    private Coordinate coordinate;
 
     Spinner stateSpinner;
 
@@ -221,15 +222,14 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
 
             String client_json = bundle.getString(Constants.CLIENT_DATA);
             client = gson.fromJson(client_json, Client.class);
-
+            Log.d("theclect", client.toString());
             if (client != null){
-                String avatarURL = Constants.GET_LOGO_ENDPOINT + "avatar_" + user.getId() + ".jpg";
-                MyUtils.Picasso.displayImage(avatarURL, avatar);
+                MyUtils.Picasso.displayImage(client.getLogo(), avatar);
                 name.setText(client.getFull_name());
                 company.setText(client.getCompany());
                 street.setText(client.getAddress().getStreet());
                 zip.setText(client.getAddress().getZip());
-                city.setText(client.getAddress().getStreet());
+                city.setText(client.getAddress().getCity());
                 stateSpinner.setSelection(adapter.getPosition(client.getAddress().getState()));
                 phone.setText(client.getPhone());
                 fax.setText(client.getFax());
@@ -428,8 +428,7 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
         }
     }
 
-    public Client initClient(){
-        Client client = new Client();
+    public Client initClient(Client client){
         client.setPhone(phoneText);
         client.setFull_name(nameText);
         client.setCompany(companyText);
@@ -446,7 +445,8 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
 
 
     private void createClient() {
-        Client client = initClient();
+        Client client = new Client();
+        client = initClient(client);
 
         File file = new File(uri.getPath());
 
@@ -490,8 +490,8 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
 
             @Override
             public void onFailure(Call<ClientRes> ClientResponseCall, Throwable t) {
-                Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
-                Log.d(TAG + " onFailure", t.toString());
+                Toast.makeText(getActivity(), "On failure create: error encountered", Toast.LENGTH_LONG).show();
+                Log.d(TAG + " onFailure create", t.toString());
                 DialogUtils.closeProgress();
             }
         });
@@ -499,12 +499,11 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
 
 
     private void editClient() {
-
-        client = initClient();
+        client = initClient(client);
 
         ClientApi clientApi = MainApplication.getInstance().getRetrofit().create(ClientApi.class);
         Call<ClientRes> response = null;
-        if(uri == null){
+        if(uri != null){
             File file = new File(uri.getPath());
 
             Log.d("Uri", uri.getPath());
@@ -523,16 +522,13 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
             final MultipartBody.Part body =
                     MultipartBody.Part.createFormData("logo", file.getName(), requestFile);
 
-            response = clientApi.createClient(user.getToken(), clientReq, body);
+            response = clientApi.editClient(user.getToken(), client.getId(), clientReq, body);
 
         }else{
-            RequestBody clientReq =
-                    RequestBody.create(
-                            MediaType.parse("multipart/form-data"), new Gson().toJson(client));
-
-            response = clientApi.editNoAvatarClient(user.getToken(), client.getId(), clientReq);
+            response = clientApi.editNoAvatarClient(user.getToken(), client.getId(), client);
         }
 
+        Log.d(TAG + " form ", user.getToken() +" "+client.toString());
         response.enqueue(new Callback<ClientRes>() {
             @Override
             public void onResponse(Call<ClientRes> call, Response<ClientRes> resResponse) {
@@ -541,8 +537,8 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
                 ClientRes clientRes = resResponse.body();
                 if (clientRes.isAuthFailed()) {
                     User.LogOut(getActivity().getApplicationContext());
-                } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 201) {
-                    Log.d(TAG + " client good", clientRes.getClient().toString());
+                } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200) {
+                    Log.d(TAG + " client updated", clientRes.getClient().toString());
                     DialogUtils.closeProgress();
                     bundle.putBoolean(Constants.NO_CLIENT_FOUND, false);
                     Client.clientCreated(getActivity().getApplicationContext());
@@ -555,8 +551,8 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
 
             @Override
             public void onFailure(Call<ClientRes> ClientResponseCall, Throwable t) {
-                Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
-                Log.d(TAG + " onFailure", t.toString());
+                Toast.makeText(getActivity(), "On failure edit: error encountered", Toast.LENGTH_LONG).show();
+                Log.d(TAG + " onFailure edit", t.toString());
                 DialogUtils.closeProgress();
             }
         });

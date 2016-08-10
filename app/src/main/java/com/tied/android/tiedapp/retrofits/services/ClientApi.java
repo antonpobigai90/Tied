@@ -1,6 +1,7 @@
 package com.tied.android.tiedapp.retrofits.services;
 
 import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.client.ClientLocation;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.responses.Count;
@@ -29,17 +30,16 @@ public interface ClientApi {
                                  @Part MultipartBody.Part file);
 
     @Multipart
-    @PUT(Constants.EDIT_CLIENT_WITH_ID)
+    @PUT(Constants.UPDATE_CLIENT_WITH_ID)
     Call<ClientRes> editClient(@Header(Constants.TOKEN_HEADER) String token,
-                                 @Part("client_id") String client_id,
+                                 @Path("client_id") String client_id,
                                  @Part("client") RequestBody client,
                                  @Part MultipartBody.Part file);
 
-    @Multipart
-    @PUT(Constants.EDIT_CLIENT_WITH_ID)
+    @PUT(Constants.UPDATE_CLIENT_WITH_ID)
     Call<ClientRes> editNoAvatarClient(@Header(Constants.TOKEN_HEADER) String token,
-                               @Part("client_id") String client_id,
-                               @Part("client") RequestBody client);
+                               @Path("client_id") String client_id,
+                               @Body Client client);
 
     @GET(Constants.USER_CLIENTS)
     Call<ClientRes> getClients(@Header(Constants.TOKEN_HEADER) String token);
