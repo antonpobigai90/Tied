@@ -20,7 +20,7 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.ui.activities.schedule.CreateAppointmentActivity;
 import com.tied.android.tiedapp.util.RoundImage;
-import com.tied.android.tiedapp.util.ScheduleDialog;
+import com.tied.android.tiedapp.ui.dialogs.ScheduleDialog;
 
 import java.util.ArrayList;
 import java.util.List;

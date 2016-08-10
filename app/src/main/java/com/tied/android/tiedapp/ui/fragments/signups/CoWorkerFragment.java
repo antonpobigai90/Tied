@@ -32,7 +32,7 @@ import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
-import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -69,6 +69,12 @@ public class CoWorkerFragment extends Fragment implements View.OnClickListener{
 
     public ImageView img_user_picture;
     private Bundle bundle;
+
+    public static Fragment newInstance(Bundle bundle) {
+        Fragment fragment=new CoWorkerFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     public CoWorkerFragment() {
     }

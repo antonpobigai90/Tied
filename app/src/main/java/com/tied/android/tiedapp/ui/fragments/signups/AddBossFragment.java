@@ -28,7 +28,7 @@ import com.tied.android.tiedapp.objects.user.Boss;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
-import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -65,6 +65,13 @@ public class AddBossFragment extends Fragment implements View.OnClickListener{
     Bundle bundle;
     // Reference to our image view we will use
     public ImageView img_user_picture;
+
+
+    public static Fragment newInstance(Bundle bundle) {
+        Fragment fragment=new AddBossFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
 
     public AddBossFragment() {

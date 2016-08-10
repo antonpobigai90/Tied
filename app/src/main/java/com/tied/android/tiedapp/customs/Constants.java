@@ -14,6 +14,7 @@ public class Constants {
     public static final String SERVER_URL = "http://tied.goattale.com:8102/api/v1/";
 
     public static final String HOST = "http://tied.goattale.com:8102/";
+//    public static final String HOST = "https://tied-api.herokuapp.com/";
 
     public static final int PORT = 3000;
     public static final String API_PATH = "api/v1/";
@@ -22,6 +23,7 @@ public class Constants {
     public static final String AUTH_REGISTER_ENDPOINT = API_PATH + "auth/register";
     public static final String AUTH_LOGIN_ENDPOINT = API_PATH + "auth/login";
     public static final String AUTH_SEND_PHONE_CODE_ENDPOINT = API_PATH + "auth/send_phone_vc";
+    public static final String AUTH_VERIFY_PHONE_CODE_ENDPOINT = API_PATH + "auth/send_phone_vc";
 
     public static final String GET_AVATAR_ENDPOINT = HOST + "uploads/avatars/";
 
@@ -37,6 +39,7 @@ public class Constants {
 
     public static final String GET_CLIENT_WITH_ID = API_PATH + "client/{client_id}";
     public static final String UPDATE_SCHEDULE_WITH_ID = API_PATH + "schedules/{schedule_id}";
+    public static final String DELETE_SCHEDULE_WITH_ID = API_PATH + "schedules/{schedule_id}";
 
     public static final String SCHEDULES = API_PATH + "schedules";
     public static final String USER_SCHEDULE = API_PATH + "users/me/schedules";
@@ -151,7 +154,7 @@ public class Constants {
     public static final String RAIN = "rain";
     public static final String CLEAR_DAY = "clear-day";
     public static final String CLEAR_NIGHT = "clear-night";
-    public static final String SNOW = "snow";
+    public static final String SNOW = "sn`ow";
     public static final String SLEET = "sleet";
     public static final String FOG = "fog";
     public static final String WIND = "wind";

@@ -21,7 +21,7 @@ import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
-import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,6 +43,11 @@ public class AddBossNowFragment extends Fragment implements View.OnClickListener
     public ImageView img_user_picture;
     private Bundle bundle;
 
+    public static Fragment newInstance(Bundle bundle) {
+        Fragment fragment=new AddBossNowFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     public AddBossNowFragment() {
     }

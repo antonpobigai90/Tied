@@ -14,7 +14,7 @@
         <ImageView
             android:id="@+id/img_activity"
             android:layout_width="30dp"
-            android:layout_height="25dp"
+            android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:src="@mipmap/sort_icon_blue" />

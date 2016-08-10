@@ -27,7 +27,7 @@ import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
 import com.tied.android.tiedapp.ui.adapters.ScheduleListAdapter;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
-import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.HelperMethods;
 
 import java.text.ParseException;

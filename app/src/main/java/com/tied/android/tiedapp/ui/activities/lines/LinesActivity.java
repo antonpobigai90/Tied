@@ -21,13 +21,13 @@ public class LinesActivity extends AppCompatActivity implements  View.OnClickLis
 
         bundle = getIntent().getExtras();
         user = MyUtils.getUserFromBundle(bundle);
-
-
         initComponent();
     }
+
     private void initComponent() {
 
     }
+
     @Override
     public void onClick(View v) {
 

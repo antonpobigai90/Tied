@@ -1,7 +1,6 @@
 package com.tied.android.tiedapp.objects.user;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -10,6 +9,7 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignInActivity;
+import com.tied.android.tiedapp.util.MyUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -128,15 +128,11 @@ public class User implements Serializable {
         User user = this;
         boolean saved = user.save(context);
         if(saved){
-
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putBoolean(Constants.LOGGED_IN_USER,true);
             editor.apply();
-
-            Intent intent = new Intent(context, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            context.startActivity(intent);
+            MyUtils.startActivity(context, MainActivity.class);
         }
     }
 
@@ -149,11 +145,7 @@ public class User implements Serializable {
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putBoolean(Constants.LOGGED_IN_USER,false);
             editor.apply();
-
-            Intent intent = new Intent(context, SignInActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            context.startActivity(intent);
+            MyUtils.startActivity(context, SignInActivity.class);
         }
     }
 

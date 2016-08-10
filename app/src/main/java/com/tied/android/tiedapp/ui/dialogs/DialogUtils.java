@@ -1,7 +1,10 @@
-package com.tied.android.tiedapp.util;
+package com.tied.android.tiedapp.ui.dialogs;
 
 import android.app.Activity;
 import android.content.Context;
+
+import com.tied.android.tiedapp.ui.dialogs.AppDialog;
+import com.tied.android.tiedapp.util.ProgressIndicator;
 
 /**
  * Created by Maulik.Joshi on 29-06-2015.

@@ -1,7 +1,6 @@
 package com.tied.android.tiedapp.ui.fragments.lines;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,19 +19,21 @@ import com.tied.android.tiedapp.ui.activities.lines.AddLinesActivity;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityAddSales;
 import com.tied.android.tiedapp.ui.adapters.RevenueAdapter;
 import com.tied.android.tiedapp.ui.fragments.MyFormFragment;
+<<<<<<< HEAD
 import com.tied.android.tiedapp.ui.fragments.sales.AddSalesFragment;
 import com.tied.android.tiedapp.util.DialogUtils;
+=======
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+>>>>>>> 2afd2a3192d5c050bb8f327ed7c37d7bdd0bd5e2
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 import okhttp3.ResponseBody;
-import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Emmanuel on 6/22/2016.

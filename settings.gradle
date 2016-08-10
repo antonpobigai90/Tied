@@ -1,2 +1,3 @@
-include ':app'
-include ':coverflow'
+include ':app', ':coverflow'
+project(':app').projectDir = new File('.idea/modules/app')
+project(':coverflow').projectDir = new File('.idea/modules/coverflow')

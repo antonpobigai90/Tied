@@ -32,7 +32,7 @@ import java.util.List;
 /**
  * Created by Daniel on 5/3/2016.
  */
-public class AddLinesActivity extends AppCompatActivity implements FragmentIterationListener, View.OnClickListener{
+public class AddLinesActivity extends AppCompatActivity implements FragmentIterationListener, View.OnClickListener {
 
     public static final String TAG = AddLinesActivity.class.getSimpleName();
     private ViewPager mViewPager;
@@ -40,9 +40,9 @@ public class AddLinesActivity extends AppCompatActivity implements FragmentItera
     private Bundle bundle;
     private User user;
     public TextView lineNameTextView;
-    public Line line=null;
+    public Line line = null;
     Gson gson = new Gson();
-    LinearLayout general_tab, revenue_tab, goal_tab, client_tab,tab_bar;
+    LinearLayout general_tab, revenue_tab, goal_tab, client_tab, tab_bar;
     List<Fragment> fragments;
 
     @Override
@@ -53,11 +53,10 @@ public class AddLinesActivity extends AppCompatActivity implements FragmentItera
 
         bundle = getIntent().getExtras();
         user = MyUtils.getUserFromBundle(bundle);
-        if(bundle!=null) {
-             line=(Line)bundle.getSerializable("line");
+        if (bundle != null) {
+            line = (Line) bundle.getSerializable("line");
 
         }
-
         initComponent();
     }
 
@@ -76,22 +75,19 @@ public class AddLinesActivity extends AppCompatActivity implements FragmentItera
         goal_tab.setOnClickListener(this);
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
-        fragments=new ArrayList<Fragment>();
+        fragments = new ArrayList<Fragment>();
         fragments.add(new GeneralFragment());
         fragments.add(new RevenueFragment());
         fragments.add(new GoalFragment());
         fragments.add(new ClientFragment());
 
 
-        mPagerAdapter = new PagerAdapter(getSupportFragmentManager(),fragments);
+        mPagerAdapter = new PagerAdapter(getSupportFragmentManager(), fragments);
         if (mViewPager != null) {
             mViewPager.setAdapter(mPagerAdapter);
             mViewPager.setCurrentItem(0);
             selectTab(tab_bar, 0);
         }
-
-
-
         onCustomSelected(mViewPager);
     }
 
@@ -113,6 +109,7 @@ public class AddLinesActivity extends AppCompatActivity implements FragmentItera
                 break;
         }
     }
+<<<<<<< HEAD
     public void reloadData() {
         //((MyFormFragment)mPagerAdapter.getItem(1)).loadData();
         for(int i=0; i<mPagerAdapter.getCount(); i++) {
@@ -127,6 +124,14 @@ public void moveNext() {
     mViewPager.setCurrentItem(mViewPager.getCurrentItem()+1);
 }
     protected void onCustomSelected(ViewPager vpPager){
+=======
+
+    public void moveNext() {
+        mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
+    }
+
+    protected void onCustomSelected(ViewPager vpPager) {
+>>>>>>> 2afd2a3192d5c050bb8f327ed7c37d7bdd0bd5e2
         // Attaching the page change listener inside the activity
         vpPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
@@ -158,7 +163,17 @@ public void moveNext() {
 
     public void setLine(Line line) {
         this.line = line;
+<<<<<<< HEAD
 
+=======
+        for (int i = 0; i < mPagerAdapter.getCount(); i++) {
+            try {
+                ((MyFormFragment) mPagerAdapter.getItem(i)).initComponents();
+            } catch (Exception e) {
+                Logger.write(e);
+            }
+        }
+>>>>>>> 2afd2a3192d5c050bb8f327ed7c37d7bdd0bd5e2
 
     }
 
@@ -166,18 +181,18 @@ public void moveNext() {
         return user;
     }
 
-    public void selectTab(LinearLayout tab_bar, int position){
+    public void selectTab(LinearLayout tab_bar, int position) {
         int index = 0;
-        for(int i = 0; i < tab_bar.getChildCount(); i++){
-            if(tab_bar.getChildAt(i) instanceof LinearLayout){
+        for (int i = 0; i < tab_bar.getChildCount(); i++) {
+            if (tab_bar.getChildAt(i) instanceof LinearLayout) {
                 LinearLayout child = (LinearLayout) tab_bar.getChildAt(i);
-                Log.d(TAG, "am here != position "+child.getChildAt(i));
+                Log.d(TAG, "am here != position " + child.getChildAt(i));
                 TextView title = (TextView) child.getChildAt(0);
                 TextView indicator = (TextView) child.getChildAt(1);
-                if(position != index){
+                if (position != index) {
                     indicator.setVisibility(View.GONE);
                     title.setTextColor(getResources().getColor(R.color.white2));
-                }else{
+                } else {
                     indicator.setVisibility(View.VISIBLE);
                     title.setTextColor(getResources().getColor(R.color.white));
                 }
@@ -194,15 +209,16 @@ public void moveNext() {
     public class PagerAdapter extends FragmentStatePagerAdapter {
 
         List<Fragment> fragmentList;
+
         public PagerAdapter(FragmentManager fm, List<Fragment> fragments) {
             super(fm);
-            this.fragmentList=fragments;
+            this.fragmentList = fragments;
         }
 
         @Override
         public Fragment getItem(int position) {
             Fragment fragment = fragmentList.get(position);
-            Log.d(TAG, "position : "+position);
+            Log.d(TAG, "position : " + position);
             /*switch (position){
                 case 0:
                     fragment = new GeneralFragment();
@@ -217,7 +233,7 @@ public void moveNext() {
                     fragment = new ClientFragment();
                     break;
             }*/
-         //   assert fragment != null;
+            //   assert fragment != null;
 //            fragment.setArguments(bundle);
             return fragment;
         }
@@ -227,9 +243,11 @@ public void moveNext() {
             return fragmentList.size();
         }
     }
+
     public void goBack(View v) {
         onBackPressed();
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();

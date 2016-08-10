@@ -21,7 +21,7 @@ import com.tied.android.tiedapp.objects.responses.SignUpLogin;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
-import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.Utility;
 
 import retrofit2.Call;
@@ -46,6 +46,12 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
 
     private String passwordText;
     private Bundle bundle;
+
+    public static Fragment newInstance (Bundle bundle) {
+        Fragment fragment=new PasswordFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     public PasswordFragment() {
     }

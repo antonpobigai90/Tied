@@ -79,7 +79,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:ems="10"
-                        android:text="k3 Eric moore"
+                        android:text=""
                         android:gravity="center"
                         android:inputType="text"
                         android:layout_toRightOf="@+id/txt_address_label"
@@ -129,7 +129,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:ems="10"
-                        android:text="Surulere"
+                        android:text=""
                         android:gravity="center"
                         android:inputType="text"
                         android:layout_toRightOf="@+id/txt_city_label"
@@ -160,7 +160,7 @@
                         android:layout_gravity="center_horizontal"
                         android:ems="10"
                         android:gravity="center"
-                        android:text="Lagos"
+                        android:text=""
                         android:inputType="text"
                         android:layout_toRightOf="@+id/txt_state_label"
                         android:layout_marginLeft="5dp"
@@ -210,7 +210,7 @@
                         android:layout_gravity="center_horizontal"
                         android:ems="10"
                         android:gravity="center"
-                        android:text="101283"
+                        android:text=""
                         android:inputType="number"
                         android:layout_toRightOf="@+id/txt_zipcode_label"
                         android:layout_marginLeft="5dp"
@@ -277,7 +277,11 @@
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+<<<<<<< HEAD
             android:onClick="onClick"
+=======
+            android:onClick="profileButtonClicked"
+>>>>>>> 2afd2a3192d5c050bb8f327ed7c37d7bdd0bd5e2
             android:background="@color/white"
             android:gravity="center_vertical"
             android:orientation="horizontal">

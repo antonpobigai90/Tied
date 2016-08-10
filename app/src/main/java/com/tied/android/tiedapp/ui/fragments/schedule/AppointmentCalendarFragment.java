@@ -46,6 +46,13 @@ public class AppointmentCalendarFragment extends Fragment implements View.OnClic
 
     private FragmentIterationListener fragmentIterationListener;
 
+    public static Fragment newInstance(Bundle bundle) {
+        Fragment fragment=new AppointmentCalendarFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
+
     public AppointmentCalendarFragment() {
     }
 

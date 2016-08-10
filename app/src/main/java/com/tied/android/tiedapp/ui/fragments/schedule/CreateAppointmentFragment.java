@@ -39,9 +39,9 @@ import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.fragments.DatePickerFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
-import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.HelperMethods;
-import com.tied.android.tiedapp.util.ScheduleNotifyDialog;
+import com.tied.android.tiedapp.ui.dialogs.ScheduleNotifyDialog;
 
 import java.io.IOException;
 import java.util.List;
@@ -83,6 +83,12 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
     ScheduleNotifyDialog alert;
 
     private FragmentIterationListener fragmentIterationListener;
+
+    public static Fragment newInstance(Bundle bundle) {
+        Fragment fragment=new CreateAppointmentFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     public CreateAppointmentFragment() {
     }

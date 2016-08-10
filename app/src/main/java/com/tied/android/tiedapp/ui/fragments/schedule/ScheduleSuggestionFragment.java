@@ -2,7 +2,6 @@ package com.tied.android.tiedapp.ui.fragments.schedule;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -37,7 +36,8 @@ import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.adapters.ClientScheduleAdapter;
 import com.tied.android.tiedapp.ui.adapters.ClientScheduleHorizontalAdapter;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
-import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.util.MyUtils;
 
 import java.util.ArrayList;
 
@@ -171,9 +171,7 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
                 nextAction(Constants.ViewSchedule,bundle);
                 break;
             case R.id.img_activity:
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                intent.putExtra(Constants.APP_DATA, bundle);
-                startActivity(intent);
+                MyUtils.startActivity(getActivity(), MainActivity.class, bundle);
                 break;
         }
     }

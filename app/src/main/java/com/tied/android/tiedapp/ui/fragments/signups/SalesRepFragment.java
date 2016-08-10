@@ -24,7 +24,7 @@ import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
-import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -54,6 +54,12 @@ public class SalesRepFragment extends Fragment implements View.OnClickListener {
     private Bundle bundle;
 
     private RequestQueue queue;
+
+    public static Fragment newInstance(Bundle bundle) {
+        Fragment fragment=new SalesRepFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     public SalesRepFragment() {
     }

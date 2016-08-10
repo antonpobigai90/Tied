@@ -26,7 +26,7 @@ import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
-import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.Utility;
 
 import java.util.ArrayList;
@@ -60,6 +60,12 @@ public class TerritoryFragment extends Fragment implements View.OnClickListener{
     Context context;
 
     ArrayList<String> territories = new ArrayList<String>();
+
+    public static Fragment newInstance (Bundle bundle) {
+        Fragment fragment=new TerritoryFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     public TerritoryFragment() {
     }

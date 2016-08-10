@@ -1,7 +1,5 @@
 package com.tied.android.tiedapp.util;
 
-import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +7,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import com.google.gson.Gson;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
@@ -19,22 +18,15 @@ import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Distance;
 import com.tied.android.tiedapp.objects._Meta;
 import com.tied.android.tiedapp.objects.user.User;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.util.EntityUtils;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import  com.tied.android.tiedapp.util.States;
-import org.apache.http.impl.client.AbstractHttpClient;
-import java.io.IOException;
+
 import java.net.URLEncoder;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 

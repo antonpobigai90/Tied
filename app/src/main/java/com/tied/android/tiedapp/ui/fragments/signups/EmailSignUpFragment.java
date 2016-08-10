@@ -31,14 +31,14 @@ import com.facebook.login.LoginResult;
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.objects.responses.CheckEmail;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.activities.signups.WalkThroughActivity;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
-import com.tied.android.tiedapp.util.AppDialog;
-import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.ui.dialogs.AppDialog;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.Utility;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterAuthToken;
@@ -83,6 +83,12 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
     private EditText email;
 
     String facebookId, firstName = "", lastName="", emailText="", avatar="";
+
+    public static Fragment newInstance (Bundle bundle) {
+        Fragment fragment=new EmailSignUpFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     public EmailSignUpFragment() {}
 
@@ -290,10 +296,6 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
                             firstName = obj.getString("first_name");
                             lastName = obj.getString("last_name");
                             emailText = obj.getString("email");
-
-                            Toast.makeText(getActivity(), emailText,Toast.LENGTH_LONG).show();
-                            Log.d("response email ", obj.getString("email")+"");
-
                             continue_action();
 
                         } catch (JSONException e) {
