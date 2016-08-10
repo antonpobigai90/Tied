@@ -26,6 +26,7 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
+import com.tied.android.tiedapp.ui.activities.client.SelectClientActivity;
 import com.tied.android.tiedapp.ui.fragments.activities.ActivityFragment;
 import com.tied.android.tiedapp.ui.fragments.client.ClientAddFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.AddressFragment;
@@ -377,6 +378,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
 
                 break;
             case R.id.client_menu:
+                MyUtils.startActivity(MainActivity.this, SelectClientActivity.class,bundle);
                 break;
 
             case R.id.img_user_picture : case R.id.user_picture_iv:

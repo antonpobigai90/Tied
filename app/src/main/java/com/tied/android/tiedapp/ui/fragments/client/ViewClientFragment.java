@@ -32,7 +32,7 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
     public static final String TAG = ViewClientFragment.class
             .getSimpleName();
 
-    public ImageView avatar;
+    public ImageView avatar,img_edit;
     private LinearLayout icon_plus, icon_call;
     private TextView btn_delete;
 
@@ -66,6 +66,7 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
         btn_delete = (TextView) view.findViewById(R.id.btn_delete);
         icon_plus = (LinearLayout) view.findViewById(R.id.icon_plus);
         icon_call = (LinearLayout) view.findViewById(R.id.icon_call);
+        img_edit = (ImageView) view.findViewById(R.id.img_edit);
 
         avatar = (ImageView) view.findViewById(R.id.avatar);
 
@@ -125,6 +126,9 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
                 color = this.getResources().getColor(R.color.green_color);
                 DialogYesNo alert_call = new DialogYesNo(getActivity(),"CALL CLIENT","Are you sure want to call this client?. Call charges may apply","YES, CALL!",color,1);
                 alert_call.showDialog();
+                break;
+            case R.id.img_edit:
+
                 break;
         }
     }
