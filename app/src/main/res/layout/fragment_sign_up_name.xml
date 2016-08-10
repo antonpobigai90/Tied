@@ -164,6 +164,7 @@
             android:layout_weight="1"
             android:background="@color/white"
             android:gravity="center_vertical"
+            android:onClick="onClick"
             android:orientation="horizontal">
 
             <de.hdodenhof.circleimageview.CircleImageView

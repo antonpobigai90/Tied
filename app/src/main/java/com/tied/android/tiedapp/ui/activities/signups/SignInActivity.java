@@ -8,15 +8,18 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import android.view.View;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
+import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.fragments.signins.DoneResetFragment;
 import com.tied.android.tiedapp.ui.fragments.signins.ResetFragment;
 import com.tied.android.tiedapp.ui.fragments.signins.SignInFragment;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
 
+import com.tied.android.tiedapp.util.MyUtils;
 import retrofit2.Retrofit;
 
 public class SignInActivity extends AppCompatActivity implements SignUpFragmentListener {
@@ -99,4 +102,11 @@ public class SignInActivity extends AppCompatActivity implements SignUpFragmentL
         launchFragment(action, bundle);
     }
 
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.profile_layout:
+                MyUtils.startActivity(this, MainActivity.class);
+                break;
+        }
+    }
 }

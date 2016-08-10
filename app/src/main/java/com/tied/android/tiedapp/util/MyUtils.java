@@ -137,6 +137,20 @@ public abstract class MyUtils {
             );
         }
     }
+    /**
+     * startActivity: starts a new activity
+     * @param a Activity  :parent activity
+     * @param newActivity Class :activity to be started
+     * @param requestCode int:bundle data to be passed
+     */
+    public static void startRequestActivity(Activity a, Class newActivity, int requestCode) {
+        Intent i = new Intent(a, newActivity);
+
+
+           // i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            a.startActivityForResult(i, requestCode);
+
+    }
     public static SharedPreferences getSharedPreferences() {
         return PreferenceManager.getDefaultSharedPreferences(MainApplication.getInstance().getApplicationContext());
     }

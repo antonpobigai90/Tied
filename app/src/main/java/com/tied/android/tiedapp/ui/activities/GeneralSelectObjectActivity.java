@@ -26,6 +26,7 @@ import com.tied.android.tiedapp.util.DialogUtils;
 
 import java.util.ArrayList;
 
+import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -223,7 +224,9 @@ public class GeneralSelectObjectActivity extends Activity
         Bundle b =new Bundle();
         b.putSerializable("selected", selectedObjects);
         intent.putExtras(b);
+        Logger.write("finishginnnnn.");
         setResult(RESULT_OK, intent);
+        finishActivity(RESULT_OK);
         finish();
     }
 

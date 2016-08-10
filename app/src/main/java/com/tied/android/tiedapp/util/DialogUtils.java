@@ -23,27 +23,16 @@ public class DialogUtils {
                         @Override
                         public void run() {
                             progressIndicator = new ProgressIndicator(context);
+                            if(!progressIndicator.isShowing()) progressIndicator.show();
                         }
                     });
                 }else {
                     progressIndicator = new ProgressIndicator(context);
+                    if(!progressIndicator.isShowing()) progressIndicator.show();
                 }
             }
-
-        if(!((Activity)context).isFinishing() && !progressIndicator.isShowing()) {
-            if(context instanceof Activity) {
-                ((Activity)context).runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        progressIndicator.show();
-                    }
-                });
-            }else{
-                progressIndicator.show();
-            }
-
-        }
     }
+
 
     public static void closeProgress(){
         if (progressIndicator != null && progressIndicator.isShowing()) {

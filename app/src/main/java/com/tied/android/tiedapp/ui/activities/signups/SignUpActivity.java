@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -27,6 +29,7 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.HelpActivity;
+import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.fragments.signups.AddBossFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.AddBossNowFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.AddInviteFragment;
@@ -49,6 +52,7 @@ import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
 import java.io.File;
 import java.io.IOException;
 
+import com.tied.android.tiedapp.util.MyUtils;
 import retrofit2.Retrofit;
 
 public class SignUpActivity extends AppCompatActivity implements SignUpFragmentListener {
@@ -308,6 +312,18 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
     public void onKeyPadClick(View v) {
         if(((VerifyCodeFragment) fragment) != null){
             ((VerifyCodeFragment) fragment).onKeyPadClick(v);
+        }
+    }
+
+    public void onClick(View v) {
+        switch(v.getId()) {
+            case R.id.profile_layout:
+                MyUtils.startActivity(this, MainActivity.class);
+                SharedPreferences.Editor e = PreferenceManager.getDefaultSharedPreferences(this).edit();
+               e.putBoolean(Constants.SPLASH_SCREEN_DONE, true);
+                e.apply();
+                finish();
+                break;
         }
     }
 

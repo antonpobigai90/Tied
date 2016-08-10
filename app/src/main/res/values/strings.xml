@@ -46,9 +46,9 @@
     <string name="str_continue">CONTINUE SETUP</string>
     <string name="str_add_picture">+ADD PICTURE</string>
     <string name="str_signup_hint3">Please tell me more about yourself so I can better server you</string>
-    <string name="str_profile">PROFILE</string>
-    <string name="str_first_name">FIRSTNAME</string>
-    <string name="str_last_name">LASTNAME</string>
+    <string name="str_profile">SKIP</string>
+    <string name="str_first_name">FIRST NAME</string>
+    <string name="str_last_name">LAST NAME</string>
     <string name="str_signup_hint4">What should I call you?</string>
     <string name="str_signup_hint5">Let me save both your phone number and fax number</string>
     <string name="str_phone">PHONE</string>
