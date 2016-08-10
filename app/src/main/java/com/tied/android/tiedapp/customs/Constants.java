@@ -161,6 +161,8 @@ public class Constants {
 
     public static final String SCHEDULE_CREATED = "a_schedule_exist";
     public static final String CLIENT_CREATED = "a_client_exist";
+    public static final String NO_CLIENT_FOUND = "no_client_found";
+    public static final String NO_SCHEDULE_FOUND = "no_schedule_found";
     public static final String LINE_CREATED = "a_line_exist";
     public static final String GOOGLE_REVERSE_GEOCODING_URL="https://maps.googleapis.com/maps/api/geocode/json?sensor=true&key=AIzaSyDdWKslIGOEWJMa5RJFwH2dowBc7rEQ14g&latlng=";
     public static PersistentCookieStore MY_COOKIE_STORE=null;

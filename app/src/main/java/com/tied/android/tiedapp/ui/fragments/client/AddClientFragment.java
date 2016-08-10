@@ -44,6 +44,7 @@ import com.tied.android.tiedapp.ui.fragments.ClientDatePickerFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.ui.dialogs.ClientSelectIndustryDialog;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.util.MyUtils;
 
 import org.json.JSONObject;
 
@@ -405,10 +406,9 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
                 } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 201) {
                     Log.d(TAG + " client good", clientRes.getClient().toString());
                     DialogUtils.closeProgress();
+                    bundle.putBoolean(Constants.NO_CLIENT_FOUND, false);
                     Client.clientCreated(getActivity().getApplicationContext());
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
+                    MyUtils.startActivity(getActivity(), MainActivity.class, bundle);
                 } else {
                     DialogUtils.closeProgress();
                     Toast.makeText(getActivity(), clientRes.getMessage(), Toast.LENGTH_LONG).show();

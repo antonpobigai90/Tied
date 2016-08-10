@@ -133,7 +133,11 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         MyUtils.Picasso.displayImage(avatarURL, drawerUserPicture);
         retrofit = MainApplication.getInstance().getRetrofit();
         service = retrofit.create(SignUpApi.class);
-        bundle = new Bundle();
+
+        bundle = getIntent().getExtras();
+        if(bundle == null){
+            bundle = new Bundle();
+        }
         Gson gson = new Gson();
         String user_json = gson.toJson(user);
 
@@ -141,12 +145,17 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         if ((new Date().getTime() - MyUtils.getLastTimeAppRan()) > 24*60*60*1000) {
             launchFragment(Constants.HomeSchedule, bundle);
             MyUtils.setLastTimeAppRan(new Date().getTime());
-        } else {
+        }
+        else if(bundle.getBoolean(Constants.NO_CLIENT_FOUND)){
+            launchFragment(Constants.ClientAdd, bundle);
+        }
+        else if(bundle.getBoolean(Constants.NO_SCHEDULE_FOUND)){
+            launchFragment(Constants.CreateSchedule, bundle);
+        }
+        else {
             launchFragment(Constants.AppointmentList, bundle);
         }
-
         activity_layout.setBackground(null);
-
     }
 
     Fragment currentFragment=null;
@@ -171,6 +180,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 fragment = fragments.get(pos);
                 break;
             case Constants.ClientAdd:
+                relativeLayout.setVisibility(View.GONE);
                 tab_actvity_schedule.setBackgroundResource(R.drawable.base_schedule);
                 if(fragments.get(pos)==null) {
                     fragments.put(pos,ClientAddFragment.newInstance(bundle) );
@@ -284,7 +294,6 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         //this.moveTaskToBack(true);
         backPressed=System.currentTimeMillis();
         return;
-
     }
 
     private void handleCrop(Uri outputUri) {

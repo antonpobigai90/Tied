@@ -67,9 +67,12 @@ public class ClientActivity extends FragmentActivity implements View.OnClickList
         this.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
         setContentView(R.layout.activity_client);
 
+        bundle = getIntent().getExtras();
+        if(bundle == null){
+            bundle = new Bundle();
+        }
         user = User.getUser(getApplicationContext());
         Client client = (Client) getIntent().getSerializableExtra(Constants.CLIENT_DATA);
-        bundle = new Bundle();
         Gson gson = new Gson();
         String user_json = gson.toJson(user);
         String client_json = gson.toJson(client);

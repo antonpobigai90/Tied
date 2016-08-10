@@ -1,22 +1,11 @@
 package com.tied.android.tiedapp.ui.activities.schedule;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
@@ -38,13 +27,10 @@ import java.util.Map;
 /**
  * Created by Daniel on 5/3/2016.
  */
-public class CreateAppointmentActivity extends FragmentActivity implements FragmentIterationListener,
-        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class CreateAppointmentActivity extends FragmentActivity implements FragmentIterationListener{
     public static final String TAG = CreateAppointmentFragment.class
             .getSimpleName();
 
-    private GoogleApiClient mGoogleApiClient;
-    private static final int FINE_LOCATION_PERMISSION = 1;
 
     private Fragment fragment = null;
     public Fragment profileFragment = null;
@@ -64,16 +50,14 @@ public class CreateAppointmentActivity extends FragmentActivity implements Fragm
         this.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
         setContentView(R.layout.activity_fragment_container);
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
-
         user = User.getUser(getApplicationContext());
         Client client = (Client) getIntent().getSerializableExtra(Constants.CLIENT_DATA);
 
-        bundle = new Bundle();
+        bundle = getIntent().getExtras();
+        if(bundle == null){
+            bundle = new Bundle();
+        }
+
         Gson gson = new Gson();
         String user_json = gson.toJson(user);
         String client_json = gson.toJson(client);
@@ -87,11 +71,6 @@ public class CreateAppointmentActivity extends FragmentActivity implements Fragm
         bundle.putString(Constants.USER_DATA, user_json);
         bundle.putString(Constants.CLIENT_DATA, client_json);
         launchFragment(Constants.CreateAppointment, bundle);
-    }
-
-    protected void onStart() {
-        mGoogleApiClient.connect();
-        super.onStart();
     }
 
     @Override
@@ -158,64 +137,6 @@ public class CreateAppointmentActivity extends FragmentActivity implements Fragm
         currentFragment=fragment;
     }
     static long backPressed=0;
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        Log.i(TAG, "connected");
-        startLocationUpdates();
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        Log.i(TAG, "connection suspended");
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Log.i(TAG, "connection failed");
-    }
-
-    protected void startLocationUpdates() {
-        LocationRequest mLocationRequest = new LocationRequest();
-        mLocationRequest.setInterval(10000);
-        mLocationRequest.setFastestInterval(5000);
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, FINE_LOCATION_PERMISSION);
-            return;
-        }
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-        if (location != null) {
-            String lat = String.valueOf(location.getLatitude());
-            String lng = String.valueOf(location.getLongitude());
-            coordinate = new Coordinate(Double.parseDouble(lat), Double.parseDouble(lng));
-            Log.d(TAG, "location coordinate ....."+coordinate);
-        } else {
-            coordinate = null;
-            Log.d(TAG, "location is null ...............");
-        }
-    }
-
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case FINE_LOCATION_PERMISSION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission was granted
-                    startLocationUpdates();
-                } else {
-                    // permission denied
-                }
-            }
-        }
-    }
-
     public void addFragment(FragmentTransaction transaction, Fragment currentFragment, Fragment targetFragment, String tag) {
 
         //transaction.setCustomAnimations(0,0,0,0);
@@ -229,10 +150,4 @@ public class CreateAppointmentActivity extends FragmentActivity implements Fragm
                     .commit();
         }
     }
-
-    protected void onStop() {
-        mGoogleApiClient.disconnect();
-        super.onStop();
-    }
-
 }
