@@ -120,6 +120,7 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
 
     public void nextAction(Bundle bundle) {
         if (mListener != null) {
+
             mListener.onFragmentInteraction(Constants.EnterCode, bundle);
         }
     }
@@ -128,10 +129,10 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
         phoneText = phone.getText().toString();
         phoneText = phoneText.replaceAll("[)(-]","").replace(" ","");
         if(phoneText.charAt(0) == '0'){
-            phoneText = "+234" + phoneText.substring(1);
+            phoneText = "+1" + phoneText.substring(1);
         }
         if(phoneText.charAt(0) != '+'){
-            phoneText = "+" +phoneText;
+            phoneText = "+1" +phoneText;
         }
 
         faxText = fax.getText().toString();
@@ -192,13 +193,20 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
                 if(getActivity() == null) return;
 
                 ServerRes ServerRes = ServerResResponse.body();
-                if(ServerRes.isSuccess()){
-                    nextAction(bundle);
-                    //Log.d(TAG +" Sms enter", ServerResResponse.body().toString());
-                    DialogUtils.closeProgress();
+                try {
+                    if (ServerRes.isSuccess()) {
 
-                }else{
-                    MyUtils.showToast(ServerRes.getMessage());
+                        Logger.write(TAG +" Sms enter", ServerResResponse.body().toString());
+                        DialogUtils.closeProgress();
+                        nextAction(bundle);
+
+                    } else {
+                        Logger.write(ServerRes.getMessage());
+                        MyUtils.showToast("An error occurred. Please try again");
+                    }
+                }catch (Exception e){
+                    Logger.write(e);
+                    MyUtils.showToast("An error occurred. Please try again");
                 }
             }
 

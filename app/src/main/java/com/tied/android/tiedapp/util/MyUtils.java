@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.ImageView;
@@ -263,6 +264,25 @@ public abstract class MyUtils {
     }
     public static String moneyFormat(double amount) {
         return NumberFormat.getCurrencyInstance(new Locale("en", "US")).format(amount);
+    }
+
+    public static String getDistance(Coordinate start, Coordinate stop) {
+        try {
+            Location mallLoc = new Location("");
+            mallLoc.setLatitude(start.getLat());
+            mallLoc.setLongitude(start.getLon());
+
+            Location userLoc = new Location("");
+            userLoc.setLatitude(stop.getLat());
+            userLoc.setLongitude(stop.getLon());
+
+            float distance = 0.621371f*(mallLoc.distanceTo(userLoc) / 1000);
+            return String.format(Locale.getDefault(), "%.0f", distance)
+                    + " km";
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            return "Unknown";
+        }
     }
 
 }

@@ -26,6 +26,7 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
+import com.tied.android.tiedapp.services.LocationService;
 import com.tied.android.tiedapp.ui.activities.client.ActivityClient;
 import com.tied.android.tiedapp.ui.activities.client.SelectClientActivity;
 import com.tied.android.tiedapp.ui.fragments.activities.ActivityFragment;
@@ -98,6 +99,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         super.onCreate(savedInstanceState);
         this.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
         setContentView(R.layout.activity_main);
+        startService(new Intent(this, LocationService.class));
 
         navigationView=(NavigationView)findViewById(R.id.navigation_view);
         drawerLayout=(DrawerLayout)findViewById(R.id.drawer);

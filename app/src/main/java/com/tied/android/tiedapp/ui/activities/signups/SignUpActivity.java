@@ -158,6 +158,7 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
                     fragment = fragments.get(pos);
                     break;
                 case Constants.EnterCode:
+                    Logger.write("FEMiiiiiiiiiiiiiiiiiiii");
                     fragments.put(pos, VerifyCodeFragment.newInstance(bundle));
                     fragment = fragments.get(pos);
                     break;

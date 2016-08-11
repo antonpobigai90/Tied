@@ -10,25 +10,36 @@
             android:background="@drawable/background"
             android:layout_height="54dp">
 
-        <LinearLayout android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      android:padding="3dp"
+        <RelativeLayout android:layout_width="140dp"
+                      android:layout_height="60dp"
+                      android:padding="0dp"
                       android:layout_margin="30dp"
                       android:layout_centerInParent="true"
-                      android:background="@drawable/white_switch_backround"
-                      android:orientation="horizontal">
+                     >
+            <ImageView android:layout_width="match_parent"
+                       android:scaleType="centerCrop"
+                       android:layout_centerVertical="true"
+                       android:src="@drawable/ic_map_tab_background"
+                       android:layout_height="50dp"/>
            <ImageView android:layout_width="60dp"
                       android:scaleType="centerCrop"
+                      android:layout_alignParentLeft="true"
+                      android:layout_alignParentBottom="true"
+                      android:layout_marginLeft="10dp"
+                      android:layout_marginBottom="8dp"
 
-                      android:layout_height="24dip"
+                      android:layout_height="50dp"
            android:src="@drawable/ic_map_active"/>
             <ImageView android:layout_width="60dp"
                        android:scaleType="centerCrop"
-
-                       android:layout_height="24dip"
+                       android:layout_alignParentBottom="true"
+                       android:layout_alignParentRight="true"
+                       android:layout_marginRight="10dp"
+                       android:layout_marginBottom="8dp"
+                       android:layout_height="50dp"
                        android:src="@drawable/ic_list_inactive"/>
                       
-        </LinearLayout>
+        </RelativeLayout>
 
         <LinearLayout
                 android:id="@+id/back_layout"
