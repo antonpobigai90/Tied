@@ -277,7 +277,6 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
             outputUri = Uri.fromFile(new File(getFilesDir(), "cropped.jpg"));
             Crop.of(selectedImage, outputUri).asSquare().start(this);
         }
-
     }
 
     public class IncomingSms extends BroadcastReceiver {
