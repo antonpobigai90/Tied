@@ -15,18 +15,16 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
-import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
+import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 import com.tied.android.tiedapp.util.Utility;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,12 +34,12 @@ import retrofit2.Response;
  */
 public class VerifyCodeFragment extends Fragment implements View.OnClickListener{
 
-    public static final String TAG = VerifyPhoneFragment.class
+    public static final String TAG = VerifyCodeFragment.class
             .getSimpleName();
 
     private SignUpFragmentListener mListener;
 
-    LinearLayout back_layout, alert_valid;
+    private LinearLayout back_layout, alert_valid;
     TextView txt_help, txt_next, txt_delete, txt_verify_code;
     StringBuffer temp = new StringBuffer();
     Context context;
@@ -73,9 +71,6 @@ public class VerifyCodeFragment extends Fragment implements View.OnClickListener
     private void initComponent(View view) {
         context = getActivity();
 
-        back_layout = (LinearLayout) view.findViewById(R.id.back_layout);
-        back_layout.setOnClickListener(this);
-
         txt_verify_code = (TextView) view.findViewById(R.id.txt_verify_code);
 
         txt_help = (TextView) view.findViewById(R.id.txt_help);
@@ -90,12 +85,12 @@ public class VerifyCodeFragment extends Fragment implements View.OnClickListener
         alert_valid = (LinearLayout) view.findViewById(R.id.alert_valid);
         alert_valid.setVisibility(View.GONE);
 
+        back_layout = (LinearLayout) view.findViewById(R.id.back_layout);
+        back_layout.setOnClickListener(this);
 
         bundle = getArguments();
         String user_json = bundle.getString(Constants.USER_DATA);
-        String ResponseBody_str = bundle.getString(Constants.SERVER_INFO);
         Gson gson = new Gson();
-        ResponseBody ResponseBody = gson.fromJson(ResponseBody_str, ResponseBody.class);
         user = gson.fromJson(user_json, User.class);
     }
 
@@ -185,15 +180,16 @@ public class VerifyCodeFragment extends Fragment implements View.OnClickListener
 
         DialogUtils.displayProgress(getActivity());
         SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
-        Call<ResponseBody> response = signUpApi.verifyPhoneCode(user.getId(),code, user.getPhone());
-        response.enqueue(new Callback<ResponseBody>() {
+        Call<ServerRes> response = signUpApi.verifyPhoneCode(user.getId(),code, user.getPhone());
+        response.enqueue(new Callback<ServerRes>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> ResponseBodyResponse) {
+            public void onResponse(Call<ServerRes> call, Response<ServerRes> serverResResponse) {
                 if(getActivity() == null) return;
+                    Logger.write(TAG +" Sms enter", serverResResponse.body().toString());
                 try {
-                    JSONObject object = new JSONObject(ResponseBodyResponse.body().toString());
-                    Log.d(TAG, "object => " +object.toString());
-                    if(object.getBoolean("success")){
+                    ServerRes serverRes = serverResResponse.body();
+                    Logger.write("Am here "+serverRes);
+                    if (serverRes.isSuccess()) {
                         bundle = getArguments();
                         Gson gson = new Gson();
                         String user_json = bundle.getString(Constants.USER_DATA);
@@ -208,19 +204,18 @@ public class VerifyCodeFragment extends Fragment implements View.OnClickListener
                         }else{
                             MyUtils.showToast("user info  was not updated");
                         }
-                    }else{
-                        DialogUtils.closeProgress();
-                        MyUtils.showToast("Error encountered");
+                    } else {
+                        Logger.write("Am here ");
+                        MyUtils.showToast("An error occurred. Please try again");
                     }
-                } catch (JSONException e) {
-                    MyUtils.showToast("Error encountered from "+e.getMessage());
-                    DialogUtils.closeProgress();
-                    e.printStackTrace();
+                }catch (Exception e){
+                    Logger.write(e);
+                    MyUtils.showToast("An error occurred. Please try again");
                 }
             }
 
             @Override
-            public void onFailure(Call<ResponseBody> ResponseBodyCall, Throwable t) {
+            public void onFailure(Call<ServerRes> serverResCall, Throwable t) {
                 MyUtils.showToast("On failure : error encountered");
                 Log.d(TAG +" onFailure", t.toString());
                 DialogUtils.closeProgress();

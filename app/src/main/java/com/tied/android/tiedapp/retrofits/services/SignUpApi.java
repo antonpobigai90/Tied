@@ -12,7 +12,6 @@ import java.util.List;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
@@ -47,7 +46,7 @@ public interface SignUpApi {
 
     @FormUrlEncoded
     @POST(Constants.AUTH_VERIFY_PHONE_CODE_ENDPOINT)
-    Call<ResponseBody> verifyPhoneCode(@Field("user_id") String user_id, @Field("code") String code, @Field("phone_number") String phone_number);
+    Call<ServerRes> verifyPhoneCode(@Field("user_id") String user_id, @Field("code") String code, @Field("phone_number") String phone_number);
 
     @Multipart
     @PUT(Constants.USER_UPDATE_INFO)

@@ -160,7 +160,7 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
                     if(saved){
                         String user_json = bundle.getString(Constants.USER_DATA);
                         User user = gson.fromJson(user_json, User.class);
-                        //Log.d(TAG +" number", phoneText);
+                        Log.d(TAG +" number", phoneText);
                         call_send_phone_vc(user);
                     }else{
                         DialogUtils.closeProgress();
@@ -189,19 +189,17 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
         Logger.write(phoneText);
         response.enqueue(new Callback<ServerRes>() {
             @Override
-            public void onResponse(Call<ServerRes> call, Response<ServerRes> ServerResResponse) {
+            public void onResponse(Call<ServerRes> call, Response<ServerRes> serverResResponse) {
                 if(getActivity() == null) return;
-
-                ServerRes ServerRes = ServerResResponse.body();
                 try {
-                    if (ServerRes.isSuccess()) {
-
-                        Logger.write(TAG +" Sms enter", ServerResResponse.body().toString());
+                    ServerRes serverRes = serverResResponse.body();
+                    Logger.write("Am here "+serverRes);
+                    if (serverRes.isSuccess()) {
+                        Logger.write(TAG +" Sms enter", serverResResponse.body().toString());
                         DialogUtils.closeProgress();
                         nextAction(bundle);
-
                     } else {
-                        Logger.write(ServerRes.getMessage());
+                        Logger.write("Am here ");
                         MyUtils.showToast("An error occurred. Please try again");
                     }
                 }catch (Exception e){

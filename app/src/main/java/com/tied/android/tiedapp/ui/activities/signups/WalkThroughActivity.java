@@ -16,6 +16,7 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
 import com.tied.android.tiedapp.util.DemoData;
+import com.tied.android.tiedapp.util.MyUtils;
 import com.tied.lib.coverflow.CoverFlow;
 import com.tied.lib.coverflow.core.PagerContainer;
 
@@ -41,15 +42,12 @@ public class WalkThroughActivity extends Activity implements View.OnClickListene
 
         User user = User.getUser(getApplicationContext());
         if(user != null && user.getId() != null && user.getSign_up_stage() < Constants.Completed){
-            Intent intent = new Intent(this, SignUpActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
+            MyUtils.startActivity(this, SignUpActivity.class);
         }else if(user != null && user.getId() != null && user.getSign_up_stage() > Constants.Password){
-            Intent intent = new Intent(this, SignInActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
+            MyUtils.startActivity(this, SignInActivity.class);
+        }else{
+            initComponent();
         }
-        initComponent();
     }
 
     public void initComponent(){

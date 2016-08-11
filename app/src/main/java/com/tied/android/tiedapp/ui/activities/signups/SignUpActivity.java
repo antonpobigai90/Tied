@@ -96,7 +96,7 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
         user = User.getUser(getApplicationContext());
         if (user != null && user.getId() != null) {
             Log.d(TAG, user.toString());
-//            user.setSign_up_stage(Constants.Picture);
+//            user.setSign_up_stage(Constants.EnterCode);
 //            user.save(getApplicationContext());
             Bundle bundle = new Bundle();
             Gson gson = new Gson();
