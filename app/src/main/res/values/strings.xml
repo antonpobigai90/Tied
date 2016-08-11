@@ -160,7 +160,7 @@
     <string name="alert_valide_name">Cannot contains invalid characters</string>
     <string name="alert_valide_name_empty">first name cannot be empty</string>
     <string name="alert_valide_no_territory">No territory inputted</string>
-    <string name="str_name">Fulll Name</string>
+    <string name="str_name">Full Name</string>
 
     <!-- Profile -->
     <string name="profile_notification">Notifications</string>
@@ -172,4 +172,5 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_send_invite">SendInviteActivity</string>
 
+    <string name="google_maps_api_key">AIzaSyC0m7wUq4hxxLG3D4YA63U6Qa4AhAFb-4M</string>
 </resources>

@@ -26,6 +26,8 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
+import com.tied.android.tiedapp.services.LocationService;
+import com.tied.android.tiedapp.ui.activities.client.ActivityClient;
 import com.tied.android.tiedapp.ui.activities.client.SelectClientActivity;
 import com.tied.android.tiedapp.ui.fragments.activities.ActivityFragment;
 import com.tied.android.tiedapp.ui.fragments.client.ClientAddFragment;
@@ -67,7 +69,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
     public Fragment profileFragment = null;
     private int fragment_index = 0;
 
-    private LinearLayout tab_bar, relativeLayout, activity_layout, add_layout, more_layout, tab_actvity_schedule, alert_edit_msg;
+    private LinearLayout tab_bar, map_tab, relativeLayout, activity_layout, add_layout, more_layout, tab_actvity_schedule, alert_edit_msg;
     private RelativeLayout invite_menu;
     private TextView txt_schedules, txt_activities, info_msg;
 
@@ -91,11 +93,13 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
     DrawerLayout drawerLayout;
     int currentFragmentID=0;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
         setContentView(R.layout.activity_main);
+        startService(new Intent(this, LocationService.class));
 
         navigationView=(NavigationView)findViewById(R.id.navigation_view);
         drawerLayout=(DrawerLayout)findViewById(R.id.drawer);
@@ -110,6 +114,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         activity_layout = (LinearLayout) findViewById(R.id.activity);
         add_layout = (LinearLayout) findViewById(R.id.add_layout);
         invite_menu = (RelativeLayout) findViewById(R.id.invite_menu);
+        map_tab = (LinearLayout) findViewById(R.id.map);
 
         add = (ImageView) findViewById(R.id.add);
         txt_activities = (TextView) findViewById(R.id.txt_activities);
@@ -126,6 +131,9 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         activity_layout.setOnClickListener(this);
         img_user_picture.setOnClickListener(this);
         invite_menu.setOnClickListener(this);
+        map_tab.setOnClickListener(this);
+
+
 
 
         Log.d(TAG, "Avatar Url : " + Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg");
@@ -403,6 +411,11 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
             case R.id.logout:
                 User.LogOut(this);
                 break;
+            case R.id.map:
+                //clearTabs();
+                //map_tab.setBackground(getResources().getDrawable(R.drawable.tab_selected));
+                MyUtils.startActivity(this, ActivityClient.class);
+                break;
         }
     }
     private void toggelDrawer() {
@@ -411,6 +424,12 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         } else {
             drawerLayout.openDrawer(Gravity.RIGHT);
         }
+    }
+    private void clearTabs() {
+        activity_layout.setBackground(null);
+        map_tab.setBackground(null);
+
+
     }
 
     public void ShowSuccessMessage(String message, final String forWhat){
