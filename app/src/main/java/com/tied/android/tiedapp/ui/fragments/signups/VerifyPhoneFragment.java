@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -24,7 +24,7 @@ public class VerifyPhoneFragment extends Fragment implements View.OnClickListene
     public static final String TAG = VerifyPhoneFragment.class
             .getSimpleName();
 
-    private SignUpFragmentListener mListener;
+    private FragmentIterationListener mListener;
 
     private RelativeLayout continue_btn;
     private EditText code;
@@ -50,8 +50,8 @@ public class VerifyPhoneFragment extends Fragment implements View.OnClickListene
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SignUpFragmentListener) {
-            mListener = (SignUpFragmentListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -60,7 +60,7 @@ public class VerifyPhoneFragment extends Fragment implements View.OnClickListene
 
     public void nextAction(int action,Bundle bundle) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(action,bundle);
+            mListener.OnFragmentInteractionListener(action,bundle);
         }
     }
 

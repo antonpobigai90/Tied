@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.tied.android.tiedapp.R;
-import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 
 /**
  * Created by ZuumaPC on 6/17/2016.
@@ -18,7 +18,7 @@ import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
 public class UIFragment extends Fragment implements View.OnClickListener {
 
 
-    private SignUpFragmentListener mListener;
+    private FragmentIterationListener mListener;
     private RelativeLayout continue_btn;
 
     public UIFragment() {
@@ -46,8 +46,8 @@ public class UIFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SignUpFragmentListener) {
-            mListener = (SignUpFragmentListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -56,7 +56,7 @@ public class UIFragment extends Fragment implements View.OnClickListener {
 
     public void nextAction(int action, Bundle bundle) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(action, bundle);
+            mListener.OnFragmentInteractionListener(action, bundle);
         }
     }
 

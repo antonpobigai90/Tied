@@ -72,7 +72,7 @@
             android:layout_weight="1"
             android:background="@color/white"
             android:gravity="center_vertical"
-            android:onClick="onClick"
+            android:onClick="profileButtonClicked"
             android:id="@+id/profile_layout">
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -128,7 +128,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="9/20"
+                    android:text="9/15"
                     android:id="@+id/textView"
                     android:layout_below="@+id/txt_continue_label"
                     android:layout_centerInParent="true" />

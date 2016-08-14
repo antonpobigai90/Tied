@@ -95,18 +95,6 @@ public class User implements Serializable {
         return gson.fromJson(json, User.class);
     }
 
-    public boolean isNewUser(Context context){
-        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return mPrefs.getBoolean(Constants.NEW_USER, false);
-    }
-
-    public void setIsNewUser(Context context){
-        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor prefsEditor = mPrefs.edit();
-        prefsEditor.putBoolean(Constants.NEW_USER, true);
-        prefsEditor.apply();
-    }
-
     public boolean save(Context context){
         User user = this;
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -120,8 +108,15 @@ public class User implements Serializable {
 
     public static boolean isUserLoggedIn(Context context){
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String json = mPrefs.getString(Constants.CURRENT_USER, "");
         return mPrefs.getBoolean(Constants.LOGGED_IN_USER, false);
+    }
+
+    public static void LogInUser(Context context){
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = mPrefs.edit();
+        editor.putBoolean(Constants.LOGGED_IN_USER,true);
+        editor.apply();
+        MyUtils.startActivity(context, MainActivity.class);
     }
 
     public void LogIn(Context context){
@@ -137,16 +132,12 @@ public class User implements Serializable {
     }
 
     public static void LogOut(Context context){
-        User user = new User();
-        boolean saved = user.save(context);
-        if(saved){
-
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putBoolean(Constants.LOGGED_IN_USER,false);
-            editor.apply();
-            MyUtils.startActivity(context, SignInActivity.class);
-        }
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        SharedPreferences.Editor prefsEditor = mPrefs.edit();
+        prefsEditor.putString(Constants.CURRENT_USER, null);
+        prefsEditor.putBoolean(Constants.LOGGED_IN_USER,false);
+        prefsEditor.apply();
+        MyUtils.startActivity(context, SignInActivity.class);
     }
 
     public String getCompany_name() {
@@ -206,7 +197,8 @@ public class User implements Serializable {
     }
 
     public String getAvatar() {
-        return avatar;
+        String avatarURL = Constants.GET_AVATAR_ENDPOINT + "avatar_" + getId() + ".jpg";
+        return avatarURL;
     }
 
     public void setAvatar(String avatar) {

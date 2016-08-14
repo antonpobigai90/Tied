@@ -22,7 +22,7 @@ import com.tied.android.tiedapp.objects.responses.LoginUser;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.signups.SignInActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
-import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.Utility;
 
@@ -38,7 +38,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
     public static final String TAG = SignInFragment.class
             .getSimpleName();
 
-    private SignUpFragmentListener mListener;
+    private FragmentIterationListener mListener;
 
     ImageView signin, signup;
     Context context;
@@ -69,8 +69,8 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SignUpFragmentListener) {
-            mListener = (SignUpFragmentListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -151,7 +151,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
 
                 break;
             case R.id.forgot_password:
-                mListener.onFragmentInteraction(Constants.Reset, null);
+                mListener.OnFragmentInteractionListener(Constants.Reset, null);
                 break;
             case R.id.signup:
                 Intent intent = new Intent(getActivity(), SignUpActivity.class);

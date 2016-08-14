@@ -17,17 +17,18 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.MyAddressAsyncTask;
-import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
-import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
+import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.util.MyUtils;
 
 import org.json.JSONObject;
 
@@ -47,7 +48,7 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
     public static final String TAG = OfficeAddressFragment.class
             .getSimpleName();
 
-    private SignUpFragmentListener mListener;
+    private FragmentIterationListener mListener;
 
     //    private Button continue_btn;
     private RelativeLayout continue_btn;
@@ -94,8 +95,8 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SignUpFragmentListener) {
-            mListener = (SignUpFragmentListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -104,7 +105,7 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
 
     public void nextAction(int action, Bundle bundle) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(action, bundle);
+            mListener.OnFragmentInteractionListener(action, bundle);
         }
     }
 
@@ -127,12 +128,7 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
         checkbox_layout.setOnClickListener(this);
 
         bundle = getArguments();
-        if (bundle != null) {
-            Gson gson = new Gson();
-            String user_json = bundle.getString(Constants.USER_DATA);
-            User user = gson.fromJson(user_json, User.class);
-            ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
-        }
+        MyUtils.initAvatar(bundle, img_user_picture);
 
         alert_valid = (LinearLayout) view.findViewById(R.id.alert_valid);
         alert_valid.setVisibility(View.GONE);
@@ -226,8 +222,7 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
                 user.setHome_address(location);
             }
 
-            SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
-            Call<ServerRes> response = signUpApi.updateUser(user);
+            Call<ServerRes> response = MainApplication.createService(SignUpApi.class).updateUser(user);
             response.enqueue(new Callback<ServerRes>() {
                 @Override
                 public void onResponse(Call<ServerRes> call, Response<ServerRes> ServerResResponse) {

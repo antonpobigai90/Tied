@@ -169,7 +169,7 @@ public class ProfileActivity extends FragmentActivity implements FragmentIterati
 
     @Override
     public void OnFragmentInteractionListener(int action, Bundle bundle) {
-        Log.d(TAG, " onFragmentInteraction " + action);
+        Log.d(TAG, " OnFragmentInteractionListener " + action);
         launchFragment(action, bundle);
     }
 

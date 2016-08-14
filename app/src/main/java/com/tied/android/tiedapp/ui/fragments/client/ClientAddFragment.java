@@ -12,9 +12,7 @@ import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-
 import com.tied.android.tiedapp.ui.activities.client.AddClientActivity;
-
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 
 /**

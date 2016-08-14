@@ -29,16 +29,16 @@ import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.gson.Gson;
+import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.responses.CheckEmail;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
-import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.activities.signups.WalkThroughActivity;
-import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
 import com.tied.android.tiedapp.ui.dialogs.AppDialog;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.Utility;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterAuthToken;
@@ -68,7 +68,7 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
     private AccessTokenTracker accessTokenTracker;
     private ProfileTracker profileTracker;
 
-    private SignUpFragmentListener mListener;
+    private FragmentIterationListener mListener;
 
     private RelativeLayout continue_btn;
     LinearLayout alert_valid_email;
@@ -107,8 +107,8 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SignUpFragmentListener) {
-            mListener = (SignUpFragmentListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -117,7 +117,7 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
 
     public void nextAction(Bundle bundle) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(Constants.Password,bundle);
+            mListener.OnFragmentInteractionListener(Constants.Password,bundle);
         }
     }
 
@@ -152,8 +152,7 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
 
     public void continue_action(){
         DialogUtils.displayProgress(getActivity());
-        SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
-        Call<CheckEmail> response = signUpApi.checkEmail(emailText);
+        Call<CheckEmail> response =  MainApplication.createService(SignUpApi.class).checkEmail(emailText);
         Log.d(TAG, response.request().url().toString());
         response.enqueue(new Callback<CheckEmail>() {
             @Override
@@ -331,6 +330,4 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
             }
         };
     }
-
-
 }

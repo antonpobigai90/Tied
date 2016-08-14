@@ -66,7 +66,6 @@ public class HomeScheduleFragment extends Fragment implements View.OnClickListen
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         initComponent(view);
     }
 

@@ -16,14 +16,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
-import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
+import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.util.MyUtils;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -45,7 +46,7 @@ public class CoWorkerCountFragment extends Fragment implements View.OnClickListe
 
     private String coWorkerCountText;
 
-    private SignUpFragmentListener mListener;
+    private FragmentIterationListener mListener;
 
     public ImageView img_user_picture;
     private Bundle bundle;
@@ -75,8 +76,8 @@ public class CoWorkerCountFragment extends Fragment implements View.OnClickListe
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SignUpFragmentListener) {
-            mListener = (SignUpFragmentListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -85,7 +86,7 @@ public class CoWorkerCountFragment extends Fragment implements View.OnClickListe
 
     public void nextAction(Bundle bundle) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(Constants.AddOptions, bundle);
+            mListener.OnFragmentInteractionListener(Constants.AddOptions, bundle);
         }
     }
 
@@ -117,12 +118,7 @@ public class CoWorkerCountFragment extends Fragment implements View.OnClickListe
         img_user_picture = (ImageView) view.findViewById(R.id.img_user_picture);
 
         bundle = getArguments();
-        if (bundle != null) {
-            Gson gson = new Gson();
-            String user_json = bundle.getString(Constants.USER_DATA);
-            User user = gson.fromJson(user_json, User.class);
-            ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
-        }
+        MyUtils.initAvatar(bundle, img_user_picture);
 
         setSelectType(0);
     }
@@ -160,8 +156,7 @@ public class CoWorkerCountFragment extends Fragment implements View.OnClickListe
         user.setCo_workers(coWorkerCountText);
         user.setSign_up_stage(Constants.AddOptions);
 
-        SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
-        Call<ServerRes> response = signUpApi.updateUser(user);
+        Call<ServerRes> response = MainApplication.createService(SignUpApi.class).updateUser(user);
         response.enqueue(new Callback<ServerRes>() {
             @Override
             public void onResponse(Call<ServerRes> call, Response<ServerRes> ServerResponseResponse) {
@@ -172,11 +167,7 @@ public class CoWorkerCountFragment extends Fragment implements View.OnClickListe
                     Bundle bundle = new Bundle();
                     boolean saved = user.save(getActivity().getApplicationContext());
                     if(saved){
-                        Gson gson = new Gson();
-                        String json = gson.toJson(user);
-                        bundle.putString(Constants.USER_DATA, json);
-                        DialogUtils.closeProgress();
-                        nextAction(bundle);
+                        User.LogInUser(getActivity().getApplicationContext());
                     }else{
                         DialogUtils.closeProgress();
                         Toast.makeText(getActivity(), "user info  was not updated", Toast.LENGTH_LONG).show();

@@ -15,10 +15,13 @@ import com.tied.android.tiedapp.util.Logger;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 import io.fabric.sdk.android.Fabric;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -31,8 +34,16 @@ public class MainApplication extends Application {
     public static final String TAG = MainApplication.class
             .getSimpleName();
 
+    private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
+    private static Retrofit.Builder builder =
+            new Retrofit.Builder()
+                    .baseUrl(Constants.HOST)
+                    .addConverterFactory(GsonConverterFactory.create());
+
     private RequestQueue mRequestQueue;
     private Retrofit retrofit;
+
 
     private static MainApplication mInstance;
 
@@ -68,6 +79,33 @@ public class MainApplication extends Application {
 //        } catch (PackageManager.NameNotFoundException | NoSuchAlgorithmException e) {
 //            Log.d("KeyHash:", e.getMessage());
 //        }
+    }
+
+    public static <S> S createService(Class<S> serviceClass) {
+        return createService(serviceClass, null);
+    }
+
+    public static <S> S createService(Class<S> serviceClass, final String authToken) {
+        if (authToken != null) {
+            httpClient.addInterceptor(new Interceptor() {
+                @Override
+                public Response intercept(Chain chain) throws IOException {
+                    okhttp3.Request original = chain.request();
+
+                    // Request customization: add request headers
+                    okhttp3.Request.Builder requestBuilder = original.newBuilder()
+                            .header("x-access-token", authToken)
+                            .method(original.method(), original.body());
+
+                    okhttp3.Request request = requestBuilder.build();
+                    return chain.proceed(request);
+                }
+            });
+        }
+
+        OkHttpClient client = httpClient.build();
+        Retrofit retrofit = builder.client(client).build();
+        return retrofit.create(serviceClass);
     }
 
     public OkHttpClient getOkHttpClient(){

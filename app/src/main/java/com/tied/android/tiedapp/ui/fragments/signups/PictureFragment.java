@@ -20,15 +20,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
+import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
-import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.util.MyUtils;
 
 import java.io.File;
 
@@ -61,7 +62,7 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
     // Reference to our image view we will use
     public ImageView avatar, img_user_picture;
 
-    private SignUpFragmentListener mListener;
+    private FragmentIterationListener mListener;
     Bundle bundle;
 
     public static Fragment newInstance (Bundle bundle) {
@@ -99,31 +100,14 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
         continue_btn.setOnClickListener(this);
 
         bundle = getArguments();
-        if (bundle != null) {
-            Gson gson = new Gson();
-            String user_json = bundle.getString(Constants.USER_DATA);
-            User user = gson.fromJson(user_json, User.class);
-            ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
-
-            if (user.getAvatar_uri() != null){
-                Uri myUri = Uri.parse(user.getAvatar_uri());
-                img_user_picture.setImageURI(myUri);
-                avatar.setImageURI(myUri);
-            }
-            else if(user.getAvatar() != null && !user.getAvatar().equals("")){
-                Picasso.with(getActivity()).
-                        load(user.getAvatar())
-                        .resize(100,100)
-                        .into(avatar);
-            }
-        }
+        MyUtils.initAvatar(bundle, img_user_picture);
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SignUpFragmentListener) {
-            mListener = (SignUpFragmentListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -132,7 +116,7 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
 
     public void nextAction(Bundle bundle) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(Constants.Name, bundle);
+            mListener.OnFragmentInteractionListener(Constants.Name, bundle);
         }
     }
 
@@ -170,9 +154,9 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
                     RequestBody.create(
                             MediaType.parse("multipart/form-data"), Constants.Name+"");
 
-            SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
             // finally, execute the request
-            Call<ServerRes> call = signUpApi.uploadAvatar(user.getToken() ,id, stage, body);
+            Call<ServerRes> call = MainApplication.createService(SignUpApi.class, user.getToken())
+                    .uploadAvatar(id, stage, body);
             call.enqueue(new Callback<ServerRes>() {
 
                 @Override

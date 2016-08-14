@@ -16,7 +16,7 @@ import android.widget.ProgressBar;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.APIManager;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.Utility;
@@ -37,7 +37,7 @@ public class ResetFragment extends Fragment implements View.OnClickListener{
     public static final String TAG = ResetFragment.class
             .getSimpleName();
 
-    private SignUpFragmentListener mListener;
+    private FragmentIterationListener mListener;
 
     private ProgressBar progressBar;
     private EditText email;
@@ -69,8 +69,8 @@ public class ResetFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SignUpFragmentListener) {
-            mListener = (SignUpFragmentListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -79,7 +79,7 @@ public class ResetFragment extends Fragment implements View.OnClickListener{
 
     public void nextAction(int action, Bundle bundle) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(action,bundle);
+            mListener.OnFragmentInteractionListener(action,bundle);
         }
     }
 

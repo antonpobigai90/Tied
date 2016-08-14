@@ -13,14 +13,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
-import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
-import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 import com.tied.android.tiedapp.util.Utility;
@@ -37,7 +37,7 @@ public class VerifyCodeFragment extends Fragment implements View.OnClickListener
     public static final String TAG = VerifyCodeFragment.class
             .getSimpleName();
 
-    private SignUpFragmentListener mListener;
+    private FragmentIterationListener mListener;
 
     private LinearLayout back_layout, alert_valid;
     TextView txt_help, txt_next, txt_delete, txt_verify_code;
@@ -97,8 +97,8 @@ public class VerifyCodeFragment extends Fragment implements View.OnClickListener
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SignUpFragmentListener) {
-            mListener = (SignUpFragmentListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -107,7 +107,7 @@ public class VerifyCodeFragment extends Fragment implements View.OnClickListener
 
     public void nextAction(int action, Bundle bundle) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(action,bundle);
+            mListener.OnFragmentInteractionListener(action,bundle);
         }
     }
 
@@ -179,13 +179,12 @@ public class VerifyCodeFragment extends Fragment implements View.OnClickListener
     private void call_verify_code(User user) {
 
         DialogUtils.displayProgress(getActivity());
-        SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
-        Call<ServerRes> response = signUpApi.verifyPhoneCode(user.getId(),code, user.getPhone());
+        Call<ServerRes> response = MainApplication.createService(SignUpApi.class)
+                .verifyPhoneCode(user.getId(),code, user.getPhone());
         response.enqueue(new Callback<ServerRes>() {
             @Override
             public void onResponse(Call<ServerRes> call, Response<ServerRes> serverResResponse) {
                 if(getActivity() == null) return;
-                    Logger.write(TAG +" Sms enter", serverResResponse.body().toString());
                 try {
                     ServerRes serverRes = serverResResponse.body();
                     Logger.write("Am here "+serverRes);
@@ -202,14 +201,17 @@ public class VerifyCodeFragment extends Fragment implements View.OnClickListener
                             bundle.putString(Constants.USER_DATA, json);
                             nextAction(Constants.OfficeAddress, bundle);
                         }else{
+                            DialogUtils.closeProgress();
                             MyUtils.showToast("user info  was not updated");
                         }
                     } else {
+                        DialogUtils.closeProgress();
                         Logger.write("Am here ");
                         MyUtils.showToast("An error occurred. Please try again");
                     }
                 }catch (Exception e){
                     Logger.write(e);
+                    DialogUtils.closeProgress();
                     MyUtils.showToast("An error occurred. Please try again");
                 }
             }

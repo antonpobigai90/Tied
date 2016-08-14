@@ -15,14 +15,15 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
-import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
+import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.util.MyUtils;
 import com.tied.android.tiedapp.util.Utility;
 
 import retrofit2.Call;
@@ -47,10 +48,9 @@ public class NameFragment extends Fragment implements View.OnClickListener {
 
     String firstNameText, lastNameText;
 
-    private SignUpFragmentListener mListener;
+    private FragmentIterationListener mListener;
 
     private Bundle bundle;
-    private User user;
 
     public static Fragment newInstance (Bundle bundle) {
         Fragment fragment=new NameFragment();
@@ -88,24 +88,14 @@ public class NameFragment extends Fragment implements View.OnClickListener {
         continue_btn.setOnClickListener(this);
 
         bundle = getArguments();
-        if (bundle != null) {
-            Gson gson = new Gson();
-            bundle = getArguments();
-            String user_json = bundle.getString(Constants.USER_DATA);
-            user = gson.fromJson(user_json, User.class);
-            first_name.setText(user.getFirst_name());
-            last_name.setText(user.getLast_name());
-            ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
-        }
-
-
+        MyUtils.initAvatar(bundle, img_user_picture);
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SignUpFragmentListener) {
-            mListener = (SignUpFragmentListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -115,17 +105,19 @@ public class NameFragment extends Fragment implements View.OnClickListener {
 
     public void nextAction(Bundle bundle) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(Constants.PhoneAndFax, bundle);
+            mListener.OnFragmentInteractionListener(Constants.PhoneAndFax, bundle);
         }
     }
 
     public void continue_action() {
         DialogUtils.displayProgress(getActivity());
+        String user_json = bundle.getString(Constants.USER_DATA);
+        final Gson gson = new Gson();
+        final User user = gson.fromJson(user_json, User.class);
         user.setFirst_name(firstNameText);
         user.setLast_name(lastNameText);
         user.setSign_up_stage(Constants.PhoneAndFax);
-        SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
-        Call<ServerRes> response = signUpApi.updateUser(user);
+        Call<ServerRes> response = MainApplication.createService(SignUpApi.class).updateUser(user);
         response.enqueue(new Callback<ServerRes>() {
             @Override
             public void onResponse(Call<ServerRes> call, Response<ServerRes> ServerResResponse) {

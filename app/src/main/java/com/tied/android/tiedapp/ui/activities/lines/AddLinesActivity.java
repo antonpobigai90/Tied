@@ -109,20 +109,23 @@ public class AddLinesActivity extends AppCompatActivity implements FragmentItera
                 break;
         }
     }
+
     public void reloadData() {
         //((MyFormFragment)mPagerAdapter.getItem(1)).loadData();
-        for(int i=0; i<mPagerAdapter.getCount(); i++) {
+        for (int i = 0; i < mPagerAdapter.getCount(); i++) {
             try {
                 ((MyFormFragment) mPagerAdapter.getItem(i)).initComponents();
-            }catch (Exception e) {
+            } catch (Exception e) {
                 Logger.write(e);
             }
         }
     }
-public void moveNext() {
-    mViewPager.setCurrentItem(mViewPager.getCurrentItem()+1);
-}
-    protected void onCustomSelected(ViewPager vpPager){
+
+    public void moveNext() {
+        mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
+    }
+
+    protected void onCustomSelected(ViewPager vpPager) {
 
         // Attaching the page change listener inside the activity
         vpPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -195,6 +198,7 @@ public void moveNext() {
 
     }
 
+
     public class PagerAdapter extends FragmentStatePagerAdapter {
 
         List<Fragment> fragmentList;
@@ -246,7 +250,7 @@ public void moveNext() {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode== Constants.ADD_SALES && resultCode==RESULT_OK) {
+        if (requestCode == Constants.ADD_SALES && resultCode == RESULT_OK) {
 
             Logger.write(data.getSerializableExtra("selected").toString());
         }

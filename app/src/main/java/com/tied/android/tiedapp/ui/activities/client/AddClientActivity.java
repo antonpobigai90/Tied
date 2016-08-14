@@ -34,7 +34,7 @@ import java.util.Map;
 /**
  * Created by Daniel on 5/3/2016.
  */
-public class AddClientActivity extends FragmentActivity implements View.OnClickListener, FragmentIterationListener{
+public class AddClientActivity extends FragmentActivity implements View.OnClickListener, FragmentIterationListener {
 
     public static final String TAG = AddClientActivity.class
             .getSimpleName();
@@ -153,7 +153,7 @@ public class AddClientActivity extends FragmentActivity implements View.OnClickL
     static long backPressed=0;
 
     public void OnFragmentInteractionListener(int action, Bundle bundle) {
-        Log.d(TAG, " onFragmentInteraction " + action);
+        Log.d(TAG, " OnFragmentInteractionListener " + action);
         launchFragment(action, bundle);
     }
 

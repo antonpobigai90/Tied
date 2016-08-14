@@ -61,8 +61,8 @@ public class Constants {
     public static final String SERVER_INFO = "server_info";
     public static final String CURRENT_USER = "current_user";
     public static final String NEW_USER = "new_user";
-    public static final String SPLASH_SCREEN_DONE = "sp lash_screen_done";
-    public static final String LOGGED_OUT_USER = "logout";
+    public static final String SPLASH_SCREEN_DONE = "sp_lash_screen_done";
+    public static final String RETURNING_USER = "returning_user";
     public static final String LOGGED_IN_USER = "login";
     public static final String AVATAR_STATE_SAVED = "avatar_state";
     public static final String EditingProfile = "editing_profile";

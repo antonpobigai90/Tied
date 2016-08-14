@@ -93,14 +93,18 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
     DrawerLayout drawerLayout;
     int currentFragmentID=0;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
         setContentView(R.layout.activity_main);
-        startService(new Intent(this, LocationService.class));
 
+        user = User.getUser(getApplicationContext());
+        if(user == null){
+            User.LogOut(getApplicationContext());
+        }
+
+        startService(new Intent(this, LocationService.class));
         navigationView=(NavigationView)findViewById(R.id.navigation_view);
         drawerLayout=(DrawerLayout)findViewById(R.id.drawer);
 
@@ -122,7 +126,6 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
 
         img_user_picture = (ImageView) findViewById(R.id.img_user_picture);
         drawerUserPicture = (ImageView) findViewById(R.id.user_picture_iv);
-        user = User.getUser(getApplicationContext());
 
         more_layout.setOnClickListener(this);
         add.setOnClickListener(this);
@@ -132,9 +135,6 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         img_user_picture.setOnClickListener(this);
         invite_menu.setOnClickListener(this);
         map_tab.setOnClickListener(this);
-
-
-
 
         Log.d(TAG, "Avatar Url : " + Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg");
         String avatarURL =Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg";
@@ -147,7 +147,6 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         if(bundle == null){
             bundle = new Bundle();
             alert_edit_msg = (LinearLayout) findViewById(R.id.alert_edit_msg);
-
         }
 
         if(bundle.getBoolean(Constants.SCHEDULE_EDITED)){
@@ -308,7 +307,6 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         }
         if(System.currentTimeMillis()-backPressed < 5000) {
             finish();
-            System.exit(0);
         }else{
             MyUtils.showToast("Press back again to exit");
         }
@@ -333,7 +331,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
 
     @Override
     public void OnFragmentInteractionListener(int action, Bundle bundle) {
-        Log.d(TAG, " onFragmentInteraction " + action);
+        Log.d(TAG, " OnFragmentInteractionListener " + action);
         launchFragment(action, bundle);
     }
 

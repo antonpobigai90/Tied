@@ -1,12 +1,10 @@
 package com.tied.android.tiedapp.ui.fragments.schedule;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -19,7 +17,6 @@ import android.view.animation.TranslateAnimation;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.user.User;

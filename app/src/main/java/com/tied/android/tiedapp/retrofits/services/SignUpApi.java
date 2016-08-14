@@ -17,7 +17,6 @@ import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -50,7 +49,7 @@ public interface SignUpApi {
 
     @Multipart
     @PUT(Constants.USER_UPDATE_INFO)
-    Call<ServerRes> uploadAvatar(@Header(Constants.TOKEN_HEADER) String token, @Part("id") RequestBody id, @Part("sign_up_stage") RequestBody sign_up_stage, @Part MultipartBody.Part file);
+    Call<ServerRes> uploadAvatar(@Part("id") RequestBody id, @Part("sign_up_stage") RequestBody sign_up_stage, @Part MultipartBody.Part file);
 
     @PUT(Constants.USER_UPDATE_INFO)
     Call<ServerRes> updateUser(@Body User user);

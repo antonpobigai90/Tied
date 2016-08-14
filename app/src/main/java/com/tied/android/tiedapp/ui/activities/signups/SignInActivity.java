@@ -17,12 +17,12 @@ import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.fragments.signins.DoneResetFragment;
 import com.tied.android.tiedapp.ui.fragments.signins.ResetFragment;
 import com.tied.android.tiedapp.ui.fragments.signins.SignInFragment;
-import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 
 import com.tied.android.tiedapp.util.MyUtils;
 import retrofit2.Retrofit;
 
-public class SignInActivity extends AppCompatActivity implements SignUpFragmentListener {
+public class SignInActivity extends AppCompatActivity implements FragmentIterationListener {
 
     public static final String TAG = SignInActivity.class
             .getSimpleName();
@@ -97,8 +97,8 @@ public class SignInActivity extends AppCompatActivity implements SignUpFragmentL
     }
 
     @Override
-    public void onFragmentInteraction(int action, Bundle bundle) {
-        Log.d(TAG, " onFragmentInteraction " + action);
+    public void OnFragmentInteractionListener(int action, Bundle bundle) {
+        Log.d(TAG, " OnFragmentInteractionListener " + action);
         launchFragment(action, bundle);
     }
 

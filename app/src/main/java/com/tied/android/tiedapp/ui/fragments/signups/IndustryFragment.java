@@ -18,15 +18,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.model.DataModel;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
-import com.tied.android.tiedapp.ui.activities.ProfileActivity;
-import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import java.util.ArrayList;
@@ -115,25 +115,13 @@ public class IndustryFragment extends Fragment implements View.OnClickListener {
         bundle = getArguments();
         editProfile = bundle.getBoolean(Constants.EditingProfile);
         if(editProfile){
-            signUpApi = ((ProfileActivity) getActivity()).service;
             iniEditProfileComponent(view);
-        }else{
-            signUpApi = ((ProfileActivity) getActivity()).service;
         }
         continue_btn = (RelativeLayout) view.findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(this);
 
         img_user_picture = (ImageView) view.findViewById(R.id.img_user_picture);
-        if (bundle != null) {
-            Gson gson = new Gson();
-            String user_json = bundle.getString(Constants.USER_DATA);
-            User user = gson.fromJson(user_json, User.class);
-            if(editProfile){
-                MyUtils.Picasso.displayImage(Constants.GET_AVATAR_ENDPOINT+user.getAvatar(), img_user_picture);
-            }else{
-                MyUtils.Picasso.displayImage(Constants.GET_AVATAR_ENDPOINT+user.getAvatar(), img_user_picture);
-            }
-        }
+        MyUtils.initAvatar(bundle, img_user_picture);
 
         industry_listview = (ListView) view.findViewById(R.id.industry_listview);
         industry_adapter = new SearchAdapter(industry_data, getActivity());
@@ -153,7 +141,7 @@ public class IndustryFragment extends Fragment implements View.OnClickListener {
             }
         });
         DialogUtils.displayProgress(getActivity());
-        Call<List<DataModel>> response = signUpApi.getIndustries();
+        Call<List<DataModel>> response = MainApplication.createService(SignUpApi.class).getIndustries();
         response.enqueue(new Callback<List<DataModel>>() {
             @Override
             public void onResponse(Call<List<DataModel>> call, Response<List<DataModel>> listResponse) {
@@ -239,7 +227,7 @@ public class IndustryFragment extends Fragment implements View.OnClickListener {
             final User user = gson.fromJson(user_json, User.class);
             user.setIndustries(industries);
             user.setSign_up_stage(Constants.AddBoss);
-            Call<ServerRes> response = signUpApi.updateUser(user);
+            Call<ServerRes> response = MainApplication.createService(SignUpApi.class).updateUser(user);
             response.enqueue(new Callback<ServerRes>() {
                 @Override
                 public void onResponse(Call<ServerRes> call, Response<ServerRes> ServerResponseResponse) {

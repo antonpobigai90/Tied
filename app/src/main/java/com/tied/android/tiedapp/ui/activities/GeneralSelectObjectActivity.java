@@ -7,7 +7,11 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
@@ -20,14 +24,14 @@ import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.ui.adapters.MyClientLineAdapter;
-import com.tied.android.tiedapp.ui.fragments.client.SelectClientListFragment;
-import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.ui.fragments.client.tab.LastVisitedClientListFragment;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.util.Logger;
+import com.tied.android.tiedapp.util.MyUtils;
 
 import java.util.ArrayList;
 
-import com.tied.android.tiedapp.util.Logger;
-import com.tied.android.tiedapp.util.MyUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -38,7 +42,7 @@ import retrofit2.Response;
 public class GeneralSelectObjectActivity extends Activity
         implements View.OnClickListener, AdapterView.OnItemClickListener{
 
-    public static final String TAG = SelectClientListFragment.class
+    public static final String TAG = LastVisitedClientListFragment.class
             .getSimpleName();
 
 

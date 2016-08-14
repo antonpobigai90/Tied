@@ -14,7 +14,7 @@ import java.util.ArrayList;
 /**
  * Created by Emmanuel on 6/28/2016.
  */
-public class Client implements Serializable {
+public class Client implements Serializable, Comparable<Client>{
 
     public static final String TAG = Client.class.getSimpleName();
 
@@ -237,5 +237,10 @@ public class Client implements Serializable {
                 ", dis_from=" + dis_from +
                 ", _score=" + _score +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Client client) {
+        return getFull_name().toUpperCase().compareTo(client.getFull_name().toUpperCase());
     }
 }

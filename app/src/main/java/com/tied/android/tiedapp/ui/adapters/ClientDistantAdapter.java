@@ -1,8 +1,6 @@
 package com.tied.android.tiedapp.ui.adapters;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +8,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.Distance;
 import com.tied.android.tiedapp.objects.client.Client;
+import com.tied.android.tiedapp.util.MyUtils;
 import com.tied.android.tiedapp.util.RoundImage;
 
 import java.util.ArrayList;
@@ -24,8 +21,8 @@ import java.util.Locale;
 /**
  * Created by Emmanuel on 6/28/2016.
  */
-public class ClientAdapter extends BaseAdapter {
-    public static final String TAG = ClientAdapter.class
+public class ClientDistantAdapter extends BaseAdapter {
+    public static final String TAG = ClientDistantAdapter.class
             .getSimpleName();
 
     public List _data;
@@ -34,7 +31,7 @@ public class ClientAdapter extends BaseAdapter {
     ViewHolder v;
     RoundImage roundedImage;
 
-    public ClientAdapter(ArrayList clients, Context context) {
+    public ClientDistantAdapter(ArrayList clients, Context context) {
         _data = clients;
         _c = context;
         this.arraylist = clients;
@@ -70,21 +67,7 @@ public class ClientAdapter extends BaseAdapter {
             name.setText(data.getFull_name());
 
             address.setText(data.getAddress().getLocationAddress());
-
-            String logo = data.getLogo().equals("") ? null  : data.getLogo();
-            Picasso.with(_c).
-                    load(logo)
-                    .into(new Target() {
-                        @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                            if (bitmap != null){
-                                imageView.setImageBitmap(bitmap);
-                            }else{
-                                imageView.setImageResource(R.mipmap.default_avatar);
-                            }
-                        }
-                        @Override public void onBitmapFailed(Drawable errorDrawable) { }
-                        @Override public void onPrepareLoad(Drawable placeHolderDrawable) { }
-                    });
+            MyUtils.Picasso.displayImage(data.getLogo(),imageView);
 
         } else {
             final Distance distance = (Distance) _data.get(i);
@@ -95,44 +78,6 @@ public class ClientAdapter extends BaseAdapter {
         }
         return view;
     }
-
-//    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-//    @Override
-//    public View getView(int i, View convertView, ViewGroup viewGroup) {
-//        View view = convertView;
-//        if (view == null) {
-//            LayoutInflater li = (LayoutInflater) _c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//            view = li.inflate(R.layout.schedule_select_client_list_item, viewGroup,false);
-//        } else {
-//            view = convertView;
-//        }
-//        v = new ViewHolder();
-//        v.name = (TextView) view.findViewById(R.id.name);
-//        v.address = (TextView) view.findViewById(R.id.address);
-//        v.imageView = (ImageView) view.findViewById(R.id.pic);
-//
-//        final Client data = (Client) _data.get(i);
-//        v.name.setText(data.getFull_name());
-//
-//        v.address.setText(data.getAddress().getLocationAddress());
-//
-//        String logo = data.getLogo().equals("") ? null  : data.getLogo();
-//        Picasso.with(_c).
-//                load(logo)
-//                .into(new Target() {
-//                    @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-//                        if (bitmap != null){
-//                            v.imageView.setImageBitmap(bitmap);
-//                        }else{
-//                            v.imageView.setImageResource(R.mipmap.default_avatar);
-//                        }
-//                    }
-//                    @Override public void onBitmapFailed(Drawable errorDrawable) { }
-//                    @Override public void onPrepareLoad(Drawable placeHolderDrawable) { }
-//                });
-//        view.setTag(data);
-//        return view;
-//    }
 
     // Filter Class
     public void filter(String charText) {

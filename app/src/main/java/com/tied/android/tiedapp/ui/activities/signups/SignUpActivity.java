@@ -4,11 +4,9 @@ import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -20,16 +18,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.soundcloud.android.crop.Crop;
 import com.squareup.picasso.Picasso;
-import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.HelpActivity;
-import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.fragments.signups.AddBossFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.AddBossNowFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.AddInviteFragment;
@@ -47,7 +41,7 @@ import com.tied.android.tiedapp.ui.fragments.signups.PictureFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.SalesRepFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.TerritoryFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.VerifyCodeFragment;
-import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 
@@ -56,9 +50,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import retrofit2.Retrofit;
-
-public class SignUpActivity extends AppCompatActivity implements SignUpFragmentListener {
+public class SignUpActivity extends AppCompatActivity implements FragmentIterationListener {
 
     public static final String TAG = SignUpActivity.class
             .getSimpleName();
@@ -80,11 +72,7 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
     public Bitmap bitmap;
     Map<Integer, Fragment> fragments = new HashMap<Integer, Fragment>();
 
-    public Retrofit retrofit;
-    public SignUpApi service;
-
     private Bundle bundle;
-    private User user;
 
     public Uri imageUri = null, outputUri = null;
 
@@ -92,24 +80,15 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-
-        user = User.getUser(getApplicationContext());
-        if (user != null && user.getId() != null) {
-            Log.d(TAG, user.toString());
-//            user.setSign_up_stage(Constants.EnterCode);
-//            user.save(getApplicationContext());
-            Bundle bundle = new Bundle();
-            Gson gson = new Gson();
-            String user_json = gson.toJson(user);
-            bundle.putString(Constants.USER_DATA, user_json);
-            launchFragment(user.getSign_up_stage(), bundle);
-        } else {
-            launchFragment(Constants.EmailSignUp, null);
-        }
-
-        retrofit = MainApplication.getInstance().getRetrofit();
-        service = retrofit.create(SignUpApi.class);
+//        User user = User.getUser(getApplicationContext());
+//        Log.d(TAG, user.toString());
+//        Gson gson = new Gson();
+//        String user_json = gson.toJson(user);
+//        bundle = new Bundle();
+//        bundle.putString(Constants.USER_DATA, user_json);
+        launchFragment(Constants.EmailSignUp, bundle);
     }
+
 
     public void loadAvatar(User user, ImageView img_user_picture) {
         if (user.getAvatar_uri() != null) {
@@ -232,7 +211,7 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
     }
 
     @Override
-    public void onFragmentInteraction(int action, Bundle bundle) {
+    public void OnFragmentInteractionListener(int action, Bundle bundle) {
         switch (action) {
             case Constants.USE_ADDRESS_NAME:
                 break;
@@ -288,7 +267,6 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
 
             // Retrieves a map of extended data from the intent.
             final Bundle bundle = intent.getExtras();
-
             try {
 
                 if (bundle != null) {
@@ -315,7 +293,6 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
 
             } catch (Exception e) {
                 Log.e("SmsReceiver", "Exception smsReceiver" + e);
-
             }
         }
     }
@@ -342,22 +319,15 @@ public class SignUpActivity extends AppCompatActivity implements SignUpFragmentL
 
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.profile_layout:
-                MyUtils.startActivity(this, MainActivity.class);
-                SharedPreferences.Editor e = PreferenceManager.getDefaultSharedPreferences(this).edit();
-                e.putBoolean(Constants.SPLASH_SCREEN_DONE, true);
-                e.apply();
-                finish();
-                break;
+
         }
     }
 
     public void helpButtonClicked(View v) {
-        Intent invite_intent = new Intent(this, HelpActivity.class);
-        startActivity(invite_intent);
+        MyUtils.startActivity(this, HelpActivity.class);
     }
 
     public void profileButtonClicked(View v) {
-        user.LogIn(this);
+        User.LogInUser(getApplicationContext());
     }
 }

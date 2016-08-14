@@ -14,14 +14,14 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.objects.responses.SignUpLogin;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
-import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
+import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.Utility;
 
 import retrofit2.Call;
@@ -36,7 +36,7 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
     public static final String TAG = PasswordFragment.class
             .getSimpleName();
 
-    private SignUpFragmentListener mListener;
+    private FragmentIterationListener mListener;
 
 //    private Button continue_btn;
     private LinearLayout back_btn;
@@ -86,8 +86,8 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SignUpFragmentListener) {
-            mListener = (SignUpFragmentListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -96,7 +96,7 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
 
     public void nextAction(int action, Bundle bundle) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(action, bundle);
+            mListener.OnFragmentInteractionListener(action, bundle);
         }
     }
 
@@ -106,8 +106,8 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
         final String user_json = bundle.getString(Constants.USER_DATA);
         final User user = gson.fromJson(user_json, User.class);
         Log.d(TAG, user.toString());
-        SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
-        Call<SignUpLogin> response = signUpApi.LoginSignUpUser(user.getEmail(), passwordText, Constants.Picture);
+        Call<SignUpLogin> response = MainApplication.createService(SignUpApi.class)
+                .LoginSignUpUser(user.getEmail(), passwordText, Constants.Picture);
         Log.d(TAG, response.request().url().toString());
         response.enqueue(new Callback<SignUpLogin>() {
             @Override
@@ -147,7 +147,6 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
             }
         });
     }
-
 
     @Override
     public void onClick(View v) {

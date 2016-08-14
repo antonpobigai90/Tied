@@ -17,17 +17,15 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.google.gson.Gson;
+import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
-import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
-import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
-
-import com.tied.android.tiedapp.util.Logger;
-
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 import com.tied.android.tiedapp.util.Utility;
 
@@ -53,7 +51,7 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
     public ImageView img_user_picture;
     private Bundle bundle;
 
-    private SignUpFragmentListener mListener;
+    private FragmentIterationListener mListener;
 
     public static Fragment newInstance (Bundle bundle) {
         Fragment fragment=new PhoneFaxFragment();
@@ -91,16 +89,8 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
         continue_btn.setOnClickListener(this);
 
         img_user_picture = (ImageView) view.findViewById(R.id.img_user_picture);
-
         bundle = getArguments();
-        if(bundle != null){
-            Gson gson = new Gson();
-            String user_json = bundle.getString(Constants.USER_DATA);
-            User user = gson.fromJson(user_json, User.class);
-            phone.setText(user.getPhone());
-            fax.setText(user.getFax());
-            ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
-        }
+        MyUtils.initAvatar(bundle, img_user_picture);
 
         phone.addTextChangedListener(new PhoneNumberFormattingTextWatcher("US"));
 //        fax.addTextChangedListener(new FaxNumberTextWatcher(fax));
@@ -110,8 +100,8 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SignUpFragmentListener) {
-            mListener = (SignUpFragmentListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -121,7 +111,7 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
     public void nextAction(Bundle bundle) {
         if (mListener != null) {
 
-            mListener.onFragmentInteraction(Constants.EnterCode, bundle);
+            mListener.OnFragmentInteractionListener(Constants.EnterCode, bundle);
         }
     }
     
@@ -147,8 +137,7 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
         user.setFax(faxText);
         user.setSign_up_stage(Constants.EnterCode);
 
-        SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
-        Call<ServerRes> response = signUpApi.updateUser(user);
+        Call<ServerRes> response = MainApplication.createService(SignUpApi.class).updateUser(user);
         response.enqueue(new Callback<ServerRes>() {
             @Override
             public void onResponse(Call<ServerRes> call, Response<ServerRes> ServerResResponse) {
@@ -183,9 +172,7 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
     }
 
     private void call_send_phone_vc(User user) {
-
-        SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
-        Call<ServerRes> response = signUpApi.sendPhoneCode(user.getId(), phoneText);
+        Call<ServerRes> response = MainApplication.createService(SignUpApi.class).sendPhoneCode(user.getId(), phoneText);
         Logger.write(phoneText);
         response.enqueue(new Callback<ServerRes>() {
             @Override

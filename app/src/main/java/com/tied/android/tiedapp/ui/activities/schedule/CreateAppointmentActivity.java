@@ -27,7 +27,7 @@ import java.util.Map;
 /**
  * Created by Daniel on 5/3/2016.
  */
-public class CreateAppointmentActivity extends FragmentActivity implements FragmentIterationListener{
+public class CreateAppointmentActivity extends FragmentActivity implements FragmentIterationListener {
     public static final String TAG = CreateAppointmentFragment.class
             .getSimpleName();
 
@@ -75,7 +75,7 @@ public class CreateAppointmentActivity extends FragmentActivity implements Fragm
 
     @Override
     public void OnFragmentInteractionListener(int action, Bundle bundle) {
-        Log.d(TAG, " onFragmentInteraction " + action);
+        Log.d(TAG, " OnFragmentInteractionListener " + action);
         launchFragment(action, bundle);
     }
 
