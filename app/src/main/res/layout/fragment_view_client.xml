@@ -195,94 +195,94 @@
                 android:paddingBottom="5dp"
                 android:paddingLeft="10dp">
 
-                <RelativeLayout
-                    android:id="@+id/total_sales"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp">
+                <!--<RelativeLayout-->
+                    <!--android:id="@+id/total_sales"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:paddingBottom="10dp"-->
+                    <!--android:paddingTop="10dp">-->
 
-                    <ImageView
-                        android:id="@+id/ring_total_sales"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:src="@mipmap/ring_red" />
+                    <!--<ImageView-->
+                        <!--android:id="@+id/ring_total_sales"-->
+                        <!--android:layout_width="25dp"-->
+                        <!--android:layout_height="25dp"-->
+                        <!--android:src="@mipmap/ring_red" />-->
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="15dp"
-                        android:layout_toRightOf="@+id/ring_total_sales"
-                        android:orientation="vertical">
-
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_toLeftOf="@+id/sales_right"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerVertical="true"
-                                    android:text="Total Sales"
-                                    android:textStyle="bold"
-                                    android:textColor="@color/schedule_title_bg_color"
-                                    android:textSize="16sp" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerVertical="true"
-                                    android:text="How much you made from this client till date"
-                                    android:textColor="@color/schedule_title_bg_color"
-                                    android:textSize="11sp" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/sales_right"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
-                                android:layout_centerVertical="true"
-                                android:layout_marginRight="10dp"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:id="@+id/sales_amount"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="$2,202,298"
-                                    android:layout_gravity="center_vertical"
-                                    android:textSize="12sp"
-                                    android:textColor="@color/schedule_title_bg_color"/>
-
-                                <ImageView
-                                    android:id="@+id/sales_arrow"
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
-                                    android:src="@mipmap/right_arrow" />
-
-                            </LinearLayout>
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:layout_marginLeft="15dp"-->
+                        <!--android:layout_toRightOf="@+id/ring_total_sales"-->
+                        <!--android:orientation="vertical">-->
 
 
+                        <!--<RelativeLayout-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content">-->
 
-                        </RelativeLayout>
+                            <!--<LinearLayout-->
+                                <!--android:layout_width="match_parent"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_toLeftOf="@+id/sales_right"-->
+                                <!--android:orientation="vertical">-->
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.1dp"
-                            android:layout_marginTop="5dp"
-                            android:background="@android:color/darker_gray" />
-                    </LinearLayout>
+                                <!--<TextView-->
+                                    <!--android:layout_width="wrap_content"-->
+                                    <!--android:layout_height="wrap_content"-->
+                                    <!--android:layout_centerVertical="true"-->
+                                    <!--android:text="Total Sales"-->
+                                    <!--android:textStyle="bold"-->
+                                    <!--android:textColor="@color/schedule_title_bg_color"-->
+                                    <!--android:textSize="16sp" />-->
 
-                </RelativeLayout>
+                                <!--<TextView-->
+                                    <!--android:layout_width="wrap_content"-->
+                                    <!--android:layout_height="wrap_content"-->
+                                    <!--android:layout_centerVertical="true"-->
+                                    <!--android:text="How much you made from this client till date"-->
+                                    <!--android:textColor="@color/schedule_title_bg_color"-->
+                                    <!--android:textSize="11sp" />-->
+
+                            <!--</LinearLayout>-->
+
+                            <!--<LinearLayout-->
+                                <!--android:id="@+id/sales_right"-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_alignParentRight="true"-->
+                                <!--android:layout_centerVertical="true"-->
+                                <!--android:layout_marginRight="10dp"-->
+                                <!--android:orientation="horizontal">-->
+
+                                <!--<TextView-->
+                                    <!--android:id="@+id/sales_amount"-->
+                                    <!--android:layout_width="wrap_content"-->
+                                    <!--android:layout_height="wrap_content"-->
+                                    <!--android:text="$2,202,298"-->
+                                    <!--android:layout_gravity="center_vertical"-->
+                                    <!--android:textSize="12sp"-->
+                                    <!--android:textColor="@color/schedule_title_bg_color"/>-->
+
+                                <!--<ImageView-->
+                                    <!--android:id="@+id/sales_arrow"-->
+                                    <!--android:layout_width="20dp"-->
+                                    <!--android:layout_height="20dp"-->
+                                    <!--android:src="@mipmap/right_arrow" />-->
+
+                            <!--</LinearLayout>-->
+
+
+
+                        <!--</RelativeLayout>-->
+
+                        <!--<View-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="0.1dp"-->
+                            <!--android:layout_marginTop="5dp"-->
+                            <!--android:background="@android:color/darker_gray" />-->
+                    <!--</LinearLayout>-->
+
+                <!--</RelativeLayout>-->
 
                 <RelativeLayout
                     android:id="@+id/schedule"
@@ -365,86 +365,86 @@
 
                 </RelativeLayout>
 
-                <RelativeLayout
-                    android:id="@+id/specials"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp">
+                <!--<RelativeLayout-->
+                    <!--android:id="@+id/specials"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:paddingBottom="10dp"-->
+                    <!--android:paddingTop="10dp">-->
 
-                    <ImageView
-                        android:id="@+id/ring_special"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:src="@mipmap/ring_orange" />
+                    <!--<ImageView-->
+                        <!--android:id="@+id/ring_special"-->
+                        <!--android:layout_width="25dp"-->
+                        <!--android:layout_height="25dp"-->
+                        <!--android:src="@mipmap/ring_orange" />-->
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="15dp"
-                        android:layout_toRightOf="@+id/ring_special"
-                        android:orientation="vertical">
-
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_toLeftOf="@+id/layout_special_right"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerVertical="true"
-                                    android:text="Special"
-                                    android:textStyle="bold"
-                                    android:textColor="@color/schedule_title_bg_color"
-                                    android:textSize="16sp" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerVertical="true"
-                                    android:text="You have 10 upcoming"
-                                    android:textColor="@color/schedule_title_bg_color"
-                                    android:textSize="11sp" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/layout_special_right"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
-                                android:layout_centerVertical="true"
-                                android:layout_marginRight="10dp"
-                                android:orientation="horizontal">
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="match_parent"-->
+                        <!--android:layout_marginLeft="15dp"-->
+                        <!--android:layout_toRightOf="@+id/ring_special"-->
+                        <!--android:orientation="vertical">-->
 
 
-                                <ImageView
-                                    android:id="@+id/special_arrow"
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
-                                    android:src="@mipmap/right_arrow" />
+                        <!--<RelativeLayout-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content">-->
 
-                            </LinearLayout>
+                            <!--<LinearLayout-->
+                                <!--android:layout_width="match_parent"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_toLeftOf="@+id/layout_special_right"-->
+                                <!--android:orientation="vertical">-->
+
+                                <!--<TextView-->
+                                    <!--android:layout_width="wrap_content"-->
+                                    <!--android:layout_height="wrap_content"-->
+                                    <!--android:layout_centerVertical="true"-->
+                                    <!--android:text="Special"-->
+                                    <!--android:textStyle="bold"-->
+                                    <!--android:textColor="@color/schedule_title_bg_color"-->
+                                    <!--android:textSize="16sp" />-->
+
+                                <!--<TextView-->
+                                    <!--android:layout_width="wrap_content"-->
+                                    <!--android:layout_height="wrap_content"-->
+                                    <!--android:layout_centerVertical="true"-->
+                                    <!--android:text="You have 10 upcoming"-->
+                                    <!--android:textColor="@color/schedule_title_bg_color"-->
+                                    <!--android:textSize="11sp" />-->
+
+                            <!--</LinearLayout>-->
+
+                            <!--<LinearLayout-->
+                                <!--android:id="@+id/layout_special_right"-->
+                                <!--android:layout_width="wrap_content"-->
+                                <!--android:layout_height="wrap_content"-->
+                                <!--android:layout_alignParentRight="true"-->
+                                <!--android:layout_centerVertical="true"-->
+                                <!--android:layout_marginRight="10dp"-->
+                                <!--android:orientation="horizontal">-->
+
+
+                                <!--<ImageView-->
+                                    <!--android:id="@+id/special_arrow"-->
+                                    <!--android:layout_width="20dp"-->
+                                    <!--android:layout_height="20dp"-->
+                                    <!--android:src="@mipmap/right_arrow" />-->
+
+                            <!--</LinearLayout>-->
 
 
 
-                        </RelativeLayout>
+                        <!--</RelativeLayout>-->
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.1dp"
-                            android:layout_marginTop="5dp"
-                            android:background="@android:color/darker_gray" />
-                    </LinearLayout>
+                        <!--<View-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="0.1dp"-->
+                            <!--android:layout_marginTop="5dp"-->
+                            <!--android:background="@android:color/darker_gray" />-->
+                    <!--</LinearLayout>-->
 
-                </RelativeLayout>
+                <!--</RelativeLayout>-->
 
                 <RelativeLayout
                     android:id="@+id/important_info"

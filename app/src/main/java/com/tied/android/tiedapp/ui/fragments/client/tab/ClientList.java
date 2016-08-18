@@ -26,7 +26,7 @@ import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
-import com.tied.android.tiedapp.ui.activities.schedule.CreateAppointmentActivity;
+import com.tied.android.tiedapp.ui.activities.client.AddClientActivity;
 import com.tied.android.tiedapp.ui.adapters.ClientListAdapter;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
@@ -92,7 +92,8 @@ public class ClientList extends Fragment implements AdapterView.OnItemClickListe
         if(clientsList.get(position) instanceof Client){
             Client data = (Client) clientsList.get(position);
 
-            Intent intent = new Intent(getActivity(), CreateAppointmentActivity.class);
+//            Intent intent = new Intent(getActivity(), CreateAppointmentActivity.class);
+            Intent intent = new Intent(getActivity(), AddClientActivity.class);
 
             intent.putExtra(Constants.CLIENT_DATA, data);
             startActivity(intent);

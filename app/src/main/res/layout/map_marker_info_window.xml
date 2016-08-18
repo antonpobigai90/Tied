@@ -38,7 +38,6 @@
                   android:text="emily@dobson.com"
                   android:layout_marginRight="20dp"
                   android:id="@+id/address_tv"
-
                   android:textColor="@color/grey"
                   android:layout_toRightOf="@+id/user_picture_iv"
                   android:layout_below="@+id/full_name_tv"

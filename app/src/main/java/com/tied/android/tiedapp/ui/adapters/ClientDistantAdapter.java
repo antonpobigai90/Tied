@@ -101,6 +101,5 @@ public class ClientDistantAdapter extends BaseAdapter {
         ImageView imageView;
         TextView name,address;
     }
-
 }
 
