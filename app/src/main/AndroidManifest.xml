@@ -183,11 +183,15 @@
 
         <service
             android:name=".services.LocationService"
-            android:label="My Location Service"></service>
+            android:label="My Location Service" />
 
-        <activity android:name=".ui.activities.client.ClientInfo"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.activities.client.ClientInfo"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ui.activities.client.ClientLinesTerritories"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

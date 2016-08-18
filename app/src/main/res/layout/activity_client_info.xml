@@ -104,14 +104,14 @@
                     android:id="@+id/street"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="473 Phillip parkway"
+                    android:text=""
                     android:textColor="@color/grey"
                     android:textSize="13sp"/>
                 <TextView
                     android:id="@+id/city_state"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Copell II Texas"
+                    android:text=""
                     android:textColor="@color/grey"
                     android:textSize="13sp"/>
 
@@ -151,7 +151,7 @@
                     android:id="@+id/phone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="921-023-4561"
+                    android:text=""
                     android:textColor="@color/grey"
                     android:textSize="13sp"/>
 
@@ -192,7 +192,7 @@
                     android:id="@+id/email"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="elex@yahoo.com"
+                    android:text=""
                     android:textColor="@color/grey"
                     android:textSize="13sp"/>
 
@@ -233,7 +233,7 @@
                     android:id="@+id/fax"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="3456-789"
+                    android:text=""
                     android:textColor="@color/grey"
                     android:textSize="13sp"/>
 

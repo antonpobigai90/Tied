@@ -24,6 +24,7 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.client.ClientInfo;
+import com.tied.android.tiedapp.ui.activities.client.ClientLinesTerritories;
 import com.tied.android.tiedapp.ui.dialogs.DialogClientOptions;
 import com.tied.android.tiedapp.ui.dialogs.DialogYesNo;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
@@ -38,7 +39,7 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
     public ImageView avatar,img_edit;
     private LinearLayout icon_plus, icon_call;
     private TextView btn_delete;
-    RelativeLayout important_info;
+    RelativeLayout important_info,lines_territory;
 
     private Bundle bundle;
     private User user;
@@ -72,6 +73,7 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
         icon_call = (LinearLayout) view.findViewById(R.id.icon_call);
         img_edit = (ImageView) view.findViewById(R.id.img_edit);
         important_info = (RelativeLayout) view.findViewById(R.id.important_info);
+        lines_territory = (RelativeLayout) view.findViewById(R.id.lines_territory);
 
         avatar = (ImageView) view.findViewById(R.id.avatar);
 
@@ -81,6 +83,7 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
         icon_plus.setOnClickListener(this);
         icon_call.setOnClickListener(this);
         important_info.setOnClickListener(this);
+        lines_territory.setOnClickListener(this);
 
         if (bundle != null) {
             Log.d(TAG, "bundle not null");
@@ -138,6 +141,9 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
                 break;
             case R.id.important_info:
                 MyUtils.startActivity(getActivity(), ClientInfo.class, bundle);
+                break;
+            case R.id.lines_territory:
+                MyUtils.startActivity(getActivity(), ClientLinesTerritories.class, bundle);
                 break;
         }
     }

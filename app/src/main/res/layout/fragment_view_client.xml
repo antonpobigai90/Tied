@@ -131,15 +131,15 @@
 
                 <LinearLayout
                     android:id="@+id/icon_plus"
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
                     android:gravity="center_horizontal"
                     android:background="@drawable/blue_dot"
                     android:layout_marginRight="10dp">
 
                     <ImageView
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:scaleType="fitXY"
                         android:layout_gravity="center_vertical"
                         android:src="@mipmap/icon_add" />
@@ -148,16 +148,16 @@
 
                 <LinearLayout
                     android:id="@+id/icon_mail"
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
                     android:layout_toRightOf="@id/icon_plus"
                     android:gravity="center_horizontal"
                     android:background="@drawable/blue_dot"
                     android:layout_marginRight="10dp">
 
                     <ImageView
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:scaleType="fitXY"
                         android:layout_gravity="center_vertical"
                         android:src="@mipmap/email" />
@@ -166,16 +166,16 @@
 
                 <LinearLayout
                     android:id="@+id/icon_call"
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
                     android:layout_toRightOf="@id/icon_mail"
                     android:gravity="center_horizontal"
                     android:background="@drawable/blue_dot"
                     android:layout_marginRight="10dp">
 
                     <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
                         android:scaleType="fitXY"
                         android:layout_gravity="center_vertical"
                         android:src="@mipmap/phone" />
@@ -288,13 +288,13 @@
                     android:id="@+id/schedule"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp">
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp">
 
                     <ImageView
                         android:id="@+id/ring_schedule"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:src="@mipmap/ring_blue" />
 
                     <LinearLayout
@@ -450,13 +450,13 @@
                     android:id="@+id/important_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp">
+                    android:paddingBottom="5dp"
+                    android:paddingTop="5dp">
 
                     <ImageView
                         android:id="@+id/ring_important_info"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:src="@mipmap/ring_green" />
 
                     <LinearLayout
@@ -529,13 +529,13 @@
                     android:id="@+id/lines_territory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingBottom="10dp"
-                    android:paddingTop="10dp">
+                    android:paddingBottom="8dp"
+                    android:paddingTop="5dp">
 
                     <ImageView
                         android:id="@+id/ring_lines_territory"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
                         android:src="@mipmap/ring_purple" />
 
                     <LinearLayout
