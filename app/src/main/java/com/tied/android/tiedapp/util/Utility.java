@@ -72,8 +72,11 @@ public class Utility {
 
 	}
 
+
+	/*
 	public static void moveViewToScreenCenter(View view, String message )
 	{
+		//MyUtils.showAlert(view.getParent();
 		TextView txt_alert = (TextView) view.findViewById(R.id.txt_alert);
 		txt_alert.setText(message);
 
@@ -81,7 +84,7 @@ public class Utility {
 		anim.setDuration(1500);
 		anim.setFillAfter( true );
 		view.startAnimation(anim);
-	}
+	}*/
 
 	public static boolean isEmailValid(String email) {
 		boolean isValid = false;

@@ -49,7 +49,7 @@ public class HomeAddressFragment extends Fragment implements View.OnClickListene
 
     private FragmentIterationListener mListener;
 
-    private LinearLayout alert_valid;
+
 
     Bundle bundle;
 
@@ -120,8 +120,6 @@ public class HomeAddressFragment extends Fragment implements View.OnClickListene
         bundle = getArguments();
         MyUtils.initAvatar(bundle, img_user_picture);
 
-        alert_valid = (LinearLayout) view.findViewById(R.id.alert_valid);
-        alert_valid.setVisibility(View.GONE);
     }
 
     public void continue_action() {

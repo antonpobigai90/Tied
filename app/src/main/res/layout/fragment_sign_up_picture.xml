@@ -3,13 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/background"
+                android:background="@drawable/background_layout"
     android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/top_layout"
         android:layout_width="match_parent"
-        android:layout_height="54dp">
+        android:layout_height="@dimen/action_bar_height">
 
         <TextView
             android:id="@+id/txt_signup_label"
@@ -19,18 +19,20 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="15dp"
             android:text="@string/str_signup"
+            style="@style/SignUpTitle"
             android:textColor="@color/white"
-            android:textSize="25dp" />
+            />
 
         <ImageView
-            android:id="@+id/img_help"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:onClick="helpButtonClicked"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="15dp"
-            android:src="@mipmap/btn_help" />
+                android:layout_width="@dimen/action_bar_icon_height"
+                android:layout_height="@dimen/action_bar_height"
+                android:padding="@dimen/action_bar_icon_padding"
+                android:id="@+id/img_help"
+                android:src="@drawable/btn_help"
+                android:onClick="helpButtonClicked"
+                android:layout_marginRight="5dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true" />
 
     </RelativeLayout>
 
@@ -153,7 +155,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="3/15"
+                    android:text="5/15"
                     android:id="@+id/stage"
                     android:layout_below="@+id/txt_continue_label"
                     android:layout_centerInParent="true" />
@@ -162,29 +164,7 @@
         </RelativeLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="54dp"
-        android:background="@color/alert_bg_color"
-        android:gravity="center_vertical|center_horizontal"
-        android:id="@+id/alert_valid"
-        android:visibility="gone">
 
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:id="@+id/imageView2"
-            android:src="@mipmap/attention" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/txt_alert"
-            android:textColor="@color/white"
-            android:textSize="17dp"
-            android:layout_marginLeft="25dp" />
-    </LinearLayout>
 
 
 

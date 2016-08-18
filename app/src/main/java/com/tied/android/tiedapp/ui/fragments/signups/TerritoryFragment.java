@@ -46,8 +46,6 @@ public class TerritoryFragment extends Fragment implements View.OnClickListener{
 
     private RelativeLayout continue_btn;
 
-    LinearLayout alert_valid;
-
     private Bundle bundle;
 
     // Reference to our image view we will use
@@ -115,9 +113,6 @@ public class TerritoryFragment extends Fragment implements View.OnClickListener{
         territory_adapter = new SearchAdapter(territory_data, getActivity());
         territory_listview.setAdapter(territory_adapter);
         territory_listview.setDividerHeight(0);
-
-        alert_valid = (LinearLayout) view.findViewById(R.id.alert_valid);
-        alert_valid.setVisibility(View.GONE);
 
         img_user_picture = (ImageView) view.findViewById(R.id.img_user_picture);
 
@@ -189,8 +184,8 @@ public class TerritoryFragment extends Fragment implements View.OnClickListener{
                 }
             });
         }else{
-            alert_valid.setVisibility(View.VISIBLE);
-            Utility.moveViewToScreenCenter( alert_valid, Utility.getResourceString(context, R.string.alert_valide_no_territory));
+           // Utility.moveViewToScreenCenter( alert_valid, Utility.getResourceString(context, R.string.alert_valide_no_territory));
+            MyUtils.showAlert(getActivity(),getActivity().getString(R.string.alert_valide_no_territory) );
         }
     }
 
@@ -228,8 +223,7 @@ public class TerritoryFragment extends Fragment implements View.OnClickListener{
                 @Override
                 public void onClick(View v) {
                     if (txt_territory.getText().length() == 0) {
-                        alert_valid.setVisibility(View.VISIBLE);
-                        Utility.moveViewToScreenCenter( alert_valid, Utility.getResourceString(context, R.string.alert_valide_territory));
+                        MyUtils.showAlert(getActivity(),getActivity().getString(R.string.alert_valide_territory) );
                     } else {
                         item.setTerritory_name(txt_territory.getText().toString());
                         item.setiNew(false);

@@ -2,6 +2,7 @@ package com.tied.android.tiedapp.ui.fragments.signups;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import com.google.gson.Gson;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.customs.MyStringAsyncTask;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
@@ -39,12 +41,14 @@ public class VerifyCodeFragment extends Fragment implements View.OnClickListener
 
     private FragmentIterationListener mListener;
 
-    private LinearLayout back_layout, alert_valid;
-    TextView txt_help, txt_next, txt_delete, txt_verify_code;
+    private LinearLayout back_layout;
+    TextView txt_help, txt_delete, txt_verify_code;
+    View txt_next;
     StringBuffer temp = new StringBuffer();
     Context context;
     String code;
 
+    MyStringAsyncTask task;
     private User user;
 
     Bundle bundle;
@@ -76,22 +80,54 @@ public class VerifyCodeFragment extends Fragment implements View.OnClickListener
         txt_help = (TextView) view.findViewById(R.id.txt_help);
         txt_help.setOnClickListener(this);
 
-        txt_next = (TextView) view.findViewById(R.id.txt_next);
+        txt_next =  view.findViewById(R.id.txt_next);
         txt_next.setOnClickListener(this);
 
         txt_delete = (TextView) view.findViewById(R.id.txt_delete);
         txt_delete.setOnClickListener(this);
 
-        alert_valid = (LinearLayout) view.findViewById(R.id.alert_valid);
-        alert_valid.setVisibility(View.GONE);
 
-        back_layout = (LinearLayout) view.findViewById(R.id.back_layout);
-        back_layout.setOnClickListener(this);
+     //   back_layout = (LinearLayout) view.findViewById(R.id.back_layout);
+//        back_layout.setOnClickListener(this);
 
         bundle = getArguments();
         String user_json = bundle.getString(Constants.USER_DATA);
         Gson gson = new Gson();
         user = gson.fromJson(user_json, User.class);
+        final SharedPreferences sp=MyUtils.getSharedPreferences();
+        task=new MyStringAsyncTask() {
+            @Override
+            protected String doInBackground(Void... params) {
+                while (true) {
+                    //check
+                    String code=sp.getString("VERIFICATION_CODE", null);
+                    if(code!=null) {
+
+                        return code;
+                    }
+
+                    try{
+                        Thread.sleep(800);
+                    }catch (Exception e){
+
+                    }
+                    if(isCancelled()) break;
+                }
+                return super.doInBackground(params);
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                if(getActivity()==null) return;
+               if(s!=null) txt_verify_code.setText(s);
+
+                SharedPreferences.Editor editor=sp.edit();
+                editor.remove("VERIFICATION_CODE");
+                editor.apply();
+                txt_next.performClick();
+            }
+        };
+        task.execute();
     }
 
     @Override
@@ -156,16 +192,19 @@ public class VerifyCodeFragment extends Fragment implements View.OnClickListener
         Intent intent = null;
         switch (v.getId()) {
             case R.id.back_layout:
-                nextAction(Constants.PhoneAndFax, bundle);
+                nextAction(Constants.Name, bundle);
                 break;
             case R.id.txt_help:
 
                 break;
             case R.id.txt_next:
                 if (txt_verify_code.getText().length() == 0) {
-                    alert_valid.setVisibility(View.VISIBLE);
-                    Utility.moveViewToScreenCenter( alert_valid, Utility.getResourceString(context, R.string.alert_valide_verify_code));
+                   // alert_valid.setVisibility(View.VISIBLE);
+
+                    MyUtils.showAlert(getActivity(), getActivity().getString(R.string.alert_valide_verify_code));
+                  //  Utility.moveViewToScreenCenter( alert_valid, Utility.getResourceString(context, R.string.alert_valide_verify_code));
                 } else {
+                    code=txt_verify_code.getText().toString().trim();
                     call_verify_code(user);
                 }
                 break;
@@ -176,11 +215,20 @@ public class VerifyCodeFragment extends Fragment implements View.OnClickListener
         }
     }
 
+    @Override
+    public void onDestroy() {
+        task.cancel(true);
+        super.onDestroy();
+    }
+
+
+
     private void call_verify_code(User user) {
 
         DialogUtils.displayProgress(getActivity());
         Call<ServerRes> response = MainApplication.createService(SignUpApi.class)
                 .verifyPhoneCode(user.getId(),code, user.getPhone());
+        Logger.write("hello "  +user.toString());
         response.enqueue(new Callback<ServerRes>() {
             @Override
             public void onResponse(Call<ServerRes> call, Response<ServerRes> serverResResponse) {
@@ -193,13 +241,13 @@ public class VerifyCodeFragment extends Fragment implements View.OnClickListener
                         Gson gson = new Gson();
                         String user_json = bundle.getString(Constants.USER_DATA);
                         User user = gson.fromJson(user_json, User.class);
-                        user.setSign_up_stage(Constants.OfficeAddress);
+                        user.setSign_up_stage(Constants.Name);
                         boolean saved = user.save(getActivity().getApplicationContext());
                         DialogUtils.closeProgress();
                         if(saved){
                             String json = gson.toJson(user);
                             bundle.putString(Constants.USER_DATA, json);
-                            nextAction(Constants.OfficeAddress, bundle);
+                            nextAction(Constants.Name, bundle);
                         }else{
                             DialogUtils.closeProgress();
                             MyUtils.showToast("user info  was not updated");
