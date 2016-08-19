@@ -29,13 +29,19 @@ public class WalkThroughActivity extends Activity implements View.OnClickListene
     public static final String TAG = WalkThroughActivity.class
             .getSimpleName();
 
+    static WalkThroughActivity walkThroughActivity;
     private FragmentIterationListener mListener;
 
     private TextView register, sign_in;
 
+    public static WalkThroughActivity getInstance() {
+        return walkThroughActivity;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        walkThroughActivity=this;
         this.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
         setContentView(R.layout.fragment_welcome);
 

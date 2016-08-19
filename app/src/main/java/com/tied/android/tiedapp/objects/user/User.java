@@ -9,6 +9,7 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignInActivity;
+import com.tied.android.tiedapp.ui.activities.signups.WalkThroughActivity;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import java.io.Serializable;
@@ -137,7 +138,8 @@ public class User implements Serializable {
         prefsEditor.putString(Constants.CURRENT_USER, null);
         prefsEditor.putBoolean(Constants.LOGGED_IN_USER,false);
         prefsEditor.apply();
-        MyUtils.startActivity(context, SignInActivity.class);
+        MyUtils.startActivity(context, WalkThroughActivity.class);
+
     }
 
     public String getCompany_name() {

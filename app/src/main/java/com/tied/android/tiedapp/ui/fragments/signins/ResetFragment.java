@@ -19,6 +19,7 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.APIManager;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.util.MyUtils;
 import com.tied.android.tiedapp.util.Utility;
 
 import org.apache.http.NameValuePair;
@@ -106,7 +107,8 @@ public class ResetFragment extends Fragment implements View.OnClickListener{
             case R.id.reset_password:
                 if (!Utility.isEmailValid(email.getText().toString())) {
                     alert_valid_email.setVisibility(View.VISIBLE);
-                    Utility.moveViewToScreenCenter( alert_valid_email, Utility.getResourceString(context, R.string.alert_valide_email));
+                    //Utility.moveViewToScreenCenter( alert_valid_email, );
+                    MyUtils.showAlert(getActivity(), Utility.getResourceString(context, R.string.alert_valide_email));
                 } else {
                     new LoadForgetPasswordTask().execute(email.getText().toString());
                 }

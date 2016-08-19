@@ -4,10 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -17,6 +23,7 @@ import com.squareup.picasso.NetworkPolicy;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.customs.MyStringAsyncTask;
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Distance;
 import com.tied.android.tiedapp.objects._Meta;
@@ -31,6 +38,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.zip.Inflater;
 
 /**
  * Created by Femi on 7/19/2016.
@@ -150,7 +158,7 @@ public abstract class MyUtils {
         Intent i = new Intent(a, newActivity);
 
         if (b == null) {
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             a.startActivity(i);
         } else {
             Logger.write("bundle added");
@@ -336,6 +344,86 @@ public abstract class MyUtils {
             // TODO Auto-generated catch block
             return "Unknown";
         }
+    }
+    public static final int MESSAGE_TOAST=0, ERROR_TOAST=1;
+    public static void showAlert(Activity  activity, String message) {
+        showAlert(activity, message, MESSAGE_TOAST);
+    }
+    public static MyStringAsyncTask animateTask=null;
+    public static void showAlert(Activity activity, String message, int type) {
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
+        boolean isFirstTime=false;
+        View layout= activity.getWindow().getDecorView().getRootView();
+        View view=layout.findViewById(R.id.custom_alert);
+        if(view==null) {
+            isFirstTime=true;
+            LayoutInflater inflater = LayoutInflater.from(MainApplication.getInstance().getApplicationContext());
+            view=inflater.inflate(R.layout.custom_toast, null);
+            //view.setVisibility(View.INVISIBLE);
+            ((ViewGroup)layout).addView(view, params);
+            //view.setVisibility(View.GONE);
+           // view.setTranslationY(-80.0f);
+            //view.setVisibility(View.GONE);
+        }
+        final AlertLayout v=(AlertLayout)view;
+       // v.setVisibility(View.VISIBLE);
+
+        TextView msgTV=(TextView)v.findViewById(R.id.txt_alert);
+        msgTV.setText(message);
+
+        if(animateTask!=null) {
+            animateTask.cancel(true);
+        }
+
+       // v.setTranslationY(100.0f);
+
+        if(isFirstTime) {
+            Logger.write("its first time");
+            view.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    v.setVisibility(View.VISIBLE);
+                }
+            }, 300);
+        }else{
+            Logger.write("its not first time");
+            v.setVisibility(View.VISIBLE);
+        }
+       // v.animate().translationY(100).setDuration(1000).start();
+
+        animateTask=new MyStringAsyncTask() {
+            boolean cancelled=false;
+
+            public void setCancelled(boolean cancelled) {
+                this.cancelled = cancelled;
+            }
+            @Override
+            protected String doInBackground(Void... params) {
+                while (true) {
+                    try {
+                        Thread.sleep(3500);
+                    } catch (Exception e) {
+
+                    }
+                    break;
+                }
+              return super.doInBackground(params);
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                if(!isCancelled()) {
+                    Logger.write("hidinnggg");
+                    v.setVisibility(View.GONE);
+                }
+                animateTask=null;
+            }
+        };
+        animateTask.execute();
+
+        Logger.write(message);
     }
 
 }

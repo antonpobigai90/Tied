@@ -23,6 +23,7 @@ import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 import com.tied.android.tiedapp.util.Utility;
 
@@ -41,7 +42,7 @@ public class NameFragment extends Fragment implements View.OnClickListener {
     private EditText first_name, last_name;
     //    private Button continue_btn;
     private RelativeLayout continue_btn;
-    LinearLayout alert_valid;
+   // LinearLayout alert_valid;
 
     // Reference to our image view we will use
     public ImageView img_user_picture;
@@ -79,8 +80,8 @@ public class NameFragment extends Fragment implements View.OnClickListener {
         first_name = (EditText) view.findViewById(R.id.first_name);
         last_name = (EditText) view.findViewById(R.id.last_name);
 
-        alert_valid = (LinearLayout) view.findViewById(R.id.alert_valid);
-        alert_valid.setVisibility(View.GONE);
+        //alert_valid = (LinearLayout) view.findViewById(R.id.alert_valid);
+       // alert_valid.setVisibility(View.GONE);
 
         img_user_picture = (ImageView) view.findViewById(R.id.img_user_picture);
 
@@ -105,7 +106,7 @@ public class NameFragment extends Fragment implements View.OnClickListener {
 
     public void nextAction(Bundle bundle) {
         if (mListener != null) {
-            mListener.OnFragmentInteractionListener(Constants.PhoneAndFax, bundle);
+            mListener.OnFragmentInteractionListener(Constants.Picture, bundle);
         }
     }
 
@@ -116,37 +117,41 @@ public class NameFragment extends Fragment implements View.OnClickListener {
         final User user = gson.fromJson(user_json, User.class);
         user.setFirst_name(firstNameText);
         user.setLast_name(lastNameText);
-        user.setSign_up_stage(Constants.PhoneAndFax);
+        user.setSign_up_stage(Constants.Picture);
         Call<ServerRes> response = MainApplication.createService(SignUpApi.class).updateUser(user);
         response.enqueue(new Callback<ServerRes>() {
             @Override
             public void onResponse(Call<ServerRes> call, Response<ServerRes> ServerResResponse) {
                 if (getActivity() == null) return;
-                ServerRes ServerRes = ServerResResponse.body();
-                Log.d(TAG + " onFailure", ServerResResponse.body().toString());
-                if (ServerRes.isSuccess()) {
-                    Bundle bundle = new Bundle();
-                    boolean saved = user.save(getActivity().getApplicationContext());
-                    if (saved) {
-                        Gson gson = new Gson();
-                        String json = gson.toJson(user);
-                        bundle.putString(Constants.USER_DATA, json);
-                        DialogUtils.closeProgress();
-                        nextAction(bundle);
+                try {
+                    ServerRes ServerRes = ServerResResponse.body();
+                    Log.d(TAG + " onFailure", ServerResResponse.body().toString());
+                    if (ServerRes.isSuccess()) {
+                        Bundle bundle = new Bundle();
+                        boolean saved = user.save(getActivity().getApplicationContext());
+                        if (saved) {
+                            Gson gson = new Gson();
+                            String json = gson.toJson(user);
+                            bundle.putString(Constants.USER_DATA, json);
+                            DialogUtils.closeProgress();
+                            nextAction(bundle);
+                        } else {
+                            DialogUtils.closeProgress();
+                            MyUtils.showToast(getString(R.string.connection_error));
+                        }
                     } else {
-                        DialogUtils.closeProgress();
-                        Toast.makeText(getActivity(), "user info  was not updated", Toast.LENGTH_LONG).show();
+                        MyUtils.showAlert(getActivity(), ServerRes.getMessage());
                     }
-                } else {
-                    Toast.makeText(getActivity(), ServerRes.getMessage(), Toast.LENGTH_LONG).show();
+                }catch (Exception e) {
+                    MyUtils.showToast(getString(R.string.connection_error));
                 }
                 DialogUtils.closeProgress();
             }
 
             @Override
             public void onFailure(Call<ServerRes> ServerResCall, Throwable t) {
-                Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
-                Log.d(TAG + " onFailure", t.toString());
+                MyUtils.showToast(getString(R.string.connection_error));
+                Logger.write(TAG + " onFailure", t.toString());
                 DialogUtils.closeProgress();
             }
         });
@@ -160,11 +165,13 @@ public class NameFragment extends Fragment implements View.OnClickListener {
                 lastNameText = last_name.getText().toString();
                 boolean first_name_match = firstNameText.matches("^[\\p{L} .'-]+$");
                 if (!first_name_match) {
-                    alert_valid.setVisibility(View.VISIBLE);
-                    Utility.moveViewToScreenCenter(alert_valid, Utility.getResourceString(getActivity(), R.string.alert_valide_name));
+                  //  alert_valid.setVisibility(View.VISIBLE);
+                    MyUtils.showAlert(getActivity(), getActivity().getString(R.string.alert_valide_name));
+                   // Utility.moveViewToScreenCenter(alert_valid, );
                 } else if (firstNameText.length() == 0) {
-                    alert_valid.setVisibility(View.VISIBLE);
-                    Utility.moveViewToScreenCenter(alert_valid, Utility.getResourceString(getActivity(), R.string.alert_valide_name_empty));
+                   // alert_valid.setVisibility(View.VISIBLE);
+                    MyUtils.showAlert(getActivity(), getActivity().getString(R.string.alert_valide_name_empty));
+                    //Utility.moveViewToScreenCenter(alert_valid, Utility.getResourceString(getActivity(), R.string.alert_valide_name_empty));
                 } else {
                     continue_action();
                 }

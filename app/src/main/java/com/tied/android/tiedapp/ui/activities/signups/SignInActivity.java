@@ -40,6 +40,7 @@ public class SignInActivity extends AppCompatActivity implements FragmentIterati
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.slide_out_top);
         setContentView(R.layout.activity_sign_in);
         launchFragment(Constants.SignInUser, null);
 
@@ -100,6 +101,7 @@ public class SignInActivity extends AppCompatActivity implements FragmentIterati
     public void OnFragmentInteractionListener(int action, Bundle bundle) {
         Log.d(TAG, " OnFragmentInteractionListener " + action);
         launchFragment(action, bundle);
+
     }
 
     public void onClick(View view) {
@@ -108,5 +110,9 @@ public class SignInActivity extends AppCompatActivity implements FragmentIterati
                 MyUtils.startActivity(this, MainActivity.class);
                 break;
         }
+    }
+
+    public void goBack(View v) {
+        onBackPressed();
     }
 }

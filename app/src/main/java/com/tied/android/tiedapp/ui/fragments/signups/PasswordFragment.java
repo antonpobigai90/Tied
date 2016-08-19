@@ -22,6 +22,7 @@ import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.util.MyUtils;
 import com.tied.android.tiedapp.util.Utility;
 
 import retrofit2.Call;
@@ -41,7 +42,7 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
 //    private Button continue_btn;
     private LinearLayout back_btn;
     private RelativeLayout continue_btn;
-    LinearLayout alert_valid_password;
+    //LinearLayout alert_valid_password;
     private EditText password;
 
     private String passwordText;
@@ -74,13 +75,12 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
         bundle = getArguments();
 
         password = (EditText) view.findViewById(R.id.password);
-        back_btn = (LinearLayout) view.findViewById(R.id.back_layout);
+      //  back_btn = (LinearLayout) view.findViewById(R.id.back_layout);
         continue_btn = (RelativeLayout)view.findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(this);
-        back_btn.setOnClickListener(this);
+//        back_btn.setOnClickListener(this);
 
-        alert_valid_password = (LinearLayout) view.findViewById(R.id.alert_valid);
-        alert_valid_password.setVisibility(View.GONE);
+
     }
 
     @Override
@@ -107,42 +107,54 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
         final User user = gson.fromJson(user_json, User.class);
         Log.d(TAG, user.toString());
         Call<SignUpLogin> response = MainApplication.createService(SignUpApi.class)
-                .LoginSignUpUser(user.getEmail(), passwordText, Constants.Picture);
+                .LoginSignUpUser(user.getEmail(), passwordText, Constants.PhoneAndFax);
         Log.d(TAG, response.request().url().toString());
         response.enqueue(new Callback<SignUpLogin>() {
             @Override
             public void onResponse(Call<SignUpLogin> call, Response<SignUpLogin> LoginResponse) {
                 if (getActivity() == null) return;
-                SignUpLogin signUpLogin = LoginResponse.body();
-                User loggedIn_user = signUpLogin.getUser();
-                Log.d(TAG, signUpLogin.toString());
-                if (loggedIn_user.getToken() != null) {
-                    loggedIn_user.setSign_up_stage(Constants.Picture);
-                    loggedIn_user.setPassword(passwordText);
-                    loggedIn_user.setAvatar(user.getAvatar());
-                    loggedIn_user.setFirst_name(user.getFirst_name());
-                    loggedIn_user.setLast_name(user.getLast_name());
-                    boolean saved = loggedIn_user.save(getActivity().getApplicationContext());
-                    if (saved) {
-                        Bundle bundle = new Bundle();
-                        Gson gson = new Gson();
-                        String user_json = gson.toJson(loggedIn_user);
-                        bundle.putString(Constants.USER_DATA, user_json);
-                        nextAction(Constants.Picture, bundle);
-                    } else {
-                        Toast.makeText(getActivity(), "user not save", Toast.LENGTH_LONG).show();
+
+                try {
+                    SignUpLogin signUpLogin = LoginResponse.body();
+                    try {
+                        User loggedIn_user = signUpLogin.getUser();
+                        Log.d(TAG, signUpLogin.toString());
+                        if (loggedIn_user.getToken() != null) {
+                            loggedIn_user.setSign_up_stage(Constants.PhoneAndFax);
+                            loggedIn_user.setPassword(passwordText);
+                            loggedIn_user.setAvatar(user.getAvatar());
+                            loggedIn_user.setFirst_name(user.getFirst_name());
+                            loggedIn_user.setLast_name(user.getLast_name());
+                            boolean saved = loggedIn_user.save(getActivity().getApplicationContext());
+                            if (saved) {
+                                Bundle bundle = new Bundle();
+                                Gson gson = new Gson();
+                                String user_json = gson.toJson(loggedIn_user);
+                                bundle.putString(Constants.USER_DATA, user_json);
+                                nextAction(Constants.PhoneAndFax, bundle);
+                            } else {
+                                //Toast.makeText(getActivity(), "user not save", Toast.LENGTH_LONG).show();
+                                MyUtils.showToast(getString(R.string.connection_error));
+                            }
+                            DialogUtils.closeProgress();
+                        } else {
+                            DialogUtils.closeProgress();
+                            MyUtils.showToast(getString(R.string.connection_error));
+                            //Toast.makeText(getActivity(), "user not created", Toast.LENGTH_LONG).show();
+                        }
+                    }catch (Exception e) {
+                        MyUtils.showAlert(getActivity(), signUpLogin.get_meta().getUser_message());
                     }
-                    DialogUtils.closeProgress();
-                } else {
-                    DialogUtils.closeProgress();
-                    Toast.makeText(getActivity(), "user not created", Toast.LENGTH_LONG).show();
+                }catch (Exception e) {
+                    MyUtils.showToast(getString(R.string.connection_error));
                 }
             }
 
             @Override
             public void onFailure(Call<SignUpLogin> checkEmailCall, Throwable t) {
                 DialogUtils.closeProgress();
-                Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
+                MyUtils.showToast(getString(R.string.connection_error));
                 Log.d(TAG + " onFailure", t.toString());
             }
         });
@@ -154,8 +166,10 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
             case R.id.continue_btn:
                 passwordText = password.getText().toString();
                 if (passwordText.length() == 0) {
-                    alert_valid_password.setVisibility(View.VISIBLE);
-                    Utility.moveViewToScreenCenter( alert_valid_password, Utility.getResourceString(getActivity(), R.string.alert_valide_password));
+                   // alert_valid_password.setVisibility(View.VISIBLE);
+                   // Utility.moveViewToScreenCenter( alert_valid_password, Utility.getResourceString(getActivity(), R.string.alert_valide_password));
+
+                    MyUtils.showAlert(getActivity(), getActivity().getString(R.string.alert_valide_password));
                 } else {
                     continue_action();
                 }

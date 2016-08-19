@@ -44,6 +44,7 @@ public class SplashActivity extends Activity {
                 MyUtils.startActivity(this, MainActivity.class);
             } else {
                 MyUtils.startActivity(sPlashScreen, WalkThroughActivity.class);
+                finish();
             }
 
         } else {
@@ -70,6 +71,7 @@ public class SplashActivity extends Activity {
                                 prefsEditor.putBoolean(Constants.SPLASH_SCREEN_DONE, true);
                                 prefsEditor.apply();
                                 MyUtils.startActivity(sPlashScreen, WalkThroughActivity.class);
+                                finish();
                             }
                         });
                     }

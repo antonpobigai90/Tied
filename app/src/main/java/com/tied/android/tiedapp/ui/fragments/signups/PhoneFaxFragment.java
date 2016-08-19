@@ -43,7 +43,7 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
 
     private EditText phone,fax;
     private RelativeLayout continue_btn;
-    LinearLayout alert_valid;
+   // LinearLayout alert_valid;
 
     String phoneText, faxText;
 
@@ -81,8 +81,7 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
         phone = (EditText) view.findViewById(R.id.phone);
         fax = (EditText) view.findViewById(R.id.fax);
 
-        alert_valid = (LinearLayout) view.findViewById(R.id.alert_valid);
-        alert_valid.setVisibility(View.GONE);
+
 
 
         continue_btn = (RelativeLayout)view.findViewById(R.id.continue_btn);
@@ -135,6 +134,7 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
         final User user = gson.fromJson(user_json, User.class);
         user.setPhone(phoneText);
         user.setFax(faxText);
+        bundle.putString(Constants.USER_DATA, gson.toJson(user));
         user.setSign_up_stage(Constants.EnterCode);
 
         Call<ServerRes> response = MainApplication.createService(SignUpApi.class).updateUser(user);
@@ -209,8 +209,10 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
         switch (v.getId()){
             case R.id.continue_btn:
                 if (phone.getText().length() == 0) {
-                    alert_valid.setVisibility(View.VISIBLE);
-                    Utility.moveViewToScreenCenter( alert_valid, Utility.getResourceString(getActivity(), R.string.alert_valide_phone_number));
+                   // alert_valid.setVisibility(View.VISIBLE);
+                    //Utility.moveViewToScreenCenter( alert_valid, Utility.getResourceString(getActivity(), R.string.alert_valide_phone_number));
+
+                    MyUtils.showAlert(getActivity(), getActivity().getString(R.string.alert_valide_phone_number));
                 } else {
                     continue_action();
                 }

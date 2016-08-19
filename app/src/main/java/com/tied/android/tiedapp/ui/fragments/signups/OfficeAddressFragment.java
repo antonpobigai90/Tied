@@ -56,8 +56,6 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
     // Reference to our image view we will use
     public ImageView img_user_picture;
 
-    private LinearLayout alert_valid;
-
     //    private CheckBox same;
     LinearLayout checkbox_layout;
     ImageView img_check;
@@ -130,8 +128,7 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
         bundle = getArguments();
         MyUtils.initAvatar(bundle, img_user_picture);
 
-        alert_valid = (LinearLayout) view.findViewById(R.id.alert_valid);
-        alert_valid.setVisibility(View.GONE);
+
     }
 
     public void continue_action() {

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -79,6 +80,7 @@ public class SignUpActivity extends AppCompatActivity implements FragmentIterati
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.slide_out_top);
         setContentView(R.layout.activity_sign_up);
 //        User user = User.getUser(getApplicationContext());
 //        Log.d(TAG, user.toString());
@@ -111,7 +113,9 @@ public class SignUpActivity extends AppCompatActivity implements FragmentIterati
         this.bundle = bundle;
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.setCustomAnimations(R.anim.slide_in_from_bottom, R.anim.slide_out_top);
+        if(Constants.EmailSignUp!=pos) {
+            ft.setCustomAnimations(R.anim.slide_in_from_bottom, R.anim.slide_out_top);
+        }
         currentFragmentID = pos;
 
         if (fragments.get(pos) == null) {
@@ -124,14 +128,8 @@ public class SignUpActivity extends AppCompatActivity implements FragmentIterati
                     fragments.put(pos, PasswordFragment.newInstance(bundle));
                     fragment = fragments.get(pos);
                     break;
-                case Constants.Picture:
-                    fragments.put(pos, PictureFragment.newInstance(bundle));
-                    fragment = fragments.get(pos);
-                    break;
-                case Constants.Name:
-                    fragments.put(pos, NameFragment.newInstance(bundle));
-                    fragment = fragments.get(pos);
-                    break;
+
+
                 case Constants.PhoneAndFax:
                     fragments.put(pos, PhoneFaxFragment.newInstance(bundle));
                     fragment = fragments.get(pos);
@@ -139,6 +137,14 @@ public class SignUpActivity extends AppCompatActivity implements FragmentIterati
                 case Constants.EnterCode:
                     Logger.write("FEMiiiiiiiiiiiiiiiiiiii");
                     fragments.put(pos, VerifyCodeFragment.newInstance(bundle));
+                    fragment = fragments.get(pos);
+                    break;
+                case Constants.Name:
+                    fragments.put(pos, NameFragment.newInstance(bundle));
+                    fragment = fragments.get(pos);
+                    break;
+                case Constants.Picture:
+                    fragments.put(pos, PictureFragment.newInstance(bundle));
                     fragment = fragments.get(pos);
                     break;
                 case Constants.OfficeAddress:
@@ -205,11 +211,16 @@ public class SignUpActivity extends AppCompatActivity implements FragmentIterati
             MyUtils.startActivity(this, WalkThroughActivity.class);
         } else if (fragment_index == Constants.Password) {
             launchFragment(Constants.EmailSignUp, bundle);
-        } else {
+        }  else if (fragment_index == Constants.EnterCode) {
+       super.onBackPressed();
+    } else {
+            overridePendingTransition(R.anim.slide_in_from_top, R.anim.slide_out_bottom);
             finish();
         }
     }
-
+public void goBack(View v) {
+    onBackPressed();
+}
     @Override
     public void OnFragmentInteractionListener(int action, Bundle bundle) {
         switch (action) {
@@ -240,7 +251,7 @@ public class SignUpActivity extends AppCompatActivity implements FragmentIterati
      */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("requestCode", requestCode + "");
+        Logger.write("requestCode", requestCode + " "+resultCode);
         if (requestCode == REQUEST_FACEBOOK_LOGIN && resultCode == Activity.RESULT_OK) {
             ((EmailSignUpFragment) fragment).callbackManager.onActivityResult(requestCode, resultCode, data);
         } else if (requestCode == REQUEST_TWITTER_LOGIN) {
@@ -249,7 +260,8 @@ public class SignUpActivity extends AppCompatActivity implements FragmentIterati
             handleCrop(outputUri);
         } else if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
             outputUri = Uri.fromFile(new File(getFilesDir(), "cropped.jpg"));
-            Uri selectedImage = imageUri;
+            Uri selectedImage = Uri.fromFile(new File(Environment.getExternalStorageDirectory(), "Pic.jpg"));
+            Logger.write(selectedImage.toString());
             Crop.of(selectedImage, outputUri).asSquare().start(this);
         } else if (requestCode == IMAGE_PICKER_SELECT && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
             Uri selectedImage = data.getData();
@@ -281,18 +293,18 @@ public class SignUpActivity extends AppCompatActivity implements FragmentIterati
                         String senderNum = phoneNumber;
                         String message = currentMessage.getDisplayMessageBody();
 
-                        Log.d("SmsReceiver", "senderNum: " + senderNum + "; message: " + message);
+                        Logger.write("SmsReceiver", "senderNum: " + senderNum + "; message: " + message);
 
                         // Show Alert
                         int duration = Toast.LENGTH_LONG;
-                        Toast toast = Toast.makeText(context, "senderNum: " + senderNum + ", message: " + message, duration);
-                        toast.show();
+                       // Toast toast = Toast.makeText(context, "senderNum: " + senderNum + ", message: " + message, duration);
+                        //toast.show();
 
                     } // end for loop
                 } // bundle is null
 
             } catch (Exception e) {
-                Log.e("SmsReceiver", "Exception smsReceiver" + e);
+                Logger.write("SmsReceiver", e);
             }
         }
     }
@@ -329,5 +341,18 @@ public class SignUpActivity extends AppCompatActivity implements FragmentIterati
 
     public void profileButtonClicked(View v) {
         User.LogInUser(getApplicationContext());
+        finish();
+        WalkThroughActivity.getInstance().finish();
+    }
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+
+        super.onRestoreInstanceState(savedInstanceState);
     }
 }

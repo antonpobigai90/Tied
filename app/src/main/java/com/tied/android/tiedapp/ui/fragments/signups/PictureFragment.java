@@ -116,7 +116,7 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
 
     public void nextAction(Bundle bundle) {
         if (mListener != null) {
-            mListener.OnFragmentInteractionListener(Constants.Name, bundle);
+            mListener.OnFragmentInteractionListener(Constants.OfficeAddress, bundle);
         }
     }
 
@@ -152,7 +152,7 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
 
             RequestBody stage =
                     RequestBody.create(
-                            MediaType.parse("multipart/form-data"), Constants.Name+"");
+                            MediaType.parse("multipart/form-data"), Constants.OfficeAddress+"");
 
             // finally, execute the request
             Call<ServerRes> call = MainApplication.createService(SignUpApi.class, user.getToken())
@@ -162,42 +162,47 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
                 @Override
                 public void onResponse(Call<ServerRes> call, Response<ServerRes> updateAvatarResponse) {
                     if (getActivity() == null) return;
-                    ServerRes ServerRes = updateAvatarResponse.body();
-                    Log.d(TAG, ServerRes.toString() );
-                    if(ServerRes.isSuccess()){
-                        Gson gson = new Gson();
-                        Bundle bundle = getArguments();
-                        String user_json = bundle.getString(Constants.USER_DATA, "");
-                        User user = gson.fromJson(user_json, User.class);
-                        user.setSign_up_stage(Constants.Name);
-                        user.setAvatar_uri(String.valueOf(uri));
-                        user.setAvatar(ServerRes.getUser().getAvatar());
-                        boolean saved = user.save(getActivity().getApplicationContext());
-                        if(saved){
+                    try {
+                        ServerRes ServerRes = updateAvatarResponse.body();
+                        Log.d(TAG, ServerRes.toString());
+                        if (ServerRes.isSuccess()) {
+                            Gson gson = new Gson();
+                            Bundle bundle = getArguments();
+                            String user_json = bundle.getString(Constants.USER_DATA, "");
+                            User user = gson.fromJson(user_json, User.class);
+                            user.setSign_up_stage(Constants.OfficeAddress);
+                            user.setAvatar_uri(String.valueOf(uri));
+                            user.setAvatar(ServerRes.getUser().getAvatar());
+                            boolean saved = user.save(getActivity().getApplicationContext());
+                            if (saved) {
+                                DialogUtils.closeProgress();
+                                user_json = gson.toJson(user);
+                                bundle.putString(Constants.USER_DATA, user_json);
+                                nextAction(bundle);
+                            } else {
+                                DialogUtils.closeProgress();
+                                MyUtils.showToast(getString(R.string.connection_error));
+                            }
+                        } else {
                             DialogUtils.closeProgress();
-                            user_json = gson.toJson(user);
-                            bundle.putString(Constants.USER_DATA, user_json);
-                            nextAction(bundle);
-                        }else {
-                            DialogUtils.closeProgress();
-                            Toast.makeText(getActivity(), "user information  was not updated", Toast.LENGTH_LONG).show();
+                           MyUtils.showAlert(getActivity(), ServerRes.getMessage());
                         }
-                    }else{
-                        DialogUtils.closeProgress();
-                        Toast.makeText(getActivity(), ServerRes.getMessage(), Toast.LENGTH_LONG).show();
+                    }catch (Exception e) {
+                        MyUtils.showToast(getString(R.string.connection_error));
                     }
                 }
 
                 @Override
                 public void onFailure(Call<ServerRes> call, Throwable t) {
                     Log.e("Upload error:", t.getMessage());
+                    MyUtils.showToast(getString(R.string.connection_error));
                 }
             });
         } else {
             Gson gson = new Gson();
             String user_json = bundle.getString(Constants.USER_DATA, "");
             User user = gson.fromJson(user_json, User.class);
-            user.setSign_up_stage(Constants.Name);
+            user.setSign_up_stage(Constants.OfficeAddress);
             boolean saved = user.save(getActivity().getApplicationContext());
             if(saved){
                 DialogUtils.closeProgress();
@@ -206,7 +211,7 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
                 nextAction(bundle);
             }else {
                 DialogUtils.closeProgress();
-                Toast.makeText(getActivity(), "user information  was not updated", Toast.LENGTH_LONG).show();
+               // Toast.makeText(getActivity(), "user information  was not updated", Toast.LENGTH_LONG).show();
             }
         }
     }

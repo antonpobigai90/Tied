@@ -102,6 +102,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         user = User.getUser(getApplicationContext());
         if(user == null){
             User.LogOut(getApplicationContext());
+            finish();
         }
 
         startService(new Intent(this, LocationService.class));
@@ -408,6 +409,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 break;
             case R.id.logout:
                 User.LogOut(this);
+                finish();
                 break;
             case R.id.map:
                 //clearTabs();
