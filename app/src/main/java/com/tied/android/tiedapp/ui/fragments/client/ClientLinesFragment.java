@@ -106,5 +106,4 @@ public class ClientLinesFragment extends Fragment implements AdapterView.OnItemC
 
     }
 
-
 }
