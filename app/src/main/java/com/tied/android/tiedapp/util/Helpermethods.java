@@ -14,7 +14,8 @@ import java.util.Locale;
 /**
  * Created by Emmanuel on 7/3/2016.
  */
-public class HelperMethods {
+public
+class HelperMethods {
 
     protected static final String TAG = HelperMethods.class
             .getSimpleName();

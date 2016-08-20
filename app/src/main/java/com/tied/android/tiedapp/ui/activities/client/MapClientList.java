@@ -1,21 +1,16 @@
-package com.tied.android.tiedapp.ui.fragments.client.tab;
+package com.tied.android.tiedapp.ui.activities.client;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
@@ -26,10 +21,8 @@ import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
-import com.tied.android.tiedapp.ui.activities.schedule.CreateAppointmentActivity;
-import com.tied.android.tiedapp.ui.adapters.ClientListAdapter;
+import com.tied.android.tiedapp.ui.adapters.MapClientListAdapter;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
-import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import java.util.ArrayList;
@@ -38,52 +31,42 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * Created by Emmanuel on 8/14/2016.
- */
-public class ClientList extends Fragment implements AdapterView.OnItemClickListener {
+public class MapClientList extends AppCompatActivity implements View.OnClickListener,AdapterView.OnItemClickListener {
 
-    public static final String TAG = ClientList.class
+    public static final String TAG = MapClientList.class
             .getSimpleName();
+    private User user;
+    private Bundle bundle;
 
-    protected FragmentIterationListener mListener;
-
-    protected User user;
-    protected Bundle bundle;
+    LinearLayout back_layout;
     protected ListView listView;
 
     protected BaseAdapter adapter;
     protected ArrayList clientsList;
 
-    // Pop up
-    protected EditText search;
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.schedule_select_client_list, container, false);
-        return view;
-    }
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_map_client_list_layout);
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        initComponent(view);
-    }
+        user= MyUtils.getUserLoggedIn();
 
-    public void initComponent(View view){
-        clientsList = new ArrayList<>();
-        listView = (ListView) view.findViewById(R.id.list);
-        listView.setOnItemClickListener(this);
-        search = (EditText) view.findViewById(R.id.search);
-        bundle = getArguments();
-        if (bundle != null) {
-            Gson gson = new Gson();
-            String user_json = bundle.getString(Constants.USER_DATA);
-            user = gson.fromJson(user_json, User.class);
+        back_layout = (LinearLayout) findViewById(R.id.back_layout);
+        if (back_layout != null) {
+            back_layout.setOnClickListener(this);
         }
+
+        clientsList = new ArrayList<>();
+        listView = (ListView) findViewById(R.id.list);
+
+        if (listView != null) {
+            listView.setOnItemClickListener(MapClientList.this);
+        }
+
         if(clientsList.size() == 0){
             initClient();
         }
+
     }
 
     @Override
@@ -92,14 +75,11 @@ public class ClientList extends Fragment implements AdapterView.OnItemClickListe
         if(clientsList.get(position) instanceof Client){
             Client data = (Client) clientsList.get(position);
 
-            Intent intent = new Intent(getActivity(), CreateAppointmentActivity.class);
-//            Intent intent = new Intent(getActivity(), AddClientActivity.class);
-
+            Intent intent = new Intent(this, AddClientActivity.class);
             intent.putExtra(Constants.CLIENT_DATA, data);
             startActivity(intent);
         }
     }
-
 
     protected void initClient(){
 
@@ -116,11 +96,11 @@ public class ClientList extends Fragment implements AdapterView.OnItemClickListe
         response.enqueue(new Callback<ClientRes>() {
             @Override
             public void onResponse(Call<ClientRes> call, Response<ClientRes> resResponse) {
-                if ( getActivity() == null ) return;
+                if ( this == null ) return;
                 DialogUtils.closeProgress();
                 ClientRes clientRes = resResponse.body();
                 if(clientRes.isAuthFailed()){
-                    User.LogOut(getActivity());
+                    User.LogOut(MapClientList.this);
                 }
                 else if(clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200){
                     ArrayList<Client> clients = clientRes.getClients();
@@ -129,10 +109,10 @@ public class ClientList extends Fragment implements AdapterView.OnItemClickListe
                         initFormattedClient(clients);
                     }else{
                         bundle.putBoolean(Constants.NO_CLIENT_FOUND, true);
-                        MyUtils.startActivity(getActivity(), MainActivity.class, bundle);
+                        MyUtils.startActivity(MapClientList.this, MainActivity.class, bundle);
                     }
                 }else{
-                    Toast.makeText(getActivity(), clientRes.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(MapClientList.this, clientRes.getMessage(), Toast.LENGTH_LONG).show();
                 }
                 Log.d(TAG + " onResponse", resResponse.body().toString());
             }
@@ -145,27 +125,28 @@ public class ClientList extends Fragment implements AdapterView.OnItemClickListe
         });
     }
 
-    protected void nextAction(int action,Bundle bundle) {
-        if (mListener != null) {
-            mListener.OnFragmentInteractionListener(action, bundle);
-        }
+    public void initFormattedClient(ArrayList<Client> clients){
+        clientsList = clients;
+        adapter = new MapClientListAdapter(clientsList, this);
+        listView.setAdapter(adapter);
+        listView.setFastScrollEnabled(true);
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof FragmentIterationListener) {
-            mListener = (FragmentIterationListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.back_layout:
+                onBackPressed();
+                break;
+
         }
     }
 
-    public void initFormattedClient(ArrayList<Client> clients){
-        clientsList = clients;
-        adapter = new ClientListAdapter(clientsList, getActivity());
-        listView.setAdapter(adapter);
-        listView.setFastScrollEnabled(true);
+    public void goBack(View v) {
+        onBackPressed();
+    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }
