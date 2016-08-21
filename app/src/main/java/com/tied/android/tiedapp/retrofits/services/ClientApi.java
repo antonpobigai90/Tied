@@ -51,6 +51,6 @@ public interface ClientApi {
     Call<Count> getClientsCount(@Header(Constants.TOKEN_HEADER) String token);
 
     @POST(Constants.USER_GE0_CLIENTS)
-    Call<ClientRes> getClientsByLocation(@Header(Constants.TOKEN_HEADER) String token, @Body ClientLocation clientLocation);
+    Call<ClientRes> getClientsByLocation(@Body ClientLocation clientLocation);
 
 }

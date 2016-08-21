@@ -245,8 +245,8 @@ public class GeneralSelectObjectActivity extends Activity
         }
         clientLocation.setCoordinate(coordinate);
 
-        ClientApi clientApi =  MainApplication.getInstance().getRetrofit().create(ClientApi.class);
-        Call<ClientRes> response = clientApi.getClientsByLocation(user.getToken(), clientLocation);
+        ClientApi clientApi =  MainApplication.createService(ClientApi.class, user.getToken());
+        Call<ClientRes> response = clientApi.getClientsByLocation(clientLocation);
         response.enqueue(new Callback<ClientRes>() {
             @Override
             public void onResponse(Call<ClientRes> call, Response<ClientRes> resResponse) {

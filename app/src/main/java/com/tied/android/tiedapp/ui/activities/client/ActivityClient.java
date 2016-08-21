@@ -2,50 +2,47 @@ package com.tied.android.tiedapp.ui.activities.client;
 
 import android.app.Activity;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-import bolts.AppLink;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.*;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.squareup.picasso.Transformation;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.Coordinate;
-import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.client.ClientLocation;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
-import com.tied.android.tiedapp.ui.activities.GeneralSelectObjectActivity;
-import com.tied.android.tiedapp.ui.adapters.MyClientLineAdapter;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
-import com.tied.android.tiedapp.ui.fragments.client.ClientMapFragment;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by femi on 8/10/2016.
@@ -169,8 +166,8 @@ public class ActivityClient extends Activity implements OnMapReadyCallback, Goog
         }
         clientLocation.setCoordinate(coordinate);
 
-        ClientApi clientApi =  MainApplication.getInstance().getRetrofit().create(ClientApi.class);
-        Call<ClientRes> response = clientApi.getClientsByLocation(user.getToken(), clientLocation);
+        ClientApi clientApi =  MainApplication.createService(ClientApi.class, user.getToken());
+        Call<ClientRes> response = clientApi.getClientsByLocation(clientLocation);
         response.enqueue(new Callback<ClientRes>() {
             @Override
             public void onResponse(Call<ClientRes> call, Response<ClientRes> resResponse) {

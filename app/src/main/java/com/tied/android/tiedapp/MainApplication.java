@@ -16,6 +16,7 @@ import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import io.fabric.sdk.android.Fabric;
@@ -33,6 +34,8 @@ public class MainApplication extends Application {
 
     public static final String TAG = MainApplication.class
             .getSimpleName();
+
+    public static ArrayList clientsList = new ArrayList();
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
@@ -157,5 +160,7 @@ public class MainApplication extends Application {
         }
     }
 
-
+    public static ArrayList getClientsList(){
+        return clientsList;
+    }
 }

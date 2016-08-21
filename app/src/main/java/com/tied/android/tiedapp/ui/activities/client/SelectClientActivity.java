@@ -3,15 +3,15 @@ package com.tied.android.tiedapp.ui.activities.client;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
@@ -21,19 +21,22 @@ import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.fragments.client.tab.ClientAlphabeticalListFragment;
 import com.tied.android.tiedapp.ui.fragments.client.tab.ClientDistanceListFragment;
 import com.tied.android.tiedapp.ui.fragments.client.tab.LastVisitedClientListFragment;
-import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.DemoData;
 import com.tied.android.tiedapp.util.MyUtils;
 
-public class SelectClientActivity extends AppCompatActivity implements FragmentIterationListener, View.OnClickListener{
+public class SelectClientActivity extends AppCompatActivity implements View.OnClickListener{
 
     public static final String TAG = SelectClientActivity.class
             .getSimpleName();
+
+    private int[] range = {0,500,1000,2000,5000};
+    private boolean[] added;
 
     private ViewPager mViewPager;
     private PagerAdapter mPagerAdapter;
     private Bundle bundle;
     private User user;
+    protected BaseAdapter adapter;
 
     LinearLayout tab_alpha, tab_last_visited,tab_distance, tab_bar;
     TextView alpha_indicator, last_visited_indicator,distance_indicator;
@@ -77,7 +80,6 @@ public class SelectClientActivity extends AppCompatActivity implements FragmentI
         Gson gson = new Gson();
         String user_json = gson.toJson(user);
         bundle.putString(Constants.USER_DATA, user_json);
-
         mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
         if (mViewPager != null) {
             mViewPager.setAdapter(mPagerAdapter);
@@ -85,11 +87,8 @@ public class SelectClientActivity extends AppCompatActivity implements FragmentI
             last_visited_indicator.setVisibility(View.VISIBLE);
             txt_last_visited.setTextColor(getResources().getColor(R.color.button_bg));
         }
-
         onCustomSelected(mViewPager);
     }
-
-
 
     @Override
     public void onClick(View v) {
@@ -117,7 +116,6 @@ public class SelectClientActivity extends AppCompatActivity implements FragmentI
             // This method will be invoked when a new page becomes selected.
             @Override
             public void onPageSelected(int position) {
-                Toast.makeText(SelectClientActivity.this,"Selected page position: " + position, Toast.LENGTH_SHORT).show();
                 selectTab(tab_bar, position);
             }
 
@@ -155,13 +153,7 @@ public class SelectClientActivity extends AppCompatActivity implements FragmentI
         }
     }
 
-
-    @Override
-    public void OnFragmentInteractionListener(int action, Bundle bundle) {
-
-    }
-
-    public class PagerAdapter extends FragmentStatePagerAdapter {
+    public class PagerAdapter extends FragmentPagerAdapter {
 
         public PagerAdapter(FragmentManager fm) {
             super(fm);

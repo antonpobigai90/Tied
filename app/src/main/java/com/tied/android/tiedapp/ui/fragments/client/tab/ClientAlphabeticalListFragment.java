@@ -1,11 +1,8 @@
 package com.tied.android.tiedapp.ui.fragments.client.tab;
 
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 
 import com.tied.android.tiedapp.objects.client.Client;
-import com.tied.android.tiedapp.ui.adapters.ClientDistantAdapter;
 import com.tied.android.tiedapp.ui.adapters.ClientListAdapter;
 
 import java.util.ArrayList;
@@ -22,38 +19,36 @@ public class ClientAlphabeticalListFragment extends ClientList{
 
     public void initComponent(View view) {
         super.initComponent(view);
-
-        search.addTextChangedListener(new TextWatcher() {
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count,
-                                          int after) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                // TODO Auto-generated method stub
-                String searchData = search.getText().toString().trim().toLowerCase();
-                if(adapter != null){
-                    ((ClientDistantAdapter)adapter).filter(searchData);
-                }
-            }
-
-        });
+//
+//        search.addTextChangedListener(new TextWatcher() {
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                // TODO Auto-generated method stub
+//
+//            }
+//
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count,
+//                                          int after) {
+//                // TODO Auto-generated method stub
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                // TODO Auto-generated method stub
+//                String searchData = search.getText().toString().trim().toLowerCase();
+//                if(adapter != null){
+//                    ((ClientDistantAdapter)adapter).filter(searchData);
+//                }
+//            }
+//
+//        });
     }
 
     public void initFormattedClient(ArrayList clients){
-        clientsList = clients;
-
-        Collections.sort(clientsList, new Comparator() {
+        Collections.sort(clients, new Comparator() {
             @Override
             public int compare(Object lhs, Object rhs) {
                 Client client = (Client) lhs;
@@ -62,7 +57,7 @@ public class ClientAlphabeticalListFragment extends ClientList{
             }
         });
 
-        adapter = new ClientListAdapter(clientsList, getActivity());
+        adapter = new ClientListAdapter(clients, getActivity());
         listView.setAdapter(adapter);
         listView.setFastScrollEnabled(true);
     }
