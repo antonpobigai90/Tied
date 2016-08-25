@@ -49,15 +49,15 @@ import retrofit2.Response;
  */
 public class ActivityClient extends Activity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener,View.OnClickListener {
     MapFragment mMapFragment;
-    String TAG = "ACTIVIY_CLINET";
-    Map<String, Client> markerClientMap = new HashMap<String, Client>();
+    String TAG="ACTIVIY_CLINET";
+    Map<String, Client> markerClientMap=new HashMap<String, Client>();
     User user;
     ArrayList<Client> clients;
     GoogleMap googleMap;
     ImageView img_list_clients;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         this.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
         setContentView(R.layout.activity_client_layout);
@@ -72,7 +72,10 @@ public class ActivityClient extends Activity implements OnMapReadyCallback, Goog
         fragmentTransaction.commit();
         mMapFragment.getMapAsync(this);
 
-        user = MyUtils.getUserLoggedIn();
+        user=MyUtils.getUserLoggedIn();
+
+
+
 
 
     }
@@ -80,7 +83,7 @@ public class ActivityClient extends Activity implements OnMapReadyCallback, Goog
     @Override
     public void onMapReady(GoogleMap googleMap) {
         // Setting a custom info window adapter for the google map
-        this.googleMap = googleMap;
+        this.googleMap=googleMap;
         googleMap.setOnMarkerClickListener(this);
         googleMap.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
 
@@ -97,15 +100,14 @@ public class ActivityClient extends Activity implements OnMapReadyCallback, Goog
                 //Logger.write(marker.getTag().toString());
 
                 //Client client=markerClientMap.get((String)marker.getTag());
-                Client client = clients.get((int) marker.getTag());
-                if (client == null) return null;
+                Client client=clients.get((int)marker.getTag());
+                if(client==null) return null;
 
                 // Getting view from the layout file info_window_layout
                 View v = getLayoutInflater().inflate(R.layout.map_marker_info_window, null);
 
                 ImageView photo = (ImageView) v.findViewById(R.id.user_picture_iv);
-                if (!client.getLogo().isEmpty())
-                    MyUtils.Picasso.displayImage(client.getLogo(), photo);
+                if(!client.getLogo().isEmpty()) MyUtils.Picasso.displayImage(client.getLogo(), photo);
                 // Getting the position from the marker
                 //LatLng latLng = arg0.getPosition();
 
@@ -119,7 +121,7 @@ public class ActivityClient extends Activity implements OnMapReadyCallback, Goog
                 TextView tvDistance = (TextView) v.findViewById(R.id.distance);
 
                 tvName.setText(client.getFull_name());
-                tvAddress.setText(client.getAddress().getStreet() + " " + client.getAddress().getCity());
+                tvAddress.setText(client.getAddress().getStreet()+" "+client.getAddress().getCity());
 
                 tvDistance.setText(MyUtils.getDistance(MyUtils.getCurrentLocation(), client.getAddress().getCoordinate()));
 
@@ -160,57 +162,58 @@ public class ActivityClient extends Activity implements OnMapReadyCallback, Goog
 
 
     public void loadClients(final GoogleMap googleMap) {
-        final User user = MyUtils.getUserLoggedIn();
+        final User user=MyUtils.getUserLoggedIn();
         ClientLocation clientLocation = new ClientLocation();
-        clientLocation.setDistance("100000" + MyUtils.getPreferredDistanceUnit());
+        clientLocation.setDistance("100000"+ MyUtils.getPreferredDistanceUnit());
         MyUtils.setCurrentLocation(new Coordinate(33.894212, -84.231574));
         Coordinate coordinate = MyUtils.getCurrentLocation();
-        if (coordinate == null) {
+        if( coordinate == null ){
             coordinate = user.getOffice_address().getCoordinate();
         }
         clientLocation.setCoordinate(coordinate);
 
-        ClientApi clientApi = MainApplication.getInstance().getRetrofit().create(ClientApi.class);
-        Call<ClientRes> response = clientApi.getClientsByLocation(user.getToken(), clientLocation);
+        ClientApi clientApi =  MainApplication.createService(ClientApi.class, user.getToken());
+        Call<ClientRes> response = clientApi.getClientsByLocation(clientLocation);
         response.enqueue(new Callback<ClientRes>() {
             @Override
             public void onResponse(Call<ClientRes> call, Response<ClientRes> resResponse) {
-                if (this == null) return;
+                if ( this == null ) return;
                 DialogUtils.closeProgress();
                 ClientRes clientRes = resResponse.body();
-                if (clientRes.isAuthFailed()) {
+                if(clientRes.isAuthFailed()){
                     User.LogOut(getApplicationContext());
-                } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200) {
-                    clients = clientRes.getClients();
+                }
+                else if(clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200){
+                   clients = clientRes.getClients();
 
-                    boolean centered = false;
-                    int i = -1;
-                    for (Client client : clients) {
+                    boolean centered=false;
+                    int i=-1;
+                    for(Client client:clients) {
                         i++;
-                        LatLng latLng = new LatLng(client.getAddress().getCoordinate().getLat(),
+                        LatLng latLng=new LatLng(client.getAddress().getCoordinate().getLat(),
                                 client.getAddress().getCoordinate().getLon());
-                        if (!centered) {
+                        if(!centered) {
                             Logger.write(client.getLogo());
-                            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(33.8960935, -84.2319696), 3.0f));
-                            centered = true;
+                            googleMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(33.8960935, -84.2319696) , 3.0f) );
+                            centered=true;
                         }
-                        Marker marker = googleMap.addMarker(new MarkerOptions()
+                        Marker marker=googleMap.addMarker(new MarkerOptions()
                                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_white)).anchor(0.5f, 1f).position(latLng));
-                        // client.setLogo(user.getAvatar());
+                      // client.setLogo(user.getAvatar());
                         marker.setTag(i);
 
-                        if (client.getLogo() != null && !client.getLogo().isEmpty()) {
+                        if(client.getLogo()!=null && !client.getLogo().isEmpty()) {
                             //Logger.write(TAG + " "+client.getLogo());
                             new MyPicassoTarget(googleMap, client);
                         }
 
                     }
 
-                } else {
+                }else{
                     Logger.write(clientRes.getMessage());
                     MyUtils.showToast(getString(R.string.connection_error));
                 }
-                // Log.d(TAG + " onResponse", resResponse.body().toString());
+               // Log.d(TAG + " onResponse", resResponse.body().toString());
             }
 
             @Override
@@ -240,15 +243,15 @@ public class ActivityClient extends Activity implements OnMapReadyCallback, Goog
 
     class MyPicassoTarget {
 
-        public MyPicassoTarget(final GoogleMap googleMap, final Client client) {
-            Target target = new Target() {
+        public  MyPicassoTarget( final GoogleMap googleMap, final Client client) {
+           Target target = new Target() {
                 @Override
                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                    Logger.write("Image loaded " + bitmap.getWidth());
-                    Marker marker = googleMap.addMarker(new MarkerOptions().anchor(0.5f, 1.5f)
+                    Logger.write("Image loaded "+bitmap.getWidth());
+                    Marker marker=googleMap.addMarker(new MarkerOptions().anchor(0.5f, 1.5f)
                             .icon(BitmapDescriptorFactory.fromBitmap(bitmap)).position(new LatLng(client.getAddress().getCoordinate().getLat(), client.getAddress().getCoordinate().getLon())));
-                    // marker.setTag(client.getId());
-                    // markerClientMap.put(client.getId(), client);
+                   // marker.setTag(client.getId());
+                   // markerClientMap.put(client.getId(), client);
 
 
                 }
@@ -266,18 +269,13 @@ public class ActivityClient extends Activity implements OnMapReadyCallback, Goog
             Picasso.with(ActivityClient.this).load(client.getLogo()).centerCrop().transform(new CircleTransform()).resize(100, 100).into(target);
         }
     }
-
     public void goBack(View v) {
         onBackPressed();
     }
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
     }
-
-
-
     public static class CircleTransform implements Transformation {
         @Override
         public Bitmap transform(Bitmap source) {
