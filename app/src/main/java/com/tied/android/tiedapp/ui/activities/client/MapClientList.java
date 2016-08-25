@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -43,6 +44,7 @@ public class MapClientList extends AppCompatActivity implements View.OnClickList
 
     protected BaseAdapter adapter;
     protected ArrayList clientsList;
+    ImageView map_layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +54,12 @@ public class MapClientList extends AppCompatActivity implements View.OnClickList
         user= MyUtils.getUserLoggedIn();
 
         back_layout = (LinearLayout) findViewById(R.id.back_layout);
+        map_layout = (ImageView) findViewById(R.id.map_layout);
+
         if (back_layout != null) {
             back_layout.setOnClickListener(this);
         }
+        map_layout.setOnClickListener(this);
 
         clientsList = new ArrayList<>();
         listView = (ListView) findViewById(R.id.list);
@@ -132,11 +137,15 @@ public class MapClientList extends AppCompatActivity implements View.OnClickList
         listView.setFastScrollEnabled(true);
     }
 
+
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.back_layout:
                 onBackPressed();
+                break;
+            case R.id.map_layout:
+                MyUtils.startActivity(this,ActivityClient.class);
                 break;
 
         }
