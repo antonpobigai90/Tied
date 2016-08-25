@@ -32,7 +32,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MapClientList extends AppCompatActivity implements View.OnClickListener,AdapterView.OnItemClickListener {
+public class MapClientList extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     public static final String TAG = MapClientList.class
             .getSimpleName();
@@ -51,7 +51,7 @@ public class MapClientList extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_client_list_layout);
 
-        user= MyUtils.getUserLoggedIn();
+        user = MyUtils.getUserLoggedIn();
 
         back_layout = (LinearLayout) findViewById(R.id.back_layout);
         map_layout = (ImageView) findViewById(R.id.map_layout);
@@ -68,7 +68,7 @@ public class MapClientList extends AppCompatActivity implements View.OnClickList
             listView.setOnItemClickListener(MapClientList.this);
         }
 
-        if(clientsList.size() == 0){
+      if (clientsList.size() == 0) {
             initClient();
         }
 
@@ -77,7 +77,7 @@ public class MapClientList extends AppCompatActivity implements View.OnClickList
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.d("search", "here---------------- listener");
-        if(clientsList.get(position) instanceof Client){
+        if (clientsList.get(position) instanceof Client) {
             Client data = (Client) clientsList.get(position);
 
             Intent intent = new Intent(this, AddClientActivity.class);
@@ -86,37 +86,37 @@ public class MapClientList extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    protected void initClient(){
+
+    protected void initClient() {
 
         ClientLocation clientLocation = new ClientLocation();
         clientLocation.setDistance("0km");
         Coordinate coordinate = MyUtils.getCurrentLocation();
-        if( coordinate == null ){
+        if (coordinate == null) {
             coordinate = user.getOffice_address().getCoordinate();
         }
         clientLocation.setCoordinate(coordinate);
 
-        ClientApi clientApi =  MainApplication.getInstance().getRetrofit().create(ClientApi.class);
-        Call<ClientRes> response = clientApi.getClientsByLocation(user.getToken(), clientLocation);
+        final ClientApi clientApi =  MainApplication.createService(ClientApi.class, user.getToken());
+        Call<ClientRes> response = clientApi.getClientsByLocation(clientLocation);
         response.enqueue(new Callback<ClientRes>() {
             @Override
             public void onResponse(Call<ClientRes> call, Response<ClientRes> resResponse) {
-                if ( this == null ) return;
+                if (this == null) return;
                 DialogUtils.closeProgress();
                 ClientRes clientRes = resResponse.body();
-                if(clientRes.isAuthFailed()){
+                if (clientRes.isAuthFailed()) {
                     User.LogOut(MapClientList.this);
-                }
-                else if(clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200){
+                } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200) {
                     ArrayList<Client> clients = clientRes.getClients();
                     Log.d(TAG + "", clients.toString());
-                    if(clients.size() > 0){
+                    if (clients.size() > 0) {
                         initFormattedClient(clients);
-                    }else{
+                    } else {
                         bundle.putBoolean(Constants.NO_CLIENT_FOUND, true);
                         MyUtils.startActivity(MapClientList.this, MainActivity.class, bundle);
                     }
-                }else{
+                } else {
                     Toast.makeText(MapClientList.this, clientRes.getMessage(), Toast.LENGTH_LONG).show();
                 }
                 Log.d(TAG + " onResponse", resResponse.body().toString());
@@ -128,9 +128,10 @@ public class MapClientList extends AppCompatActivity implements View.OnClickList
                 DialogUtils.closeProgress();
             }
         });
+
     }
 
-    public void initFormattedClient(ArrayList<Client> clients){
+    public void initFormattedClient(ArrayList<Client> clients) {
         clientsList = clients;
         adapter = new MapClientListAdapter(clientsList, this);
         listView.setAdapter(adapter);
@@ -140,12 +141,12 @@ public class MapClientList extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.back_layout:
-                onBackPressed();
+                MyUtils.startActivity(this, MainActivity.class);
                 break;
             case R.id.map_layout:
-                MyUtils.startActivity(this,ActivityClient.class);
+                MyUtils.startActivity(this, ActivityClient.class);
                 break;
 
         }
@@ -154,6 +155,7 @@ public class MapClientList extends AppCompatActivity implements View.OnClickList
     public void goBack(View v) {
         onBackPressed();
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();

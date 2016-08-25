@@ -10,15 +10,17 @@ import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.client.Client;
+import com.tied.android.tiedapp.ui.listeners.ListAdapterListener;
 import com.tied.android.tiedapp.util.MyUtils;
 import com.tied.android.tiedapp.util.RoundImage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Emmanuel on 8/20/2016.
  */
-public class MapClientListAdapter extends BaseAdapter {
+public class MapClientListAdapter extends BaseAdapter implements ListAdapterListener {
     public static final String TAG = "MapClientListAdapter";
 
     public List _data;
@@ -72,11 +74,19 @@ public class MapClientListAdapter extends BaseAdapter {
         return view;
     }
 
+    @Override
+    public void listInit(ArrayList arrayList) {
+
+    }
 
 
     static class ViewHolder {
         ImageView pic;
         TextView name,address;
+    }
+
+    public List getList(){
+        return _data;
     }
 
 }
