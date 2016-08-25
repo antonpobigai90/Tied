@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -33,7 +33,8 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginLeft="10dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_map_active" />
+                android:id="@+id/map_layout"
+                android:src="@drawable/ic_map_inactive" />
 
             <ImageView
                 android:layout_width="60dp"
@@ -42,9 +43,8 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginBottom="8dp"
                 android:layout_marginRight="10dp"
-                android:id="@+id/img_list_clients"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_list_inactive" />
+                android:src="@drawable/ic_list_active" />
 
         </RelativeLayout>
 
@@ -80,8 +80,6 @@
 
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-
-
                 android:src="@drawable/ic_search" />
 
         </LinearLayout>
@@ -95,7 +93,6 @@
             android:layout_marginRight="10dp">
 
             <ImageView
-
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_filter_map" />
@@ -103,9 +100,11 @@
 
     </RelativeLayout>
 
-    <FrameLayout
-        android:id="@+id/fragment_container"
+    <ListView
+        android:id="@+id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:layout_below="@+id/top_layout"
+        android:listSelector="@android:color/transparent"
+        android:scrollbars="none" />
+</RelativeLayout>
