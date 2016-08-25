@@ -170,7 +170,7 @@
 
                         <ImageView
                             android:layout_width="20dp"
-                            android:layout_height="30dp"
+                            android:layout_height="25dp"
                             android:src="@mipmap/icon_plus"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
@@ -225,7 +225,7 @@
 
                         <ImageView
                             android:layout_width="20dp"
-                            android:layout_height="30dp"
+                            android:layout_height="25dp"
                             android:src="@mipmap/icon_plus"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
@@ -427,7 +427,7 @@
 
                         <ImageView
                             android:layout_width="20dp"
-                            android:layout_height="30dp"
+                            android:layout_height="25dp"
                             android:src="@mipmap/up_down_arrow"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"

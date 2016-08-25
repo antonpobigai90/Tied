@@ -27,7 +27,7 @@
             android:maxLines="1"
             android:text="Creative Co-op"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <LinearLayout
