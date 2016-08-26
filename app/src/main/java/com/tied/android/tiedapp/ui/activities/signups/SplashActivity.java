@@ -42,6 +42,7 @@ public class SplashActivity extends Activity {
         if (done) {
             if (User.isUserLoggedIn(getApplicationContext())) {
                 MyUtils.startActivity(this, MainActivity.class);
+                finish();
             } else {
                 MyUtils.startActivity(sPlashScreen, WalkThroughActivity.class);
                 finish();

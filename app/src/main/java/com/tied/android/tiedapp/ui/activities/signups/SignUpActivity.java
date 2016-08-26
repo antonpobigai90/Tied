@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.SmsManager;
@@ -17,6 +18,7 @@ import android.telephony.SmsMessage;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.soundcloud.android.crop.Crop;
@@ -25,6 +27,7 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.HelpActivity;
+import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.fragments.signups.AddBossFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.AddBossNowFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.AddInviteFragment;
@@ -49,6 +52,7 @@ import com.tied.android.tiedapp.util.MyUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class SignUpActivity extends AppCompatActivity implements FragmentIterationListener {
@@ -59,6 +63,7 @@ public class SignUpActivity extends AppCompatActivity implements FragmentIterati
     private Fragment fragment = null;
     private int fragment_index = 0;
     int currentFragmentID = 0;
+    public static int NUM_STAGES=8;
 
     // Code for our image picker select action.
     public final int IMAGE_PICKER_SELECT = 999;
@@ -131,6 +136,7 @@ public class SignUpActivity extends AppCompatActivity implements FragmentIterati
 
 
                 case Constants.PhoneAndFax:
+                    getSupportFragmentManager().popBackStack(); //if coming from password
                     fragments.put(pos, PhoneFaxFragment.newInstance(bundle));
                     fragment = fragments.get(pos);
                     break;
@@ -194,21 +200,30 @@ public class SignUpActivity extends AppCompatActivity implements FragmentIterati
                 default:
                     finish();
             }
+        }else{
+            fragment = fragments.get(pos);
         }
 
+        Logger.write("1 TAGGGG: " + pos);
         if (fragment != null) {
             Log.d(TAG, getSupportFragmentManager().getBackStackEntryCount() + "");
             Logger.write("TAGGGG: " + fragment.getClass().getName());
-            addFragment(ft, currentFragment, fragment, fragment.getClass().getName());
+            addFragment(ft, currentFragment, fragment, ""+pos);
         }
         currentFragment = fragment;
     }
 
     @Override
     public void onBackPressed() {
-        Log.d(TAG, "fragment_index " + fragment_index);
-        if (fragment_index == Constants.EmailSignUp || fragment_index == Constants.SignInUser) {
-            MyUtils.startActivity(this, WalkThroughActivity.class);
+        Fragment fragment=getVisibleFragment();
+        if(fragment!=null) {
+            Log.d(TAG, "fragment_index " + fragment_index + " " + fragment.getTag());
+            if (fragment.getTag()!=null) fragment_index=Integer.parseInt(fragment.getTag());
+        }
+        if (fragment_index == Constants.EmailSignUp || fragment_index == Constants.PhoneAndFax || fragment_index == Constants.SignInUser) {
+            //MyUtils.startActivity(this, WalkThroughActivity.class);
+            finish();
+            return;
         } else if (fragment_index == Constants.Password) {
             launchFragment(Constants.EmailSignUp, bundle);
         }  else if (fragment_index == Constants.EnterCode) {
@@ -232,8 +247,9 @@ public void goBack(View v) {
     }
 
     private void handleCrop(Uri outputUri) {
-        ImageView avatar = ((PictureFragment) fragment).avatar;
-        ImageView img_user_picture = ((PictureFragment) fragment).img_user_picture;
+        PictureFragment pictureFragment=(PictureFragment) fragments.get(Constants.Picture);
+        ImageView avatar = pictureFragment.avatar;
+        ImageView img_user_picture = pictureFragment.img_user_picture;
         avatar.setImageBitmap(null);
         img_user_picture.setImageBitmap(null);
         Log.d("path * ", outputUri.getPath());
@@ -313,13 +329,20 @@ public void goBack(View v) {
 
         //transaction.setCustomAnimations(0,0,0,0);
         if (currentFragment != null) transaction.hide(currentFragment);
+        Logger.write("1 fragment called "+targetFragment.getClass().getName());
         // use a fragment tag, so that later on we can find the currently displayed fragment
         if (targetFragment.isAdded()) {
+            Logger.write("2 fragment called "+targetFragment.getClass().getName());
             transaction.show(targetFragment).commit();
         } else {
-            transaction.add(R.id.fragment_place, targetFragment, tag)
-                    .addToBackStack(tag)
-                    .commit();
+            transaction.add(R.id.fragment_place, targetFragment, tag);
+               if(!tag.equals(""+Constants.Password))     transaction.addToBackStack(tag);
+                    transaction.commit();
+           try{
+               transaction.show(targetFragment);
+           }catch (Exception e) {
+
+           }
         }
     }
 
@@ -341,8 +364,10 @@ public void goBack(View v) {
 
     public void profileButtonClicked(View v) {
         User.LogInUser(getApplicationContext());
-        finish();
+        MyUtils.startActivity(this, MainActivity.class);
         WalkThroughActivity.getInstance().finish();
+        finish();
+
     }
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
@@ -354,5 +379,28 @@ public void goBack(View v) {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
 
         super.onRestoreInstanceState(savedInstanceState);
+    }
+    public Fragment getVisibleFragment(){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        List<Fragment> fragments = fragmentManager.getFragments();
+        if(fragments != null){
+            for(Fragment fragment : fragments){
+                if(fragment != null && fragment.isVisible())
+                    return fragment;
+            }
+        }
+        return null;
+    }
+    public static void setStage(View v, int stage) {
+        TextView tv= (TextView)v.findViewById(R.id.stage);
+        if(tv!=null) {
+            tv.setText(stage+"/"+NUM_STAGES);
+        }
+    }
+    public static void startMainApp(Activity c) {
+        MyUtils.startActivity(c, MainActivity.class);
+        MyUtils.showToast("Welcome to "+c.getString(R.string.app_name));
+        c.finish();
+        WalkThroughActivity.getInstance().finish();
     }
 }

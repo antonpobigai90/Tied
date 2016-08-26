@@ -213,6 +213,7 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
                 startActivity(intent);
                 break;
             case R.id.img_facebook:
+
                 LoginManager.getInstance().logInWithReadPermissions(getActivity(), Arrays.asList("public_profile", "email"));
                 break;
             case R.id.img_twitter:

@@ -23,6 +23,7 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
+import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.Logger;
@@ -77,7 +78,7 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void initComponent(View view){
-
+        SignUpActivity.setStage(view, 3);
         phone = (EditText) view.findViewById(R.id.phone);
         fax = (EditText) view.findViewById(R.id.fax);
 
@@ -153,13 +154,13 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
                         call_send_phone_vc(user);
                     }else{
                         DialogUtils.closeProgress();
-                        MyUtils.showToast("user info  was not updated");
+                        //MyUtils.showToast("user info  was not updated");
                     }
                 }else{
                     MyUtils.showToast(ServerRes.getMessage());
                     DialogUtils.closeProgress();
                 }
-                DialogUtils.closeProgress();
+                //DialogUtils.closeProgress();
             }
 
             @Override
@@ -172,6 +173,7 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
     }
 
     private void call_send_phone_vc(User user) {
+        DialogUtils.displayProgress(getActivity());
         Call<ServerRes> response = MainApplication.createService(SignUpApi.class).sendPhoneCode(user.getId(), phoneText);
         Logger.write(phoneText);
         response.enqueue(new Callback<ServerRes>() {
@@ -191,6 +193,7 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
                     }
                 }catch (Exception e){
                     Logger.write(e);
+                   // nextAction(bundle);
                     MyUtils.showToast("An error occurred. Please try again");
                 }
             }

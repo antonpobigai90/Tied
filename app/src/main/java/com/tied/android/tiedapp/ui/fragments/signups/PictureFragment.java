@@ -89,6 +89,7 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
     }
 
     public void initComponent(View view) {
+        SignUpActivity.setStage(view, 8);
         select_pics = (TextView) view.findViewById(R.id.select_pics);
         avatar = (ImageView) view.findViewById(R.id.avatar);
         img_user_picture = (ImageView) view.findViewById(R.id.img_user_picture);
@@ -116,7 +117,8 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
 
     public void nextAction(Bundle bundle) {
         if (mListener != null) {
-            mListener.OnFragmentInteractionListener(Constants.OfficeAddress, bundle);
+            SignUpActivity.startMainApp(getActivity());
+           // mListener.OnFragmentInteractionListener(Constants.OfficeAddress, bundle);
         }
     }
 
