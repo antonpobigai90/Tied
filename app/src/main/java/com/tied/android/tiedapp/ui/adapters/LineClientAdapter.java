@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.client.Client;
+import com.tied.android.tiedapp.util.MyUtils;
 import com.tied.android.tiedapp.util.RoundImage;
 
 import java.util.ArrayList;
@@ -67,9 +68,32 @@ public class LineClientAdapter extends BaseAdapter {
         v = new ViewHolder();
         v.name = (TextView) view.findViewById(R.id.name);
         v.imageView = (ImageView) view.findViewById(R.id.pic);
+        v.check = (ImageView) view.findViewById(R.id.selector);
 
         final Client data = (Client) _data.get(i);
+        MyUtils.Picasso.displayImage(data.getLogo(), v.imageView);
         v.name.setText(data.getFull_name());
+        if (data.getCheckStatus()) {
+            v.check.setBackgroundResource(R.drawable.circle_check2);
+        } else {
+            v.check.setBackgroundResource(R.drawable.circle_uncheck);
+        }
+
+        // Set check box listener android
+        v.check.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean same = data.getCheckStatus();
+                if (same) {
+                    data.setCheckStatus(false);
+                    v.check.setBackgroundResource(R.mipmap.circle_uncheck);
+                } else {
+                    data.setCheckStatus(true);
+                    v.check.setBackgroundResource(R.mipmap.circle_check2);
+                }
+                notifyDataSetChanged();
+            }
+        });
 
         view.setTag(data);
         return view;
@@ -93,7 +117,7 @@ public class LineClientAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        ImageView imageView;
+        ImageView imageView,check;
         TextView name;
     }
 

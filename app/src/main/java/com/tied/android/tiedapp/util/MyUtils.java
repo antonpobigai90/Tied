@@ -5,10 +5,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +27,13 @@ import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Distance;
 import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects._Meta;
+import com.tied.android.tiedapp.objects.client.Client;
+import com.tied.android.tiedapp.objects.client.ClientLocation;
+import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.retrofits.services.ClientApi;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.ui.listeners.ListAdapterListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,7 +44,9 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.zip.Inflater;
+
+import retrofit2.Call;
+import retrofit2.Response;
 
 /**
  * Created by Femi on 7/19/2016.
@@ -426,6 +434,7 @@ public abstract class MyUtils {
         Logger.write(message);
     }
 
+<<<<<<< HEAD
     public static void showAddressDialog(final Activity context, String title, final com.tied.android.tiedapp.objects.Location currentLocation, final DialogClickListener okayClicked) {
         // custom dialog
         final Dialog dialog = new Dialog(context);
@@ -508,6 +517,48 @@ public abstract class MyUtils {
     }
     public interface DialogClickListener {
         public void onClick( Object response);
+=======
+
+    public static void initClient(final Context context, User user, final ListAdapterListener listAdapterListener){
+
+        ClientLocation clientLocation = new ClientLocation();
+        clientLocation.setDistance("0km");
+        Coordinate coordinate = MyUtils.getCurrentLocation();
+        if( coordinate == null ){
+            coordinate = user.getOffice_address().getCoordinate();
+        }
+        clientLocation.setCoordinate(coordinate);
+
+        final ClientApi clientApi =  MainApplication.createService(ClientApi.class, user.getToken());
+        Call<ClientRes> response = clientApi.getClientsByLocation(clientLocation);
+        response.enqueue(new retrofit2.Callback<ClientRes>() {
+            @Override
+            public void onResponse(Call<ClientRes> call, Response<ClientRes> resResponse) {
+                if ( context == null ) return;
+                DialogUtils.closeProgress();
+                ClientRes clientRes = resResponse.body();
+                if(clientRes.isAuthFailed()){
+                    User.LogOut(context);
+                }
+                else if(clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200){
+                    ArrayList<Client> clients = clientRes.getClients();
+                    if(clients.size() > 0){
+                        MainApplication.clientsList = clients;
+                        if (listAdapterListener != null){
+                            listAdapterListener.listInit(clients);
+                        }
+                    }
+                }else{
+                    Log.d("Error onResponse", clientRes.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ClientRes> call, Throwable t) {
+                Log.d(" onFailure", t.toString());
+            }
+        });
+>>>>>>> e3e82d855f3037707e7fe789bd265cba2793f585
     }
 
 }

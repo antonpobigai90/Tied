@@ -26,10 +26,18 @@ public class Line implements Serializable {
     private int dis_from;
     private ArrayList _score;
 
+    private String sales;
+    boolean check_status;
 
     public Line() {
     }
 
+    public Line(String id, String name, String sales, boolean check_status) {
+        this.id = id;
+        this.name = name;
+        this.sales = sales;
+        this.check_status = check_status;
+    }
 
     public void setName(String name) {
         this.name = name;
@@ -92,6 +100,22 @@ public class Line implements Serializable {
 
     public void set_score(ArrayList _score) {
         this._score = _score;
+    }
+
+    public String getSales() {
+        return sales;
+    }
+
+    public void setSales(String sales) {
+        this.sales = sales;
+    }
+
+    public boolean isCheck_status() {
+        return check_status;
+    }
+
+    public void setCheck_status(boolean check_status) {
+        this.check_status = check_status;
     }
 
     @Override

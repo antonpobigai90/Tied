@@ -17,7 +17,7 @@ public class LinesActivity extends AppCompatActivity implements  View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_line);
+        setContentView(R.layout.activity_add_line_old);
 
         bundle = getIntent().getExtras();
         user = MyUtils.getUserFromBundle(bundle);

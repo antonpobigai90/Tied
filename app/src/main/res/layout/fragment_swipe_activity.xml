@@ -13,7 +13,7 @@
         android:paddingTop="5dp"
         android:background="#f3f5f6"
         android:orientation="horizontal"
-        android:paddingBottom="5dp">
+        android:paddingBottom="1dp">
 
         <LinearLayout
             android:id="@+id/you_tab"
@@ -45,7 +45,7 @@
         <View
             android:layout_width="0.1dp"
             android:layout_height="match_parent"
-            android:background="@android:color/darker_gray" />
+            android:background="@color/light_gray2" />
 
         <LinearLayout
             android:id="@+id/emp_tab"

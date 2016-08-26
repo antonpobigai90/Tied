@@ -61,7 +61,7 @@ public class DialogYesNo {
                         dialog.dismiss();
                         break;
                     case 1:
-
+                        dialog.dismiss();
                         break;
                 }
             }

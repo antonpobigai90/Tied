@@ -5,8 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
 import android.widget.ListView;
+
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
@@ -15,22 +15,21 @@ import com.tied.android.tiedapp.objects._Meta;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.LineApi;
-import com.tied.android.tiedapp.ui.activities.lines.AddLinesActivity;
+import com.tied.android.tiedapp.ui.activities.lines.AddLinesActivityOld;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityAddSales;
 import com.tied.android.tiedapp.ui.adapters.RevenueAdapter;
-import com.tied.android.tiedapp.ui.fragments.MyFormFragment;
-
-import com.tied.android.tiedapp.ui.fragments.sales.AddSalesFragment;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.ui.fragments.MyFormFragment;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Emmanuel on 6/22/2016.
@@ -40,7 +39,7 @@ public class RevenueFragment extends MyFormFragment implements View.OnClickListe
     private ListView revenueLV;
     RevenueAdapter adapter;
     List<Revenue> revenueList;
-    AddLinesActivity addLinesActivity;
+    AddLinesActivityOld addLinesActivity;
     int page=1;
     View view, addBut;
 
@@ -48,7 +47,7 @@ public class RevenueFragment extends MyFormFragment implements View.OnClickListe
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
        view = inflater.inflate(R.layout.fragment_line_revenue, container, false);
-        addLinesActivity=(AddLinesActivity) getActivity();
+        addLinesActivity=(AddLinesActivityOld) getActivity();
         revenueList = new ArrayList<Revenue>();
         adapter = new RevenueAdapter(getActivity(),revenueList);
         initComponents();

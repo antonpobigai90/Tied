@@ -21,7 +21,8 @@ public class DialogClientOptions implements View.OnClickListener {
     public static final String TAG = DialogClientOptions.class
             .getSimpleName();
     RelativeLayout cancel;
-    private TextView create_schedule,add_new_goal,add_new_line,add_new_sales;
+    private TextView create_schedule,add_new_line;
+//    private TextView create_schedule,add_new_goal,add_new_line,add_new_sales;
     private Dialog dialog;
     private Client client;
     Activity activity;
@@ -46,13 +47,13 @@ public class DialogClientOptions implements View.OnClickListener {
 
         create_schedule = (TextView) dialog.findViewById(R.id.create_schedule);
         add_new_line = (TextView) dialog.findViewById(R.id.add_new_line);
-        add_new_goal = (TextView) dialog.findViewById(R.id.add_new_goal);
-        add_new_sales = (TextView) dialog.findViewById(R.id.add_new_sales);
+//        add_new_goal = (TextView) dialog.findViewById(R.id.add_new_goal);
+//        add_new_sales = (TextView) dialog.findViewById(R.id.add_new_sales);
 
         create_schedule.setOnClickListener(this);
         add_new_line.setOnClickListener(this);
-        add_new_sales.setOnClickListener(this);
-        add_new_goal.setOnClickListener(this);
+//        add_new_sales.setOnClickListener(this);
+//        add_new_goal.setOnClickListener(this);
 
 
         cancel = (RelativeLayout) dialog.findViewById(R.id.cancel);
@@ -69,15 +70,15 @@ public class DialogClientOptions implements View.OnClickListener {
             case R.id.create_schedule:
 
                 break;
-            case R.id.add_new_goal:
-
-                break;
-            case R.id.add_new_sales:
-
-                break;
             case R.id.add_new_line:
 
                 break;
+//            case R.id.add_new_goal:
+//
+//                break;
+//            case R.id.add_new_sales:
+//
+//                break;
 
         }
     }

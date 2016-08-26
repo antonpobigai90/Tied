@@ -39,6 +39,7 @@ public class Client implements Serializable, Comparable<Client>{
 
     private int dis_from;
     private ArrayList _score;
+    Boolean checkStatus = false;
 
     public Client() {
     }
@@ -212,6 +213,14 @@ public class Client implements Serializable, Comparable<Client>{
 
     public void set_score(ArrayList _score) {
         this._score = _score;
+    }
+
+    public Boolean getCheckStatus() {
+        return checkStatus;
+    }
+
+    public void setCheckStatus(Boolean checkStatus) {
+        this.checkStatus = checkStatus;
     }
 
     @Override
