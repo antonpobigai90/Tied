@@ -35,8 +35,8 @@
 
                 <ImageView
                     android:id="@+id/img_sunny"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
                     android:src="@mipmap/sunny_white" />
@@ -48,7 +48,7 @@
                     android:layout_centerVertical="true"
                     android:text="0°"
                     android:textColor="@color/white"
-                    android:textSize="40sp" />
+                    android:textSize="30sp" />
 
 
             </LinearLayout>
@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:text="20 June, 2016"
                 android:textColor="@color/white"
-                android:textSize="16sp" />
+                android:textSize="13sp" />
 
         </LinearLayout>
 
@@ -92,7 +92,7 @@
         android:paddingRight="20dp"
         android:text="Good Morning, Emily"
         android:textColor="@color/white"
-        android:textSize="25sp" />
+        android:textSize="22sp" />
 
     <TextView
         android:layout_width="match_parent"
@@ -102,7 +102,7 @@
         android:gravity="center_vertical"
         android:paddingRight="20dp"
         android:text="Important TO-DOs"
-        android:textSize="22sp" />
+        android:textSize="20sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -143,6 +143,7 @@
             <HorizontalScrollView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:scrollbarSize="0dp">
 
                 <LinearLayout
@@ -158,76 +159,7 @@
                         android:layout_marginRight="8dp"
                         android:src="@mipmap/user_example" />
 
-                    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginRight="8dp"
-                        android:src="@mipmap/avatar_profile" />
 
-
-                    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginRight="8dp"
-                        android:src="@mipmap/avatar_profile" />
-
-                    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginRight="8dp"
-                        android:src="@mipmap/avatar_profile" />
-
-                    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginRight="8dp"
-                        android:src="@mipmap/avatar_profile" />
-
-                    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginRight="8dp"
-                        android:src="@mipmap/avatar_profile" />
-
-                    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginRight="8dp"
-                        android:src="@mipmap/avatar_profile" />
-
-                    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginRight="8dp"
-                        android:src="@mipmap/avatar_profile" />
-
-                    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginRight="8dp"
-                        android:src="@mipmap/avatar_profile" />
-
-                    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginRight="8dp"
-                        android:src="@mipmap/avatar_profile" />
-
-                    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginRight="8dp"
-                        android:src="@mipmap/user_example" />
 
 
                 </LinearLayout>
@@ -246,7 +178,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp">
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
 
         <ImageView
             android:id="@+id/icon_info"
@@ -304,6 +237,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+
         android:layout_marginBottom="10dp">
 
         <ImageView
@@ -364,7 +299,7 @@
         android:paddingRight="40dp"
         android:text="GOT IT THANKS"
         android:textColor="@color/white"
-        android:textSize="18sp"
+        android:textSize="14sp"
         android:textStyle="bold" />
     </LinearLayout>
 

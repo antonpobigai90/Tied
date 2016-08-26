@@ -434,7 +434,6 @@ public abstract class MyUtils {
         Logger.write(message);
     }
 
-<<<<<<< HEAD
     public static void showAddressDialog(final Activity context, String title, final com.tied.android.tiedapp.objects.Location currentLocation, final DialogClickListener okayClicked) {
         // custom dialog
         final Dialog dialog = new Dialog(context);
@@ -516,8 +515,8 @@ public abstract class MyUtils {
         dialog.show();
     }
     public interface DialogClickListener {
-        public void onClick( Object response);
-=======
+        public void onClick(Object response);
+    }
 
     public static void initClient(final Context context, User user, final ListAdapterListener listAdapterListener){
 
@@ -558,7 +557,6 @@ public abstract class MyUtils {
                 Log.d(" onFailure", t.toString());
             }
         });
->>>>>>> e3e82d855f3037707e7fe789bd265cba2793f585
     }
 
 }
