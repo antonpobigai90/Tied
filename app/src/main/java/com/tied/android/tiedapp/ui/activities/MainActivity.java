@@ -37,7 +37,7 @@ import com.tied.android.tiedapp.ui.fragments.profile.EditProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.NotificationProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.ProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.CreateScheduleFragment;
-import com.tied.android.tiedapp.ui.fragments.schedule.HomeScheduleFragment;
+import com.tied.android.tiedapp.ui.fragments.DailyStatsFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleSuggestionFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleTimeLineFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.IndustryFragment;
@@ -162,20 +162,24 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         Gson gson = new Gson();
         String user_json = gson.toJson(user);
 
+        Logger.write("hhhhhhaaaaaaaaaaaaaaaaaaaaaaa");
+
         bundle.putString(Constants.USER_DATA, user_json);
-        if ((new Date().getTime() - MyUtils.getLastTimeAppRan()) > 24*60*60*1000) {
-            launchFragment(Constants.HomeSchedule, bundle);
+        if ((new Date().getTime() - MyUtils.getLastTimeAppRan()) != 24*60*60*1000) {
+            //launchFragment(Constants.HomeSchedule, bundle);
+            MyUtils.startActivity(this, DailyStatsActivity.class);
             MyUtils.setLastTimeAppRan(new Date().getTime());
+           // return;
         }
-        else if(bundle.getBoolean(Constants.NO_CLIENT_FOUND)){
+       /* else if(bundle.getBoolean(Constants.NO_CLIENT_FOUND)){
             launchFragment(Constants.ClientAdd, bundle);
         }
         else if(bundle.getBoolean(Constants.NO_SCHEDULE_FOUND)){
             launchFragment(Constants.CreateSchedule, bundle);
         }
-        else {
+        else {*/
             launchFragment(Constants.AppointmentList, bundle);
-        }
+        //}
         activity_layout.setBackground(null);
     }
 
@@ -218,7 +222,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
             case Constants.HomeSchedule:
                 tab_bar.setVisibility(View.GONE);
                if(fragments.get(pos)==null) {
-                    fragments.put(pos, HomeScheduleFragment.newInstance(bundle) );
+                    fragments.put(pos, DailyStatsFragment.newInstance(bundle) );
                 }
                 fragment = fragments.get(pos);
                 break;

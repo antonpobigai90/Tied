@@ -21,6 +21,7 @@ import com.tied.android.tiedapp.customs.MyStringAsyncTask;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
+import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.Logger;
@@ -62,6 +63,7 @@ public class VerifyCodeFragment extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         return inflater.inflate(R.layout.fragment_sign_up_verify_code, container, false);
     }
 
@@ -74,7 +76,7 @@ public class VerifyCodeFragment extends Fragment implements View.OnClickListener
 
     private void initComponent(View view) {
         context = getActivity();
-
+        SignUpActivity.setStage(view, 4);
         txt_verify_code = (TextView) view.findViewById(R.id.txt_verify_code);
 
         txt_help = (TextView) view.findViewById(R.id.txt_help);
@@ -111,7 +113,10 @@ public class VerifyCodeFragment extends Fragment implements View.OnClickListener
                     }catch (Exception e){
 
                     }
-                    if(isCancelled()) break;
+                    if(isCancelled()) {
+
+                        break;
+                    }
                 }
                 return super.doInBackground(params);
             }
@@ -271,5 +276,13 @@ public class VerifyCodeFragment extends Fragment implements View.OnClickListener
                 DialogUtils.closeProgress();
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        SharedPreferences.Editor editor=MyUtils.getSharedPreferences().edit();
+        editor.remove("VERIFICATION_CODE");
+        editor.apply();
     }
 }

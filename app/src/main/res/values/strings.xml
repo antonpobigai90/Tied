@@ -57,7 +57,7 @@
     <string name="str_city">CITY</string>
     <string name="str_state">STATE</string>
     <string name="str_zip_code">ZIP CODE</string>
-    <string name="str_signup_hint6">Tell me your office address</string>
+    <string name="str_signup_hint6">Provide your office address</string>
     <string name="str_signup_hint7">Office address same as hc</string>
     <string name="str_signup_hint8">Please enter your home address</string>
     <string name="str_signup_hint9">What territories do you cover?</string>
@@ -144,8 +144,6 @@
 
     <string name="alert_valide_email">*Please enter a valid email address</string>
     <string name="alert_valide_password">Please enter password</string>
-    <string name="alert_valide_first_name">Please enter first name</string>
-    <string name="alert_valide_last_name">*Please enter last name</string>
 
     <string name="alert_valide_address">*Please enter address</string>
     <string name="alert_valide_city">*Please enter city</string>
@@ -157,10 +155,12 @@
 
     <string name="alert_valide_phone_number">*Please enter phone number</string>
     <string name="alert_valide_verify_code">*Please enter verify code</string>
-    <string name="alert_valide_name">Cannot contains invalid characters</string>
+    <string name="alert_valide_first_name">Please provide your first name</string>
+    <string name="alert_valide_last_name">Please provide your last name</string>
     <string name="alert_valide_name_empty">first name cannot be empty</string>
     <string name="alert_valide_no_territory">No territory inputted</string>
     <string name="str_name">Full Name</string>
+    <string name="num_signup_stages">6</string>
 
     <!-- Profile -->
     <string name="profile_notification">Notifications</string>

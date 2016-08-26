@@ -21,6 +21,7 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
+import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.Logger;
@@ -77,6 +78,7 @@ public class NameFragment extends Fragment implements View.OnClickListener {
 
     public void initComponent(View view) {
 
+        SignUpActivity.setStage(view, 5);
         first_name = (EditText) view.findViewById(R.id.first_name);
         last_name = (EditText) view.findViewById(R.id.last_name);
 
@@ -106,7 +108,7 @@ public class NameFragment extends Fragment implements View.OnClickListener {
 
     public void nextAction(Bundle bundle) {
         if (mListener != null) {
-            mListener.OnFragmentInteractionListener(Constants.Picture, bundle);
+            mListener.OnFragmentInteractionListener(Constants.OfficeAddress, bundle);
         }
     }
 
@@ -117,7 +119,7 @@ public class NameFragment extends Fragment implements View.OnClickListener {
         final User user = gson.fromJson(user_json, User.class);
         user.setFirst_name(firstNameText);
         user.setLast_name(lastNameText);
-        user.setSign_up_stage(Constants.Picture);
+        user.setSign_up_stage(Constants.OfficeAddress);
         Call<ServerRes> response = MainApplication.createService(SignUpApi.class).updateUser(user);
         response.enqueue(new Callback<ServerRes>() {
             @Override
@@ -164,15 +166,15 @@ public class NameFragment extends Fragment implements View.OnClickListener {
                 firstNameText = first_name.getText().toString();
                 lastNameText = last_name.getText().toString();
                 boolean first_name_match = firstNameText.matches("^[\\p{L} .'-]+$");
-                if (!first_name_match) {
-                  //  alert_valid.setVisibility(View.VISIBLE);
-                    MyUtils.showAlert(getActivity(), getActivity().getString(R.string.alert_valide_name));
-                   // Utility.moveViewToScreenCenter(alert_valid, );
-                } else if (firstNameText.length() == 0) {
-                   // alert_valid.setVisibility(View.VISIBLE);
-                    MyUtils.showAlert(getActivity(), getActivity().getString(R.string.alert_valide_name_empty));
+                if (firstNameText.length() == 0) {
+                    // alert_valid.setVisibility(View.VISIBLE);
+                    MyUtils.showAlert(getActivity(), "First name is required");
                     //Utility.moveViewToScreenCenter(alert_valid, Utility.getResourceString(getActivity(), R.string.alert_valide_name_empty));
-                } else {
+                } else if (!first_name_match) {
+                  //  alert_valid.setVisibility(View.VISIBLE);
+                    MyUtils.showAlert(getActivity(), getActivity().getString(R.string.alert_valide_first_name));
+                   // Utility.moveViewToScreenCenter(alert_valid, );
+                } else  {
                     continue_action();
                 }
                 break;

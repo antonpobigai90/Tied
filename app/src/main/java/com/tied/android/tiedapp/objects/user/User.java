@@ -117,7 +117,6 @@ public class User implements Serializable {
         SharedPreferences.Editor editor = mPrefs.edit();
         editor.putBoolean(Constants.LOGGED_IN_USER,true);
         editor.apply();
-        MyUtils.startActivity(context, MainActivity.class);
     }
 
     public void LogIn(Context context){

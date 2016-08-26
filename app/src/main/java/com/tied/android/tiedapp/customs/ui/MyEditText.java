@@ -6,6 +6,9 @@ import android.text.InputFilter;
 import android.text.Spanned;
 import android.util.AttributeSet;
 import android.support.v7.widget.AppCompatEditText;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.TextView;
 
 /**
  * Created by Femi on 7/20/2016.
@@ -27,14 +30,39 @@ public class MyEditText extends AppCompatEditText {
 
     }
 
+    @Override
+    public void setText(CharSequence text, BufferType type) {
+        if(!isEditable) {
+            setIsEditable(true);
+            super.setText(text, type);
+            setIsEditable(false);
+        }else{
+            setIsEditable(true);
+            super.setText(text, type);
+        }
 
+    }
+
+    boolean isEditable=true;
+    InputFilter[] filter3 = new InputFilter[] { new InputFilter.LengthFilter(200) };
     public void setIsEditable(boolean editable) {
+        isEditable=editable;
         if(editable) {
            // setFilters(null);
+            setFilters(new InputFilter[] { new InputFilter.LengthFilter(200) });
         }else{
             setLongClickable(false);
             setFocusableInTouchMode(false);
             setClickable(false);
+            setOnTouchListener(new OnTouchListener() {
+                // Setting on Touch Listener for handling the touch inside ScrollView
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    // Disallow the touch request for parent scroll on touch of child view
+                    getParent().requestDisallowInterceptTouchEvent(true);
+                    return false;
+                }
+            });
 
             setFilters(new InputFilter[] {
                     new InputFilter() {

@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -20,13 +21,18 @@ import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.MyAddressAsyncTask;
+import com.tied.android.tiedapp.customs.ui.MyEditText;
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
+import com.tied.android.tiedapp.ui.activities.MainActivity;
+import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
+import com.tied.android.tiedapp.ui.activities.signups.WalkThroughActivity;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import org.json.JSONObject;
@@ -59,9 +65,10 @@ public class HomeAddressFragment extends Fragment implements View.OnClickListene
     // Reference to our image view we will use
     public ImageView img_user_picture;
 
-    private EditText street, city, state, zip;
+    private MyEditText street, city, state, zip;
     private String cityText, stateText, streetText, zipText;
     private Location location;
+    private View addButton, addressSection;
 
 
     int fetchType = Constants.USE_ADDRESS_NAME;
@@ -107,15 +114,26 @@ public class HomeAddressFragment extends Fragment implements View.OnClickListene
 
     public void initComponent(View view) {
 
-        street = (EditText) view.findViewById(R.id.street);
-        city = (EditText) view.findViewById(R.id.city);
-        state = (EditText) view.findViewById(R.id.state);
-        zip = (EditText) view.findViewById(R.id.zip);
-
+        SignUpActivity.setStage(view, 7);
+        street = (MyEditText) view.findViewById(R.id.street);
+        street.setIsEditable(false);
+        city = (MyEditText) view.findViewById(R.id.city);
+        city.setIsEditable(false);
+        state = (MyEditText) view.findViewById(R.id.state);
+        state.setIsEditable(false);
+        zip = (MyEditText) view.findViewById(R.id.zip);
+        zip.setIsEditable(false);
         continue_btn = (RelativeLayout) view.findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(this);
 
         img_user_picture = (ImageView) view.findViewById(R.id.img_user_picture);
+        addButton=view.findViewById(R.id.add_button);
+        addButton.setOnClickListener(this);
+        addressSection=view.findViewById(R.id.address_section);
+        addressSection.setVisibility(View.GONE);
+        addressSection.setOnClickListener(this);
+
+
 
         bundle = getArguments();
         MyUtils.initAvatar(bundle, img_user_picture);
@@ -125,6 +143,8 @@ public class HomeAddressFragment extends Fragment implements View.OnClickListene
     public void continue_action() {
         if (validated()) {
             new GeocodeAsyncTask().execute();
+        }else{
+            MyUtils.showAlert(getActivity(), "You must enter a valid address");
         }
     }
 
@@ -134,7 +154,7 @@ public class HomeAddressFragment extends Fragment implements View.OnClickListene
         zipText = zip.getText().toString();
         stateText = state.getText().toString();
         location = new Location(cityText, zipText, stateText, streetText);
-        return !streetText.equals("");
+        return (!streetText.equals("") && !cityText.isEmpty() && !stateText.isEmpty() && !zipText.isEmpty());
     }
 
     @Override
@@ -142,6 +162,26 @@ public class HomeAddressFragment extends Fragment implements View.OnClickListene
         switch (v.getId()) {
             case R.id.continue_btn:
                 continue_action();
+                break;
+            case R.id.address_section:
+            case R.id.add_button:
+                MyUtils.showAddressDialog(getActivity(), "Office Address", location, new MyUtils.DialogClickListener() {
+                    @Override
+                    public void onClick(Object response) {
+                        HomeAddressFragment.this.location=(Location)response;
+                        Logger.write(location.getStreet());
+                        addressSection.setVisibility(View.VISIBLE);
+
+                        street.setText(location.getStreet());
+                        city.setText(location.getCity());
+                        state.setText(location.getState());
+                        zip.setText(location.getZip());
+
+                        addressSection.setVisibility(View.VISIBLE);
+
+
+                    }
+                });
                 break;
         }
     }
@@ -201,27 +241,33 @@ public class HomeAddressFragment extends Fragment implements View.OnClickListene
                 @Override
                 public void onResponse(Call<ServerRes> call, Response<ServerRes> ServerResponseResponse) {
                     if (getActivity() == null) return;
-                    ServerRes ServerRes = ServerResponseResponse.body();
-                    Log.d(TAG +" onFailure", ServerResponseResponse.body().toString());
-                    if(ServerRes.isSuccess()){
-                        Bundle bundle = new Bundle();
-                        boolean saved = user.save(getActivity().getApplicationContext());
-                        if (saved) {
-                            Gson gson = new Gson();
-                            String json = gson.toJson(user);
-                            bundle.putString(Constants.USER_DATA, json);
-                            DialogUtils.closeProgress();
-                            nextAction(Constants.Territory,bundle);
-                            Log.d(TAG, "location: " + json);
+                    try {
+                        ServerRes ServerRes = ServerResponseResponse.body();
+                        Log.d(TAG + " onFailure", ServerResponseResponse.body().toString());
+                        if (ServerRes.isSuccess()) {
+                            Bundle bundle = new Bundle();
+                            boolean saved = user.save(getActivity().getApplicationContext());
+                            if (saved) {
+                                Gson gson = new Gson();
+                                String json = gson.toJson(user);
+                                bundle.putString(Constants.USER_DATA, json);
+                                DialogUtils.closeProgress();
+                                nextAction(Constants.Picture, bundle);
+
+                                Log.d(TAG, "location: " + json);
+                            } else {
+                                DialogUtils.closeProgress();
+                               // MyUtils.showToast("user info  was not updated");
+                            }
                         } else {
                             DialogUtils.closeProgress();
-                            MyUtils.showToast("user info  was not updated");
+                            MyUtils.showAlert(getActivity(), ServerRes.getMessage());
                         }
-                    }else{
-                        DialogUtils.closeProgress();
-                        MyUtils.showToast(ServerRes.getMessage());
+                    }catch (Exception e) {
+                        MyUtils.showToast(getString(R.string.connection_error));
                     }
                 }
+
 
                 @Override
                 public void onFailure(Call<ServerRes> ServerResponseCall, Throwable t) {

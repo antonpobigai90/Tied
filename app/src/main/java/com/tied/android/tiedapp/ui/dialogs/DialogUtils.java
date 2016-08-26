@@ -33,6 +33,8 @@ public class DialogUtils {
                     progressIndicator = new ProgressIndicator(context);
                     if(!progressIndicator.isShowing()) progressIndicator.show();
                 }
+            }else {
+                if(!progressIndicator.isShowing()) progressIndicator.show();
             }
     }
 

@@ -4,14 +4,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
+import android.widget.*;
 
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.MainApplication;
@@ -20,6 +19,7 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.responses.SignUpLogin;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
+import com.tied.android.tiedapp.ui.activities.signups.WalkThroughActivity;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.MyUtils;
@@ -46,6 +46,8 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
     private EditText password;
 
     private String passwordText;
+    private View showPasswordBut;
+    private ImageView showPasswordSelector;
     private Bundle bundle;
 
     public static Fragment newInstance (Bundle bundle) {
@@ -73,12 +75,16 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
     public void initComponent(View view) {
 
         bundle = getArguments();
-
+        showPasswordBut=view.findViewById(R.id.show_password);
+        showPasswordSelector=(ImageView)view.findViewById(R.id.show_password_selector);
+        showPasswordBut.setOnClickListener(this);
         password = (EditText) view.findViewById(R.id.password);
-      //  back_btn = (LinearLayout) view.findViewById(R.id.back_layout);
+        password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+
+        //back_btn = (LinearLayout) view.findViewById(R.id.back_layout);
         continue_btn = (RelativeLayout)view.findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(this);
-//        back_btn.setOnClickListener(this);
+        // back_btn.setOnClickListener(this);
 
 
     }
@@ -131,6 +137,8 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
                                 Gson gson = new Gson();
                                 String user_json = gson.toJson(loggedIn_user);
                                 bundle.putString(Constants.USER_DATA, user_json);
+                                User.LogInUser(getActivity());
+                                WalkThroughActivity.getInstance().finish();
                                 nextAction(Constants.PhoneAndFax, bundle);
                             } else {
                                 //Toast.makeText(getActivity(), "user not save", Toast.LENGTH_LONG).show();
@@ -159,7 +167,7 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
             }
         });
     }
-
+boolean isShowingPassword=true;
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -170,12 +178,29 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
                    // Utility.moveViewToScreenCenter( alert_valid_password, Utility.getResourceString(getActivity(), R.string.alert_valide_password));
 
                     MyUtils.showAlert(getActivity(), getActivity().getString(R.string.alert_valide_password));
-                } else {
-                    continue_action();
+                } else if (passwordText.length() <6) {
+                    MyUtils.showAlert(getActivity(), "Password cannot be less than 6 characters");
+                } else{
+                        continue_action();
+
                 }
                 break;
             case R.id.back_layout:
                 nextAction(Constants.EmailSignUp,bundle);
+                break;
+            case R.id.show_password:
+                int post=password.getSelectionStart();
+                if(!isShowingPassword) {
+                    password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    isShowingPassword=true;
+                    showPasswordSelector.setImageResource(R.drawable.ic_selected_white);
+
+                }else {
+                    password.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    isShowingPassword=false;
+                    showPasswordSelector.setImageResource(R.drawable.unselectd_bg);
+                }
+                password.setSelection(post);
                 break;
         }
     }

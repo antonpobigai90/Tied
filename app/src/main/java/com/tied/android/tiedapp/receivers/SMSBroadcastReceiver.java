@@ -41,6 +41,11 @@ public class SMSBroadcastReceiver extends BroadcastReceiver {
                     if(msg.contains("code")) {
                         String[] prs=msg.trim().split(" ");
                         String code=prs[prs.length-1];
+                        try{
+                            Integer.parseInt(code);
+                        }catch (Exception e) {
+                            return;
+                        }
                        SharedPreferences.Editor editor = MyUtils.getSharedPreferences().edit();
                         editor.putString("VERIFICATION_CODE", code);
                         editor.apply();

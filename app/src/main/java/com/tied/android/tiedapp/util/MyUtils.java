@@ -1,6 +1,7 @@
 package com.tied.android.tiedapp.util;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,10 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.view.Window;
+import android.widget.*;
 
 import com.google.gson.Gson;
 import com.squareup.picasso.Callback;
@@ -437,6 +436,90 @@ public abstract class MyUtils {
         animateTask.execute();
 
         Logger.write(message);
+    }
+
+    public static void showAddressDialog(final Activity context, String title, final com.tied.android.tiedapp.objects.Location currentLocation, final DialogClickListener okayClicked) {
+        // custom dialog
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.address_dialog_activity);
+        //dialog.setTitle(title.toUpperCase());
+        //dialog.setFeatureDrawableAlpha(Backg);
+
+        final EditText streetET, cityET,zipET, territoryET;
+        final Spinner stateSpinner;
+        streetET=(EditText)dialog.findViewById(R.id.street);
+        cityET=(EditText)dialog.findViewById(R.id.city);
+        zipET=(EditText)dialog.findViewById(R.id.zip);
+        stateSpinner = (Spinner) dialog.findViewById(R.id.state);
+        List<String> states = MyUtils.States.asArrayList();
+        states.add(0, "Select...");
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, R.layout.my_spinner_item, states);
+        adapter.setDropDownViewResource(R.layout.my_spinner_dropdown);
+        stateSpinner.setAdapter(adapter);
+        //stateSpinner.setSelection(adapter.getPosition("TX"));
+
+        if(currentLocation!=null) {
+            streetET.setText(currentLocation.getStreet());
+            cityET.setText(currentLocation.getCity());
+            stateSpinner.setSelection(adapter.getPosition(currentLocation.getState()));
+            zipET.setText(currentLocation.getZip());
+        }
+
+        // set the custom dialog components - text, image and button
+        TextView text = (TextView) dialog.findViewById(R.id.txt_title);
+        text.setText(title.toUpperCase());
+
+       View.OnClickListener cancelClicked=new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            };
+
+        Button cancelButton = (Button) dialog.findViewById(R.id.cancel_button);
+        // if button is clicked, close the custom dialog
+        cancelButton.setOnClickListener(cancelClicked);
+        View.OnClickListener okayButClicked=new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String street = streetET.getText().toString().trim();
+                    String city = cityET.getText().toString().trim();
+                    String state = stateSpinner.getSelectedItem().toString().trim();
+                    String zip=zipET.getText().toString().trim();
+
+                    if(street.isEmpty()) {
+                        MyUtils.showToast( "You must provide a street address");
+                        return;
+                    }
+                    if(city.isEmpty()) {
+                        MyUtils.showToast("You must enter a city");
+                        return;
+                    }
+                    if(state.isEmpty() || state.toLowerCase().contains("select")) {
+                        MyUtils.showToast("You must provide a state address");
+                        return;
+                    }
+                    if(zip.isEmpty()) {
+                        MyUtils.showToast( "You must provide a zip code");
+                        return;
+                    }
+
+                    final com.tied.android.tiedapp.objects.Location location = new com.tied.android.tiedapp.objects.Location(city, zip, state,  street);
+                    location.setCountry("US");
+                    okayClicked.onClick(location);
+                    dialog.dismiss();
+                }
+            };
+
+        Button okButton = (Button) dialog.findViewById(R.id.ok_button);
+        // if button is clicked, close the custom dialog
+        okButton.setOnClickListener(okayButClicked);
+
+        dialog.show();
+    }
+    public interface DialogClickListener {
+        public void onClick(Object response);
     }
 
     public static void initClient(final Context context, User user, final ListAdapterListener listAdapterListener){

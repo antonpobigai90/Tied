@@ -18,6 +18,7 @@ import com.tied.android.tiedapp.objects.responses.LoginUser;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.signups.SignInActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
+import com.tied.android.tiedapp.ui.activities.signups.WalkThroughActivity;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.Logger;
@@ -115,6 +116,8 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                         boolean saved = loggedIn_user.save(getActivity().getApplicationContext());
                         if (saved) {
                             loggedIn_user.LogIn(getActivity().getApplicationContext());
+                            getActivity().finish();
+                            WalkThroughActivity.getInstance().finish();
                         } else {
                            // Toast.makeText(getActivity(), "user not save", Toast.LENGTH_LONG).show();
                         }

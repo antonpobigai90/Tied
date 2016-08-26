@@ -1,4 +1,4 @@
-package com.tied.android.tiedapp.ui.fragments.schedule;
+package com.tied.android.tiedapp.ui.fragments;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -31,6 +31,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import com.tied.android.tiedapp.util.Logger;
+import com.tied.android.tiedapp.util.MyUtils;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -38,9 +40,9 @@ import retrofit.client.Response;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class HomeScheduleFragment extends Fragment implements View.OnClickListener {
+public class DailyStatsFragment extends Fragment implements View.OnClickListener {
 
-    public static final String TAG = HomeScheduleFragment.class
+    public static final String TAG = DailyStatsFragment.class
             .getSimpleName();
 
     private Bundle bundle;
@@ -53,7 +55,7 @@ public class HomeScheduleFragment extends Fragment implements View.OnClickListen
     private FragmentIterationListener fragmentIterationListener;
 
     public static Fragment newInstance (Bundle bundle) {
-        Fragment fragment=new HomeScheduleFragment();
+        Fragment fragment=new DailyStatsFragment();
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -101,8 +103,9 @@ public class HomeScheduleFragment extends Fragment implements View.OnClickListen
         img_user_picture.setOnClickListener(this);
 
         Gson gson = new Gson();
-        String user_json = bundle.getString(Constants.USER_DATA);
-        user = gson.fromJson(user_json, User.class);
+       // String user_json = MyUtils.getUserLoggedIn();
+        user = MyUtils.getUserLoggedIn();
+        Logger.write(user.toString());
 
         if (user.getAvatar_uri() != null) {
             Uri myUri = Uri.parse(user.getAvatar_uri());
@@ -133,7 +136,7 @@ public class HomeScheduleFragment extends Fragment implements View.OnClickListen
 
         Calendar cal = Calendar.getInstance();
 
-        String greet = getTimeOfTheDay() + ", " + user.getLast_name();
+        String greet = getTimeOfTheDay() + ", " + (""+user.getFirst_name().charAt(0)).toUpperCase()+user.getFirst_name().substring(1);
         greeting.setText(greet);
 
         SimpleDateFormat format = new SimpleDateFormat("MMMM dd, yyyy");
@@ -191,7 +194,8 @@ public class HomeScheduleFragment extends Fragment implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_got:
-                nextAction(Constants.AppointmentList, bundle);
+              //  nextAction(Constants.AppointmentList, bundle);
+                getActivity().finish();
                 break;
         }
     }
