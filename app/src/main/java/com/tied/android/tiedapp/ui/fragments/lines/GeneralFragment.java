@@ -162,7 +162,7 @@ public class GeneralFragment extends MyFormFragment implements View.OnClickListe
         LineApi lineApi = MainApplication.getInstance().getRetrofit().create(LineApi.class);
         User user=MyUtils.getUserLoggedIn();
         DialogUtils.displayProgress(getActivity());
-        Call<ResponseBody> response = lineApi.createLine(user.getToken(), line);
+        Call<ResponseBody> response = lineApi.createLine(line);
         response.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {

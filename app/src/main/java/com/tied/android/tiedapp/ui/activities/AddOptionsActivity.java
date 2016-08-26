@@ -83,8 +83,7 @@ public class AddOptionsActivity  extends AppCompatActivity implements  View.OnCl
 
                 break;
             case R.id.line_layout:
-                MyUtils.startActivity(this, AddLinesActivity.class);
-
+                MyUtils.startActivity(this, AddLinesActivity.class, bundle);
                 break;
             case R.id.goal_layout:
 

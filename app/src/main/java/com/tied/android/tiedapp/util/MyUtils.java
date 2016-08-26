@@ -26,12 +26,15 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.MyStringAsyncTask;
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Distance;
+import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects._Meta;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.client.ClientLocation;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
+import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
+import com.tied.android.tiedapp.retrofits.services.LineApi;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.listeners.ListAdapterListener;
 
@@ -39,12 +42,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -434,7 +439,6 @@ public abstract class MyUtils {
         Logger.write(message);
     }
 
-
     public static void initClient(final Context context, User user, final ListAdapterListener listAdapterListener){
 
         ClientLocation clientLocation = new ClientLocation();
@@ -471,6 +475,49 @@ public abstract class MyUtils {
 
             @Override
             public void onFailure(Call<ClientRes> call, Throwable t) {
+                Log.d(" onFailure", t.toString());
+            }
+        });
+    }
+
+
+    public static void initLines(final Context context, User user, final ListAdapterListener listAdapterListener){
+        final LineApi lineApi =  MainApplication.createService(LineApi.class, user.getToken());
+        Call<ResponseBody> response = lineApi.getUserLines();
+        response.enqueue(new retrofit2.Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
+                try {
+                    GeneralResponse response = new GeneralResponse(resResponse.body());
+                    if (response.isAuthFailed()) {
+                        User.LogOut(context);
+                        return;
+                    }
+                    _Meta meta=response.getMeta();
+                    if(meta !=null && meta.getStatus_code() == 200) {
+                        ArrayList lines = (ArrayList) response.getDataAsList(Constants.LINES_lIST, Line.class);
+                        if(lines.size() > 0){
+                            MainApplication.linesList = lines;
+                            if (listAdapterListener != null){
+                                listAdapterListener.listInit(lines);
+                            }
+                        }
+                    }else{
+                        MyUtils.showToast("Error encountered");
+                        DialogUtils.closeProgress();
+                    }
+
+                }catch (IOException ioe) {
+                    Logger.write(ioe);
+                }
+                catch (Exception jo) {
+                    Logger.write(jo);
+                }
+                DialogUtils.closeProgress();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.d(" onFailure", t.toString());
             }
         });

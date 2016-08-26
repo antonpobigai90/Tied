@@ -8,7 +8,6 @@ import com.google.gson.Gson;
 import com.tied.android.tiedapp.customs.Constants;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
  * Created by Femi on 7/22/2016.
@@ -24,7 +23,7 @@ public class Line implements Serializable {
     private String name;
 
     private int dis_from;
-    private ArrayList _score;
+    private String _score;
 
     private String sales;
     boolean check_status;
@@ -93,12 +92,11 @@ public class Line implements Serializable {
         this.address = address;
     }
 
-
-    public ArrayList get_score() {
+    public String get_score() {
         return _score;
     }
 
-    public void set_score(ArrayList _score) {
+    public void set_score(String _score) {
         this._score = _score;
     }
 

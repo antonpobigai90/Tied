@@ -32,11 +32,19 @@ public class Constants {
     public static final String USER_CHANGE_PASSWORD = API_PATH + "users/changePassword";
 
     public static final String CLIENTS = API_PATH + "clients";
-    public static final String LINES = API_PATH + "lines";
     public static final String USER_CLIENTS = API_PATH + "users/me/clients";
     public static final String USER_CLIENTS_COUNT = API_PATH + "users/me/clients_count";
     public static final String USER_GE0_CLIENTS = API_PATH + "users/me/clients/geo";
 
+
+    public static final String LINES = API_PATH + "lines";
+    public static final String UPDATE_LINE_WITH_ID = API_PATH + "lines/{line_id}";
+    public static final String USER_LINES = API_PATH + "users/me/lines";
+    public static final String USER_CLIENT_LINES = API_PATH + "users/me/client_lines";
+    public static final String USER_LINE_REVENUES = API_PATH + "users/me/lines/{line_id}/revenues/{page_number}";
+    public static final String GET_LINE_WITH_ID =  API_PATH + "lines/";
+    public static final String USER_LINE_COUNT=  API_PATH + "lines/count";
+    public static final String USER_GE0_LINES =  API_PATH + "lines/geo";
 
     public static final String GET_CLIENT_WITH_ID = API_PATH + "client/{client_id}";
     public static final String UPDATE_CLIENT_WITH_ID = API_PATH + "clients/{client_id}";
@@ -173,12 +181,10 @@ public class Constants {
     public static final String NO_SCHEDULE_FOUND = "no_schedule_found";
     public static final String LINE_CREATED = "a_line_exist";
     public static final String GOOGLE_REVERSE_GEOCODING_URL="https://maps.googleapis.com/maps/api/geocode/json?sensor=true&key=AIzaSyDdWKslIGOEWJMa5RJFwH2dowBc7rEQ14g&latlng=";
+    public static final String LINE_DATA = "line";
+    public static final String LINES_lIST = "lines";
     public static PersistentCookieStore MY_COOKIE_STORE=null;
-    public static final String USER_LINES = API_PATH + "users/me/lines";
-    public static final String USER_LINE_REVENUES = API_PATH + "users/me/lines/{line_id}/revenues/{page_number}";
-    public static final String GET_LINE_WITH_ID =  API_PATH + "lines/";
-    public static final String USER_LINE_COUNT=  API_PATH + "lines/count";
-    public static final String USER_GE0_LINES =  API_PATH + "lines/geo";
+
     public static File DIR_ROOT = new File("StreamLive"),
             DIR_CACHE = new File("cache"), DIR_HTML_CACHE = new File("html"), DIR_DOWNLOADS = new File("downloads"), DIR_MEDIA = new File("media");
 

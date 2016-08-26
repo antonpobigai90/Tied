@@ -36,6 +36,7 @@ public class MainApplication extends Application {
             .getSimpleName();
 
     public static ArrayList clientsList = new ArrayList();
+    public static ArrayList linesList = new ArrayList();
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
