@@ -116,6 +116,7 @@ public class AddLinesActivity extends AppCompatActivity implements  View.OnClick
                         Logger.write("the_line: "+the_line.toString());
                         Bundle bundle = new Bundle();
                         bundle.putSerializable(Constants.LINE_DATA, the_line);
+                        MainApplication.linesList.clear();
                         MyUtils.startActivity(AddLinesActivity.this, ViewLineActivity.class, bundle);
                     }else{
                         MyUtils.showToast("Error encountered");
@@ -138,48 +139,5 @@ public class AddLinesActivity extends AppCompatActivity implements  View.OnClick
         });
     }
 
-    private void updateLine(final Line line) {
 
-        LineApi lineApi = MainApplication.createService(LineApi.class, user.getToken());
-        DialogUtils.displayProgress(this);
-        Call<ResponseBody> response = lineApi.updateLine(line.getId(), line);
-        response.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
-                if (this == null) return;
-                try {
-                    GeneralResponse response =new GeneralResponse(resResponse.body());
-                    if (response.isAuthFailed()) {
-                        User.LogOut(AddLinesActivity.this);
-                        return;
-                    }
-                    _Meta meta=response.getMeta();
-                    if(meta !=null && meta.getStatus_code()==200) {
-                        Line the_line = response.getData(Constants.LINE_DATA, Line.class);
-                        if(the_line.getId().equals(line.getId())){
-                            Logger.write("Update line id +"+the_line.getId());
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable(Constants.LINE_DATA, line);
-                            MyUtils.showToast("Send me somewhere");
-                        }
-                    }else{
-                        MyUtils.showToast("Error encountered");
-                        DialogUtils.closeProgress();
-                    }
-
-                }catch (IOException ioe) {
-                    Logger.write(ioe);
-                }
-                catch (Exception jo) {
-                    Logger.write(jo);
-                }
-                DialogUtils.closeProgress();
-            }
-            @Override
-            public void onFailure(Call<ResponseBody> ClientResponseCall, Throwable t) {
-                Logger.write("Request failed: "+t.getCause());
-                DialogUtils.closeProgress();
-            }
-        });
-    }
 }

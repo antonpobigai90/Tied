@@ -13,11 +13,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.*;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.squareup.picasso.Callback;
-import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
@@ -31,10 +37,15 @@ import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.client.ClientLocation;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
+import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.retrofits.services.LineApi;
+<<<<<<< HEAD
 import com.tied.android.tiedapp.ui.activities.GeneralSelectObjectActivity;
+=======
+import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
+>>>>>>> 3baad851b6bf1922db286dcfe93b87709ead2f23
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.listeners.ListAdapterListener;
 
@@ -62,8 +73,13 @@ public abstract class MyUtils {
             if (imageUrl != null && !imageUrl.isEmpty()) {
                 com.squareup.picasso.Picasso.with(MainApplication.getInstance().getApplicationContext())
                         .load(imageUrl)
+<<<<<<< HEAD
                        // .memoryPolicy(MemoryPolicy.C)
                         //.networkPolicy(NetworkPolicy.NO_CACHE)
+=======
+//                        .memoryPolicy(MemoryPolicy.NO_CACHE)
+//                        .networkPolicy(NetworkPolicy.NO_CACHE)
+>>>>>>> 3baad851b6bf1922db286dcfe93b87709ead2f23
                         .networkPolicy(NetworkPolicy.OFFLINE)
                         .into(imageView, new Callback() {
                             @Override
@@ -580,7 +596,6 @@ public abstract class MyUtils {
         });
     }
 
-
     public static void initLines(final Context context, User user, final ListAdapterListener listAdapterListener){
         final LineApi lineApi =  MainApplication.createService(LineApi.class, user.getToken());
         Call<ResponseBody> response = lineApi.getUserLines();
@@ -623,4 +638,45 @@ public abstract class MyUtils {
         });
     }
 
+    public static void initSchedules(final Context context, User user, final ListAdapterListener listAdapterListener){
+        final ScheduleApi scheduleApi =  MainApplication.createService(ScheduleApi.class, user.getToken());
+        Call<ResponseBody> response = scheduleApi.getSchedules();
+        response.enqueue(new retrofit2.Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
+                try {
+                    GeneralResponse response = new GeneralResponse(resResponse.body());
+                    if (response.isAuthFailed()) {
+                        User.LogOut(context);
+                        return;
+                    }
+                    _Meta meta=response.getMeta();
+                    if(meta !=null && meta.getStatus_code() == 200) {
+                        ArrayList schedule = (ArrayList) response.getDataAsList(Constants.SCHEDULE_LIST, Schedule.class);
+                        if(schedule.size() > 0){
+                            MainApplication.schedules = schedule;
+                            if (listAdapterListener != null){
+                                listAdapterListener.listInit(schedule);
+                            }
+                        }
+                    }else{
+                        MyUtils.showToast("Error encountered");
+                        DialogUtils.closeProgress();
+                    }
+
+                }catch (IOException ioe) {
+                    Logger.write(ioe);
+                }
+                catch (Exception jo) {
+                    Logger.write(jo);
+                }
+                DialogUtils.closeProgress();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d(" onFailure", t.toString());
+            }
+        });
+    }
 }

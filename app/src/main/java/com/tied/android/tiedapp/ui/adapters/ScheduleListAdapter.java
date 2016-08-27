@@ -76,6 +76,7 @@ public class ScheduleListAdapter extends BaseAdapter {
             }
         }
         notifyDataSetChanged();
+//        viewPager.getAdapter().notifyDataSetChanged();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -222,6 +223,4 @@ public class ScheduleListAdapter extends BaseAdapter {
         }
         return new_hour;
     }
-
-
 }

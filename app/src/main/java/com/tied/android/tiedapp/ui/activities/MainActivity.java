@@ -39,7 +39,7 @@ import com.tied.android.tiedapp.ui.fragments.profile.ProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.CreateScheduleFragment;
 import com.tied.android.tiedapp.ui.fragments.DailyStatsFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleSuggestionFragment;
-import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleTimeLineFragment;
+import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleAppointmentsFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.IndustryFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.ui.listeners.ImageReadyForUploadListener;
@@ -289,7 +289,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
             case Constants.AppointmentList:
                 tab_bar.setVisibility(View.VISIBLE);
                 if(fragments.get(pos)==null) {
-                    fragments.put(pos,ScheduleTimeLineFragment.newInstance(bundle) );
+                    fragments.put(pos, ScheduleAppointmentsFragment.newInstance(bundle) );
                     Logger.write("it is new");
                 }
                 fragment = fragments.get(pos);
@@ -401,8 +401,8 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
             case Constants.ProfileAddress:
                 fragment = new AddressFragment();
                 break;
-            case R.id.subscription_menu:
-
+            case R.id.lines_menu:
+                MyUtils.startActivity(MainActivity.this, LinesAndTerritories.class,bundle);
                 break;
             case R.id.client_menu:
                 MyUtils.startActivity(MainActivity.this, SelectClientActivity.class,bundle);
