@@ -7,16 +7,17 @@
     <RelativeLayout
         android:id="@+id/top_layout"
         android:layout_width="match_parent"
-        android:layout_height="54dp"
+        android:layout_height="@dimen/action_bar_height"
         android:background="@color/schedule_title_bg_color">
 
         <ImageView
             android:id="@+id/img_close"
-            android:layout_width="25dp"
-            android:layout_height="match_parent"
+            android:padding="@dimen/action_bar_icon_padding"
+            android:layout_width="@dimen/action_bar_icon_height"
+            android:layout_height="@dimen/action_bar_icon_height"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:src="@mipmap/btn_close" />
+            android:layout_marginLeft="0dp"
+            android:src="@drawable/btn_close" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -44,6 +45,7 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="25dp"
                 android:paddingRight="24dp"
+                android:paddingBottom="10dp"
                 android:background="@color/schedule_create_appointment_bg_color">
 
                 <LinearLayout
@@ -58,47 +60,22 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <RelativeLayout
-                            android:layout_width="120dp"
-                            android:layout_height="70dp"
-                            android:layout_alignParentRight="true"
-                            android:id="@+id/right_layout">
 
-                            <de.hdodenhof.circleimageview.CircleImageView
-                                android:layout_width="match_parent"
-                                android:layout_gravity="center"
-                                android:layout_height="60dp"
-                                android:id="@+id/img_avatar_schedule"
-                                android:src="@mipmap/default_avatar"
-                                android:layout_above="@+id/txt_creative_co_op"
-                                android:layout_marginBottom="4dp" />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Company name"
-                                android:textSize="11sp"
-                                android:textAlignment="center"
-                                android:id="@+id/txt_creative_co_op"
-                                android:layout_alignParentBottom="true"
-                                android:textColor="@color/schedule_title_bg_color"
-                                android:layout_marginBottom="4dp"
-                                android:layout_gravity="center" />
-                        </RelativeLayout>
 
                         <LinearLayout
                             android:orientation="vertical"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_toLeftOf="@+id/right_layout">
+                           >
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="TITLE"
                                 android:paddingLeft="4dp"
-                                android:textSize="14sp"
-                                android:textColor="@color/accentColor" />
+                                android:id="@+id/gainFocus"
+                                android:nextFocusDown="@+id/txt_title"
+                                style="@style/SectionText" />
 
                             <EditText
                                 android:layout_width="match_parent"
@@ -112,9 +89,11 @@
                     </RelativeLayout>
                 </LinearLayout>
 
-                <TextView
+                <View
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
                     android:background="@android:color/darker_gray"/>
 
                 <LinearLayout
@@ -123,7 +102,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="0dp">
 
                     <LinearLayout
                         android:orientation="vertical"
@@ -136,8 +115,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="DESCRIPTION"
-                            android:textSize="14sp"
-                            android:textColor="@color/accentColor" />
+                            style="@style/SectionText" />
 
                         <EditText
                             android:layout_width="match_parent"
@@ -162,16 +140,73 @@
                     android:layout_height="wrap_content"
                     android:paddingLeft="16dp"
                     android:paddingRight="15dp">
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:paddingLeft="4dp"
+                            android:text="Client (Optional)"
+                            android:textColor="@color/accentColor"
+                            android:textSize="14sp" />
+                    <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
 
+                            android:layout_alignParentRight="true"
+                            android:id="@+id/client_layout">
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:id="@+id/img_avatar_schedule"
+                                android:layout_centerVertical="true"
+                                android:src="@drawable/default_avatar"
+                                android:layout_marginBottom="4dp" />
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Click here if meeting with a client"
+                                android:textSize="11sp"
+                                android:textAlignment="center"
+                                android:gravity="left"
+                                android:layout_centerVertical="true"
+                                android:id="@+id/txt_creative_co_op"
+                                android:layout_toRightOf="@+id/img_avatar_schedule"
+                                android:textColor="@color/schedule_title_bg_color"
+                                android:layout_marginBottom="4dp"
+                                android:layout_gravity="center" />
+                        <ImageView android:layout_width="@dimen/action_bar_icon_height"
+                                   android:layout_height="@dimen/action_bar_icon_height"
+                                   android:padding="@dimen/action_bar_icon_padding"
+                                    android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_arrow_right_blue"/>
+                    </RelativeLayout>
+
+
+                    <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.1dp"
+                            android:layout_marginBottom="0dp"
+                            android:background="@android:color/darker_gray" />
+
+                <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@+id/img_plus_date"
+                        android:paddingTop="10dp">
                     <RelativeLayout
                         android:id="@+id/layout_date"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="25dp"
-                            android:src="@mipmap/icon_plus"
+                                android:layout_width="@dimen/action_bar_icon_height"
+                                android:layout_height="@dimen/action_bar_icon_height"
+                                android:padding="@dimen/action_bar_icon_padding"
+                            android:src="@drawable/icon_plus"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:id="@+id/img_plus_date" />
@@ -211,6 +246,7 @@
                         </LinearLayout>
 
                     </RelativeLayout>
+                    </LinearLayout>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -224,9 +260,10 @@
                         android:layout_height="wrap_content">
 
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="25dp"
-                            android:src="@mipmap/icon_plus"
+                                android:layout_width="@dimen/action_bar_icon_height"
+                                android:layout_height="@dimen/action_bar_icon_height"
+                                android:padding="@dimen/action_bar_icon_padding"
+                            android:src="@drawable/icon_plus"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:id="@+id/img_plus1" />
@@ -264,160 +301,46 @@
                         android:layout_marginBottom="5dp"
                         android:background="@android:color/darker_gray" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                    <RelativeLayout
+                            android:id="@+id/layout_location"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                        <ImageView
+                                android:layout_width="@dimen/action_bar_icon_height"
+                                android:layout_height="@dimen/action_bar_icon_height"
+                                android:padding="@dimen/action_bar_icon_padding"
+                                android:src="@drawable/icon_location"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:id="@+id/img_plus3" />
 
                         <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingTop="5dp"
-                            android:weightSum="2">
-
-                            <LinearLayout
-                                android:layout_width="0dp"
+                                android:orientation="vertical"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginRight="20dp"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
+                                android:layout_toLeftOf="@+id/img_plus3"
+                                android:paddingTop="5dp">
 
-                                <TextView
-                                    android:layout_width="match_parent"
+                            <TextView
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:text="Location"
                                     android:paddingLeft="4dp"
-                                    android:text="Street"
                                     android:textColor="@color/accentColor"
                                     android:textSize="14sp" />
 
-                                <EditText
-                                    android:id="@+id/street"
+                            <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:backgroundTint="@android:color/transparent"
-                                    android:inputType="text"
-                                    android:maxLines="1"
+                                    android:id="@+id/location"
+                                    android:paddingTop="4dp"
+                                    android:textStyle="bold"
                                     android:textColor="@color/schedule_title_bg_color"
                                     android:textSize="16sp" />
-
-                                <View
-                                    android:layout_width="match_parent"
-                                    android:layout_height="0.1dp"
-                                    android:layout_marginBottom="5dp"
-                                    android:background="@android:color/darker_gray" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:paddingLeft="4dp"
-                                    android:text="City"
-                                    android:textColor="@color/schedule_title_bg_color"
-                                    android:textSize="14sp" />
-
-                                <EditText
-                                    android:id="@+id/city"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:backgroundTint="@android:color/transparent"
-                                    android:maxLines="1"
-                                    android:textColor="@color/schedule_title_bg_color"
-                                    android:textSize="16sp" />
-
-                                <View
-                                    android:layout_width="match_parent"
-                                    android:layout_height="0.1dp"
-                                    android:layout_marginBottom="5dp"
-                                    android:background="@android:color/darker_gray" />
-
-                            </LinearLayout>
-
-
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:paddingTop="5dp"
-                            android:weightSum="2">
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:layout_marginRight="20dp"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:paddingLeft="4dp"
-                                    android:text="State"
-                                    android:textColor="@color/accentColor"
-                                    android:textSize="14sp" />
-
-                                <EditText
-                                    android:id="@+id/state"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:backgroundTint="@android:color/transparent"
-                                    android:maxLines="1"
-                                    android:textColor="@color/schedule_title_bg_color"
-                                    android:textSize="16sp" />
-
-                                <View
-                                    android:layout_width="match_parent"
-                                    android:layout_height="0.1dp"
-                                    android:layout_marginBottom="5dp"
-                                    android:background="@android:color/darker_gray" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:paddingLeft="4dp"
-                                    android:text="Zip"
-                                    android:textColor="@color/accentColor"
-                                    android:textSize="14sp" />
-
-                                <EditText
-                                    android:id="@+id/zip"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:backgroundTint="@android:color/transparent"
-                                    android:inputType="text"
-                                    android:maxLines="1"
-                                    android:textColor="@color/schedule_title_bg_color"
-                                    android:textSize="16sp" />
-
-                                <View
-                                    android:layout_width="match_parent"
-                                    android:layout_height="0.1dp"
-                                    android:layout_marginBottom="5dp"
-                                    android:background="@android:color/darker_gray" />
-
-                            </LinearLayout>
-
-
-                        </LinearLayout>
-
-                    </LinearLayout>
+                    </RelativeLayout>
 
 
                     <RelativeLayout
@@ -426,9 +349,10 @@
                         android:layout_height="wrap_content">
 
                         <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="25dp"
-                            android:src="@mipmap/up_down_arrow"
+                                android:layout_width="@dimen/action_bar_icon_height"
+                                android:layout_height="@dimen/action_bar_icon_height"
+                                android:padding="@dimen/action_bar_icon_padding"
+                            android:src="@drawable/up_down_arrow"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:id="@+id/img_reminder" />

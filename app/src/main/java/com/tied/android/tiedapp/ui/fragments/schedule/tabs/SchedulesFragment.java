@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -39,6 +40,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
+import com.tied.android.tiedapp.util.MyUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -60,10 +62,13 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
     protected TimeRange timeRange = null;
     protected DateRange dateRange = null;
 
+    protected View emptyScheduleMessage;
+
     protected ScheduleListAdapter adapter;
     protected Bundle bundle;
     protected User user;
 
+    protected ProgressBar pb;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.schedule_list, container, false);
@@ -79,6 +84,10 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
     protected void initComponent(View view){
         listView = (ListView) view.findViewById(R.id.list);
         listView.setOnItemClickListener(this);
+        emptyScheduleMessage=view.findViewById(R.id.empty_schedule);
+        emptyScheduleMessage.setVisibility(View.GONE);
+        pb=(ProgressBar)view.findViewById(R.id.progress_bar);
+        pb.setVisibility(View.GONE);
         bundle = getArguments();
         if (bundle != null) {
             Gson gson = new Gson();
@@ -96,31 +105,42 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
 
     protected void initSchedule() {
         Log.d(TAG + " scheduleDate", scheduleDate.toString());
+       pb.setVisibility(View.VISIBLE);
+        emptyScheduleMessage.setVisibility(View.GONE);
         ScheduleApi scheduleApi = MainApplication.getInstance().getRetrofit().create(ScheduleApi.class);
         Call<ScheduleRes> response = scheduleApi.getScheduleByDate(user.getToken(), scheduleDate);
         response.enqueue(new Callback<ScheduleRes>() {
             @Override
             public void onResponse(Call<ScheduleRes> call, Response<ScheduleRes> resResponse) {
                 if (getActivity() == null) return;
-                DialogUtils.closeProgress();
-                ScheduleRes scheduleRes = resResponse.body();
-                if (scheduleRes != null && scheduleRes.isAuthFailed()) {
-                    User.LogOut(getActivity());
-                } else if (scheduleRes != null && scheduleRes.get_meta() != null && scheduleRes.get_meta().getStatus_code() == 200) {
-                    ArrayList<Schedule> scheduleArrayList = scheduleRes.getSchedules();
-                    scheduleDataModels = parseSchedules(scheduleArrayList);
-                    Log.d(TAG + "scheduleDataModels", scheduleDataModels.toString());
-                    bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
-                    adapter = new ScheduleListAdapter(scheduleDataModels, getActivity(), bundle);
-                    listView.setAdapter(adapter);
-                } else {
-                    Toast.makeText(getActivity(), "encountered error with server", Toast.LENGTH_LONG).show();
+                pb.setVisibility(View.GONE);
+                try {
+                    ScheduleRes scheduleRes = resResponse.body();
+                    if (scheduleRes != null && scheduleRes.isAuthFailed()) {
+                        User.LogOut(getActivity());
+                    } else if (scheduleRes != null && scheduleRes.get_meta() != null && scheduleRes.get_meta().getStatus_code() == 200) {
+                        ArrayList<Schedule> scheduleArrayList = scheduleRes.getSchedules();
+                        scheduleDataModels = parseSchedules(scheduleArrayList);
+                        Log.d(TAG + "scheduleDataModels", scheduleDataModels.toString());
+                        bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
+                        adapter = new ScheduleListAdapter(scheduleDataModels, getActivity(), bundle);
+                        listView.setAdapter(adapter);
+                        if(scheduleArrayList.size()==0) {
+                            emptyScheduleMessage.setVisibility(View.VISIBLE);
+                        }
+                    } else {
+                        MyUtils.showToast(getString(R.string.connection_error));
+                    }
+                }catch (Exception e) {
+
                 }
             }
 
             @Override
             public void onFailure(Call<ScheduleRes> call, Throwable t) {
                 Log.d(TAG + " onFailure", t.toString());
+                pb.setVisibility(View.GONE);
+                MyUtils.showToast(getString(R.string.connection_error));
                 DialogUtils.closeProgress();
             }
         });

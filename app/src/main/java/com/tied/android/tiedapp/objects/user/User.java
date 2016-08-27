@@ -317,6 +317,9 @@ public class User implements Serializable {
     public void setAvatar_uri(String avatar_uri) {
         this.avatar_uri = avatar_uri;
     }
+    public String getAvatarURL() {
+        return Constants.GET_AVATAR_ENDPOINT + "avatar_" + getId() + ".jpg";
+    }
 
     @Override
     public String toString() {

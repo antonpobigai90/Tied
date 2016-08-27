@@ -99,7 +99,7 @@ public class ScheduleListAdapter extends BaseAdapter {
         v.weather = (TextView) view.findViewById(R.id.weather);
 
         v.day.setText(data.getDay());
-        v.week_day.setText(data.getWeek_day());
+        v.week_day.setText(data.getWeek_day().toUpperCase());
         v.temperature.setText(data.getTemperature());
         v.weather.setText(data.getWeather());
         v.timeLine = (LinearLayout) view.findViewById(R.id.timeline);

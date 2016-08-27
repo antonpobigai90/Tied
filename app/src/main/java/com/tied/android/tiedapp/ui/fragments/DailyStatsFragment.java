@@ -107,32 +107,7 @@ public class DailyStatsFragment extends Fragment implements View.OnClickListener
         user = MyUtils.getUserLoggedIn();
         Logger.write(user.toString());
 
-        if (user.getAvatar_uri() != null) {
-            Uri myUri = Uri.parse(user.getAvatar_uri());
-            img_user_picture.setImageURI(myUri);
-        } else {
-            Picasso.with(getActivity()).
-                    load(Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg")
-                    .resize(35, 35)
-                    .into(new Target() {
-                        @Override
-                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                            if (bitmap != null) {
-                                img_user_picture.setImageBitmap(bitmap);
-                            } else {
-                                img_user_picture.setImageResource(R.mipmap.default_avatar);
-                            }
-                        }
-
-                        @Override
-                        public void onBitmapFailed(Drawable errorDrawable) {
-                        }
-
-                        @Override
-                        public void onPrepareLoad(Drawable placeHolderDrawable) {
-                        }
-                    });
-        }
+        MyUtils.Picasso.displayImage(user.getAvatarURL(), img_user_picture);
 
         Calendar cal = Calendar.getInstance();
 
@@ -146,8 +121,8 @@ public class DailyStatsFragment extends Fragment implements View.OnClickListener
         final RequestBuilder weather = new RequestBuilder();
 
         Request request = new Request();
-        request.setLat("32.00");
-        request.setLng("-81.00");
+        request.setLat(""+MyUtils.getCurrentLocation().getLat());
+        request.setLng(""+MyUtils.getCurrentLocation().getLon());
         request.setUnits(Request.Units.US);
         request.setLanguage(Request.Language.ENGLISH);
         request.addExcludeBlock(Request.Block.CURRENTLY);

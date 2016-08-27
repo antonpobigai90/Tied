@@ -12,6 +12,7 @@ import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.client.AddClientActivity;
 import com.tied.android.tiedapp.ui.activities.client.SelectClientActivity;
 import com.tied.android.tiedapp.ui.activities.lines.AddLinesActivity;
+import com.tied.android.tiedapp.ui.activities.schedule.CreateAppointmentActivity;
 import com.tied.android.tiedapp.util.MyUtils;
 
 /**
@@ -74,7 +75,7 @@ public class AddOptionsActivity  extends AppCompatActivity implements  View.OnCl
 
                 break;
             case R.id.schedule_layout:
-                MyUtils.startActivity(this, SelectClientActivity.class);
+                MyUtils.startActivity(this, CreateAppointmentActivity.class);
                 break;
             case R.id.client_layout:
                 MyUtils.startActivity(this, AddClientActivity.class);

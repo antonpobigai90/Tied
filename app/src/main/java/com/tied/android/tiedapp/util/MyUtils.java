@@ -34,6 +34,7 @@ import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.retrofits.services.LineApi;
+import com.tied.android.tiedapp.ui.activities.GeneralSelectObjectActivity;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.listeners.ListAdapterListener;
 
@@ -61,8 +62,8 @@ public abstract class MyUtils {
             if (imageUrl != null && !imageUrl.isEmpty()) {
                 com.squareup.picasso.Picasso.with(MainApplication.getInstance().getApplicationContext())
                         .load(imageUrl)
-                        .memoryPolicy(MemoryPolicy.NO_CACHE)
-                        .networkPolicy(NetworkPolicy.NO_CACHE)
+                       // .memoryPolicy(MemoryPolicy.C)
+                        //.networkPolicy(NetworkPolicy.NO_CACHE)
                         .networkPolicy(NetworkPolicy.OFFLINE)
                         .into(imageView, new Callback() {
                             @Override
@@ -180,6 +181,22 @@ public abstract class MyUtils {
         }
     }
 
+    public static void setFocus(View view) {
+        view.setFocusable(true);
+        view.requestFocus();
+        view.setFocusableInTouchMode(true);
+    }
+
+    public static void initiateClientSelector(Activity c,  ArrayList<Object> selected, boolean isMultiple, int requestCode) {
+        Intent i = new Intent(c, GeneralSelectObjectActivity.class);
+        Bundle b=new Bundle();
+        b.putInt(GeneralSelectObjectActivity.OBJECT_TYPE, GeneralSelectObjectActivity.SELECT_CLIENT_TYPE);
+        b.putBoolean(GeneralSelectObjectActivity.IS_MULTIPLE, isMultiple);
+        if(selected!=null) b.putSerializable(GeneralSelectObjectActivity.SELECTED_OBJECTS, selected);
+        i.putExtras(b);
+        c.startActivityForResult(i, requestCode);
+
+    }
     public static void initAvatar(Bundle bundle, ImageView imageView) {
         if (bundle != null) {
             Gson gson = new Gson();

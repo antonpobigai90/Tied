@@ -84,8 +84,8 @@ public class SelectClientActivity extends AppCompatActivity implements View.OnCl
         if (mViewPager != null) {
             mViewPager.setAdapter(mPagerAdapter);
             mViewPager.setCurrentItem(0);
-            last_visited_indicator.setVisibility(View.VISIBLE);
-            txt_last_visited.setTextColor(getResources().getColor(R.color.button_bg));
+            alpha_indicator.setVisibility(View.VISIBLE);
+            txt_alpha.setTextColor(getResources().getColor(R.color.button_bg));
         }
         onCustomSelected(mViewPager);
     }
@@ -94,16 +94,16 @@ public class SelectClientActivity extends AppCompatActivity implements View.OnCl
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.tab_last_visited:
-                mViewPager.setCurrentItem(0);
+                mViewPager.setCurrentItem(2);
                 break;
             case R.id.tab_distance:
                 mViewPager.setCurrentItem(1);
                 break;
             case R.id.tab_alpha:
-                mViewPager.setCurrentItem(2);
+                mViewPager.setCurrentItem(0);
                 break;
             case R.id.img_close:
-                MyUtils.startActivity(this, MainActivity.class);
+               onBackPressed();
                 break;
         }
     }
@@ -142,7 +142,7 @@ public class SelectClientActivity extends AppCompatActivity implements View.OnCl
                 TextView title = (TextView) child.getChildAt(0);
                 TextView indicator = (TextView) child.getChildAt(1);
                 if(position != index){
-                    indicator.setVisibility(View.GONE);
+                    indicator.setVisibility(View.INVISIBLE);
                     title.setTextColor(getResources().getColor(R.color.semi_transparent_black));
                 }else{
                     indicator.setVisibility(View.VISIBLE);
@@ -165,14 +165,16 @@ public class SelectClientActivity extends AppCompatActivity implements View.OnCl
             Log.d(TAG, "position : "+position);
             switch (position){
                 case 0:
-                    fragment = new LastVisitedClientListFragment();
+                    fragment = new ClientAlphabeticalListFragment();
                     break;
+
                 case 1:
                     fragment = new ClientDistanceListFragment();
                     break;
                 case 2:
-                    fragment = new ClientAlphabeticalListFragment();
+                    fragment = new LastVisitedClientListFragment();
                     break;
+
             }
             assert fragment != null;
             fragment.setArguments(bundle);

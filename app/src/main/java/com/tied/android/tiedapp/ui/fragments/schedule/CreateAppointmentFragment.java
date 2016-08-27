@@ -66,7 +66,7 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
 
     TextView txt_title, txt_description, txt_date, txt_time, txt_creative_co_op, txt_reminder, txt_date_selected;
     ImageView img_avatar, img_plus_date, img_plus1, img_location, img_reminder, img_close;
-    private EditText street, city, zip, state;
+    private TextView locationTV;// street, city, zip, state;
 
     private Bundle bundle;
     private User user;
@@ -102,6 +102,9 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        view.findViewById(R.id.gainFocus).requestFocus();
+        view.setFocusableInTouchMode(true);
+
         initComponent(view);
     }
 
@@ -143,10 +146,12 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
         txt_time = (TextView) view.findViewById(R.id.time);
         txt_reminder = (TextView) view.findViewById(R.id.reminder);
 
-        street = (EditText) view.findViewById(R.id.street);
+        view.findViewById(R.id.client_layout).setOnClickListener(this);
+
+        /*street = (EditText) view.findViewById(R.id.street);
         state = (EditText) view.findViewById(R.id.state);
         city = (EditText) view.findViewById(R.id.city);
-        zip = (EditText) view.findViewById(R.id.zip);
+        zip = (EditText) view.findViewById(R.id.zip);*/
 
         img_close = (ImageView) view.findViewById(R.id.img_close);
         img_close.setOnClickListener(this);
@@ -171,29 +176,29 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
             String client_json = bundle.getString(Constants.CLIENT_DATA);
             user = gson.fromJson(user_json, User.class);
             client = gson.fromJson(client_json, Client.class);
-            txt_creative_co_op.setText(client.getCompany());
+//            txt_creative_co_op.setText(client.getCompany());
 
             String schedule_json = bundle.getString(Constants.SCHEDULE_DATA);
             Log.d(TAG, "schedule_json "+schedule_json);
             if(schedule_json != null){
                 schedule = gson.fromJson(schedule_json, Schedule.class);
                 txt_title.setText(schedule.getTitle());
-                street.setText(schedule.getLocation().getStreet());
-                city.setText(schedule.getLocation().getCity());
-                zip.setText(schedule.getLocation().getZip());
-                state.setText(schedule.getLocation().getState());
+               // street.setText(schedule.getLocation().getStreet());
+               // city.setText(schedule.getLocation().getCity());
+               // zip.setText(schedule.getLocation().getZip());
+               // state.setText(schedule.getLocation().getState());
                 txt_time.setText(schedule.getTime_range().getRange());
                 txt_date_selected.setText(schedule.getDate());
                 txt_date.setText(HelperMethods.getFormatedDate(schedule.getDate()));
                 txt_create_schedule.setText("UPDATE SCHEDULE");
 
             }else{
-                street.setText(client.getAddress().getStreet());
+               /* street.setText(client.getAddress().getStreet());
                 city.setText(client.getAddress().getCity());
                 zip.setText(client.getAddress().getZip());
-                state.setText(client.getAddress().getState());
+                state.setText(client.getAddress().getState());*/
             }
-
+/*
             String logo = client.getLogo().equals("") ? null  : client.getLogo();
             Picasso.with(getActivity()).
                     load(logo)
@@ -214,7 +219,7 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
                         @Override
                         public void onPrepareLoad(Drawable placeHolderDrawable) {
                         }
-                    });
+                    }); */
         }
 
     }
@@ -241,9 +246,10 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
         Intent intent = null;
         switch (v.getId()) {
             case R.id.img_close:
-                intent = new Intent(getActivity(), MainActivity.class);
+                /*intent = new Intent(getActivity(), MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                getActivity().startActivity(intent);
+                getActivity().startActivity(intent);*/
+                getActivity().onBackPressed();
                 break;
             case R.id.img_plus_date:
 //                nextAction(Constants.AppointmentCalendar, bundle);
@@ -279,6 +285,9 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
                     Toast.makeText(getActivity(), "Input not filled appropiately", Toast.LENGTH_LONG).show();
                 }
                 break;
+            case R.id.client_layout:
+               MyUtils.initiateClientSelector(getActivity(), null, false, 12000);
+                break;
         }
     }
 
@@ -292,10 +301,10 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
     public boolean validated() {
         dateText = txt_date_selected.getText().toString();
         titleText = txt_title.getText().toString();
-        streetText = street.getText().toString();
-        cityText = city.getText().toString();
-        zipText = zip.getText().toString();
-        stateText = state.getText().toString();
+       // streetText = street.getText().toString();
+      //  cityText = city.getText().toString();
+       // zipText = zip.getText().toString();
+        //stateText = state.getText().toString();
         location = new Location(cityText, zipText, stateText, streetText);
 
         String range = txt_time.getText().toString();

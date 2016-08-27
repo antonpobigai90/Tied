@@ -59,8 +59,9 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
     }
 
     private void selectClient() {
-        GeneralSelectObjectActivity.setType(GeneralSelectObjectActivity.SELECT_CLIENT_TYPE, false);
-        MyUtils.startRequestActivity(this, GeneralSelectObjectActivity.class, Constants.SELECT_CLIENT);
+        //GeneralSelectObjectActivity.setType(GeneralSelectObjectActivity.SELECT_CLIENT_TYPE, false);
+       // MyUtils.startRequestActivity(this, GeneralSelectObjectActivity.class, Constants.SELECT_CLIENT);
+        MyUtils.initiateClientSelector(this, null, false, 12000);
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

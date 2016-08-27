@@ -33,6 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/week_day"
+
                 android:layout_gravity="center_horizontal"
                 android:textColor="@color/schedule_title_bg_color"
                 android:text=""

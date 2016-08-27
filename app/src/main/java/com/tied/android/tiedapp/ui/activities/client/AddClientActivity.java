@@ -76,8 +76,8 @@ public class AddClientActivity extends FragmentActivity implements View.OnClickL
         String client_json = gson.toJson(client);
         bundle.putString(Constants.USER_DATA, user_json);
         bundle.putString(Constants.CLIENT_DATA, client_json);
-//        launchFragment(Constants.AddClient, bundle);
-        launchFragment(Constants.ViewClient, bundle);
+        launchFragment(Constants.AddClient, bundle);
+        //launchFragment(Constants.ViewClient, bundle);
     }
 
     private void handleCrop(Uri outputUri) {

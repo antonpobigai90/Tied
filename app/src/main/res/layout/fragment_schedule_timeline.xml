@@ -8,15 +8,17 @@
     <HorizontalScrollView
         android:id="@+id/tab_scroll"
         android:layout_width="match_parent"
+        android:scrollbars="none"
         android:layout_height="wrap_content">
 
         <LinearLayout
             android:id="@+id/tab_bar"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="#f3f5f6"
+            android:layout_height="@dimen/action_bar_height"
+            android:background="#f6f6f6"
             android:orientation="horizontal"
-            android:paddingBottom="5dp">
+            android:gravity="bottom"
+            android:paddingBottom="0dp">
 
 
 
@@ -25,6 +27,7 @@
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:gravity="bottom"
+
                 android:orientation="vertical">
 
                 <TextView
@@ -39,9 +42,9 @@
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
+                    android:layout_height="4dp"
                     android:background="@color/button_bg"
-                    android:visibility="gone" />
+                    android:visibility="visible" />
             </LinearLayout>
             <LinearLayout
                     android:id="@+id/all_tab"
@@ -60,11 +63,11 @@
                         android:textSize="12sp"
                         android:textStyle="bold" />
 
-                <TextView
+                <View
                         android:layout_width="match_parent"
-                        android:layout_height="2dp"
+                        android:layout_height="4dp"
                         android:background="@color/button_bg"
-                        android:visibility="gone" />
+                        android:visibility="invisible" />
 
             </LinearLayout>
 
@@ -86,10 +89,10 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="@color/button_bg"
-                    android:visibility="gone" />
+                        android:layout_width="match_parent"
+                        android:layout_height="4dp"
+                        android:background="@color/button_bg"
+                        android:visibility="invisible" />
             </LinearLayout>
 
             <LinearLayout
@@ -110,10 +113,10 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="@color/button_bg"
-                    android:visibility="gone" />
+                        android:layout_width="match_parent"
+                        android:layout_height="4dp"
+                        android:background="@color/button_bg"
+                        android:visibility="invisible" />
             </LinearLayout>
 
             <LinearLayout
@@ -134,15 +137,18 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="@color/button_bg"
-                    android:visibility="gone" />
+                        android:layout_width="match_parent"
+                        android:layout_height="4dp"
+                        android:background="@color/button_bg"
+                        android:visibility="invisible" />
             </LinearLayout>
 
         </LinearLayout>
 
     </HorizontalScrollView>
+    <View android:layout_height="0.1dp"
+          android:layout_width="match_parent"
+          android:background="@color/light_gray2" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"

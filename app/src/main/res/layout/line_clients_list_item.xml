@@ -34,20 +34,20 @@
             android:textColor="@color/grey"
             android:textSize="14sp" />
 
-        <!--<TextView-->
-        <!--android:id="@+id/description"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_toRightOf="@+id/pic"-->
-        <!--android:layout_marginLeft="15dp"-->
-        <!--android:layout_marginTop="10dp"-->
-        <!--android:layout_toLeftOf="@+id/check"-->
-        <!--android:ellipsize="end"-->
-        <!--android:maxLines="1"-->
-        <!--android:layout_below="@+id/name"-->
-        <!--android:text="ewewe"-->
-        <!--android:textColor="@color/light_gray"-->
-        <!--android:textSize="13sp" />-->
+        <TextView
+        android:id="@+id/description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/pic"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_toLeftOf="@+id/check"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:layout_below="@+id/name"
+        android:text="ewewe"
+        android:textColor="@color/light_gray"
+        android:textSize="13sp" />
 
         <ImageView
             android:id="@+id/selector"

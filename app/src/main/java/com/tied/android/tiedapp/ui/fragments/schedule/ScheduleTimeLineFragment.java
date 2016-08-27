@@ -219,9 +219,9 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
             if(tab_bar.getChildAt(i) instanceof LinearLayout){
                 LinearLayout child = (LinearLayout) tab_bar.getChildAt(i);
                 final TextView title = (TextView) child.getChildAt(0);
-                TextView indicator = (TextView) child.getChildAt(1);
+                View indicator = (View) child.getChildAt(1);
                 if(position != index){
-                    indicator.setVisibility(View.GONE);
+                    indicator.setVisibility(View.INVISIBLE);
                     title.setTextColor(getResources().getColor(R.color.semi_transparent_black));
                 }else{
                     indicator.setVisibility(View.VISIBLE);

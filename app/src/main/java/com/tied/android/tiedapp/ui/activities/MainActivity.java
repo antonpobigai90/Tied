@@ -71,7 +71,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
 
     private LinearLayout tab_bar, map_tab, relativeLayout, activity_layout, add_layout, more_layout, tab_actvity_schedule, alert_edit_msg;
     private RelativeLayout invite_menu;
-    private TextView txt_schedules, txt_activities, info_msg;
+    private TextView txt_schedules, txt_activities, info_msg, drawerFullName, drawerEmail;
 
     public Bitmap bitmap;
 
@@ -136,6 +136,10 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         img_user_picture.setOnClickListener(this);
         invite_menu.setOnClickListener(this);
         map_tab.setOnClickListener(this);
+        drawerFullName=(TextView)findViewById(R.id.full_name_tv);
+        drawerFullName.setText(user.getFirst_name()+" "+user.getLast_name());
+        drawerEmail=(TextView)findViewById(R.id.email_tv);
+        drawerEmail.setText(user.getEmail());
 
         Log.d(TAG, "Avatar Url : " + Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg");
         String avatarURL =Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg";

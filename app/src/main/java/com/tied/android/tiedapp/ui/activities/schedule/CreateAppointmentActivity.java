@@ -81,9 +81,11 @@ public class CreateAppointmentActivity extends FragmentActivity implements Fragm
 
     @Override
     public void onBackPressed() {
-        if(fragment_index == Constants.CreateAppointment){
+       /* if(fragment_index == Constants.CreateAppointment){
             finish();
-        }
+        }*/
+       // super.onBackPressed();
+        finish();
     }
 
     Fragment currentFragment=null;
@@ -146,7 +148,7 @@ public class CreateAppointmentActivity extends FragmentActivity implements Fragm
             transaction.show(targetFragment).commit();
         }else {
             transaction.add(R.id.fragment_place, targetFragment, tag)
-                    .addToBackStack(tag)
+                   // .addToBackStack(tag)
                     .commit();
         }
     }

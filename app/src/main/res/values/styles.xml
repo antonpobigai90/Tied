@@ -123,11 +123,11 @@
 
     <style name="SearchEditText" parent="AppTheme">
         <item name="android:background">@drawable/curve_editext</item>
-        <item name="android:drawableLeft">@android:drawable/ic_menu_search</item>
+        <item name="android:drawableLeft">@drawable/ic_search_grey_small</item>
 
         <item name="android:paddingBottom">2dp</item>
-        <item name="android:paddingLeft">5dp</item>
-        <item name="android:paddingRight">5dp</item>
+        <item name="android:paddingLeft">30dp</item>
+        <item name="android:paddingRight">30dp</item>
         <item name="android:paddingTop">2dp</item>
         <item name="android:singleLine">true</item>
         <item name="android:gravity">center</item>
