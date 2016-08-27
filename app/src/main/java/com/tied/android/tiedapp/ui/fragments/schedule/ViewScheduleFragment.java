@@ -67,7 +67,6 @@ public class ViewScheduleFragment extends Fragment implements View.OnClickListen
         return fragment;
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_schedule_view, container, false);
