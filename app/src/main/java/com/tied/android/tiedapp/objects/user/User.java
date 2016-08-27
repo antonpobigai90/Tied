@@ -1,7 +1,6 @@
 package com.tied.android.tiedapp.objects.user;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -10,6 +9,8 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignInActivity;
+import com.tied.android.tiedapp.ui.activities.signups.WalkThroughActivity;
+import com.tied.android.tiedapp.util.MyUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -95,18 +96,6 @@ public class User implements Serializable {
         return gson.fromJson(json, User.class);
     }
 
-    public boolean isNewUser(Context context){
-        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return mPrefs.getBoolean(Constants.NEW_USER, false);
-    }
-
-    public void setIsNewUser(Context context){
-        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor prefsEditor = mPrefs.edit();
-        prefsEditor.putBoolean(Constants.NEW_USER, true);
-        prefsEditor.apply();
-    }
-
     public boolean save(Context context){
         User user = this;
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -120,41 +109,36 @@ public class User implements Serializable {
 
     public static boolean isUserLoggedIn(Context context){
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-        String json = mPrefs.getString(Constants.CURRENT_USER, "");
         return mPrefs.getBoolean(Constants.LOGGED_IN_USER, false);
+    }
+
+    public static void LogInUser(Context context){
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = mPrefs.edit();
+        editor.putBoolean(Constants.LOGGED_IN_USER,true);
+        editor.apply();
     }
 
     public void LogIn(Context context){
         User user = this;
         boolean saved = user.save(context);
         if(saved){
-
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
             SharedPreferences.Editor editor = sharedPref.edit();
             editor.putBoolean(Constants.LOGGED_IN_USER,true);
             editor.apply();
-
-            Intent intent = new Intent(context, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            context.startActivity(intent);
+            MyUtils.startActivity(context, MainActivity.class);
         }
     }
 
     public static void LogOut(Context context){
-        User user = new User();
-        boolean saved = user.save(context);
-        if(saved){
+        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        SharedPreferences.Editor prefsEditor = mPrefs.edit();
+        prefsEditor.putString(Constants.CURRENT_USER, null);
+        prefsEditor.putBoolean(Constants.LOGGED_IN_USER,false);
+        prefsEditor.apply();
+        MyUtils.startActivity(context, WalkThroughActivity.class);
 
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putBoolean(Constants.LOGGED_IN_USER,false);
-            editor.apply();
-
-            Intent intent = new Intent(context, SignInActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            context.startActivity(intent);
-        }
     }
 
     public String getCompany_name() {
@@ -214,7 +198,8 @@ public class User implements Serializable {
     }
 
     public String getAvatar() {
-        return avatar;
+        String avatarURL = Constants.GET_AVATAR_ENDPOINT + "avatar_" + getId() + ".jpg";
+        return avatarURL;
     }
 
     public void setAvatar(String avatar) {

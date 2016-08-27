@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -26,9 +25,10 @@ import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.objects.user.Boss;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
-import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
-import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.util.MyUtils;
+import com.tied.android.tiedapp.util.Utility;
 
 import java.io.IOException;
 import java.util.List;
@@ -48,13 +48,12 @@ public class AddBossFragment extends Fragment implements View.OnClickListener{
     private ImageView img_sms, img_email, img_no_invite;
     int type_index;
 
-    private EditText street, city, state, zip;
+    private EditText street, city, state, zip, txt_territory;
     private String cityText, stateText, streetText, zipText;
-    private String emailText, phoneText, territoryText, firstNameText, lastNameText;
+    private String emailText, phoneText, territoryText;
 
     int fetchType = Constants.USE_ADDRESS_NAME;
-
-    private SignUpFragmentListener mListener;
+    private FragmentIterationListener mListener;
 
     LinearLayout sms_layout, email_layout, no_invite_layout;
     TextView txt_sms, txt_email1, txt_no_invite;
@@ -65,6 +64,13 @@ public class AddBossFragment extends Fragment implements View.OnClickListener{
     Bundle bundle;
     // Reference to our image view we will use
     public ImageView img_user_picture;
+
+
+    public static Fragment newInstance(Bundle bundle) {
+        Fragment fragment=new AddBossFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
 
     public AddBossFragment() {
@@ -86,6 +92,7 @@ public class AddBossFragment extends Fragment implements View.OnClickListener{
 
     public void initComponent(View view){
 
+        txt_territory = (EditText) view.findViewById(R.id.txt_territory);
         street = (EditText) view.findViewById(R.id.street);
         city = (EditText) view.findViewById(R.id.city);
         state = (EditText) view.findViewById(R.id.state);
@@ -108,12 +115,7 @@ public class AddBossFragment extends Fragment implements View.OnClickListener{
         img_user_picture = (ImageView) view.findViewById(R.id.img_user_picture);
 
         bundle = getArguments();
-        if (bundle != null) {
-            Gson gson = new Gson();
-            String user_json = bundle.getString(Constants.USER_DATA);
-            User user = gson.fromJson(user_json, User.class);
-            ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
-        }
+        MyUtils.initAvatar(bundle, img_user_picture);
 
         sms_layout = (LinearLayout) view.findViewById(R.id.sms_layout);
         sms_layout.setOnClickListener(this);
@@ -131,8 +133,8 @@ public class AddBossFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SignUpFragmentListener) {
-            mListener = (SignUpFragmentListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -142,7 +144,7 @@ public class AddBossFragment extends Fragment implements View.OnClickListener{
 
     public void nextAction(Bundle bundle) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(Constants.AddBossNow, bundle);
+            mListener.OnFragmentInteractionListener(Constants.AddBossNow, bundle);
         }
     }
 
@@ -156,7 +158,18 @@ public class AddBossFragment extends Fragment implements View.OnClickListener{
 
         emailText = email.getText().toString();
         phoneText = phone.getText().toString();
-        return true;
+        territoryText = txt_territory.getText().toString();
+
+        boolean validated = false;
+        if(!emailText.equals("")){
+            if (!Utility.isEmailValid(emailText)) {
+                MyUtils.showToast("Not a valid email");
+            } else {
+                validated = MyUtils.locationValidation(location);
+            }
+        }
+
+        return validated;
     }
 
     @Override
@@ -221,17 +234,14 @@ public class AddBossFragment extends Fragment implements View.OnClickListener{
 
             Bundle bundle = getArguments();
 
-            Uri uri = ((SignUpActivity) getActivity()).outputUri;
-
             Gson gson = new Gson();
             String user_json = bundle.getString(Constants.USER_DATA);
             final User user = gson.fromJson(user_json, User.class);
             user.setBoss(boss);
             user.setSign_up_stage(Constants.AddBossNow);
+            user.save(getActivity().getApplicationContext());
             String json = gson.toJson(user);
             bundle.putString(Constants.USER_DATA, json);
-            if(uri != null)
-                bundle.putString("avatar", uri.toString());
             DialogUtils.closeProgress();
             nextAction(bundle);
         }

@@ -9,11 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
@@ -22,8 +18,11 @@ import com.tied.android.tiedapp.objects.responses.LoginUser;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.signups.SignInActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
-import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
-import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.ui.activities.signups.WalkThroughActivity;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.util.Logger;
+import com.tied.android.tiedapp.util.MyUtils;
 import com.tied.android.tiedapp.util.Utility;
 
 import retrofit2.Call;
@@ -38,9 +37,10 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
     public static final String TAG = SignInFragment.class
             .getSimpleName();
 
-    private SignUpFragmentListener mListener;
+    private FragmentIterationListener mListener;
 
-    ImageView signin, signup;
+    ImageView signin;
+            View signup;
     Context context;
     private EditText email, password;
 
@@ -62,15 +62,14 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         initComponent(view);
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SignUpFragmentListener) {
-            mListener = (SignUpFragmentListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -80,20 +79,21 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
     public void initComponent(View view){
 
         context = getActivity();
+      //  MyUtils.showAlert(view, "Hello Femi", MyUtils.ERROR_TOAST);
 
         email = (EditText) view.findViewById(R.id.email);
         password = (EditText) view.findViewById(R.id.password);
         forgot_password = (TextView) view.findViewById(R.id.forgot_password);
 
         signin = (ImageView) view.findViewById(R.id.signin);
-        signup = (ImageView) view.findViewById(R.id.signup);
+        signup =  view.findViewById(R.id.signup);
 
         signin.setOnClickListener(this);
         signup.setOnClickListener(this);
         forgot_password.setOnClickListener(this);
 
-        alert_valid = (LinearLayout) view.findViewById(R.id.alert_valid);
-        alert_valid.setVisibility(View.GONE);
+       // alert_valid = (LinearLayout) view.findViewById(R.id.alert_valid);
+       // alert_valid.setVisibility(View.GONE);
     }
 
     public void continue_action(){
@@ -107,28 +107,38 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
             @Override
             public void onResponse(Call<LoginUser> call, Response<LoginUser> LoginResponse) {
                 if (getActivity() == null) return;
-                LoginUser LoginUser = LoginResponse.body();
-                Log.d(TAG, LoginUser.toString());
-                if (LoginUser.isSuccess()) {
-                    User loggedIn_user = LoginUser.getUser();
-                    loggedIn_user.setToken(LoginUser.getToken());
-                    boolean saved = loggedIn_user.save(getActivity().getApplicationContext());
-                    if (saved) {
-                        loggedIn_user.LogIn(getActivity().getApplicationContext());
+                try {
+                    LoginUser LoginUser = LoginResponse.body();
+                    Log.d(TAG, LoginUser.toString());
+                    if (LoginUser.isSuccess()) {
+                        User loggedIn_user = LoginUser.getUser();
+                        loggedIn_user.setToken(LoginUser.getToken());
+                        boolean saved = loggedIn_user.save(getActivity().getApplicationContext());
+                        if (saved) {
+                            loggedIn_user.LogIn(getActivity().getApplicationContext());
+                            getActivity().finish();
+                            WalkThroughActivity.getInstance().finish();
+                        } else {
+                           // Toast.makeText(getActivity(), "user not save", Toast.LENGTH_LONG).show();
+                        }
+                        Log.d(TAG, loggedIn_user.toString());
                     } else {
-                        Toast.makeText(getActivity(), "user not save", Toast.LENGTH_LONG).show();
+                        Logger.write(LoginUser.getMessage());
+                        DialogUtils.closeProgress();
+                       // Toast.makeText(getActivity(), LoginUser.getMessage(), Toast.LENGTH_LONG).show();
+                        MyUtils.showAlert(getActivity(), LoginUser.getMessage());
                     }
-                    Log.d(TAG, loggedIn_user.toString());
-                } else {
-                    DialogUtils.closeProgress();
-                    Toast.makeText(getActivity(), LoginUser.getMessage(), Toast.LENGTH_LONG).show();
+
+                }catch (Exception e) {
+                    Logger.write(e);
+                    MyUtils.showToast(getActivity().getString(R.string.connection_error));
                 }
                 DialogUtils.closeProgress();
             }
 
             @Override
             public void onFailure(Call<LoginUser> checkEmailCall, Throwable t) {
-                Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
+                MyUtils.showToast(getActivity().getString(R.string.connection_error));
                 Log.d(TAG + " onFailure", t.toString());
                 DialogUtils.closeProgress();
             }
@@ -140,18 +150,20 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
         switch (v.getId()){
             case R.id.signin:
                 if (!Utility.isEmailValid(email.getText().toString())) {
-                    alert_valid.setVisibility(View.VISIBLE);
-                    Utility.moveViewToScreenCenter( alert_valid, Utility.getResourceString(context, R.string.alert_valide_email));
+                    //alert_valid.setVisibility(View.VISIBLE);
+                   // Utility.moveViewToScreenCenter( alert_valid, Utility.getResourceString(context, R.string.alert_valide_email));
+                    MyUtils.showAlert(getActivity(), Utility.getResourceString(context, R.string.alert_valide_email));
                 } else if (password.getText().length() == 0) {
-                    alert_valid.setVisibility(View.VISIBLE);
-                    Utility.moveViewToScreenCenter( alert_valid, Utility.getResourceString(context, R.string.alert_valide_password));
+                   // alert_valid.setVisibility(View.VISIBLE);
+                    MyUtils.showAlert(getActivity(), Utility.getResourceString(context, R.string.alert_valide_password));
+                   // Utility.moveViewToScreenCenter( alert_valid, Utility.getResourceString(context, R.string.alert_valide_password));
                 } else {
                     continue_action();
                 }
 
                 break;
             case R.id.forgot_password:
-                mListener.onFragmentInteraction(Constants.Reset, null);
+                mListener.OnFragmentInteractionListener(Constants.Reset, null);
                 break;
             case R.id.signup:
                 Intent intent = new Intent(getActivity(), SignUpActivity.class);

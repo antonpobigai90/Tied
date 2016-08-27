@@ -14,7 +14,7 @@
         <ImageView
             android:id="@+id/img_activity"
             android:layout_width="30dp"
-            android:layout_height="25dp"
+            android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:src="@mipmap/sort_icon_blue" />
@@ -171,14 +171,21 @@
                 android:textColor="@color/schedule_title_bg_color"
                 android:textSize="18sp" />
 
-
-            <ListView
-                android:id="@+id/list"
-                android:layout_below="@+id/upper_layout"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:listSelector="@android:color/transparent"
-                android:scrollbars="none" />
+                android:id="@+id/should_visit"
+                android:orientation="vertical">
+            </LinearLayout>
+
+
+            <!--<ListView-->
+                <!--android:id="@+id/list"-->
+                <!--android:layout_below="@+id/upper_layout"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:listSelector="@android:color/transparent"-->
+                <!--android:scrollbars="none" />-->
             <!--<android.support.v7.widget.RecyclerView-->
                 <!--android:id="@+id/list"-->
                 <!--android:layout_below="@+id/upper_layout"-->

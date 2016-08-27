@@ -29,16 +29,18 @@ import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.gson.Gson;
+import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.objects.responses.CheckEmail;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
+import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.signups.WalkThroughActivity;
-import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
-import com.tied.android.tiedapp.util.AppDialog;
-import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.ui.dialogs.AppDialog;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.util.Logger;
+import com.tied.android.tiedapp.util.MyUtils;
 import com.tied.android.tiedapp.util.Utility;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterAuthToken;
@@ -68,10 +70,10 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
     private AccessTokenTracker accessTokenTracker;
     private ProfileTracker profileTracker;
 
-    private SignUpFragmentListener mListener;
+    private FragmentIterationListener mListener;
 
     private RelativeLayout continue_btn;
-    LinearLayout alert_valid_email;
+    //LinearLayout alert_valid_email;
     private ImageView btn_close, img_facebook, img_twitter, img_help;
     public TwitterAuthClient authClient = new TwitterAuthClient();
     private TwitterSession session;
@@ -83,6 +85,12 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
     private EditText email;
 
     String facebookId, firstName = "", lastName="", emailText="", avatar="";
+
+    public static Fragment newInstance (Bundle bundle) {
+        Fragment fragment=new EmailSignUpFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     public EmailSignUpFragment() {}
 
@@ -101,8 +109,8 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SignUpFragmentListener) {
-            mListener = (SignUpFragmentListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -111,7 +119,7 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
 
     public void nextAction(Bundle bundle) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(Constants.Password,bundle);
+            mListener.OnFragmentInteractionListener(Constants.Password,bundle);
         }
     }
 
@@ -140,42 +148,47 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
             email.setText(user.getEmail());
         }
 
-        alert_valid_email = (LinearLayout) view.findViewById(R.id.alert_valid);
-        alert_valid_email.setVisibility(View.GONE);
+       //alert_valid_email = (LinearLayout) view.findViewById(R.id.alert_valid);
+       // alert_valid_email.setVisibility(View.GONE);
     }
 
     public void continue_action(){
         DialogUtils.displayProgress(getActivity());
-        SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
-        Call<CheckEmail> response = signUpApi.checkEmail(emailText);
+        Call<CheckEmail> response =  MainApplication.createService(SignUpApi.class).checkEmail(emailText);
         Log.d(TAG, response.request().url().toString());
         response.enqueue(new Callback<CheckEmail>() {
             @Override
             public void onResponse(Call<CheckEmail> call, Response<CheckEmail> checkEmailResponse) {
                 if (getActivity() == null) return;
-                CheckEmail checkEmail = checkEmailResponse.body();
+                try {
+                    CheckEmail checkEmail = checkEmailResponse.body();
 
-                if(checkEmail.isSuccess()){
-                    Bundle bundle = new Bundle();
-                    User user = new User();
-                    user.setEmail(emailText);
-                    user.setFirst_name(firstName);
-                    user.setLast_name(lastName);
-                    user.setAvatar(avatar);
-                    Gson gson = new Gson();
-                    String user_json = gson.toJson(user);
-                    bundle.putString(Constants.USER_DATA, user_json);
-                    nextAction(bundle);
-                }else{
-                    Toast.makeText(getActivity(), checkEmail.getMessage(), Toast.LENGTH_LONG).show();
+                    if (checkEmail.isSuccess()) {
+                        Bundle bundle = new Bundle();
+                        User user = new User();
+                        user.setEmail(emailText);
+                        user.setFirst_name(firstName);
+                        user.setLast_name(lastName);
+                        user.setAvatar(avatar);
+                        Gson gson = new Gson();
+                        String user_json = gson.toJson(user);
+                        bundle.putString(Constants.USER_DATA, user_json);
+                        nextAction(bundle);
+                    } else {
+                        MyUtils.showAlert(getActivity(), checkEmail.getMessage());
+                    }
+                }catch (Exception e) {
+                    Logger.write(e);
+                    MyUtils.showToast(getActivity().getString(R.string.connection_error));
                 }
                 DialogUtils.closeProgress();
             }
 
             @Override
             public void onFailure(Call<CheckEmail> checkEmailCall, Throwable t) {
-                Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
-                Log.d(TAG +" onFailure", t.toString());
+               // Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
+                MyUtils.showToast(getActivity().getString(R.string.connection_error));
+                Logger.write(TAG +" onFailure", t.toString());
                 DialogUtils.closeProgress();
             }
         });
@@ -187,8 +200,9 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
             case R.id.continue_btn:
                 emailText = email.getText().toString();
                 if (!Utility.isEmailValid(emailText)) {
-                    alert_valid_email.setVisibility(View.VISIBLE);
-                    Utility.moveViewToScreenCenter( alert_valid_email, Utility.getResourceString(getActivity(), R.string.alert_valide_email));
+                  //  alert_valid_email.setVisibility(View.VISIBLE);
+                 //  Utility.moveViewToScreenCenter( alert_valid_email, Utility.getResourceString(getActivity(), R.string.alert_valide_email));
+                    MyUtils.showAlert(getActivity(), Utility.getResourceString(getActivity(), R.string.alert_valide_email));
                 } else {
                     continue_action();
                 }
@@ -199,6 +213,7 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
                 startActivity(intent);
                 break;
             case R.id.img_facebook:
+
                 LoginManager.getInstance().logInWithReadPermissions(getActivity(), Arrays.asList("public_profile", "email"));
                 break;
             case R.id.img_twitter:
@@ -290,10 +305,6 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
                             firstName = obj.getString("first_name");
                             lastName = obj.getString("last_name");
                             emailText = obj.getString("email");
-
-                            Toast.makeText(getActivity(), emailText,Toast.LENGTH_LONG).show();
-                            Log.d("response email ", obj.getString("email")+"");
-
                             continue_action();
 
                         } catch (JSONException e) {
@@ -329,6 +340,4 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
             }
         };
     }
-
-
 }

@@ -1,5 +1,6 @@
 package com.tied.android.tiedapp.ui.fragments.schedule.tabs;
 
+import android.util.Pair;
 import android.view.View;
 
 import com.tied.android.tiedapp.objects.schedule.DateRange;
@@ -19,7 +20,9 @@ public class ThisMonthScheduleFragment extends SchedulesFragment implements View
     protected void initComponent(View view) {
         Calendar cal = Calendar.getInstance();
         timeRange = new TimeRange("00:00","23:59");
-        dateRange = new DateRange("2016-07-01","2016-07-31");
+
+        Pair<String, String> range = getDateRange();
+        dateRange = new DateRange(range.first, range.second);
         scheduleDate = new ScheduleDate(timeRange, dateRange);
         super.initComponent(view);
     }

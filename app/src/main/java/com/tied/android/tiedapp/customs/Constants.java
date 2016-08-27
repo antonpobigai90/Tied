@@ -14,6 +14,7 @@ public class Constants {
     public static final String SERVER_URL = "http://tied.goattale.com:8102/api/v1/";
 
     public static final String HOST = "http://tied.goattale.com:8102/";
+//    public static final String HOST = "https://tied-api.herokuapp.com/";
 
     public static final int PORT = 3000;
     public static final String API_PATH = "api/v1/";
@@ -22,22 +23,35 @@ public class Constants {
     public static final String AUTH_REGISTER_ENDPOINT = API_PATH + "auth/register";
     public static final String AUTH_LOGIN_ENDPOINT = API_PATH + "auth/login";
     public static final String AUTH_SEND_PHONE_CODE_ENDPOINT = API_PATH + "auth/send_phone_vc";
+    public static final String AUTH_VERIFY_PHONE_CODE_ENDPOINT = API_PATH + "auth/verify_phone";
 
     public static final String GET_AVATAR_ENDPOINT = HOST + "uploads/avatars/";
+    public static final String GET_LOGO_ENDPOINT = HOST + "uploads/logos/";
 
     public static final String USER_UPDATE_INFO = API_PATH + "users/me";
     public static final String USER_CHANGE_PASSWORD = API_PATH + "users/changePassword";
 
     public static final String CLIENTS = API_PATH + "clients";
-    public static final String LINES = API_PATH + "lines";
     public static final String USER_CLIENTS = API_PATH + "users/me/clients";
     public static final String USER_CLIENTS_COUNT = API_PATH + "users/me/clients_count";
     public static final String USER_GE0_CLIENTS = API_PATH + "users/me/clients/geo";
 
 
-    public static final String GET_CLIENT_WITH_ID = API_PATH + "client/{client_id}";
-    public static final String UPDATE_SCHEDULE_WITH_ID = API_PATH + "schedules/{schedule_id}";
+    public static final String LINES = API_PATH + "lines";
+    public static final String UPDATE_LINE_WITH_ID = API_PATH + "lines/{line_id}";
+    public static final String USER_LINES = API_PATH + "users/me/lines";
+    public static final String USER_CLIENT_LINES = API_PATH + "users/me/client_lines";
+    public static final String USER_LINE_REVENUES = API_PATH + "users/me/lines/{line_id}/revenues/{page_number}";
+    public static final String GET_LINE_WITH_ID =  API_PATH + "lines/";
+    public static final String USER_LINE_COUNT=  API_PATH + "lines/count";
+    public static final String USER_GE0_LINES =  API_PATH + "lines/geo";
 
+    public static final String GET_CLIENT_WITH_ID = API_PATH + "client/{client_id}";
+    public static final String UPDATE_CLIENT_WITH_ID = API_PATH + "clients/{client_id}";
+
+
+    public static final String UPDATE_SCHEDULE_WITH_ID = API_PATH + "schedules/{schedule_id}";
+    public static final String DELETE_SCHEDULE_WITH_ID = API_PATH + "schedules/{schedule_id}";
     public static final String SCHEDULES = API_PATH + "schedules";
     public static final String USER_SCHEDULE = API_PATH + "users/me/schedules";
     public static final String USER_SCHEDULE_COUNT = API_PATH + "users/me/schedules_count";
@@ -50,13 +64,14 @@ public class Constants {
     public static final String USER_DATA = "user_data";
     public static final String CLIENT_DATA = "client_data";
     public static final String SCHEDULE_DATA = "schedule_data";
+    public static final String SCHEDULE_LIST = "schedules";
     public static final String SCHEDULE_DATE_FILTER = "schedule_date_filter";
     public static final String CODE = "code";
     public static final String SERVER_INFO = "server_info";
     public static final String CURRENT_USER = "current_user";
     public static final String NEW_USER = "new_user";
-    public static final String SPLASH_SCREEN_DONE = "sp lash_screen_done";
-    public static final String LOGGED_OUT_USER = "logout";
+    public static final String SPLASH_SCREEN_DONE = "sp_lash_screen_done";
+    public static final String RETURNING_USER = "returning_user";
     public static final String LOGGED_IN_USER = "login";
     public static final String AVATAR_STATE_SAVED = "avatar_state";
     public static final String EditingProfile = "editing_profile";
@@ -72,11 +87,6 @@ public class Constants {
     public static final String SELECTED_DATE = "selected_date";
     public static final String SHOW_SELECTED_DATE = "show_selected_date";
     public static final String SCHEDULE_DATA_FILTER_INDEX = "filter";
-    public static final String CITY = "city";
-    public static final String ZIP = "zip";
-    public static final String STATE = "state";
-    public static final String COUNTRY = "country";
-    public static final String STREET = "street";
     public static final String LONGITUDE = "longitude";
     public static final String LATITUDE = "latitude";
     public static final String FIRST_NAME = "first_name";
@@ -145,27 +155,35 @@ public class Constants {
     public static final int SUCCESS_RESULT = 0;
     public static final String RESULT_ADDRESS = "address";
     public static final String RESULT_DATA_KEY = "data_key";
+    public static final int SELECT_CLIENT = 1000;
+    public static final int ADD_SALES = 1001;
+
+    public static final String TOTAL_SALES = "Total sales";
 
     public static final String RAIN = "rain";
     public static final String CLEAR_DAY = "clear-day";
     public static final String CLEAR_NIGHT = "clear-night";
-    public static final String SNOW = "snow";
+    public static final String SNOW = "sn`ow";
     public static final String SLEET = "sleet";
     public static final String FOG = "fog";
     public static final String WIND = "wind";
     public static final String PARTLY_CLOUDY_DAY = "partly-cloudy-day";
     public static final String PARTLY_CLOUDY_NIGHT = "partly-cloudy-night";
 
+    public static final String TERRITORY_DATA = "territory_data";
+    public static final String CLIENT_EDITED = "client_updated";
+    public static final String SCHEDULE_EDITED = "schedule_updated";
     public static final String SCHEDULE_CREATED = "a_schedule_exist";
+    public static final String SCHEDULE_DELETED = "schedule_deleted";
     public static final String CLIENT_CREATED = "a_client_exist";
+    public static final String NO_CLIENT_FOUND = "no_client_found";
+    public static final String NO_SCHEDULE_FOUND = "no_schedule_found";
     public static final String LINE_CREATED = "a_line_exist";
     public static final String GOOGLE_REVERSE_GEOCODING_URL="https://maps.googleapis.com/maps/api/geocode/json?sensor=true&key=AIzaSyDdWKslIGOEWJMa5RJFwH2dowBc7rEQ14g&latlng=";
+    public static final String LINE_DATA = "line";
+    public static final String LINES_lIST = "lines";
     public static PersistentCookieStore MY_COOKIE_STORE=null;
-    public static final String USER_LINES = API_PATH + "users/me/lines";
-    public static final String USER_LINE_REVENUES = API_PATH + "users/me/lines/{line_id}/revenues/{page_number}";
-    public static final String GET_LINE_WITH_ID =  API_PATH + "lines/";
-    public static final String USER_LINE_COUNT=  API_PATH + "lines/count";
-    public static final String USER_GE0_LINES =  API_PATH + "lines/geo";
+
     public static File DIR_ROOT = new File("StreamLive"),
             DIR_CACHE = new File("cache"), DIR_HTML_CACHE = new File("html"), DIR_DOWNLOADS = new File("downloads"), DIR_MEDIA = new File("media");
 

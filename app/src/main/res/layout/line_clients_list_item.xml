@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/invite_layout"
@@ -25,37 +25,38 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/pic"
             android:layout_marginLeft="15dp"
             android:layout_toLeftOf="@+id/check"
+            android:layout_toRightOf="@+id/pic"
             android:ellipsize="end"
             android:maxLines="1"
             android:text="Emily Emmanuel"
             android:textColor="@color/grey"
             android:textSize="14sp" />
 
-        <TextView
-                android:id="@+id/description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/pic"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="10dp"
-                android:layout_toLeftOf="@+id/check"
-                android:ellipsize="end"
-                android:maxLines="1"
-                android:layout_below="@+id/name"
-                android:text="ewewe"
-                android:textColor="@color/light_gray"
-                android:textSize="13sp" />
+        <!--<TextView-->
+        <!--android:id="@+id/description"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_toRightOf="@+id/pic"-->
+        <!--android:layout_marginLeft="15dp"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:layout_toLeftOf="@+id/check"-->
+        <!--android:ellipsize="end"-->
+        <!--android:maxLines="1"-->
+        <!--android:layout_below="@+id/name"-->
+        <!--android:text="ewewe"-->
+        <!--android:textColor="@color/light_gray"-->
+        <!--android:textSize="13sp" />-->
 
-<ImageView android:layout_width="30dp"
-          android:layout_alignParentRight="true"
-           android:layout_centerVertical="true"
-           android:layout_height="30dip"
-           android:id="@+id/selector"
-           android:layout_marginRight="15dip"
-android:src="@drawable/unselectd_bg"/>
+        <ImageView
+            android:id="@+id/selector"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dip"
+            android:src="@drawable/circle_uncheck" />
     </RelativeLayout>
 
     <View

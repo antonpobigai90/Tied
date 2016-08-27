@@ -15,14 +15,17 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
-import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
-import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.util.Logger;
+import com.tied.android.tiedapp.util.MyUtils;
 import com.tied.android.tiedapp.util.Utility;
 
 import retrofit2.Call;
@@ -40,17 +43,22 @@ public class NameFragment extends Fragment implements View.OnClickListener {
     private EditText first_name, last_name;
     //    private Button continue_btn;
     private RelativeLayout continue_btn;
-    LinearLayout alert_valid;
+   // LinearLayout alert_valid;
 
     // Reference to our image view we will use
     public ImageView img_user_picture;
 
     String firstNameText, lastNameText;
 
-    private SignUpFragmentListener mListener;
+    private FragmentIterationListener mListener;
 
     private Bundle bundle;
-    private User user;
+
+    public static Fragment newInstance (Bundle bundle) {
+        Fragment fragment=new NameFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     public NameFragment() {
     }
@@ -70,11 +78,12 @@ public class NameFragment extends Fragment implements View.OnClickListener {
 
     public void initComponent(View view) {
 
+        SignUpActivity.setStage(view, 5);
         first_name = (EditText) view.findViewById(R.id.first_name);
         last_name = (EditText) view.findViewById(R.id.last_name);
 
-        alert_valid = (LinearLayout) view.findViewById(R.id.alert_valid);
-        alert_valid.setVisibility(View.GONE);
+        //alert_valid = (LinearLayout) view.findViewById(R.id.alert_valid);
+       // alert_valid.setVisibility(View.GONE);
 
         img_user_picture = (ImageView) view.findViewById(R.id.img_user_picture);
 
@@ -82,24 +91,14 @@ public class NameFragment extends Fragment implements View.OnClickListener {
         continue_btn.setOnClickListener(this);
 
         bundle = getArguments();
-        if (bundle != null) {
-            Gson gson = new Gson();
-            bundle = getArguments();
-            String user_json = bundle.getString(Constants.USER_DATA);
-            user = gson.fromJson(user_json, User.class);
-            first_name.setText(user.getFirst_name());
-            last_name.setText(user.getLast_name());
-            ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
-        }
-
-
+        MyUtils.initAvatar(bundle, img_user_picture);
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SignUpFragmentListener) {
-            mListener = (SignUpFragmentListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -109,46 +108,52 @@ public class NameFragment extends Fragment implements View.OnClickListener {
 
     public void nextAction(Bundle bundle) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(Constants.PhoneAndFax, bundle);
+            mListener.OnFragmentInteractionListener(Constants.OfficeAddress, bundle);
         }
     }
 
     public void continue_action() {
         DialogUtils.displayProgress(getActivity());
+        String user_json = bundle.getString(Constants.USER_DATA);
+        final Gson gson = new Gson();
+        final User user = gson.fromJson(user_json, User.class);
         user.setFirst_name(firstNameText);
         user.setLast_name(lastNameText);
-        user.setSign_up_stage(Constants.PhoneAndFax);
-        SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
-        Call<ServerRes> response = signUpApi.updateUser(user);
+        user.setSign_up_stage(Constants.OfficeAddress);
+        Call<ServerRes> response = MainApplication.createService(SignUpApi.class).updateUser(user);
         response.enqueue(new Callback<ServerRes>() {
             @Override
             public void onResponse(Call<ServerRes> call, Response<ServerRes> ServerResResponse) {
                 if (getActivity() == null) return;
-                ServerRes ServerRes = ServerResResponse.body();
-                Log.d(TAG + " onFailure", ServerResResponse.body().toString());
-                if (ServerRes.isSuccess()) {
-                    Bundle bundle = new Bundle();
-                    boolean saved = user.save(getActivity().getApplicationContext());
-                    if (saved) {
-                        Gson gson = new Gson();
-                        String json = gson.toJson(user);
-                        bundle.putString(Constants.USER_DATA, json);
-                        DialogUtils.closeProgress();
-                        nextAction(bundle);
+                try {
+                    ServerRes ServerRes = ServerResResponse.body();
+                    Log.d(TAG + " onFailure", ServerResResponse.body().toString());
+                    if (ServerRes.isSuccess()) {
+                        Bundle bundle = new Bundle();
+                        boolean saved = user.save(getActivity().getApplicationContext());
+                        if (saved) {
+                            Gson gson = new Gson();
+                            String json = gson.toJson(user);
+                            bundle.putString(Constants.USER_DATA, json);
+                            DialogUtils.closeProgress();
+                            nextAction(bundle);
+                        } else {
+                            DialogUtils.closeProgress();
+                            MyUtils.showToast(getString(R.string.connection_error));
+                        }
                     } else {
-                        DialogUtils.closeProgress();
-                        Toast.makeText(getActivity(), "user info  was not updated", Toast.LENGTH_LONG).show();
+                        MyUtils.showAlert(getActivity(), ServerRes.getMessage());
                     }
-                } else {
-                    Toast.makeText(getActivity(), ServerRes.getMessage(), Toast.LENGTH_LONG).show();
+                }catch (Exception e) {
+                    MyUtils.showToast(getString(R.string.connection_error));
                 }
                 DialogUtils.closeProgress();
             }
 
             @Override
             public void onFailure(Call<ServerRes> ServerResCall, Throwable t) {
-                Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
-                Log.d(TAG + " onFailure", t.toString());
+                MyUtils.showToast(getString(R.string.connection_error));
+                Logger.write(TAG + " onFailure", t.toString());
                 DialogUtils.closeProgress();
             }
         });
@@ -161,13 +166,15 @@ public class NameFragment extends Fragment implements View.OnClickListener {
                 firstNameText = first_name.getText().toString();
                 lastNameText = last_name.getText().toString();
                 boolean first_name_match = firstNameText.matches("^[\\p{L} .'-]+$");
-                if (!first_name_match) {
-                    alert_valid.setVisibility(View.VISIBLE);
-                    Utility.moveViewToScreenCenter(alert_valid, Utility.getResourceString(getActivity(), R.string.alert_valide_name));
-                } else if (firstNameText.length() == 0) {
-                    alert_valid.setVisibility(View.VISIBLE);
-                    Utility.moveViewToScreenCenter(alert_valid, Utility.getResourceString(getActivity(), R.string.alert_valide_name_empty));
-                } else {
+                if (firstNameText.length() == 0) {
+                    // alert_valid.setVisibility(View.VISIBLE);
+                    MyUtils.showAlert(getActivity(), "First name is required");
+                    //Utility.moveViewToScreenCenter(alert_valid, Utility.getResourceString(getActivity(), R.string.alert_valide_name_empty));
+                } else if (!first_name_match) {
+                  //  alert_valid.setVisibility(View.VISIBLE);
+                    MyUtils.showAlert(getActivity(), getActivity().getString(R.string.alert_valide_first_name));
+                   // Utility.moveViewToScreenCenter(alert_valid, );
+                } else  {
                     continue_action();
                 }
                 break;

@@ -20,15 +20,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
+import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
-import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
-import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.util.MyUtils;
 
 import java.io.File;
 
@@ -61,8 +62,14 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
     // Reference to our image view we will use
     public ImageView avatar, img_user_picture;
 
-    private SignUpFragmentListener mListener;
+    private FragmentIterationListener mListener;
     Bundle bundle;
+
+    public static Fragment newInstance (Bundle bundle) {
+        Fragment fragment=new PictureFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     public PictureFragment() {
 
@@ -82,6 +89,7 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
     }
 
     public void initComponent(View view) {
+        SignUpActivity.setStage(view, 8);
         select_pics = (TextView) view.findViewById(R.id.select_pics);
         avatar = (ImageView) view.findViewById(R.id.avatar);
         img_user_picture = (ImageView) view.findViewById(R.id.img_user_picture);
@@ -93,31 +101,14 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
         continue_btn.setOnClickListener(this);
 
         bundle = getArguments();
-        if (bundle != null) {
-            Gson gson = new Gson();
-            String user_json = bundle.getString(Constants.USER_DATA);
-            User user = gson.fromJson(user_json, User.class);
-            ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
-
-            if (user.getAvatar_uri() != null){
-                Uri myUri = Uri.parse(user.getAvatar_uri());
-                img_user_picture.setImageURI(myUri);
-                avatar.setImageURI(myUri);
-            }
-            else if(user.getAvatar() != null && !user.getAvatar().equals("")){
-                Picasso.with(getActivity()).
-                        load(user.getAvatar())
-                        .resize(100,100)
-                        .into(avatar);
-            }
-        }
+        MyUtils.initAvatar(bundle, img_user_picture);
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SignUpFragmentListener) {
-            mListener = (SignUpFragmentListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -126,7 +117,8 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
 
     public void nextAction(Bundle bundle) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(Constants.Name, bundle);
+            SignUpActivity.startMainApp(getActivity());
+           // mListener.OnFragmentInteractionListener(Constants.OfficeAddress, bundle);
         }
     }
 
@@ -162,52 +154,57 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
 
             RequestBody stage =
                     RequestBody.create(
-                            MediaType.parse("multipart/form-data"), Constants.Name+"");
+                            MediaType.parse("multipart/form-data"), Constants.OfficeAddress+"");
 
-            SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
             // finally, execute the request
-            Call<ServerRes> call = signUpApi.uploadAvatar(user.getToken() ,id, stage, body);
+            Call<ServerRes> call = MainApplication.createService(SignUpApi.class, user.getToken())
+                    .uploadAvatar(id, stage, body);
             call.enqueue(new Callback<ServerRes>() {
 
                 @Override
                 public void onResponse(Call<ServerRes> call, Response<ServerRes> updateAvatarResponse) {
                     if (getActivity() == null) return;
-                    ServerRes ServerRes = updateAvatarResponse.body();
-                    Log.d(TAG, ServerRes.toString() );
-                    if(ServerRes.isSuccess()){
-                        Gson gson = new Gson();
-                        Bundle bundle = getArguments();
-                        String user_json = bundle.getString(Constants.USER_DATA, "");
-                        User user = gson.fromJson(user_json, User.class);
-                        user.setSign_up_stage(Constants.Name);
-                        user.setAvatar_uri(String.valueOf(uri));
-                        user.setAvatar(ServerRes.getUser().getAvatar());
-                        boolean saved = user.save(getActivity().getApplicationContext());
-                        if(saved){
+                    try {
+                        ServerRes ServerRes = updateAvatarResponse.body();
+                        Log.d(TAG, ServerRes.toString());
+                        if (ServerRes.isSuccess()) {
+                            Gson gson = new Gson();
+                            Bundle bundle = getArguments();
+                            String user_json = bundle.getString(Constants.USER_DATA, "");
+                            User user = gson.fromJson(user_json, User.class);
+                            user.setSign_up_stage(Constants.OfficeAddress);
+                            user.setAvatar_uri(String.valueOf(uri));
+                            user.setAvatar(ServerRes.getUser().getAvatar());
+                            boolean saved = user.save(getActivity().getApplicationContext());
+                            if (saved) {
+                                DialogUtils.closeProgress();
+                                user_json = gson.toJson(user);
+                                bundle.putString(Constants.USER_DATA, user_json);
+                                nextAction(bundle);
+                            } else {
+                                DialogUtils.closeProgress();
+                                MyUtils.showToast(getString(R.string.connection_error));
+                            }
+                        } else {
                             DialogUtils.closeProgress();
-                            user_json = gson.toJson(user);
-                            bundle.putString(Constants.USER_DATA, user_json);
-                            nextAction(bundle);
-                        }else {
-                            DialogUtils.closeProgress();
-                            Toast.makeText(getActivity(), "user information  was not updated", Toast.LENGTH_LONG).show();
+                           MyUtils.showAlert(getActivity(), ServerRes.getMessage());
                         }
-                    }else{
-                        DialogUtils.closeProgress();
-                        Toast.makeText(getActivity(), ServerRes.getMessage(), Toast.LENGTH_LONG).show();
+                    }catch (Exception e) {
+                        MyUtils.showToast(getString(R.string.connection_error));
                     }
                 }
 
                 @Override
                 public void onFailure(Call<ServerRes> call, Throwable t) {
                     Log.e("Upload error:", t.getMessage());
+                    MyUtils.showToast(getString(R.string.connection_error));
                 }
             });
         } else {
             Gson gson = new Gson();
             String user_json = bundle.getString(Constants.USER_DATA, "");
             User user = gson.fromJson(user_json, User.class);
-            user.setSign_up_stage(Constants.Name);
+            user.setSign_up_stage(Constants.OfficeAddress);
             boolean saved = user.save(getActivity().getApplicationContext());
             if(saved){
                 DialogUtils.closeProgress();
@@ -216,7 +213,7 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
                 nextAction(bundle);
             }else {
                 DialogUtils.closeProgress();
-                Toast.makeText(getActivity(), "user information  was not updated", Toast.LENGTH_LONG).show();
+               // Toast.makeText(getActivity(), "user information  was not updated", Toast.LENGTH_LONG).show();
             }
         }
     }

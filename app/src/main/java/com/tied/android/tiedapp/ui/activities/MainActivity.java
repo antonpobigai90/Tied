@@ -3,7 +3,6 @@ package com.tied.android.tiedapp.ui.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -17,20 +16,19 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.soundcloud.android.crop.Crop;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.objects.responses.Count;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
+import com.tied.android.tiedapp.services.LocationService;
+import com.tied.android.tiedapp.ui.activities.client.ActivityClient;
+import com.tied.android.tiedapp.ui.activities.client.SelectClientActivity;
 import com.tied.android.tiedapp.ui.fragments.activities.ActivityFragment;
 import com.tied.android.tiedapp.ui.fragments.client.ClientAddFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.AddressFragment;
@@ -39,13 +37,14 @@ import com.tied.android.tiedapp.ui.fragments.profile.EditProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.NotificationProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.ProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.CreateScheduleFragment;
-import com.tied.android.tiedapp.ui.fragments.schedule.HomeScheduleFragment;
+import com.tied.android.tiedapp.ui.fragments.DailyStatsFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleSuggestionFragment;
-import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleTimeLineFragment;
+import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleAppointmentsFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.IndustryFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.ui.listeners.ImageReadyForUploadListener;
-import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.util.Logger;
+import com.tied.android.tiedapp.util.MyUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,13 +52,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.tied.android.tiedapp.util.Logger;
-import com.tied.android.tiedapp.util.MyUtils;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
-
 
 /**
  * Created by Daniel on 5/3/2016.
@@ -76,9 +69,9 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
     public Fragment profileFragment = null;
     private int fragment_index = 0;
 
-    private LinearLayout tab_bar, relativeLayout, activity_layout, add_layout, more_layout, tab_actvity_schedule;
-
-    private TextView txt_schedules, txt_activities;
+    private LinearLayout tab_bar, map_tab, relativeLayout, activity_layout, add_layout, more_layout, tab_actvity_schedule, alert_edit_msg;
+    private RelativeLayout invite_menu;
+    private TextView txt_schedules, txt_activities, info_msg;
 
     public Bitmap bitmap;
 
@@ -100,87 +93,97 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
     DrawerLayout drawerLayout;
     int currentFragmentID=0;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
         setContentView(R.layout.activity_main);
 
+        user = User.getUser(getApplicationContext());
+        if(user == null){
+            User.LogOut(getApplicationContext());
+            finish();
+        }
+
+        startService(new Intent(this, LocationService.class));
         navigationView=(NavigationView)findViewById(R.id.navigation_view);
         drawerLayout=(DrawerLayout)findViewById(R.id.drawer);
 
         relativeLayout = (LinearLayout) findViewById(R.id.linearLayout);
         tab_bar = (LinearLayout) findViewById(R.id.tab_bar);
+        alert_edit_msg = (LinearLayout) findViewById(R.id.alert_edit_msg);
 
         tab_actvity_schedule = (LinearLayout) findViewById(R.id.tab_activity_schedule);
 
         more_layout = (LinearLayout) findViewById(R.id.more);
         activity_layout = (LinearLayout) findViewById(R.id.activity);
         add_layout = (LinearLayout) findViewById(R.id.add_layout);
+        invite_menu = (RelativeLayout) findViewById(R.id.invite_menu);
+        map_tab = (LinearLayout) findViewById(R.id.map);
 
         add = (ImageView) findViewById(R.id.add);
         txt_activities = (TextView) findViewById(R.id.txt_activities);
         txt_schedules = (TextView) findViewById(R.id.txt_schedules);
+
+        img_user_picture = (ImageView) findViewById(R.id.img_user_picture);
+        drawerUserPicture = (ImageView) findViewById(R.id.user_picture_iv);
 
         more_layout.setOnClickListener(this);
         add.setOnClickListener(this);
         txt_schedules.setOnClickListener(this);
         txt_activities.setOnClickListener(this);
         activity_layout.setOnClickListener(this);
-
-        img_user_picture = (ImageView) findViewById(R.id.img_user_picture);
-        drawerUserPicture = (ImageView) findViewById(R.id.user_picture_iv);
-        user = User.getUser(getApplicationContext());
+        img_user_picture.setOnClickListener(this);
+        invite_menu.setOnClickListener(this);
+        map_tab.setOnClickListener(this);
 
         Log.d(TAG, "Avatar Url : " + Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg");
         String avatarURL =Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg";
         MyUtils.Picasso.displayImage(avatarURL, img_user_picture);
         MyUtils.Picasso.displayImage(avatarURL, drawerUserPicture);
-       /* Picasso.with(this).
-                load(Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg")
-                .resize(35, 35)
-                .into(new Target() {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        if (bitmap != null) {
-                            img_user_picture.setImageBitmap(bitmap);
-                        } else {
-                            img_user_picture.setImageResource(R.drawable.default_avatar);
-                            if (user.getAvatar_uri() != null) {
-                                Uri myUri = Uri.parse(user.getAvatar_uri());
-                                img_user_picture.setImageURI(myUri);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onBitmapFailed(Drawable errorDrawable) {
-                    }
-
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-                    }
-                });*/
         retrofit = MainApplication.getInstance().getRetrofit();
         service = retrofit.create(SignUpApi.class);
-        bundle = new Bundle();
+
+        bundle = getIntent().getExtras();
+        if(bundle == null){
+            bundle = new Bundle();
+            alert_edit_msg = (LinearLayout) findViewById(R.id.alert_edit_msg);
+        }
+
+        if(bundle.getBoolean(Constants.SCHEDULE_EDITED)){
+            ShowSuccessMessage("Schedule successfully updated",Constants.SCHEDULE_EDITED);
+        }
+
+        if(bundle.getBoolean(Constants.CLIENT_EDITED)){
+            ShowSuccessMessage("Client successfully updated",Constants.CLIENT_EDITED);
+        }
+
+
         Gson gson = new Gson();
         String user_json = gson.toJson(user);
 
+        Logger.write("hhhhhhaaaaaaaaaaaaaaaaaaaaaaa");
+
         bundle.putString(Constants.USER_DATA, user_json);
-        if ((new Date().getTime() - MyUtils.getLastTimeAppRan()) > 24*60*60*1000) {
-            launchFragment(Constants.HomeSchedule, bundle);
+        if ((new Date().getTime() - MyUtils.getLastTimeAppRan()) != 24*60*60*1000) {
+            //launchFragment(Constants.HomeSchedule, bundle);
+            MyUtils.startActivity(this, DailyStatsActivity.class);
             MyUtils.setLastTimeAppRan(new Date().getTime());
-        } else {
-            launchFragment(Constants.AppointmentList, bundle);
-
+           // return;
         }
-
+       /* else if(bundle.getBoolean(Constants.NO_CLIENT_FOUND)){
+            launchFragment(Constants.ClientAdd, bundle);
+        }
+        else if(bundle.getBoolean(Constants.NO_SCHEDULE_FOUND)){
+            launchFragment(Constants.CreateSchedule, bundle);
+        }
+        else {*/
+            launchFragment(Constants.AppointmentList, bundle);
+        //}
         activity_layout.setBackground(null);
-
     }
-    Fragment currentFragment=null;
 
+    Fragment currentFragment=null;
     public void launchFragment(int pos, Bundle bundle) {
         fragment_index = pos;
         fragment = null;
@@ -196,27 +199,20 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         switch (pos) {
             case Constants.CreateSchedule:
                 tab_actvity_schedule.setBackgroundResource(R.drawable.base_schedule);
-                //activity_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
-
                 if(fragments.get(pos)==null) {
                     fragments.put(pos,CreateScheduleFragment.newInstance(bundle) );
                 }
-
                 fragment = fragments.get(pos);
                 break;
             case Constants.ClientAdd:
-                //relativeLayout.setVisibility(View.GONE);
+                relativeLayout.setVisibility(View.GONE);
                 tab_actvity_schedule.setBackgroundResource(R.drawable.base_schedule);
-               // activity_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
-
                 if(fragments.get(pos)==null) {
                     fragments.put(pos,ClientAddFragment.newInstance(bundle) );
                 }
                 fragment = fragments.get(pos);
                 break;
             case Constants.ActivitySchedule:
-                //relativeLayout.setVisibility(View.GONE);
-               // fragment = new ClientAddFragment();
                 activity_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
                 if(fragments.get(pos)==null) {
                     fragments.put(pos,  ClientAddFragment.newInstance(bundle) );
@@ -225,17 +221,12 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 break;
             case Constants.HomeSchedule:
                 tab_bar.setVisibility(View.GONE);
-               // relativeLayout.setVisibility(View.GONE);
-               // fragment = new HomeScheduleFragment();
-                if(fragments.get(pos)==null) {
-                    fragments.put(pos, HomeScheduleFragment.newInstance(bundle) );
+               if(fragments.get(pos)==null) {
+                    fragments.put(pos, DailyStatsFragment.newInstance(bundle) );
                 }
                 fragment = fragments.get(pos);
                 break;
             case Constants.ScheduleSuggestions:
-                //relativeLayout.setVisibility(View.GONE);
-                //fragment = new ScheduleSuggestionFragment();
-
                 if(fragments.get(pos)==null) {
                     fragments.put(pos, ScheduleSuggestionFragment.newInstance(bundle) );
                 }
@@ -243,57 +234,42 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 break;
             case Constants.AddScheduleActivity:
                 add_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
-                //relativeLayout.setVisibility(View.GONE);
-                //fragment = new AddScheduleActivityFragment();
                 MyUtils.startActivity(this, AddOptionsActivity.class);
                 return;
-                //break;
             case Constants.Profile:
+                relativeLayout.setVisibility(View.GONE);
                 more_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
-                //relativeLayout.setVisibility(View.GONE);
-                // fragment = new ProfileFragment();
-
                 if(fragments.get(pos)==null) {
                     fragments.put(pos, ProfileFragment.newInstance(bundle) );
                 }
                 fragment = fragments.get(pos);
                 break;
             case Constants.EditProfile:
-                //relativeLayout.setVisibility(View.GONE);
+                relativeLayout.setVisibility(View.GONE);
                 more_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
-                //fragment = new EditProfileFragment();
-
                 if(fragments.get(pos)==null) {
                     fragments.put(pos, EditProfileFragment.newInstance(bundle));
                 }
                 fragment = fragments.get(pos);
                 break;
             case Constants.ProfileAddress:
-                //relativeLayout.setVisibility(View.GONE);
+                relativeLayout.setVisibility(View.GONE);
                 more_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
-                //fragment = new AddressFragment();
-
                 if(fragments.get(pos)==null) {
                     fragments.put(pos,  AddressFragment.newInstance(bundle) );
                 }
                 fragment = fragments.get(pos);
                 break;
             case Constants.Notification:
-                //relativeLayout.setVisibility(View.GONE);
                 more_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
-                //fragment = new NotificationProfileFragment();
-
                 if(fragments.get(pos)==null) {
                     fragments.put(pos, NotificationProfileFragment.newInstance(bundle) );
                 }
                 fragment = fragments.get(pos);
                 break;
             case Constants.Industry:
-                //relativeLayout.setVisibility(View.GONE);
                 tab_bar.setVisibility(View.GONE);
                 more_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
-                //fragment = new IndustryFragment();
-
                 if(fragments.get(pos)==null) {
                     fragments.put(pos, IndustryFragment.newInstance(bundle) );
                 }
@@ -301,8 +277,6 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 break;
             case Constants.ActivityFragment:
                 activity_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
-                //fragment = new ActivityFragment();
-
                 if(fragments.get(pos)==null) {
                     fragments.put(pos, ActivityFragment.newInstance(bundle) );
                 }
@@ -310,12 +284,8 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 break;
             case Constants.AppointmentList:
                 tab_bar.setVisibility(View.VISIBLE);
-                activity_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
-                //fragment = new ScheduleTimeLineFragment();
-
                 if(fragments.get(pos)==null) {
-                    fragments.put(pos,ScheduleTimeLineFragment.newInstance(bundle) );
-
+                    fragments.put(pos, ScheduleAppointmentsFragment.newInstance(bundle) );
                     Logger.write("it is new");
                 }
                 fragment = fragments.get(pos);
@@ -325,64 +295,13 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 finish();
         }
 
-//        fragment.setArguments(bundle);
-       /* if(currentFragment!=null) {
-            ft.hide(currentFragment);
-        }*/
         if (fragment != null) {
             Log.d(TAG, getSupportFragmentManager().getBackStackEntryCount() + "");
-            /*while (getSupportFragmentManager().getBackStackEntryCount() > 1) {
-                getSupportFragmentManager().popBackStackImmediate();
-            }*/
-
-
-//            ft.setCustomAnimations(R.anim.fragment_slide_left_enter, R.anim.fragment_slide_right_exit)
-          /*  if(fragment.isAdded()) {
-                Logger.write("femi");
-                ft.show(fragment);
-            }else {
-                Logger.write("not femi");
-                ft.replace(R.id.fragment_place, fragment, fragment.getClass().getSimpleName())
-                        .addToBackStack(fragment.getClass().getSimpleName())
-                        .commit();
-            }*/
             Logger.write("TAGGGG: "+ fragment.getClass().getName());
             addFragment(ft, currentFragment, fragment, fragment.getClass().getName());
         }
         currentFragment=fragment;
     }
-
-    /*public void checkIfScheduleExist() {
-        DialogUtils.displayProgress(this);
-        ScheduleApi scheduleApi = MainApplication.getInstance().getRetrofit().create(ScheduleApi.class);
-        Call<Count> response = scheduleApi.getScheduleCount(user.getToken());
-        response.enqueue(new Callback<Count>() {
-            @Override
-            public void onResponse(Call<Count> call, Response<Count> countResponse) {
-                if (MainActivity.this == null) return;
-                DialogUtils.closeProgress();
-                Count count = countResponse.body();
-                Log.d(TAG + "Count", count.toString());
-                if (count != null && count.isAuthFailed()) {
-                    User.LogOut(MainActivity.this);
-                } else if (count != null && count.isSuccess()) {
-                    if (count.getCount() > 0) {
-                        launchFragment(Constants.AppointmentList, bundle);
-                    } else {
-                        launchFragment(Constants.CreateSchedule, bundle);
-                    }
-                } else {
-                    launchFragment(Constants.CreateSchedule, bundle);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Count> call, Throwable t) {
-                Log.d(TAG + " onFailure", t.toString());
-                DialogUtils.closeProgress();
-            }
-        });
-    }*/
 
     static long backPressed=0;
     @Override
@@ -393,42 +312,12 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         }
         if(System.currentTimeMillis()-backPressed < 5000) {
             finish();
-            System.exit(0);
         }else{
             MyUtils.showToast("Press back again to exit");
         }
         //this.moveTaskToBack(true);
         backPressed=System.currentTimeMillis();
         return;
-
-    }
-
-    public void loadAvatar(final User user, final ImageView img_user_picture) {
-        Picasso.with(this).
-                load(Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg")
-                .resize(35, 35)
-                .into(new Target() {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        if (bitmap != null) {
-                            img_user_picture.setImageBitmap(bitmap);
-                        } else {
-                            img_user_picture.setImageResource(R.drawable.default_avatar);
-                            if (user.getAvatar_uri() != null && new File(user.getAvatar_uri()).exists()) {
-                                Uri myUri = Uri.parse(user.getAvatar_uri());
-                                img_user_picture.setImageURI(myUri);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onBitmapFailed(Drawable errorDrawable) {
-                    }
-
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-                    }
-                });
     }
 
     private void handleCrop(Uri outputUri) {
@@ -441,14 +330,13 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
             avatar.setImageBitmap(bitmap);
             imageReadyForUploadListener.imageReadyUri(outputUri);
         } catch (IOException e) {
-           // Toast.makeText(this, " error : " + e.getMessage(), Toast.LENGTH_LONG).show();
             MyUtils.showToast("An error occurred. Please try again.");
         }
     }
 
     @Override
     public void OnFragmentInteractionListener(int action, Bundle bundle) {
-        Log.d(TAG, " onFragmentInteraction " + action);
+        Log.d(TAG, " OnFragmentInteractionListener " + action);
         launchFragment(action, bundle);
     }
 
@@ -493,20 +381,14 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 launchFragment(Constants.AppointmentList, bundle);
                 break;
             case R.id.more:
-               // launchFragment(Constants.Profile, bundle);
                 toggelDrawer();
                 break;
             case R.id.activity:
-                /*if (!Schedule.isScheduleCreated(getApplicationContext())) {
-                    checkIfScheduleExist();
-                } else {*/
                 if(currentFragmentID==Constants.ActivityFragment) return;
                 tab_actvity_schedule.setBackgroundResource(R.drawable.base_activities);
                 launchFragment(Constants.ActivityFragment, bundle);
-                //}
                 break;
             case Constants.Profile:
-                //relativeLayout.setVisibility(View.GONE);
                 fragment = new ProfileFragment();
                 break;
             case Constants.EditProfile:
@@ -515,12 +397,28 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
             case Constants.ProfileAddress:
                 fragment = new AddressFragment();
                 break;
-
-            ///// drawer menu items
-            case R.id.subscription_menu:
-
+            case R.id.lines_menu:
+                MyUtils.startActivity(MainActivity.this, LinesAndTerritories.class,bundle);
                 break;
             case R.id.client_menu:
+                MyUtils.startActivity(MainActivity.this, SelectClientActivity.class,bundle);
+                break;
+
+            case R.id.img_user_picture : case R.id.user_picture_iv:
+                MyUtils.startActivity(MainActivity.this, ProfileActivity.class, bundle);
+                break;
+
+            case R.id.invite_menu:
+                MyUtils.startActivity(MainActivity.this, SendInviteActivity.class, bundle);
+                break;
+            case R.id.logout:
+                User.LogOut(this);
+                finish();
+                break;
+            case R.id.map:
+                //clearTabs();
+                //map_tab.setBackground(getResources().getDrawable(R.drawable.tab_selected));
+                MyUtils.startActivity(this, ActivityClient.class);
                 break;
         }
     }
@@ -530,6 +428,50 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         } else {
             drawerLayout.openDrawer(Gravity.RIGHT);
         }
+    }
+    private void clearTabs() {
+        activity_layout.setBackground(null);
+        map_tab.setBackground(null);
+
+
+    }
+
+    public void ShowSuccessMessage(String message, final String forWhat){
+        info_msg = (TextView) findViewById(R.id.info_msg);
+        info_msg.setText(message);
+        alert_edit_msg = (LinearLayout) findViewById(R.id.alert_edit_msg);
+        final int _splashTime = 3000;
+        alert_edit_msg.setVisibility(View.VISIBLE);
+        final boolean _active = true;
+        final int time = 3000;
+        final Thread splashTread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    int waited = 0;
+                    while (_active && waited < time) {
+                        sleep(100);
+                        if (_active) {
+                            waited += 100;
+                        }
+                    }
+                } catch (final InterruptedException e) {
+                    // do nothing
+                } finally {
+
+                    runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            alert_edit_msg.setVisibility(View.GONE);
+                            bundle.putBoolean(forWhat, false);
+                        }
+                    });
+                }
+            }
+        };
+        splashTread.start();
+        alert_edit_msg.setVisibility(View.VISIBLE);
     }
 
     public void addFragment(FragmentTransaction transaction, Fragment currentFragment, Fragment targetFragment, String tag) {

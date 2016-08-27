@@ -1,7 +1,7 @@
 package com.tied.android.tiedapp.retrofits.services;
 
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.customs.model.IndustryModel;
+import com.tied.android.tiedapp.customs.model.DataModel;
 import com.tied.android.tiedapp.objects.responses.CheckEmail;
 import com.tied.android.tiedapp.objects.responses.LoginUser;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
@@ -17,7 +17,6 @@ import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -44,13 +43,17 @@ public interface SignUpApi {
     @POST(Constants.AUTH_SEND_PHONE_CODE_ENDPOINT)
     Call<ServerRes> sendPhoneCode(@Field("user_id") String user_id, @Field("phone_number") String phone_number);
 
+    @FormUrlEncoded
+    @POST(Constants.AUTH_VERIFY_PHONE_CODE_ENDPOINT)
+    Call<ServerRes> verifyPhoneCode(@Field("user_id") String user_id, @Field("code") String code, @Field("phone_number") String phone_number);
+
     @Multipart
     @PUT(Constants.USER_UPDATE_INFO)
-    Call<ServerRes> uploadAvatar(@Header(Constants.TOKEN_HEADER) String token, @Part("id") RequestBody id, @Part("sign_up_stage") RequestBody sign_up_stage, @Part MultipartBody.Part file);
+    Call<ServerRes> uploadAvatar(@Part("id") RequestBody id, @Part("sign_up_stage") RequestBody sign_up_stage, @Part MultipartBody.Part file);
 
     @PUT(Constants.USER_UPDATE_INFO)
     Call<ServerRes> updateUser(@Body User user);
 
     @GET(Constants.GET_INDUSTRIES)
-    Call<List<IndustryModel>>   getIndustries();
+    Call<List<DataModel>>   getIndustries();
 }

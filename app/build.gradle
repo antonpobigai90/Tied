@@ -66,24 +66,23 @@ dependencies {
     compile ('cz.msebera.android:httpclient:4.3.6') {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
     }
-   /* compile ('org.apache.commons:commons-lang3:3.0')  {
-        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
-    }*/
+    /* compile ('org.apache.commons:commons-lang3:3.0')  {
+         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
+     }*/
     compile 'com.loopj.android:android-async-http:1.4.9'
-   /* compile files('libs/httpcore-4.2.3.jar')*/
+    /* compile files('libs/httpcore-4.2.3.jar')*/
     compile files('libs/httpmime-4.0.1.jar')
     compile files('libs/urlimageviewhelper-1.0.4.jar')
     compile('com.crashlytics.sdk.android:crashlytics:2.5.6@aar') {
         transitive = true;
     }
     compile files('libs/org-apache-commons-lang.jar')
-    compile 'com.google.android.gms:play-services-gcm:9.0.2'
+    compile 'com.google.android.gms:play-services-gcm:9.4.0'
     compile 'com.android.support:recyclerview-v7:23.4.0'
     compile 'me.relex:circleindicator:1.2.1@aar'
     compile 'com.facebook.android:facebook-android-sdk:4.+'
-    compile 'com.google.android.gms:play-services-auth:9.0.2'
-    compile 'com.google.android.gms:play-services-location:9.0.2'
-    compile 'com.google.android.gms:play-services-maps:9.0.2'
+    compile 'com.google.android.gms:play-services-auth:9.4.0'
+    compile 'com.google.android.gms:play-services-location:9.4.0'
     compile 'com.soundcloud.android:android-crop:1.0.1@aar'
     compile 'com.dubsmash.volley:library:2.0.0'
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
@@ -95,4 +94,5 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.github.johnhiott:DarkSkyApi:v0.1.4'
     compile 'com.github.tittojose:timerangepicker-library:0.2'
+    compile 'com.google.android.gms:play-services-maps:9.4.0'
 }

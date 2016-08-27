@@ -16,14 +16,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
-import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
-import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.retrofits.services.SignUpApi;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.util.MyUtils;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,7 +52,13 @@ public class GroupDescFragment extends Fragment implements View.OnClickListener{
     // Reference to our image view we will use
     public ImageView img_user_picture;
 
-    private SignUpFragmentListener mListener;
+    private FragmentIterationListener mListener;
+
+    public static Fragment newInstance(Bundle bundle) {
+        Fragment fragment=new GroupDescFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     public GroupDescFragment() {
     }
@@ -72,8 +79,8 @@ public class GroupDescFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SignUpFragmentListener) {
-            mListener = (SignUpFragmentListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -82,7 +89,7 @@ public class GroupDescFragment extends Fragment implements View.OnClickListener{
 
     public void nextAction(Bundle bundle) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(Constants.Industry, bundle);
+            mListener.OnFragmentInteractionListener(Constants.Industry, bundle);
         }
     }
 
@@ -103,12 +110,7 @@ public class GroupDescFragment extends Fragment implements View.OnClickListener{
 
 
         bundle = getArguments();
-        if (bundle != null) {
-            Gson gson = new Gson();
-            String user_json = bundle.getString(Constants.USER_DATA);
-            User user = gson.fromJson(user_json, User.class);
-            ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
-        }
+        MyUtils.initAvatar(bundle, img_user_picture);
 
         principal_layout = (LinearLayout) view.findViewById(R.id.principal_layout);
         principal_layout.setOnClickListener(this);
@@ -150,8 +152,7 @@ public class GroupDescFragment extends Fragment implements View.OnClickListener{
         }
         user.setSign_up_stage(Constants.Industry);
 
-        SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
-        Call<ServerRes> response = signUpApi.updateUser(user);
+        Call<ServerRes> response = MainApplication.createService(SignUpApi.class).updateUser(user);
         response.enqueue(new Callback<ServerRes>() {
             @Override
             public void onResponse(Call<ServerRes> call, Response<ServerRes> ServerResponseResponse) {

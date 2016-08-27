@@ -8,18 +8,21 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import android.view.View;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
+import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.fragments.signins.DoneResetFragment;
 import com.tied.android.tiedapp.ui.fragments.signins.ResetFragment;
 import com.tied.android.tiedapp.ui.fragments.signins.SignInFragment;
-import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 
+import com.tied.android.tiedapp.util.MyUtils;
 import retrofit2.Retrofit;
 
-public class SignInActivity extends AppCompatActivity implements SignUpFragmentListener {
+public class SignInActivity extends AppCompatActivity implements FragmentIterationListener {
 
     public static final String TAG = SignInActivity.class
             .getSimpleName();
@@ -37,6 +40,7 @@ public class SignInActivity extends AppCompatActivity implements SignUpFragmentL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.slide_out_top);
         setContentView(R.layout.activity_sign_in);
         launchFragment(Constants.SignInUser, null);
 
@@ -94,9 +98,21 @@ public class SignInActivity extends AppCompatActivity implements SignUpFragmentL
     }
 
     @Override
-    public void onFragmentInteraction(int action, Bundle bundle) {
-        Log.d(TAG, " onFragmentInteraction " + action);
+    public void OnFragmentInteractionListener(int action, Bundle bundle) {
+        Log.d(TAG, " OnFragmentInteractionListener " + action);
         launchFragment(action, bundle);
+
     }
 
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.profile_layout:
+                MyUtils.startActivity(this, MainActivity.class);
+                break;
+        }
+    }
+
+    public void goBack(View v) {
+        onBackPressed();
+    }
 }

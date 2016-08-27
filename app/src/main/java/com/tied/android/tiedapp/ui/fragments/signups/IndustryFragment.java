@@ -1,7 +1,6 @@
 package com.tied.android.tiedapp.ui.fragments.signups;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,19 +16,18 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.customs.model.IndustryModel;
-import com.tied.android.tiedapp.retrofits.services.SignUpApi;
+import com.tied.android.tiedapp.customs.model.DataModel;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.activities.MainActivity;
-import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
+import com.tied.android.tiedapp.retrofits.services.SignUpApi;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
-import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.util.MyUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +46,7 @@ public class IndustryFragment extends Fragment implements View.OnClickListener {
 
     private RelativeLayout continue_btn;
 
-    ArrayList<IndustryModel> industry_data = new ArrayList<IndustryModel>();
+    ArrayList<DataModel> industry_data = new ArrayList<DataModel>();
     ListView industry_listview;
     SearchAdapter industry_adapter;
 
@@ -117,25 +115,13 @@ public class IndustryFragment extends Fragment implements View.OnClickListener {
         bundle = getArguments();
         editProfile = bundle.getBoolean(Constants.EditingProfile);
         if(editProfile){
-            signUpApi = ((MainActivity) getActivity()).service;
             iniEditProfileComponent(view);
-        }else{
-            signUpApi = ((SignUpActivity) getActivity()).service;
         }
         continue_btn = (RelativeLayout) view.findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(this);
 
         img_user_picture = (ImageView) view.findViewById(R.id.img_user_picture);
-        if (bundle != null) {
-            Gson gson = new Gson();
-            String user_json = bundle.getString(Constants.USER_DATA);
-            User user = gson.fromJson(user_json, User.class);
-            if(editProfile){
-                ((MainActivity) getActivity()).loadAvatar(user, img_user_picture);
-            }else{
-                ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
-            }
-        }
+        MyUtils.initAvatar(bundle, img_user_picture);
 
         industry_listview = (ListView) view.findViewById(R.id.industry_listview);
         industry_adapter = new SearchAdapter(industry_data, getActivity());
@@ -145,7 +131,7 @@ public class IndustryFragment extends Fragment implements View.OnClickListener {
         industry_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                IndustryModel item = industry_data.get(position);
+                DataModel item = industry_data.get(position);
                 if (item.isCheck_status()) {
                     item.setCheck_status(false);
                 } else {
@@ -155,20 +141,20 @@ public class IndustryFragment extends Fragment implements View.OnClickListener {
             }
         });
         DialogUtils.displayProgress(getActivity());
-        Call<List<IndustryModel>> response = signUpApi.getIndustries();
-        response.enqueue(new Callback<List<IndustryModel>>() {
+        Call<List<DataModel>> response = MainApplication.createService(SignUpApi.class).getIndustries();
+        response.enqueue(new Callback<List<DataModel>>() {
             @Override
-            public void onResponse(Call<List<IndustryModel>> call, Response<List<IndustryModel>> listResponse) {
+            public void onResponse(Call<List<DataModel>> call, Response<List<DataModel>> listResponse) {
                 if (getActivity() == null) return;
                 DialogUtils.closeProgress();
-                List<IndustryModel> industryModelList = listResponse.body();
-                industry_data.addAll(industryModelList);
+                List<DataModel> dataModelList = listResponse.body();
+                industry_data.addAll(dataModelList);
                 industry_adapter.notifyDataSetChanged();
-                Log.d(TAG + " onResponse", industryModelList.toString());
+                Log.d(TAG + " onResponse", dataModelList.toString());
             }
 
             @Override
-            public void onFailure(Call<List<IndustryModel>> call, Throwable t) {
+            public void onFailure(Call<List<DataModel>> call, Throwable t) {
                 Log.d(TAG + " onFailure", t.toString());
                 DialogUtils.closeProgress();
             }
@@ -180,31 +166,23 @@ public class IndustryFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.continue_btn:
                 for (int i = 0 ; i < industry_data.size() ; i++) {
-                    IndustryModel item = industry_data.get(i);
+                    DataModel item = industry_data.get(i);
                     if (item.isCheck_status()) {
                        industries.add(item.getName());
                     }
                 }
                 continue_action();
                 break;
-            case R.id.profile_layout:
-                if(!editProfile){
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                }
-                nextAction(bundle);
-                break;
         }
     }
 
-    class SearchAdapter extends ArrayAdapter<IndustryModel> {
+    class SearchAdapter extends ArrayAdapter<DataModel> {
 
-        private ArrayList<IndustryModel> itemList;
+        private ArrayList<DataModel> itemList;
         private Context context;
 
 
-        public SearchAdapter(ArrayList<IndustryModel> itemList, Context ctx) {
+        public SearchAdapter(ArrayList<DataModel> itemList, Context ctx) {
             super(ctx, android.R.layout.simple_list_item_1, itemList);
             this.itemList = itemList;
             this.context = ctx;
@@ -220,7 +198,7 @@ public class IndustryFragment extends Fragment implements View.OnClickListener {
                 v = inflater.inflate(R.layout.industry_list_item, null);
             }
 
-            final IndustryModel item = industry_data.get(position);
+            final DataModel item = industry_data.get(position);
 
             ImageView img_status = (ImageView) v.findViewById(R.id.img_status);
 
@@ -249,7 +227,7 @@ public class IndustryFragment extends Fragment implements View.OnClickListener {
             final User user = gson.fromJson(user_json, User.class);
             user.setIndustries(industries);
             user.setSign_up_stage(Constants.AddBoss);
-            Call<ServerRes> response = signUpApi.updateUser(user);
+            Call<ServerRes> response = MainApplication.createService(SignUpApi.class).updateUser(user);
             response.enqueue(new Callback<ServerRes>() {
                 @Override
                 public void onResponse(Call<ServerRes> call, Response<ServerRes> ServerResponseResponse) {
@@ -270,23 +248,22 @@ public class IndustryFragment extends Fragment implements View.OnClickListener {
                             nextAction(bundle);
                         } else {
                             DialogUtils.closeProgress();
-                            Toast.makeText(getActivity(), "user info  was not updated", Toast.LENGTH_LONG).show();
+                            MyUtils.showToast("user info  was not updated");
                         }
                     } else {
-                        Toast.makeText(getActivity(), ServerRes.getMessage(), Toast.LENGTH_LONG).show();
+                        MyUtils.showToast(ServerRes.getMessage());
                     }
                     DialogUtils.closeProgress();
                 }
 
                 @Override
                 public void onFailure(Call<ServerRes> ServerResponseCall, Throwable t) {
-                    Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
-                    Log.d(TAG + " onFailure", t.toString());
+                    MyUtils.showToast("On failure : error encountered");
                     DialogUtils.closeProgress();
                 }
             });
         }else{
-            Toast.makeText(getActivity(), "No industry selected", Toast.LENGTH_LONG).show();
+            MyUtils.showToast("No industry selected");
         }
     }
 }

@@ -31,8 +31,8 @@ import com.tied.android.tiedapp.objects.user.Boss;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
-import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
-import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -62,13 +62,19 @@ public class CoWorkerFragment extends Fragment implements View.OnClickListener{
 
     int fetchType = Constants.USE_ADDRESS_NAME;
 
-    private SignUpFragmentListener mListener;
+    private FragmentIterationListener mListener;
 
     private Boss boss;
     private Location location;
 
     public ImageView img_user_picture;
     private Bundle bundle;
+
+    public static Fragment newInstance(Bundle bundle) {
+        Fragment fragment=new CoWorkerFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     public CoWorkerFragment() {
     }
@@ -136,8 +142,8 @@ public class CoWorkerFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SignUpFragmentListener) {
-            mListener = (SignUpFragmentListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -147,7 +153,7 @@ public class CoWorkerFragment extends Fragment implements View.OnClickListener{
 
     public void nextAction(Bundle bundle) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(Constants.AddBossNow, bundle);
+            mListener.OnFragmentInteractionListener(Constants.AddBossNow, bundle);
         }
     }
 

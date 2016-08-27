@@ -18,15 +18,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.model.TerritoryModel;
-import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
-import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
-import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.retrofits.services.SignUpApi;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.util.MyUtils;
 import com.tied.android.tiedapp.util.Utility;
 
 import java.util.ArrayList;
@@ -45,21 +46,26 @@ public class TerritoryFragment extends Fragment implements View.OnClickListener{
 
     private RelativeLayout continue_btn;
 
-    LinearLayout alert_valid;
-
     private Bundle bundle;
 
     // Reference to our image view we will use
     public ImageView img_user_picture;
 
-    private SignUpFragmentListener mListener;
+    private FragmentIterationListener mListener;
 
     ArrayList<TerritoryModel> territory_data = new ArrayList<TerritoryModel>();
     ListView territory_listview;
     SearchAdapter territory_adapter;
     Context context;
+    private User user;
 
     ArrayList<String> territories = new ArrayList<String>();
+
+    public static Fragment newInstance (Bundle bundle) {
+        Fragment fragment=new TerritoryFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     public TerritoryFragment() {
     }
@@ -80,8 +86,8 @@ public class TerritoryFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SignUpFragmentListener) {
-            mListener = (SignUpFragmentListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -90,7 +96,7 @@ public class TerritoryFragment extends Fragment implements View.OnClickListener{
 
     public void nextAction(Bundle bundle) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(Constants.SalesRep, bundle);
+            mListener.OnFragmentInteractionListener(Constants.SalesRep, bundle);
         }
     }
 
@@ -108,21 +114,13 @@ public class TerritoryFragment extends Fragment implements View.OnClickListener{
         territory_listview.setAdapter(territory_adapter);
         territory_listview.setDividerHeight(0);
 
-        alert_valid = (LinearLayout) view.findViewById(R.id.alert_valid);
-        alert_valid.setVisibility(View.GONE);
-
         img_user_picture = (ImageView) view.findViewById(R.id.img_user_picture);
 
         continue_btn = (RelativeLayout) view.findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(this);
 
         bundle = getArguments();
-        if (bundle != null) {
-            Gson gson = new Gson();
-            String user_json = bundle.getString(Constants.USER_DATA);
-            User user = gson.fromJson(user_json, User.class);
-            ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
-        }
+        MyUtils.initAvatar(bundle, img_user_picture);
     }
 
     @Override
@@ -153,8 +151,7 @@ public class TerritoryFragment extends Fragment implements View.OnClickListener{
             user.setTerritories(territories);
             user.setSign_up_stage(Constants.SalesRep);
 
-            SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
-            Call<ServerRes> response = signUpApi.updateUser(user);
+            Call<ServerRes> response = MainApplication.createService(SignUpApi.class).updateUser(user);
             response.enqueue(new Callback<ServerRes>() {
                 @Override
                 public void onResponse(Call<ServerRes> call, Response<ServerRes> ServerResResponse) {
@@ -187,8 +184,8 @@ public class TerritoryFragment extends Fragment implements View.OnClickListener{
                 }
             });
         }else{
-            alert_valid.setVisibility(View.VISIBLE);
-            Utility.moveViewToScreenCenter( alert_valid, Utility.getResourceString(context, R.string.alert_valide_no_territory));
+           // Utility.moveViewToScreenCenter( alert_valid, Utility.getResourceString(context, R.string.alert_valide_no_territory));
+            MyUtils.showAlert(getActivity(),getActivity().getString(R.string.alert_valide_no_territory) );
         }
     }
 
@@ -210,7 +207,6 @@ public class TerritoryFragment extends Fragment implements View.OnClickListener{
             View v = convertView;
             if (v == null) {
                 LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
                 v = inflater.inflate(R.layout.territory_list_item, null);
             }
 
@@ -227,8 +223,7 @@ public class TerritoryFragment extends Fragment implements View.OnClickListener{
                 @Override
                 public void onClick(View v) {
                     if (txt_territory.getText().length() == 0) {
-                        alert_valid.setVisibility(View.VISIBLE);
-                        Utility.moveViewToScreenCenter( alert_valid, Utility.getResourceString(context, R.string.alert_valide_territory));
+                        MyUtils.showAlert(getActivity(),getActivity().getString(R.string.alert_valide_territory) );
                     } else {
                         item.setTerritory_name(txt_territory.getText().toString());
                         item.setiNew(false);

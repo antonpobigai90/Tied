@@ -16,9 +16,10 @@ import android.widget.ProgressBar;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.APIManager;
-import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.util.MyUtils;
 import com.tied.android.tiedapp.util.Utility;
 
 import org.apache.http.NameValuePair;
@@ -37,7 +38,7 @@ public class ResetFragment extends Fragment implements View.OnClickListener{
     public static final String TAG = ResetFragment.class
             .getSimpleName();
 
-    private SignUpFragmentListener mListener;
+    private FragmentIterationListener mListener;
 
     private ProgressBar progressBar;
     private EditText email;
@@ -69,8 +70,8 @@ public class ResetFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SignUpFragmentListener) {
-            mListener = (SignUpFragmentListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -79,7 +80,7 @@ public class ResetFragment extends Fragment implements View.OnClickListener{
 
     public void nextAction(int action, Bundle bundle) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(action,bundle);
+            mListener.OnFragmentInteractionListener(action,bundle);
         }
     }
 
@@ -106,7 +107,8 @@ public class ResetFragment extends Fragment implements View.OnClickListener{
             case R.id.reset_password:
                 if (!Utility.isEmailValid(email.getText().toString())) {
                     alert_valid_email.setVisibility(View.VISIBLE);
-                    Utility.moveViewToScreenCenter( alert_valid_email, Utility.getResourceString(context, R.string.alert_valide_email));
+                    //Utility.moveViewToScreenCenter( alert_valid_email, );
+                    MyUtils.showAlert(getActivity(), Utility.getResourceString(context, R.string.alert_valide_email));
                 } else {
                     new LoadForgetPasswordTask().execute(email.getText().toString());
                 }

@@ -34,7 +34,7 @@
     </RelativeLayout>
 
     <TextView
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/str_signup_hint13"
         android:id="@+id/txt_hint_string"
@@ -45,7 +45,8 @@
         android:layout_marginTop="40dp"
         android:layout_marginBottom="20dp"
         android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp" />
+        android:layout_marginRight="15dp"
+        android:layout_toStartOf="@+id/user_picture" />
 
     <ScrollView
         android:layout_width="fill_parent"
@@ -83,22 +84,12 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:id="@+id/email"
-                    android:layout_toLeftOf="@+id/user_picture"
                     android:layout_toRightOf="@+id/txt_email_label"
                     android:inputType="textEmailAddress"
                     android:layout_marginLeft="5dp"
                     android:backgroundTint="@android:color/transparent"
                     android:layout_gravity="center_horizontal" />
 
-                <com.tied.android.tiedapp.util.CircularImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:id="@+id/user_picture"
-                    android:layout_alignParentRight="true"
-                    android:background="@mipmap/default_avatar"
-                    app:border="false"
-                    app:border_color="@android:color/transparent"
-                    app:shadow="false"/>
             </RelativeLayout>
 
             <TextView
@@ -128,7 +119,7 @@
 
                 <EditText
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:ems="10"
                     android:id="@+id/street"
                     android:backgroundTint="@android:color/transparent"
@@ -437,6 +428,7 @@
             android:layout_weight="1"
             android:background="@color/white"
             android:gravity="center_vertical"
+            android:onClick="profileButtonClicked"
             android:id="@+id/profile_layout">
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -492,12 +484,24 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="13/20"
+                    android:text="13/15"
                     android:id="@+id/textView"
                     android:layout_below="@+id/txt_continue_label"
                     android:layout_centerInParent="true" />
             </RelativeLayout>
         </RelativeLayout>
     </LinearLayout>
+
+    <com.tied.android.tiedapp.util.CircularImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/user_picture"
+        android:background="@mipmap/default_avatar"
+        app:border="false"
+        app:border_color="@android:color/transparent"
+        app:shadow="false"
+        android:layout_above="@+id/scrollView"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="35dp" />
 
 </RelativeLayout>

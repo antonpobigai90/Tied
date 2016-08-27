@@ -33,7 +33,9 @@ import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.util.HelperMethods;
+import com.tied.android.tiedapp.util.MyUtils;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -57,6 +59,14 @@ public class ViewScheduleFragment extends Fragment implements View.OnClickListen
     private LinearLayout back_layout;
 
     private TextView description, temperature, title, schedule_title;
+
+
+    public static Fragment newInstance(Bundle bundle) {
+        Fragment fragment=new ViewScheduleFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_schedule_view, container, false);
@@ -121,7 +131,6 @@ public class ViewScheduleFragment extends Fragment implements View.OnClickListen
                 Log.d(TAG, "Error while calling: " + retrofitError.getUrl());
             }
         });
-
     }
 
 
@@ -130,6 +139,9 @@ public class ViewScheduleFragment extends Fragment implements View.OnClickListen
         switch (v.getId()){
             case R.id.avatar:
 
+                break;
+            case R.id.back_layout:
+                MyUtils.startActivity(getActivity(), MainActivity.class);
                 break;
         }
     }

@@ -17,13 +17,13 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.activities.MainActivity;
+import com.tied.android.tiedapp.retrofits.services.SignUpApi;
+import com.tied.android.tiedapp.ui.activities.ProfileActivity;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.ui.dialogs.PasswordDialog;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
-import com.tied.android.tiedapp.util.DialogUtils;
-import com.tied.android.tiedapp.util.PasswordDialog;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -169,7 +169,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
             user.setFax(faxText);
             user.setCo_workers(companyNameText);
 
-            SignUpApi signUpApi = ((MainActivity) getActivity()).service;
+            SignUpApi signUpApi = ((ProfileActivity) getActivity()).service;
             Call<ServerRes> response = signUpApi.updateUser(user);
             response.enqueue(new Callback<ServerRes>() {
                 @Override

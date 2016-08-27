@@ -29,8 +29,9 @@ public class Location implements Serializable {
         this.street = street;
     }
 
-    public String getLocationAddress(){
-        return street+", " +city+", "+state +", "+zip;
+    public String getLocationAddress()
+    {
+        return street + ", " + city + ", " + state + " " + zip;
     }
 
     public String getCity() {

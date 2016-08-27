@@ -6,15 +6,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import com.google.gson.Gson;
+
 import com.tied.android.tiedapp.R;
-import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.activities.client.ClientActivity;
+import com.tied.android.tiedapp.ui.activities.client.AddClientActivity;
 import com.tied.android.tiedapp.ui.activities.client.SelectClientActivity;
 import com.tied.android.tiedapp.ui.activities.lines.AddLinesActivity;
-import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.MyUtils;
 
 /**
@@ -77,24 +74,16 @@ public class AddOptionsActivity  extends AppCompatActivity implements  View.OnCl
 
                 break;
             case R.id.schedule_layout:
-              //  if(!Client.isClientCreated(this.getApplicationContext())){
-                   // checkIfClientExist(user);
-               // }else{
                 MyUtils.startActivity(this, SelectClientActivity.class);
-                   // intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                  //  startActivity(intent);
-               // }
                 break;
             case R.id.client_layout:
-                MyUtils.startActivity(this, ClientActivity.class);
-
+                MyUtils.startActivity(this, AddClientActivity.class);
                 break;
             case R.id.employee_layout:
 
                 break;
             case R.id.line_layout:
-                MyUtils.startActivity(this, AddLinesActivity.class);
-
+                MyUtils.startActivity(this, AddLinesActivity.class, bundle);
                 break;
             case R.id.goal_layout:
 

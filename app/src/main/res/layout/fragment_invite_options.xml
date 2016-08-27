@@ -327,7 +327,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txt_continue_label"
                     android:layout_centerInParent="true"
-                    android:text="12/20" />
+                    android:text="12/15" />
             </RelativeLayout>
         </RelativeLayout>
     </LinearLayout>

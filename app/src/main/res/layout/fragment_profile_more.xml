@@ -20,7 +20,7 @@
             android:layout_marginTop="15dp"
             android:text="More"
             android:textColor="@color/white"
-            android:textSize="25sp" />
+            android:textSize="22sp" />
 
         <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/img_edit"
@@ -45,8 +45,8 @@
 
         <ImageView
             android:id="@+id/icon_subscription"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_centerVertical="true"
             android:src="@mipmap/suitecase" />
 
@@ -58,7 +58,7 @@
             android:layout_toRightOf="@+id/icon_subscription"
             android:text="SUBSCRIPTION"
             android:textColor="@color/schedule_title_bg_color"
-            android:textSize="18sp" />
+            android:textSize="17sp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -78,7 +78,7 @@
                     android:layout_marginLeft="15dp"
                     android:text="Free Trial"
                     android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="18sp" />
+                    android:textSize="15sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -87,13 +87,13 @@
                     android:layout_marginLeft="15dp"
                     android:text="Expires in 20 days"
                     android:textColor="@color/alert_bg_color"
-                    android:textSize="13sp" />
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
             <ImageView
                 android:layout_width="20dp"
-                android:layout_height="30dp"
+                android:layout_height="25dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="15dp"
@@ -105,7 +105,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="5dp"
+        android:layout_height="3dp"
         android:background="@color/schedule_create_appointment_bg_color" />
 
     <ScrollView
@@ -119,7 +119,7 @@
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="50dp"
+                android:layout_height="45dp"
                 android:gravity="center_horizontal">
 
                 <TextView
@@ -130,26 +130,26 @@
                     android:text="SEND INVITE"
                     android:textColor="@color/schedule_title_bg_color"
                     android:textIsSelectable="false"
-                    android:textSize="25sp" />
+                    android:textSize="20sp" />
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="10dp"
+                android:layout_height="6dp"
                 android:background="@color/schedule_create_appointment_bg_color" />
 
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 android:paddingLeft="40dp"
                 android:id="@+id/client_layout">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:id="@+id/icon_client"
                     android:src="@mipmap/icon_employee"
                     android:layout_centerVertical="true" />
@@ -159,14 +159,14 @@
                     android:layout_height="wrap_content"
                     android:text="CLIENTS"
                     android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:layout_toRightOf="@+id/icon_client"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp" />
 
                 <ImageView
                     android:layout_width="20dp"
-                    android:layout_height="30dp"
+                    android:layout_height="25dp"
                     android:src="@mipmap/right_arrow"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
@@ -181,14 +181,14 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 android:paddingLeft="40dp"
                 android:id="@+id/goals_layout">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:id="@+id/icon_goals"
                     android:src="@mipmap/icon_lists_blue"
                     android:layout_centerVertical="true" />
@@ -198,14 +198,14 @@
                     android:layout_height="wrap_content"
                     android:text="GOALS"
                     android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:layout_toRightOf="@+id/icon_goals"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp" />
 
                 <ImageView
                     android:layout_width="20dp"
-                    android:layout_height="30dp"
+                    android:layout_height="25dp"
                     android:src="@mipmap/right_arrow"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
@@ -220,14 +220,14 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 android:paddingLeft="40dp"
                 android:id="@+id/lines_layout">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:id="@+id/icon_lines"
                     android:src="@mipmap/icon_layer_blue"
                     android:layout_centerVertical="true" />
@@ -237,14 +237,14 @@
                     android:layout_height="wrap_content"
                     android:text="LINES"
                     android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:layout_toRightOf="@+id/icon_lines"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp" />
 
                 <ImageView
                     android:layout_width="20dp"
-                    android:layout_height="30dp"
+                    android:layout_height="25dp"
                     android:src="@mipmap/right_arrow"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
@@ -259,14 +259,14 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 android:paddingLeft="40dp"
                 android:id="@+id/specials_layout">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:id="@+id/icon_specials"
                     android:src="@mipmap/star"
                     android:layout_centerVertical="true" />
@@ -276,14 +276,14 @@
                     android:layout_height="wrap_content"
                     android:text="SPECIALS"
                     android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:layout_toRightOf="@+id/icon_specials"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp" />
 
                 <ImageView
                     android:layout_width="20dp"
-                    android:layout_height="30dp"
+                    android:layout_height="25dp"
                     android:src="@mipmap/right_arrow"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
@@ -298,14 +298,14 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 android:paddingLeft="40dp"
                 android:id="@+id/report_layout">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:id="@+id/icon_export"
                     android:src="@mipmap/icon_export"
                     android:layout_centerVertical="true" />
@@ -315,14 +315,14 @@
                     android:layout_height="wrap_content"
                     android:text="EXPORT REPORT"
                     android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:layout_toRightOf="@+id/icon_export"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp" />
 
                 <ImageView
                     android:layout_width="20dp"
-                    android:layout_height="30dp"
+                    android:layout_height="25dp"
                     android:src="@mipmap/right_arrow"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
@@ -335,8 +335,8 @@
                 android:background="@android:color/darker_gray" />
 
             <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="50dp"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
                 android:background="@color/schedule_create_appointment_bg_color"
                 android:paddingLeft="40dp">
 
@@ -349,20 +349,20 @@
                     android:textColor="@color/schedule_title_bg_color"
                     android:textIsSelectable="false"
                     android:textStyle="bold"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 android:paddingLeft="40dp"
                 android:id="@+id/boss_layout">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:id="@+id/icon_boss"
                     android:src="@mipmap/icon_employee"
                     android:layout_centerVertical="true" />
@@ -372,14 +372,14 @@
                     android:layout_height="wrap_content"
                     android:text="BOSS"
                     android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:layout_toRightOf="@+id/icon_boss"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp" />
 
                 <ImageView
                     android:layout_width="20dp"
-                    android:layout_height="30dp"
+                    android:layout_height="25dp"
                     android:src="@mipmap/right_arrow"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
@@ -394,14 +394,14 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
                 android:paddingLeft="40dp"
                 android:id="@+id/co_workers_layout">
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:id="@+id/icon_co_workers"
                     android:src="@mipmap/icon_employee"
                     android:layout_centerVertical="true" />
@@ -411,14 +411,14 @@
                     android:layout_height="wrap_content"
                     android:text="BOSS"
                     android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:layout_toRightOf="@+id/icon_co_workers"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="15dp" />
 
                 <ImageView
                     android:layout_width="20dp"
-                    android:layout_height="30dp"
+                    android:layout_height="25dp"
                     android:src="@mipmap/right_arrow"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"

@@ -14,14 +14,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
-import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
-import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.retrofits.services.SignUpApi;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.util.MyUtils;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -35,7 +36,7 @@ public class AddBossNowFragment extends Fragment implements View.OnClickListener
     public static final String TAG = AddBossNowFragment.class
             .getSimpleName();
 
-    private SignUpFragmentListener mListener;
+    private FragmentIterationListener mListener;
 
     private RelativeLayout continue_btn;
     private TextView txt_add_later;
@@ -43,6 +44,11 @@ public class AddBossNowFragment extends Fragment implements View.OnClickListener
     public ImageView img_user_picture;
     private Bundle bundle;
 
+    public static Fragment newInstance(Bundle bundle) {
+        Fragment fragment=new AddBossNowFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     public AddBossNowFragment() {
     }
@@ -64,6 +70,7 @@ public class AddBossNowFragment extends Fragment implements View.OnClickListener
     public void initComponent(View view){
 
         txt_add_later = (TextView) view.findViewById(R.id.txt_add_later);
+        txt_add_later.setOnClickListener(this);
 
         continue_btn = (RelativeLayout) view.findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(this);
@@ -71,20 +78,15 @@ public class AddBossNowFragment extends Fragment implements View.OnClickListener
         img_user_picture = (ImageView) view.findViewById(R.id.img_user_picture);
 
         bundle = getArguments();
-        if (bundle != null) {
-            Gson gson = new Gson();
-            String user_json = bundle.getString(Constants.USER_DATA);
-            User user = gson.fromJson(user_json, User.class);
-            ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
-        }
+        MyUtils.initAvatar(bundle, img_user_picture);
 
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SignUpFragmentListener) {
-            mListener = (SignUpFragmentListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -93,7 +95,7 @@ public class AddBossNowFragment extends Fragment implements View.OnClickListener
 
     public void nextAction(int action, Bundle bundle) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(action,bundle);
+            mListener.OnFragmentInteractionListener(action,bundle);
         }
     }
 
@@ -108,8 +110,7 @@ public class AddBossNowFragment extends Fragment implements View.OnClickListener
             final User user = gson.fromJson(user_json, User.class);
             user.setSign_up_stage(Constants.CoWorkerCount);
 
-            SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
-            Call<ServerRes> response = signUpApi.updateUser(user);
+            Call<ServerRes> response = MainApplication.createService(SignUpApi.class).updateUser(user);
             response.enqueue(new Callback<ServerRes>() {
                 @Override
                 public void onResponse(Call<ServerRes> call, Response<ServerRes> ServerResponseResponse) {
@@ -158,27 +159,8 @@ public class AddBossNowFragment extends Fragment implements View.OnClickListener
             case R.id.continue_btn:
                 continue_action();
                 break;
-//            case R.id.via_app:
-//                progressBar.setVisibility(View.VISIBLE);
-//                Bundle bundle = getArguments();
-//
-//                Gson gson = new Gson();
-//                String user_json = bundle.getString(Constants.USER_DATA);
-//                final User user = gson.fromJson(user_json, User.class);
-//                user.setSign_up_stage(Constants.CoWorkerCount);
-//                boolean saved = user.save(getActivity().getApplicationContext());
-//                if(saved){
-//                    String json = gson.toJson(user);
-//                    bundle.putString(Constants.USER_DATA, json);
-//                    progressBar.setVisibility(View.INVISIBLE);
-//                    nextAction(Constants.CoWorkerCount, bundle);
-//                }else{
-//                    progressBar.setVisibility(View.INVISIBLE);
-//                    Toast.makeText(getActivity(), "user info  was not updated", Toast.LENGTH_LONG).show();
-//                }
-//                break;
             case R.id.txt_add_later:
-
+                nextAction(Constants.CoWorkerCount, bundle);
                 break;
         }
     }

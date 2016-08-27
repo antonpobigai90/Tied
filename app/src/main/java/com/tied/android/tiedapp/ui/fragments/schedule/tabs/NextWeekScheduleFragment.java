@@ -26,4 +26,6 @@ public class NextWeekScheduleFragment extends SchedulesFragment implements View.
         scheduleDate = new ScheduleDate(timeRange, dateRange);
         super.initComponent(view);
     }
+
+
 }

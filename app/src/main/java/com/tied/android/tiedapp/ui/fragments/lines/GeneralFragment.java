@@ -6,36 +6,35 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-
 import android.widget.Spinner;
 import android.widget.Toast;
+
 import com.google.gson.Gson;
-import com.tied.android.tiedapp.customs.MyAddressAsyncTask;
-import com.tied.android.tiedapp.customs.MyStringAsyncTask;
-import com.tied.android.tiedapp.objects._Meta;
-import okhttp3.ResponseBody;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
+import com.tied.android.tiedapp.customs.MyStringAsyncTask;
 import com.tied.android.tiedapp.customs.ui.MyEditText;
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects.Location;
+import com.tied.android.tiedapp.objects._Meta;
+import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.LineApi;
-import com.tied.android.tiedapp.ui.activities.lines.AddLinesActivity;
+import com.tied.android.tiedapp.ui.activities.lines.AddLinesActivityOld;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.fragments.MyFormFragment;
-import com.tied.android.tiedapp.util.DialogUtils;
 import com.tied.android.tiedapp.util.HTTPConnection;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import java.io.IOException;
 import java.util.Map;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by Emmanuel on 6/22/2016.
@@ -107,7 +106,7 @@ public class GeneralFragment extends MyFormFragment implements View.OnClickListe
     }
     private void saveForm() {
 
-        String lineName = ((AddLinesActivity)getActivity()).lineNameTextView.getText().toString().trim();
+        String lineName = ((AddLinesActivityOld)getActivity()).lineNameTextView.getText().toString().trim();
         Logger.write(lineName);
         if(lineName.isEmpty()) {
             MyUtils.showToast("You must provide a name for this line");
@@ -163,28 +162,28 @@ public class GeneralFragment extends MyFormFragment implements View.OnClickListe
         LineApi lineApi = MainApplication.getInstance().getRetrofit().create(LineApi.class);
         User user=MyUtils.getUserLoggedIn();
         DialogUtils.displayProgress(getActivity());
-        Call<ResponseBody> response = lineApi.createLine(user.getToken(), line);
+        Call<ResponseBody> response = lineApi.createLine(line);
         response.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
                 if (getActivity() == null) return;
 
-                ResponseBody resp = resResponse.body();
+
                 try {
-                    JSONObject response=new JSONObject(resp.string());
-                    if (MyUtils.isAuthFailed(response)) {
-                        User.LogOut(getActivity().getApplicationContext());
+                    GeneralResponse response=new GeneralResponse(resResponse.body());
+                    if (response != null && response.isAuthFailed()) {
+                        User.LogOut(getActivity());
                         return;
                     }
-                    _Meta meta;
-                    if(( meta=MyUtils.getMeta(response)) !=null && meta.getStatus_code()==201) {
-                        AddLinesActivity activity=(AddLinesActivity)getActivity();
-                        activity.setLine(gson.fromJson(response.getString("lines"), Line.class));
+                    _Meta meta=response.getMeta();
+                    if(meta !=null && meta.getStatus_code()==201) {
+                        AddLinesActivityOld activity=(AddLinesActivityOld)getActivity();
+                        activity.setLine(response.getData("lines", Line.class));
                         new MyStringAsyncTask() {
                             @Override
                             protected String doInBackground(Void... params) {
                                 try{
-                                    Thread.sleep(1000);
+                                    Thread.sleep(2000);
                                 }catch (Exception e) {
 
                                 }
@@ -193,8 +192,9 @@ public class GeneralFragment extends MyFormFragment implements View.OnClickListe
 
                             @Override
                             protected void onPostExecute(String s) {
+                                ((AddLinesActivityOld)getActivity()).reloadData();
                                 DialogUtils.closeProgress();
-                                ((AddLinesActivity)getActivity()).moveNext();
+                                ((AddLinesActivityOld)getActivity()).moveNext();
                             }
                         }.execute();
                     }else{
@@ -204,7 +204,7 @@ public class GeneralFragment extends MyFormFragment implements View.OnClickListe
                 }catch (IOException ioe) {
                     Logger.write(ioe);
                 }
-                catch (JSONException jo) {
+                catch (Exception jo) {
                     Logger.write(jo);
                 }
                 /*if (clientRes.isAuthFailed()) {

@@ -21,7 +21,7 @@ import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.signups.InviteContactActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
-import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -31,7 +31,7 @@ public class AddInviteFragment extends Fragment implements View.OnClickListener{
     public static final String TAG = AddInviteFragment.class
             .getSimpleName();
 
-    private SignUpFragmentListener mListener;
+    private FragmentIterationListener mListener;
 
     private RelativeLayout continue_btn;
     private TextView txt_add_later;
@@ -41,6 +41,12 @@ public class AddInviteFragment extends Fragment implements View.OnClickListener{
     // Reference to our image view we will use
     public ImageView img_user_picture;
 
+
+    public static Fragment newInstance(Bundle bundle) {
+        Fragment fragment=new AddInviteFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     public AddInviteFragment() {
     }
@@ -94,8 +100,8 @@ public class AddInviteFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SignUpFragmentListener) {
-            mListener = (SignUpFragmentListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -104,7 +110,7 @@ public class AddInviteFragment extends Fragment implements View.OnClickListener{
 
     public void nextAction(int action, Bundle bundle) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(action,bundle);
+            mListener.OnFragmentInteractionListener(action,bundle);
         }
     }
 

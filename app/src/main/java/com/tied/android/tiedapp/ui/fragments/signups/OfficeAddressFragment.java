@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -17,17 +18,21 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.MyAddressAsyncTask;
-import com.tied.android.tiedapp.retrofits.services.SignUpApi;
+import com.tied.android.tiedapp.customs.ui.MyEditText;
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
-import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
-import com.tied.android.tiedapp.util.DialogUtils;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.util.Logger;
+import com.tied.android.tiedapp.util.MyUtils;
 
 import org.json.JSONObject;
 
@@ -47,7 +52,7 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
     public static final String TAG = OfficeAddressFragment.class
             .getSimpleName();
 
-    private SignUpFragmentListener mListener;
+    private FragmentIterationListener mListener;
 
     //    private Button continue_btn;
     private RelativeLayout continue_btn;
@@ -55,19 +60,25 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
     // Reference to our image view we will use
     public ImageView img_user_picture;
 
-    private LinearLayout alert_valid;
-
     //    private CheckBox same;
     LinearLayout checkbox_layout;
     ImageView img_check;
     boolean same = false;
 
-    private EditText street, city, state, zip;
+    private MyEditText street, city, state, zip;
     private String cityText, stateText, streetText, zipText;
     private Location location;
     private Bundle bundle;
+    private View addButton, addressSection;
+
 
     int fetchType = Constants.USE_ADDRESS_NAME;
+
+    public static Fragment newInstance(Bundle bundle) {
+        Fragment fragment=new OfficeAddressFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     public OfficeAddressFragment() {
     }
@@ -88,8 +99,8 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof SignUpFragmentListener) {
-            mListener = (SignUpFragmentListener) context;
+        if (context instanceof FragmentIterationListener) {
+            mListener = (FragmentIterationListener) context;
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -98,18 +109,25 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
 
     public void nextAction(int action, Bundle bundle) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(action, bundle);
+            mListener.OnFragmentInteractionListener(action, bundle);
         }
     }
 
     public void initComponent(View view) {
-
-        street = (EditText) view.findViewById(R.id.street);
-        city = (EditText) view.findViewById(R.id.city);
-        state = (EditText) view.findViewById(R.id.state);
-        zip = (EditText) view.findViewById(R.id.zip);
+        SignUpActivity.setStage(view, 6);
+        street = (MyEditText) view.findViewById(R.id.street);
+        street.setIsEditable(false);
+        city = (MyEditText) view.findViewById(R.id.city);
+        city.setIsEditable(false);
+        state = (MyEditText) view.findViewById(R.id.state);
+        state.setIsEditable(false);
+        zip = (MyEditText) view.findViewById(R.id.zip);
+        zip.setIsEditable(false);
+       // street.setText("adfadfadsf");
 
         img_user_picture = (ImageView) view.findViewById(R.id.img_user_picture);
+        addButton=view.findViewById(R.id.add_button);
+        addButton.setOnClickListener(this);
 
         img_check = (ImageView) view.findViewById(R.id.img_check);
         img_check.setBackgroundResource(R.mipmap.dot_unchecked_icon);
@@ -119,22 +137,23 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
 
         checkbox_layout = (LinearLayout) view.findViewById(R.id.checkbox_layout);
         checkbox_layout.setOnClickListener(this);
+        addressSection=view.findViewById(R.id.address_section);
+        addressSection.setVisibility(View.GONE);
+        addressSection.setOnClickListener(this);
+
+
 
         bundle = getArguments();
-        if (bundle != null) {
-            Gson gson = new Gson();
-            String user_json = bundle.getString(Constants.USER_DATA);
-            User user = gson.fromJson(user_json, User.class);
-            ((SignUpActivity) getActivity()).loadAvatar(user, img_user_picture);
-        }
+        MyUtils.initAvatar(bundle, img_user_picture);
 
-        alert_valid = (LinearLayout) view.findViewById(R.id.alert_valid);
-        alert_valid.setVisibility(View.GONE);
+
     }
 
     public void continue_action() {
         if (validated()) {
             new GeocodeAsyncTask().execute();
+        }else{
+            MyUtils.showAlert(getActivity(), "You must enter a valid address");
         }
     }
 
@@ -144,7 +163,7 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
         zipText = zip.getText().toString();
         stateText = state.getText().toString();
         location = new Location(cityText, zipText, stateText, streetText);
-        return !streetText.equals("");
+        return (!streetText.equals("") && !cityText.isEmpty() && !stateText.isEmpty() && !zipText.isEmpty());
     }
 
 
@@ -161,6 +180,26 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
                 } else {
                     img_check.setBackgroundResource(R.mipmap.dot_unchecked_icon);
                 }
+                break;
+            case R.id.address_section:
+            case R.id.add_button:
+                MyUtils.showAddressDialog(getActivity(), "Office Address", location, new MyUtils.DialogClickListener() {
+                    @Override
+                    public void onClick(Object response) {
+                        OfficeAddressFragment.this.location=(Location)response;
+                        Logger.write(location.getStreet());
+                        addressSection.setVisibility(View.VISIBLE);
+
+                        street.setText(location.getStreet());
+                        city.setText(location.getCity());
+                        state.setText(location.getState());
+                        zip.setText(location.getZip());
+
+                        addressSection.setVisibility(View.VISIBLE);
+
+
+                    }
+                });
                 break;
         }
     }
@@ -220,34 +259,38 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
                 user.setHome_address(location);
             }
 
-            SignUpApi signUpApi = ((SignUpActivity) getActivity()).service;
-            Call<ServerRes> response = signUpApi.updateUser(user);
+            Call<ServerRes> response = MainApplication.createService(SignUpApi.class).updateUser(user);
             response.enqueue(new Callback<ServerRes>() {
                 @Override
                 public void onResponse(Call<ServerRes> call, Response<ServerRes> ServerResResponse) {
                     if (getActivity() == null) return;
-                    ServerRes ServerRes = ServerResResponse.body();
-                    Log.d(TAG + " onFailure", ServerResResponse.body().toString());
-                    if (ServerRes.isSuccess()) {
-                        Bundle bundle = new Bundle();
-                        boolean saved = user.save(getActivity().getApplicationContext());
-                        if (saved) {
-                            Gson gson = new Gson();
-                            String json = gson.toJson(user);
-                            bundle.putString(Constants.USER_DATA, json);
-                            DialogUtils.closeProgress();
-                            if (same) {
-                                nextAction(Constants.Territory, bundle);
+                    try {
+                        ServerRes ServerRes = ServerResResponse.body();
+                        Log.d(TAG + " onFailure", ServerResResponse.body().toString());
+                        if (ServerRes.isSuccess()) {
+                            Bundle bundle = new Bundle();
+                            boolean saved = user.save(getActivity().getApplicationContext());
+                            if (saved) {
+                                Gson gson = new Gson();
+                                String json = gson.toJson(user);
+                                bundle.putString(Constants.USER_DATA, json);
+                                DialogUtils.closeProgress();
+                                if (same) {
+                                    nextAction(Constants.Territory, bundle);
+                                } else {
+                                    nextAction(Constants.HomeAddress, bundle);
+                                }
+                                Log.d(TAG, "location: " + json);
                             } else {
-                                nextAction(Constants.HomeAddress, bundle);
+                                DialogUtils.closeProgress();
+                               // Toast.makeText(getActivity(), "user info  was not updated", Toast.LENGTH_LONG).show();
+                                MyUtils.showToast(getString(R.string.connection_error));
                             }
-                            Log.d(TAG, "location: " + json);
                         } else {
-                            DialogUtils.closeProgress();
-                            Toast.makeText(getActivity(), "user info  was not updated", Toast.LENGTH_LONG).show();
+                            MyUtils.showAlert(getActivity(), ServerRes.getMessage());
                         }
-                    } else {
-                        Toast.makeText(getActivity(), ServerRes.getMessage(), Toast.LENGTH_LONG).show();
+                    }catch (Exception e) {
+                        MyUtils.showToast(getString(R.string.connection_error));
                     }
                     DialogUtils.closeProgress();
                 }

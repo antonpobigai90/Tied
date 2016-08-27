@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -22,9 +23,12 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.ui.activities.client.ClientInfo;
+import com.tied.android.tiedapp.ui.activities.LinesAndTerritories;
+import com.tied.android.tiedapp.ui.dialogs.DialogClientOptions;
+import com.tied.android.tiedapp.ui.dialogs.DialogYesNo;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
-import com.tied.android.tiedapp.util.DialogClientOptions;
-import com.tied.android.tiedapp.util.DialogYesNo;
+import com.tied.android.tiedapp.util.MyUtils;
 
 
 public class ViewClientFragment extends Fragment implements View.OnClickListener {
@@ -32,9 +36,10 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
     public static final String TAG = ViewClientFragment.class
             .getSimpleName();
 
-    public ImageView avatar;
+    public ImageView avatar,img_edit;
     private LinearLayout icon_plus, icon_call;
     private TextView btn_delete;
+    RelativeLayout important_info,lines_territory;
 
     private Bundle bundle;
     private User user;
@@ -42,6 +47,12 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
     private Client client;
 
     FragmentIterationListener mListener;
+
+    public static Fragment newInstance(Bundle bundle) {
+        Fragment fragment=new ViewClientFragment();
+        fragment.setArguments(bundle);
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -60,6 +71,9 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
         btn_delete = (TextView) view.findViewById(R.id.btn_delete);
         icon_plus = (LinearLayout) view.findViewById(R.id.icon_plus);
         icon_call = (LinearLayout) view.findViewById(R.id.icon_call);
+        img_edit = (ImageView) view.findViewById(R.id.img_edit);
+        important_info = (RelativeLayout) view.findViewById(R.id.important_info);
+        lines_territory = (RelativeLayout) view.findViewById(R.id.lines_territory);
 
         avatar = (ImageView) view.findViewById(R.id.avatar);
 
@@ -68,6 +82,8 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
         btn_delete.setOnClickListener(this);
         icon_plus.setOnClickListener(this);
         icon_call.setOnClickListener(this);
+        important_info.setOnClickListener(this);
+        lines_territory.setOnClickListener(this);
 
         if (bundle != null) {
             Log.d(TAG, "bundle not null");
@@ -119,6 +135,15 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
                 color = this.getResources().getColor(R.color.green_color);
                 DialogYesNo alert_call = new DialogYesNo(getActivity(),"CALL CLIENT","Are you sure want to call this client?. Call charges may apply","YES, CALL!",color,1);
                 alert_call.showDialog();
+                break;
+            case R.id.img_edit:
+
+                break;
+            case R.id.important_info:
+                MyUtils.startActivity(getActivity(), ClientInfo.class, bundle);
+                break;
+            case R.id.lines_territory:
+                MyUtils.startActivity(getActivity(), LinesAndTerritories.class, bundle);
                 break;
         }
     }

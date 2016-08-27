@@ -12,9 +12,9 @@
     <string name="str_splash">Your tool to be an exceptional rep for your clients and business</string>
     <string name="connection_error">Error connecting to server.</string>
 
-    <string name="str_register">REGISTER</string>
-    <string name="str_signin">SIGN IN</string>
-    <string name="str_login">LOGIN</string>
+    <string name="str_register">Register</string>
+    <string name="str_signin">Sign In</string>
+    <string name="str_login">Login</string>
     <string name="str_done">Done!</string>
     <string name="str_back">Back</string>
     <string name="str_hint_email">Email Address</string>
@@ -38,18 +38,18 @@
     </string-array>
 
     <!-- Sign Up -->
-    <string name="str_signup">SIGN UP</string>
+    <string name="str_signup">Sign Up</string>
     <string name="str_signup_hint1">What is your email address?</string>
-    <string name="str_signup_hint2">What should your password be?</string>
+    <string name="str_signup_hint2">Provide your password?</string>
     <string name="str_signup_hint_email">EMAIL</string>
     <string name="str_signup_hint_password">PASSWORD</string>
     <string name="str_continue">CONTINUE SETUP</string>
     <string name="str_add_picture">+ADD PICTURE</string>
     <string name="str_signup_hint3">Please tell me more about yourself so I can better server you</string>
-    <string name="str_profile">PROFILE</string>
-    <string name="str_first_name">FIRSTNAME</string>
-    <string name="str_last_name">LASTNAME</string>
-    <string name="str_signup_hint4">What should I call you?</string>
+    <string name="str_profile">SKIP SETUP</string>
+    <string name="str_first_name">FIRST NAME</string>
+    <string name="str_last_name">LAST NAME</string>
+    <string name="str_signup_hint4">Enter your name?</string>
     <string name="str_signup_hint5">Let me save both your phone number and fax number</string>
     <string name="str_phone">PHONE</string>
     <string name="str_fax">FAX</string>
@@ -57,7 +57,7 @@
     <string name="str_city">CITY</string>
     <string name="str_state">STATE</string>
     <string name="str_zip_code">ZIP CODE</string>
-    <string name="str_signup_hint6">Tell me your office address</string>
+    <string name="str_signup_hint6">Provide your office address</string>
     <string name="str_signup_hint7">Office address same as hc</string>
     <string name="str_signup_hint8">Please enter your home address</string>
     <string name="str_signup_hint9">What territories do you cover?</string>
@@ -143,9 +143,7 @@
     <string name="schedule_string_appointment">Lorem ipsum dolor sit amet, hello you there i mean you consectetur adipiscing elit. Etiam molestie tortor sed tellus posuere auctor. Nullam ultricies semper purus, et rhoncus leo efficitur consectetur</string>
 
     <string name="alert_valide_email">*Please enter a valid email address</string>
-    <string name="alert_valide_password">*Please enter password</string>
-    <string name="alert_valide_first_name">*Please enter first name</string>
-    <string name="alert_valide_last_name">*Please enter last name</string>
+    <string name="alert_valide_password">Please enter password</string>
 
     <string name="alert_valide_address">*Please enter address</string>
     <string name="alert_valide_city">*Please enter city</string>
@@ -157,10 +155,12 @@
 
     <string name="alert_valide_phone_number">*Please enter phone number</string>
     <string name="alert_valide_verify_code">*Please enter verify code</string>
-    <string name="alert_valide_name">Cannot contains invalid characters</string>
+    <string name="alert_valide_first_name">Please provide your first name</string>
+    <string name="alert_valide_last_name">Please provide your last name</string>
     <string name="alert_valide_name_empty">first name cannot be empty</string>
     <string name="alert_valide_no_territory">No territory inputted</string>
-    <string name="str_name">Fulll Name</string>
+    <string name="str_name">Full Name</string>
+    <string name="num_signup_stages">6</string>
 
     <!-- Profile -->
     <string name="profile_notification">Notifications</string>
@@ -170,5 +170,7 @@
     <string name="title_activity_profile">ProfileActivity</string>
     <string name="title_activity_pager">PagerActivity</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_send_invite">SendInviteActivity</string>
 
+    <string name="google_maps_api_key">AIzaSyC0m7wUq4hxxLG3D4YA63U6Qa4AhAFb-4M</string>
 </resources>

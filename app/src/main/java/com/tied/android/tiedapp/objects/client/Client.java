@@ -14,7 +14,7 @@ import java.util.ArrayList;
 /**
  * Created by Emmanuel on 6/28/2016.
  */
-public class Client implements Serializable {
+public class Client implements Serializable, Comparable<Client>{
 
     public static final String TAG = Client.class.getSimpleName();
 
@@ -29,12 +29,17 @@ public class Client implements Serializable {
     private String email;
     private Location address;
     private String birthday;
+    private String fax;
+    private String note;
+    private String revenue;
+    private String ytd_revenue;
 
     private int Industry_id;
     private int visit_id;
 
     private int dis_from;
     private ArrayList _score;
+    Boolean checkStatus = false;
 
     public Client() {
     }
@@ -50,6 +55,38 @@ public class Client implements Serializable {
     public static boolean isClientCreated(Context context){
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         return mPrefs.getBoolean(Constants.CLIENT_CREATED, false);
+    }
+
+    public String getFax() {
+        return fax;
+    }
+
+    public void setFax(String fax) {
+        this.fax = fax;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    public String getRevenue() {
+        return revenue;
+    }
+
+    public void setRevenue(String revenue) {
+        this.revenue = revenue;
+    }
+
+    public String getYtd_revenue() {
+        return ytd_revenue;
+    }
+
+    public void setYtd_revenue(String ytd_revenue) {
+        this.ytd_revenue = ytd_revenue;
     }
 
     public String getId() {
@@ -178,6 +215,14 @@ public class Client implements Serializable {
         this._score = _score;
     }
 
+    public Boolean getCheckStatus() {
+        return checkStatus;
+    }
+
+    public void setCheckStatus(Boolean checkStatus) {
+        this.checkStatus = checkStatus;
+    }
+
     @Override
     public String toString() {
         return "Client{" +
@@ -192,10 +237,19 @@ public class Client implements Serializable {
                 ", email='" + email + '\'' +
                 ", address=" + address +
                 ", birthday='" + birthday + '\'' +
+                ", fax='" + fax + '\'' +
+                ", note='" + note + '\'' +
+                ", revenue='" + revenue + '\'' +
+                ", ytd_revenue='" + ytd_revenue + '\'' +
                 ", Industry_id=" + Industry_id +
                 ", visit_id=" + visit_id +
                 ", dis_from=" + dis_from +
                 ", _score=" + _score +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Client client) {
+        return getFull_name().toUpperCase().compareTo(client.getFull_name().toUpperCase());
     }
 }

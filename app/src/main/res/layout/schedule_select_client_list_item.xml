@@ -6,13 +6,9 @@
     android:background="@color/white">
 
     <RelativeLayout
-        android:id="@+id/invite_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="15dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="40dp"
-        android:paddingTop="15dp">
+        android:padding="15dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/pic"
@@ -25,7 +21,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_toLeftOf="@+id/check"
             android:paddingLeft="15dp"
             android:layout_toRightOf="@+id/pic"
             android:layout_gravity="center">

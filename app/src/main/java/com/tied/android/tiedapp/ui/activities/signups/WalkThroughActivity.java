@@ -1,7 +1,6 @@
 package com.tied.android.tiedapp.ui.activities.signups;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -13,9 +12,9 @@ import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.listeners.SignUpFragmentListener;
+import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.DemoData;
+import com.tied.android.tiedapp.util.MyUtils;
 import com.tied.lib.coverflow.CoverFlow;
 import com.tied.lib.coverflow.core.PagerContainer;
 
@@ -30,26 +29,28 @@ public class WalkThroughActivity extends Activity implements View.OnClickListene
     public static final String TAG = WalkThroughActivity.class
             .getSimpleName();
 
-    private SignUpFragmentListener mListener;
+    static WalkThroughActivity walkThroughActivity;
+    private FragmentIterationListener mListener;
 
     private TextView register, sign_in;
+
+    public static WalkThroughActivity getInstance() {
+        return walkThroughActivity;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        walkThroughActivity=this;
+        this.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
         setContentView(R.layout.fragment_welcome);
 
-        User user = User.getUser(getApplicationContext());
-        if(user != null && user.getId() != null && user.getSign_up_stage() < Constants.Completed){
-            Intent intent = new Intent(this, SignUpActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-        }else if(user != null && user.getId() != null && user.getSign_up_stage() > Constants.Password){
-            Intent intent = new Intent(this, SignInActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
+        boolean returning = MyUtils.getSharedPreferences().getBoolean(Constants.RETURNING_USER, false);
+        if(returning){
+            MyUtils.startActivity(this, SignInActivity.class);
+        }else{
+            initComponent();
         }
-        initComponent();
     }
 
     public void initComponent(){
@@ -83,9 +84,7 @@ public class WalkThroughActivity extends Activity implements View.OnClickListene
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-
             View view = LayoutInflater.from(WalkThroughActivity.this).inflate(R.layout.item_cover,null);
-
             String[] str_walkthrough = getResources().getStringArray(R.array.str_walkthrough);
 
             ImageView imageView = (ImageView) view.findViewById(R.id.image_cover);
@@ -95,7 +94,6 @@ public class WalkThroughActivity extends Activity implements View.OnClickListene
 
             TextView txt_walthrough = (TextView) view.findViewById(R.id.txt_walkthrough);
             txt_walthrough.setText(str_walkthrough[position]);
-
             return view;
         }
 
@@ -118,17 +116,13 @@ public class WalkThroughActivity extends Activity implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
-        Intent intent = null;
         switch (v.getId()){
             case R.id.register:
-                intent = new Intent(this, SignUpActivity.class);
+                MyUtils.startActivity(this, SignUpActivity.class);
                 break;
             case R.id.signin:
-                intent = new Intent(this, SignInActivity.class);
+                MyUtils.startActivity(this, SignInActivity.class);
                 break;
         }
-        assert intent != null;
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
     }
 }
