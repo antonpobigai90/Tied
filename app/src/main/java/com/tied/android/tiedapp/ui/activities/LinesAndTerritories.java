@@ -1,9 +1,9 @@
-package com.tied.android.tiedapp.ui.activities.client;
+package com.tied.android.tiedapp.ui.activities;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -12,17 +12,17 @@ import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.fragments.client.ClientLinesFragment;
-import com.tied.android.tiedapp.ui.fragments.client.ClientTerritoriesFragment;
+import com.tied.android.tiedapp.ui.fragments.LinesFragment;
+import com.tied.android.tiedapp.ui.fragments.TerritoriesFragment;
 import com.tied.android.tiedapp.util.MyUtils;
 
-public class ClientLinesTerritories extends AppCompatActivity implements  View.OnClickListener {
+public class LinesAndTerritories extends AppCompatActivity implements  View.OnClickListener {
 
-    public static final String TAG = ClientLinesTerritories.class
+    public static final String TAG = LinesAndTerritories.class
             .getSimpleName();
 
-    private ViewPager mViewPager;
-    private PagerAdapter mPagerAdapter;
+    public ViewPager mViewPager;
+    public PagerAdapter mPagerAdapter;
     private Bundle bundle;
     private User user;
 
@@ -53,7 +53,7 @@ public class ClientLinesTerritories extends AppCompatActivity implements  View.O
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
 
-        mPagerAdapter = new PagerAdapter(ClientLinesTerritories.this.getSupportFragmentManager());
+        mPagerAdapter = new PagerAdapter(LinesAndTerritories.this.getSupportFragmentManager());
         if (mViewPager != null) {
             mViewPager.setAdapter(mPagerAdapter);
             mViewPager.setCurrentItem(0);
@@ -104,7 +104,7 @@ public class ClientLinesTerritories extends AppCompatActivity implements  View.O
             // This method will be invoked when a new page becomes selected.
             @Override
             public void onPageSelected(int position) {
-//                Toast.makeText(ClientLinesTerritories.this,"Selected page position: " + position, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(LinesAndTerritories.this,"Selected page position: " + position, Toast.LENGTH_SHORT).show();
                 selectTab(tab_bar, position);
             }
 
@@ -123,7 +123,7 @@ public class ClientLinesTerritories extends AppCompatActivity implements  View.O
         });
     }
 
-    public class PagerAdapter extends FragmentStatePagerAdapter {
+    public class PagerAdapter extends FragmentPagerAdapter {
 
         public PagerAdapter(FragmentManager fm) {
             super(fm);
@@ -134,10 +134,10 @@ public class ClientLinesTerritories extends AppCompatActivity implements  View.O
             Fragment fragment = null;
             switch (position){
                 case 0:
-                    fragment = new ClientLinesFragment();
+                    fragment = new LinesFragment();
                     break;
                 case 1:
-                    fragment = new ClientTerritoriesFragment();
+                    fragment = new TerritoriesFragment();
                     break;
             }
             assert fragment != null;

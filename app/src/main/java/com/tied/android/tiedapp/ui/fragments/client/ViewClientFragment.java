@@ -24,7 +24,7 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.client.ClientInfo;
-import com.tied.android.tiedapp.ui.activities.client.ClientLinesTerritories;
+import com.tied.android.tiedapp.ui.activities.LinesAndTerritories;
 import com.tied.android.tiedapp.ui.dialogs.DialogClientOptions;
 import com.tied.android.tiedapp.ui.dialogs.DialogYesNo;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
@@ -143,7 +143,7 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
                 MyUtils.startActivity(getActivity(), ClientInfo.class, bundle);
                 break;
             case R.id.lines_territory:
-                MyUtils.startActivity(getActivity(), ClientLinesTerritories.class, bundle);
+                MyUtils.startActivity(getActivity(), LinesAndTerritories.class, bundle);
                 break;
         }
     }

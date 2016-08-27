@@ -203,7 +203,7 @@
             android:name=".ui.activities.client.ClientInfo"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ui.activities.client.ClientLinesTerritories"
+        <activity android:name=".ui.activities.LinesAndTerritories"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ui.activities.client.MapClientList"

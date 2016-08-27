@@ -10,6 +10,7 @@ import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
 import com.johnhiott.darkskyandroidlib.ForecastApi;
 import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.util.FontsOverride;
 import com.tied.android.tiedapp.util.Logger;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
@@ -37,6 +38,7 @@ public class MainApplication extends Application {
 
     public static ArrayList clientsList = new ArrayList();
     public static ArrayList linesList = new ArrayList();
+    public static ArrayList schedules = new ArrayList();
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 
@@ -47,6 +49,7 @@ public class MainApplication extends Application {
 
     private RequestQueue mRequestQueue;
     private Retrofit retrofit;
+    private User user;
 
 
     private static MainApplication mInstance;

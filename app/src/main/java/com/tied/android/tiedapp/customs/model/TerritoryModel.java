@@ -1,6 +1,8 @@
 package com.tied.android.tiedapp.customs.model;
 
-public class TerritoryModel {
+import java.io.Serializable;
+
+public class TerritoryModel implements Serializable{
 	
 	String territory_name;
 	boolean iNew;
@@ -10,6 +12,10 @@ public class TerritoryModel {
 
     public TerritoryModel() {
 
+    }
+
+    public TerritoryModel(String territory_name) {
+        this.territory_name = territory_name;
     }
 
     public TerritoryModel(String territory_name, int no_clients, boolean check_status) {

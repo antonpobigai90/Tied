@@ -16,6 +16,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 /**
@@ -27,7 +28,7 @@ public interface LineApi {
     @POST(Constants.LINES)
     Call<ResponseBody> createLine(@Body Line line);
 
-    @POST(Constants.UPDATE_LINE_WITH_ID)
+    @PUT(Constants.UPDATE_LINE_WITH_ID)
     Call<ResponseBody> updateLine(@Path("line_id")  String line_id,@Body Line line);
 
     @GET(Constants.USER_LINES)

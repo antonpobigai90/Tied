@@ -64,6 +64,7 @@ public class Constants {
     public static final String USER_DATA = "user_data";
     public static final String CLIENT_DATA = "client_data";
     public static final String SCHEDULE_DATA = "schedule_data";
+    public static final String SCHEDULE_LIST = "schedules";
     public static final String SCHEDULE_DATE_FILTER = "schedule_date_filter";
     public static final String CODE = "code";
     public static final String SERVER_INFO = "server_info";
@@ -86,11 +87,6 @@ public class Constants {
     public static final String SELECTED_DATE = "selected_date";
     public static final String SHOW_SELECTED_DATE = "show_selected_date";
     public static final String SCHEDULE_DATA_FILTER_INDEX = "filter";
-    public static final String CITY = "city";
-    public static final String ZIP = "zip";
-    public static final String STATE = "state";
-    public static final String COUNTRY = "country";
-    public static final String STREET = "street";
     public static final String LONGITUDE = "longitude";
     public static final String LATITUDE = "latitude";
     public static final String FIRST_NAME = "first_name";
@@ -162,6 +158,8 @@ public class Constants {
     public static final int SELECT_CLIENT = 1000;
     public static final int ADD_SALES = 1001;
 
+    public static final String TOTAL_SALES = "Total sales";
+
     public static final String RAIN = "rain";
     public static final String CLEAR_DAY = "clear-day";
     public static final String CLEAR_NIGHT = "clear-night";
@@ -172,6 +170,7 @@ public class Constants {
     public static final String PARTLY_CLOUDY_DAY = "partly-cloudy-day";
     public static final String PARTLY_CLOUDY_NIGHT = "partly-cloudy-night";
 
+    public static final String TERRITORY_DATA = "territory_data";
     public static final String CLIENT_EDITED = "client_updated";
     public static final String SCHEDULE_EDITED = "schedule_updated";
     public static final String SCHEDULE_CREATED = "a_schedule_exist";

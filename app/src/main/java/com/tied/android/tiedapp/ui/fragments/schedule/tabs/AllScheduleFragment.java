@@ -1,12 +1,8 @@
 package com.tied.android.tiedapp.ui.fragments.schedule.tabs;
 
-import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.tied.android.tiedapp.MainApplication;
@@ -16,7 +12,6 @@ import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
 import com.tied.android.tiedapp.ui.adapters.ScheduleListAdapter;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
-import com.tied.android.tiedapp.util.Logger;
 
 import java.util.ArrayList;
 
@@ -37,24 +32,24 @@ public class AllScheduleFragment extends SchedulesFragment implements View.OnCli
         super();
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+//    @Override
+//    public void onCreate(@Nullable Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//    }
+//
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+//        if(mListViewState != null) {
+//             Logger.write("Restoring the listview's state.");
+//            listView.onRestoreInstanceState(mListViewState);
+//        }
+//
+//        return super.onCreateView(inflater, container, savedInstanceState);
+//    }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if(mListViewState != null) {
-             Logger.write("Restoring the listview's state.");
-            listView.onRestoreInstanceState(mListViewState);
-        }
-
-        return super.onCreateView(inflater, container, savedInstanceState);
-    }
-
-    protected void initComponent(View view) {
-        super.initComponent(view);
-    }
+//    protected void initComponent(View view) {
+//        super.initComponent(view);
+//    }
 
     protected void initSchedule() {
         ScheduleApi scheduleApi = MainApplication.getInstance().getRetrofit().create(ScheduleApi.class);

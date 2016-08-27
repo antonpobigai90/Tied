@@ -34,6 +34,9 @@ public interface ScheduleApi {
     @GET(Constants.USER_SCHEDULE)
     Call<ScheduleRes> getSchedule(@Header(Constants.TOKEN_HEADER) String token);
 
+    @GET(Constants.USER_SCHEDULE)
+    Call<ResponseBody> getSchedules();
+
 
     @GET(Constants.USER_SCHEDULE_COUNT)
     Call<Count> getScheduleCount(@Header(Constants.TOKEN_HEADER) String token);

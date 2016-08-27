@@ -34,25 +34,25 @@ import java.util.List;
 /**
  * Created by Emmanuel on 7/1/2016.
  */
-public class ScheduleTimeLineFragment extends Fragment implements View.OnClickListener {
+public class ScheduleAppointmentsFragment extends Fragment implements View.OnClickListener {
 
-    public static final String TAG = ScheduleTimeLineFragment.class
+    public static final String TAG = ScheduleAppointmentsFragment.class
             .getSimpleName();
 
-    private ViewPager mViewPager;
-    private PagerAdapter mPagerAdapter;
+    public ViewPager mViewPager;
+    public PagerAdapter mPagerAdapter;
     private Bundle bundle;
     private User user;
 
     public FragmentIterationListener mListener;
 
-    LinearLayout all_tab, today_tab,this_week_tab,next_week_tab, tab_bar, this_month, alert_edit_msg;
+    LinearLayout all_tab, today_tab, this_week_tab, next_week_tab, tab_bar, this_month, alert_edit_msg;
     HorizontalScrollView tab_scroll;
     List<Fragment> fragmentList = new ArrayList<Fragment>();
 
 
-    public static Fragment newInstance (Bundle bundle) {
-        Fragment fragment=new ScheduleTimeLineFragment();
+    public static Fragment newInstance(Bundle bundle) {
+        Fragment fragment = new ScheduleAppointmentsFragment();
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -64,13 +64,13 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
         fragmentList.add(new TodayScheduleFragment());
         fragmentList.add(new AllScheduleFragment());
         fragmentList.add(new ThisWeekScheduleFragment());
-        fragmentList.add( new NextWeekScheduleFragment());
-        fragmentList.add( new ThisMonthScheduleFragment());
+        fragmentList.add(new NextWeekScheduleFragment());
+        fragmentList.add(new ThisMonthScheduleFragment());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_schedule_timeline,null);
+        View view = inflater.inflate(R.layout.fragment_schedule_timeline, null);
 
         initComponent(view);
 
@@ -92,17 +92,13 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
         tab_scroll = (HorizontalScrollView) view.findViewById(R.id.tab_scroll);
 
         alert_edit_msg = (LinearLayout) getActivity().findViewById(R.id.alert_edit_msg);
-       // moveViewToScreenCenter( alert_edit_msg, "Your edit was successful");
+        // moveViewToScreenCenter( alert_edit_msg, "Your edit was successful");
 
         all_tab.setOnClickListener(this);
         today_tab.setOnClickListener(this);
         this_week_tab.setOnClickListener(this);
         next_week_tab.setOnClickListener(this);
         this_month.setOnClickListener(this);
-
-
-
-
 
 
         if (mViewPager != null) {
@@ -117,7 +113,7 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.all_tab:
                 mViewPager.setCurrentItem(1);
                 break;
@@ -136,13 +132,12 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
         }
     }
 
-    public static void moveViewToScreenCenter(final View view, String message )
-    {
+    public static void moveViewToScreenCenter(final View view, String message) {
         view.setVisibility(View.VISIBLE);
         TextView txt_alert = (TextView) view.findViewById(R.id.info_msg);
         txt_alert.setText(message);
 
-        TranslateAnimation anim = new TranslateAnimation( 0, 0 , 0, -130);
+        TranslateAnimation anim = new TranslateAnimation(0, 0, 0, -130);
         anim.setFillAfter(true);
         anim.setDuration(2500);
         anim.setAnimationListener(new Animation.AnimationListener() {
@@ -167,16 +162,17 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
 
     }
 
-    public void onCustomSelected(ViewPager vpPager){
+    public void onCustomSelected(ViewPager vpPager) {
         // Attaching the page change listener inside the activity
         vpPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             // This method will be invoked when a new page becomes selected.
             @Override
             public void onPageSelected(int position) {
-              //  Toast.makeText(getActivity(),"Selected page position: " + position, Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "position real: "+position);
+                //  Toast.makeText(getActivity(),"Selected page position: " + position, Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "position real: " + position);
                 selectTab(tab_bar, position);
             }
+
             // This method will be invoked when the current page is scrolled
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -207,37 +203,35 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
         }*/
     }
 
-    public void nextAction(int action,Bundle bundle) {
+    public void nextAction(int action, Bundle bundle) {
         if (mListener != null) {
             mListener.OnFragmentInteractionListener(action, bundle);
         }
     }
 
-    public void selectTab(LinearLayout tab_bar, final int position){
+    public void selectTab(LinearLayout tab_bar, final int position) {
         int index = 0;
-        for(int i = 0; i < tab_bar.getChildCount(); i++){
-            if(tab_bar.getChildAt(i) instanceof LinearLayout){
+        for (int i = 0; i < tab_bar.getChildCount(); i++) {
+            if (tab_bar.getChildAt(i) instanceof LinearLayout) {
                 LinearLayout child = (LinearLayout) tab_bar.getChildAt(i);
                 final TextView title = (TextView) child.getChildAt(0);
                 TextView indicator = (TextView) child.getChildAt(1);
-                if(position != index){
+                if (position != index) {
                     indicator.setVisibility(View.GONE);
                     title.setTextColor(getResources().getColor(R.color.semi_transparent_black));
-                }else{
+                } else {
                     indicator.setVisibility(View.VISIBLE);
                     title.setTextColor(getResources().getColor(R.color.button_bg));
                     ViewTreeObserver vto = tab_scroll.getViewTreeObserver();
-                    vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener(){
+                    vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                         @Override
                         public void onGlobalLayout() {
                             tab_scroll.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                            if(position == 4 || position == 3){
+                            if (position == 4 || position == 3) {
                                 tab_scroll.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
-                            }
-                            else if(position == 0){
+                            } else if (position == 0) {
                                 tab_scroll.fullScroll(HorizontalScrollView.FOCUS_LEFT);
-                            }
-                            else{
+                            } else {
                                 tab_scroll.scrollTo((int) title.getScaleX(), 0);
                             }
                         }
@@ -252,28 +246,32 @@ public class ScheduleTimeLineFragment extends Fragment implements View.OnClickLi
         public PagerAdapter(FragmentManager fm) {
             super(fm);
         }
+
         @Override
         public Fragment getItem(int position) {
             Fragment fragment = null;
-            Log.d(TAG, "position : "+position);
+            Log.d(TAG, "position : " + position);
 
-                fragment=fragmentList.get(position);
-
+            fragment = fragmentList.get(position);
 
             fragment.setArguments(bundle);
             return fragment;
         }
+
         @Override
         public int getCount() {
             return fragmentList.size();
         }
     }
-    private static int mCurCheckPosition=0;
+
+    private static int mCurCheckPosition = 0;
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("curChoice", mCurCheckPosition);
     }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
