@@ -210,6 +210,9 @@
         <activity android:name=".ui.activities.LinesAndTerritories"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.client.ClientMapAndListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ui.activities.client.MapClientList"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
