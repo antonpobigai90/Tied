@@ -42,7 +42,7 @@ public class ScheduleAppointmentsFragment extends Fragment implements View.OnCli
     public static final String TAG = ScheduleAppointmentsFragment.class
             .getSimpleName();
 
-    public ViewPager mViewPager;
+    public static ViewPager mViewPager;
     public PagerAdapter mPagerAdapter;
     private Bundle bundle;
     private User user;

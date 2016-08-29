@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.client.AddClientActivity;
-import com.tied.android.tiedapp.ui.activities.client.SelectClientActivity;
 import com.tied.android.tiedapp.ui.activities.lines.AddLinesActivity;
 import com.tied.android.tiedapp.ui.activities.schedule.CreateAppointmentActivity;
 import com.tied.android.tiedapp.util.MyUtils;
@@ -51,11 +50,11 @@ public class AddOptionsActivity  extends AppCompatActivity implements  View.OnCl
 
         client_layout = (RelativeLayout) view.findViewById(R.id.client_layout);
         client_layout.setOnClickListener(this);
-        client_layout.setVisibility(View.GONE);
+//        client_layout.setVisibility(View.GONE);
 
         line_layout = (RelativeLayout) view.findViewById(R.id.line_layout);
         line_layout.setOnClickListener(this);
-        line_layout.setVisibility(View.GONE);
+//        line_layout.setVisibility(View.GONE);
 
         employee_layout = (RelativeLayout) view.findViewById(R.id.employee_layout);
         employee_layout.setOnClickListener(this);
@@ -64,10 +63,6 @@ public class AddOptionsActivity  extends AppCompatActivity implements  View.OnCl
         goal_layout = (RelativeLayout) view.findViewById(R.id.goal_layout);
         goal_layout.setOnClickListener(this);
         goal_layout.setVisibility(View.GONE);
-
-
-
-
 
     }
 

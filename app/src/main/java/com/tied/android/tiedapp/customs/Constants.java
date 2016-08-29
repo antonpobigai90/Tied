@@ -188,4 +188,5 @@ public class Constants {
     public static File DIR_ROOT = new File("StreamLive"),
             DIR_CACHE = new File("cache"), DIR_HTML_CACHE = new File("html"), DIR_DOWNLOADS = new File("downloads"), DIR_MEDIA = new File("media");
 
+    public static final String CLIENT_LIST = "client_list";
 }

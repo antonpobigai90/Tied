@@ -1,7 +1,5 @@
 package com.tied.android.tiedapp.ui.activities.schedule;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -20,24 +18,19 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.johnhiott.darkskyandroidlib.RequestBuilder;
 import com.johnhiott.darkskyandroidlib.models.Request;
 import com.johnhiott.darkskyandroidlib.models.WeatherResponse;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.objects.client.Client;
+import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Location;
+import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.util.HelperMethods;
-
 import com.tied.android.tiedapp.util.MyUtils;
-import org.w3c.dom.Text;
+
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-
-import java.text.DateFormat;
-import java.util.Date;
 
 /**
  * Created by Emmanuel on 6/23/2016.
@@ -126,17 +119,18 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
 
         myMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
 
-        LatLng MELBOURNE = new LatLng(-37.81319, 144.96298);
+        Coordinate coordinate = client.getAddress().getCoordinate();
+        LatLng latLng = new LatLng(coordinate.getLat(), coordinate.getLon());
+
         Marker melbourne = myMap.addMarker(new MarkerOptions()
-                .position(MELBOURNE)
+                .position(latLng)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-        myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(MELBOURNE, 15));
+        myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
 
         myMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
         melbourne.showInfoWindow();
 
     }
-
 
     class MyInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
@@ -160,7 +154,7 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
                 address.setText(client.getAddress().getStreet());
                 distance.setText("0.2 miles");
 
-                MyUtils.Picasso.displayImage(Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg", image);
+                MyUtils.Picasso.displayImage(user.getAvatar(), image);
 
             } catch (Exception e) {
 

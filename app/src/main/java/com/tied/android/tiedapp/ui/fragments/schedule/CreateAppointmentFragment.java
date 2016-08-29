@@ -3,8 +3,6 @@ package com.tied.android.tiedapp.ui.fragments.schedule;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -15,15 +13,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
@@ -47,7 +42,6 @@ import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -403,7 +397,7 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
         schedule.setTitle(titleText);
         if(client!=null)    schedule.setClient_id(client.getId());
         //schedule.setUser_id(user.getId());
-        schedule.setVisited(true);
+        schedule.setVisited(false);
         schedule.setReminder(notify_id);
         TimeRange timeRange = new TimeRange(startTimeText, endTimeText);
         schedule.setTime_range(timeRange);
@@ -461,7 +455,7 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
         schedule.setTitle(titleText);
        if(client!=null) schedule.setClient_id(client.getId());
         //schedule.setUser_id(user.getId());
-        schedule.setVisited(true);
+        schedule.setVisited(false);
         schedule.setReminder(notify_id);
         TimeRange timeRange = new TimeRange(startTimeText, endTimeText);
         schedule.setTime_range(timeRange);
