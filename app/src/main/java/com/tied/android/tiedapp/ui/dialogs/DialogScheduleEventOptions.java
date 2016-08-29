@@ -24,8 +24,12 @@ import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
+import com.tied.android.tiedapp.ui.activities.SuperActivity;
 import com.tied.android.tiedapp.ui.activities.schedule.CreateAppointmentActivity;
+import com.tied.android.tiedapp.ui.activities.schedule.ViewSchedule;
 import com.tied.android.tiedapp.ui.adapters.ScheduleListAdapter;
+import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleSuggestionFragment;
+import com.tied.android.tiedapp.ui.fragments.schedule.tabs.SchedulesFragment;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import okhttp3.ResponseBody;
@@ -39,7 +43,7 @@ public class DialogScheduleEventOptions implements View.OnClickListener {
     public static final String TAG = DialogScheduleEventOptions.class
             .getSimpleName();
     RelativeLayout close;
-    private TextView edit,delete,complete,cancel;
+    private TextView edit,delete,complete,cancel, view;
     private Dialog dialog;
     private Schedule schedule;
     Activity _c;
@@ -53,7 +57,7 @@ public class DialogScheduleEventOptions implements View.OnClickListener {
         this.adapter = adapter;
         dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setCancelable(false);
+        dialog.setCancelable(true);
 
         // Setting dialogview
         Window window = dialog.getWindow();
@@ -70,6 +74,8 @@ public class DialogScheduleEventOptions implements View.OnClickListener {
         window.setGravity(Gravity.BOTTOM);
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
+        view = (TextView)  dialog.findViewById(R.id.view);
+        view.setOnClickListener(this);
         edit = (TextView) dialog.findViewById(R.id.edit);
         edit.setOnClickListener(this);
         complete = (TextView) dialog.findViewById(R.id.complete);
@@ -98,7 +104,23 @@ public class DialogScheduleEventOptions implements View.OnClickListener {
                 DialogDeleteSchedule dialogDeleteSchedule = new DialogDeleteSchedule(schedule,adapter,_c,bundle);
                 dialogDeleteSchedule.showDialog();
                 break;
+            case R.id.view:
+                viewSchedule(schedule);
+                dialog.dismiss();
+                break;
         }
+    }
+
+    public void viewSchedule(Schedule schedule) {
+        Bundle bundle=new Bundle();
+        bundle.putSerializable(Constants.SCHEDULE_DATA, schedule);
+        Client client = new Client();
+        client.setId(schedule.getClient_id());
+        if(schedule.getClient_id()!=null) bundle.putSerializable(Constants.CLIENT_DATA, client);
+
+        bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
+        bundle.putString("fragment", ViewSchedule.class.getName());
+        MyUtils.startActivity(_c,  ViewSchedule.class, bundle);
     }
 
     public void editSchedule(final Schedule schedule){
@@ -116,19 +138,23 @@ public class DialogScheduleEventOptions implements View.OnClickListener {
                 if (_c == null) return;
                 Log.d(TAG + "ClientRes", resResponse.toString());
                 DialogUtils.closeProgress();
-                ClientRes ClientRes = resResponse.body();
-                if (ClientRes != null && ClientRes.isAuthFailed()) {
-                    User.LogOut(_c);
-                } else if (ClientRes != null && ClientRes.get_meta() != null && ClientRes.get_meta().getStatus_code() == 200) {
-                    Client client = ClientRes.getClient();
-                    Log.d(TAG + "client", client.toString());
-                    Gson gson = new Gson();
-                    Intent intent = new Intent(_c, CreateAppointmentActivity.class);
-                    intent.putExtra(Constants.CLIENT_DATA, client);
-                    intent.putExtra(Constants.SCHEDULE_DATA, schedule);
-                    _c.startActivity(intent);
-                } else {
-                    Toast.makeText(_c, "encountered error with server", Toast.LENGTH_LONG).show();
+                try {
+                    ClientRes ClientRes = resResponse.body();
+                    if (ClientRes != null && ClientRes.isAuthFailed()) {
+                        User.LogOut(_c);
+                    } else if (ClientRes != null && ClientRes.get_meta() != null && ClientRes.get_meta().getStatus_code() == 200) {
+                        Client client = ClientRes.getClient();
+                        Log.d(TAG + "client", client.toString());
+                        Gson gson = new Gson();
+                        Intent intent = new Intent(_c, CreateAppointmentActivity.class);
+                        intent.putExtra(Constants.CLIENT_DATA, client);
+                        intent.putExtra(Constants.SCHEDULE_DATA, schedule);
+                        _c.startActivity(intent);
+                    } else {
+                        MyUtils.showConnectionErrorToast(_c);
+                    }
+                }catch (Exception e) {
+                    MyUtils.showConnectionErrorToast(_c);
                 }
             }
 

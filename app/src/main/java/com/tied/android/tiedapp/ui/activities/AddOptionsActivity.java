@@ -44,21 +44,28 @@ public class AddOptionsActivity  extends AppCompatActivity implements  View.OnCl
 
         sale_layout = (RelativeLayout) view.findViewById(R.id.sale_layout);
         sale_layout.setOnClickListener(this);
+        sale_layout.setVisibility(View.GONE);
 
         schedule_layout = (RelativeLayout) view.findViewById(R.id.schedule_layout);
         schedule_layout.setOnClickListener(this);
 
         client_layout = (RelativeLayout) view.findViewById(R.id.client_layout);
         client_layout.setOnClickListener(this);
+        client_layout.setVisibility(View.GONE);
 
         line_layout = (RelativeLayout) view.findViewById(R.id.line_layout);
         line_layout.setOnClickListener(this);
+        line_layout.setVisibility(View.GONE);
 
         employee_layout = (RelativeLayout) view.findViewById(R.id.employee_layout);
         employee_layout.setOnClickListener(this);
+        employee_layout.setVisibility(View.GONE);
 
         goal_layout = (RelativeLayout) view.findViewById(R.id.goal_layout);
         goal_layout.setOnClickListener(this);
+        goal_layout.setVisibility(View.GONE);
+
+
 
 
 

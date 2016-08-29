@@ -1,6 +1,8 @@
 package com.tied.android.tiedapp.ui.fragments.schedule;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
+import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.fragments.schedule.tabs.AllScheduleFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.tabs.NextWeekScheduleFragment;
@@ -215,16 +218,11 @@ public class ScheduleAppointmentsFragment extends Fragment implements View.OnCli
             if (tab_bar.getChildAt(i) instanceof LinearLayout) {
                 LinearLayout child = (LinearLayout) tab_bar.getChildAt(i);
                 final TextView title = (TextView) child.getChildAt(0);
-<<<<<<< HEAD:app/src/main/java/com/tied/android/tiedapp/ui/fragments/schedule/ScheduleTimeLineFragment.java
+
                 View indicator = (View) child.getChildAt(1);
                 if(position != index){
                     indicator.setVisibility(View.INVISIBLE);
-=======
-                TextView indicator = (TextView) child.getChildAt(1);
-                if (position != index) {
-                    indicator.setVisibility(View.GONE);
->>>>>>> 3baad851b6bf1922db286dcfe93b87709ead2f23:app/src/main/java/com/tied/android/tiedapp/ui/fragments/schedule/ScheduleAppointmentsFragment.java
-                    title.setTextColor(getResources().getColor(R.color.semi_transparent_black));
+                 title.setTextColor(getResources().getColor(R.color.semi_transparent_black));
                 } else {
                     indicator.setVisibility(View.VISIBLE);
                     title.setTextColor(getResources().getColor(R.color.button_bg));
@@ -287,4 +285,14 @@ public class ScheduleAppointmentsFragment extends Fragment implements View.OnCli
         }
         // Logger.write("femiiiiiiiiiiiiiiii");
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constants.ADD_SALES && resultCode == Activity.RESULT_OK) {
+
+            Logger.write(data.getSerializableExtra("selected").toString());
+        }
+    }
 }
+

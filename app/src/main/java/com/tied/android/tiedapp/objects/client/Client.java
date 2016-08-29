@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.google.gson.Gson;
 import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.customs.model.ScheduleDataModel;
 import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.util.HelperMethods;
 
@@ -251,5 +253,9 @@ public class Client implements Serializable, Comparable<Client>{
     @Override
     public int compareTo(Client client) {
         return getFull_name().toUpperCase().compareTo(client.getFull_name().toUpperCase());
+    }
+    public String toJSONString() {
+        Gson gson=new Gson();
+        return gson.toJson(this, Client.class);
     }
 }

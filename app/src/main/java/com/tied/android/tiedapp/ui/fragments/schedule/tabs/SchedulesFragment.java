@@ -19,6 +19,7 @@ import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.model.ScheduleDataModel;
+import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.responses.ScheduleRes;
 import com.tied.android.tiedapp.objects.schedule.DateRange;
 import com.tied.android.tiedapp.objects.schedule.Schedule;
@@ -101,6 +102,14 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
         Log.d("schedules at ", position +"here---------------- "+scheduleDataModels.toString());
+      /*  Bundle bundle=new Bundle();
+        ScheduleDataModel data=scheduleDataModels.get(position);
+        bundle.putSerializable(Constants.SCHEDULE_DATA, data.toJSONString());
+        if(data.cclient!=null) bundle.putSerializable(Constants.CLIENT_DATA, gson.toJson(client, Client.class));
+        Schedule.scheduleCreated(getActivity().getApplicationContext());
+        bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
+        DialogUtils.closeProgress();
+        nextAction(Constants.ScheduleSuggestions, bundle);*/
     }
 
     protected void initSchedule() {

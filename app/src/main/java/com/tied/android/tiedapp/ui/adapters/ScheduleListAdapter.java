@@ -107,13 +107,18 @@ public class ScheduleListAdapter extends BaseAdapter {
 
         v.timeLine.removeAllViews();
         ArrayList<Schedule> schedules = data.getSchedules();
+        boolean showDivider = false;
         for (final Schedule schedule : schedules) {
             View schedule_view = LayoutInflater.from(_c).inflate(R.layout.schedule_list_item, null);
             LinearLayout linearLayout = (LinearLayout) schedule_view.findViewById(R.id.schedule);
             TextView time = (TextView) linearLayout.findViewById(R.id.time);
+            View divider =linearLayout.findViewById(R.id.divider);
+            if(showDivider) divider.setVisibility(View.VISIBLE);
+            else divider.setVisibility(View.GONE);
+            showDivider=true;
             int color = getStatusColor(schedule.getStatus());
             time.setBackgroundColor(color);
-            time.setOnClickListener(new View.OnClickListener() {
+            linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     DialogScheduleEventOptions alert = new DialogScheduleEventOptions();

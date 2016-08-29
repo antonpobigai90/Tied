@@ -41,11 +41,11 @@ import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.retrofits.services.LineApi;
-<<<<<<< HEAD
+
 import com.tied.android.tiedapp.ui.activities.GeneralSelectObjectActivity;
-=======
+
 import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
->>>>>>> 3baad851b6bf1922db286dcfe93b87709ead2f23
+
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.listeners.ListAdapterListener;
 
@@ -73,13 +73,8 @@ public abstract class MyUtils {
             if (imageUrl != null && !imageUrl.isEmpty()) {
                 com.squareup.picasso.Picasso.with(MainApplication.getInstance().getApplicationContext())
                         .load(imageUrl)
-<<<<<<< HEAD
                        // .memoryPolicy(MemoryPolicy.C)
                         //.networkPolicy(NetworkPolicy.NO_CACHE)
-=======
-//                        .memoryPolicy(MemoryPolicy.NO_CACHE)
-//                        .networkPolicy(NetworkPolicy.NO_CACHE)
->>>>>>> 3baad851b6bf1922db286dcfe93b87709ead2f23
                         .networkPolicy(NetworkPolicy.OFFLINE)
                         .into(imageView, new Callback() {
                             @Override
@@ -203,14 +198,14 @@ public abstract class MyUtils {
         view.setFocusableInTouchMode(true);
     }
 
-    public static void initiateClientSelector(Activity c,  ArrayList<Object> selected, boolean isMultiple, int requestCode) {
+    public static void initiateClientSelector(Activity c,  ArrayList<Object> selected, boolean isMultiple) {
         Intent i = new Intent(c, GeneralSelectObjectActivity.class);
         Bundle b=new Bundle();
         b.putInt(GeneralSelectObjectActivity.OBJECT_TYPE, GeneralSelectObjectActivity.SELECT_CLIENT_TYPE);
         b.putBoolean(GeneralSelectObjectActivity.IS_MULTIPLE, isMultiple);
         if(selected!=null) b.putSerializable(GeneralSelectObjectActivity.SELECTED_OBJECTS, selected);
         i.putExtras(b);
-        c.startActivityForResult(i, requestCode);
+        c.startActivityForResult(i, Constants.SELECT_CLIENT);
 
     }
     public static void initAvatar(Bundle bundle, ImageView imageView) {
@@ -678,5 +673,62 @@ public abstract class MyUtils {
                 Log.d(" onFailure", t.toString());
             }
         });
+    }
+    public static String getTimeRange(Schedule schedule){
+        String from = schedule.getTime_range().getStart_time();
+        String to = schedule.getTime_range().getEnd_time();
+
+        String range = getMeridianTime(from) +" - "+getMeridianTime(to);
+        long diff = HelperMethods.getTimeDifference(from,to);
+        int abs_difference = Math.abs((int)diff);
+
+        if(abs_difference > 15){
+            range = "All Day";
+        }else if(abs_difference < 1){
+            range = getMeridianTime(from) +" "+getMeridianString(from);
+        }
+        return range;
+    }
+
+    public static String getMeridianString(String hour){
+        String[] hour_min = hour.split(":");
+        int hour_int = Integer.parseInt(hour_min[0]);
+        String str = "am";
+        if(hour_int > 12){
+            str = "pm";
+        }
+        return str;
+    }
+    public static String getMeridianTime(String hour){
+        String[] hour_min = hour.split(":");
+        int hour_int = Integer.parseInt(hour_min[0]);
+
+        String new_hour = hour;
+        if(hour_int > 12){
+            new_hour = String.format("%02d", hour_int - 12) +":"+ hour_min[1];
+        }
+        return new_hour;
+    }
+    public static void showConnectionErrorToast(Activity a) {
+        MyUtils.showToast(a.getString(R.string.connection_error));
+    }
+    public static String getWeekDay(Schedule schedule){
+        int diff = (int) HelperMethods.getDateDifferenceWithToday(schedule.getDate());
+        String result;
+        if(diff < 7 && diff >= 0){
+            switch (diff){
+                case 0:
+                    result = "Today";
+                    break;
+                case 1:
+                    result = "Tomorrow";
+                    break;
+                default:
+                    result = HelperMethods.getDayOfTheWeek(schedule.getDate());
+            }
+        }else{
+            result = HelperMethods.getMonthOfTheYear(schedule.getDate());
+        }
+        return result;
     }
 }

@@ -169,7 +169,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         Logger.write("hhhhhhaaaaaaaaaaaaaaaaaaaaaaa");
 
         bundle.putString(Constants.USER_DATA, user_json);
-        if ((new Date().getTime() - MyUtils.getLastTimeAppRan()) != 24*60*60*1000) {
+        if ((new Date().getTime() - MyUtils.getLastTimeAppRan()) > 24*60*60*1000) {
             //launchFragment(Constants.HomeSchedule, bundle);
             MyUtils.startActivity(this, DailyStatsActivity.class);
             MyUtils.setLastTimeAppRan(new Date().getTime());

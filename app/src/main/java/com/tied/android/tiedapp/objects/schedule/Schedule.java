@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.google.gson.Gson;
 import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.customs.model.ScheduleDataModel;
 import com.tied.android.tiedapp.objects.Location;
 
 import java.io.Serializable;
@@ -176,5 +178,9 @@ public class Schedule implements Serializable{
                 ", location=" + location +
                 ", status=" + status +
                 '}';
+    }
+    public String toJSONString() {
+        Gson gson=new Gson();
+        return gson.toJson(this, Schedule.class);
     }
 }

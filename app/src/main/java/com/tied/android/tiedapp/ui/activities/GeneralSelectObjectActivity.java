@@ -1,6 +1,8 @@
 package com.tied.android.tiedapp.ui.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -116,6 +118,7 @@ public class GeneralSelectObjectActivity extends Activity
     public void initComponent() {
         clientsWithDistance = new ArrayList<Client>();
         listView = (ListView) findViewById(R.id.list);
+        findViewById(R.id.clear_but).setOnClickListener(this);
 
         txt_continue = (TextView) findViewById(R.id.txt_continue);
 
@@ -130,6 +133,7 @@ public class GeneralSelectObjectActivity extends Activity
         finishSelection.setVisibility(View.GONE);
         finishSelection.setOnClickListener(this);
         selectedCountText=(TextView)findViewById(R.id.selected_count);
+
         updateNumSelected();
 
 
@@ -195,9 +199,30 @@ public class GeneralSelectObjectActivity extends Activity
             case R.id.add_button:
                 finishSelection();
                 break;
+            case R.id.clear_but:
+                showClearWarning();
+                break;
         }
     }
-
+private void showClearWarning() {
+     final AlertDialog ad= new AlertDialog.Builder(this).create();
+    ad.setMessage("This will clear all selections. Are you sure you want to proceed?");
+    ad.setButton(AlertDialog.BUTTON_POSITIVE, "YES", new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialogInterface, int i) {
+            selectedIDs.clear();
+            selectedObjects.clear();
+            finishSelection();
+        }
+    });
+    ad.setButton(AlertDialog.BUTTON_NEGATIVE, "NO", new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialogInterface, int i) {
+            dialogInterface.dismiss();
+        }
+    });
+    ad.show();
+}
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.d("search", "here---------------- listener");
@@ -252,7 +277,13 @@ public class GeneralSelectObjectActivity extends Activity
     private void finishSelection() {
         Intent intent = new Intent();
         Bundle b =new Bundle();
-        b.putSerializable("selected", selectedObjects);
+        if(!selectedObjects.isEmpty()) {
+            if (isMultiple) {
+                b.putSerializable("selected", selectedObjects);
+            } else {
+                b.putSerializable("selected", (Client) selectedObjects.get(0));
+            }
+        }
         intent.putExtras(b);
         Logger.write("finishginnnnn.");
         setResult(RESULT_OK, intent);

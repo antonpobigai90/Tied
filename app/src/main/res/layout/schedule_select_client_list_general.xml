@@ -43,7 +43,7 @@
 
                         android:padding="@dimen/action_bar_icon_padding"
                         android:layout_marginLeft="10dp"
-                        android:src="@drawable/btn_close" />
+                        android:src="@drawable/btn_back_arrow" />
 
             </LinearLayout>
             <LinearLayout
@@ -53,17 +53,17 @@
                     android:gravity="center_vertical"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="5dp"
                     android:padding="@dimen/action_bar_icon_padding"
                     android:orientation="horizontal">
             <ImageView
 
                     android:layout_alignParentTop="true"
-                    android:layout_width="wrap_content"
+                    android:padding="@dimen/action_bar_icon_padding"
+                    android:layout_width="@dimen/action_bar_icon_height"
                     android:layout_height="@dimen/action_bar_icon_height"
+                    android:id="@+id/clear_but"
 
-
-                    android:src="@drawable/checkmark" />
+                    android:src="@drawable/btn_close" />
             </LinearLayout>
 
         </RelativeLayout>
@@ -135,15 +135,16 @@
                       android:id="@+id/selected_count"
                       android:text="0 Selected"/>
 
-            <Button android:layout_width="wrap_content"
-                    android:gravity="center"
-                    android:visibility="gone"
-                    android:layout_gravity="center"
-                    android:padding="0dip"
+            <ImageView  android:padding="@dimen/action_bar_icon_padding"
+                        android:layout_width="@dimen/action_bar_icon_height"
+                        android:layout_height="@dimen/action_bar_icon_height"
 
+                        android:gravity="center"
+                    android:visibility="visible"
+                    android:layout_gravity="center"
+                    android:src="@drawable/checkmark_blue"
                     android:text = "Add"
-                    android:background="@drawable/button_invite"
-                    android:layout_height="wrap_content"/>
+                    />
         </LinearLayout>
     </LinearLayout>
 

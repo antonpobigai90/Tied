@@ -184,6 +184,10 @@
                   android:label="@string/app_name"
                   android:screenOrientation="portrait"
                   android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ui.activities.SuperActivity"
+                  android:label="@string/app_name"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.activities.SendInviteActivity"
             android:label="@string/app_name"

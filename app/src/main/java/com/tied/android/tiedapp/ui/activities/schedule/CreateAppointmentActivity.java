@@ -1,5 +1,6 @@
 package com.tied.android.tiedapp.ui.activities.schedule;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -38,6 +39,7 @@ public class CreateAppointmentActivity extends FragmentActivity implements Fragm
 
     public Coordinate coordinate;
     int currentFragmentID=0;
+
 
     Map<Integer, Fragment> fragments = new HashMap<Integer, Fragment>();
 
@@ -151,5 +153,11 @@ public class CreateAppointmentActivity extends FragmentActivity implements Fragm
                    // .addToBackStack(tag)
                     .commit();
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        fragment.onActivityResult(requestCode, resultCode, data);
     }
 }

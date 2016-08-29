@@ -30,9 +30,14 @@ import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.util.HelperMethods;
 
+import com.tied.android.tiedapp.util.MyUtils;
+import org.w3c.dom.Text;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+
+import java.text.DateFormat;
+import java.util.Date;
 
 /**
  * Created by Emmanuel on 6/23/2016.
@@ -46,6 +51,8 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
     private User user;
     private Client client;
     private Schedule schedule;
+    TextView dayTV, monthTV;
+
 
     private TextView description, temperature, title, schedule_title;
 
@@ -55,6 +62,7 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.fragment_schedule_view);
 
         user = User.getUser(getApplicationContext());
+
         client = (Client) getIntent().getSerializableExtra(Constants.CLIENT_DATA);
         schedule = (Schedule) getIntent().getSerializableExtra(Constants.SCHEDULE_DATA);
 
@@ -71,6 +79,20 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
         schedule_title.setText(schedule.getTitle());
         description.setText(schedule.getDescription());
 
+        dayTV=(TextView) findViewById(R.id.day);
+
+            long diff_in_date = HelperMethods.getDateDifferenceWithToday(schedule.getDate());
+
+            String day = String.format("%02d", HelperMethods.getDayFromSchedule(schedule.getDate()));
+            String week_day = MyUtils.getWeekDay(schedule);
+        dayTV.setText(day);
+
+
+
+
+        String timeRange = MyUtils.getTimeRange(schedule);
+       // time.setText(timeRange);
+
         final RequestBuilder weather = new RequestBuilder();
         Request request = new Request();
         request.setLat("32.00");
@@ -82,11 +104,12 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
         weather.getWeather(request, new Callback<WeatherResponse>() {
             @Override
             public void success(WeatherResponse weatherResponse, Response response) {
-                Log.d(TAG, "temperature : "+weatherResponse.getDaily().getData().get(0).getApparentTemperatureMax()+"");
+                Log.d(TAG, "temperature : " + weatherResponse.getDaily().getData().get(0).getApparentTemperatureMax() + "");
                 int temp_max = (int) weatherResponse.getDaily().getData().get(0).getApparentTemperatureMax();
                 temp_max = (int) HelperMethods.convertFahrenheitToCelcius(temp_max);
-                temperature.setText(temp_max+"°");
+                temperature.setText(temp_max + "°");
             }
+
             @Override
             public void failure(RetrofitError retrofitError) {
                 Log.d(TAG, "Error while calling: " + retrofitError.getUrl());
@@ -94,7 +117,6 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
         });
 
     }
-
 
 
     @Override
@@ -106,9 +128,9 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
 
         LatLng MELBOURNE = new LatLng(-37.81319, 144.96298);
         Marker melbourne = myMap.addMarker(new MarkerOptions()
-                            .position(MELBOURNE)
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-        myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(MELBOURNE,15));
+                .position(MELBOURNE)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+        myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(MELBOURNE, 15));
 
         myMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
         melbourne.showInfoWindow();
@@ -121,7 +143,7 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
         private final View myContentsView;
         boolean not_first_time_showing_info_window;
 
-        MyInfoWindowAdapter(){
+        MyInfoWindowAdapter() {
             myContentsView = getLayoutInflater().inflate(R.layout.schedule_map_info_window, null);
         }
 
@@ -129,32 +151,25 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
         public View getInfoContents(Marker marker) {
 
 
-            TextView line = ((TextView)myContentsView.findViewById(R.id.line));
-            TextView address = ((TextView)myContentsView.findViewById(R.id.address));
-            TextView distance = ((TextView)myContentsView.findViewById(R.id.distance));
+            TextView line = ((TextView) myContentsView.findViewById(R.id.line));
+            TextView address = ((TextView) myContentsView.findViewById(R.id.address));
+            TextView distance = ((TextView) myContentsView.findViewById(R.id.distance));
             final ImageView image = ((ImageView) myContentsView.findViewById(R.id.image));
+            try {
+                line.setText(client.getCompany());
+                address.setText(client.getAddress().getStreet());
+                distance.setText("0.2 miles");
 
-            line.setText(client.getCompany());
-            address.setText(client.getAddress().getStreet());
-            distance.setText("0.2 miles");
+                MyUtils.Picasso.displayImage(Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg", image);
 
-            Picasso.with(ViewSchedule.this).
-                    load(Constants.GET_AVATAR_ENDPOINT+"avatar_"+user.getId()+".jpg")
-                    .resize(35,35)
-                    .into(new Target() {
-                        @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                            if (bitmap != null){
-                                image.setImageBitmap(bitmap);
-                            }else{
-                                image.setImageResource(R.mipmap.default_avatar);
-                            }
-                        }
-                        @Override public void onBitmapFailed(Drawable errorDrawable) { }
-                        @Override public void onPrepareLoad(Drawable placeHolderDrawable) { }
-                    });
+            } catch (Exception e) {
 
+            }
             return myContentsView;
         }
+
+
+
 
         @Override
         public View getInfoWindow(Marker marker) {

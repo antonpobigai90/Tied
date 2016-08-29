@@ -10,7 +10,7 @@
         android:id="@+id/top_layout"
         android:background="@color/button_bg"
         android:layout_width="match_parent"
-        android:layout_height="54dp">
+        android:layout_height="@dimen/action_bar_height">
 
         <TextView
             android:id="@+id/schedule_title"
@@ -37,14 +37,15 @@
 
             <ImageView
                 android:id="@+id/img_close"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_height="@dimen/action_bar_icon_height"
+                android:layout_width="@dimen/action_bar_icon_height"
+                android:padding="@dimen/action_bar_icon_padding"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:src="@mipmap/btn_back_arrow" />
+                android:src="@drawable/btn_back_arrow" />
 
             <TextView
                 android:id="@+id/txt_back"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -56,12 +57,12 @@
 
         <ImageView
             android:id="@+id/img_pin"
-            android:layout_width="35dp"
-            android:layout_height="30dp"
+            android:layout_height="@dimen/action_bar_icon_height"
+            android:layout_width="@dimen/action_bar_icon_height"
+            android:padding="@dimen/action_bar_icon_padding"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="15dp"
-            android:src="@mipmap/pin" />
+            android:src="@drawable/pin" />
 
     </RelativeLayout>
 
@@ -144,6 +145,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/name"
+                        android:visibility="gone"
                         android:textColor="@color/schedule_title_bg_color"
                         android:text="All day"
                         android:textSize="13sp" />
@@ -211,6 +213,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:weightSum="4"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -233,7 +236,7 @@
                             android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:layout_marginRight="2dp"
-                            android:src="@mipmap/sunny_black" />
+                            android:src="@drawable/sunny_black" />
 
                         <TextView
                             android:id="@+id/weather"
@@ -259,9 +262,11 @@
                 <View
                     android:layout_width="0.1dp"
                     android:layout_height="match_parent"
+                    android:visibility="gone"
                     android:background="@android:color/darker_gray" />
 
                 <LinearLayout
+                        android:visibility="gone"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -291,12 +296,14 @@
                 <View
                     android:layout_width="0.1dp"
                     android:layout_height="match_parent"
+                    android:visibility="gone"
                     android:background="@android:color/darker_gray" />
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
+                    android:visibility="gone"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
@@ -323,6 +330,7 @@
                 <View
                     android:layout_width="0.1dp"
                     android:layout_height="match_parent"
+                    android:visibility="gone"
                     android:background="@android:color/darker_gray" />
 
                 <LinearLayout
@@ -330,6 +338,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:layout_weight="1"
+                    android:visibility="gone"
                     android:orientation="vertical">
 
                     <TextView
@@ -337,6 +346,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:text="121"
+
                         android:textColor="@color/schedule_title_bg_color"
                         android:layout_marginBottom="5dp"
                         android:textSize="13sp"
@@ -384,6 +394,7 @@
                     android:layout_width="120dp"
                     android:layout_height="40dp"
                     android:layout_marginLeft="20dp"
+                    android:visibility="gone"
                     android:background="@drawable/curve_white_background"
                     android:gravity="center_horizontal|center_vertical"
                     android:text="More"

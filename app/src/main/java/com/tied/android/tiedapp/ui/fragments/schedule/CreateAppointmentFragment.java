@@ -1,5 +1,6 @@
 package com.tied.android.tiedapp.ui.fragments.schedule;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -42,9 +43,11 @@ import com.tied.android.tiedapp.ui.dialogs.ScheduleNotifyDialog;
 import com.tied.android.tiedapp.ui.fragments.DatePickerFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.HelperMethods;
+import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -64,7 +67,7 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
     public static final String TAG = CreateAppointmentFragment.class
             .getSimpleName();
 
-    TextView txt_title, txt_description, txt_date, txt_time, txt_creative_co_op, txt_reminder, txt_date_selected;
+    TextView txt_title, txt_description, txt_date, txt_time, txt_client_name, txt_client_company, txt_reminder, txt_date_selected;
     ImageView img_avatar, img_plus_date, img_plus1, img_location, img_reminder, img_close;
     private TextView locationTV;// street, city, zip, state;
 
@@ -138,13 +141,15 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
         txt_create_schedule = (TextView) view.findViewById(R.id.txt_create_schedule);
         txt_create_schedule.setOnClickListener(this);
 
-        txt_creative_co_op = (TextView) view.findViewById(R.id.txt_creative_co_op);
+        txt_client_name = (TextView) view.findViewById(R.id.client_name);
+        txt_client_company = (TextView) view.findViewById(R.id.client_company);
         txt_title = (TextView) view.findViewById(R.id.txt_title);
         txt_description = (TextView) view.findViewById(R.id.txt_description);
         txt_date = (TextView) view.findViewById(R.id.date);
         txt_date_selected = (TextView) view.findViewById(R.id.date_selected);
         txt_time = (TextView) view.findViewById(R.id.time);
         txt_reminder = (TextView) view.findViewById(R.id.reminder);
+        locationTV=(TextView) view.findViewById(R.id.txt_location);
 
         view.findViewById(R.id.client_layout).setOnClickListener(this);
 
@@ -168,6 +173,8 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
         img_reminder = (ImageView) view.findViewById(R.id.img_reminder);
         img_reminder.setOnClickListener(this);
 
+        view.findViewById(R.id.layout_location).setOnClickListener(this);
+
         bundle = getArguments();
         if (bundle != null) {
             Log.d(TAG, "bundle not null");
@@ -187,6 +194,7 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
                // city.setText(schedule.getLocation().getCity());
                // zip.setText(schedule.getLocation().getZip());
                // state.setText(schedule.getLocation().getState());
+                location=schedule.getLocation();
                 txt_time.setText(schedule.getTime_range().getRange());
                 txt_date_selected.setText(schedule.getDate());
                 txt_date.setText(HelperMethods.getFormatedDate(schedule.getDate()));
@@ -197,29 +205,19 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
                 city.setText(client.getAddress().getCity());
                 zip.setText(client.getAddress().getZip());
                 state.setText(client.getAddress().getState());*/
+                if(client!=null) location=client.getAddress();
+
             }
-/*
-            String logo = client.getLogo().equals("") ? null  : client.getLogo();
-            Picasso.with(getActivity()).
-                    load(logo)
-                    .into(new Target() {
-                        @Override
-                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                            if (bitmap != null) {
-                                img_avatar.setImageBitmap(bitmap);
-                            } else {
-                                img_avatar.setImageResource(R.mipmap.default_avatar);
-                            }
-                        }
+            if(location!=null) locationTV.setText(location.getLocationAddress());
 
-                        @Override
-                        public void onBitmapFailed(Drawable errorDrawable) {
-                        }
+            if(client!=null) {
 
-                        @Override
-                        public void onPrepareLoad(Drawable placeHolderDrawable) {
-                        }
-                    }); */
+            txt_client_name.setText(client.getFull_name());
+                txt_client_company.setText(client.getCompany());
+                String logo = client.getLogo().equals("") ? null : client.getLogo();
+                MyUtils.Picasso.displayImage(logo, img_avatar);
+
+            }
         }
 
     }
@@ -281,12 +279,23 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
             case R.id.txt_create_schedule:
                 if (validated()) {
                     new GeocodeAsyncTask().execute();
-                } else {
-                    Toast.makeText(getActivity(), "Input not filled appropiately", Toast.LENGTH_LONG).show();
                 }
                 break;
             case R.id.client_layout:
-               MyUtils.initiateClientSelector(getActivity(), null, false, 12000);
+               MyUtils.initiateClientSelector(getActivity(), null, false);
+                break;
+            case R.id.layout_location:
+                MyUtils.showAddressDialog(getActivity(), "Appointment Location", location, new MyUtils.DialogClickListener() {
+                    @Override
+                    public void onClick(Object response) {
+                        if(response!=null) {
+                            location=(Location)response;
+                            locationTV.setText(location.getLocationAddress());
+                        }else{
+                            locationTV.setText("Click to enter location");
+                        }
+                    }
+                });
                 break;
         }
     }
@@ -305,7 +314,22 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
       //  cityText = city.getText().toString();
        // zipText = zip.getText().toString();
         //stateText = state.getText().toString();
-        location = new Location(cityText, zipText, stateText, streetText);
+        if(titleText.trim().isEmpty()) {
+            MyUtils.showAlert(getActivity(), "Schedule title is required");
+            return false;
+        }
+        if(dateText.trim().isEmpty()) {
+            MyUtils.showAlert(getActivity(), "Schedule date is required");
+            return false;
+        }
+        if(location==null) {
+            MyUtils.showAlert(getActivity(), "Schedule location is required");
+            return false;
+        }
+
+
+        //location = new Location(cityText, zipText, stateText, streetText);
+
 
         String range = txt_time.getText().toString();
         String[] time = range.split("-");
@@ -314,6 +338,10 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
             String to = time[1].replace(" ", "");
             startTimeText = timeFormat(from);
             endTimeText = timeFormat(to);
+        }
+        if(startTimeText==null || startTimeText.isEmpty() || endTimeText==null || endTimeText.isEmpty()) {
+            MyUtils.showAlert(getActivity(), "You must enter the time for the schedule");
+            return false;
         }
 
         return dateText != null && endTimeText!= null && startTimeText != null;
@@ -373,8 +401,8 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
     public void createAppointment() {
         final Schedule schedule = new Schedule();
         schedule.setTitle(titleText);
-        schedule.setClient_id(client.getId());
-        schedule.setUser_id(user.getId());
+        if(client!=null)    schedule.setClient_id(client.getId());
+        //schedule.setUser_id(user.getId());
         schedule.setVisited(true);
         schedule.setReminder(notify_id);
         TimeRange timeRange = new TimeRange(startTimeText, endTimeText);
@@ -392,31 +420,37 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
             @Override
             public void onResponse(Call<ScheduleRes> call, Response<ScheduleRes> scheduleResResponse) {
                 if (getActivity() == null) return;
-                ScheduleRes scheduleRes = scheduleResResponse.body();
-                Log.d(TAG + " onFailure", scheduleRes.toString());
-                if (scheduleRes.isAuthFailed()) {
-                    DialogUtils.closeProgress();
-                    User.LogOut(getActivity());
-                } else if (scheduleRes.get_meta() != null && scheduleRes.get_meta().getStatus_code() == 201) {
-                    Log.d(TAG + " Schedule", scheduleRes.getSchedule().toString());
-                    Gson gson = new Gson();
-                    Schedule mainSchedule = scheduleRes.getSchedule();
-                    String schedule_string = gson.toJson(mainSchedule, Schedule.class);
-                    bundle.putSerializable(Constants.SCHEDULE_DATA, schedule_string);
-                    Schedule.scheduleCreated(getActivity().getApplicationContext());
-                    bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
-                    DialogUtils.closeProgress();
-                    nextAction(Constants.ScheduleSuggestions, bundle);
-                } else {
-                    DialogUtils.closeProgress();
-                    nextAction(Constants.CreateSchedule, bundle);
-                    Toast.makeText(getActivity(), scheduleRes.toString(), Toast.LENGTH_LONG).show();
+                try {
+                    ScheduleRes scheduleRes = scheduleResResponse.body();
+                    Log.d(TAG + " onFailure", scheduleRes.toString());
+                    if (scheduleRes.isAuthFailed()) {
+                        DialogUtils.closeProgress();
+                        User.LogOut(getActivity());
+                    } else if (scheduleRes.get_meta() != null && scheduleRes.get_meta().getStatus_code() == 201) {
+                        Log.d(TAG + " Schedule", scheduleRes.getSchedule().toString());
+                        Gson gson = new Gson();
+                        Schedule mainSchedule = scheduleRes.getSchedule();
+                        String schedule_string = gson.toJson(mainSchedule, Schedule.class);
+                        bundle.putSerializable(Constants.SCHEDULE_DATA, schedule_string);
+                        if(client!=null) bundle.putSerializable(Constants.CLIENT_DATA, gson.toJson(client, Client.class));
+                        Schedule.scheduleCreated(getActivity().getApplicationContext());
+                        bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
+                        DialogUtils.closeProgress();
+                        nextAction(Constants.ScheduleSuggestions, bundle);
+                    } else {
+                        DialogUtils.closeProgress();
+                        nextAction(Constants.CreateSchedule, bundle);
+                        MyUtils.showToast(scheduleRes.getMessage());
+                    }
+                }catch (Exception e) {
+                    MyUtils.showConnectionErrorToast(getActivity());
                 }
             }
 
             @Override
             public void onFailure(Call<ScheduleRes> ScheduleResponseCall, Throwable t) {
-                Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
+               // Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
+                MyUtils.showConnectionErrorToast(getActivity());
                 Log.d(TAG + " onFailure", t.toString());
                 DialogUtils.closeProgress();
             }
@@ -425,8 +459,8 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
 
     public void updateAppointment() {
         schedule.setTitle(titleText);
-        schedule.setClient_id(client.getId());
-        schedule.setUser_id(user.getId());
+       if(client!=null) schedule.setClient_id(client.getId());
+        //schedule.setUser_id(user.getId());
         schedule.setVisited(true);
         schedule.setReminder(notify_id);
         TimeRange timeRange = new TimeRange(startTimeText, endTimeText);
@@ -444,35 +478,40 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
             @Override
             public void onResponse(Call<ScheduleRes> call, Response<ScheduleRes> scheduleResResponse) {
                 if (getActivity() == null) return;
-                ScheduleRes scheduleRes = scheduleResResponse.body();
-                if (scheduleRes != null && scheduleRes.isAuthFailed()){
-                    DialogUtils.closeProgress();
-                    User.LogOut(getActivity());
-                }
-                else if (scheduleRes != null && scheduleRes.get_meta() != null && scheduleRes.get_meta().getStatus_code() == 200) {
-                    Log.d(TAG + " Schedule", scheduleRes.getSchedule().toString());
-                    Gson gson = new Gson();
-                    Schedule updatedSchedule = scheduleRes.getSchedule();
-                    if(updatedSchedule.getId().equals(schedule.getId())){
-                        String schedule_string = gson.toJson(schedule, Schedule.class);
-                        bundle.putSerializable(Constants.SCHEDULE_DATA, schedule_string);
-                        bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
-                        bundle.putBoolean(Constants.SCHEDULE_EDITED, true);
+                try {
+                    ScheduleRes scheduleRes = scheduleResResponse.body();
+                    if (scheduleRes != null && scheduleRes.isAuthFailed()) {
+                        DialogUtils.closeProgress();
+                        User.LogOut(getActivity());
+                    } else if (scheduleRes != null && scheduleRes.get_meta() != null && scheduleRes.get_meta().getStatus_code() == 200) {
+                        Log.d(TAG + " Schedule", scheduleRes.getSchedule().toString());
+                        Gson gson = new Gson();
+                        Schedule updatedSchedule = scheduleRes.getSchedule();
+                        if (updatedSchedule.getId().equals(schedule.getId())) {
+                            String schedule_string = gson.toJson(schedule, Schedule.class);
+                            bundle.putSerializable(Constants.SCHEDULE_DATA, schedule_string);
+                            bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
+                            bundle.putBoolean(Constants.SCHEDULE_EDITED, true);
 
-                        MyUtils.startActivity(getActivity(), MainActivity.class, bundle);
+                            MyUtils.startActivity(getActivity(), MainActivity.class, bundle);
 //                        Schedule.scheduleCreated(getActivity().getApplicationContext());
 //                        DialogUtils.closeProgress();
 //                        nextAction(Constants.ScheduleSuggestions, bundle);
+                        }
+                    } else {
+                        //Toast.makeText(getActivity(), scheduleRes.toString(), Toast.LENGTH_LONG).show();
+                        MyUtils.showAlert(getActivity(), scheduleRes.getMessage());
+                        DialogUtils.closeProgress();
                     }
-                } else {
-                    Toast.makeText(getActivity(), scheduleRes.toString(), Toast.LENGTH_LONG).show();
-                    DialogUtils.closeProgress();
+                }catch (Exception e) {
+                    MyUtils.showConnectionErrorToast(getActivity());
                 }
             }
 
             @Override
             public void onFailure(Call<ScheduleRes> ScheduleResponseCall, Throwable t) {
-                Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
+               // Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
+                MyUtils.showConnectionErrorToast(getActivity());
                 Log.d(TAG + " onFailure", t.toString());
                 DialogUtils.closeProgress();
             }
@@ -481,8 +520,34 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
 
     @Override
     public void onTimeRangeSelected(int startHour, int startMin, int endHour, int endMin) {
-        startTimeText = startHour + ":" + startMin;
-        endTimeText = endHour + ":" + endMin;
-        txt_time.setText(startTimeText + "-" + endTimeText);
+        startTimeText = startHour + ":" +String.format("%02d", startMin);
+        endTimeText = endHour + ":" + String.format("%02d", endMin);
+        txt_time.setText(startTimeText + " - " + endTimeText);
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constants.SELECT_CLIENT && resultCode == Activity.RESULT_OK) {
+            //location=(
+            if(data.getSerializableExtra("selected")!=null) {
+
+                client = (Client) data.getSerializableExtra("selected");
+                String logo = client.getLogo().equals("") ? null : client.getLogo();
+                MyUtils.Picasso.displayImage(logo, img_avatar);
+                txt_client_name.setText(client.getFull_name());
+                txt_client_company.setText(client.getCompany());
+                if(location==null) {
+                    location=client.getAddress();
+                    locationTV.setText(location.getLocationAddress());
+                }
+
+
+                Logger.write(client.toString());
+            }else{
+                client=null;
+                img_avatar.setImageResource(R.drawable.client_photo);
+                txt_client_name.setText("");
+            }
+        }
     }
 }

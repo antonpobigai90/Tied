@@ -14,11 +14,29 @@
             android:background="@drawable/curve_white_background_with_stroke"
             android:orientation="vertical"
             android:padding="5dp">
+            <TextView
+                    android:id="@+id/view"
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="10dp"
+                    android:text="VIEW"
+                    android:textColor="@color/button_bg"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.1dp"
+                    android:background="@android:color/darker_gray" />
 
             <TextView
                 android:id="@+id/edit"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
+                android:gravity="center"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:paddingTop="10dp"
@@ -36,7 +54,8 @@
 
             <TextView
                 android:id="@+id/complete"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
+                android:gravity="center"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:paddingTop="10dp"
@@ -54,12 +73,13 @@
 
             <TextView
                 android:id="@+id/cancel"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
+                android:gravity="center"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
-                android:text="CANCEL"
+                android:text="CANCEL APPOINTMENT"
                 android:textColor="@color/button_bg"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -72,7 +92,8 @@
 
             <TextView
                 android:id="@+id/delete"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
+                android:gravity="center"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:paddingTop="10dp"

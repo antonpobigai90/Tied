@@ -5,21 +5,21 @@
     android:orientation="vertical"
     android:background="@color/white">
 
-    <RelativeLayout
-        android:id="@+id/invite_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp">
+    <LinearLayout
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="horizontal"
+                  android:background="@color/white">
 
-        <LinearLayout
+    <LinearLayout
             android:id="@+id/date"
             android:layout_width="60dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingTop="10dp"
             android:orientation="vertical"
             android:layout_centerVertical="true">
 
-            <TextView
+        <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/day"
@@ -29,7 +29,7 @@
                 android:textStyle="bold"
                 android:textSize="20sp" />
 
-            <TextView
+        <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/week_day"
@@ -40,53 +40,56 @@
                 android:textSize="9sp" />
 
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/timeline"
-            android:layout_width="match_parent"
+    </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/invite_layout"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingTop="5dp"
-            android:layout_toLeftOf="@+id/weather_info"
-            android:paddingLeft="15dp"
-            android:layout_toRightOf="@+id/date">
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
+            <LinearLayout
+                android:id="@+id/timeline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingTop="5dp"
 
-
-        </LinearLayout>
-
+                android:paddingLeft="15dp"
+            />
+        </RelativeLayout>
         <LinearLayout
-            android:id="@+id/weather_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:orientation="horizontal">
+                android:id="@+id/weather_info"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:paddingTop="10dp"
+                android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:id="@+id/temperature"
-                android:gravity="center_vertical"
-                android:layout_marginRight="3dp"
-                android:text=""
-                android:textStyle="bold"
-                android:textColor="@color/schedule_title_bg_color"
-                android:textSize="12sp" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/temperature"
+                    android:gravity="center_vertical"
+                    android:layout_marginRight="3dp"
+                    android:text=""
+                    android:textStyle="bold"
+                    android:textColor="@color/schedule_title_bg_color"
+                    android:textSize="12sp" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:id="@+id/weather"
-                android:gravity="center_vertical"
-                android:text=""
-                android:layout_marginRight="10dp"
-                android:textColor="#8a8787"
-                android:textSize="10sp" />
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/weather"
+                    android:gravity="center_vertical"
+                    android:text=""
+                    android:layout_marginRight="10dp"
+                    android:textColor="#8a8787"
+                    android:textSize="10sp" />
+
 
         </LinearLayout>
-
-    </RelativeLayout>
-
+    </LinearLayout>
     <View
         android:layout_width="match_parent"
         android:layout_height="0.1dp"

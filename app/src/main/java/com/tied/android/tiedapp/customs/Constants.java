@@ -157,6 +157,7 @@ public class Constants {
     public static final String RESULT_DATA_KEY = "data_key";
     public static final int SELECT_CLIENT = 1000;
     public static final int ADD_SALES = 1001;
+    public static final int ADD_CLIENT = 2001;
 
     public static final String TOTAL_SALES = "Total sales";
 

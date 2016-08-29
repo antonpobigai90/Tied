@@ -4,11 +4,7 @@
               android:orientation="vertical"
               android:gravity="center_horizontal"
     android:layout_height="match_parent">
-<<<<<<< HEAD
 
-
-=======
->>>>>>> 3baad851b6bf1922db286dcfe93b87709ead2f23
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
