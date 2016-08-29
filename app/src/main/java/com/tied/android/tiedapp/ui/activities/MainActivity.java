@@ -27,8 +27,8 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.services.LocationService;
-import com.tied.android.tiedapp.ui.activities.client.ActivityClient;
-import com.tied.android.tiedapp.ui.activities.client.SelectClientActivity;
+import com.tied.android.tiedapp.ui.activities.client.ClientMapAndListActivity;
+import com.tied.android.tiedapp.ui.fragments.DailyStatsFragment;
 import com.tied.android.tiedapp.ui.fragments.activities.ActivityFragment;
 import com.tied.android.tiedapp.ui.fragments.client.ClientAddFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.AddressFragment;
@@ -37,9 +37,8 @@ import com.tied.android.tiedapp.ui.fragments.profile.EditProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.NotificationProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.ProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.CreateScheduleFragment;
-import com.tied.android.tiedapp.ui.fragments.DailyStatsFragment;
-import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleSuggestionFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleAppointmentsFragment;
+import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleSuggestionFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.IndustryFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.ui.listeners.ImageReadyForUploadListener;
@@ -401,7 +400,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 MyUtils.startActivity(MainActivity.this, LinesAndTerritories.class,bundle);
                 break;
             case R.id.client_menu:
-                MyUtils.startActivity(MainActivity.this, SelectClientActivity.class,bundle);
+                MyUtils.startActivity(MainActivity.this, ClientMapAndListActivity.class,bundle);
                 break;
 
             case R.id.img_user_picture : case R.id.user_picture_iv:
@@ -418,7 +417,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
             case R.id.map:
                 //clearTabs();
                 //map_tab.setBackground(getResources().getDrawable(R.drawable.tab_selected));
-                MyUtils.startActivity(this, ActivityClient.class);
+                MyUtils.startActivity(this, ClientMapAndListActivity.class, bundle);
                 break;
         }
     }
