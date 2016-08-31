@@ -24,6 +24,7 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.customs.MyStringAsyncTask;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.objects.schedule.Schedule;
@@ -66,9 +67,10 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
         client = (Client) getIntent().getSerializableExtra(Constants.CLIENT_DATA);
         schedule = (Schedule) getIntent().getSerializableExtra(Constants.SCHEDULE_DATA);
 
-        MapFragment mapFragment = (MapFragment) getFragmentManager()
+        final MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+
+        mapFragment.getMapAsync(ViewSchedule.this);
 
         schedule_title = (TextView) findViewById(R.id.schedule_title);
         description = (TextView) findViewById(R.id.description);
@@ -95,8 +97,8 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
 
         final RequestBuilder weather = new RequestBuilder();
         Request request = new Request();
-        request.setLat("32.00");
-        request.setLng("-81.00");
+        request.setLat(""+schedule.getLocation().getCoordinate().getLat());
+        request.setLng(""+schedule.getLocation().getCoordinate().getLon());
         request.setUnits(Request.Units.US);
         request.setLanguage(Request.Language.ENGLISH);
         request.addExcludeBlock(Request.Block.CURRENTLY);
@@ -126,11 +128,11 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
 
         myMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
 
-        LatLng MELBOURNE = new LatLng(-37.81319, 144.96298);
+        LatLng location = new LatLng(schedule.getLocation().getCoordinate().getLat(), schedule.getLocation().getCoordinate().getLon());
         Marker melbourne = myMap.addMarker(new MarkerOptions()
-                .position(MELBOURNE)
+                .position(location)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-        myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(MELBOURNE, 15));
+        myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
 
         myMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
         melbourne.showInfoWindow();
@@ -157,7 +159,7 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
             final ImageView image = ((ImageView) myContentsView.findViewById(R.id.image));
             try {
                 line.setText(client.getCompany());
-                address.setText(client.getAddress().getStreet());
+                address.setText(schedule.getLocation().getLocationAddress());
                 distance.setText("0.2 miles");
 
                 MyUtils.Picasso.displayImage(Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg", image);
