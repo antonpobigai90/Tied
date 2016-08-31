@@ -11,7 +11,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
@@ -24,12 +24,9 @@ import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
-import com.tied.android.tiedapp.ui.activities.SuperActivity;
 import com.tied.android.tiedapp.ui.activities.schedule.CreateAppointmentActivity;
 import com.tied.android.tiedapp.ui.activities.schedule.ViewSchedule;
 import com.tied.android.tiedapp.ui.adapters.ScheduleListAdapter;
-import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleSuggestionFragment;
-import com.tied.android.tiedapp.ui.fragments.schedule.tabs.SchedulesFragment;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import okhttp3.ResponseBody;
@@ -43,7 +40,7 @@ public class DialogScheduleEventOptions implements View.OnClickListener {
     public static final String TAG = DialogScheduleEventOptions.class
             .getSimpleName();
     RelativeLayout close;
-    private TextView edit,delete,complete,cancel, view;
+    private TextView edit,delete,mark_as_completed,cancel_appointment, view;
     private Dialog dialog;
     private Schedule schedule;
     Activity _c;
@@ -78,12 +75,14 @@ public class DialogScheduleEventOptions implements View.OnClickListener {
         view.setOnClickListener(this);
         edit = (TextView) dialog.findViewById(R.id.edit);
         edit.setOnClickListener(this);
-        complete = (TextView) dialog.findViewById(R.id.complete);
-        cancel = (TextView) dialog.findViewById(R.id.cancel);
 
+        cancel_appointment = (TextView) dialog.findViewById(R.id.cancel_appointment);
         delete = (TextView) dialog.findViewById(R.id.delete);
-        delete.setOnClickListener(this);
+        mark_as_completed = (TextView) dialog.findViewById(R.id.mark_as_completed);
 
+        mark_as_completed.setOnClickListener(this);
+        cancel_appointment.setOnClickListener(this);
+        delete.setOnClickListener(this);
 
         close = (RelativeLayout) dialog.findViewById(R.id.close);
         close.setOnClickListener(this);
@@ -92,38 +91,40 @@ public class DialogScheduleEventOptions implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+        ConfirmScheduleActionDialog confirmScheduleActionDialog = null;
         switch (v.getId()){
             case R.id.close:
                 dialog.dismiss();
                 break;
             case R.id.edit:
-                editSchedule(schedule);
+                doAction(schedule, CreateAppointmentActivity.class, bundle);
+                break;
+            case R.id.mark_as_completed:
+                dialog.dismiss();
+                confirmScheduleActionDialog = new ConfirmScheduleActionDialog(schedule,adapter,_c,bundle, 1);
+                confirmScheduleActionDialog.showDialog();
+                break;
+            case R.id.cancel_appointment:
+                dialog.dismiss();
+                confirmScheduleActionDialog = new ConfirmScheduleActionDialog(schedule,adapter,_c,bundle, 2);
+                confirmScheduleActionDialog.showDialog();
                 break;
             case R.id.delete:
                 dialog.dismiss();
-                DialogDeleteSchedule dialogDeleteSchedule = new DialogDeleteSchedule(schedule,adapter,_c,bundle);
-                dialogDeleteSchedule.showDialog();
+                confirmScheduleActionDialog = new ConfirmScheduleActionDialog(schedule,adapter,_c,bundle, 3);
+                confirmScheduleActionDialog.showDialog();
                 break;
             case R.id.view:
-                viewSchedule(schedule);
+                bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
+                bundle.putString("fragment", ViewSchedule.class.getName());
+                doAction(schedule,ViewSchedule.class, bundle);
                 dialog.dismiss();
                 break;
         }
     }
 
-    public void viewSchedule(Schedule schedule) {
-        Bundle bundle=new Bundle();
-        bundle.putSerializable(Constants.SCHEDULE_DATA, schedule);
-        Client client = new Client();
-        client.setId(schedule.getClient_id());
-        if(schedule.getClient_id()!=null) bundle.putSerializable(Constants.CLIENT_DATA, client);
 
-        bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
-        bundle.putString("fragment", ViewSchedule.class.getName());
-        MyUtils.startActivity(_c,  ViewSchedule.class, bundle);
-    }
-
-    public void editSchedule(final Schedule schedule){
+    public void doAction(final Schedule schedule,  final Class aClass, Bundle bundle){
         Gson gson = new Gson();
         String user_json = bundle.getString(Constants.USER_DATA);
         User user = gson.fromJson(user_json, User.class);
@@ -146,7 +147,7 @@ public class DialogScheduleEventOptions implements View.OnClickListener {
                         Client client = ClientRes.getClient();
                         Log.d(TAG + "client", client.toString());
                         Gson gson = new Gson();
-                        Intent intent = new Intent(_c, CreateAppointmentActivity.class);
+                        Intent intent = new Intent(_c, aClass);
                         intent.putExtra(Constants.CLIENT_DATA, client);
                         intent.putExtra(Constants.SCHEDULE_DATA, schedule);
                         _c.startActivity(intent);
@@ -165,6 +166,58 @@ public class DialogScheduleEventOptions implements View.OnClickListener {
             }
         });
     }
+
+    public void viewSchedule(Schedule schedule) {
+//        bundle.putSerializable(Constants.SCHEDULE_DATA, schedule);
+//        Client client = new Client();
+//        client.setId(schedule.getClient_id());
+//        if(schedule.getClient_id()!=null) bundle.putSerializable(Constants.CLIENT_DATA, client);
+        bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
+        bundle.putString("fragment", ViewSchedule.class.getName());
+        MyUtils.startActivity(_c,  ViewSchedule.class, bundle);
+    }
+
+//    public void editSchedule(final Schedule schedule){
+//        Gson gson = new Gson();
+//        String user_json = bundle.getString(Constants.USER_DATA);
+//        User user = gson.fromJson(user_json, User.class);
+//
+//        Log.d(TAG + "schedule", schedule.toString());
+//
+//        ClientApi clientApi = MainApplication.getInstance().getRetrofit().create(ClientApi.class);
+//        Call<ClientRes> response = clientApi.getClientWithId(user.getToken(), schedule.getClient_id());
+//        response.enqueue(new retrofit2.Callback<ClientRes>() {
+//            @Override
+//            public void onResponse(Call<ClientRes> call, retrofit2.Response<ClientRes> resResponse) {
+//                if (_c == null) return;
+//                Log.d(TAG + "ClientRes", resResponse.toString());
+//                DialogUtils.closeProgress();
+//                try {
+//                    ClientRes ClientRes = resResponse.body();
+//                    if (ClientRes != null && ClientRes.isAuthFailed()) {
+//                        User.LogOut(_c);
+//                    } else if (ClientRes != null && ClientRes.get_meta() != null && ClientRes.get_meta().getStatus_code() == 200) {
+//                        Client client = ClientRes.getClient();
+//                        Log.d(TAG + "client", client.toString());
+//                        Intent intent = new Intent(_c, CreateAppointmentActivity.class);
+//                        intent.putExtra(Constants.CLIENT_DATA, client);
+//                        intent.putExtra(Constants.SCHEDULE_DATA, schedule);
+//                        _c.startActivity(intent);
+//                    } else {
+//                        MyUtils.showConnectionErrorToast(_c);
+//                    }
+//                }catch (Exception e) {
+//                    MyUtils.showConnectionErrorToast(_c);
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ClientRes> call, Throwable t) {
+//                Log.d(TAG + " onFailure", t.toString());
+//                DialogUtils.closeProgress();
+//            }
+//        });
+//    }
 
     public void deleteSchedule(final Schedule schedule){
         Gson gson = new Gson();

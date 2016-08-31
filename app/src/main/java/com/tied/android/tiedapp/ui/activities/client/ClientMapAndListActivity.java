@@ -3,7 +3,7 @@ package com.tied.android.tiedapp.ui.activities.client;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -11,9 +11,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.tied.android.tiedapp.R;
+import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.ui.fragments.client.ClientsListFragment;
 import com.tied.android.tiedapp.ui.fragments.client.ClientsMapFragment;
-import com.tied.android.tiedapp.ui.fragments.client.ClientsMapListFragment;
 import com.tied.android.tiedapp.util.MyUtils;
 
 public class ClientMapAndListActivity extends AppCompatActivity implements  View.OnClickListener {
@@ -56,10 +57,15 @@ public class ClientMapAndListActivity extends AppCompatActivity implements  View
         mPagerAdapter = new PagerAdapter(ClientMapAndListActivity.this.getSupportFragmentManager());
         if (mViewPager != null) {
             mViewPager.setAdapter(mPagerAdapter);
-            mViewPager.setCurrentItem(0);
-            selectTab(tab_container, 0);
-        }
+            if (bundle.getBoolean(Constants.CLIENT_LIST)){
+                mViewPager.setCurrentItem(1);
+                selectTab(tab_container, 1);
+            }else{
+                mViewPager.setCurrentItem(0);
+                selectTab(tab_container, 0);
+            }
 
+        }
         onCustomSelected(mViewPager);
     }
 
@@ -118,7 +124,7 @@ public class ClientMapAndListActivity extends AppCompatActivity implements  View
         });
     }
 
-    public class PagerAdapter extends FragmentPagerAdapter {
+    public class PagerAdapter extends FragmentStatePagerAdapter {
 
         public PagerAdapter(FragmentManager fm) {
             super(fm);
@@ -132,7 +138,7 @@ public class ClientMapAndListActivity extends AppCompatActivity implements  View
                     fragment = new ClientsMapFragment();
                     break;
                 case 1:
-                    fragment = new ClientsMapListFragment();
+                    fragment = new ClientsListFragment();
                     break;
             }
             assert fragment != null;

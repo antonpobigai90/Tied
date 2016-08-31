@@ -23,9 +23,9 @@ import com.tied.android.tiedapp.util.MyUtils;
 /**
  * Created by ZuumaPC on 8/18/2016.
  */
-public class ClientsMapListFragment extends Fragment implements AdapterView.OnItemClickListener,View.OnClickListener{
+public class ClientsListFragment extends Fragment implements AdapterView.OnItemClickListener,View.OnClickListener{
 
-    public static final String TAG = ClientsMapListFragment.class
+    public static final String TAG = ClientsListFragment.class
             .getSimpleName();
 
     protected User user;

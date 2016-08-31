@@ -21,6 +21,7 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.model.ScheduleDataModel;
 import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.ui.dialogs.DialogScheduleEventOptions;
+import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleAppointmentsFragment;
 import com.tied.android.tiedapp.util.HelperMethods;
 
 import java.util.ArrayList;
@@ -76,7 +77,22 @@ public class ScheduleListAdapter extends BaseAdapter {
             }
         }
         notifyDataSetChanged();
-//        viewPager.getAdapter().notifyDataSetChanged();
+        ScheduleAppointmentsFragment.mViewPager.getAdapter().notifyDataSetChanged();
+    }
+
+    public void updateStatus(String id, int status){
+        outerloop:
+        for (int i = 0; i < _data.size(); i++){
+            ArrayList<Schedule> schedules = _data.get(i).getSchedules();
+            for (int j = 0; j < schedules.size(); j++){
+                if(schedules.get(j).getId().equals(id)){
+                    _data.get(i).getSchedules().get(j).setStatus(status);
+                    break outerloop;
+                }
+            }
+        }
+        notifyDataSetChanged();
+        ScheduleAppointmentsFragment.mViewPager.getAdapter().notifyDataSetChanged();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
