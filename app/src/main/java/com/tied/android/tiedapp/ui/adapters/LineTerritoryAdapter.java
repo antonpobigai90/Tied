@@ -56,7 +56,7 @@ public class LineTerritoryAdapter extends BaseAdapter{
         View view = convertView;
         if (view == null) {
             LayoutInflater li = (LayoutInflater) _c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = li.inflate(R.layout.territories_list_item, viewGroup,false);
+            view = li.inflate(R.layout.line_territory_list_item, viewGroup,false);
         } else {
             view = convertView;
         }
