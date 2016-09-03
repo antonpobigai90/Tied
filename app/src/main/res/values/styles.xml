@@ -69,7 +69,7 @@
         <item name="android:textStyle">bold</item>
     </style>
     <style name="SectionText" parent="RobotoTextViewStyle">
-        <item name="android:textSize">11sp</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:textStyle">normal</item>
         <item name="android:layout_marginTop">10dp</item>
         <item name="android:layout_marginBottom">10dp</item>
@@ -103,6 +103,16 @@
         <item name="android:layout_marginTop">8dip</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
+
+    <style name="SectionLayout2" parent="AppTheme">
+        <item name="android:background">@color/light_gray</item>
+        <item name="android:paddingTop">8dip</item>
+        <item name="android:paddingBottom">8dip</item>
+        <item name="android:paddingLeft">20dip</item>
+        <item name="android:paddingRight">5dip</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
     <style name="SectionDivider" parent="AppTheme">
         <item name="android:background">@color/light_gray</item>
         <item name="android:paddingBottom">3dip</item>
