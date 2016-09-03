@@ -21,7 +21,7 @@
             android:layout_toLeftOf="@+id/img_pin"
             android:layout_toRightOf="@+id/back_layout"
             android:layout_marginTop="15dp"
-            android:text="Emily Tope's birthday 23rd birthday ssdsd"
+            android:text=""
             android:ellipsize="end"
             android:maxLines="1"
             android:paddingRight="5dp"
@@ -57,12 +57,10 @@
 
         <ImageView
             android:id="@+id/img_pin"
-            android:layout_height="@dimen/action_bar_icon_height"
-            android:layout_width="@dimen/action_bar_icon_height"
-            android:padding="@dimen/action_bar_icon_padding"
+           style="@style/ActionBarIcon"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/pin" />
+            android:src="@drawable/icon_edit" />
 
     </RelativeLayout>
 
@@ -107,6 +105,7 @@
                     android:id="@+id/date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+
                     android:paddingRight="5dp"
                     android:orientation="vertical"
                     android:layout_centerVertical="true">
@@ -119,7 +118,7 @@
                         android:layout_gravity="center_horizontal"
                         android:text="18"
                         android:textStyle="bold"
-                        android:textSize="22sp" />
+                        android:textSize="20sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -132,6 +131,7 @@
 
 
                 </LinearLayout>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -157,7 +157,7 @@
                         android:paddingBottom="10dp"
                         android:orientation="horizontal">
 
-                        <ImageView
+                       <!-- <ImageView
                             android:layout_width="10dp"
                             android:layout_height="10dp"
                             android:layout_marginTop="4dp"
@@ -173,8 +173,30 @@
                             android:textStyle="bold"
                             android:textColor="@color/schedule_title_bg_color"
                             android:textSize="13sp" />
-
+                        -->
                     </LinearLayout>
+
+
+                </LinearLayout>
+                <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="3dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:gravity="center_horizontal|center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingBottom="3dp">
+
+
+
+                    <TextView
+                            android:id="@+id/time_range"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textColor="@color/schedule_title_bg_color"
+                            android:textSize="22sp" />
 
                 </LinearLayout>
 
@@ -199,7 +221,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/schedule_title_bg_color"
-                    android:text="@string/schedule_string_appointment"
+                    android:text=""
                     android:textSize="14sp"/>
             </LinearLayout>
 
@@ -217,45 +239,37 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingTop="3dp"
+
                         android:gravity="center_horizontal|center_vertical"
-                        android:orientation="horizontal"
+                        android:orientation="vertical"
                         android:paddingBottom="3dp">
 
-                        <ImageView
+                    <ImageView
                             android:id="@+id/img_sunny"
                             android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:layout_marginRight="2dp"
+                            android:visibility="gone"
                             android:src="@drawable/sunny_black" />
 
-                        <TextView
+                    <TextView
                             android:id="@+id/weather"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="58°"
+                            android:text=""
                             android:textColor="@color/schedule_title_bg_color"
                             android:textSize="20sp" />
-
-                    </LinearLayout>
-
                     <TextView
-                        android:id="@+id/weather_info"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Las vegas"
-                        android:layout_gravity="center_horizontal"
-                        android:textColor="@color/schedule_title_bg_color"
-                        android:textSize="10sp" />
+                            android:id="@+id/weather_info"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:layout_gravity="center_horizontal"
+                            android:textColor="@color/schedule_title_bg_color"
+                            android:textSize="10sp" />
 
                 </LinearLayout>
 
@@ -386,7 +400,7 @@
                     android:background="@drawable/curve_blue_background"
                     android:gravity="center_vertical|center_horizontal"
                     android:text="Call Client"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                   android:textSize="12sp"
                     android:textColor="@color/white" />
 
                 <Button

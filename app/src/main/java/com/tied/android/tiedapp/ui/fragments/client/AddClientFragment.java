@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,7 +43,7 @@ import com.tied.android.tiedapp.ui.activities.client.AddClientActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.dialogs.SelectDataDialog;
-import com.tied.android.tiedapp.ui.fragments.ClientDatePickerFragment;
+import com.tied.android.tiedapp.ui.dialogs.SimpleDialogSelector;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.MyUtils;
 
@@ -81,10 +80,13 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
     Boolean[] line_status = {false,false};
     ArrayList<DataModel> listLine;
 
+
+
     public ImageView avatar;
-    private EditText company,name, street, city, phone, zip, territory, fax, revenue, ytd_revenue, note;
+    private EditText company,name, territory, fax, phone, email, revenue, ytd_revenue, note;//, street, city, , zip, ;
+
     private LinearLayout ok_but;
-    private TextView industry, line, birthday;
+    private TextView industry, line, address;//, birthday;
     private Coordinate coordinate;
 
     Spinner stateSpinner;
@@ -97,8 +99,10 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
     private LinearLayout weekly_layout, two_weeks_layout,monthly_layout,three_weeks_layout;
     LinearLayout visit_radio, birthday_layout;
     RelativeLayout industry_layout;
+    Integer industryId=null, lineId=null;
 
-    int industry_id = 1;
+
+    //int industry_id = 1;
 
     // Code for our image picker select action.
     public final int IMAGE_PICKER_SELECT = 999;
@@ -132,46 +136,32 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
         initComponent(view);
     }
 
-    public void initIndustry(){
-        Call<List<DataModel>> response = MainApplication.getInstance().getRetrofit().create(SignUpApi.class).getIndustries();
-        response.enqueue(new Callback<List<DataModel>>() {
-            @Override
-            public void onResponse(Call<List<DataModel>> call, Response<List<DataModel>> listResponse) {
-                if (getActivity() == null) return;
-                DialogUtils.closeProgress();
-                List<DataModel> dataModelList = listResponse.body();
-                Log.d(TAG + " onResponse", dataModelList.toString());
-            }
 
-            @Override
-            public void onFailure(Call<List<DataModel>> call, Throwable t) {
-                Log.d(TAG + " onFailure", t.toString());
-                DialogUtils.closeProgress();
-            }
-        });
-    }
 
     public void initComponent(View view) {
         company = (EditText) view.findViewById(R.id.company);
         name = (EditText) view.findViewById(R.id.name);
-        street = (EditText) view.findViewById(R.id.street);
-        zip = (EditText) view.findViewById(R.id.zip);
-        city = (EditText) view.findViewById(R.id.city);
+        address=(TextView) view.findViewById(R.id.address_tv);
+       // street = (EditText) view.findViewById(R.id.street);
+       // zip = (EditText) view.findViewById(R.id.zip);
+       // city = (EditText) view.findViewById(R.id.city);
+        view.findViewById(R.id.location_layout).setOnClickListener(this);
 
-        stateSpinner = (Spinner) view.findViewById(R.id.state);
+     //   stateSpinner = (Spinner) view.findViewById(R.id.state);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(), R.layout.my_spinner_item, MyUtils.States.asArrayList());
         adapter.setDropDownViewResource(R.layout.my_spinner_dropdown);
-        stateSpinner.setAdapter(adapter);
-        stateSpinner.setSelection(adapter.getPosition("TX"));
+//        stateSpinner.setAdapter(adapter);
+
+        //stateSpinner.setSelection(adapter.getPosition("TX"));
 
         phone = (EditText) view.findViewById(R.id.phone);
         fax = (EditText) view.findViewById(R.id.fax);
         revenue = (EditText) view.findViewById(R.id.revenue);
         ytd_revenue = (EditText) view.findViewById(R.id.ytd_revenue);
         note = (EditText) view.findViewById(R.id.note);
-        birthday = (TextView) view.findViewById(R.id.birthday);
-        birthday_layout = (LinearLayout) view.findViewById(R.id.birthday_layout);
-        birthday_layout.setOnClickListener(this);
+        //birthday = (TextView) view.findViewById(R.id.birthday);
+        //birthday_layout = (LinearLayout) view.findViewById(R.id.birthday_layout);
+        //birthday_layout.setOnClickListener(this);
 
         industry_layout = (RelativeLayout) view.findViewById(R.id.industry_layout);
         industry = (TextView) view.findViewById(R.id.industry);
@@ -212,13 +202,7 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
             String user_json = bundle.getString(Constants.USER_DATA);
             user = gson.fromJson(user_json, User.class);
 
-            ArrayList<String> stringArrayList = user.getIndustries();
-            if (stringArrayList != null && stringArrayList.size() > 0){
-                for(int i = 0; i < stringArrayList.size(); i++){
-                    DataModel list_industry = new DataModel(i+1,stringArrayList.get(i),false);
-                    listIndustry.add(list_industry);
-                }
-            }
+            listIndustry=MyUtils.getIndustriesAsList();
 
             String client_json = bundle.getString(Constants.CLIENT_DATA);
             client = gson.fromJson(client_json, Client.class);
@@ -226,16 +210,16 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
                 MyUtils.Picasso.displayImage(client.getLogo(), avatar);
                 name.setText(client.getFull_name());
                 company.setText(client.getCompany());
-                street.setText(client.getAddress().getStreet());
-                zip.setText(client.getAddress().getZip());
-                city.setText(client.getAddress().getCity());
+                ///street.setText(client.getAddress().getStreet());
+                //zip.setText(client.getAddress().getZip());
+                //city.setText(client.getAddress().getCity());
                 stateSpinner.setSelection(adapter.getPosition(client.getAddress().getState()));
                 phone.setText(client.getPhone());
                 fax.setText(client.getFax());
                 revenue.setText(client.getRevenue());
                 ytd_revenue.setText(client.getYtd_revenue());
                 note.setText(client.getNote());
-                birthday.setText(client.getBirthday());
+               // birthday.setText(client.getBirthday());
             }
         }
     }
@@ -259,16 +243,34 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
 
     private boolean validated() {
         companyText = company.getText().toString();
+        if(companyText.isEmpty()) {
+            MyUtils.showErrorAlert(getActivity(), "Company name is required");
+            return false;
+        }
         nameText = name.getText().toString();
-        streetText = street.getText().toString();
-        cityText = city.getText().toString();
-        zipText = zip.getText().toString();
-        stateText = stateSpinner.getSelectedItem().toString().trim();
-        location = new Location(cityText, zipText, stateText, streetText);
-        birthdayText = birthday.getText().toString();
+        if(nameText.isEmpty()) {
+            MyUtils.showErrorAlert(getActivity(), "Contact person's name is required");
+            return false;
+        }
+       // streetText = street.getText().toString();
+       // cityText = city.getText().toString();
+        //zipText = zip.getText().toString();
+        //stateText = stateSpinner.getSelectedItem().toString().trim();
+        //location = new Location(cityText, zipText, stateText, streetText);
+        if(location==null) {
+            MyUtils.showErrorAlert(getActivity(), "Enter client location");
+            return false;
+        }
+        //birthdayText = birthday.getText().toString();
+        if(industryId==null) {
+            MyUtils.showErrorAlert(getActivity(), "You must select an industry");
+            return false;
+        }
+
         noteText = note.getText().toString();
         phoneText = phone.getText().toString();
-        return !streetText.equals("");
+        return true;
+       // return !streetText.equals("");
     }
 
     @Override
@@ -276,10 +278,11 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
         switch (v.getId()){
             case R.id.ok_but:
                 uri = ((AddClientActivity) getActivity()).outputUri;
-                if(client == null && uri == null){
+               /* if(client == null){
                     Toast.makeText(getActivity(), "Upload user image", Toast.LENGTH_LONG).show();
                 }
-                else if (validated()) {
+                else */
+                if (validated()) {
                     new GeocodeAsyncTask().execute();
                 }
                 break;
@@ -295,21 +298,42 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
             case R.id.monthly_layout:
                 selectRadio(visit_radio,3);
                 break;
-            case R.id.birthday_layout:
+           /* case R.id.birthday_layout:
                 DialogFragment dateFragment = new ClientDatePickerFragment();
                 dateFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
-                break;
+                break;*/
             case R.id.industry:
-                SelectDataDialog alert = new SelectDataDialog(listIndustry,industry,this);
+                SimpleDialogSelector alert = new SimpleDialogSelector(getActivity(), listIndustry, new SimpleDialogSelector.SelectedListener() {
+                    @Override
+                    public void selected(DataModel dataModel) {
+                        industryId=dataModel.getId();
+                        industry.setText(dataModel.getName());
+                    }
+                });
                 alert.showDialog();
                 break;
             case R.id.line:
-                SelectDataDialog alert_line = new SelectDataDialog(listLine,line,this);
+               // SelectDataDialog alert_line = new SelectDataDialog(listLine,line,this);
+                SimpleDialogSelector alert_line = new SimpleDialogSelector(getActivity(), listLine, new SimpleDialogSelector.SelectedListener() {
+                    @Override
+                    public void selected(DataModel dataModel) {
+                        lineId=dataModel.getId();
+                        line.setText(dataModel.getName());
+                    }
+                });
                 alert_line.showDialog();
                 break;
             case R.id.avatar:
                 showChooser();
                 break;
+            case R.id.location_layout:
+                MyUtils.showAddressDialog(getActivity(), "Address", location , new MyUtils.MyDialogClickListener() {
+                    @Override
+                    public void onClick(Object response) {
+                        location = (Location)response;
+                        address.setText(location.getLocationAddress());
+                    }
+                });
         }
     }
 
@@ -353,8 +377,8 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
                                 Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
                                 File photo = new File(Environment.getExternalStorageDirectory(), "Pic.jpg");
                                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
-                                ((SignUpActivity) getActivity()).imageUri = Uri.fromFile(photo);
-                                getActivity().startActivityForResult(intent, REQUEST_TAKE_PHOTO);
+                                ((AddClientActivity) getActivity()).imageUri = Uri.fromFile(photo);
+                                ((AddClientActivity) getActivity()).startActivityForResult(intent, REQUEST_TAKE_PHOTO);
                                 break;
 
                             case 1:
@@ -432,10 +456,10 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
         client.setFull_name(nameText);
         client.setCompany(companyText);
         client.setAddress(location);
-        client.setLine_id("1");
-        client.setIndustry_id(1);
-        client.setVisit_id(1);
-        client.setBirthday(birthdayText);
+        if(lineId!=null) client.setLine_id(""+lineId);
+        client.setIndustry_id(industryId);
+        client.setVisit_id(visit_frequency);
+        //client.setBirthday(birthdayText);
         client.setDescription(noteText);
 
         return client;
@@ -446,21 +470,27 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
     private void createClient() {
         Client client = new Client();
         client = initClient(client);
+        File file = null;
+        if(uri!=null) {
+            file = new File(uri.getPath());
 
-        File file = new File(uri.getPath());
 
-        Log.d("Uri", uri.getPath());
-        Log.d("File path", file.getPath());
-        Log.d("file Name", file.getName());
+            Log.d("Uri", uri.getPath());
+            Log.d("File path", file.getPath());
+            Log.d("file Name", file.getName());
+        }
 
-        // create RequestBody instance from file
-        RequestBody requestFile =
-                RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        MultipartBody.Part body=null;
+        if(file!=null) {
 
-        // MultipartBody.Part is used to send also the actual file name
-        final MultipartBody.Part body =
-                MultipartBody.Part.createFormData("logo", file.getName(), requestFile);
+            // create RequestBody instance from file
+            RequestBody requestFile =
+                    RequestBody.create(MediaType.parse("multipart/form-data"), file);
 
+            // MultipartBody.Part is used to send also the actual file name
+           body =
+                    MultipartBody.Part.createFormData("logo", file.getName(), requestFile);
+        }
         RequestBody clientReq =
                 RequestBody.create(
                         MediaType.parse("multipart/form-data"), new Gson().toJson(client));
@@ -471,26 +501,33 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
             @Override
             public void onResponse(Call<ClientRes> call, Response<ClientRes> resResponse) {
                 if (getActivity() == null) return;
-                Log.d(TAG + " onResponse", resResponse.body().toString());
-                ClientRes clientRes = resResponse.body();
-                if (clientRes.isAuthFailed()) {
-                    User.LogOut(getActivity().getApplicationContext());
-                } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 201) {
-                    Log.d(TAG + " client good", clientRes.getClient().toString());
-                    bundle.putBoolean(Constants.NO_CLIENT_FOUND, false);
-                    DialogUtils.closeProgress();
-                    Client.clientCreated(getActivity().getApplicationContext());
-                    MyUtils.startActivity(getActivity(), MainActivity.class, bundle);
-                } else {
-                    DialogUtils.closeProgress();
-                    Toast.makeText(getActivity(), clientRes.getMessage(), Toast.LENGTH_LONG).show();
+                try {
+                    Log.d(TAG + " onResponse", resResponse.body().toString());
+                    ClientRes clientRes = resResponse.body();
+                    if (clientRes.isAuthFailed()) {
+                        User.LogOut(getActivity().getApplicationContext());
+                    } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 201) {
+                        Log.d(TAG + " client good", clientRes.getClient().toString());
+                        bundle.putBoolean(Constants.NO_CLIENT_FOUND, false);
+                        DialogUtils.closeProgress();
+                        Client.clientCreated(getActivity().getApplicationContext());
+                        MyUtils.showToast("Client successfully created");
+                       // MyUtils.startActivity(getActivity(), MainActivity.class, bundle);
+                    } else {
+                        DialogUtils.closeProgress();
+                        //Toast.makeText(getActivity(), clientRes.getMessage(), Toast.LENGTH_LONG).show();
+                        MyUtils.showErrorAlert(getActivity(), clientRes.getMessage());
+                    }
+                }catch (Exception e) {
+                    MyUtils.showToast(getString(R.string.connection_error));
                 }
             }
 
             @Override
             public void onFailure(Call<ClientRes> ClientResponseCall, Throwable t) {
-                Toast.makeText(getActivity(), "On failure create: error encountered", Toast.LENGTH_LONG).show();
-                Log.d(TAG + " onFailure create", t.toString());
+                //Toast.makeText(getActivity(), "On failure create: error encountered", Toast.LENGTH_LONG).show();
+                //Log.d(TAG + " onFailure create", t.toString());
+                MyUtils.showToast(getString(R.string.connection_error));
                 DialogUtils.closeProgress();
             }
         });

@@ -1,6 +1,7 @@
 package com.tied.android.tiedapp.util;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -29,6 +30,7 @@ import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.MyStringAsyncTask;
+import com.tied.android.tiedapp.customs.model.DataModel;
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Distance;
 import com.tied.android.tiedapp.objects.Line;
@@ -42,6 +44,7 @@ import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.retrofits.services.LineApi;
 
+import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.GeneralSelectObjectActivity;
 
 import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
@@ -379,7 +382,7 @@ public abstract class MyUtils {
 
             float distance = 0.621371f * (mallLoc.distanceTo(userLoc) / 1000);
             return String.format(Locale.getDefault(), "%.0f", distance)
-                    + " km";
+                    + " miles";
         } catch (Exception e) {
             // TODO Auto-generated catch block
             return "Unknown";
@@ -388,6 +391,12 @@ public abstract class MyUtils {
     public static final int MESSAGE_TOAST=0, ERROR_TOAST=1;
     public static void showAlert(Activity  activity, String message) {
         showAlert(activity, message, MESSAGE_TOAST);
+    }
+    public static void showMessageAlert(Activity  activity, String message) {
+        showAlert(activity, message, MESSAGE_TOAST);
+    }
+    public static void showErrorAlert(Activity  activity, String message) {
+        showAlert(activity, message, ERROR_TOAST);
     }
     public static MyStringAsyncTask animateTask=null;
     public static void showAlert(Activity activity, String message, int type) {
@@ -466,7 +475,7 @@ public abstract class MyUtils {
         Logger.write(message);
     }
 
-    public static void showAddressDialog(final Activity context, String title, final com.tied.android.tiedapp.objects.Location currentLocation, final DialogClickListener okayClicked) {
+    public static void showAddressDialog(final Activity context, String title, final com.tied.android.tiedapp.objects.Location currentLocation, final MyDialogClickListener okayClicked) {
         // custom dialog
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -546,7 +555,7 @@ public abstract class MyUtils {
 
         dialog.show();
     }
-    public interface DialogClickListener {
+    public interface MyDialogClickListener {
         public void onClick(Object response);
     }
 
@@ -734,5 +743,85 @@ public abstract class MyUtils {
     public static String capitalize(final String line) {
         return Character.toUpperCase(line.charAt(0)) + line.substring(1);
     }
+    public static String distanceBetween(Coordinate c1, Coordinate c2) {
+        int R = 6371; // km
+        //R = 1; // miles
+        double x = (c2.getLon() - c1.getLon()) * Math.cos((c1.getLat() + c2.getLat()) / 2);
+        double y = (c2.getLat() - c1.getLat());
+       return Math.sqrt(x * x + y * y) * R +" miles";
+    }
+    public static String toNth(Object num) {
+        int dayOfYear;
+        String day=""+num;
+        if(num instanceof Integer) dayOfYear=(Integer)num;
+        else dayOfYear=Integer.parseInt((String)num);
+        switch (dayOfYear > 20 ? (dayOfYear % 10) : dayOfYear) {
+            case 1:
+             day= dayOfYear + "st";
+            break;
+            case 2:
+                day= dayOfYear + "nd";
+            break;
+            case 3:  day=dayOfYear + "rd";
+            break;
+            default:  day= dayOfYear + "th";
+            break;
+        }
+        return day;
+    }
+
+    public static void initIndustryList(){
+        Call<List<DataModel>> response = MainApplication.getInstance().getRetrofit().create(SignUpApi.class).getIndustries();
+        response.enqueue(new retrofit2.Callback<List<DataModel>>() {
+            @Override
+            public void onResponse(Call<List<DataModel>> call, Response<List<DataModel>> listResponse) {
+                if (MainApplication.getInstance().getApplicationContext() == null) return;
+                //DialogUtils.closeProgress();
+                try {
+                    List<DataModel> dataModelList = listResponse.body();
+                    JSONArray ja= new JSONArray();
+                    for(DataModel data:dataModelList) {
+                        ja.put(data.toJSONString());
+                    }
+                    SharedPreferences.Editor e=MyUtils.getSharedPreferences().edit();
+                    e.putString(Constants.INDUSTRIES, ja.toString());
+                    e.apply();
+
+                }catch (Exception e) {
+
+                }
+                //Log.d(TAG + " onResponse", dataModelList.toString());
+            }
+
+            @Override
+            public void onFailure(Call<List<DataModel>> call, Throwable t) {
+                Logger.write(" onFailure", t.toString());
+               // DialogUtils.closeProgress();
+            }
+        });
+    }
+    public static ArrayList<DataModel> getIndustriesAsList() {
+        SharedPreferences sp=MyUtils.getSharedPreferences();
+        String ind=sp.getString(Constants.INDUSTRIES, null );
+        if(ind==null) {
+            initIndustryList();
+        }
+        ArrayList<DataModel> dataModels=new ArrayList<>(0);
+        try{
+            JSONArray ja=new JSONArray(ind);
+            int len=ja.length();
+             dataModels=new ArrayList<DataModel>(len);
+            Gson gson=new Gson();
+
+            for(int i=0; i<len; i++) {
+                dataModels.add(gson.fromJson(ja.getString(i), DataModel.class));
+            }
+        }catch (Exception e) {
+
+        }
+        return dataModels;
+
+    }
+
 
 }

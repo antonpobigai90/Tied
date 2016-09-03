@@ -45,44 +45,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-            <RelativeLayout
-                    android:id="@+id/sale_layout"
-                    android:layout_width="fill_parent"
-                    android:layout_height="55dp"
-                    android:layout_marginTop="0dp">
 
-                <ImageView
-                        android:id="@+id/icon_sales"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="25dp"
-                        android:src="@drawable/icon_sale_blue" />
-
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="15dp"
-                        android:layout_toRightOf="@+id/icon_sales"
-                        android:text="Sale"
-                        android:textColor="@color/schedule_title_bg_color"
-                        android:textSize="18sp" />
-
-                <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="25dp"
-                        android:src="@drawable/right_arrow" />
-            </RelativeLayout>
-
-            <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="0.1dp"
-                    android:layout_marginLeft="25dp"
-                    android:background="@android:color/darker_gray" />
 
             <RelativeLayout
                     android:id="@+id/schedule_layout"
@@ -199,6 +162,45 @@
                     android:background="@android:color/darker_gray" />
 
             <RelativeLayout
+                    android:id="@+id/sale_layout"
+                    android:layout_width="fill_parent"
+                    android:layout_height="55dp"
+                    android:layout_marginTop="0dp">
+
+                <ImageView
+                        android:id="@+id/icon_sales"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="25dp"
+                        android:src="@drawable/icon_sale_blue" />
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp"
+                        android:layout_toRightOf="@+id/icon_sales"
+                        android:text="Sale"
+                        android:textColor="@color/schedule_title_bg_color"
+                        android:textSize="18sp" />
+
+                <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="25dp"
+                        android:src="@drawable/right_arrow" />
+            </RelativeLayout>
+
+            <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="0.1dp"
+                    android:layout_marginLeft="25dp"
+                    android:background="@android:color/darker_gray" />
+
+            <RelativeLayout
                     android:id="@+id/employee_layout"
                     android:layout_width="fill_parent"
                     android:layout_height="55dp">
@@ -209,7 +211,7 @@
                         android:layout_height="30dp"
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="25dp"
-                        android:src="@drawable/icon_sale_blue" />
+                        android:src="@drawable/icon_user_blue" />
 
                 <TextView
                         android:layout_width="wrap_content"

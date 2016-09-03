@@ -1,5 +1,7 @@
 package com.tied.android.tiedapp.customs.model;
 
+import com.google.gson.Gson;
+
 public class DataModel {
 
 	int id;
@@ -44,5 +46,10 @@ public class DataModel {
 				", name='" + name + '\'' +
 				", check_status=" + check_status +
 				'}';
+	}
+
+	public String toJSONString() {
+		Gson gson = new Gson();
+		return gson.toJson(this, DataModel.class);
 	}
 }

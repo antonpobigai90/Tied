@@ -279,7 +279,7 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
                MyUtils.initiateClientSelector(getActivity(), null, false);
                 break;
             case R.id.layout_location:
-                MyUtils.showAddressDialog(getActivity(), "Appointment Location", location, new MyUtils.DialogClickListener() {
+                MyUtils.showAddressDialog(getActivity(), "Appointment Location", location, new MyUtils.MyDialogClickListener() {
                     @Override
                     public void onClick(Object response) {
                         if(response!=null) {

@@ -69,7 +69,7 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
                 MyUtils.startActivity(this, LineClientList.class);
                 break;
             case R.id.ship_layout:
-                MyUtils.showAddressDialog(this, "Shipping information", null, new MyUtils.DialogClickListener() {
+                MyUtils.showAddressDialog(this, "Shipping information", null, new MyUtils.MyDialogClickListener() {
                     @Override
                     public void onClick(Object response) {
                         line.setDescription("Updated it here");

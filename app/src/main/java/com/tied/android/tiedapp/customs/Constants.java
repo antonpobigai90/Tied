@@ -184,6 +184,7 @@ public class Constants {
     public static final String LINE_DATA = "line";
     public static final String LINES_lIST = "lines";
     public static PersistentCookieStore MY_COOKIE_STORE=null;
+    public static final String INDUSTRIES="industries";
 
     public static File DIR_ROOT = new File("StreamLive"),
             DIR_CACHE = new File("cache"), DIR_HTML_CACHE = new File("html"), DIR_DOWNLOADS = new File("downloads"), DIR_MEDIA = new File("media");

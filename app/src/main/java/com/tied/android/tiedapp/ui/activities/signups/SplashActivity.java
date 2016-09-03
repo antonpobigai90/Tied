@@ -68,6 +68,7 @@ public class SplashActivity extends Activity {
 
                             @Override
                             public void run() {
+                                MyUtils.initIndustryList();
                                 SharedPreferences.Editor prefsEditor = mPrefs.edit();
                                 prefsEditor.putBoolean(Constants.SPLASH_SCREEN_DONE, true);
                                 prefsEditor.apply();

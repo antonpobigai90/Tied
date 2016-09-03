@@ -171,6 +171,11 @@
         <item name="android:layout_height">0.1dp</item>
         <item name="android:background">@color/light_gray</item>
     </style>
+    <style name="ActionBarIcon">
+        <item name="android:layout_width">@dimen/action_bar_icon_height</item>
+        <item name="android:layout_height">@dimen/action_bar_icon_height</item>
+        <item name="android:padding">@dimen/action_bar_icon_padding</item>
+    </style>
     <!--<style name="Widget.CalendarView.Custom" parent="android:Widget.CalendarView">-->
         <!--<item name="android:weekNumberColor">@color/schedule_title_bg_color</item>-->
         <!--<item name="android:focusedMonthDateColor">@color/colorPrimaryDark</item>-->

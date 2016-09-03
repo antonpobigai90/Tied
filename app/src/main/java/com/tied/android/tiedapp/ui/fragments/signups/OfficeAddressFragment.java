@@ -8,10 +8,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -183,7 +181,7 @@ public class OfficeAddressFragment extends Fragment implements View.OnClickListe
                 break;
             case R.id.address_section:
             case R.id.add_button:
-                MyUtils.showAddressDialog(getActivity(), "Office Address", location, new MyUtils.DialogClickListener() {
+                MyUtils.showAddressDialog(getActivity(), "Office Address", location, new MyUtils.MyDialogClickListener() {
                     @Override
                     public void onClick(Object response) {
                         OfficeAddressFragment.this.location=(Location)response;
