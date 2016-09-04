@@ -41,12 +41,21 @@
                 android:padding="10dp">
 
                 <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="0dp"
-                    android:onClick="onClick"
-                    android:src="@drawable/btn_close" />
+                    android:id="@+id/img_close"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/btn_back_arrow" />
+
+                <TextView
+                    android:id="@+id/txt_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@+id/img_close"
+                    android:text="@string/str_back"
+                    android:textColor="@color/white"
+                    android:textSize="17sp" />
 
             </LinearLayout>
 
@@ -74,7 +83,7 @@
             android:paddingRight="10dp">
 
             <TextView
-                android:id="@id/name"
+                android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Line name Here"

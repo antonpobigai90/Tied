@@ -31,7 +31,7 @@ public class ActiveGoalFragment extends Fragment implements AdapterView.OnItemCl
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.lines_active_goals_fragment,null);
+        return inflater.inflate(R.layout.line_active_goals_fragment,null);
     }
 
     @Override

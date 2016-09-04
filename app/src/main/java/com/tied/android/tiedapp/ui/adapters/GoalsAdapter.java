@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by ZuumaPC on 8/18/2016.
+ * Created by ZuumaPC on 9/3/2016.
  */
 public class GoalsAdapter extends BaseAdapter implements ListAdapterListener {
 
@@ -59,7 +59,7 @@ public class GoalsAdapter extends BaseAdapter implements ListAdapterListener {
         View view = convertView;
         if (view == null) {
             LayoutInflater li = (LayoutInflater) _c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = li.inflate(R.layout.goal_list_item, viewGroup,false);
+            view = li.inflate(R.layout.line_goal_list_item, viewGroup,false);
         } else {
             view = convertView;
         }
