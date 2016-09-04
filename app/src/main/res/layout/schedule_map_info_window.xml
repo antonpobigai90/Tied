@@ -7,7 +7,7 @@
     <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/curve_white_background_with_stroke">
+                    android:background="@drawable/curve_white_background">
     <LinearLayout
         android:id="@+id/img_layout"
         android:layout_width="wrap_content"

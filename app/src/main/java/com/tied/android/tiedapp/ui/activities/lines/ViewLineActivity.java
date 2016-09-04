@@ -33,7 +33,7 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
     private Bundle bundle;
     private User user;
     LinearLayout back_layout;
-    RelativeLayout clients_layout;
+    RelativeLayout clients_layout, goals_layout;
 
     private TextView name, description;
     private Line line;
@@ -57,6 +57,9 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
         description.setText(line.getDescription());
         clients_layout = (RelativeLayout) findViewById(R.id.clients_layout);
         clients_layout.setOnClickListener(this);
+
+        goals_layout = (RelativeLayout) findViewById(R.id.goals_layout);
+        goals_layout.setOnClickListener(this);
     }
 
     @Override
@@ -67,6 +70,9 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
                 break;
             case R.id.clients_layout:
                 MyUtils.startActivity(this, LineClientList.class);
+                break;
+            case R.id.goals_layout:
+                MyUtils.startActivity(this, LineGoalActivity.class);
                 break;
             case R.id.ship_layout:
                 MyUtils.showAddressDialog(this, "Shipping information", null, new MyUtils.MyDialogClickListener() {
