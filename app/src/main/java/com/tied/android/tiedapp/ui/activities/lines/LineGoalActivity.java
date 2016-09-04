@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -28,6 +29,7 @@ public class LineGoalActivity extends AppCompatActivity implements  View.OnClick
 
     LinearLayout back_layout;
     TextView active_goals, past_goals;
+    ImageView img_add;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,8 @@ public class LineGoalActivity extends AppCompatActivity implements  View.OnClick
     private void initComponent() {
         back_layout = (LinearLayout) findViewById(R.id.back_layout);
         back_layout.setOnClickListener(this);
+        img_add = (ImageView) findViewById(R.id.img_add);
+        img_add.setOnClickListener(this);
 
         active_goals = (TextView) findViewById(R.id.active_goals);
         past_goals = (TextView) findViewById(R.id.past_goals);
@@ -67,6 +71,9 @@ public class LineGoalActivity extends AppCompatActivity implements  View.OnClick
         switch (v.getId()){
             case R.id.back_layout:
                 onBackPressed();
+                break;
+            case R.id.img_add:
+                MyUtils.startActivity(this, LineAddGoal.class);
                 break;
             case R.id.active_goals:
                 mViewPager.setCurrentItem(0);
