@@ -38,7 +38,7 @@ public class LineAddGoalActivity extends AppCompatActivity implements View.OnCli
     private User user;
     private Bundle bundle;
     private EditText goal_name, how_much, note;
-    private TextView end_date, date_selected;
+    private TextView end_date, date_selected, title;
     
     private String name, set_goal, dateText, noteText;
 
@@ -51,6 +51,7 @@ public class LineAddGoalActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_line_add_goal);
 
+        title = (TextView) findViewById(R.id.title);
         goal_name = (EditText) findViewById(R.id.goal_name);
         how_much = (EditText) findViewById(R.id.how_much);
         end_date = (TextView) findViewById(R.id.date);
@@ -66,6 +67,7 @@ public class LineAddGoalActivity extends AppCompatActivity implements View.OnCli
             end_date.setText(HelperMethods.getFormatedDate(goal.getDate()));
             date_selected.setText(goal.getDate());
             note.setText(goal.getDescription());
+            title.setText("Edit Goal");
         }
         else{
             goal = new Goal();

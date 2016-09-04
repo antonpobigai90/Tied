@@ -25,7 +25,6 @@ public class LineViewGoalActivity extends AppCompatActivity implements View.OnCl
     ImageView img_add, img_edit;
     TextView goal_title, goal_progress, txt_expire, description, lines_client_count;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
