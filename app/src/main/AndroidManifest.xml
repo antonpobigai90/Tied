@@ -219,7 +219,7 @@
         <activity android:name=".ui.activities.lines.LineGoalActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".ui.activities.lines.LineAddGoal"
+        <activity android:name=".ui.activities.lines.LineAddGoalActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>

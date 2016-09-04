@@ -71,6 +71,14 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
             case R.id.clients_layout:
                 MyUtils.startActivity(this, LineClientList.class);
                 break;
+            case R.id.info_layout:
+                MyUtils.showLinesRelevantInfoDialog(this,"Relevant Information", line, new MyUtils.MyDialogClickListener() {
+                    @Override
+                    public void onClick(Object response) {
+                        updateLine(line);
+                    }
+                });
+                break;
             case R.id.goals_layout:
                 MyUtils.startActivity(this, LineGoalActivity.class);
                 break;
@@ -78,12 +86,10 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
                 MyUtils.showAddressDialog(this, "Shipping information", null, new MyUtils.MyDialogClickListener() {
                     @Override
                     public void onClick(Object response) {
-                        line.setDescription("Updated it here");
                         updateLine(line);
                     }
                 });
                 break;
-
         }
     }
 

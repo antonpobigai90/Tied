@@ -55,7 +55,6 @@ public class LineGoalActivity extends AppCompatActivity implements  View.OnClick
         past_goals.setOnClickListener(this);
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
-
         mPagerAdapter = new PagerAdapter(LineGoalActivity.this.getSupportFragmentManager());
         if (mViewPager != null) {
             mViewPager.setAdapter(mPagerAdapter);
@@ -73,7 +72,7 @@ public class LineGoalActivity extends AppCompatActivity implements  View.OnClick
                 onBackPressed();
                 break;
             case R.id.img_add:
-                MyUtils.startActivity(this, LineAddGoal.class);
+                MyUtils.startActivity(this, LineAddGoalActivity.class);
                 break;
             case R.id.active_goals:
                 mViewPager.setCurrentItem(0);

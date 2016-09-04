@@ -1,4 +1,4 @@
-package com.tied.android.tiedapp.ui.fragments;
+package com.tied.android.tiedapp.ui.dialogs;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;

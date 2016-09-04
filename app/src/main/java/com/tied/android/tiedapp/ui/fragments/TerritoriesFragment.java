@@ -11,10 +11,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.tied.android.tiedapp.R;
-import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.model.TerritoryModel;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.activities.lines.ViewLineActivity;
 import com.tied.android.tiedapp.ui.adapters.TerritoryAdapter;
 import com.tied.android.tiedapp.util.MyUtils;
 
@@ -68,10 +66,10 @@ public class TerritoriesFragment extends Fragment implements AdapterView.OnItemC
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.d(TAG, "here---------------- listener");
-        TerritoryModel territoryModel = territoryModels.get(position);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(Constants.TERRITORY_DATA, territoryModel);
-        MyUtils.startActivity(getActivity(), ViewLineActivity.class, bundle);
+//        TerritoryModel territoryModel = territoryModels.get(position);
+//        Bundle bundle = new Bundle();
+//        bundle.putSerializable(Constants.TERRITORY_DATA, territoryModel);
+//        MyUtils.startActivity(getActivity(), ViewLineActivity.class, bundle);
     }
 
     @Override

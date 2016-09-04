@@ -31,7 +31,7 @@ public class PastGoalFragment extends Fragment implements AdapterView.OnItemClic
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_line_past_goal,null);
+        return inflater.inflate(R.layout.lines_active_goals_fragment,null);
     }
 
     @Override

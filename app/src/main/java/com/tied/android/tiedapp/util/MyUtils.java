@@ -32,6 +32,7 @@ import com.tied.android.tiedapp.customs.MyStringAsyncTask;
 import com.tied.android.tiedapp.customs.model.DataModel;
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Distance;
+import com.tied.android.tiedapp.objects.Goal;
 import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects._Meta;
 import com.tied.android.tiedapp.objects.client.Client;
@@ -474,7 +475,7 @@ public abstract class MyUtils {
 
 
 
-    public static void showLinesRelevantInfoDialog(final Activity context, final Line line, String title, final MyDialogClickListener okayClicked) {
+    public static void showLinesRelevantInfoDialog(final Activity context,String title, final Line line, final MyDialogClickListener okayClicked) {
         // custom dialog
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -706,7 +707,7 @@ public abstract class MyUtils {
                     }
                     _Meta meta=response.getMeta();
                     if(meta !=null && meta.getStatus_code() == 200) {
-                        ArrayList goals = (ArrayList) response.getDataAsList(Constants.GOAL_lIST, Line.class);
+                        ArrayList goals = (ArrayList) response.getDataAsList(Constants.GOAL_lIST, Goal.class);
                         if(goals.size() > 0){
                             MainApplication.goals = goals;
                             if (listAdapterListener != null){
