@@ -79,6 +79,30 @@ public class Goal implements Serializable {
         return "Expires in 4 days";
     }
 
+    public String getObject_id() {
+        return object_id;
+    }
+
+    public void setObject_id(String object_id) {
+        this.object_id = object_id;
+    }
+
+    public String getTarget() {
+        return target;
+    }
+
+    public void setTarget(String target) {
+        this.target = target;
+    }
+
+    public String getCreated() {
+        return created;
+    }
+
+    public void setCreated(String created) {
+        this.created = created;
+    }
+
     public String getDate() {
         return date;
     }
@@ -87,10 +111,12 @@ public class Goal implements Serializable {
         this.date = date;
     }
 
+
     @Override
     public String toString() {
         return "Goal{" +
                 "id='" + id + '\'' +
+                ", object_id='" + object_id + '\'' +
                 ", user_id='" + user_id + '\'' +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +

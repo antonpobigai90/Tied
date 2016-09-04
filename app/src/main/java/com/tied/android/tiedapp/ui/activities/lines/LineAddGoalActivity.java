@@ -13,6 +13,7 @@ import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Goal;
+import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects._Meta;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
@@ -43,6 +44,7 @@ public class LineAddGoalActivity extends AppCompatActivity implements View.OnCli
 
     LinearLayout back_layout, layout_date, ok_but;
     private Goal goal;
+    private Line line;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +59,7 @@ public class LineAddGoalActivity extends AppCompatActivity implements View.OnCli
 
         bundle = getIntent().getExtras();
         goal = (Goal) bundle.getSerializable(Constants.GOAL_DATA);
+        line = (Line) bundle.getSerializable(Constants.LINE_DATA);
         if (goal != null){
             goal_name.setText(goal.getTitle());
             how_much.setText(goal.getValue());
@@ -107,6 +110,8 @@ public class LineAddGoalActivity extends AppCompatActivity implements View.OnCli
         goal.setValue(set_goal);
         goal.setDescription(noteText);
         goal.setDate(dateText);
+        goal.setUser_id(user.getId());
+        goal.setObject_id(line.getId());
 
     }
 
