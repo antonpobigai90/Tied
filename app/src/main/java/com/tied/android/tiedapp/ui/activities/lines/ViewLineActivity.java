@@ -80,7 +80,7 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
                 });
                 break;
             case R.id.goals_layout:
-                MyUtils.startActivity(this, LineGoalActivity.class);
+                MyUtils.startActivity(this, LineGoalActivity.class, bundle);
                 break;
             case R.id.ship_layout:
                 MyUtils.showAddressDialog(this, "Shipping information", null, new MyUtils.MyDialogClickListener() {

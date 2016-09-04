@@ -15,6 +15,7 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Goal;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.ui.activities.lines.LineViewGoalActivity;
 import com.tied.android.tiedapp.ui.adapters.GoalsAdapter;
 import com.tied.android.tiedapp.util.MyUtils;
 
@@ -57,7 +58,9 @@ public class ActiveGoalFragment extends Fragment implements AdapterView.OnItemCl
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.d(TAG, "here---------------- listener");
         Goal goal = (Goal) MainApplication.goals.get(position);
+        Log.d(TAG, "here----------------"+goal.toString());
         bundle.putSerializable(Constants.GOAL_DATA, goal);
+        MyUtils.startActivity(getActivity(), LineViewGoalActivity.class, bundle);
     }
 
     @Override

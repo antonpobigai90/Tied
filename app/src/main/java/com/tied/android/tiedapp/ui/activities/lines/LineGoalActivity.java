@@ -12,6 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
+import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.objects.Goal;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.fragments.lines.ActiveGoalFragment;
 import com.tied.android.tiedapp.ui.fragments.lines.PastGoalFragment;
@@ -26,9 +28,10 @@ public class LineGoalActivity extends AppCompatActivity implements  View.OnClick
     public PagerAdapter mPagerAdapter;
     private Bundle bundle;
     private User user;
+    private Goal goal;
 
     LinearLayout back_layout;
-    TextView active_goals, past_goals;
+    TextView active_goals, past_goals, goal_title, goal_progress, txt_expire, description, lines_client_count;
     ImageView img_add;
 
     @Override
@@ -37,12 +40,14 @@ public class LineGoalActivity extends AppCompatActivity implements  View.OnClick
         setContentView(R.layout.activity_line_goal_layout);
 
         bundle = getIntent().getExtras();
+        goal = (Goal) bundle.getSerializable(Constants.GOAL_DATA);
         user = MyUtils.getUserFromBundle(bundle);
-        initComponent();
+
+        initComponent(goal);
 
     }
 
-    private void initComponent() {
+    private void initComponent(Goal goal) {
         back_layout = (LinearLayout) findViewById(R.id.back_layout);
         back_layout.setOnClickListener(this);
         img_add = (ImageView) findViewById(R.id.img_add);

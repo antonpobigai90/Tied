@@ -120,7 +120,7 @@ public class GeneralSelectObjectActivity extends Activity
         listView = (ListView) findViewById(R.id.list);
         findViewById(R.id.clear_but).setOnClickListener(this);
 
-        txt_continue = (TextView) findViewById(R.id.txt_continue);
+//        txt_continue = (TextView) findViewById(R.id.txt_continue);
 
         search = (EditText) findViewById(R.id.search);
         listView.setOnItemClickListener(this);

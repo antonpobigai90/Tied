@@ -9,12 +9,15 @@ public class Goal implements Serializable {
 
 
     private String id;
+    private String object_id;
     private String user_id;
     private String title;
     private String description;
     private String type;
+    private String target = "00.00";
     private String value;
     private String date;
+    private String created;
 
     public String getId() {
         return id;
@@ -64,6 +67,18 @@ public class Goal implements Serializable {
         this.value = value;
     }
 
+    public String getProgress(){
+        return target +" of "+value +" Goals";
+    }
+
+    public String getExpirationDate(){
+        return date;
+    }
+
+    public String getClientLinesCountString(){
+        return "Expires in 4 days";
+    }
+
     public String getDate() {
         return date;
     }
@@ -80,8 +95,10 @@ public class Goal implements Serializable {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", type='" + type + '\'' +
+                ", target='" + target + '\'' +
                 ", value='" + value + '\'' +
                 ", date='" + date + '\'' +
+                ", created='" + created + '\'' +
                 '}';
     }
 }
