@@ -1,7 +1,6 @@
 package com.tied.android.tiedapp.util;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -42,13 +41,11 @@ import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
+import com.tied.android.tiedapp.retrofits.services.GoalApi;
 import com.tied.android.tiedapp.retrofits.services.LineApi;
-
+import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.GeneralSelectObjectActivity;
-
-import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
-
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.listeners.ListAdapterListener;
 
@@ -475,6 +472,58 @@ public abstract class MyUtils {
         Logger.write(message);
     }
 
+
+
+    public static void showLinesRelevantInfoDialog(final Activity context, final Line line, String title, final MyDialogClickListener okayClicked) {
+        // custom dialog
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.line_relevant_info_dialog);
+        //dialog.setTitle(title.toUpperCase());
+        //dialog.setFeatureDrawableAlpha(Backg);
+
+        final EditText websiteET, requestET,openingET;
+        final Spinner reorderSpinner;
+        websiteET=(EditText)dialog.findViewById(R.id.website);
+        requestET=(EditText)dialog.findViewById(R.id.special_request);
+        openingET=(EditText)dialog.findViewById(R.id.opening);
+        reorderSpinner=(Spinner)dialog.findViewById(R.id.reorders);
+
+        // set the custom dialog components - text, image and button
+        TextView text = (TextView) dialog.findViewById(R.id.txt_title);
+        text.setText(title.toUpperCase());
+
+        View.OnClickListener cancelClicked=new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        };
+
+        Button cancelButton = (Button) dialog.findViewById(R.id.cancel_button);
+        // if button is clicked, close the custom dialog
+        cancelButton.setOnClickListener(cancelClicked);
+        View.OnClickListener okayButClicked=new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String website = websiteET.getText().toString().trim();
+                String request = requestET.getText().toString().trim();
+                String opening= openingET.getText().toString().trim();
+                String reorder = reorderSpinner.getSelectedItem().toString().trim();
+                line.setRelevantInfo(website, request, opening, reorder);
+                okayClicked.onClick(line);
+                dialog.dismiss();
+            }
+        };
+
+        Button okButton = (Button) dialog.findViewById(R.id.ok_button);
+        // if button is clicked, close the custom dialog
+        okButton.setOnClickListener(okayButClicked);
+
+        dialog.show();
+    }
+
+
     public static void showAddressDialog(final Activity context, String title, final com.tied.android.tiedapp.objects.Location currentLocation, final MyDialogClickListener okayClicked) {
         // custom dialog
         final Dialog dialog = new Dialog(context);
@@ -641,6 +690,52 @@ public abstract class MyUtils {
             }
         });
     }
+
+
+    public static void initGoals(final Context context, User user, final ListAdapterListener listAdapterListener){
+        final GoalApi goalApi =  MainApplication.createService(GoalApi.class, user.getToken());
+        Call<ResponseBody> response = goalApi.getUserGoals();
+        response.enqueue(new retrofit2.Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
+                try {
+                    GeneralResponse response = new GeneralResponse(resResponse.body());
+                    if (response.isAuthFailed()) {
+                        User.LogOut(context);
+                        return;
+                    }
+                    _Meta meta=response.getMeta();
+                    if(meta !=null && meta.getStatus_code() == 200) {
+                        ArrayList goals = (ArrayList) response.getDataAsList(Constants.GOAL_lIST, Line.class);
+                        if(goals.size() > 0){
+                            MainApplication.goals = goals;
+                            if (listAdapterListener != null){
+                                listAdapterListener.listInit(goals);
+                            }
+                        }
+                    }else{
+                        MyUtils.showToast("Error encountered");
+                        DialogUtils.closeProgress();
+                    }
+
+                }catch (IOException ioe) {
+                    Logger.write(ioe);
+                }
+                catch (Exception jo) {
+                    Logger.write(jo);
+                }
+                DialogUtils.closeProgress();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d(" onFailure", t.toString());
+            }
+        });
+    }
+
+
+
 
     public static void initSchedules(final Context context, User user, final ListAdapterListener listAdapterListener){
         final ScheduleApi scheduleApi =  MainApplication.createService(ScheduleApi.class, user.getToken());

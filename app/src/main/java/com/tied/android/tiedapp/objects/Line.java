@@ -22,6 +22,11 @@ public class Line implements Serializable {
     private Location address;
     private String name;
 
+    private String website;
+    private String opening;
+    private String reorder;
+    private String request;
+
     private int dis_from;
     private String _score;
 
@@ -36,6 +41,13 @@ public class Line implements Serializable {
         this.name = name;
         this.sales = sales;
         this.check_status = check_status;
+    }
+
+    public void setRelevantInfo(String website, String request, String opening, String reorder){
+        this.request = request;
+        this.website = website;
+        this.opening = opening;
+        this.reorder = reorder;
     }
 
     public void setName(String name) {

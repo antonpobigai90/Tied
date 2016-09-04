@@ -58,6 +58,14 @@ public class Constants {
     public static final String USER_GE0_SCHEDULE = API_PATH + "users/me/schedules/geo";
     public static final String USER_SCHEDULES_BY_DATE = API_PATH + "users/me/schedules/date";
 
+
+    public static final String UPDATE_GOAL_WITH_ID = API_PATH + "goals/{goal_id}";
+    public static final String DELETE_GOAL_WITH_ID = API_PATH + "goals/{goal_id}";
+    public static final String GOALS = API_PATH + "goals";
+    public static final String USER_GOAL = API_PATH + "users/me/goals";
+    public static final String USER_GOALS_BY_DATE = API_PATH + "users/me/goals/date";
+
+
     public static final String GET_INDUSTRIES = API_PATH + "config/industries";
 
     public static final String APP_DATA = "app_data";
@@ -190,4 +198,7 @@ public class Constants {
             DIR_CACHE = new File("cache"), DIR_HTML_CACHE = new File("html"), DIR_DOWNLOADS = new File("downloads"), DIR_MEDIA = new File("media");
 
     public static final String CLIENT_LIST = "client_list";
+
+    public static String GOAL_DATA = "goal";
+    public static final String GOAL_lIST = "goals";
 }
