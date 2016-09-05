@@ -9,9 +9,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.Revenue;
+import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,6 +25,7 @@ import java.util.List;
 public class RevenueAdapter extends BaseAdapter {
     private Context context;
     private List<Revenue> rowItems;
+    DateFormat df=new SimpleDateFormat("yyyy-mm-dd");
 
 
     public RevenueAdapter(Context context, List<Revenue> rowItems) {
@@ -58,6 +64,8 @@ public class RevenueAdapter extends BaseAdapter {
            // viewHoder.img = (ImageView) convertView.findViewById(R.id.img);
             viewHoder.title = (TextView) convertView.findViewById(R.id.title);
             viewHoder.description = (TextView) convertView.findViewById(R.id.value);
+            viewHoder.dateSold=(TextView)convertView.findViewById(R.id.date_sold);
+
 
             convertView.setTag(viewHoder);
 
@@ -70,6 +78,16 @@ public class RevenueAdapter extends BaseAdapter {
 
         viewHoder.title.setText(beanClass.getTitle());
         viewHoder.description.setText(MyUtils.moneyFormat(beanClass.getValue()));
+        if(beanClass.getDate_sold()!=null) {
+            try {
+                Date date = df.parse(beanClass.getDate_sold());
+                viewHoder.dateSold.setText(MyUtils.formatDate(date));
+
+            }catch (Exception e) {
+                Logger.write(e);
+            }
+
+        }
 
 
         return convertView;
@@ -79,7 +97,8 @@ public class RevenueAdapter extends BaseAdapter {
     private class ViewHoder{
         ImageView img;
         TextView title;
-        TextView description;
+        TextView description, dateSold;
+
     }
 
 }

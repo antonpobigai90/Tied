@@ -8,7 +8,7 @@
     <RelativeLayout
         android:id="@+id/top_layout"
         android:layout_width="match_parent"
-        android:layout_height="54dp"
+        android:layout_height="@dimen/action_bar_height"
         android:background="@drawable/background_layout">
 
         <TextView
@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="PROFILE"
+            android:text="Profile"
             android:textColor="@color/white"
             android:textSize="18sp" />
 
@@ -42,6 +42,7 @@
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/img_close"
                 android:text="@string/str_back"
+                android:visibility="invisible"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
         </LinearLayout>
@@ -79,12 +80,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/curve_editext"
-                android:drawableLeft="@android:drawable/ic_menu_search"
+                android:drawableLeft="@drawable/ic_search_grey_small"
                 android:textSize="13sp"
+                android:gravity="center"
                 android:hint="Search Name, Line, Phones"
                 android:paddingBottom="3dp"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
                 android:paddingTop="3dp"
                 android:singleLine="true"
                 android:textColor="@android:color/black"
@@ -99,9 +101,9 @@
 
         <LinearLayout
             android:layout_width="fill_parent"
-            android:layout_height="25dp"
+            android:layout_height="wrap_content"
             android:background="@color/schedule_create_appointment_bg_color"
-            android:paddingLeft="20dp">
+            android:padding="10dp">
 
             <TextView
                 android:layout_width="wrap_content"

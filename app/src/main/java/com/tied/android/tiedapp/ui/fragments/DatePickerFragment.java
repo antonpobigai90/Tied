@@ -10,7 +10,9 @@ import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
@@ -19,18 +21,33 @@ import java.util.Locale;
  */
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
-    String[] MONTHS_LIST = {"January", "Febuary", "March", "April", "May", "June",
+    public static String[] MONTHS_LIST = {"January", "Febuary", "March", "April", "May", "June",
             "July", "August", "September", "October", "November", "December"};
-    String[] WEEK_LIST = {"", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+    public static String[] WEEK_LIST = {"", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the current date as the default date in the picker
-        final Calendar c = Calendar.getInstance();
+        Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
+        try{
+            String dateString = getArguments().getString("date");
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+                Date date = format.parse(dateString);
+                c.setTime(date);
+                year = c.get(Calendar.YEAR);
+                month = c.get(Calendar.MONTH);
+                day = c.get(Calendar.DAY_OF_MONTH);
+
+
+        }catch (Exception e) {
+
+        }
+
 
         String name_month = c.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
 

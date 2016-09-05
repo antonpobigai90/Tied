@@ -11,6 +11,7 @@ import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Line;
+import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.objects._Meta;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
@@ -46,6 +47,7 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
         bundle = getIntent().getExtras();
         line = (Line) bundle.getSerializable(Constants.LINE_DATA);
         user = MyUtils.getUserFromBundle(bundle);
+
         initComponent(line);
     }
 
@@ -62,8 +64,11 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.back_layout:
+            case R.id.back_button:
                 onBackPressed();
+                break;
+            case R.id.revenue_layout:
+                MyUtils.startActivity(this, LineRevenueActivity.class, bundle);
                 break;
             case R.id.clients_layout:
                 MyUtils.startActivity(this, LineClientList.class);
@@ -72,7 +77,8 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
                 MyUtils.showAddressDialog(this, "Shipping information", null, new MyUtils.MyDialogClickListener() {
                     @Override
                     public void onClick(Object response) {
-                        line.setDescription("Updated it here");
+                        line.setAddress(((Location)response));
+                        
                         updateLine(line);
                     }
                 });

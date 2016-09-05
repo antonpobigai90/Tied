@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
+import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Distance;
 import com.tied.android.tiedapp.objects.Line;
@@ -287,7 +288,7 @@ private void showClearWarning() {
         intent.putExtras(b);
         Logger.write("finishginnnnn.");
         setResult(RESULT_OK, intent);
-        finishActivity(RESULT_OK);
+        finishActivity(Constants.SELECT_CLIENT);
         finish();
     }
 

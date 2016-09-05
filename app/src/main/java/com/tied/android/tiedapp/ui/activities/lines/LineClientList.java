@@ -120,7 +120,7 @@ public class LineClientList extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.back_layout:
-                MyUtils.startActivity(this, ViewLineActivity.class);
+                onBackPressed();
                 break;
 
         }

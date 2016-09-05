@@ -50,6 +50,7 @@ import com.tied.android.tiedapp.ui.activities.GeneralSelectObjectActivity;
 import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
 
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.ui.fragments.DatePickerFragment;
 import com.tied.android.tiedapp.ui.listeners.ListAdapterListener;
 
 import org.json.JSONArray;
@@ -59,9 +60,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -201,12 +200,19 @@ public abstract class MyUtils {
         view.setFocusableInTouchMode(true);
     }
 
-    public static void initiateClientSelector(Activity c,  ArrayList<Object> selected, boolean isMultiple) {
+    public static void initiateClientSelector(Activity c,  Object selected, boolean isMultiple) {
         Intent i = new Intent(c, GeneralSelectObjectActivity.class);
         Bundle b=new Bundle();
         b.putInt(GeneralSelectObjectActivity.OBJECT_TYPE, GeneralSelectObjectActivity.SELECT_CLIENT_TYPE);
         b.putBoolean(GeneralSelectObjectActivity.IS_MULTIPLE, isMultiple);
-        if(selected!=null) b.putSerializable(GeneralSelectObjectActivity.SELECTED_OBJECTS, selected);
+        ArrayList<Object> selectedObjects=null;
+        if(!(selected instanceof ArrayList)) {
+            selectedObjects= new ArrayList<Object>(1);
+            selectedObjects.add(selected);
+        }else{
+            selectedObjects=(ArrayList)selected;
+        }
+        if(selected!=null) b.putSerializable(GeneralSelectObjectActivity.SELECTED_OBJECTS, selectedObjects);
         i.putExtras(b);
         c.startActivityForResult(i, Constants.SELECT_CLIENT);
 
@@ -230,9 +236,13 @@ public abstract class MyUtils {
      * @param requestCode int:bundle data to be passed
      */
     public static void startRequestActivity(Activity a, Class newActivity, int requestCode) {
+       MyUtils.startRequestActivity(a, newActivity, requestCode, null);
+
+    }
+    public static void startRequestActivity(Activity a, Class newActivity, int requestCode, Bundle bundle) {
         Intent i = new Intent(a, newActivity);
 
-
+        if(bundle!=null) i.putExtras(bundle);
         // i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         a.startActivityForResult(i, requestCode);
 
@@ -577,19 +587,22 @@ public abstract class MyUtils {
                 if ( context == null ) return;
                 DialogUtils.closeProgress();
                 ClientRes clientRes = resResponse.body();
-                if(clientRes.isAuthFailed()){
-                    User.LogOut(context);
-                }
-                else if(clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200){
-                    ArrayList<Client> clients = clientRes.getClients();
-                    if(clients.size() > 0){
-                        MainApplication.clientsList = clients;
-                        if (listAdapterListener != null){
-                            listAdapterListener.listInit(clients);
+                try {
+                    if (clientRes.isAuthFailed()) {
+                        // User.LogOut(context);
+                    } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200) {
+                        ArrayList<Client> clients = clientRes.getClients();
+                        if (clients.size() > 0) {
+                            MainApplication.clientsList = clients;
+                            if (listAdapterListener != null) {
+                                listAdapterListener.listInit(clients);
+                            }
                         }
+                    } else {
+                        Logger.write("Error onResponse", clientRes.getMessage());
                     }
-                }else{
-                    Log.d("Error onResponse", clientRes.getMessage());
+                }catch (Exception e) {
+                    Logger.write(e);
                 }
             }
 
@@ -822,6 +835,14 @@ public abstract class MyUtils {
         return dataModels;
 
     }
+    public static String getClientName(Client client) {
+        return (client.getCompany()==null || client.getCompany().isEmpty())?client.getFull_name():client.getCompany();
+    }
 
+    public static String formatDate(Date date) {
+        Calendar c= Calendar.getInstance();
+        c.setTime(date);
+        return toNth(c.get(Calendar.DAY_OF_MONTH))+" "+ DatePickerFragment.MONTHS_LIST[c.get(Calendar.MONTH)+1]+", "+c.get(Calendar.YEAR);
+    }
 
 }

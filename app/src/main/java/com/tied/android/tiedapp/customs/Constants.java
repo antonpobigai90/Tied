@@ -11,9 +11,9 @@ public class Constants {
     public static final String TAG = Constants.class
             .getSimpleName();
 
-    public static final String SERVER_URL = "http://tied.goattale.com:8102/api/v1/";
+    public static final String SERVER_URL = "http://tied.goattale.com:8101/api/v1/";
 
-    public static final String HOST = "http://tied.goattale.com:8102/";
+    public static final String HOST = "http://tied.goattale.com:8101/";
 //    public static final String HOST = "https://tied-api.herokuapp.com/";
 
     public static final int PORT = 3000;
@@ -45,6 +45,10 @@ public class Constants {
     public static final String GET_LINE_WITH_ID =  API_PATH + "lines/";
     public static final String USER_LINE_COUNT=  API_PATH + "lines/count";
     public static final String USER_GE0_LINES =  API_PATH + "lines/geo";
+
+    public static final String REVENUES = API_PATH + "revenue";
+    public static final String UPDATE_REVENUE_WITH_ID = API_PATH + "revenue/{line_id}";
+    public static final String ADD_REVENUE = API_PATH + "revenue";
 
     public static final String GET_CLIENT_WITH_ID = API_PATH + "client/{client_id}";
     public static final String UPDATE_CLIENT_WITH_ID = API_PATH + "clients/{client_id}";
@@ -182,6 +186,7 @@ public class Constants {
     public static final String LINE_CREATED = "a_line_exist";
     public static final String GOOGLE_REVERSE_GEOCODING_URL="https://maps.googleapis.com/maps/api/geocode/json?sensor=true&key=AIzaSyDdWKslIGOEWJMa5RJFwH2dowBc7rEQ14g&latlng=";
     public static final String LINE_DATA = "line";
+    public static final String REVENUE_DATA = "revenue";
     public static final String LINES_lIST = "lines";
     public static PersistentCookieStore MY_COOKIE_STORE=null;
     public static final String INDUSTRIES="industries";

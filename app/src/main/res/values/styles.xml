@@ -51,7 +51,7 @@
     </style>
     <style name="EditTextStyle" parent="RobotoTextViewStyle">
         <item name="android:textColor">@color/tw__medium_gray</item>
-
+        <item name="android:textColorHint">@color/light_gray2</item>
     </style>
     <style name="TabTextStyle" parent="RobotoTextViewStyle">
         <item name="android:textSize">11sp</item>

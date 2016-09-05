@@ -77,7 +77,7 @@ public class AddLinesActivityOld extends AppCompatActivity implements FragmentIt
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         fragments = new ArrayList<Fragment>();
         fragments.add(new GeneralFragment());
-        fragments.add(new RevenueFragment());
+        //fragments.add(new RevenueFragment());
         fragments.add(new GoalFragment());
         fragments.add(new ClientFragment());
 
