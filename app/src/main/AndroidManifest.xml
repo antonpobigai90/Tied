@@ -137,7 +137,7 @@
             android:label="@string/app_name"
             android:parentActivityName=".ui.activities.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/AppTheme.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.activities.schedule.ViewSchedule"

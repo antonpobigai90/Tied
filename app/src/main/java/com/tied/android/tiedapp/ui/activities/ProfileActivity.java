@@ -23,10 +23,12 @@ import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.fragments.profile.AddressFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.AvatarProfileFragment;
+import com.tied.android.tiedapp.ui.fragments.profile.ChangePasswordFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.EditProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.NotificationProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.ProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.IndustryFragment;
+import com.tied.android.tiedapp.ui.fragments.signups.IndustryFragmentNew;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.ui.listeners.ImageReadyForUploadListener;
 import com.tied.android.tiedapp.util.Logger;
@@ -117,7 +119,14 @@ public class ProfileActivity extends FragmentActivity implements FragmentIterati
                 break;
             case Constants.Industry:
                 if(fragments.get(pos)==null) {
-                    fragments.put(pos, IndustryFragment.newInstance(bundle) );
+                   // fragments.put(pos, IndustryFragment.newInstance(bundle) );
+                    fragments.put(pos, new IndustryFragmentNew());
+                }
+                fragment = fragments.get(pos);
+                break;
+            case Constants.ChangePassword:
+                if(fragments.get(pos)==null) {
+                    fragments.put(pos, new ChangePasswordFragment());
                 }
                 fragment = fragments.get(pos);
                 break;

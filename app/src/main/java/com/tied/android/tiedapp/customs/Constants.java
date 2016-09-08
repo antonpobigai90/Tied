@@ -11,7 +11,7 @@ public class Constants {
     public static final String TAG = Constants.class
             .getSimpleName();
 
-    public static final String SERVER_URL = "http://tied.goattale.com:8102/api/v1/";
+    public static final String SERVER_URL = "http://tied.goattale.com:8101/api/v1/";
 
     public static final String HOST = "http://tied.goattale.com:8102/";
 //    public static final String HOST = "https://tied-api.herokuapp.com/";
@@ -152,6 +152,7 @@ public class Constants {
     public static final int EditProfile = 101;
     public static final int ProfileAddress = 102;
     public static final int Notification = 103;
+    public static final int ChangePassword=104;
 
 
 
