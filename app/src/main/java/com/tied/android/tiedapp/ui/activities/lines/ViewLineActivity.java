@@ -39,6 +39,7 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
     private TextView name, description, totalRevenueHeaderTV, totalRevenueBodyTV, addressTV, numClients;
     private Line line;
     Location location;
+    View nameEditor, descriptionEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +49,7 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
         bundle = getIntent().getExtras();
         line = (Line) bundle.getSerializable(Constants.LINE_DATA);
         user = MyUtils.getUserFromBundle(bundle);
+
 
 
         LineApi lineApi = MainApplication.createService(LineApi.class, user.getToken());
@@ -113,9 +115,16 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
         numClients=(TextView) findViewById(R.id.num_clients);
 
         addressTV=(TextView) findViewById(R.id.ship_from);
+        location=line.getAddress();
         if(location!=null)
-        addressTV.setText(location.getLocationAddress());
+            addressTV.setText(location.getLocationAddress());
         numClients.setText(""+line.getNum_clients());
+
+        nameEditor = findViewById(R.id.name_editor);
+        nameEditor.setOnClickListener(this);
+        descriptionEditor = findViewById(R.id.description_editor);
+        descriptionEditor.setOnClickListener(this);
+
     }
 
     @Override
@@ -149,6 +158,26 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
 
                         line.setAddress(((Location)response));
                         addressTV.setText(line.getAddress().getLocationAddress());
+                        updateLine(line);
+                    }
+                });
+                break;
+            case R.id.name_editor:
+                MyUtils.showEditTextDialog(this, "Line Name", line.getName(), new MyUtils.MyDialogClickListener() {
+                    @Override
+                    public void onClick(Object response) {
+                        line.setName((String)response);
+                        name.setText((String)response);
+                        updateLine(line);
+                    }
+                });
+                break;
+            case R.id.description_editor:
+                MyUtils.showEditTextDialog(this, "Line Description", line.getDescription(), new MyUtils.MyDialogClickListener() {
+                    @Override
+                    public void onClick(Object response) {
+                        line.setDescription((String)response);
+                        name.setText((String)response);
                         updateLine(line);
                     }
                 });

@@ -48,7 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@android:color/transparent"
-                android:text="6408 Rocksprings drive"
+                android:text=""
                 android:textColor="@color/grey"
                 android:singleLine="false"
                 style="@style/EditTextStyle"

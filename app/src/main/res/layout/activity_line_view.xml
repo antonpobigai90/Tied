@@ -110,6 +110,7 @@
                        android:layout_toRightOf="@+id/name"
                        android:layout_marginLeft="40dp"
                        android:layout_marginBottom="0dp"
+                       android:id="@+id/name_editor"
                        android:layout_alignBottom="@+id/name"
             android:src="@drawable/icon_edit"/>
 
@@ -447,6 +448,7 @@
                            android:layout_toRightOf="@+id/name"
                            android:layout_marginLeft="20dp"
                            android:layout_marginBottom="0dp"
+                           android:id="@+id/description_editor"
                            android:layout_alignBottom="@+id/name"
                            android:src="@drawable/icon_edit"/>
             </LinearLayout>

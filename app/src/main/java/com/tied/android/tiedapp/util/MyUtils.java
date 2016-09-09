@@ -498,6 +498,7 @@ public abstract class MyUtils {
         final EditText websiteET, requestET,openingET;
         final Spinner reorderSpinner;
         websiteET=(EditText)dialog.findViewById(R.id.website);
+
         requestET=(EditText)dialog.findViewById(R.id.special_request);
         openingET=(EditText)dialog.findViewById(R.id.openings);
         reorderSpinner=(Spinner)dialog.findViewById(R.id.reorders);
@@ -616,8 +617,14 @@ public abstract class MyUtils {
                                 MyUtils.showToast("Could not validate address!");
                             }else {
                                 location.setCoordinate(Coordinate.fromJSONString(response));
-                                okayClicked.onClick(location);
-                                dialog.dismiss();
+                                context.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        okayClicked.onClick(location);
+                                        dialog.dismiss();
+                                    }
+                                });
+
                             }
                             //dialog.dismiss();
                         }
@@ -643,7 +650,7 @@ public abstract class MyUtils {
 
         final EditText textET=(EditText)dialog.findViewById(R.id.text_et);
 
-
+        textET.setText(initialValue);
         // set the custom dialog components - text, image and button
         TextView text = (TextView) dialog.findViewById(R.id.txt_title);
         text.setText(title.toUpperCase());

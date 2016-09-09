@@ -11,9 +11,9 @@ public class Constants {
     public static final String TAG = Constants.class
             .getSimpleName();
 
-    public static final String SERVER_URL = "http://tied.goattale.com:8100/api/v1/";
+    public static final String SERVER_URL = "http://tied.goattale.com:8101/api/v1/";
 
-    public static final String HOST = "http://tied.goattale.com:8100/";
+    public static final String HOST = "http://tied.goattale.com:8101/";
 //    public static final String HOST = "https://tied-api.herokuapp.com/";
 
     public static final int PORT = 3000;

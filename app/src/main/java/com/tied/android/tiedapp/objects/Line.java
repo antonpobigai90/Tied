@@ -52,6 +52,22 @@ public class Line implements Serializable {
         this.reorder = reorder;
     }
 
+    public String getRequest() {
+        return request;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public String getOpening() {
+        return opening;
+    }
+
+    public String getReorder() {
+        return reorder;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
