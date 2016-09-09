@@ -38,7 +38,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private LinearLayout back_layout;
 
 
-    private Button btnNotifications, btnEditPersonalInfo, btnChangePassword, btnIndustries;
+    private Button btnNotifications, btnEditPersonalInfo, btnChangePassword, btnIndustries, btnPrivacy;
 
     public FragmentIterationListener mListener;
     /**
@@ -83,6 +83,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         btnIndustries = (Button) view.findViewById(R.id.btnIndustries);
         btnIndustries.setOnClickListener(this);
 
+        btnPrivacy = (Button) view.findViewById(R.id.btnPrivacy);
+        btnPrivacy.setOnClickListener(this);
+
         back_layout = (LinearLayout) view.findViewById(R.id.back_layout);
         back_layout.setOnClickListener(this);
 
@@ -124,6 +127,12 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.btnNotifications:
                 nextAction(Constants.Notification, bundle);
+                break;
+            case R.id.btnIndustries:
+                nextAction(Constants.Industry, bundle);
+                break;
+            case R.id.btnPrivacy:
+                nextAction(Constants.PRIVACY, bundle);
                 break;
         }
     }

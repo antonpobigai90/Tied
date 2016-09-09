@@ -149,7 +149,7 @@ public class IndustryAdapter extends BaseAdapter implements Filterable {
 
         @Override
         public void onClick(View view) {
-            view.setSelected(true);
+            view.setSelected(!view.isSelected());
         }
     }
 }

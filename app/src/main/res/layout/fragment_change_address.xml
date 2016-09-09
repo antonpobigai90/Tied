@@ -5,220 +5,228 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btnSaveChange">
+        android:orientation="vertical">
 
-        <LinearLayout
+        <include layout="@layout/row_header_layout"></include>
+
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tvOffice"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/light_gray"
-                android:padding="20dp"
-                android:text="@string/office"
-                android:textColor="@color/grey" />
-
-            <LinearLayout
-                android:id="@+id/llStreetAddress"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tvOffice"
-                android:orientation="vertical"
-                android:padding="20dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/street_address"
-                    android:textColor="@color/accentColor"
-                    android:textSize="12sp" />
-
-                <EditText
-                    android:id="@+id/etStreetAddress"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:backgroundTint="@android:color/transparent"
-                    android:text="581 Meagen Ferry Suite 685"
-                    android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <View
-                android:id="@+id/vSeparator1"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@+id/llStreetAddress"
-                android:background="@color/light_gray"></View>
-
-            <LinearLayout
-                android:id="@+id/llZipCode"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/llStreetAddress"
-                android:orientation="vertical"
-                android:padding="20dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/zip_code"
-                    android:textColor="@color/accentColor"
-                    android:textSize="12sp" />
-
-                <EditText
-                    android:id="@+id/etZipCode"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:backgroundTint="@android:color/transparent"
-                    android:text="76019"
-                    android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <View
-                android:id="@+id/vSeparator2"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@+id/llZipCode"
-                android:background="@color/light_gray"></View>
-
-            <LinearLayout
-                android:id="@+id/llCity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/vSeparator2"
-                android:orientation="vertical"
-                android:padding="20dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/city"
-                    android:textColor="@color/accentColor"
-                    android:textSize="12sp" />
-
-                <EditText
-                    android:id="@+id/etCity"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:backgroundTint="@android:color/transparent"
-                    android:text="Dallas"
-                    android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/tvHome"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/llCity"
-                android:background="@color/light_gray"
-                android:padding="20dp"
-                android:text="@string/home"
-                android:textColor="@color/grey" />
+            android:layout_above="@+id/btnSaveChange">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvOffice"
-                android:orientation="vertical"
-                android:padding="20dp">
+                android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/tvOffice"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/street_address"
-                    android:textColor="@color/accentColor"
-                    android:textSize="12sp" />
+                    android:background="@color/light_gray"
+                    android:padding="20dp"
+                    android:text="@string/office"
+                    android:textColor="@color/grey" />
 
-                <EditText
-                    android:id="@+id/etHomeStreetAddress"
+                <LinearLayout
+                    android:id="@+id/llStreetAddress"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:backgroundTint="@android:color/transparent"
-                    android:text="581 Meagen Ferry Suite 685"
-                    android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                    android:layout_below="@+id/tvOffice"
+                    android:orientation="vertical"
+                    android:padding="20dp">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@+id/llStreetAddress"
-                android:background="@color/light_gray"></View>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/street_address"
+                        android:textColor="@color/accentColor"
+                        android:textSize="12sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="20dp">
+                    <EditText
+                        android:id="@+id/etOfficeStreetAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:backgroundTint="@android:color/transparent"
+                        android:text="581 Meagen Ferry Suite 685"
+                        android:textColor="@color/schedule_title_bg_color"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/vSeparator1"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@+id/llStreetAddress"
+                    android:background="@color/light_gray"></View>
+
+                <LinearLayout
+                    android:id="@+id/llZipCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/llStreetAddress"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/zip_code"
+                        android:textColor="@color/accentColor"
+                        android:textSize="12sp" />
+
+                    <EditText
+                        android:id="@+id/etOfficeZipCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:backgroundTint="@android:color/transparent"
+                        android:text="76019"
+                        android:textColor="@color/schedule_title_bg_color"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/vSeparator2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@+id/llZipCode"
+                    android:background="@color/light_gray"></View>
+
+                <LinearLayout
+                    android:id="@+id/llCity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/vSeparator2"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/city"
+                        android:textColor="@color/accentColor"
+                        android:textSize="12sp" />
+
+                    <EditText
+                        android:id="@+id/etOfficeCity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:backgroundTint="@android:color/transparent"
+                        android:text="Dallas"
+                        android:textColor="@color/schedule_title_bg_color"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
                 <TextView
+                    android:id="@+id/tvHome"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/zip_code"
-                    android:textColor="@color/accentColor"
-                    android:textSize="12sp" />
+                    android:layout_below="@+id/llCity"
+                    android:background="@color/light_gray"
+                    android:padding="20dp"
+                    android:text="@string/home"
+                    android:textColor="@color/grey" />
 
-                <EditText
-                    android:id="@+id/etHomeZipCode"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:backgroundTint="@android:color/transparent"
-                    android:text="76019"
-                    android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:layout_below="@+id/tvOffice"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/street_address"
+                        android:textColor="@color/accentColor"
+                        android:textSize="12sp" />
+
+                    <EditText
+                        android:id="@+id/etHomeStreetAddress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:backgroundTint="@android:color/transparent"
+                        android:text="581 Meagen Ferry Suite 685"
+                        android:textColor="@color/schedule_title_bg_color"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@+id/llStreetAddress"
+                    android:background="@color/light_gray"></View>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/zip_code"
+                        android:textColor="@color/accentColor"
+                        android:textSize="12sp" />
+
+                    <EditText
+                        android:id="@+id/etHomeZipCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:backgroundTint="@android:color/transparent"
+                        android:text="76019"
+                        android:textColor="@color/schedule_title_bg_color"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@+id/llZipCode"
+                    android:background="@color/light_gray"></View>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/vSeparator2"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/city"
+                        android:textColor="@color/accentColor"
+                        android:textSize="12sp" />
+
+                    <EditText
+                        android:id="@+id/etHomeCity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:backgroundTint="@android:color/transparent"
+                        android:text="Dallas"
+                        android:textColor="@color/schedule_title_bg_color"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
             </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@+id/llZipCode"
-                android:background="@color/light_gray"></View>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/vSeparator2"
-                android:orientation="vertical"
-                android:padding="20dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/city"
-                    android:textColor="@color/accentColor"
-                    android:textSize="12sp" />
-
-                <EditText
-                    android:id="@+id/etHomeCity"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:backgroundTint="@android:color/transparent"
-                    android:text="Dallas"
-                    android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
+        </ScrollView>
+    </LinearLayout>
 
     <Button
         android:id="@+id/btnSaveChange"
