@@ -62,15 +62,15 @@ public class AvatarProfileFragment extends Fragment implements View.OnClickListe
 
         bundle = getArguments();
         if (bundle != null) {
-            Log.d(TAG, "bundle not null");
             Gson gson = new Gson();
             String user_json = bundle.getString(Constants.USER_DATA);
             User user = gson.fromJson(user_json, User.class);
+            Log.d(TAG, "user.getAvatar()"+user.getAvatar());
             if (user.getAvatar_uri() != null && new File(user.getAvatar_uri()).exists()) {
                 Uri myUri = Uri.parse(user.getAvatar_uri());
                 avatar.setImageURI(myUri);
             }else{
-                MyUtils.Picasso.displayImage(Constants.GET_AVATAR_ENDPOINT + user.getAvatar(),avatar);
+                MyUtils.Picasso.displayImage(user.getAvatar(),avatar);
             }
         }
         return view;
@@ -174,7 +174,7 @@ public class AvatarProfileFragment extends Fragment implements View.OnClickListe
                     Bundle bundle = getArguments();
                     String user_json = bundle.getString(Constants.USER_DATA, "");
                     User user = gson.fromJson(user_json, User.class);
-                    user.setAvatar_uri(String.valueOf(uri));
+                    user.setAvatar_uri(null);
                     user.setAvatar(ServerRes.getUser().getAvatar()+new Date().getTime());
                     boolean saved = user.save(getActivity().getApplicationContext());
                     if(saved){
