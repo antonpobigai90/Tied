@@ -159,6 +159,7 @@ public class Constants {
     public static final int EditProfile = 101;
     public static final int ProfileAddress = 102;
     public static final int Notification = 103;
+    public static final int ChangePassword=104;
 
 
 
