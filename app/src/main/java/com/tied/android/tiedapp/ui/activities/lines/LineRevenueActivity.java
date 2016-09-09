@@ -40,11 +40,12 @@ public class LineRevenueActivity  extends AppCompatActivity implements  View.OnC
     private Bundle bundle;
     private User user;
     View backButton;
-    List revenueList;
+    List revenueList=new ArrayList<Revenue>();;
     int page=1;
     RevenueAdapter adapter;
     ListView revenueLV;
     View addBut;
+    TextView totalRevenue;
 
     private TextView name, description;
     private Line line;
@@ -73,9 +74,10 @@ public class LineRevenueActivity  extends AppCompatActivity implements  View.OnC
         revenueLV=(ListView)findViewById(R.id.list);
         addBut = findViewById(R.id.add);
         addBut.setOnClickListener(this);
-        revenueList=new ArrayList<Revenue>();
+
         adapter=new RevenueAdapter(this, revenueList);
         revenueLV.setAdapter(adapter);
+        totalRevenue = (TextView) findViewById(R.id.txt_total_revenue);
 
     }
 
@@ -123,13 +125,65 @@ public class LineRevenueActivity  extends AppCompatActivity implements  View.OnC
                 DialogUtils.closeProgress();
             }
         });
+
+
+       // DialogUtils.displayProgress(this);
+
+
     }
+
+    public void setLineTotalRevenue() {
+        LineApi lineApi = MainApplication.getInstance().getRetrofit().create(LineApi.class);
+        final Call<ResponseBody> response2 = lineApi.getLineTotalRevenue(user.getToken(), line.getId());
+        response2.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
+                if (this == null) return;
+                DialogUtils.closeProgress();
+                try {
+                    //Logger.write(resResponse.body().string());
+                    //  JSONObject response = new JSONObject(resResponse.body().string());
+                    GeneralResponse response=new GeneralResponse(resResponse.body());
+                    // Logger.write("RESPONSSSSSSSSSSSSSSSSSSSS "+response.toString());
+                    if (response != null && response.isAuthFailed()) {
+                        User.LogOut(LineRevenueActivity.this);
+                        return;
+                    }
+
+                    _Meta meta=response.getMeta();
+                    if(meta !=null && meta.getStatus_code()==200) {
+                        // revenueList.addAll(response.getDataAsList("revenues", Revenue.class));
+                        // adapter.notifyDataSetChanged();
+                        line.setTotal_revenue(response.getData("line", Line.class).getTotal_revenue());
+                        totalRevenue.setText(MyUtils.moneyFormat(line.getTotal_revenue()));
+                        //totalRevenueBodyTV.setText(MyUtils.moneyFormat(line.getTotal_revenue()));
+
+                    } else {
+                        // MyUtils.showToast(getString(R.string.connection_error));
+                    }
+                }catch (Exception e) {
+                    // MyUtils.showConnectionErrorToast(LineRevenueActivity.this);
+                    //Logger.write(e);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                //Log.d(TAG + " onFailure", t.toString());
+                Logger.write(t.getMessage());
+                MyUtils.showConnectionErrorToast(LineRevenueActivity.this);
+                DialogUtils.closeProgress();
+            }
+        });
+    }
+
 
     @Override
     protected void onResume() {
         super.onResume();
         revenueList.clear();
         loadData();
+        setLineTotalRevenue();
     }
 
     public void goBack(View v) {

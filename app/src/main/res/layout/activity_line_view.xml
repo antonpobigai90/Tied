@@ -33,7 +33,7 @@
 
 
                 <ImageView
-                    android:layout_width="@dimen/action_bar_icon_height"
+                         android:layout_width="@dimen/action_bar_icon_height"
                     android:layout_height="@dimen/action_bar_icon_height"
                     android:padding="@dimen/action_bar_icon_padding"
                     android:layout_gravity="center"
@@ -42,7 +42,6 @@
                     android:onClick="onClick"
                     android:id="@+id/back_button"
                     android:src="@drawable/btn_back_arrow" />
-
 
 
             <LinearLayout
@@ -57,52 +56,41 @@
 
         </RelativeLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:layout_marginTop="10dp"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
             android:paddingBottom="2dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp">
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp">
 
             <TextView
-                android:id="@id/name"
+                android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Line name Here"
                 android:textColor="@color/white"
+                android:layout_centerHorizontal="true"
                 android:textSize="22sp"
                 android:textStyle="normal" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/string"
-                android:gravity="center"
-                android:layout_marginTop="8dp"
-                android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:paddingRight="5dp"
-                    android:text="$"
-                    android:textStyle="bold"
-                    android:textColor="@color/white"
-                    android:textSize="22sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="0.00"
+                    android:layout_centerVertical="true"
+                    android:layout_below="@+id/name"
+                    android:gravity="center"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="8dp"
+                    android:id="@+id/total_revenue_txt"
                     android:textStyle="bold"
                     android:textColor="@color/white"
                     android:textSize="22sp" />
-            </LinearLayout>
+
 
             <TextView
                 android:id="@+id/string"
@@ -110,11 +98,22 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0dp"
                 android:text="Overall Sales"
+                android:layout_below="@+id/total_revenue_txt"
                 android:textSize="13sp"
                 android:alpha="0.5"
+                android:layout_centerHorizontal="true"
                 android:textStyle="bold" />
 
-        </LinearLayout>
+            <ImageView android:layout_width="40dp"
+                       android:layout_height="40dp"
+                       android:padding="5dp"
+                       android:layout_toRightOf="@+id/name"
+                       android:layout_marginLeft="40dp"
+                       android:layout_marginBottom="0dp"
+                       android:layout_alignBottom="@+id/name"
+            android:src="@drawable/icon_edit"/>
+
+        </RelativeLayout>
 
     </LinearLayout>
 
@@ -286,9 +285,11 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.1dp"
+                android:visibility="gone"
                 android:background="@android:color/darker_gray" />
 
             <RelativeLayout
+                    android:visibility="gone"
                 android:id="@+id/territory_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -426,6 +427,7 @@
                 android:layout_width="match_parent"
                 style="@style/SectionLayout"
                 android:layout_marginTop="0dp"
+                android:orientation="horizontal"
                 android:paddingLeft="20dp">
 
                 <TextView
@@ -439,6 +441,14 @@
                     android:textSize="14sp"
 
                     android:textStyle="bold" />
+                <ImageView android:layout_width="30dp"
+                           android:layout_height="30dp"
+                           android:padding="6dp"
+                           android:layout_toRightOf="@+id/name"
+                           android:layout_marginLeft="20dp"
+                           android:layout_marginBottom="0dp"
+                           android:layout_alignBottom="@+id/name"
+                           android:src="@drawable/icon_edit"/>
             </LinearLayout>
 
             <TextView

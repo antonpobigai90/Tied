@@ -1,4 +1,4 @@
-package com.tied.android.tiedapp.ui.fragments;
+package com.tied.android.tiedapp.ui.fragments.lines;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,33 +10,28 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
-import com.tied.android.tiedapp.customs.model.TerritoryModel;
+import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.objects.Goal;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.adapters.TerritoryAdapter;
+import com.tied.android.tiedapp.ui.adapters.GoalsAdapter;
 import com.tied.android.tiedapp.util.MyUtils;
 
-import java.util.ArrayList;
+public class PastGoalFragment extends Fragment implements AdapterView.OnItemClickListener,View.OnClickListener{
 
-
-/**
- * Created by Ratan on 7/27/2015.
- */
-public class TerritoriesFragment extends Fragment implements AdapterView.OnItemClickListener,View.OnClickListener {
-
-    public static final String TAG = LinesFragment.class
+    public static final String TAG = PastGoalFragment.class
             .getSimpleName();
 
     protected User user;
     protected Bundle bundle;
     protected ListView listView;
-    private ArrayList<TerritoryModel> territoryModels;
 
-    private TerritoryAdapter adapter;
+    protected GoalsAdapter adapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.client_territories_fragment,null);
+        return inflater.inflate(R.layout.line_past_goal_fragment,null);
     }
 
     @Override
@@ -46,30 +41,23 @@ public class TerritoriesFragment extends Fragment implements AdapterView.OnItemC
     }
 
     public void initComponent(View view){
-        territoryModels = new ArrayList<>();
         bundle = getArguments();
         user = MyUtils.getUserFromBundle(bundle);
         listView = (ListView) view.findViewById(R.id.list);
         listView.setOnItemClickListener(this);
 
-        ArrayList territory = user.getTerritories();
-        if(territory != null){
-            for(Object obj : territory){
-                String name = (String) obj;
-                territoryModels.add(new TerritoryModel(name));
-            }
-            adapter = new TerritoryAdapter(territoryModels, getActivity());
-            listView.setAdapter(adapter);
+        adapter = new GoalsAdapter(MainApplication.goals, getActivity());
+        listView.setAdapter(adapter);
+        if (MainApplication.goals.size() == 0){
+            MyUtils.initGoals(getActivity(), user, adapter);
         }
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.d(TAG, "here---------------- listener");
-//        TerritoryModel territoryModel = territoryModels.get(position);
-//        Bundle bundle = new Bundle();
-//        bundle.putSerializable(Constants.TERRITORY_DATA, territoryModel);
-//        MyUtils.startActivity(getActivity(), ViewLineActivity.class, bundle);
+        Goal goal = (Goal) MainApplication.goals.get(position);
+        bundle.putSerializable(Constants.GOAL_DATA, goal);
     }
 
     @Override

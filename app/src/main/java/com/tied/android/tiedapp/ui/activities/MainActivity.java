@@ -403,6 +403,9 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
             case R.id.lines_menu:
                 MyUtils.startActivity(MainActivity.this, LinesAndTerritories.class,bundle);
                 break;
+            case R.id.goal_menu:
+
+                break;
             case R.id.client_menu:
                 bundle.putBoolean(Constants.CLIENT_LIST, true);
                 MyUtils.startActivity(MainActivity.this, ClientMapAndListActivity.class,bundle);
@@ -435,8 +438,6 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
     private void clearTabs() {
         activity_layout.setBackground(null);
         map_tab.setBackground(null);
-
-
     }
 
     public void ShowSuccessMessage(String message, final String forWhat){

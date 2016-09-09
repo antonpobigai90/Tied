@@ -34,10 +34,11 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
     private Bundle bundle;
     private User user;
     LinearLayout back_layout;
-    RelativeLayout clients_layout;
+    RelativeLayout clients_layout, goals_layout;
 
-    private TextView name, description;
+    private TextView name, description, totalRevenueHeaderTV, totalRevenueBodyTV, addressTV, numClients;
     private Line line;
+    Location location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +49,49 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
         line = (Line) bundle.getSerializable(Constants.LINE_DATA);
         user = MyUtils.getUserFromBundle(bundle);
 
-        initComponent(line);
+
+        LineApi lineApi = MainApplication.createService(LineApi.class, user.getToken());
+        DialogUtils.displayProgress(this);
+        final Call<ResponseBody> response = lineApi.getLineWithId(line.getId(), line.getId());
+
+        response.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
+                if (this == null) return;
+                try {
+                    GeneralResponse response=new GeneralResponse(resResponse.body());
+
+                    if(line!=null) {
+                        Line the_line = response.getData("lines", Line.class);
+                        Logger.write("Request failedsdddddddddddddd: "+the_line.toString());
+                        ViewLineActivity.this.line=the_line;
+                        initComponent(line);
+                    }else{
+                        MyUtils.showToast("Error encountered");
+                        DialogUtils.closeProgress();
+                    }
+
+                }catch (Exception ioe) {
+                    Logger.write(ioe);
+                }
+
+                DialogUtils.closeProgress();
+            }
+            @Override
+            public void onFailure(Call<ResponseBody> ClientResponseCall, Throwable t) {
+                Logger.write("Request failed: "+t.getCause());
+                MyUtils.showConnectionErrorToast(ViewLineActivity.this);
+                DialogUtils.closeProgress();
+            }
+        });
+
+
+       // setLineTotalRevenue();
+        //setLineNumClients();
     }
 
     private void initComponent(Line line) {
+
         name = (TextView) findViewById(R.id.name);
         name.setText(line.getName());
 
@@ -59,6 +99,23 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
         description.setText(line.getDescription());
         clients_layout = (RelativeLayout) findViewById(R.id.clients_layout);
         clients_layout.setOnClickListener(this);
+
+        goals_layout = (RelativeLayout) findViewById(R.id.goals_layout);
+        goals_layout.setOnClickListener(this);
+
+        findViewById(R.id.ship_layout).setOnClickListener(this);
+
+        totalRevenueHeaderTV = (TextView) findViewById(R.id.total_revenue_txt);
+        totalRevenueBodyTV = (TextView) findViewById(R.id.total_revenue);
+        totalRevenueHeaderTV.setText(""+MyUtils.moneyFormat(line.getTotal_revenue()));
+        totalRevenueBodyTV.setText(""+MyUtils.moneyFormat(line.getTotal_revenue()));
+
+        numClients=(TextView) findViewById(R.id.num_clients);
+
+        addressTV=(TextView) findViewById(R.id.ship_from);
+        if(location!=null)
+        addressTV.setText(location.getLocationAddress());
+        numClients.setText(""+line.getNum_clients());
     }
 
     @Override
@@ -73,18 +130,36 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
             case R.id.clients_layout:
                 MyUtils.startActivity(this, LineClientList.class);
                 break;
-            case R.id.ship_layout:
-                MyUtils.showAddressDialog(this, "Shipping information", null, new MyUtils.MyDialogClickListener() {
+            case R.id.info_layout:
+                MyUtils.showLinesRelevantInfoDialog(this,"Relevant Information", line, new MyUtils.MyDialogClickListener() {
                     @Override
                     public void onClick(Object response) {
-                        line.setAddress(((Location)response));
-                        
+                        line=line;
                         updateLine(line);
                     }
                 });
                 break;
+            case R.id.goals_layout:
+                MyUtils.startActivity(this, LineGoalActivity.class, bundle);
+                break;
+            case R.id.ship_layout:
+                MyUtils.showAddressDialog(this, "Shipping information",location, new MyUtils.MyDialogClickListener() {
+                    @Override
+                    public void onClick(Object response) {
 
+                        line.setAddress(((Location)response));
+                        addressTV.setText(line.getAddress().getLocationAddress());
+                        updateLine(line);
+                    }
+                });
+                break;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(line==null) finish();
     }
 
     private void updateLine(final Line line) {
@@ -105,6 +180,7 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
                     _Meta meta=response.getMeta();
                     if(meta !=null && meta.getStatus_code()==200) {
                         Line the_line = response.getData(Constants.LINE_DATA, Line.class);
+                        Logger.write("Request failed: "+the_line.toString());
                         if(the_line.getId().equals(line.getId())){
                             Logger.write("Update line id +"+the_line.getId());
                             name.setText(line.getName());
@@ -126,6 +202,98 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
             @Override
             public void onFailure(Call<ResponseBody> ClientResponseCall, Throwable t) {
                 Logger.write("Request failed: "+t.getCause());
+                DialogUtils.closeProgress();
+            }
+        });
+    }
+
+    public void setLineTotalRevenue() {
+        LineApi lineApi = MainApplication.getInstance().getRetrofit().create(LineApi.class);
+        final Call<ResponseBody> response2 = lineApi.getLineTotalRevenue(user.getToken(), line.getId());
+        response2.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
+                if (this == null) return;
+                DialogUtils.closeProgress();
+                try {
+                    //Logger.write(resResponse.body().string());
+                    //  JSONObject response = new JSONObject(resResponse.body().string());
+                    GeneralResponse response=new GeneralResponse(resResponse.body());
+                   // Logger.write("RESPONSSSSSSSSSSSSSSSSSSSS "+response.toString());
+                    if (response != null && response.isAuthFailed()) {
+                        User.LogOut(ViewLineActivity.this);
+                        return;
+                    }
+
+                    _Meta meta=response.getMeta();
+                    if(meta !=null && meta.getStatus_code()==200) {
+                        // revenueList.addAll(response.getDataAsList("revenues", Revenue.class));
+                        // adapter.notifyDataSetChanged();
+                        line.setTotal_revenue(response.getData("line", Line.class).getTotal_revenue());
+                        totalRevenueHeaderTV.setText(MyUtils.moneyFormat(line.getTotal_revenue()));
+                        totalRevenueBodyTV.setText(MyUtils.moneyFormat(line.getTotal_revenue()));
+
+                    } else {
+                       // MyUtils.showToast(getString(R.string.connection_error));
+                    }
+                }catch (Exception e) {
+                    // MyUtils.showConnectionErrorToast(LineRevenueActivity.this);
+                    //Logger.write(e);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                //Log.d(TAG + " onFailure", t.toString());
+                Logger.write(t.getMessage());
+                MyUtils.showConnectionErrorToast(ViewLineActivity.this);
+                DialogUtils.closeProgress();
+            }
+        });
+    }
+
+    public void setLineNumClients() {
+        LineApi lineApi = MainApplication.getInstance().getRetrofit().create(LineApi.class);
+        final Call<ResponseBody> response2 = lineApi.getClientCount(user.getToken(), line.getId());
+        response2.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
+                if (this == null) return;
+                DialogUtils.closeProgress();
+                try {
+
+                    //  JSONObject response = new JSONObject(resResponse.body().string());
+                    GeneralResponse response=new GeneralResponse(resResponse.body());
+                    Logger.write("RESPONSSSSSSSSSSSSSSSSSSSS "+response.toString());
+
+                    if (response != null && response.isAuthFailed()) {
+                        User.LogOut(ViewLineActivity.this);
+                        return;
+                    }
+
+                    _Meta meta=response.getMeta();
+                    if(meta !=null && meta.getStatus_code()==200) {
+                        // revenueList.addAll(response.getDataAsList("revenues", Revenue.class));
+                        // adapter.notifyDataSetChanged();
+                        line.setNum_clients(response.getData("line", Line.class).getNum_clients());
+                        Logger.write("num clientsss "+line.getNum_clients());
+                        numClients.setText(""+line.getNum_clients());
+
+
+                    } else {
+                        // MyUtils.showToast(getString(R.string.connection_error));
+                    }
+                }catch (Exception e) {
+                    // MyUtils.showConnectionErrorToast(LineRevenueActivity.this);
+                    //Logger.write(e);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                //Log.d(TAG + " onFailure", t.toString());
+                Logger.write(t.getMessage());
+                MyUtils.showConnectionErrorToast(ViewLineActivity.this);
                 DialogUtils.closeProgress();
             }
         });

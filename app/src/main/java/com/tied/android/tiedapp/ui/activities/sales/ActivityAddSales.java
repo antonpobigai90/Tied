@@ -22,7 +22,7 @@ import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.RevenueApi;
 import com.tied.android.tiedapp.ui.activities.GeneralSelectObjectActivity;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
-import com.tied.android.tiedapp.ui.fragments.DatePickerFragment;
+import com.tied.android.tiedapp.ui.dialogs.DatePickerFragment;
 import com.tied.android.tiedapp.ui.fragments.sales.AddSalesFragment;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;

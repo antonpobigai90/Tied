@@ -10,32 +10,30 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
-import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.objects.Line;
-import com.tied.android.tiedapp.ui.activities.LinesAndTerritories;
+import com.tied.android.tiedapp.objects.Goal;
+import com.tied.android.tiedapp.ui.activities.lines.LineGoalActivity;
 import com.tied.android.tiedapp.ui.listeners.ListAdapterListener;
-import com.tied.android.tiedapp.util.MyUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by ZuumaPC on 8/18/2016.
+ * Created by ZuumaPC on 9/3/2016.
  */
-public class LinesAdapter extends BaseAdapter implements ListAdapterListener {
+public class GoalsAdapter extends BaseAdapter implements ListAdapterListener {
 
     private static class ViewHolder {
-        TextView txt_line_name,txt_line_sales;
+        TextView txt_title,txt_date;
     }
 
-    public static final String TAG = LinesAdapter.class
+    public static final String TAG = GoalsAdapter.class
             .getSimpleName();
 
-    public List<Line> _data;
+    public List<Goal> _data;
     Context _c;
     ViewHolder viewHolder;
 
-    public LinesAdapter(List<Line> line_list, Context context) {
+    public GoalsAdapter(List<Goal> line_list, Context context) {
         _data = line_list;
         _c = context;
     }
@@ -61,20 +59,20 @@ public class LinesAdapter extends BaseAdapter implements ListAdapterListener {
         View view = convertView;
         if (view == null) {
             LayoutInflater li = (LayoutInflater) _c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = li.inflate(R.layout.lines_list_item, viewGroup,false);
+            view = li.inflate(R.layout.line_goal_list_item, viewGroup,false);
         } else {
             view = convertView;
         }
         viewHolder = new ViewHolder();
 
-        viewHolder.txt_line_name = (TextView) view.findViewById(R.id.line);
-        viewHolder.txt_line_sales = (TextView) view.findViewById(R.id.sales);
+        viewHolder.txt_title = (TextView) view.findViewById(R.id.title);
+        viewHolder.txt_date = (TextView) view.findViewById(R.id.date);
 
-        final Line data = (Line) _data.get(i);
+        final Goal data = (Goal) _data.get(i);
 
-        viewHolder.txt_line_name.setText(data.getName());
-      //  String sales = data.getSales() + Constants.TOTAL_SALES;
-        viewHolder.txt_line_sales.setText(MyUtils.moneyFormat(data.getTotal_revenue()));
+        viewHolder.txt_title.setText(data.getTitle());
+        String date = "Ends" + data.getDate();
+        viewHolder.txt_date.setText(date);
         view.setTag(data);
         return view;
     }
@@ -82,7 +80,7 @@ public class LinesAdapter extends BaseAdapter implements ListAdapterListener {
     @Override
     public void listInit(ArrayList arrayList) {
         this._data = arrayList;
-        android.support.v4.view.ViewPager mViewPager = ((LinesAndTerritories) _c).mViewPager;
+        android.support.v4.view.ViewPager mViewPager = ((LineGoalActivity) _c).mViewPager;
         notifyDataSetChanged();
         mViewPager.getAdapter().notifyDataSetChanged();
     }

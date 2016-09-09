@@ -8,7 +8,7 @@
     <RelativeLayout
             android:id="@+id/top_layout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/action_bar_height"
+            android:layout_height="100dp"
             android:background="@drawable/background_layout">
 
         <LinearLayout android:layout_width="wrap_content"
@@ -16,6 +16,13 @@
                       android:layout_centerInParent="true"
                       android:gravity="center"
                       android:orientation="vertical">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Line / Revenues"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/white"
+                    android:textSize="18sp" />
             <TextView
                     android:id="@+id/txt_line_name"
                     android:layout_width="wrap_content"
@@ -50,7 +57,7 @@
                     android:id="@+id/back_button"
                     style="@style/ActionBarIcon"
                     android:onClick="goBack"
-                    android:layout_centerVertical="true"
+                    android:layout_alignParentTop="true"
                     android:src="@drawable/btn_back_arrow" />
 
            
@@ -59,7 +66,7 @@
                 android:id="@+id/add"
                style="@style/ActionBarIcon"
                 android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
+               android:layout_alignParentTop="true"
                 android:onClick="onClick"
 
                 android:src="@drawable/add_icon" />

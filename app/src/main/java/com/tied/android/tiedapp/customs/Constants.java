@@ -11,9 +11,9 @@ public class Constants {
     public static final String TAG = Constants.class
             .getSimpleName();
 
-    public static final String SERVER_URL = "http://tied.goattale.com:8101/api/v1/";
+    public static final String SERVER_URL = "http://tied.goattale.com:8100/api/v1/";
 
-    public static final String HOST = "http://tied.goattale.com:8101/";
+    public static final String HOST = "http://tied.goattale.com:8100/";
 //    public static final String HOST = "https://tied-api.herokuapp.com/";
 
     public static final int PORT = 3000;
@@ -42,9 +42,12 @@ public class Constants {
     public static final String USER_LINES = API_PATH + "users/me/lines";
     public static final String USER_CLIENT_LINES = API_PATH + "users/me/client_lines";
     public static final String USER_LINE_REVENUES = API_PATH + "users/me/lines/{line_id}/revenues/{page_number}";
-    public static final String GET_LINE_WITH_ID =  API_PATH + "lines/";
+    public static final String GET_LINE_WITH_ID =  API_PATH + "line/{line_id}";
     public static final String USER_LINE_COUNT=  API_PATH + "lines/count";
     public static final String USER_GE0_LINES =  API_PATH + "lines/geo";
+    public static final String TOTAL_LINE_REVENUE =  API_PATH + "lines/{line_id}/total_revenue";
+    public static final String CLIENT_COUNT=  API_PATH + "lines/{line_id}/num_clients";
+    public static final String LINE_CLIENTS=  API_PATH + "lines/{line_id}/clients";
 
     public static final String REVENUES = API_PATH + "revenue";
     public static final String UPDATE_REVENUE_WITH_ID = API_PATH + "revenue/{line_id}";
@@ -61,6 +64,14 @@ public class Constants {
     public static final String USER_SCHEDULE_COUNT = API_PATH + "users/me/schedules_count";
     public static final String USER_GE0_SCHEDULE = API_PATH + "users/me/schedules/geo";
     public static final String USER_SCHEDULES_BY_DATE = API_PATH + "users/me/schedules/date";
+
+
+    public static final String UPDATE_GOAL_WITH_ID = API_PATH + "goals/{goal_id}";
+    public static final String DELETE_GOAL_WITH_ID = API_PATH + "goals/{goal_id}";
+    public static final String GOALS = API_PATH + "goals";
+    public static final String USER_GOAL = API_PATH + "users/me/goals";
+    public static final String USER_GOALS_BY_DATE = API_PATH + "users/me/goals/date";
+
 
     public static final String GET_INDUSTRIES = API_PATH + "config/industries";
 
@@ -195,4 +206,7 @@ public class Constants {
             DIR_CACHE = new File("cache"), DIR_HTML_CACHE = new File("html"), DIR_DOWNLOADS = new File("downloads"), DIR_MEDIA = new File("media");
 
     public static final String CLIENT_LIST = "client_list";
+
+    public static String GOAL_DATA = "goal";
+    public static final String GOAL_lIST = "goals";
 }

@@ -1,7 +1,6 @@
 package com.tied.android.tiedapp.util;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -33,6 +32,7 @@ import com.tied.android.tiedapp.customs.MyStringAsyncTask;
 import com.tied.android.tiedapp.customs.model.DataModel;
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Distance;
+import com.tied.android.tiedapp.objects.Goal;
 import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects._Meta;
 import com.tied.android.tiedapp.objects.client.Client;
@@ -42,15 +42,13 @@ import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
+import com.tied.android.tiedapp.retrofits.services.GoalApi;
 import com.tied.android.tiedapp.retrofits.services.LineApi;
-
+import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.GeneralSelectObjectActivity;
-
-import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
-
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
-import com.tied.android.tiedapp.ui.fragments.DatePickerFragment;
+import com.tied.android.tiedapp.ui.dialogs.DatePickerFragment;
 import com.tied.android.tiedapp.ui.listeners.ListAdapterListener;
 
 import org.json.JSONArray;
@@ -366,7 +364,9 @@ public abstract class MyUtils {
 
     public static boolean isAuthFailed(JSONObject response) {
         try {
-            return !response.getBoolean("success");
+            if(response.getInt("status")!=400)
+                return !response.getBoolean("success");
+            else return false;
         } catch (Exception e) {
             return false;
         }
@@ -485,6 +485,61 @@ public abstract class MyUtils {
         Logger.write(message);
     }
 
+
+
+    public static void showLinesRelevantInfoDialog(final Activity context,String title, final Line line, final MyDialogClickListener okayClicked) {
+        // custom dialog
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.line_relevant_info_dialog);
+        //dialog.setTitle(title.toUpperCase());
+        //dialog.setFeatureDrawableAlpha(Backg);
+
+        final EditText websiteET, requestET,openingET;
+        final Spinner reorderSpinner;
+        websiteET=(EditText)dialog.findViewById(R.id.website);
+        requestET=(EditText)dialog.findViewById(R.id.special_request);
+        openingET=(EditText)dialog.findViewById(R.id.openings);
+        reorderSpinner=(Spinner)dialog.findViewById(R.id.reorders);
+
+        // set the custom dialog components - text, image and button
+        TextView text = (TextView) dialog.findViewById(R.id.txt_title);
+        text.setText(title.toUpperCase());
+
+        View.OnClickListener cancelClicked=new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        };
+
+        Button cancelButton = (Button) dialog.findViewById(R.id.cancel_button);
+        // if button is clicked, close the custom dialog
+        cancelButton.setOnClickListener(cancelClicked);
+        View.OnClickListener okayButClicked=new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String website = websiteET.getText().toString().trim();
+                String request = requestET.getText().toString().trim();
+                String opening = openingET.getText().toString().trim();
+                String reorder="";
+                if (reorderSpinner.getSelectedItem() != null) {
+                   reorder = reorderSpinner.getSelectedItem().toString().trim();
+                }
+                line.setRelevantInfo(website, request, opening, reorder);
+                okayClicked.onClick(line);
+                dialog.dismiss();
+            }
+        };
+
+        Button okButton = (Button) dialog.findViewById(R.id.ok_button);
+        // if button is clicked, close the custom dialog
+        okButton.setOnClickListener(okayButClicked);
+
+        dialog.show();
+    }
+
+
     public static void showAddressDialog(final Activity context, String title, final com.tied.android.tiedapp.objects.Location currentLocation, final MyDialogClickListener okayClicked) {
         // custom dialog
         final Dialog dialog = new Dialog(context);
@@ -554,10 +609,64 @@ public abstract class MyUtils {
 
                     final com.tied.android.tiedapp.objects.Location location = new com.tied.android.tiedapp.objects.Location(city, zip, state,  street);
                     location.setCountry("US");
-                    okayClicked.onClick(location);
-                    dialog.dismiss();
+                    MyUtils.getLatLon(location.getLocationAddress(), new HTTPConnection.AjaxCallback() {
+                        @Override
+                        public void run(int code, String response) {
+                            if(code!=200) {
+                                MyUtils.showToast("Could not validate address!");
+                            }else {
+                                location.setCoordinate(Coordinate.fromJSONString(response));
+                                okayClicked.onClick(location);
+                                dialog.dismiss();
+                            }
+                            //dialog.dismiss();
+                        }
+                    });
+
+
                 }
             };
+
+        Button okButton = (Button) dialog.findViewById(R.id.ok_button);
+        // if button is clicked, close the custom dialog
+        okButton.setOnClickListener(okayButClicked);
+
+        dialog.show();
+    }
+    public static void showEditTextDialog(final Activity context, String title, String initialValue, final MyDialogClickListener okayClicked) {
+        // custom dialog
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.edit_text_dialog);
+        //dialog.setTitle(title.toUpperCase());
+        //dialog.setFeatureDrawableAlpha(Backg);
+
+        final EditText textET=(EditText)dialog.findViewById(R.id.text_et);
+
+
+        // set the custom dialog components - text, image and button
+        TextView text = (TextView) dialog.findViewById(R.id.txt_title);
+        text.setText(title.toUpperCase());
+
+        View.OnClickListener cancelClicked=new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        };
+
+
+
+        Button cancelButton = (Button) dialog.findViewById(R.id.cancel_button);
+        // if button is clicked, close the custom dialog
+        cancelButton.setOnClickListener(cancelClicked);
+        View.OnClickListener okayButClicked=new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                okayClicked.onClick(textET.getText().toString());
+                dialog.dismiss();
+            }
+        };
 
         Button okButton = (Button) dialog.findViewById(R.id.ok_button);
         // if button is clicked, close the custom dialog
@@ -629,7 +738,12 @@ public abstract class MyUtils {
                     if(meta !=null && meta.getStatus_code() == 200) {
                         ArrayList lines = (ArrayList) response.getDataAsList(Constants.LINES_lIST, Line.class);
                         if(lines.size() > 0){
-                            MainApplication.linesList = lines;
+                            if(MainApplication.linesList!=null) {
+                                MainApplication.linesList.clear();
+                                MainApplication.linesList.addAll(lines);
+                            }else {
+                                MainApplication.linesList=lines;
+                            }
                             if (listAdapterListener != null){
                                 listAdapterListener.listInit(lines);
                             }
@@ -654,6 +768,52 @@ public abstract class MyUtils {
             }
         });
     }
+
+
+    public static void initGoals(final Context context, User user, final ListAdapterListener listAdapterListener){
+        final GoalApi goalApi =  MainApplication.createService(GoalApi.class, user.getToken());
+        Call<ResponseBody> response = goalApi.getUserGoals();
+        response.enqueue(new retrofit2.Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
+                try {
+                    GeneralResponse response = new GeneralResponse(resResponse.body());
+                    if (response.isAuthFailed()) {
+                        User.LogOut(context);
+                        return;
+                    }
+                    _Meta meta=response.getMeta();
+                    if(meta !=null && meta.getStatus_code() == 200) {
+                        ArrayList goals = (ArrayList) response.getDataAsList(Constants.GOAL_lIST, Goal.class);
+                        if(goals.size() > 0){
+                            MainApplication.goals = goals;
+                            if (listAdapterListener != null){
+                                listAdapterListener.listInit(goals);
+                            }
+                        }
+                    }else{
+                        MyUtils.showToast("Error encountered");
+                        DialogUtils.closeProgress();
+                    }
+
+                }catch (IOException ioe) {
+                    Logger.write(ioe);
+                }
+                catch (Exception jo) {
+                    Logger.write(jo);
+                }
+                DialogUtils.closeProgress();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d(" onFailure", t.toString());
+            }
+        });
+    }
+
+
+
 
     public static void initSchedules(final Context context, User user, final ListAdapterListener listAdapterListener){
         final ScheduleApi scheduleApi =  MainApplication.createService(ScheduleApi.class, user.getToken());
