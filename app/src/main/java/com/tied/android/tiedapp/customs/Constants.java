@@ -11,9 +11,9 @@ public class Constants {
     public static final String TAG = Constants.class
             .getSimpleName();
 
-    public static final String SERVER_URL = "http://tied.goattale.com:8101/api/v1/";
+    public static final String SERVER_URL = "http://tied.goattale.com:8100/api/v1/";
 
-    public static final String HOST = "http://tied.goattale.com:8101/";
+    public static final String HOST = "http://tied.goattale.com:8100/";
 //    public static final String HOST = "https://tied-api.herokuapp.com/";
 
     public static final int PORT = 3000;
@@ -47,7 +47,7 @@ public class Constants {
     public static final String USER_GE0_LINES =  API_PATH + "lines/geo";
     public static final String TOTAL_LINE_REVENUE =  API_PATH + "lines/{line_id}/total_revenue";
     public static final String CLIENT_COUNT=  API_PATH + "lines/{line_id}/num_clients";
-    public static final String LINE_CLIENTS=  API_PATH + "lines/{line_id}/clients";
+    public static final String LINE_CLIENTS=  API_PATH + "lines/{line_id}/clients/{page_number}";
 
     public static final String REVENUES = API_PATH + "revenue";
     public static final String UPDATE_REVENUE_WITH_ID = API_PATH + "revenue/{line_id}";

@@ -498,10 +498,15 @@ public abstract class MyUtils {
         final EditText websiteET, requestET,openingET;
         final Spinner reorderSpinner;
         websiteET=(EditText)dialog.findViewById(R.id.website);
+        websiteET.setText(line.getWebsite()==null?"":line.getWebsite());
 
         requestET=(EditText)dialog.findViewById(R.id.special_request);
+        requestET.setText(line.getRequest()==null?"":line.getRequest());
+
         openingET=(EditText)dialog.findViewById(R.id.openings);
+        openingET.setText(line.getOpening()==null?"":line.getOpening());
         reorderSpinner=(Spinner)dialog.findViewById(R.id.reorders);
+
 
         // set the custom dialog components - text, image and button
         TextView text = (TextView) dialog.findViewById(R.id.txt_title);

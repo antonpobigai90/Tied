@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Profile"
+            android:text="Line / Clients"
             android:textColor="@color/white"
             android:textSize="18sp" />
 
@@ -33,7 +33,7 @@
                 android:layout_height="25dp"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
-                android:src="@mipmap/btn_back_arrow" />
+                android:src="@drawable/btn_back_arrow" />
 
             <TextView
                 android:id="@+id/txt_back"
@@ -54,7 +54,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
-            android:src="@mipmap/icon_edit" />
+            android:visibility="gone"
+            android:src="@drawable/icon_edit" />
 
     </RelativeLayout>
 
@@ -100,6 +101,7 @@
             android:background="@color/white" />
 
         <LinearLayout
+                android:visibility="gone"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@color/schedule_create_appointment_bg_color"

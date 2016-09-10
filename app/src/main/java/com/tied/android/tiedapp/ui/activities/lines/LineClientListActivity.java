@@ -12,6 +12,7 @@ import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Coordinate;
+import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.client.ClientLocation;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
@@ -20,6 +21,7 @@ import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.adapters.LineClientAdapter;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import java.util.ArrayList;
@@ -28,12 +30,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LineClientList extends AppCompatActivity implements View.OnClickListener {
+public class LineClientListActivity extends AppCompatActivity implements View.OnClickListener {
 
-    public static final String TAG = LineClientList.class
+    public static final String TAG = LineClientListActivity.class
             .getSimpleName();
     private User user;
     private Bundle bundle;
+    Line line;
 
     LinearLayout back_layout;
     protected ListView listView;
@@ -47,7 +50,8 @@ public class LineClientList extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_line_client_list);
 
         user = MyUtils.getUserLoggedIn();
-
+        bundle = getIntent().getExtras();
+        line = (Line) bundle.getSerializable(Constants.LINE_DATA);
         back_layout = (LinearLayout) findViewById(R.id.back_layout);
 
         if (back_layout != null) {
@@ -75,33 +79,40 @@ public class LineClientList extends AppCompatActivity implements View.OnClickLis
         clientLocation.setCoordinate(coordinate);
 
         final ClientApi clientApi = MainApplication.createService(ClientApi.class, user.getToken());
-        Call<ClientRes> response = clientApi.getClientsByLocation(clientLocation);
+        Call<ClientRes> response = clientApi.getLineClients(user.getToken(), line.getId(), 0, clientLocation);
         response.enqueue(new Callback<ClientRes>() {
             @Override
             public void onResponse(Call<ClientRes> call, Response<ClientRes> resResponse) {
                 if (this == null) return;
                 DialogUtils.closeProgress();
-                ClientRes clientRes = resResponse.body();
-                if (clientRes.isAuthFailed()) {
-                    User.LogOut(LineClientList.this);
-                } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200) {
-                    ArrayList<Client> clients = clientRes.getClients();
-                    Log.d(TAG + "", clients.toString());
-                    if (clients.size() > 0) {
-                        initFormattedClient(clients);
+                try {
+                    ClientRes clientRes = resResponse.body();
+                    Logger.write(clientRes.toString());
+                    if (clientRes.isAuthFailed()) {
+                       // User.LogOut(LineClientListActivity.this);
+                        Logger.write(clientRes.toString());
+                    } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200) {
+                        ArrayList<Client> clients = clientRes.getClients();
+                        Log.d(TAG + "", clients.toString());
+                        if (clients.size() > 0) {
+                            initFormattedClient(clients);
+                        } else {
+                            bundle.putBoolean(Constants.NO_CLIENT_FOUND, true);
+                           // MyUtils.startActivity(LineClientListActivity.this, MainActivity.class, bundle);
+                        }
                     } else {
-                        bundle.putBoolean(Constants.NO_CLIENT_FOUND, true);
-                        MyUtils.startActivity(LineClientList.this, MainActivity.class, bundle);
+                        Logger.write(clientRes.getMessage());
                     }
-                } else {
-                    Toast.makeText(LineClientList.this, clientRes.getMessage(), Toast.LENGTH_LONG).show();
+                    Log.d(TAG + " onResponse", resResponse.body().toString());
+                }catch (Exception e) {
+Logger.write(e);
                 }
-                Log.d(TAG + " onResponse", resResponse.body().toString());
             }
 
             @Override
             public void onFailure(Call<ClientRes> call, Throwable t) {
-                Log.d(TAG + " onFailure", t.toString());
+                Logger.write(TAG + " onFailure", t.toString());
+                MyUtils.showConnectionErrorToast(LineClientListActivity.this);
                 DialogUtils.closeProgress();
             }
         });

@@ -40,11 +40,17 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
     private Line line;
     Location location;
     View nameEditor, descriptionEditor;
+    private static ViewLineActivity viewLineActivity;
+
+    public static ViewLineActivity getInstance() {
+        return viewLineActivity;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_line_view);
+        viewLineActivity=this;
 
         bundle = getIntent().getExtras();
         line = (Line) bundle.getSerializable(Constants.LINE_DATA);
@@ -71,10 +77,13 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
                     }else{
                         MyUtils.showToast("Error encountered");
                         DialogUtils.closeProgress();
+                        finish();
                     }
 
                 }catch (Exception ioe) {
+                    DialogUtils.closeProgress();
                     Logger.write(ioe);
+                    finish();
                 }
 
                 DialogUtils.closeProgress();
@@ -84,6 +93,7 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
                 Logger.write("Request failed: "+t.getCause());
                 MyUtils.showConnectionErrorToast(ViewLineActivity.this);
                 DialogUtils.closeProgress();
+                finish();
             }
         });
 
@@ -137,7 +147,7 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
                 MyUtils.startActivity(this, LineRevenueActivity.class, bundle);
                 break;
             case R.id.clients_layout:
-                MyUtils.startActivity(this, LineClientList.class);
+                MyUtils.startActivity(this, LineClientListActivity.class, bundle);
                 break;
             case R.id.info_layout:
                 MyUtils.showLinesRelevantInfoDialog(this,"Relevant Information", line, new MyUtils.MyDialogClickListener() {

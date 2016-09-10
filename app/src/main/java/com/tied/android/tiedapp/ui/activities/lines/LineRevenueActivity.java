@@ -188,6 +188,16 @@ public class LineRevenueActivity  extends AppCompatActivity implements  View.OnC
 
     public void goBack(View v) {
         onBackPressed();
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(ViewLineActivity.getInstance()!=null) {
+            ViewLineActivity.getInstance().setLineNumClients();
+            ViewLineActivity.getInstance().setLineTotalRevenue();
+        }
+        super.onBackPressed();
     }
 
     @Override
