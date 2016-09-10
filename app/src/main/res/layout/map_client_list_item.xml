@@ -41,7 +41,7 @@
             android:id="@+id/layout_center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/layout_pic"
             android:layout_toLeftOf="@+id/layout_right"
             android:orientation="vertical"
