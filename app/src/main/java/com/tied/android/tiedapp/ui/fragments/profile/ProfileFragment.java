@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
@@ -39,6 +40,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
 
     private Button btnNotifications, btnEditPersonalInfo, btnChangePassword, btnIndustries, btnPrivacy;
+
+    private RelativeLayout rlIndustries;
 
     public FragmentIterationListener mListener;
     /**
