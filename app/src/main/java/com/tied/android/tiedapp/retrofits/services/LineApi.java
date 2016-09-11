@@ -56,6 +56,11 @@ public interface LineApi {
     @GET(Constants.TOTAL_LINE_REVENUE)
     Call<ResponseBody> getLineTotalRevenue(@Header(Constants.TOKEN_HEADER) String token,
                                            @Path("line_id")  String line_id);
+    @GET(Constants.LINE_GOALS)
+    Call<ResponseBody> getLineGoals(@Header(Constants.TOKEN_HEADER) String token, @Path("line_id") String line_id,
+                                    @Path("page_num") int page_num);
+    @GET(Constants.NUM_LINE_GOALS)
+    Call<ResponseBody> getNumLineGoals(@Header(Constants.TOKEN_HEADER) String token, @Path("line_id") String line_id);
 
     @POST(Constants.USER_GE0_LINES)
     Call<ClientRes> getLineByLocation(@Header(Constants.TOKEN_HEADER) String token, @Body ClientLocation clientLocation);

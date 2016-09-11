@@ -58,6 +58,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import okhttp3.ResponseBody;
@@ -1015,6 +1016,13 @@ public abstract class MyUtils {
         Calendar c= Calendar.getInstance();
         c.setTime(date);
         return toNth(c.get(Calendar.DAY_OF_MONTH))+" "+ DatePickerFragment.MONTHS_LIST[c.get(Calendar.MONTH)+1]+", "+c.get(Calendar.YEAR);
+    }
+
+    public static Date parseDate(String pattern, String date) throws Exception {
+        return new SimpleDateFormat(pattern).parse(date);
+    }
+    public static Date parseDate( String date) throws Exception {
+        return new SimpleDateFormat("yy-mm-dd").parse(date);
     }
 
 }

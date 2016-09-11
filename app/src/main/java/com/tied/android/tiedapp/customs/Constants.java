@@ -13,7 +13,8 @@ public class Constants {
 
     public static final String SERVER_URL = "http://tied.goattale.com:8100/api/v1/";
 
-    public static final String HOST = "http://tied.goattale.com:8100/";
+      public static final String HOST = "http://tied.goattale.com:8100/";
+
 //    public static final String HOST = "https://tied-api.herokuapp.com/";
 
     public static final int PORT = 3000;
@@ -70,7 +71,9 @@ public class Constants {
     public static final String DELETE_GOAL_WITH_ID = API_PATH + "goals/{goal_id}";
     public static final String GOALS = API_PATH + "goals";
     public static final String USER_GOAL = API_PATH + "users/me/goals";
+    public static final String LINE_GOALS = API_PATH + "lines/{line_id}/goals/{status}/{page_num}";
     public static final String USER_GOALS_BY_DATE = API_PATH + "users/me/goals/date";
+    public static final String NUM_LINE_GOALS = API_PATH + "lines/{line_id}/num_goals";
 
 
     public static final String GET_INDUSTRIES = API_PATH + "config/industries";
@@ -133,6 +136,7 @@ public class Constants {
     public static final int CoWorkerCount = 18;
     public static final int AddOptions = 19;
     public static final int CoWorker = 20;
+    public static final int GOAL_REQUEST =2300;
 
     public static final int Completed = 25;
 
@@ -160,6 +164,10 @@ public class Constants {
     public static final int ProfileAddress = 102;
     public static final int Notification = 103;
     public static final int ChangePassword=104;
+    public static final int PRIVACY=105;
+    public static final int PRIVACY_SALES=106;
+
+
 
 
 

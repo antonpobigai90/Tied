@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -34,25 +35,28 @@ import retrofit2.Response;
 /**
  * Created by Emmanuel on 6/22/2016.
  */
-public class EditProfileFragment extends Fragment implements View.OnClickListener{
+public class EditProfileFragment extends Fragment implements View.OnClickListener {
 
     public static final String TAG = EditProfileFragment.class
             .getSimpleName();
 
     private EditText first_name, last_name, email, fax, company_name;
     private String firstNameText, lastNameText, emailText, faxText, companyNameText, homeAddressText, officeAddressText;
-    TextView change;
 
-    private ImageView confirm_edit, img_close, add_industry;
+    private ImageView add_industry;
     private Bundle bundle;
     private User user;
 
-    private TextView office_address_text, home_address_text, industry_list;
+    private TextView office_address_text, home_address_text;
 
     private LinearLayout home_address, office_address;
     public FragmentIterationListener mListener;
-    public static Fragment newInstance (Bundle bundle) {
-        Fragment fragment=new EditProfileFragment();
+
+    private Button btnSaveChange, btnBack;
+    private TextView tvTitle,tvChange;
+
+    public static Fragment newInstance(Bundle bundle) {
+        Fragment fragment = new EditProfileFragment();
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -96,8 +100,6 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         fax = (EditText) view.findViewById(R.id.fax);
         company_name = (EditText) view.findViewById(R.id.company_name);
 
-        industry_list = (TextView) view.findViewById(R.id.industry_list);
-
         home_address = (LinearLayout) view.findViewById(R.id.home_address);
         home_address_text = (TextView) view.findViewById(R.id.home_address_text);
 
@@ -105,16 +107,21 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         office_address_text = (TextView) view.findViewById(R.id.office_address_text);
 
         add_industry = (ImageView) view.findViewById(R.id.add_industry);
-        change = (TextView) view.findViewById(R.id.change);
-        change.setOnClickListener(this);
-        add_industry.setOnClickListener(this);
-        office_address.setOnClickListener(this);
-        home_address.setOnClickListener(this);
+//        add_industry.setOnClickListener(this);
+    //    office_address.setOnClickListener(this);
+      //  home_address.setOnClickListener(this);
 
-        confirm_edit = (ImageView) view.findViewById(R.id.confirm_edit);
-        img_close = (ImageView) view.findViewById(R.id.img_close);
-        confirm_edit.setOnClickListener(this);
-        img_close.setOnClickListener(this);
+        btnSaveChange = (Button) view.findViewById(R.id.btnSaveChange);
+        btnSaveChange.setOnClickListener(this);
+
+        btnBack = (Button) view.findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(this);
+
+        tvTitle = (TextView) view.findViewById(R.id.tvTitle);
+        tvTitle.setText(getResources().getString(R.string.profile_edit));
+
+        tvChange=(TextView)view.findViewById(R.id.tvChange);
+        tvChange.setOnClickListener(this);
 
         bundle = getArguments();
         if (bundle != null) {
@@ -128,18 +135,18 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
             fax.setText(user.getFax());
             company_name.setText(user.getCompany_name());
 
-            if(user.getOffice_address() != null){
+            if (user.getOffice_address() != null) {
                 office_address_text.setText(user.getOffice_address().getLocationAddress());
             }
 
-            if(user.getHome_address() != null){
+            if (user.getHome_address() != null) {
                 home_address_text.setText(user.getHome_address().getLocationAddress());
             }
-
-            if(user.getIndustries() != null && user.getIndustries().size() > 0){
-                String indust =  StringUtils.join( user.getIndustries().toArray(), ", ");
+/*
+            if (user.getIndustries() != null && user.getIndustries().size() > 0) {
+                String indust = StringUtils.join(user.getIndustries().toArray(), ", ");
                 industry_list.setText(indust);
-            }
+            }*/
         }
     }
 
@@ -154,14 +161,14 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         }
     }
 
-    public void nextAction(int action,Bundle bundle) {
+    public void nextAction(int action, Bundle bundle) {
         if (mListener != null) {
             mListener.OnFragmentInteractionListener(action, bundle);
         }
     }
 
-    private void confirmEdit(){
-        if(validate()){
+    private void confirmEdit() {
+        if (validate()) {
             DialogUtils.displayProgress(getActivity());
 
             user.setFirst_name(firstNameText);
@@ -177,11 +184,10 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                     if (getActivity() == null) return;
                     ServerRes ServerRes = ServerResponseResponse.body();
                     Log.d(TAG + " onFailure", ServerResponseResponse.body().toString());
-                    if (ServerRes.isAuthFailed()){
+                    if (ServerRes.isAuthFailed()) {
                         DialogUtils.closeProgress();
                         User.LogOut(getActivity());
-                    }
-                    else if (ServerRes.isSuccess()) {
+                    } else if (ServerRes.isSuccess()) {
                         boolean saved = user.save(getActivity().getApplicationContext());
                         if (saved) {
                             Gson gson = new Gson();
@@ -209,7 +215,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         }
     }
 
-    public boolean validate(){
+    public boolean validate() {
         firstNameText = first_name.getText().toString();
         lastNameText = last_name.getText().toString();
         emailText = email.getText().toString();
@@ -221,23 +227,20 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.confirm_edit:
+        switch (v.getId()) {
+            case R.id.btnSaveChange:
                 confirmEdit();
                 break;
-            case R.id.img_close:
-                nextAction(Constants.Profile,bundle);
+            case R.id.btnBack:
+                nextAction(Constants.Profile, bundle);
                 break;
-            case R.id.home_address:
+            case R.id.tvChange:
                 nextAction(Constants.ProfileAddress, bundle);
                 break;
-            case R.id.office_address:
-                nextAction(Constants.ProfileAddress, bundle);
-                break;
-            case R.id.change:
+/*            case R.id.change:
                 PasswordDialog alert = new PasswordDialog();
                 alert.showDialog(getActivity(), user);
-                break;
+                break;*/
             case R.id.add_industry:
                 bundle.putBoolean(Constants.EditingProfile, true);
                 nextAction(Constants.Industry, bundle);

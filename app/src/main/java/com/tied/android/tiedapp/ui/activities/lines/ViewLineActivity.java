@@ -36,7 +36,7 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
     LinearLayout back_layout;
     RelativeLayout clients_layout, goals_layout;
 
-    private TextView name, description, totalRevenueHeaderTV, totalRevenueBodyTV, addressTV, numClients;
+    private TextView name, description, totalRevenueHeaderTV, totalRevenueBodyTV, addressTV, numClients, numGoalsTV;
     private Line line;
     Location location;
     View nameEditor, descriptionEditor;
@@ -58,7 +58,7 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
 
 
 
-        LineApi lineApi = MainApplication.createService(LineApi.class, user.getToken());
+        final LineApi lineApi = MainApplication.createService(LineApi.class, user.getToken());
         DialogUtils.displayProgress(this);
         final Call<ResponseBody> response = lineApi.getLineWithId(line.getId(), line.getId());
 
@@ -73,6 +73,7 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
                         Line the_line = response.getData("lines", Line.class);
                         Logger.write("Request failedsdddddddddddddd: "+the_line.toString());
                         ViewLineActivity.this.line=the_line;
+                        bundle.putSerializable(Constants.LINE_DATA, line);
                         initComponent(line);
                     }else{
                         MyUtils.showToast("Error encountered");
@@ -99,7 +100,7 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
 
 
        // setLineTotalRevenue();
-        //setLineNumClients();
+
     }
 
     private void initComponent(Line line) {
@@ -123,6 +124,7 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
         totalRevenueBodyTV.setText(""+MyUtils.moneyFormat(line.getTotal_revenue()));
 
         numClients=(TextView) findViewById(R.id.num_clients);
+        numGoalsTV = (TextView) findViewById(R.id.num_goals);
 
         addressTV=(TextView) findViewById(R.id.ship_from);
         location=line.getAddress();
@@ -134,6 +136,9 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
         nameEditor.setOnClickListener(this);
         descriptionEditor = findViewById(R.id.description_editor);
         descriptionEditor.setOnClickListener(this);
+
+        setLineNumClients();
+        setLineNumGoals();
 
     }
 
@@ -317,6 +322,53 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
                         line.setNum_clients(response.getData("line", Line.class).getNum_clients());
                         Logger.write("num clientsss "+line.getNum_clients());
                         numClients.setText(""+line.getNum_clients());
+
+
+                    } else {
+                        // MyUtils.showToast(getString(R.string.connection_error));
+                    }
+                }catch (Exception e) {
+                    // MyUtils.showConnectionErrorToast(LineRevenueActivity.this);
+                    //Logger.write(e);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                //Log.d(TAG + " onFailure", t.toString());
+                Logger.write(t.getMessage());
+                MyUtils.showConnectionErrorToast(ViewLineActivity.this);
+                DialogUtils.closeProgress();
+            }
+        });
+    }
+
+    public void setLineNumGoals() {
+        LineApi lineApi = MainApplication.getInstance().getRetrofit().create(LineApi.class);
+        final Call<ResponseBody> response2 = lineApi.getNumLineGoals(user.getToken(), line.getId());
+        response2.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
+                if (this == null) return;
+                DialogUtils.closeProgress();
+                try {
+
+                    //  JSONObject response = new JSONObject(resResponse.body().string());
+                    GeneralResponse response=new GeneralResponse(resResponse.body());
+                    Logger.write("RESPONSSSSSSSSSSSSSSSSSSSS "+response.toString());
+
+                    if (response != null && response.isAuthFailed()) {
+                        User.LogOut(ViewLineActivity.this);
+                        return;
+                    }
+
+                    _Meta meta=response.getMeta();
+                    if(meta !=null && meta.getStatus_code()==200) {
+                        // revenueList.addAll(response.getDataAsList("revenues", Revenue.class));
+                        // adapter.notifyDataSetChanged();
+                        line.setNum_goals(response.getData("line", Line.class).getNum_goals());
+                        Logger.write("num clientsss "+line.getNum_goals());
+                        numGoalsTV.setText(""+line.getNum_goals());
 
 
                     } else {

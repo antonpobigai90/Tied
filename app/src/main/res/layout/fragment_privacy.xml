@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/row_header_layout"></include>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ababab"
+                android:drawableLeft="@drawable/ic_message"
+                android:drawablePadding="20dp"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:padding="20dp"
+                android:text="@string/control_who_sees_your_activities"
+                android:textSize="20sp" />
+
+            <RelativeLayout
+                android:id="@+id/rlSales"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp">
+
+                <Button
+                    android:id="@+id/btnSales"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:background="@android:color/transparent"
+                    android:gravity="left|center_vertical"
+                    android:padding="0dp"
+                    android:text="@string/sales"
+                    android:textAllCaps="false"
+                    android:textColor="@color/grey" />
+
+                <TextView
+                    android:id="@+id/tvSales"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@+id/ivArrow"
+                    android:drawableLeft="@drawable/ic_time_grey"
+                    android:drawablePadding="5dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/privates"
+                    android:textColor="@color/light_gray2" />
+
+                <ImageView
+                    android:id="@+id/ivArrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_arrow_gray" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#ababab"></View>
+
+            <RelativeLayout
+                android:id="@+id/rlGoals"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp">
+
+                <Button
+                    android:id="@+id/btnGoals"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:background="@android:color/transparent"
+                    android:gravity="left|center_vertical"
+                    android:padding="0dp"
+                    android:text="@string/goals"
+                    android:textAllCaps="false"
+                    android:textColor="@color/grey" />
+
+                <Switch
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:text="@string/all_co_workers_can_see" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#ababab"></View>
+
+            <RelativeLayout
+                android:id="@+id/rlDailyActivities"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp">
+
+                <Button
+                    android:id="@+id/btnDailyActivities"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:background="@android:color/transparent"
+                    android:gravity="left|center_vertical"
+                    android:padding="0dp"
+                    android:text="@string/daily_activities"
+                    android:textAllCaps="false"
+                    android:textColor="@color/grey" />
+
+                <TextView
+                    android:id="@+id/tvDailyActivities"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@+id/ivDailyActivities"
+                    android:gravity="center_vertical"
+                    android:text="@string/tmp_share_text"
+                    android:textColor="@color/light_gray2" />
+
+                <ImageView
+                    android:id="@+id/ivDailyActivities"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_arrow_gray" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#ababab"></View>
+
+            <RelativeLayout
+                android:id="@+id/rlClients"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp">
+
+                <Button
+                    android:id="@+id/btnClients"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:background="@android:color/transparent"
+                    android:gravity="left|center_vertical"
+                    android:padding="0dp"
+                    android:text="@string/clients"
+                    android:textAllCaps="false"
+                    android:textColor="@color/grey" />
+
+                <TextView
+                    android:id="@+id/tvClients"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@+id/ivClients"
+                    android:gravity="center_vertical"
+                    android:text="@string/tmp_share_text"
+                    android:textColor="@color/light_gray2" />
+
+                <ImageView
+                    android:id="@+id/ivClients"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_arrow_gray" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#ababab"></View>
+
+            <RelativeLayout
+                android:id="@+id/rlTeritorry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp">
+
+                <Button
+                    android:id="@+id/btnTeritorry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:background="@android:color/transparent"
+                    android:gravity="left|center_vertical"
+                    android:padding="0dp"
+                    android:text="@string/territory"
+                    android:textAllCaps="false"
+                    android:textColor="@color/grey" />
+
+                <TextView
+                    android:id="@+id/tvTeritorry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@+id/ivTeritorry"
+                    android:drawableLeft="@drawable/ic_time_grey"
+                    android:drawablePadding="5dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/privates"
+                    android:textColor="@color/light_gray2" />
+
+                <ImageView
+                    android:id="@+id/ivTeritorry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_arrow_gray" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#ababab"></View>
+
+            <RelativeLayout
+                android:id="@+id/rlLine"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp">
+
+                <Button
+                    android:id="@+id/btnLine"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:background="@android:color/transparent"
+                    android:gravity="left|center_vertical"
+                    android:padding="0dp"
+                    android:text="@string/line"
+                    android:textAllCaps="false"
+                    android:textColor="@color/grey" />
+
+                <TextView
+                    android:id="@+id/tvLine"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@+id/ivLine"
+                    android:drawableLeft="@drawable/ic_time_grey"
+                    android:drawablePadding="5dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/privates"
+                    android:textColor="@color/light_gray2" />
+
+                <ImageView
+                    android:id="@+id/ivLine"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_arrow_gray" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#ababab"></View>
+
+            <RelativeLayout
+                android:id="@+id/rlIndustry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="20dp">
+
+                <Button
+                    android:id="@+id/btnIndustry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:background="@android:color/transparent"
+                    android:gravity="left|center_vertical"
+                    android:padding="0dp"
+                    android:text="@string/industry"
+                    android:textAllCaps="false"
+                    android:textColor="@color/grey" />
+
+                <TextView
+                    android:id="@+id/tvIndustry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_toLeftOf="@+id/ivIndustry"
+                    android:drawableLeft="@drawable/ic_time_grey"
+                    android:drawablePadding="5dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/privates"
+                    android:textColor="@color/light_gray2" />
+
+                <ImageView
+                    android:id="@+id/ivIndustry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_arrow_gray" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#ababab"></View>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

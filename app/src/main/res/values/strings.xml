@@ -6,6 +6,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="map_api_key">AIzaSyDVusiCotzBPLpJMQ9FFWl7JvlWO4_A49s</string>
+    <string name="mapbox_access_token">pk.eyJ1IjoiZmVtaW5lZmEiLCJhIjoiY2lzeGFqYTN2MDhsbDJ5cGdvbnBndm8yYiJ9.F8ogZn8CTWTl-p5btlTBoQ</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="Logout">Logout</string>
 
@@ -197,6 +198,7 @@
 
     <!--fragment_industry starts here-->
     <string name="type_name_to_add_industry">TYPE NAME TO ADD NEW INDUSTRY</string>
+    <string name="done">Done</string>
     <!--fragment_industry starts here-->
 
     <!--fragment_change_address starts here-->
@@ -206,6 +208,39 @@
     <string name="city">City</string>
     <string name="home">HOME</string>
     <!--fragment_change_address starts here-->
+
+    <!--row_header_layout starts here-->
+    <string name="back">Back</string>
+    <!--row_header_layout ends here-->
+
+    <!--fragment_profile_edit starts here-->
+    <string name="phone_number">Phone Number</string>
+    <string name="change">CHANGE</string>
+    <!--fragment_profile_edit ends here-->
+
+    <!--fragment_change_password starts here-->
+    <string name="address">Address</string>
+    <!--fragment_change_password ends here-->
+
+    <!--fragment_privacy starts here-->
+    <string name="sales">Sales</string>
+    <string name="goals">Goals</string>
+    <string name="daily_activities">Daily Activities</string>
+    <string name="clients">Clients</string>
+    <string name="territory">Territory</string>
+    <string name="line">Line</string>
+    <string name="industry">Industry</string>
+    <string name="privates">Private</string>
+    <string name="all_co_workers_can_see">all co-workers can see</string>
+    <string name="tmp_share_text">shared with 5 co-workers</string>
+    <string name="control_who_sees_your_activities">Control who sees your activities, sales, goals, client, territories...</string>
+    <!--fragment_privacy ends here-->
+
+    <!--fragment_subscription starts here-->
+    <string name="why_go_premium">Why Go Premium?</string>
+    <string name="go_premium">GO PREMIUM</string>
+    <string name="managing_subscription_text">Managing and keeping track of your progress with your clients is about to get better</string>
+    <!--fragment_subscription ends here-->
 
 
 

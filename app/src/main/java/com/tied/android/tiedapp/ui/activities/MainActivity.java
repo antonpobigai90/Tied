@@ -28,6 +28,8 @@ import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.services.LocationService;
 import com.tied.android.tiedapp.ui.activities.client.ClientMapAndListActivity;
+import com.tied.android.tiedapp.ui.activities.coworker.CoWorkerActivity;
+import com.tied.android.tiedapp.ui.activities.lines.LineGoalActivity;
 import com.tied.android.tiedapp.ui.fragments.DailyStatsFragment;
 import com.tied.android.tiedapp.ui.fragments.activities.ActivityFragment;
 import com.tied.android.tiedapp.ui.fragments.client.ClientAddFragment;
@@ -164,8 +166,6 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
 
         Gson gson = new Gson();
         String user_json = gson.toJson(user);
-
-        Logger.write("hhhhhhaaaaaaaaaaaaaaaaaaaaaaa");
 
         bundle.putString(Constants.USER_DATA, user_json);
         if ((new Date().getTime() - MyUtils.getLastTimeAppRan()) > 24*60*60*1000) {
@@ -403,8 +403,8 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
             case R.id.lines_menu:
                 MyUtils.startActivity(MainActivity.this, LinesAndTerritories.class,bundle);
                 break;
-            case R.id.goal_menu:
-
+            case R.id.coworker_menu:
+                MyUtils.startActivity(MainActivity.this, CoWorkerActivity.class,bundle);
                 break;
             case R.id.client_menu:
                 bundle.putBoolean(Constants.CLIENT_LIST, true);
@@ -425,6 +425,9 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
             case R.id.map:
                 bundle.putBoolean(Constants.CLIENT_LIST, false);
                 MyUtils.startActivity(this, ClientMapAndListActivity.class, bundle);
+                break;
+            case R.id.goal_menu:
+                MyUtils.startActivity(this, LineGoalActivity.class);
                 break;
         }
     }

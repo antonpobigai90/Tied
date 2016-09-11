@@ -1,6 +1,7 @@
 buildscript {
     repositories {
         maven { url 'https://maven.fabric.io/public' }
+
     }
 
     dependencies {
@@ -13,21 +14,27 @@ apply plugin: 'io.fabric'
 repositories {
     maven { url "https://jitpack.io" }
     maven { url 'https://maven.fabric.io/public' }
+    maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
 }
-
+ext {
+    supportLibVersion = '24.2.0'
+}
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion 24
+    buildToolsVersion "24.0.1"
 
     defaultConfig {
         applicationId "com.tied.android.tiedapp"
         minSdkVersion 19
-        targetSdkVersion 23
+        targetSdkVersion 24
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
     }
-
+    dexOptions {
+        incremental true
+        javaMaxHeapSize "4g"
+    }
     signingConfigs {
         release {
             storeFile file("Tied.jks")
@@ -78,7 +85,7 @@ dependencies {
     }
     compile files('libs/org-apache-commons-lang.jar')
     compile 'com.google.android.gms:play-services-gcm:9.4.0'
-    compile 'com.android.support:recyclerview-v7:23.4.0'
+    compile 'com.android.support:recyclerview-v7:${supportLibVersion}'
     compile 'me.relex:circleindicator:1.2.1@aar'
     compile 'com.facebook.android:facebook-android-sdk:4.+'
     compile 'com.google.android.gms:play-services-auth:9.4.0'
@@ -88,11 +95,19 @@ dependencies {
     compile 'com.squareup.retrofit2:retrofit:2.0.2'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
-    compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.android.support:support-v4:${supportLibVersion}'
     compile 'com.github.moondroid.coverflow:library:1.0'
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.github.johnhiott:DarkSkyApi:v0.1.4'
     compile 'com.github.tittojose:timerangepicker-library:0.2'
     compile 'com.google.android.gms:play-services-maps:9.4.0'
+    compile "com.android.support:appcompat-v7:${supportLibVersion}"
+    compile ('com.mapbox.mapboxsdk:mapbox-android-sdk:4.2.0-beta.1@aar'){
+        transitive=true
+    }
+    compile('com.mapbox.mapboxsdk:mapbox-android-services:2.0.0-SNAPSHOT@aar') {
+        transitive = true
+    }
+
 }

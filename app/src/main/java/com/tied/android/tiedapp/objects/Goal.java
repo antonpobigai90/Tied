@@ -7,13 +7,14 @@ import java.io.Serializable;
  */
 public class Goal implements Serializable {
 
-
+    public static final String SALES_TYPE="sales", VISIT_TYPE="visits", CLIENT_TYPE="clients";
     private String id;
-    private String object_id;
+    private String item_id;
+    
     private String user_id;
     private String title;
     private String description;
-    private String type;
+    private String goal_type;
     private String target = "00.00";
     private String value;
     private String date;
@@ -51,12 +52,12 @@ public class Goal implements Serializable {
         this.description = description;
     }
 
-    public String getType() {
-        return type;
+    public String getGoal_type() {
+        return goal_type;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setGoal_type(String goal_type) {
+        this.goal_type = goal_type;
     }
 
     public String getValue() {
@@ -79,12 +80,12 @@ public class Goal implements Serializable {
         return "Expires in 4 days";
     }
 
-    public String getObject_id() {
-        return object_id;
+    public String getItem_id() {
+        return item_id;
     }
 
-    public void setObject_id(String object_id) {
-        this.object_id = object_id;
+    public void setItem_id(String Item_id) {
+        this.item_id = Item_id;
     }
 
     public String getTarget() {
@@ -116,11 +117,11 @@ public class Goal implements Serializable {
     public String toString() {
         return "Goal{" +
                 "id='" + id + '\'' +
-                ", object_id='" + object_id + '\'' +
+                ", item_id='" + item_id + '\'' +
                 ", user_id='" + user_id + '\'' +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", type='" + type + '\'' +
+                ", goal_type='" + goal_type + '\'' +
                 ", target='" + target + '\'' +
                 ", value='" + value + '\'' +
                 ", date='" + date + '\'' +
