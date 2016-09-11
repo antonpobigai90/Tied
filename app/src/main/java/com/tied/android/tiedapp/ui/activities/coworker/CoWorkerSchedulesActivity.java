@@ -18,7 +18,6 @@ public class CoWorkerSchedulesActivity extends AppCompatActivity{
     private Bundle bundle;
     private User user;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +25,5 @@ public class CoWorkerSchedulesActivity extends AppCompatActivity{
 
         bundle = getIntent().getExtras();
         user = MyUtils.getUserFromBundle(bundle);
-
     }
 }

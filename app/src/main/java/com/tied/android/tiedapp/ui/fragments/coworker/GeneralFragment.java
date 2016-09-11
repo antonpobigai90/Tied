@@ -6,8 +6,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.user.User;
@@ -27,7 +27,7 @@ public class GeneralFragment extends Fragment implements View.OnClickListener {
 
     protected GoalsAdapter adapter;
 
-    private RelativeLayout lines, schedules;
+    private LinearLayout lines, schedules;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,8 +44,8 @@ public class GeneralFragment extends Fragment implements View.OnClickListener {
         bundle = getArguments();
         user = MyUtils.getUserFromBundle(bundle);
 
-        lines = (RelativeLayout) view.findViewById(R.id.lines);
-        schedules = (RelativeLayout) view.findViewById(R.id.schedules);
+        lines = (LinearLayout) view.findViewById(R.id.lines);
+        schedules = (LinearLayout) view.findViewById(R.id.schedules);
         lines.setOnClickListener(this);
         schedules.setOnClickListener(this);
     }

@@ -239,7 +239,9 @@
 
         <service android:name="com.mapbox.mapboxsdk.telemetry.TelemetryService" />
 
-
+        <activity android:name=".ui.activities.SelectPicture"
+            android:screenOrientation="portrait"
+            android:theme="@style/DialogTheme"/>
     </application>
 
 </manifest>
