@@ -23,6 +23,7 @@ import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ProfileApi;
 import com.tied.android.tiedapp.ui.activities.ProfileActivity;
+import com.tied.android.tiedapp.ui.activities.SelectPicture;
 import com.tied.android.tiedapp.ui.listeners.ImageReadyForUploadListener;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.MyUtils;
@@ -89,7 +90,8 @@ public class AvatarProfileFragment extends Fragment implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.avatar:
-                showChooser();
+                //showChooser();
+                startActivity(new Intent(getActivity(), SelectPicture.class));
                 break;
         }
     }
