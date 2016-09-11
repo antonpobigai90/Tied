@@ -7,10 +7,13 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
+import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.fragments.coworker.ActivityFragment;
 import com.tied.android.tiedapp.ui.fragments.coworker.GeneralFragment;
@@ -26,6 +29,9 @@ public class ViewCoWorkerActivity extends AppCompatActivity implements View.OnCl
 
     LinearLayout back_layout;
     LinearLayout general_tab, activity_tab, tab_bar;
+    private ImageView avatar;
+    private TextView name;
+    private Client client;
 
     public ViewPager mViewPager;
     public PagerAdapter mPagerAdapter;
@@ -38,6 +44,13 @@ public class ViewCoWorkerActivity extends AppCompatActivity implements View.OnCl
 
         bundle = getIntent().getExtras();
         user = MyUtils.getUserFromBundle(bundle);
+        client = (Client) bundle.getSerializable(Constants.CLIENT_DATA);
+
+        name = (TextView) findViewById(R.id.name);
+        avatar = (ImageView) findViewById(R.id.avatar);
+
+        name.setText(client.getFull_name());
+        MyUtils.Picasso.displayImage(client.getLogo(), avatar);
 
         back_layout = (LinearLayout) findViewById(R.id.back_layout);
         back_layout.setOnClickListener(this);

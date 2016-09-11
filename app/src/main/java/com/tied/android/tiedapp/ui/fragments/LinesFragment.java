@@ -52,7 +52,7 @@ public class LinesFragment extends Fragment implements AdapterView.OnItemClickLi
         listView = (ListView) view.findViewById(R.id.list);
         listView.setOnItemClickListener(this);
 
-        adapter = new LinesAdapter(MainApplication.linesList, getActivity());
+        adapter = new LinesAdapter(MainApplication.linesList, getActivity(), bundle);
         listView.setAdapter(adapter);
         if (MainApplication.linesList.size() == 0){
             MyUtils.initLines(getActivity(), user, adapter);

@@ -18,7 +18,7 @@ import com.tied.android.tiedapp.ui.adapters.CoWorkerGAdapter;
 import com.tied.android.tiedapp.ui.adapters.CoWorkerHAdapter;
 import com.tied.android.tiedapp.util.MyUtils;
 
-public class CoWorkerActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
+public class CoWorkerActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnClickListener{
 
     public static final String TAG = CoWorkerActivity.class
             .getSimpleName();
@@ -69,5 +69,14 @@ public class CoWorkerActivity extends AppCompatActivity implements AdapterView.O
         Client client = (Client) MainApplication.clientsList.get(position);
         bundle.putSerializable(Constants.CLIENT_DATA, client);
         MyUtils.startActivity(this, ViewCoWorkerActivity.class, bundle);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.back_layout:
+                super.onBackPressed();
+                break;
+        }
     }
 }

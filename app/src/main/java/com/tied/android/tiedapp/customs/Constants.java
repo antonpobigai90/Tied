@@ -196,6 +196,7 @@ public class Constants {
     public static final String GOOGLE_REVERSE_GEOCODING_URL="https://maps.googleapis.com/maps/api/geocode/json?sensor=true&key=AIzaSyDdWKslIGOEWJMa5RJFwH2dowBc7rEQ14g&latlng=";
     public static final String LINE_DATA = "line";
     public static final String LINES_lIST = "lines";
+    public static final String SHOW_TERRITORY = "show_territory" ;
     public static PersistentCookieStore MY_COOKIE_STORE=null;
     public static final String INDUSTRIES="industries";
 

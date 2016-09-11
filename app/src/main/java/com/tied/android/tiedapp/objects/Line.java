@@ -50,6 +50,7 @@ public class Line implements Serializable {
         this.reorder = reorder;
     }
 
+
     public void setName(String name) {
         this.name = name;
     }

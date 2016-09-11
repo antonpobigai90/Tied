@@ -20,8 +20,6 @@
             android:gravity="bottom"
             android:paddingBottom="0dp">
 
-
-
             <LinearLayout
                 android:id="@+id/today_tab"
                 android:layout_width="100dp"

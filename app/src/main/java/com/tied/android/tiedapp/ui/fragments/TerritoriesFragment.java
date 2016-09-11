@@ -58,7 +58,7 @@ public class TerritoriesFragment extends Fragment implements AdapterView.OnItemC
                 String name = (String) obj;
                 territoryModels.add(new TerritoryModel(name));
             }
-            adapter = new TerritoryAdapter(territoryModels, getActivity());
+            adapter = new TerritoryAdapter(territoryModels, getActivity(), bundle);
             listView.setAdapter(adapter);
         }
     }
