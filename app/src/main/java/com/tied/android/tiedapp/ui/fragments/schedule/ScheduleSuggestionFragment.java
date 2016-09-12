@@ -33,6 +33,7 @@ import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
+import com.tied.android.tiedapp.ui.activities.schedule.ViewSchedule;
 import com.tied.android.tiedapp.ui.adapters.ClientScheduleAdapter;
 import com.tied.android.tiedapp.ui.adapters.ClientScheduleHorizontalAdapter;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
@@ -55,7 +56,7 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
 
     private User user;
 
-    private Bundle bundle;
+    public Bundle bundle;
 
     private TextView view_schedule, company_name;
    // private ImageView img_activity;
@@ -79,8 +80,9 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
     private FragmentIterationListener fragmentIterationListener;
 
     public static Fragment newInstance (Bundle bundle) {
-        Fragment fragment=new ScheduleSuggestionFragment();
+        ScheduleSuggestionFragment fragment=new ScheduleSuggestionFragment();
         fragment.setArguments(bundle);
+        fragment.bundle=bundle;
         return fragment;
     }
 
@@ -168,7 +170,12 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.view_schedule:
-                nextAction(Constants.ViewSchedule,bundle);
+               // nextAction(Constants.ViewSchedule,bundle);
+                //bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
+                bundle.putString("fragment", ViewSchedule.class.getName());
+                bundle.putSerializable(Constants.SCHEDULE_DATA, schedule);
+                bundle.putSerializable(Constants.CLIENT_DATA, client);
+                MyUtils.startActivity(getActivity(), ViewSchedule.class, bundle);
                 break;
 
         }

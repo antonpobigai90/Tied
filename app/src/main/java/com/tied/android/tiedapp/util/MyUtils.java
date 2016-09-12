@@ -74,9 +74,10 @@ public abstract class MyUtils {
             if (imageUrl != null && !imageUrl.isEmpty()) {
                 com.squareup.picasso.Picasso.with(MainApplication.getInstance().getApplicationContext())
                         .load(imageUrl)
-                       // .memoryPolicy(MemoryPolicy.C)
+                       // .memoryPolicy(MemoryPolicy.)
                         //.networkPolicy(NetworkPolicy.NO_CACHE)
                         .networkPolicy(NetworkPolicy.OFFLINE)
+                        .resize(100,100)
                         .into(imageView, new Callback() {
                             @Override
                             public void onSuccess() {

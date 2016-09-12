@@ -233,6 +233,9 @@
         <activity android:name=".ui.activities.coworker.CoWorkerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.client.ViewClientActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ui.activities.coworker.ViewCoWorkerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>

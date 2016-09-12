@@ -33,6 +33,7 @@ import com.tied.android.tiedapp.objects.schedule.TimeRange;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
+import com.tied.android.tiedapp.ui.activities.schedule.ViewSchedule;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.dialogs.ScheduleNotifyDialog;
 import com.tied.android.tiedapp.ui.dialogs.DatePickerFragment;
@@ -404,6 +405,7 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
         schedule.setEnd_time(endTimeText);
         schedule.setDate(dateText);
         schedule.setLocation(location);
+        schedule.setDescription(txt_description.getText().toString().trim());
 
         Log.d(TAG + " schedule", schedule.toString());
 
@@ -486,8 +488,11 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
                             bundle.putSerializable(Constants.SCHEDULE_DATA, schedule_string);
                             bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
                             bundle.putBoolean(Constants.SCHEDULE_EDITED, true);
+                            if(ViewSchedule.getInstance()!=null) ViewSchedule.getInstance().finish();
+                            MyUtils.startActivity(getActivity(), ViewSchedule.class, bundle);
+                            getActivity().finish();
 
-                            MyUtils.startActivity(getActivity(), MainActivity.class, bundle);
+                          //  MyUtils.startActivity(getActivity(), MainActivity.class, bundle);
 //                        Schedule.scheduleCreated(getActivity().getApplicationContext());
 //                        DialogUtils.closeProgress();
 //                        nextAction(Constants.ScheduleSuggestions, bundle);

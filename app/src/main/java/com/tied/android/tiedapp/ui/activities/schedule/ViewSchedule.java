@@ -2,6 +2,8 @@ package com.tied.android.tiedapp.ui.activities.schedule;
 
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -10,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.tied.android.tiedapp.ui.activities.client.ViewClientActivity;
 import com.tied.android.tiedapp.util.Logger;
 import org.apache.commons.lang.time.DateUtils;
 
@@ -46,7 +49,7 @@ import java.util.Date;
 /**
  * Created by Emmanuel on 6/23/2016.
  */
-public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallback {
+public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener {
     public static final String TAG = ViewSchedule.class
             .getSimpleName();
 
@@ -56,20 +59,32 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
     private Client client;
     private Schedule schedule;
     TextView dayTV, weekTV, timeRange;
+    Bundle bundle;
+    private static ViewSchedule viewSchedule;
 
 
     private TextView description, temperature,  schedule_title, weatherInfo;
+
+    public static ViewSchedule getInstance() {
+        return viewSchedule;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_schedule_view);
+        viewSchedule=this;
 
         user = User.getUser(getApplicationContext());
 
+
         client = (Client) getIntent().getSerializableExtra(Constants.CLIENT_DATA);
         schedule = (Schedule) getIntent().getSerializableExtra(Constants.SCHEDULE_DATA);
+        bundle=new Bundle();
+        bundle.putSerializable(Constants.CLIENT_DATA, client);
+        bundle.putSerializable(Constants.SCHEDULE_DATA, schedule);
 
+        Logger.write(client.toString());
         final MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
 
@@ -79,10 +94,11 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
         description = (TextView) findViewById(R.id.description);
         //title = (TextView) findViewById(R.id.title);
         temperature = (TextView) findViewById(R.id.weather);
-
+Logger.write(schedule.toString());
         //title.setText(schedule.getTitle());
         schedule_title.setText(schedule.getTitle());
         description.setText(schedule.getDescription());
+        if(schedule.getDescription()==null || schedule.getDescription()=="") findViewById(R.id.description_section).setVisibility(View.GONE);
         if(schedule.getDescription()==null || schedule.getDescription().isEmpty()) description.setVisibility(View.GONE);
 
         dayTV=(TextView) findViewById(R.id.day);
@@ -109,6 +125,8 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
         weekTV.setText(MyUtils.getWeekDay(schedule));
         weatherInfo=(TextView) findViewById(R.id.weather_info);
 
+        findViewById(R.id.img_edit).setOnClickListener(this);
+
 
 
 
@@ -128,7 +146,7 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
             public void success(WeatherResponse weatherResponse, Response response) {
                 Log.d(TAG, "temperature : " + weatherResponse.getDaily().getData().get(0).getApparentTemperatureMax() + "");
                 int temp_max = (int) weatherResponse.getDaily().getData().get(0).getApparentTemperatureMax();
-                temp_max = (int) HelperMethods.convertFahrenheitToCelcius(temp_max);
+               // temp_max = (int) HelperMethods.convertFahrenheitToCelcius(temp_max);
                 temperature.setText(temp_max + "°");
                 weatherInfo.setText(weatherResponse.getDaily().getData().get(0).getSummary());
             }
@@ -157,6 +175,12 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
         myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location2, 15));
 
         myMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
+        myMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                MyUtils.startActivity(ViewSchedule.this, ViewClientActivity.class, bundle);
+            }
+        });
         melbourne.showInfoWindow();
 
     }
@@ -175,6 +199,7 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
             myContentsView = inflater.inflate(R.layout.schedule_map_info_window, null);
         }
 
+
         //// TODO: 9/2/2016  avater should be clients
 
         @Override
@@ -185,14 +210,18 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
             TextView address = ((TextView) myContentsView.findViewById(R.id.address));
             TextView distance = ((TextView) myContentsView.findViewById(R.id.distance));
             final ImageView image = ((ImageView) myContentsView.findViewById(R.id.image));
-            if(client==null) image.setVisibility(View.GONE);
+            //if(client==null) image.setVisibility(View.GONE);
             try {
                 line.setText(MyUtils.getClientName(client));
                 address.setText(schedule.getLocation().getLocationAddress());
                 distance.setText(""+MyUtils.getDistance(MyUtils.getCurrentLocation(), schedule.getLocation().getCoordinate()));
 
-                
-                if(client.getLogo()!=null && client.getLogo()!="") MyUtils.Picasso.displayImage(client.getLogo(), image);
+
+                image.setImageResource(R.drawable.default_avatar);
+                if(client.getLogo()!=null && client.getLogo()!="") {
+                    Logger.write(client.toString());
+                    MyUtils.Picasso.displayImage(client.getLogo(), image);
+                }
 
             } catch (Exception e) {
 
@@ -203,11 +232,31 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
 
 
 
+
+
         @Override
         public View getInfoContents(Marker marker) {
             // TODO Auto-generated method stub
             return null;
         }
-
+    }
+    public void callClient() {
+        String phone = client.getPhone();
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
+        startActivity(intent);
+    }
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.img_close:
+                onBackPressed();
+                break;
+            case R.id.img_edit:
+                MyUtils.startActivity(this, CreateAppointmentActivity.class, bundle);
+                //finish();
+                break;
+            case R.id.call_client:
+                callClient();
+                break;
+        }
     }
 }
