@@ -29,6 +29,7 @@ import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.services.LocationService;
 import com.tied.android.tiedapp.ui.activities.client.ClientMapAndListActivity;
 import com.tied.android.tiedapp.ui.activities.coworker.CoWorkerActivity;
+import com.tied.android.tiedapp.ui.activities.lines.LineGoalActivity;
 import com.tied.android.tiedapp.ui.fragments.DailyStatsFragment;
 import com.tied.android.tiedapp.ui.fragments.activities.ActivityFragment;
 import com.tied.android.tiedapp.ui.fragments.client.ClientAddFragment;
@@ -424,6 +425,9 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
             case R.id.map:
                 bundle.putBoolean(Constants.CLIENT_LIST, false);
                 MyUtils.startActivity(this, ClientMapAndListActivity.class, bundle);
+                break;
+            case R.id.goal_menu:
+                MyUtils.startActivity(this, LineGoalActivity.class);
                 break;
         }
     }

@@ -6,6 +6,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="map_api_key">AIzaSyDVusiCotzBPLpJMQ9FFWl7JvlWO4_A49s</string>
+    <string name="mapbox_access_token">pk.eyJ1IjoiZmVtaW5lZmEiLCJhIjoiY2lzeGFqYTN2MDhsbDJ5cGdvbnBndm8yYiJ9.F8ogZn8CTWTl-p5btlTBoQ</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="Logout">Logout</string>
 

@@ -90,14 +90,14 @@
                     style="@style/FieldLabels"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="NAME OF GOAL" />
+                    android:text="TITLE OF THIS GOAL" />
 
                 <EditText
                     android:id="@+id/goal_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
-                    android:text="test name"
+                    android:text=""
                     android:textColor="@color/grey" />
 
                 <View
@@ -117,14 +117,16 @@
                     style="@style/FieldLabels"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="HOW MUCH TO SET AS GOAL" />
+                    android:id="@+id/target_label"
+                    android:text="HOW MUCH SALES DO YOU INTEND TO ACHIEVE ($)" />
 
                 <EditText
                     android:id="@+id/how_much"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
-                    android:text="2000"
+                    android:text=""
+                    android:inputType="numberDecimal"
                     android:textColor="@color/grey" />
 
                 <View
@@ -151,6 +153,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/date"
+                    android:text="Click to choose date"
                     android:textColor="@color/grey"/>
 
                 <TextView
@@ -185,13 +188,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
-                    android:text="this is a test goal"
+                    android:text=""
                     android:textColor="@color/grey" />
 
                 <View
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/light_gray" />
+                    style="@style/SeperatorHorizontal" />
             </LinearLayout>
         </LinearLayout>
 

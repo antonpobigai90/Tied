@@ -3,6 +3,7 @@ package com.tied.android.tiedapp.ui.activities.lines;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -37,7 +38,7 @@ public class AddLinesActivity extends AppCompatActivity implements  View.OnClick
     TextView btn_add;
     LinearLayout back_layout;
 
-    MyEditText descriptonET, nameET;
+    EditText descriptonET, nameET;
 
 
     @Override
@@ -56,8 +57,8 @@ public class AddLinesActivity extends AppCompatActivity implements  View.OnClick
 
     private void initComponent() {
 
-        nameET =(MyEditText) findViewById(R.id.name);
-        descriptonET =(MyEditText) findViewById(R.id.description);
+        nameET =(EditText) findViewById(R.id.name);
+        descriptonET =(EditText) findViewById(R.id.description);
 
         btn_add = (TextView) findViewById(R.id.btn_add);
         btn_add.setOnClickListener(this);
@@ -111,29 +112,43 @@ public class AddLinesActivity extends AppCompatActivity implements  View.OnClick
                     }
                     _Meta meta=response.getMeta();
                     if(meta !=null && meta.getStatus_code()==201) {
-                        DialogUtils.closeProgress();
+
                         Line the_line = response.getData(Constants.LINE_DATA, Line.class);
                         Logger.write("the_line: "+the_line.toString());
-                        Bundle bundle = new Bundle();
+                        final Bundle bundle = new Bundle();
                         bundle.putSerializable(Constants.LINE_DATA, the_line);
                         MainApplication.linesList.clear();
-                        MyUtils.startActivity(AddLinesActivity.this, ViewLineActivity.class, bundle);
+                        MyUtils.showMessageAlert(AddLinesActivity.this, "Line \""+nameET.getText().toString()+"\" created!");
+                        nameET.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                DialogUtils.closeProgress();
+                                MyUtils.startActivity(AddLinesActivity.this, ViewLineActivity.class, bundle);
+                                finish();
+                            }
+                        }, 2000);
+
                     }else{
                         MyUtils.showToast("Error encountered");
                         DialogUtils.closeProgress();
                     }
 
                 }catch (IOException ioe) {
+                    DialogUtils.closeProgress();
+                    MyUtils.showToast("Error encountered. Please check your internet connection.");
+
                     Logger.write(ioe);
                 }
                 catch (Exception jo) {
+                    DialogUtils.closeProgress();
                     Logger.write(jo);
                 }
-                DialogUtils.closeProgress();
+
             }
             @Override
             public void onFailure(Call<ResponseBody> ClientResponseCall, Throwable t) {
                 Logger.write("Request failed: "+t.getCause());
+                MyUtils.showConnectionErrorToast(AddLinesActivity.this);
                 DialogUtils.closeProgress();
             }
         });

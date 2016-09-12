@@ -2,19 +2,26 @@ package com.tied.android.tiedapp.ui.adapters;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Build;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.Goal;
 import com.tied.android.tiedapp.ui.activities.lines.LineGoalActivity;
 import com.tied.android.tiedapp.ui.listeners.ListAdapterListener;
+import com.tied.android.tiedapp.util.Logger;
+import com.tied.android.tiedapp.util.MyUtils;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,8 +30,12 @@ import java.util.List;
 public class GoalsAdapter extends BaseAdapter implements ListAdapterListener {
 
     private static class ViewHolder {
-        TextView txt_title,txt_date;
+        TextView txt_title,txt_date, percent;
+        ImageView completed;
+
     }
+
+    NumberFormat nf = NumberFormat.getIntegerInstance();
 
     public static final String TAG = GoalsAdapter.class
             .getSimpleName();
@@ -43,7 +54,6 @@ public class GoalsAdapter extends BaseAdapter implements ListAdapterListener {
         return _data.size();
     }
 
-    @Override
     public Object getItem(int position) {
         return _data.get(position);
     }
@@ -67,12 +77,32 @@ public class GoalsAdapter extends BaseAdapter implements ListAdapterListener {
 
         viewHolder.txt_title = (TextView) view.findViewById(R.id.title);
         viewHolder.txt_date = (TextView) view.findViewById(R.id.date);
+        viewHolder.percent = (TextView)view.findViewById(R.id.percent);
+        viewHolder.completed = (ImageView)view.findViewById(R.id.mark_as_completed);
 
         final Goal data = (Goal) _data.get(i);
 
         viewHolder.txt_title.setText(data.getTitle());
         String date = "Ends" + data.getDate();
-        viewHolder.txt_date.setText(date);
+        try {
+            Date ddate=MyUtils.parseDate(data.getDate().split(" ")[0]);
+            if (ddate.before(new Date())) {
+                viewHolder.txt_date.setTextColor(Color.RED);
+            }else{
+                viewHolder.txt_date.setTextColor(_c.getResources().getColor(R.color.light_gray2));
+            }
+            String timePassedString = ""+ DateUtils.getRelativeTimeSpanString(ddate.getTime(), System.currentTimeMillis(), DateUtils.WEEK_IN_MILLIS);
+
+            viewHolder.txt_date.setText(timePassedString);
+
+        }catch (Exception e) {
+            Logger.write(e);
+        }
+        double progress=0;
+        if(data.getValue()!=null) {
+            progress=Double.parseDouble(data.getValue());
+        }
+        viewHolder.percent.setText(nf.format(progress/Double.parseDouble(data.getTarget()))+"%");
         view.setTag(data);
         return view;
     }

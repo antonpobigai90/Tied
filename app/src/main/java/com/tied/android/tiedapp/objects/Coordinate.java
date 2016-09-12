@@ -43,4 +43,8 @@ public class Coordinate implements Serializable {
         Gson gson = new Gson();
         return gson.toJson(this);
     }
+    public static Coordinate fromJSONString(String jsonString) {
+        Gson gson = new Gson();
+        return gson.fromJson(jsonString, Coordinate.class);
+    }
 }

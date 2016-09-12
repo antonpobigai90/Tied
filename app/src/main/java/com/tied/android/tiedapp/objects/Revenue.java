@@ -10,6 +10,7 @@ import java.util.Date;
  */
 public class Revenue implements Serializable {
     String id, user_id, line_id, client_id, title;
+    String date_sold;
 
     float value;
     String created;
@@ -69,6 +70,15 @@ public class Revenue implements Serializable {
     public String getCreated() {
         return created;
     }
+
+    public void setDate_sold(String date) {
+        this.date_sold = date;
+    }
+
+    public String getDate_sold() {
+        return date_sold;
+    }
+
     @Override
     public String toString() {
         Gson gson = new Gson();

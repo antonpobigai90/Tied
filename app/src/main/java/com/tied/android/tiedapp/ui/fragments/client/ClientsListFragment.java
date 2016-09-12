@@ -15,6 +15,7 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.ui.activities.client.ClientInfo;
 import com.tied.android.tiedapp.ui.activities.lines.ViewLineActivity;
 import com.tied.android.tiedapp.ui.adapters.MapClientListAdapter;
 import com.tied.android.tiedapp.util.MyUtils;
@@ -63,8 +64,8 @@ public class ClientsListFragment extends Fragment implements AdapterView.OnItemC
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.d(TAG, "here---------------- listener");
         Client client = (Client) MainApplication.clientsList.get(position);
-        bundle.putSerializable(Constants.LINE_DATA, client);
-        MyUtils.startActivity(getActivity(), ViewLineActivity.class, bundle);
+        bundle.putSerializable(Constants.CLIENT_DATA, client);
+        MyUtils.startActivity(getActivity(), ClientInfo.class, bundle);
     }
 
     @Override

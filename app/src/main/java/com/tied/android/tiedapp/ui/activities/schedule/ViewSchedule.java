@@ -1,9 +1,12 @@
 package com.tied.android.tiedapp.ui.activities.schedule;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -164,13 +167,18 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
         boolean not_first_time_showing_info_window;
 
         MyInfoWindowAdapter() {
-            myContentsView = getLayoutInflater().inflate(R.layout.schedule_map_info_window, null);
+            ContextThemeWrapper cw = new ContextThemeWrapper(
+                   getApplicationContext(), R.style.Transparent);
+
+            LayoutInflater inflater = (LayoutInflater) cw
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            myContentsView = inflater.inflate(R.layout.schedule_map_info_window, null);
         }
 
         //// TODO: 9/2/2016  avater should be clients
-        
+
         @Override
-        public View getInfoContents(Marker marker) {
+        public View getInfoWindow(Marker marker) {
 
 
             TextView line = ((TextView) myContentsView.findViewById(R.id.line));
@@ -179,12 +187,12 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
             final ImageView image = ((ImageView) myContentsView.findViewById(R.id.image));
             if(client==null) image.setVisibility(View.GONE);
             try {
-                line.setText(client.getCompany());
+                line.setText(MyUtils.getClientName(client));
                 address.setText(schedule.getLocation().getLocationAddress());
                 distance.setText(""+MyUtils.getDistance(MyUtils.getCurrentLocation(), schedule.getLocation().getCoordinate()));
 
                 
-                MyUtils.Picasso.displayImage(user.getAvatar(), image);
+                if(client.getLogo()!=null && client.getLogo()!="") MyUtils.Picasso.displayImage(client.getLogo(), image);
 
             } catch (Exception e) {
 
@@ -196,7 +204,7 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
 
 
         @Override
-        public View getInfoWindow(Marker marker) {
+        public View getInfoContents(Marker marker) {
             // TODO Auto-generated method stub
             return null;
         }

@@ -20,25 +20,27 @@
 
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="match_parent"
                 android:layout_centerVertical="true"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_map_tab_background" />
+                android:scaleType="fitCenter"
+                android:id="@+id/tab_bg"
+                android:src="@drawable/map_active" />
 
             <LinearLayout
-                android:id="@+id/tab_container"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                    android:id="@+id/tab_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" android:weightSum="1" android:layout_alignParentBottom="true">
                 <ImageView
-                    android:id="@+id/img_map_clients"
-                    android:layout_width="60dp"
-                    android:layout_height="50dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="10dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_map_active" />
+                        android:id="@+id/img_map_clients"
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginLeft="10dp"
+                        android:scaleType="centerCrop"
+                        android:alpha="0"
+                        android:src="@drawable/ic_map_active" android:layout_weight="0.70"/>
 
                 <ImageView
                     android:layout_width="60dp"
@@ -48,6 +50,7 @@
                     android:layout_marginBottom="8dp"
                     android:layout_marginRight="10dp"
                     android:id="@+id/img_list_clients"
+                    android:alpha="0"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_list_inactive" />
             </LinearLayout>
@@ -66,11 +69,8 @@
 
             <ImageView
                 android:id="@+id/img_close"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center"
-                android:layout_marginLeft="0dp"
-                android:src="@drawable/btn_close" />
+                style="@style/ActionBarIcon"
+                android:src="@drawable/btn_back_arrow" />
 
         </LinearLayout>
 

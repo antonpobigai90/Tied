@@ -15,6 +15,7 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.fragments.client.ClientsListFragment;
 import com.tied.android.tiedapp.ui.fragments.client.ClientsMapFragment;
+import com.tied.android.tiedapp.ui.fragments.client.MapboxFragment;
 import com.tied.android.tiedapp.util.MyUtils;
 
 public class ClientMapAndListActivity extends AppCompatActivity implements  View.OnClickListener {
@@ -28,7 +29,7 @@ public class ClientMapAndListActivity extends AppCompatActivity implements  View
     private User user;
 
     LinearLayout back_layout, tab_container;
-    ImageView img_list_clients, img_map_clients;
+    ImageView img_list_clients, img_map_clients, tabBg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +47,8 @@ public class ClientMapAndListActivity extends AppCompatActivity implements  View
         back_layout = (LinearLayout) findViewById(R.id.back_layout);
         back_layout.setOnClickListener(this);
 
+        tabBg=(ImageView) findViewById(R.id.tab_bg);
+
         img_list_clients = (ImageView) findViewById(R.id.img_list_clients);
         img_map_clients = (ImageView) findViewById(R.id.img_map_clients);
 
@@ -58,8 +61,8 @@ public class ClientMapAndListActivity extends AppCompatActivity implements  View
         if (mViewPager != null) {
             mViewPager.setAdapter(mPagerAdapter);
             if (bundle.getBoolean(Constants.CLIENT_LIST)){
-                mViewPager.setCurrentItem(1);
-                selectTab(tab_container, 1);
+                mViewPager.setCurrentItem(0);
+                selectTab(tab_container, 0);
             }else{
                 mViewPager.setCurrentItem(0);
                 selectTab(tab_container, 0);
@@ -87,12 +90,14 @@ public class ClientMapAndListActivity extends AppCompatActivity implements  View
     public void selectTab(LinearLayout tab_bar, int position){
         switch (position){
             case 0:
-                img_map_clients.setImageResource(R.drawable.ic_map_active);
-                img_list_clients.setImageResource(R.drawable.ic_list_inactive);
+               // img_map_clients.setImageResource(R.drawable.ic_map_active);
+               // img_list_clients.setImageResource(R.drawable.ic_list_inactive);
+                tabBg.setImageResource(R.drawable.map_active);
                 break;
             case 1:
-                img_map_clients.setImageResource(R.drawable.ic_map_inactive);
-                img_list_clients.setImageResource(R.drawable.ic_list_active);
+                //img_map_clients.setImageResource(R.drawable.ic_map_inactive);
+                //img_list_clients.setImageResource(R.drawable.ic_list_active);
+                tabBg.setImageResource(R.drawable.list_active);
                 break;
             default:;
         }

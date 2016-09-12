@@ -11,9 +11,10 @@ public class Constants {
     public static final String TAG = Constants.class
             .getSimpleName();
 
-    public static final String SERVER_URL = "http://tied.goattale.com:8101/api/v1/";
+    public static final String SERVER_URL = "http://tied.goattale.com:8100/api/v1/";
 
-    public static final String HOST = "http://tied.goattale.com:8101/";
+      public static final String HOST = "http://tied.goattale.com:8100/";
+
 //    public static final String HOST = "https://tied-api.herokuapp.com/";
 
     public static final int PORT = 3000;
@@ -42,9 +43,16 @@ public class Constants {
     public static final String USER_LINES = API_PATH + "users/me/lines";
     public static final String USER_CLIENT_LINES = API_PATH + "users/me/client_lines";
     public static final String USER_LINE_REVENUES = API_PATH + "users/me/lines/{line_id}/revenues/{page_number}";
-    public static final String GET_LINE_WITH_ID =  API_PATH + "lines/";
+    public static final String GET_LINE_WITH_ID =  API_PATH + "line/{line_id}";
     public static final String USER_LINE_COUNT=  API_PATH + "lines/count";
     public static final String USER_GE0_LINES =  API_PATH + "lines/geo";
+    public static final String TOTAL_LINE_REVENUE =  API_PATH + "lines/{line_id}/total_revenue";
+    public static final String CLIENT_COUNT=  API_PATH + "lines/{line_id}/num_clients";
+    public static final String LINE_CLIENTS=  API_PATH + "lines/{line_id}/clients/{page_number}";
+
+    public static final String REVENUES = API_PATH + "revenue";
+    public static final String UPDATE_REVENUE_WITH_ID = API_PATH + "revenue/{line_id}";
+    public static final String ADD_REVENUE = API_PATH + "revenue";
 
     public static final String GET_CLIENT_WITH_ID = API_PATH + "client/{client_id}";
     public static final String UPDATE_CLIENT_WITH_ID = API_PATH + "clients/{client_id}";
@@ -63,7 +71,9 @@ public class Constants {
     public static final String DELETE_GOAL_WITH_ID = API_PATH + "goals/{goal_id}";
     public static final String GOALS = API_PATH + "goals";
     public static final String USER_GOAL = API_PATH + "users/me/goals";
+    public static final String LINE_GOALS = API_PATH + "lines/{line_id}/goals/{status}/{page_num}";
     public static final String USER_GOALS_BY_DATE = API_PATH + "users/me/goals/date";
+    public static final String NUM_LINE_GOALS = API_PATH + "lines/{line_id}/num_goals";
 
 
     public static final String GET_INDUSTRIES = API_PATH + "config/industries";
@@ -126,6 +136,7 @@ public class Constants {
     public static final int CoWorkerCount = 18;
     public static final int AddOptions = 19;
     public static final int CoWorker = 20;
+    public static final int GOAL_REQUEST =2300;
 
     public static final int Completed = 25;
 
@@ -195,6 +206,7 @@ public class Constants {
     public static final String LINE_CREATED = "a_line_exist";
     public static final String GOOGLE_REVERSE_GEOCODING_URL="https://maps.googleapis.com/maps/api/geocode/json?sensor=true&key=AIzaSyDdWKslIGOEWJMa5RJFwH2dowBc7rEQ14g&latlng=";
     public static final String LINE_DATA = "line";
+    public static final String REVENUE_DATA = "revenue";
     public static final String LINES_lIST = "lines";
     public static PersistentCookieStore MY_COOKIE_STORE=null;
     public static final String INDUSTRIES="industries";

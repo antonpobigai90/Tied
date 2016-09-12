@@ -1,5 +1,6 @@
 package com.tied.android.tiedapp.ui.activities.lines;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,13 +12,24 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Goal;
+import com.tied.android.tiedapp.objects._Meta;
+import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.retrofits.services.LineApi;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.fragments.lines.ActiveGoalFragment;
+import com.tied.android.tiedapp.ui.fragments.lines.LineGoalsFragment;
 import com.tied.android.tiedapp.ui.fragments.lines.PastGoalFragment;
+import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LineGoalActivity extends AppCompatActivity implements  View.OnClickListener {
 
@@ -39,9 +51,11 @@ public class LineGoalActivity extends AppCompatActivity implements  View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_line_goal_layout);
 
-        bundle = getIntent().getExtras();
-        goal = (Goal) bundle.getSerializable(Constants.GOAL_DATA);
-        user = MyUtils.getUserFromBundle(bundle);
+
+            bundle = getIntent().getExtras();
+            //goal = (Goal) bundle.getSerializable(Constants.GOAL_DATA);
+            user = MyUtils.getUserFromBundle(bundle);
+
 
         initComponent(goal);
 
@@ -77,7 +91,7 @@ public class LineGoalActivity extends AppCompatActivity implements  View.OnClick
                 onBackPressed();
                 break;
             case R.id.img_add:
-                MyUtils.startActivity(this, LineAddGoalActivity.class);
+                MyUtils.startRequestActivity(this, LineAddGoalActivity.class, Constants.GOAL_REQUEST, bundle);
                 break;
             case R.id.active_goals:
                 mViewPager.setCurrentItem(0);
@@ -133,6 +147,7 @@ public class LineGoalActivity extends AppCompatActivity implements  View.OnClick
         });
     }
 
+
     public class PagerAdapter extends FragmentStatePagerAdapter {
 
         public PagerAdapter(FragmentManager fm) {
@@ -145,6 +160,7 @@ public class LineGoalActivity extends AppCompatActivity implements  View.OnClick
             switch (position){
                 case 0:
                     fragment = new ActiveGoalFragment();
+
                     break;
                 case 1:
                     fragment = new PastGoalFragment();
@@ -159,5 +175,10 @@ public class LineGoalActivity extends AppCompatActivity implements  View.OnClick
         public int getCount() {
             return 2;
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Logger.write("requesssssssssssssssssssssssssssst "+requestCode);
     }
 }
