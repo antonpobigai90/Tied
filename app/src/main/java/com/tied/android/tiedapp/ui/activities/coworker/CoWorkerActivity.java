@@ -77,6 +77,9 @@ public class CoWorkerActivity extends AppCompatActivity implements AdapterView.O
             case R.id.back_layout:
                 super.onBackPressed();
                 break;
+            case R.id.add:
+                MyUtils.startActivity(this, InviteCoWorkerActivity.class, bundle);
+                break;
         }
     }
 }

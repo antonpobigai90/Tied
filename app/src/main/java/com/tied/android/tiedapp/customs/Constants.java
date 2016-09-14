@@ -11,9 +11,9 @@ public class Constants {
     public static final String TAG = Constants.class
             .getSimpleName();
 
-    public static final String SERVER_URL = "http://tied.goattale.com:8101/api/v1/";
+    public static final String SERVER_URL = "http://tied.goattale.com:8100/api/v1/";
 
-    public static final String HOST = "http://tied.goattale.com:8101/";
+    public static final String HOST = "http://tied.goattale.com:8100/";
 //    public static final String HOST = "https://tied-api.herokuapp.com/";
 
     public static final int PORT = 3000;
@@ -28,6 +28,7 @@ public class Constants {
     public static final String GET_AVATAR_ENDPOINT = HOST + "uploads/avatars/";
     public static final String GET_LOGO_ENDPOINT = HOST + "uploads/logos/";
 
+    public static final String USER_FIND_BY_EMAIL = API_PATH + "users/find_by_email/{email}";
     public static final String USER_UPDATE_INFO = API_PATH + "users/me";
     public static final String USER_CHANGE_PASSWORD = API_PATH + "users/changePassword";
 
@@ -35,6 +36,8 @@ public class Constants {
     public static final String USER_CLIENTS = API_PATH + "users/me/clients";
     public static final String USER_CLIENTS_COUNT = API_PATH + "users/me/clients_count";
     public static final String USER_GE0_CLIENTS = API_PATH + "users/me/clients/geo";
+
+    public static final String ADD_COWORKER = API_PATH + "users/{user_id}/coworkers";
 
 
     public static final String LINES = API_PATH + "lines";
@@ -45,6 +48,7 @@ public class Constants {
     public static final String GET_LINE_WITH_ID =  API_PATH + "lines/";
     public static final String USER_LINE_COUNT=  API_PATH + "lines/count";
     public static final String USER_GE0_LINES =  API_PATH + "lines/geo";
+
 
     public static final String GET_CLIENT_WITH_ID = API_PATH + "client/{client_id}";
     public static final String UPDATE_CLIENT_WITH_ID = API_PATH + "clients/{client_id}";
@@ -69,6 +73,8 @@ public class Constants {
     public static final String GET_INDUSTRIES = API_PATH + "config/industries";
 
     public static final String APP_DATA = "app_data";
+    public static final String COWORKER = "coworker";
+    public static final String USER = "user";
     public static final String USER_DATA = "user_data";
     public static final String CLIENT_DATA = "client_data";
     public static final String SCHEDULE_DATA = "schedule_data";

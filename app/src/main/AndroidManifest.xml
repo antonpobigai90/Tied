@@ -237,6 +237,9 @@
         <activity android:name=".ui.activities.SelectPicture"
             android:screenOrientation="portrait"
             android:theme="@style/DialogTheme"/>
+        <activity android:name=".ui.activities.coworker.InviteCoWorkerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
