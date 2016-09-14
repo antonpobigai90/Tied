@@ -17,10 +17,11 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Goal;
 import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects._Meta;
-import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.GoalApi;
+import com.tied.android.tiedapp.retrofits.services.LineApi;
+import com.tied.android.tiedapp.ui.activities.lines.LineViewGoalActivity;
 import com.tied.android.tiedapp.ui.adapters.GoalsAdapter;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.Logger;
@@ -33,23 +34,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PastGoalFragment extends Fragment implements AdapterView.OnItemClickListener,View.OnClickListener{
+public class LineGoalsFragment extends Fragment implements AdapterView.OnItemClickListener,View.OnClickListener {
 
-    public static final String TAG = PastGoalFragment.class
+    public static final String TAG = ActiveGoalFragment.class
             .getSimpleName();
 
     protected User user;
     protected Bundle bundle;
     protected ListView listView;
 
-    private Client client;
+    protected GoalsAdapter adapter;
     Line line;
     List<Goal> goals=new ArrayList<Goal>();
-    protected GoalsAdapter adapter;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.line_past_goal_fragment,null);
+        return inflater.inflate(R.layout.line_active_goals_fragment,null);
     }
 
     @Override
@@ -61,40 +62,26 @@ public class PastGoalFragment extends Fragment implements AdapterView.OnItemClic
     public void initComponent(View view){
         bundle = getArguments();
         user = MyUtils.getUserFromBundle(bundle);
-        try {
-            line = (Line) bundle.getSerializable(Constants.LINE_DATA);
-            client = (Client) bundle.getSerializable(Constants.CLIENT_DATA);
-        }catch (Exception e ) {
-
-        }
-
         listView = (ListView) view.findViewById(R.id.list);
         listView.setOnItemClickListener(this);
+        line = (Line) bundle.getSerializable(Constants.LINE_DATA);
 
 
-
-        adapter = new GoalsAdapter(goals, getActivity());
+        adapter = new GoalsAdapter(MainApplication.goals, getActivity());
         listView.setAdapter(adapter);
         if (goals.size() == 0){
-           // MyUtils.initGoals(getActivity(), user, adapter);
-            loadPastGoals(getActivity());
+            loadGoals(this.getActivity());
         }
     }
 
-    private void loadPastGoals(final Context context) {
-        final GoalApi goalApi =  MainApplication.createService(GoalApi.class, user.getToken());
-        Call<ResponseBody> response;
-        if(line!=null)
-            response= goalApi.getLineGoals(user.getToken(),line.getId(),  GoalApi.STATUS_COMPLETE, 1 );
-        else
-            response= goalApi.getUserGoals( );
+    private void loadGoals(final Context context) {
+        final LineApi goalApi =  MainApplication.createService(LineApi.class, user.getToken());
+        Call<ResponseBody> response = goalApi.getLineGoals(user.getToken(),line.getId(), 1 );
         response.enqueue(new retrofit2.Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
                 try {
-                    ResponseBody responseBody=resResponse.body();
-
-                    GeneralResponse response = new GeneralResponse(responseBody);
+                    GeneralResponse response = new GeneralResponse(resResponse.body());
                     if (response.isAuthFailed()) {
                         User.LogOut(context);
                         return;
@@ -103,7 +90,8 @@ public class PastGoalFragment extends Fragment implements AdapterView.OnItemClic
                     if(meta !=null && meta.getStatus_code() == 200) {
                         ArrayList goals = (ArrayList) response.getDataAsList(Constants.GOAL_lIST, Goal.class);
                         if(goals.size() > 0){
-                            PastGoalFragment.this.goals = goals;
+                            LineGoalsFragment.this.goals.clear();;
+                            LineGoalsFragment.this.goals.addAll(goals);
                             if (adapter != null){
                                 adapter.listInit(goals);
                             }
@@ -133,7 +121,9 @@ public class PastGoalFragment extends Fragment implements AdapterView.OnItemClic
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.d(TAG, "here---------------- listener");
         Goal goal = (Goal) MainApplication.goals.get(position);
+        Log.d(TAG, "here----------------"+goal.toString());
         bundle.putSerializable(Constants.GOAL_DATA, goal);
+        MyUtils.startActivity(getActivity(), LineViewGoalActivity.class, bundle);
     }
 
     @Override

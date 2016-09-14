@@ -111,7 +111,7 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@android:color/transparent"
                 android:inputType="text"
-                android:text="Dallas"
+                android:text=""
                 style="@style/EditTextStyle"
                 android:textColor="@color/grey"
                 />

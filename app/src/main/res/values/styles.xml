@@ -18,6 +18,14 @@
             backward-compatibility can go here.
         -->
     </style>
+    <style name="Transparent" parent="AppTheme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
 
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
@@ -51,7 +59,7 @@
     </style>
     <style name="EditTextStyle" parent="RobotoTextViewStyle">
         <item name="android:textColor">@color/tw__medium_gray</item>
-
+        <item name="android:textColorHint">@color/light_gray2</item>
     </style>
     <style name="TabTextStyle" parent="RobotoTextViewStyle">
         <item name="android:textSize">11sp</item>

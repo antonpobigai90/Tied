@@ -1,6 +1,7 @@
 package com.tied.android.tiedapp.ui.fragments.client;
 
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,22 +98,26 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
 
             // Use default InfoWindow frame
             @Override
-            public View getInfoWindow(Marker arg0) {
+            public View getInfoContents(Marker arg0) {
                 return null;
             }
 
             // Defines the contents of the InfoWindow
             @Override
-            public View getInfoContents(Marker marker) {
+            public View getInfoWindow(Marker marker) {
 
                 //Logger.write(marker.getTag().toString());
+                ContextThemeWrapper cw = new ContextThemeWrapper(
+                       getActivity().getApplicationContext(), R.style.Transparent);
 
                 //Client client=markerClientMap.get((String)marker.getTag());
                 Client client = clients.get((int) marker.getTag());
                 if (client == null) return null;
 
                 // Getting view from the layout file info_window_layout
-                View v = getActivity().getLayoutInflater().inflate(R.layout.map_marker_info_window, null);
+                LayoutInflater inflater = (LayoutInflater) cw
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View v = inflater.inflate(R.layout.map_marker_info_window, null);
 
                 ImageView photo = (ImageView) v.findViewById(R.id.user_picture_iv);
                 if (!client.getLogo().isEmpty())
@@ -192,6 +198,12 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
                     User.LogOut(getActivity().getApplicationContext());
                 } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200) {
                     clients = clientRes.getClients();
+                    Coordinate currentLocation=MyUtils.getCurrentLocation();
+                    LatLng loc=new LatLng(currentLocation.getLat(), currentLocation.getLon());
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 3.0f));
+                    googleMap.addMarker(new MarkerOptions()
+                            .position(loc));
+
 
                     boolean centered = false;
                     int i = -1;
@@ -199,11 +211,11 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
                         i++;
                         LatLng latLng = new LatLng(client.getAddress().getCoordinate().getLat(),
                                 client.getAddress().getCoordinate().getLon());
-                        if (!centered) {
+                      /*  if (!centered) {
                             Logger.write(client.getLogo());
                             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(33.8960935, -84.2319696), 3.0f));
                             centered = true;
-                        }
+                        }*/
                         Marker marker = googleMap.addMarker(new MarkerOptions()
                                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_white)).anchor(0.5f, 1f).position(latLng));
                         // client.setLogo(user.getAvatar());

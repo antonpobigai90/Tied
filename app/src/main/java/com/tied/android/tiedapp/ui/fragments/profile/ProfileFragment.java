@@ -10,11 +10,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -39,11 +39,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private LinearLayout back_layout;
 
 
-    private Button btnNotifications, btnEditPersonalInfo, btnChangePassword, btnIndustries, btnPrivacy;
-
     private RelativeLayout rlIndustries;
 
     public FragmentIterationListener mListener;
+
+    private AppCompatTextView atvPersonalInfo, atvNotifications, atvChangePassword, atvIndustries, atvPrivacy, atvHelp, atvLogout;
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -75,19 +75,19 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         vpProfile.setAdapter(mPagerAdapter);
         circleIndicator.setViewPager(vpProfile);
 
-        btnNotifications = (Button) view.findViewById(R.id.btnNotifications);
-        btnNotifications.setOnClickListener(this);
-        btnEditPersonalInfo = (Button) view.findViewById(R.id.btnEditPersonalInfo);
-        btnEditPersonalInfo.setOnClickListener(this);
+        atvNotifications = (AppCompatTextView) view.findViewById(R.id.atvNotifications);
+        atvNotifications.setOnClickListener(this);
+        atvPersonalInfo = (AppCompatTextView) view.findViewById(R.id.atvPersonalInfo);
+        atvPersonalInfo.setOnClickListener(this);
 
-        btnChangePassword = (Button) view.findViewById(R.id.btnChangePassword);
-        btnChangePassword.setOnClickListener(this);
+        atvChangePassword = (AppCompatTextView) view.findViewById(R.id.atvChangePassword);
+        atvChangePassword.setOnClickListener(this);
 
-        btnIndustries = (Button) view.findViewById(R.id.btnIndustries);
-        btnIndustries.setOnClickListener(this);
+        atvIndustries = (AppCompatTextView) view.findViewById(R.id.atvIndustries);
+        atvIndustries.setOnClickListener(this);
 
-        btnPrivacy = (Button) view.findViewById(R.id.btnPrivacy);
-        btnPrivacy.setOnClickListener(this);
+        atvPrivacy = (AppCompatTextView) view.findViewById(R.id.atvPrivacy);
+        atvPrivacy.setOnClickListener(this);
 
         back_layout = (LinearLayout) view.findViewById(R.id.back_layout);
         back_layout.setOnClickListener(this);
@@ -122,19 +122,19 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btnEditPersonalInfo:
+            case R.id.atvPersonalInfo:
                 nextAction(Constants.EditProfile, bundle);
                 break;
             case R.id.back_layout:
                 nextAction(Constants.CreateSchedule, bundle);
                 break;
-            case R.id.btnNotifications:
+            case R.id.atvNotifications:
                 nextAction(Constants.Notification, bundle);
                 break;
-            case R.id.btnIndustries:
+            case R.id.atvIndustries:
                 nextAction(Constants.Industry, bundle);
                 break;
-            case R.id.btnPrivacy:
+            case R.id.atvPrivacy:
                 nextAction(Constants.PRIVACY, bundle);
                 break;
         }

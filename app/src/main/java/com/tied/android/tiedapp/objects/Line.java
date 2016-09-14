@@ -32,6 +32,8 @@ public class Line implements Serializable {
 
     private String sales;
     boolean check_status;
+    private float total_revenue=0f;
+    private int num_clients, num_goals, num_territories=0;
 
     public Line() {
     }
@@ -48,6 +50,22 @@ public class Line implements Serializable {
         this.website = website;
         this.opening = opening;
         this.reorder = reorder;
+    }
+
+    public String getRequest() {
+        return request;
+    }
+
+    public String getWebsite() {
+        return website;
+    }
+
+    public String getOpening() {
+        return opening;
+    }
+
+    public String getReorder() {
+        return reorder;
     }
 
 
@@ -127,6 +145,38 @@ public class Line implements Serializable {
 
     public void setCheck_status(boolean check_status) {
         this.check_status = check_status;
+    }
+
+    public float getTotal_revenue() {
+        return total_revenue;
+    }
+
+    public void setTotal_revenue(float total_revenue) {
+        this.total_revenue = total_revenue;
+    }
+
+    public void setNum_clients(int num_clients) {
+        this.num_clients = num_clients;
+    }
+
+    public int getNum_clients() {
+        return num_clients;
+    }
+
+    public int getNum_goals() {
+        return num_goals;
+    }
+
+    public void setNum_goals(int num_goals) {
+        this.num_goals = num_goals;
+    }
+
+    public int getNum_territories() {
+        return num_territories;
+    }
+
+    public void setNum_territories(int num_territories) {
+        this.num_territories = num_territories;
     }
 
     @Override

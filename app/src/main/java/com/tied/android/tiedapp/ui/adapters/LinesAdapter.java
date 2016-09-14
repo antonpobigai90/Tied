@@ -16,6 +16,7 @@ import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.ui.activities.LinesAndTerritories;
 import com.tied.android.tiedapp.ui.listeners.ListAdapterListener;
+import com.tied.android.tiedapp.util.MyUtils;
 
 import java.util.ArrayList;
 
@@ -80,8 +81,8 @@ public class LinesAdapter extends BaseAdapter implements ListAdapterListener {
         final Line data = (Line) _data.get(i);
 
         viewHolder.txt_line_name.setText(data.getName());
-        String sales = data.getSales() + Constants.TOTAL_SALES;
-        viewHolder.txt_line_sales.setText(sales);
+      //  String sales = data.getSales() + Constants.TOTAL_SALES;
+        viewHolder.txt_line_sales.setText(MyUtils.moneyFormat(data.getTotal_revenue()));
         view.setTag(data);
         return view;
     }
