@@ -17,16 +17,16 @@ repositories {
     maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
 }
 ext {
-    supportLibVersion = '24.2.0'
+    supportLibVersion = '23.0.3'
 }
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.1"
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
 
     defaultConfig {
         applicationId "com.tied.android.tiedapp"
         minSdkVersion 19
-        targetSdkVersion 24
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
         multiDexEnabled true

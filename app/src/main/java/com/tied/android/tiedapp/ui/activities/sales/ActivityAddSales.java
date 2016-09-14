@@ -38,6 +38,7 @@ import java.util.GregorianCalendar;
 /**
  * Created by femi on 8/4/2016.
  */
+@SuppressWarnings("ValidFragment")
 public class ActivityAddSales extends AppCompatActivity implements  View.OnClickListener{
     private Bundle bundle;
     private User user;

@@ -34,7 +34,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
+@SuppressWarnings("ValidFragment")
 public class LineAddGoalActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static final String TAG = LineAddGoalActivity.class
@@ -57,9 +57,13 @@ public class LineAddGoalActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_line_add_goal);
         bundle = getIntent().getExtras();
-        goal = (Goal) bundle.getSerializable(Constants.GOAL_DATA);
-        line = (Line) bundle.getSerializable(Constants.LINE_DATA);
-        client = (Client)bundle.getSerializable(Constants.CLIENT_DATA);
+        try {
+            goal = (Goal) bundle.getSerializable(Constants.GOAL_DATA);
+            line = (Line) bundle.getSerializable(Constants.LINE_DATA);
+            client = (Client) bundle.getSerializable(Constants.CLIENT_DATA);
+        }catch (Exception e) {
+
+        }
 
         title = (TextView) findViewById(R.id.title);
         goal_name = (EditText) findViewById(R.id.goal_name);
