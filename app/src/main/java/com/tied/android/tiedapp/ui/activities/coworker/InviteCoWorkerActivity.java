@@ -86,12 +86,7 @@ public class InviteCoWorkerActivity extends AppCompatActivity implements View.On
         });
     }
     public void call_add_CoWorker(String user_id, String coworker_id){
-        CoWorker coWorker = new CoWorker();
-        coWorker.setUser_id(user_id);
-        coWorker.setCoworker_id(coworker_id);
-        coWorker.setVerified(false);
-        Logger.write("coWorker : "+coWorker);
-        Call<ResponseBody> response =  MainApplication.createService(CoworkerApi.class, user.getToken()).addCoworker(user_id, coWorker);
+        Call<ResponseBody> response =  MainApplication.createService(CoworkerApi.class, user.getToken()).addCoworker(user_id, coworker_id);
         Log.d(TAG, response.request().url().toString());
         response.enqueue(new Callback<ResponseBody>() {
             @Override
