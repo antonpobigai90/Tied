@@ -17,7 +17,7 @@ repositories {
     maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
 }
 ext {
-    supportLibVersion = '24.2.0'
+    supportLibVersion = '24.1.0'
 }
 android {
     compileSdkVersion 24

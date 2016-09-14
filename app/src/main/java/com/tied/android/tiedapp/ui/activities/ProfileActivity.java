@@ -30,6 +30,7 @@ import com.tied.android.tiedapp.ui.fragments.profile.NotificationProfileFragment
 import com.tied.android.tiedapp.ui.fragments.profile.ProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.SalesPrivacyFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.IndustryFragmentNew;
+import com.tied.android.tiedapp.ui.fragments.signups.SelectIndustryFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.ui.listeners.ImageReadyForUploadListener;
 import com.tied.android.tiedapp.util.Logger;
@@ -122,7 +123,8 @@ public class ProfileActivity extends FragmentActivity implements FragmentIterati
             case Constants.Industry:
                 if (fragments.get(pos) == null) {
                     // fragments.put(pos, IndustryFragment.newInstance(bundle) );
-                    fragments.put(pos, new IndustryFragmentNew());
+                   // fragments.put(pos, new IndustryFragmentNew());
+                    fragments.put(pos, new SelectIndustryFragment());
                 }
                 fragment = fragments.get(pos);
                 break;
