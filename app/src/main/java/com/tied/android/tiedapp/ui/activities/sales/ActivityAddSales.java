@@ -1,10 +1,14 @@
 package com.tied.android.tiedapp.ui.activities.sales;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.client.Client;
@@ -30,17 +34,16 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
         setContentView(R.layout.fragment_add_sales);
 
         bundle = getIntent().getExtras();
-        //user = MyUtils.getUserFromBundle(bundle);
-       // fragment=AddSalesFragment.newInstance(bundle);
-
 
         initComponent();
     }
     private void initComponent() {
-      /*  FragmentTransaction ft= getSupportFragmentManager().beginTransaction();
-        ft.add(R.id.fragment_container, fragment);
-        ft.commit();*/
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(R.color.green_color1));
+        }
     }
     @Override
     public void onClick(View v) {

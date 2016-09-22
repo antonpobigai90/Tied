@@ -17,12 +17,12 @@
     <color name="background_tab_pressed">#6633B5E5</color>
     <color name="primary">#002943</color>
     <color name="icon_green">#38df22</color>
-    <color name="color_green">#23af10</color>
+    <color name="color_green">#061204</color>
 
-    <color name="off_white">#FAFAFA</color>
+    <color name="off_white">#fafafa</color>
     <color name="background2">#E0E0E0</color>
     <color name="indigo">#3F51B5</color>
-    <color name="blue">#3C96FF</color>
+    <color name="blue">#3c96ff</color>
     <color name="grey">#32323A</color>
     <color name="light_gray">#DAE1E4</color>
     <color name="light_gray2">#BBBBBB</color>
@@ -31,4 +31,6 @@
     <color name="red_color">#ff1414</color>
     <color name="orange_color">#feb414</color>
     <color name="green_color">#00e500</color>
+    <color name="green_color1">#167a59</color>
+    <color name="light_grey3">#f3f5f6</color>
 </resources>
