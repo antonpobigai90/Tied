@@ -50,7 +50,8 @@
                 android:backgroundTint="@android:color/transparent"
                 android:text="6408 Rocksprings drive"
                 android:textColor="@color/grey"
-                android:textSize="13sp"
+                style="@style/EditTextStyle"
+
         />
     </LinearLayout>
 
@@ -88,6 +89,7 @@
                     android:backgroundTint="@android:color/transparent"
                     android:inputType="text"
                     android:text="Dallas"
+                    style="@style/EditTextStyle"
                     android:textColor="@color/grey"
             />
 
@@ -151,6 +153,7 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="@android:color/transparent"
                 android:text="76001"
+                style="@style/EditTextStyle"
                 android:inputType="number"
                 android:textColor="@color/grey"
         />

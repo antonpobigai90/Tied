@@ -69,11 +69,13 @@ public class LineClientAdapter extends BaseAdapter {
         v.name = (TextView) view.findViewById(R.id.name);
         v.imageView = (ImageView) view.findViewById(R.id.pic);
         v.check = (ImageView) view.findViewById(R.id.selector);
+        v.description=(TextView)view.findViewById(R.id.description);
 
         final Client data = (Client) _data.get(i);
         MyUtils.Picasso.displayImage(data.getLogo(), v.imageView);
-        v.name.setText(data.getFull_name());
-        if (data.getCheckStatus()) {
+        v.name.setText(MyUtils.getClientName(data));
+        v.description.setText(MyUtils.getDistance(MyUtils.getCurrentLocation(), data.getAddress().getCoordinate()));
+      /*  if (data.getCheckStatus()) {
             v.check.setBackgroundResource(R.drawable.circle_check2);
         } else {
             v.check.setBackgroundResource(R.drawable.circle_uncheck);
@@ -86,14 +88,14 @@ public class LineClientAdapter extends BaseAdapter {
                 boolean same = data.getCheckStatus();
                 if (same) {
                     data.setCheckStatus(false);
-                    v.check.setBackgroundResource(R.mipmap.circle_uncheck);
+                    v.check.setBackgroundResource(R.drawable.circle_uncheck);
                 } else {
                     data.setCheckStatus(true);
-                    v.check.setBackgroundResource(R.mipmap.circle_check2);
+                    v.check.setBackgroundResource(R.drawable.circle_check2);
                 }
                 notifyDataSetChanged();
             }
-        });
+        });*/
 
         view.setTag(data);
         return view;
@@ -118,7 +120,7 @@ public class LineClientAdapter extends BaseAdapter {
 
     static class ViewHolder {
         ImageView imageView,check;
-        TextView name;
+        TextView name, description;
     }
 
 }

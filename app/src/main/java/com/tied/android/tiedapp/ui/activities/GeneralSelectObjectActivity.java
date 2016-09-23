@@ -1,6 +1,8 @@
 package com.tied.android.tiedapp.ui.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -15,6 +17,7 @@ import android.widget.Toast;
 
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
+import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Distance;
 import com.tied.android.tiedapp.objects.Line;
@@ -31,6 +34,7 @@ import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -46,13 +50,15 @@ public class GeneralSelectObjectActivity extends Activity
             .getSimpleName();
 
 
-    public static final String SELECTED_IDS="selected_ids";
+    public static final String SELECTED_OBJECTS="selected_ids";
+    public static final String OBJECT_TYPE="object_type";
+    public static final String IS_MULTIPLE="is_multiple";
     public static final int SELECT_CLIENT_TYPE=100;
    // public static final int SELECT_CLIENT_TYPE_MULTIPLE=102;
     public static final int SELECT_LINE_TYPE=200;
    // public static final int SELECT_LINE_TYPE_MULTIPLE=201;
-    public static int ACTIVITY_TYPE=SELECT_CLIENT_TYPE;
-    public static boolean IS_MULTIPLE=true;
+    //public static int ACTIVITY_TYPE=SELECT_CLIENT_TYPE;
+    //public static boolean IS_MULTIPLE=true;
 
     public FragmentIterationListener mListener;
     ArrayList selectedObjects = new ArrayList();
@@ -74,39 +80,61 @@ public class GeneralSelectObjectActivity extends Activity
     private TextView txt_continue, selectedCountText;
     private View addLayout;
     View finishSelection;
+    private boolean isMultiple=false;
+    private String selectedIds;
+    int objectType=SELECT_CLIENT_TYPE;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle bundle=getIntent().getExtras();
+        if(bundle!=null ) {
+           try{
+               isMultiple=bundle.getBoolean(IS_MULTIPLE);
+
+           }catch (Exception e) {}
+            try{
+                objectType=bundle.getInt(OBJECT_TYPE);
+            }catch (Exception e) {}
+           /* try{
+                selectedIDs=bundle.getStringArrayList(SELECTED_IDS);
+                if(selectedIDs==null) selectedIDs=new ArrayList<String>(0);
+            }catch (Exception e) {}*/
+        }
         setContentView(R.layout.schedule_select_client_list_general);
+        MyUtils.setFocus(findViewById(R.id.getFocus));
         initComponent();
     }
-    public static void setType(int objectType, boolean isMultiple) {
-        ACTIVITY_TYPE=objectType;
-        IS_MULTIPLE=isMultiple;
-        GeneralSelectObjectActivity.IS_MULTIPLE=isMultiple;
-    }
+   /* public static void setType(int objectType, boolean isMultiple) {
+      //  ACTIVITY_TYPE=objectType;
+      //  IS_MULTIPLE=isMultiple;
+       // this.objectType=objectType;
+       // this.isMultiple=isMultiple
+       // GeneralSelectObjectActivity.IS_MULTIPLE=isMultiple;
+    }*/
 
 
 
     public void initComponent() {
         clientsWithDistance = new ArrayList<Client>();
         listView = (ListView) findViewById(R.id.list);
+        findViewById(R.id.clear_but).setOnClickListener(this);
 
-        txt_continue = (TextView) findViewById(R.id.txt_continue);
+//        txt_continue = (TextView) findViewById(R.id.txt_continue);
 
         search = (EditText) findViewById(R.id.search);
         listView.setOnItemClickListener(this);
         addLayout = findViewById(R.id.add_layout);
 
-        if(!IS_MULTIPLE) {
+        if(!isMultiple) {
             addLayout.setVisibility(View.GONE);
         }
         finishSelection=findViewById(R.id.add_button);
         finishSelection.setVisibility(View.GONE);
         finishSelection.setOnClickListener(this);
         selectedCountText=(TextView)findViewById(R.id.selected_count);
+
         updateNumSelected();
 
 
@@ -141,14 +169,15 @@ public class GeneralSelectObjectActivity extends Activity
 
         bundle = getIntent().getExtras();
         user = MyUtils.getUserFromBundle(bundle);
+        if(user==null) user=MyUtils.getUserLoggedIn();
         if(bundle!=null) {
-            selectedObjects=(ArrayList<Object>)bundle.getSerializable(SELECTED_IDS);
+            selectedObjects=(ArrayList<Object>)bundle.getSerializable(SELECTED_OBJECTS);
         }
         if(selectedObjects!=null) {
             int len=selectedObjects.size();
             selectedIDs=new ArrayList<>(len);
             for(int i=0; i<len; i++) {
-                if( ACTIVITY_TYPE==SELECT_CLIENT_TYPE) {
+                if( objectType==SELECT_CLIENT_TYPE) {
                     selectedIDs.add(((Client) selectedObjects.get(i)).getId());
 
                 }
@@ -157,6 +186,8 @@ public class GeneralSelectObjectActivity extends Activity
 
                 }
             }
+        }else{
+            selectedObjects=new ArrayList<Objects>();
         }
         //if( ACTIVITY_TYPE==SELECT_CLIENT_TYPE) {
             initClient();
@@ -169,19 +200,40 @@ public class GeneralSelectObjectActivity extends Activity
             case R.id.add_button:
                 finishSelection();
                 break;
+            case R.id.clear_but:
+                showClearWarning();
+                break;
         }
     }
-
+private void showClearWarning() {
+     final AlertDialog ad= new AlertDialog.Builder(this).create();
+    ad.setMessage("This will clear all selections. Are you sure you want to proceed?");
+    ad.setButton(AlertDialog.BUTTON_POSITIVE, "YES", new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialogInterface, int i) {
+            selectedIDs.clear();
+            selectedObjects.clear();
+            finishSelection();
+        }
+    });
+    ad.setButton(AlertDialog.BUTTON_NEGATIVE, "NO", new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialogInterface, int i) {
+            dialogInterface.dismiss();
+        }
+    });
+    ad.show();
+}
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.d("search", "here---------------- listener");
 
        // if(clientsWithDistance.get(position))
-        if(!IS_MULTIPLE) {
+        if(!isMultiple) {
             selectedIDs.clear();
             selectedObjects.clear();
         }
-      if( ACTIVITY_TYPE==SELECT_CLIENT_TYPE) {
+      if( objectType==SELECT_CLIENT_TYPE) {
             Client obj=(Client)clientsWithDistance.get(position);
 
             if(selectedIDs.contains(obj.getId())) {
@@ -207,7 +259,7 @@ public class GeneralSelectObjectActivity extends Activity
         intent.putExtras(b);
         setResult(RESULT_OK, intent);
         finish();*/
-        if(IS_MULTIPLE) {
+        if(isMultiple) {
             adapter.setSelected(selectedIDs);
             adapter.notifyDataSetChanged();
         }else{
@@ -226,11 +278,17 @@ public class GeneralSelectObjectActivity extends Activity
     private void finishSelection() {
         Intent intent = new Intent();
         Bundle b =new Bundle();
-        b.putSerializable("selected", selectedObjects);
+        if(!selectedObjects.isEmpty()) {
+            if (isMultiple) {
+                b.putSerializable("selected", selectedObjects);
+            } else {
+                b.putSerializable("selected", (Client) selectedObjects.get(0));
+            }
+        }
         intent.putExtras(b);
         Logger.write("finishginnnnn.");
         setResult(RESULT_OK, intent);
-        finishActivity(RESULT_OK);
+        finishActivity(Constants.SELECT_CLIENT);
         finish();
     }
 
@@ -260,7 +318,7 @@ public class GeneralSelectObjectActivity extends Activity
                     ArrayList<Client> clients = clientRes.getClients();
                     Log.d(TAG + "", clients.toString());
                     clientsWithDistance = clients;
-                    adapter = new MyClientLineAdapter(clientsWithDistance, selectedIDs, GeneralSelectObjectActivity.this, IS_MULTIPLE);
+                    adapter = new MyClientLineAdapter(clientsWithDistance, selectedIDs, GeneralSelectObjectActivity.this, isMultiple);
                     listView.setAdapter(adapter);
                     listView.setFastScrollEnabled(true);
                 }else{

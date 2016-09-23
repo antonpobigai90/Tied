@@ -4,14 +4,13 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.util.Pair;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.ProgressBar;
 
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.MainApplication;
@@ -29,15 +28,10 @@ import com.tied.android.tiedapp.ui.adapters.ScheduleListAdapter;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.HelperMethods;
+import com.tied.android.tiedapp.util.MyUtils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -60,10 +54,13 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
     protected TimeRange timeRange = null;
     protected DateRange dateRange = null;
 
+    protected View emptyScheduleMessage;
+
     protected ScheduleListAdapter adapter;
     protected Bundle bundle;
     protected User user;
 
+    protected ProgressBar pb;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.schedule_list, container, false);
@@ -79,6 +76,10 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
     protected void initComponent(View view){
         listView = (ListView) view.findViewById(R.id.list);
         listView.setOnItemClickListener(this);
+        emptyScheduleMessage=view.findViewById(R.id.empty_schedule);
+        emptyScheduleMessage.setVisibility(View.GONE);
+        pb=(ProgressBar)view.findViewById(R.id.progress_bar);
+        pb.setVisibility(View.GONE);
         bundle = getArguments();
         if (bundle != null) {
             Gson gson = new Gson();
@@ -92,50 +93,59 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
         Log.d("schedules at ", position +"here---------------- "+scheduleDataModels.toString());
+      /*  Bundle bundle=new Bundle();
+        ScheduleDataModel data=scheduleDataModels.get(position);
+        bundle.putSerializable(Constants.SCHEDULE_DATA, data.toJSONString());
+        if(data.cclient!=null) bundle.putSerializable(Constants.CLIENT_DATA, gson.toJson(client, Client.class));
+        Schedule.scheduleCreated(getActivity().getApplicationContext());
+        bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
+        DialogUtils.closeProgress();
+        nextAction(Constants.ScheduleSuggestions, bundle);*/
     }
 
     protected void initSchedule() {
         Log.d(TAG + " scheduleDate", scheduleDate.toString());
+       pb.setVisibility(View.VISIBLE);
+        emptyScheduleMessage.setVisibility(View.GONE);
         ScheduleApi scheduleApi = MainApplication.getInstance().getRetrofit().create(ScheduleApi.class);
         Call<ScheduleRes> response = scheduleApi.getScheduleByDate(user.getToken(), scheduleDate);
         response.enqueue(new Callback<ScheduleRes>() {
             @Override
             public void onResponse(Call<ScheduleRes> call, Response<ScheduleRes> resResponse) {
                 if (getActivity() == null) return;
-                DialogUtils.closeProgress();
-                ScheduleRes scheduleRes = resResponse.body();
-                if (scheduleRes != null && scheduleRes.isAuthFailed()) {
-                    User.LogOut(getActivity());
-                } else if (scheduleRes != null && scheduleRes.get_meta() != null && scheduleRes.get_meta().getStatus_code() == 200) {
-                    ArrayList<Schedule> scheduleArrayList = scheduleRes.getSchedules();
-                    scheduleDataModels = parseSchedules(scheduleArrayList);
-                    Log.d(TAG + "scheduleDataModels", scheduleDataModels.toString());
-                    bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
-                    adapter = new ScheduleListAdapter(scheduleDataModels, getActivity(), bundle);
-                    listView.setAdapter(adapter);
-                } else {
-                    Toast.makeText(getActivity(), "encountered error with server", Toast.LENGTH_LONG).show();
+                pb.setVisibility(View.GONE);
+                try {
+                    ScheduleRes scheduleRes = resResponse.body();
+                    if (scheduleRes != null && scheduleRes.isAuthFailed()) {
+                        User.LogOut(getActivity());
+                    } else if (scheduleRes != null && scheduleRes.get_meta() != null && scheduleRes.get_meta().getStatus_code() == 200) {
+                        ArrayList<Schedule> scheduleArrayList = scheduleRes.getSchedules();
+                        scheduleDataModels = parseSchedules(scheduleArrayList);
+                        Log.d(TAG + "scheduleDataModels", scheduleDataModels.toString());
+                        bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
+                        adapter = new ScheduleListAdapter(scheduleDataModels, getActivity(), bundle);
+                        listView.setAdapter(adapter);
+                        if(scheduleArrayList.size()==0) {
+                            emptyScheduleMessage.setVisibility(View.VISIBLE);
+                        }
+                    } else {
+                        MyUtils.showToast(getString(R.string.connection_error));
+                    }
+                }catch (Exception e) {
+
                 }
             }
 
             @Override
             public void onFailure(Call<ScheduleRes> call, Throwable t) {
                 Log.d(TAG + " onFailure", t.toString());
+                pb.setVisibility(View.GONE);
+                MyUtils.showToast(getString(R.string.connection_error));
                 DialogUtils.closeProgress();
             }
         });
     }
 
-    private boolean isSameDay(String day1, String day2) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            Date date1 = sdf.parse(day1);
-            Date date2 = sdf.parse(day2);
-            return date1.compareTo(date2) == 0;
-        } catch (ParseException e) {
-            return false;
-        }
-    }
 
     protected ArrayList<ScheduleDataModel> parseSchedules(ArrayList<Schedule> scheduleArrayList) {
         Log.d(TAG + " parseSchedules", scheduleArrayList.toString());
@@ -147,7 +157,7 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
             schedules.add(schedule);
             for (int j = i + 1; j < scheduleArrayList.size(); j++) {
                 Schedule this_schedule = scheduleArrayList.get(j);
-                if (isSameDay(schedule.getDate(), this_schedule.getDate())) {
+                if (MyUtils.isSameDay(schedule.getDate(), this_schedule.getDate())) {
                     schedules.add(this_schedule);
                     Log.d(TAG, "SAME "+schedule.getTitle() + " and "+this_schedule.getTitle());
                     scheduleArrayList.remove(j--);
@@ -157,7 +167,7 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
             long diff_in_date = HelperMethods.getDateDifferenceWithToday(schedule.getDate());
 
             String day = String.format("%02d", HelperMethods.getDayFromSchedule(schedule.getDate()));
-            String week_day = getWeekDay(schedule);
+            String week_day = MyUtils.getWeekDay(schedule);
 
             scheduleDataModel.setSchedules(schedules);
             scheduleDataModel.setDay(day);
@@ -168,27 +178,6 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
         Collections.reverse(scheduleDataModels);
         return scheduleDataModels;
     }
-
-    protected String getWeekDay(Schedule schedule){
-        int diff = (int) HelperMethods.getDateDifferenceWithToday(schedule.getDate());
-        String result;
-        if(diff < 7 && diff >= 0){
-            switch (diff){
-                case 0:
-                    result = "Today";
-                    break;
-                case 1:
-                    result = "Tomorrow";
-                    break;
-                default:
-                    result = HelperMethods.getDayOfTheWeek(schedule.getDate());
-            }
-        }else{
-            result = HelperMethods.getMonthOfTheYear(schedule.getDate());
-        }
-        return result;
-    }
-
 
     @Override
     public void onClick(View v) {
@@ -214,64 +203,4 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
         }
     }
 
-    public static Pair<String,String> getWeekRange(int year, int week_no) {
-
-        Calendar cal = Calendar.getInstance();
-
-        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-        cal.set(Calendar.YEAR, year);
-        cal.set(Calendar.WEEK_OF_YEAR, week_no);
-        Date monday = cal.getTime();
-
-        cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-        cal.set(Calendar.YEAR, year);
-        cal.set(Calendar.WEEK_OF_YEAR, week_no);
-        Date sunday = cal.getTime();
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        return new Pair<String,String>(sdf.format(monday), sdf.format(sunday));
-    }
-
-
-    public android.util.Pair<String, String> getDateRange() {
-        Date begining, end;
-
-        {
-            Calendar calendar = getCalendarForNow();
-            calendar.set(Calendar.DAY_OF_MONTH,
-                    calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
-            setTimeToBeginningOfDay(calendar);
-            begining = calendar.getTime();
-        }
-
-        {
-            Calendar calendar = getCalendarForNow();
-            calendar.set(Calendar.DAY_OF_MONTH,
-                    calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-            setTimeToEndofDay(calendar);
-            end = calendar.getTime();
-        }
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        return new android.util.Pair<String,String>(sdf.format(begining), sdf.format(end));
-    }
-
-    private static Calendar getCalendarForNow() {
-        Calendar calendar = GregorianCalendar.getInstance();
-        calendar.setTime(new Date());
-        return calendar;
-    }
-
-    private static void setTimeToBeginningOfDay(Calendar calendar) {
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-    }
-
-    private static void setTimeToEndofDay(Calendar calendar) {
-        calendar.set(Calendar.HOUR_OF_DAY, 23);
-        calendar.set(Calendar.MINUTE, 59);
-        calendar.set(Calendar.SECOND, 59);
-        calendar.set(Calendar.MILLISECOND, 999);
-    }
 }

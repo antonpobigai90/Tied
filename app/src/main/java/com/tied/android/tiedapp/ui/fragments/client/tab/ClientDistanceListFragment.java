@@ -3,7 +3,6 @@ package com.tied.android.tiedapp.ui.fragments.client.tab;
 import android.view.View;
 import android.widget.TextView;
 
-import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.ui.adapters.ClientDistantAdapter;
 import com.tied.android.tiedapp.ui.adapters.ClientParentAdapter;
 import com.tied.android.tiedapp.util.MyUtils;
@@ -20,7 +19,7 @@ public class ClientDistanceListFragment extends ClientList{
 
     public void initComponent(View view) {
         super.initComponent(view);
-        txt_continue = (TextView) view.findViewById(R.id.txt_continue);
+//        txt_continue = (TextView) view.findViewById(R.id.txt_continue);
     }
 
     protected void initClient(){

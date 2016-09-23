@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -71,19 +72,20 @@ public class AddClientActivity extends FragmentActivity implements View.OnClickL
         }
         user = User.getUser(getApplicationContext());
         Client client = (Client) getIntent().getSerializableExtra(Constants.CLIENT_DATA);
+
         Gson gson = new Gson();
         String user_json = gson.toJson(user);
         String client_json = gson.toJson(client);
         bundle.putString(Constants.USER_DATA, user_json);
         bundle.putString(Constants.CLIENT_DATA, client_json);
-//        launchFragment(Constants.AddClient, bundle);
-        launchFragment(Constants.ViewClient, bundle);
+        launchFragment(Constants.AddClient, bundle);
+        //launchFragment(Constants.ViewClient, bundle);
     }
 
     private void handleCrop(Uri outputUri) {
         ImageView avatar = ((AddClientFragment) fragment).avatar;
         avatar.setImageBitmap(null);
-        Log.d("path * ", outputUri.getPath());
+        Logger.write("path * "+ outputUri.getPath());
         try {
             bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), outputUri);
             avatar.setImageBitmap(bitmap);
@@ -97,7 +99,7 @@ public class AddClientActivity extends FragmentActivity implements View.OnClickL
      */
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("requestCode", requestCode + "");
+        Logger.write("requestCodeeeeeeee "+ requestCode + "");
         if (requestCode == Crop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
             handleCrop(outputUri);
         } else if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
@@ -160,9 +162,11 @@ public class AddClientActivity extends FragmentActivity implements View.OnClickL
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        finish();
+        /*
         if (Constants.AddClient == fragment_index){
             finish();
-        }
+        }*/
     }
 
 
@@ -193,4 +197,13 @@ public class AddClientActivity extends FragmentActivity implements View.OnClickL
         }
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState, PersistableBundle persistentState) {
+        super.onRestoreInstanceState(savedInstanceState, persistentState);
+    }
 }

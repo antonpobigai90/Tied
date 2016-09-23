@@ -39,6 +39,7 @@ public class MainApplication extends Application {
     public static ArrayList clientsList = new ArrayList();
     public static ArrayList linesList = new ArrayList();
     public static ArrayList schedules = new ArrayList();
+    public static ArrayList goals = new ArrayList();
 
     private static OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
 

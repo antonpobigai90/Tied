@@ -86,7 +86,7 @@ public class MyClientLineAdapter extends BaseAdapter {
             final Client client = (Client) _data.get(i);
             viewHolder.name.setText(client.getFull_name());
              MyUtils.Picasso.displayImage(client.getLogo(), viewHolder.roundedImage);
-             viewHolder.description.setText("");
+             viewHolder.description.setText(client.getAddress().getCity()+", "+client.getAddress().getState());
          if(isMultiple) {
              if (selected.contains(client.getId())) {
                  viewHolder.selector.setImageResource(R.drawable.selected_bg);

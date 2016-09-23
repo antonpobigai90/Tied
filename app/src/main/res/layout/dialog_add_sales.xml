@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:background="@drawable/rounded_white_background"
+              android:padding="10dp"
+              android:layout_margin="10dp">
+<LinearLayout android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:gravity="center_vertical"
+              android:onClick="onClick"
+              android:id="@+id/select_client"
+              android:orientation="horizontal">
+    <de.hdodenhof.circleimageview.CircleImageView
+            android:onClick="onClick"
+            android:id="@+id/user_picture_iv"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="25dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:src="@drawable/default_avatar" />
+    <TextView android:layout_width="0dp"
+              android:layout_weight="1"
+              style="@style/EditTextStyle"
+              android:textColor="@color/grey"
+              android:layout_height="wrap_content"
+              android:text="Select Client"/>
+    <ImageView android:layout_width="20dp"
+               android:layout_height="20dp"
+               android:src="@drawable/right_arrow"/>
+
+</LinearLayout>
+<LinearLayout style="@style/SeperatorHorizontal" />
+<LinearLayout android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:gravity="center_vertical"
+              android:onClick="onClick"
+              android:id="@+id/select_line"
+              android:orientation="horizontal">
+    <ImageView
+            android:onClick="onClick"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="15dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:src="@drawable/icon_layer_blue" />
+    <TextView android:layout_width="0dp"
+              android:layout_weight="1"
+              style="@style/EditTextStyle"
+              android:textColor="@color/grey"
+              android:layout_height="wrap_content"
+              android:text="Select Line"/>
+    <ImageView android:layout_width="20dp"
+               android:layout_height="20dp"
+               android:src="@drawable/right_arrow"/>
+
+</LinearLayout>
+<LinearLayout style="@style/SeperatorHorizontal" />
+<LinearLayout android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:gravity="center_vertical"
+              android:onClick="onClick"
+              android:orientation="horizontal">
+    <ImageView
+            android:onClick="onClick"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="15dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:src="@drawable/ic_dollar_grey" />
+    <EditText android:layout_width="0dp"
+              android:layout_weight="1"
+              style="@style/EditTextStyle"
+              android:textColorHint="@color/light_gray2"
+              android:hint="Sales amount"
+              android:textColor="@color/grey"
+              android:textSize="15sp"
+              android:layout_height="wrap_content"
+              android:text=""/>
+
+
+</LinearLayout>
+<LinearLayout style="@style/SeperatorHorizontal" />
+<LinearLayout android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:gravity="center_vertical"
+              android:onClick="onClick"
+              android:id="@+id/select_date"
+              android:orientation="horizontal">
+    <ImageView
+            android:onClick="onClick"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="15dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:src="@drawable/ic_time_grey" />
+    <TextView android:layout_width="0dp"
+              android:layout_weight="1"
+              style="@style/EditTextStyle"
+              android:textColorHint="@color/grey"
+              android:hint="Date of Sales"
+              android:textSize="15sp"
+              android:textColor="@color/grey"
+              android:layout_height="wrap_content"
+              android:text=""/>
+
+    <ImageView android:layout_width="20dp"
+               android:layout_height="20dp"
+               android:src="@drawable/up_down_arrow"/>
+
+</LinearLayout>
+
+</LinearLayout>

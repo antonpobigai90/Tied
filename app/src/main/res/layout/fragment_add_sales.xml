@@ -4,14 +4,50 @@
               android:layout_height="match_parent"
               android:background="@drawable/background_green"
               android:orientation="vertical">
+    <RelativeLayout
+            android:id="@+id/top_layout"
+            android:layout_width="match_parent"
+            android:background="@drawable/background_layout"
+            android:layout_height="@dimen/action_bar_height">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="0dp"
+                android:text="Add a Sale"
+                android:textColor="@color/white"
+                android:textSize="15sp" />
 
+        <ImageView
+                android:id="@+id/img_close"
+                style="@style/ActionBarIcon"
+                android:onClick="goBack"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:src="@drawable/btn_close" />
+
+
+
+
+        <ImageView
+                android:id="@+id/img_edit"
+                style="@style/ActionBarIcon"
+                android:gravity="center"
+                android:layout_height="50dp"
+                android:visibility="gone"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/checkmark" />
+
+
+    </RelativeLayout>
     <LinearLayout
             android:id="@+id/top"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
 
             android:orientation="vertical">
-
         <RelativeLayout
                 android:id="@+id/top_layout"
                 android:layout_width="match_parent"
@@ -46,30 +82,10 @@
                     android:layout_marginLeft="10dp"
                         android:src="@drawable/btn_back_arrow" />
 
-            </LinearLayout>
+        <ScrollView android:layout_width="match_parent"
+                    android:layout_height="0dp"
+        android:layout_weight="1">
 
-            <LinearLayout
-                    android:id="@+id/ok_but"
-                    android:layout_width="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:gravity="center"
-                    android:onClick="onClick"
-                    android:layout_height="@dimen/action_bar_icon_height"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:orientation="horizontal">
-                <ImageView
-                        android:id="@+id/img_edit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/action_bar_icon_height"
-                        android:gravity="center"
-
-
-                        android:layout_marginRight="15dp"
-                        android:src="@drawable/checkmark" />
-            </LinearLayout>
-
-        </RelativeLayout>
 
         <LinearLayout android:layout_width="match_parent"
                       android:layout_height="wrap_content"
@@ -81,16 +97,50 @@
                           android:layout_height="wrap_content"
                           android:gravity="center_vertical"
                           android:onClick="onClick"
+                          android:orientation="horizontal">
+                <ImageView
+                        android:onClick="onClick"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:padding="15dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="15dp"
+                        android:focusable="true"
+                         />
+                <EditText android:layout_width="0dp"
+                          android:layout_weight="1"
+                          style="@style/EditTextStyle"
+                          android:textColorHint="@color/light_gray2"
+                          android:hint="Title of this sale"
+                          android:textColor="@color/grey"
+                          android:textSize="15sp"
+                          android:padding="5dp"
+                          android:id="@+id/title"
+                          android:layout_height="wrap_content"
+                          android:text=""/>
+
+
+            </LinearLayout>
+            <LinearLayout style="@style/SeperatorHorizontal" />
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:gravity="center_vertical"
+                          android:onClick="onClick"
                           android:id="@+id/select_client"
                           android:orientation="horizontal">
                 <de.hdodenhof.circleimageview.CircleImageView
                         android:onClick="onClick"
-                        android:id="@+id/user_picture_iv"
+                        android:id="@+id/client_photo"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
+                        android:padding="10dp"
+                        android:layout_marginRight="15dp"
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="15dp"
+                        android:scaleType="centerCrop"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
                         android:src="@drawable/default_avatar" />
                 <TextView android:layout_width="0dp"
                           android:layout_weight="1"
@@ -106,8 +156,10 @@
                     android:textSize="15dp" />
 
             </LinearLayout>
-            <LinearLayout style="@style/SeperatorHorizontal" />
+            <LinearLayout style="@style/SeperatorHorizontal"
+            android:visibility="gone"/>
             <LinearLayout android:layout_width="match_parent"
+                          android:visibility="gone"
                           android:layout_height="wrap_content"
                           android:gravity="center_vertical"
                           android:onClick="onClick"
@@ -145,9 +197,11 @@
                         android:layout_width="50dp"
                         android:layout_height="50dp"
                         android:padding="15dp"
+                        android:id="@+id/getFocus"
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="15dp"
+                        android:focusable="true"
                         android:src="@drawable/ic_dollar_grey" />
 
                 <LinearLayout
@@ -199,6 +253,7 @@
                           android:textColorHint="@color/grey"
                           android:hint="Date of Sales"
                           android:textSize="15sp"
+                          android:id="@+id/date_sold"
                           android:textColor="@color/grey"
                           android:layout_height="wrap_content"
                           android:text=""
@@ -264,8 +319,8 @@
                     android:textColor="@color/schedule_title_bg_color" />
             </LinearLayout>
 
-        </LinearLayout>
 
+        </LinearLayout>
     </LinearLayout>
 
 

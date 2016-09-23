@@ -189,7 +189,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:background="@drawable/curve_white_background"
+                android:background="@drawable/curve_white_background_with_stroke"
                 android:orientation="vertical"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
@@ -590,7 +590,7 @@
                                     android:id="@+id/lines_territory_arrow"
                                     android:layout_width="20dp"
                                     android:layout_height="20dp"
-                                    android:src="@mipmap/right_arrow" />
+                                    android:src="@drawable/right_arrow" />
 
                             </LinearLayout>
 

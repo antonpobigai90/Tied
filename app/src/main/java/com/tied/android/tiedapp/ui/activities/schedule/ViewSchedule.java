@@ -1,13 +1,17 @@
 package com.tied.android.tiedapp.ui.activities.schedule;
 
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
+
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.tied.android.tiedapp.util.Logger;
+import org.apache.commons.lang.time.DateUtils;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -20,20 +24,25 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.johnhiott.darkskyandroidlib.RequestBuilder;
 import com.johnhiott.darkskyandroidlib.models.Request;
 import com.johnhiott.darkskyandroidlib.models.WeatherResponse;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
+
 import com.tied.android.tiedapp.objects.client.Client;
+
+import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Location;
+import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.util.HelperMethods;
-
+import com.tied.android.tiedapp.util.MyUtils;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 /**
  * Created by Emmanuel on 6/23/2016.
  */
@@ -46,8 +55,10 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
     private User user;
     private Client client;
     private Schedule schedule;
+    TextView dayTV, weekTV, timeRange;
 
-    private TextView description, temperature, title, schedule_title;
+
+    private TextView description, temperature,  schedule_title, weatherInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,26 +66,59 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.fragment_schedule_view);
 
         user = User.getUser(getApplicationContext());
+
         client = (Client) getIntent().getSerializableExtra(Constants.CLIENT_DATA);
         schedule = (Schedule) getIntent().getSerializableExtra(Constants.SCHEDULE_DATA);
 
-        MapFragment mapFragment = (MapFragment) getFragmentManager()
+        final MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+
+        mapFragment.getMapAsync(ViewSchedule.this);
 
         schedule_title = (TextView) findViewById(R.id.schedule_title);
         description = (TextView) findViewById(R.id.description);
-        title = (TextView) findViewById(R.id.title);
+        //title = (TextView) findViewById(R.id.title);
         temperature = (TextView) findViewById(R.id.weather);
 
-        title.setText(schedule.getTitle());
+        //title.setText(schedule.getTitle());
         schedule_title.setText(schedule.getTitle());
         description.setText(schedule.getDescription());
+        if(schedule.getDescription()==null || schedule.getDescription().isEmpty()) description.setVisibility(View.GONE);
+
+        dayTV=(TextView) findViewById(R.id.day);
+        weekTV=(TextView) findViewById(R.id.week_day);
+        timeRange =(TextView) findViewById(R.id.time_range);
+
+            long diff_in_date = HelperMethods.getDateDifferenceWithToday(schedule.getDate());
+
+            String day = String.format("%02d", HelperMethods.getDayFromSchedule(schedule.getDate()));
+           // String week_day = MyUtils.getWeekDay(schedule);
+        dayTV.setText(MyUtils.toNth(day));
+       // long epoch=SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        long epoch = 0;
+        Logger.write(schedule.getDate()+" "+schedule.getTime_range().getStart_time());
+        timeRange.setText(schedule.getTime_range().getStart_time()+" - "+schedule.getTime_range().getEnd_time());
+        try {
+            epoch = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(schedule.getDate()+" "+schedule.getTime_range().getStart_time()).getTime();
+            System.out.println(epoch);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            Logger.write(e);
+        }
+        //String timePassedString = ""+ android.text.format.DateUtils.getRelativeTimeSpanString(epoch, System.currentTimeMillis(), android.text.format.DateUtils.WEEK_IN_MILLIS);
+        weekTV.setText(MyUtils.getWeekDay(schedule));
+        weatherInfo=(TextView) findViewById(R.id.weather_info);
+
+
+
+
+        String timeRange = MyUtils.getTimeRange(schedule);
+       // time.setText(timeRange);
 
         final RequestBuilder weather = new RequestBuilder();
         Request request = new Request();
-        request.setLat("32.00");
-        request.setLng("-81.00");
+        request.setLat(""+schedule.getLocation().getCoordinate().getLat());
+        request.setLng(""+schedule.getLocation().getCoordinate().getLon());
         request.setUnits(Request.Units.US);
         request.setLanguage(Request.Language.ENGLISH);
         request.addExcludeBlock(Request.Block.CURRENTLY);
@@ -82,11 +126,13 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
         weather.getWeather(request, new Callback<WeatherResponse>() {
             @Override
             public void success(WeatherResponse weatherResponse, Response response) {
-                Log.d(TAG, "temperature : "+weatherResponse.getDaily().getData().get(0).getApparentTemperatureMax()+"");
+                Log.d(TAG, "temperature : " + weatherResponse.getDaily().getData().get(0).getApparentTemperatureMax() + "");
                 int temp_max = (int) weatherResponse.getDaily().getData().get(0).getApparentTemperatureMax();
                 temp_max = (int) HelperMethods.convertFahrenheitToCelcius(temp_max);
-                temperature.setText(temp_max+"°");
+                temperature.setText(temp_max + "°");
+                weatherInfo.setText(weatherResponse.getDaily().getData().get(0).getSummary());
             }
+
             @Override
             public void failure(RetrofitError retrofitError) {
                 Log.d(TAG, "Error while calling: " + retrofitError.getUrl());
@@ -96,7 +142,6 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
@@ -104,60 +149,62 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
 
         myMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
 
-        LatLng MELBOURNE = new LatLng(-37.81319, 144.96298);
+        LatLng location = new LatLng(schedule.getLocation().getCoordinate().getLat(), schedule.getLocation().getCoordinate().getLon());
         Marker melbourne = myMap.addMarker(new MarkerOptions()
-                            .position(MELBOURNE)
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-        myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(MELBOURNE,15));
+                .position(location)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+        LatLng location2=new LatLng(location.latitude+0.002, location.longitude);
+        myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location2, 15));
 
         myMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
         melbourne.showInfoWindow();
 
     }
 
-
     class MyInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
         private final View myContentsView;
         boolean not_first_time_showing_info_window;
 
-        MyInfoWindowAdapter(){
-            myContentsView = getLayoutInflater().inflate(R.layout.schedule_map_info_window, null);
+        MyInfoWindowAdapter() {
+            ContextThemeWrapper cw = new ContextThemeWrapper(
+                   getApplicationContext(), R.style.Transparent);
+
+            LayoutInflater inflater = (LayoutInflater) cw
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            myContentsView = inflater.inflate(R.layout.schedule_map_info_window, null);
         }
 
-        @Override
-        public View getInfoContents(Marker marker) {
-
-
-            TextView line = ((TextView)myContentsView.findViewById(R.id.line));
-            TextView address = ((TextView)myContentsView.findViewById(R.id.address));
-            TextView distance = ((TextView)myContentsView.findViewById(R.id.distance));
-            final ImageView image = ((ImageView) myContentsView.findViewById(R.id.image));
-
-            line.setText(client.getCompany());
-            address.setText(client.getAddress().getStreet());
-            distance.setText("0.2 miles");
-
-            Picasso.with(ViewSchedule.this).
-                    load(Constants.GET_AVATAR_ENDPOINT+"avatar_"+user.getId()+".jpg")
-                    .resize(35,35)
-                    .into(new Target() {
-                        @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                            if (bitmap != null){
-                                image.setImageBitmap(bitmap);
-                            }else{
-                                image.setImageResource(R.mipmap.default_avatar);
-                            }
-                        }
-                        @Override public void onBitmapFailed(Drawable errorDrawable) { }
-                        @Override public void onPrepareLoad(Drawable placeHolderDrawable) { }
-                    });
-
-            return myContentsView;
-        }
+        //// TODO: 9/2/2016  avater should be clients
 
         @Override
         public View getInfoWindow(Marker marker) {
+
+
+            TextView line = ((TextView) myContentsView.findViewById(R.id.line));
+            TextView address = ((TextView) myContentsView.findViewById(R.id.address));
+            TextView distance = ((TextView) myContentsView.findViewById(R.id.distance));
+            final ImageView image = ((ImageView) myContentsView.findViewById(R.id.image));
+            if(client==null) image.setVisibility(View.GONE);
+            try {
+                line.setText(MyUtils.getClientName(client));
+                address.setText(schedule.getLocation().getLocationAddress());
+                distance.setText(""+MyUtils.getDistance(MyUtils.getCurrentLocation(), schedule.getLocation().getCoordinate()));
+
+                
+                if(client.getLogo()!=null && client.getLogo()!="") MyUtils.Picasso.displayImage(client.getLogo(), image);
+
+            } catch (Exception e) {
+
+            }
+            return myContentsView;
+        }
+
+
+
+
+        @Override
+        public View getInfoContents(Marker marker) {
             // TODO Auto-generated method stub
             return null;
         }

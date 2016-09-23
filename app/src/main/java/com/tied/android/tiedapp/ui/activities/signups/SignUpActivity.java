@@ -134,7 +134,6 @@ public class SignUpActivity extends AppCompatActivity implements FragmentIterati
                     fragment = fragments.get(pos);
                     break;
 
-
                 case Constants.PhoneAndFax:
                     getSupportFragmentManager().popBackStack(); //if coming from password
                     fragments.put(pos, PhoneFaxFragment.newInstance(bundle));

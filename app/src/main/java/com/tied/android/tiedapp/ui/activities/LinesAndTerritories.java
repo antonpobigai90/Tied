@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
+import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.fragments.LinesFragment;
 import com.tied.android.tiedapp.ui.fragments.TerritoriesFragment;
@@ -38,6 +39,9 @@ public class LinesAndTerritories extends AppCompatActivity implements  View.OnCl
         user = MyUtils.getUserFromBundle(bundle);
         initComponent();
 
+        if (bundle.getBoolean(Constants.SHOW_TERRITORY)) {
+            mViewPager.setCurrentItem(1);
+        }
     }
 
     private void initComponent() {
@@ -59,7 +63,6 @@ public class LinesAndTerritories extends AppCompatActivity implements  View.OnCl
             mViewPager.setCurrentItem(0);
             selectTab(tab_bar, 0);
         }
-
         onCustomSelected(mViewPager);
     }
 
