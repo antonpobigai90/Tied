@@ -35,7 +35,7 @@ public interface LineApi {
     Call<ResponseBody> getLines(@Header(Constants.TOKEN_HEADER) String token);
 
     @GET(Constants.GET_LINE_WITH_ID)
-    Call<Line> getLineWithId(@Header(Constants.TOKEN_HEADER) String token, @Path("line_id")  String line_id);
+    Call<ResponseBody> getLineWithId(@Header(Constants.TOKEN_HEADER) String token, @Path("line_id")  String line_id);
 
     @GET(Constants.USER_LINES)
     Call<ResponseBody> getUserLines();
@@ -46,7 +46,21 @@ public interface LineApi {
                                           @Path("page_number")  int page_number);
 
     @GET(Constants.USER_LINE_COUNT)
-    Call<Count> getLineCount(@Header(Constants.TOKEN_HEADER) String token);
+    Call<ResponseBody> getLineCount(@Header(Constants.TOKEN_HEADER) String token,
+                             @Path("line_id")  String line_id);
+
+    @GET(Constants.CLIENT_COUNT)
+    Call<ResponseBody> getClientCount(@Header(Constants.TOKEN_HEADER) String token,
+                               @Path("line_id")  String line_id);
+
+    @GET(Constants.TOTAL_LINE_REVENUE)
+    Call<ResponseBody> getLineTotalRevenue(@Header(Constants.TOKEN_HEADER) String token,
+                                           @Path("line_id")  String line_id);
+    @GET(Constants.LINE_GOALS)
+    Call<ResponseBody> getLineGoals(@Header(Constants.TOKEN_HEADER) String token, @Path("line_id") String line_id,
+                                    @Path("page_num") int page_num);
+    @GET(Constants.NUM_LINE_GOALS)
+    Call<ResponseBody> getNumLineGoals(@Header(Constants.TOKEN_HEADER) String token, @Path("line_id") String line_id);
 
     @POST(Constants.USER_GE0_LINES)
     Call<ClientRes> getLineByLocation(@Header(Constants.TOKEN_HEADER) String token, @Body ClientLocation clientLocation);

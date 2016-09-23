@@ -87,6 +87,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+                android:name=".ui.activities.lines.LineRevenueActivity"
+                android:label="@string/app_name"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".ui.activities.sales.ActivityAddSales"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
@@ -136,7 +141,7 @@
             android:label="@string/app_name"
             android:parentActivityName=".ui.activities.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/AppTheme.FullScreen"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.activities.schedule.ViewSchedule"
@@ -175,11 +180,15 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ui.activities.lines.LineClientList"
+            android:name=".ui.activities.lines.LineClientListActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ui.activities.DailyStatsActivity"
+                  android:label="@string/app_name"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ui.activities.SuperActivity"
                   android:label="@string/app_name"
                   android:screenOrientation="portrait"
                   android:theme="@style/AppTheme.NoActionBar" />
@@ -228,7 +237,37 @@
         <activity android:name=".ui.activities.LinesAndTerritories"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.client.ClientMapAndListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ui.activities.client.MapClientList"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.lines.LineGoalActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.lines.LineAddGoalActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.lines.LineViewGoalActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.coworker.CoWorkerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.coworker.ViewCoWorkerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.coworker.CoWorkerSchedulesActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <service android:name="com.mapbox.mapboxsdk.telemetry.TelemetryService" />
+
+        <activity android:name=".ui.activities.SelectPicture"
+            android:screenOrientation="portrait"
+            android:theme="@style/DialogTheme"/>
+        <activity android:name=".ui.activities.coworker.InviteCoWorkerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>

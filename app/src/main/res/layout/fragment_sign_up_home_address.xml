@@ -80,7 +80,7 @@
                     android:layout_below="@+id/txt_hint_string"
                     android:text="+ CLICK TO ADD/EDIT ADDRESS"
                     android:textColor="@color/grey"
-                    android:background="@drawable/curve_white_background"
+                    android:background="@drawable/curve_white_background_with_stroke"
                     android:textSize="13sp" />
             <LinearLayout
                     android:layout_width="match_parent"

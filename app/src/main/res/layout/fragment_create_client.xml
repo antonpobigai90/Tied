@@ -73,40 +73,13 @@
             android:layout_below="@+id/top_layout"
             android:padding="10dp">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_toLeftOf="@+id/camera"
-                android:orientation="vertical"
-                android:paddingBottom="10dp"
-                android:layout_marginRight="20dp"
-                android:paddingTop="10dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="5dp"
-                    android:text="COMPANY LEGAL NAME"
-                    android:textColor="@color/white"
-                    android:textSize="14sp" />
-
-                <EditText
-                    android:id="@+id/company"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="10dp"
-                    android:text=""
-                    android:textColor="@color/white"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/camera"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
+                android:layout_centerHorizontal="true"
                 android:orientation="horizontal">
 
                 <de.hdodenhof.circleimageview.CircleImageView
@@ -115,7 +88,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
-                    android:src="@mipmap/default_avatar"
+                    android:src="@drawable/default_avatar"
                     android:layout_marginTop="0dp" />
 
             </LinearLayout>
@@ -129,14 +102,41 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/top"
-        android:paddingBottom="30dp">
+        android:paddingBottom="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:paddingTop="20dp"
             android:paddingLeft="16dp"
             android:paddingRight="15dp">
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingBottom="2dp"
+                    android:paddingTop="5dp">
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/FieldLabels"
+                        android:text="COMPANY LEGAL NAME" />
+
+                <EditText
+                        android:id="@+id/company"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@android:color/transparent"
+                        android:text=""
+                        android:textColor="@color/grey" />
+                <View android:layout_width="match_parent"
+                      android:layout_height="0.1dp"
+                      android:background="@color/light_gray"
+                />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -151,16 +151,20 @@
                     style="@style/FieldLabels"
                     android:text="CONTACT PERSON" />
 
-                <com.tied.android.tiedapp.customs.ui.MyEditText
+                <EditText
                     android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
                     android:text=""
                     android:textColor="@color/grey" />
+                <View android:layout_width="match_parent"
+                      android:layout_height="0.1dp"
+                      android:background="@color/light_gray"
+                      />
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -168,10 +172,11 @@
                 android:paddingTop="5dp">
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginRight="0dp"
                     android:layout_weight="1"
+                    android:id="@+id/location_layout"
                     android:orientation="vertical">
 
                     <TextView
@@ -180,8 +185,8 @@
                         android:text="LOCATION"
                         style="@style/FieldLabels"/>
 
-                    <com.tied.android.tiedapp.customs.ui.MyEditText
-                        android:id="@+id/street"
+                    <TextView
+                        android:id="@+id/address_tv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@android:color/transparent"
@@ -189,11 +194,24 @@
                         android:inputType="text"
                         android:maxLines="1"
                         android:text=""/>
+                    <View android:layout_width="match_parent"
+                          android:layout_height="0.1dp"
+                          android:background="@color/light_gray"
+                    />
 
 
                 </LinearLayout>
+                <ImageView android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                android:src="@drawable/right_arrow"
+                           android:layout_alignParentBottom="true"
+                           android:paddingBottom="10dp"
+                           android:layout_marginRight="5dp"
+                android:layout_alignParentRight="true"/>
 
-            </LinearLayout>
+            </RelativeLayout>
+
+
 
 
             <LinearLayout
@@ -205,92 +223,31 @@
                 android:weightSum="2">
 
                 <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="20dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="20dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        style="@style/FieldLabels"
-                        android:text="CITY"/>
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="PHONE"
+                            style="@style/FieldLabels"/>
 
-                    <com.tied.android.tiedapp.customs.ui.MyEditText
-                        android:id="@+id/city"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@android:color/transparent"
-                        android:textColor="@color/grey"
-                        android:inputType="text"
-                        android:maxLines="1"
-                        android:text="" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="ZIP"
-                        style="@style/FieldLabels"/>
-
-                    <com.tied.android.tiedapp.customs.ui.MyEditText
-                        android:id="@+id/zip"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@android:color/transparent"
-                        android:maxLines="1"
-                        android:textColor="@color/grey"
-                        android:text=""/>
-
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingBottom="2dp"
-                android:paddingTop="5dp"
-                android:weightSum="2">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginRight="20dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        style="@style/FieldLabels"
-                        android:text="STATE"
-                        android:layout_marginBottom="3dip"
-                        />
-                    <RelativeLayout android:layout_width="100dip"
-                        android:layout_height="wrap_content">
-                        <Spinner
-                            android:id="@+id/state"
-                            style="@style/SpinnerStyle"
-                            />
-                        <ImageView android:layout_width="20dip"
-                            android:padding="6dp"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:src="@drawable/arrow_down_blue"
-                            android:layout_height="20dip"/>
-
-                    </RelativeLayout>
+                    <EditText
+                            android:id="@+id/phone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:backgroundTint="@android:color/transparent"
+                            android:inputType="phone"
+                            android:maxLines="1"
+                            android:textColor="@color/grey"
+                            android:text="" />
+                    <View android:layout_width="match_parent"
+                          android:layout_height="0.1dp"
+                          android:background="@color/light_gray"
+                    />
 
                 </LinearLayout>
 
@@ -307,15 +264,19 @@
                         android:text="FAX"
                         style="@style/FieldLabels"/>
 
-                    <com.tied.android.tiedapp.customs.ui.MyEditText
+                    <EditText
                         android:id="@+id/fax"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@android:color/transparent"
-                        android:inputType="text"
+                        android:inputType="phone"
                         android:maxLines="1"
                         android:text=""
                         android:textColor="@color/grey"/>
+                    <View android:layout_width="match_parent"
+                          android:layout_height="0.1dp"
+                          android:background="@color/light_gray"
+                    />
 
                 </LinearLayout>
 
@@ -331,34 +292,10 @@
                 android:paddingTop="5dp"
                 android:weightSum="2">
 
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="20dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="PHONE"
-                        style="@style/FieldLabels"/>
-
-                    <com.tied.android.tiedapp.customs.ui.MyEditText
-                        android:id="@+id/phone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@android:color/transparent"
-                        android:inputType="text"
-                        android:maxLines="1"
-                        android:textColor="@color/grey"
-                        android:text="" />
-
-
-                </LinearLayout>
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical">
@@ -366,17 +303,22 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Email"
+                        android:text="EMAIL"
                         style="@style/FieldLabels"/>
 
-                    <com.tied.android.tiedapp.customs.ui.MyEditText
+                    <EditText
                         android:id="@+id/email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@android:color/transparent"
                         android:maxLines="1"
+                        android:inputType="textEmailAddress"
                         android:textColor="@color/grey"
                         android:text="" />
+                    <View android:layout_width="match_parent"
+                          android:layout_height="0.1dp"
+                          android:background="@color/light_gray"
+                    />
 
                 </LinearLayout>
 
@@ -400,24 +342,30 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <com.tied.android.tiedapp.customs.ui.MyEditText
+                    <EditText
                         android:id="@+id/revenue"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_toLeftOf="@+id/dollar"
                         android:backgroundTint="@android:color/transparent"
                         android:text=""
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         android:textColor="@color/grey" />
 
-                    <ImageView
+
+                    <TextView
                         android:id="@+id/dollar"
-                        android:layout_width="25dp"
-                        android:layout_height="30dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:scaleType="fitXY"
-                        android:src="@mipmap/dollar" />
+                        android:textColor="@color/grey"
+                        android:textStyle="bold"
+                        android:text="$" />
                 </RelativeLayout>
+                <View android:layout_width="match_parent"
+                      android:layout_height="0.1dp"
+                      android:background="@color/light_gray"
+                />
             </LinearLayout>
 
 
@@ -438,23 +386,24 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <com.tied.android.tiedapp.customs.ui.MyEditText
+                    <EditText
                         android:id="@+id/ytd_revenue"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_toLeftOf="@+id/dollar1"
                         android:backgroundTint="@android:color/transparent"
                         android:text=""
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         android:textColor="@color/grey"/>
 
-                    <ImageView
-                        android:id="@+id/dollar1"
-                        android:layout_width="25dp"
-                        android:layout_height="30dp"
-                        android:layout_alignParentRight="true"
-                        android:scaleType="fitXY"
-                        android:src="@mipmap/dollar" />
+                    <TextView
+                            android:id="@+id/dollar1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:textColor="@color/grey"
+                            android:textStyle="bold"
+                            android:text="$" />
                 </RelativeLayout>
             </LinearLayout>
 
@@ -484,14 +433,18 @@
                         android:textColor="@color/schedule_title_bg_color"
                         android:textStyle="bold" />
 
-                    <ImageView
-                        android:id="@+id/add_industry"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_alignParentRight="true"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/plus_add" />
+                    <ImageView android:layout_width="wrap_content"
+                               android:layout_height="wrap_content"
+                               android:src="@drawable/right_arrow"
+                               android:layout_alignParentBottom="true"
+                               android:paddingBottom="10dp"
+                               android:layout_marginRight="5dp"
+                               android:layout_alignParentRight="true"/>
                 </RelativeLayout>
+                <View android:layout_width="match_parent"
+                      android:layout_height="0.1dp"
+                      android:background="@color/light_gray"
+                />
 
             </LinearLayout>
 
@@ -517,19 +470,23 @@
                         android:id="@+id/line"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_toLeftOf="@+id/add_line"
+
                         android:text=""
                         android:textStyle="bold"
                         android:textColor="@color/grey" />
 
-                    <ImageView
-                        android:id="@+id/add_line"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_alignParentRight="true"
-                        android:scaleType="fitXY"
-                        android:src="@drawable/plus_add" />
+                    <ImageView android:layout_width="wrap_content"
+                               android:layout_height="wrap_content"
+                               android:src="@drawable/right_arrow"
+                               android:layout_alignParentBottom="true"
+                               android:paddingBottom="10dp"
+                               android:layout_marginRight="5dp"
+                               android:layout_alignParentRight="true"/>
                 </RelativeLayout>
+                <View android:layout_width="match_parent"
+                      android:layout_height="0.1dp"
+                      android:background="@color/light_gray"
+                />
 
             </LinearLayout>
 
@@ -546,15 +503,19 @@
                     android:text="NOTE"
                     style="@style/FieldLabels"/>
 
-                <com.tied.android.tiedapp.customs.ui.MyEditText
+                <EditText
                     android:id="@+id/note"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
                     android:text=""
                     android:textColor="@color/grey"/>
+                <View android:layout_width="match_parent"
+                      android:layout_height="0.1dp"
+                      android:background="@color/light_gray"
+                />
             </LinearLayout>
-
+<!--
             <LinearLayout
                 android:id="@+id/birthday_layout"
                 android:layout_width="match_parent"
@@ -578,7 +539,7 @@
                     android:textStyle="bold"
                     android:textColor="@color/grey"/>
             </LinearLayout>
-
+-->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -596,7 +557,9 @@
                 <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                android:paddingBottom="30dp">
+
 
 
                     <LinearLayout
@@ -616,7 +579,7 @@
                             <ImageView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:src="@mipmap/circle_uncheck"
+                                android:src="@drawable/circle_uncheck"
                                 android:id="@+id/img_weekly" />
 
                             <TextView
@@ -639,7 +602,7 @@
                             <ImageView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:src="@mipmap/circle_uncheck"
+                                android:src="@drawable/circle_uncheck"
                                 android:id="@+id/img_two_weeks" />
 
                             <TextView
@@ -662,7 +625,7 @@
                             <ImageView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:src="@mipmap/circle_uncheck"
+                                android:src="@drawable/circle_uncheck"
                                 android:id="@+id/img_three_weeks" />
 
                             <TextView
@@ -685,7 +648,7 @@
                             <ImageView
                                 android:layout_width="20dp"
                                 android:layout_height="20dp"
-                                android:src="@mipmap/circle_uncheck"
+                                android:src="@drawable/circle_uncheck"
                                 android:id="@+id/img_monthly" />
 
                             <TextView

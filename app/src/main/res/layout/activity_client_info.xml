@@ -61,7 +61,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
-            android:src="@mipmap/icon_edit" />
+            android:src="@drawable/icon_edit" />
 
     </RelativeLayout>
 

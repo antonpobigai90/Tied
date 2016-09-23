@@ -19,8 +19,10 @@ import com.johnhiott.darkskyandroidlib.models.Request;
 import com.johnhiott.darkskyandroidlib.models.WeatherResponse;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.model.ScheduleDataModel;
+import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.ui.dialogs.DialogScheduleEventOptions;
+import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleAppointmentsFragment;
 import com.tied.android.tiedapp.util.HelperMethods;
 
 import java.util.ArrayList;
@@ -33,7 +35,7 @@ import retrofit.client.Response;
 /**
  * Created by Emmanuel on 7/1/2016.
  */
-public class ScheduleListAdapter extends BaseAdapter {
+public class ScheduleListAdapter extends BaseAdapter{
     public static final String TAG = ScheduleListAdapter.class
             .getSimpleName();
 
@@ -41,11 +43,29 @@ public class ScheduleListAdapter extends BaseAdapter {
     Activity _c;
     ViewHolder v;
     Bundle bundle;
+    private Client client;
 
     public ScheduleListAdapter(List<ScheduleDataModel> schedules, Activity context, Bundle bundle) {
         _data = schedules;
         _c = context;
         this.bundle = bundle;
+        if (client != null){
+            filterForClient();
+        }
+    }
+
+    public void filterForClient(){
+        for (int i = 0; i < _data.size(); i++){
+            ArrayList<Schedule> schedules = _data.get(i).getSchedules();
+            for (int j = 0; j < schedules.size(); j++){
+                if(!schedules.get(j).getClient_id().equals(client.getId())){
+                    _data.get(i).getSchedules().remove(j);
+                    if (_data.get(i).getSchedules().size() == 0){
+                        _data.remove(i);
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -76,7 +96,22 @@ public class ScheduleListAdapter extends BaseAdapter {
             }
         }
         notifyDataSetChanged();
-//        viewPager.getAdapter().notifyDataSetChanged();
+        ScheduleAppointmentsFragment.mViewPager.getAdapter().notifyDataSetChanged();
+    }
+
+    public void updateStatus(String id, int status){
+        outerloop:
+        for (int i = 0; i < _data.size(); i++){
+            ArrayList<Schedule> schedules = _data.get(i).getSchedules();
+            for (int j = 0; j < schedules.size(); j++){
+                if(schedules.get(j).getId().equals(id)){
+                    _data.get(i).getSchedules().get(j).setStatus(status);
+                    break outerloop;
+                }
+            }
+        }
+        notifyDataSetChanged();
+        ScheduleAppointmentsFragment.mViewPager.getAdapter().notifyDataSetChanged();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -100,20 +135,25 @@ public class ScheduleListAdapter extends BaseAdapter {
         v.weather = (TextView) view.findViewById(R.id.weather);
 
         v.day.setText(data.getDay());
-        v.week_day.setText(data.getWeek_day());
+        v.week_day.setText(data.getWeek_day().toUpperCase());
         v.temperature.setText(data.getTemperature());
         v.weather.setText(data.getWeather());
         v.timeLine = (LinearLayout) view.findViewById(R.id.timeline);
 
         v.timeLine.removeAllViews();
         ArrayList<Schedule> schedules = data.getSchedules();
+        boolean showDivider = false;
         for (final Schedule schedule : schedules) {
             View schedule_view = LayoutInflater.from(_c).inflate(R.layout.schedule_list_item, null);
             LinearLayout linearLayout = (LinearLayout) schedule_view.findViewById(R.id.schedule);
             TextView time = (TextView) linearLayout.findViewById(R.id.time);
+            View divider =linearLayout.findViewById(R.id.divider);
+            if(showDivider) divider.setVisibility(View.VISIBLE);
+            else divider.setVisibility(View.GONE);
+            showDivider=true;
             int color = getStatusColor(schedule.getStatus());
             time.setBackgroundColor(color);
-            time.setOnClickListener(new View.OnClickListener() {
+            linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     DialogScheduleEventOptions alert = new DialogScheduleEventOptions();
@@ -131,7 +171,6 @@ public class ScheduleListAdapter extends BaseAdapter {
         view.setTag(data);
         return view;
     }
-
 
     static class ViewHolder {
         TextView day, week_day, temperature, weather;

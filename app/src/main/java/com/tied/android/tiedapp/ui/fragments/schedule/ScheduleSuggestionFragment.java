@@ -58,7 +58,7 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
     private Bundle bundle;
 
     private TextView view_schedule, company_name;
-    private ImageView img_activity;
+   // private ImageView img_activity;
     private ArrayList<Client> clients;
     private ListView listView;
     private Client client;
@@ -114,7 +114,7 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
 
     public void initComponent(View view) {
 
-        img_activity = (ImageView) view.findViewById(R.id.img_activity);
+       // img_activity = (ImageView) view.findViewById(R.id.img_activity);
 
         should_visit = (LinearLayout) view.findViewById(R.id.should_visit);
 
@@ -132,7 +132,7 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
 
         view_schedule = (TextView) view.findViewById(R.id.view_schedule);
         view_schedule.setOnClickListener(this);
-        img_activity.setOnClickListener(this);
+       // img_activity.setOnClickListener(this);
 
         bundle = getArguments();
         if (bundle != null) {
@@ -142,26 +142,22 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
             String client_json = bundle.getString(Constants.CLIENT_DATA);
             String schedule_json = bundle.getString(Constants.SCHEDULE_DATA);
             user = gson.fromJson(user_json, User.class);
+            if(user==null) {
+                user=MyUtils.getUserLoggedIn();
+            }
             client = gson.fromJson(client_json, Client.class);
             schedule = gson.fromJson(schedule_json, Schedule.class);
-            company_name.setText(client.getCompany());
-
-            Log.d(TAG + " schedule", schedule.getLocation().getCoordinate().toString());
-
-            String logo = client.getLogo().equals("") ? null  : client.getLogo();
-            Picasso.with(getActivity()).
-                    load(logo)
-                    .into(new Target() {
-                        @Override public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                            if (bitmap != null){
-                                pic_client.setImageBitmap(bitmap);
-                            }else{
-                                pic_client.setImageResource(R.mipmap.default_avatar);
-                            }
-                        }
-                        @Override public void onBitmapFailed(Drawable errorDrawable) { }
-                        @Override public void onPrepareLoad(Drawable placeHolderDrawable) { }
-                    });
+            if(client !=null) {
+                try {
+                    company_name.setText(client.getCompany());
+                    Log.d(TAG + " schedule", schedule.getLocation().getCoordinate().toString());
+                    String logo = client.getLogo().equals("") ? null : client.getLogo();
+                    MyUtils.Picasso.displayImage(logo, pic_client);
+                }catch (Exception e) {
+                    company_name.setText(schedule.getTitle());
+                    pic_client.setVisibility(View.GONE);
+                }
+            }
 
             initClient();
         }
@@ -174,9 +170,7 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
             case R.id.view_schedule:
                 nextAction(Constants.ViewSchedule,bundle);
                 break;
-            case R.id.img_activity:
-                MyUtils.startActivity(getActivity(), MainActivity.class, bundle);
-                break;
+
         }
     }
 
@@ -194,27 +188,30 @@ public class ScheduleSuggestionFragment extends Fragment implements View.OnClick
             public void onResponse(Call<ClientRes> call, Response<ClientRes> resResponse) {
                 if ( getActivity() == null ) return;
                 DialogUtils.closeProgress();
-                ClientRes clientRes = resResponse.body();
-                if(clientRes.isAuthFailed()){
-                    User.LogOut(getActivity());
-                }
-                else if(clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200){
-                    clients = clientRes.getClients();
-                    horizontalAdapter = new ClientScheduleHorizontalAdapter(clients,getActivity());
-                    should_visit.removeAllViews();
-                    for (Client client : clients) {
-                        View schedule_view = LayoutInflater.from(getActivity()).inflate(R.layout.schedule_clients_suggestion_list_item, null);
-                        LinearLayout linearLayout = (LinearLayout) schedule_view.findViewById(R.id.should_visit_list_item);
-                        TextView name = (TextView) linearLayout.findViewById(R.id.name);
-                        name.setText(client.getFull_name());
-                        ImageView imageView = (ImageView) linearLayout.findViewById(R.id.pic);
-                        MyUtils.Picasso.displayImage(client.getLogo(), imageView);
-                        should_visit.addView(linearLayout);
-                    }
+                try {
+                    ClientRes clientRes = resResponse.body();
+                    if (clientRes.isAuthFailed()) {
+                        User.LogOut(getActivity());
+                    } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200) {
+                        clients = clientRes.getClients();
+                        horizontalAdapter = new ClientScheduleHorizontalAdapter(clients, getActivity());
+                        should_visit.removeAllViews();
+                        for (Client client : clients) {
+                            View schedule_view = LayoutInflater.from(getActivity()).inflate(R.layout.schedule_clients_suggestion_list_item, null);
+                            LinearLayout linearLayout = (LinearLayout) schedule_view.findViewById(R.id.should_visit_list_item);
+                            TextView name = (TextView) linearLayout.findViewById(R.id.name);
+                            name.setText(client.getFull_name());
+                            ImageView imageView = (ImageView) linearLayout.findViewById(R.id.pic);
+                            MyUtils.Picasso.displayImage(client.getLogo(), imageView);
+                            should_visit.addView(linearLayout);
+                        }
 
-                    horizontalList.setAdapter(horizontalAdapter);
-                }else{
-                    Toast.makeText(getActivity(), clientRes.getMessage(), Toast.LENGTH_LONG).show();
+                        horizontalList.setAdapter(horizontalAdapter);
+                    } else {
+                        MyUtils.showToast(clientRes.getMessage());
+                    }
+                }catch (Exception e) {
+                    MyUtils.showConnectionErrorToast(getActivity());
                 }
                 Log.d(TAG + " onResponse", resResponse.body().toString());
             }

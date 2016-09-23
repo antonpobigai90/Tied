@@ -42,7 +42,8 @@ public class TodayScheduleFragment extends SchedulesFragment implements View.OnC
         Log.d(TAG + " parseSchedules", scheduleArrayList.toString());
 
         ArrayList<ScheduleDataModel> scheduleDataModels = new ArrayList<>();
-        for (int i = 0; i < scheduleArrayList.size(); i++) {
+        int size=scheduleArrayList.size();
+        for (int i = 0; i < size; i++) {
             Schedule schedule = scheduleArrayList.get(i);
 
             ScheduleDataModel scheduleDataModel = new ScheduleDataModel();

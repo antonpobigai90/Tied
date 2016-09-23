@@ -21,12 +21,16 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
+import com.tied.android.tiedapp.ui.fragments.PrivacyFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.AddressFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.AvatarProfileFragment;
+import com.tied.android.tiedapp.ui.fragments.profile.ChangePasswordFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.EditProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.NotificationProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.ProfileFragment;
-import com.tied.android.tiedapp.ui.fragments.signups.IndustryFragment;
+import com.tied.android.tiedapp.ui.fragments.profile.SalesPrivacyFragment;
+import com.tied.android.tiedapp.ui.fragments.signups.IndustryFragmentNew;
+import com.tied.android.tiedapp.ui.fragments.signups.SelectIndustryFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.ui.listeners.ImageReadyForUploadListener;
 import com.tied.android.tiedapp.util.Logger;
@@ -70,7 +74,7 @@ public class ProfileActivity extends FragmentActivity implements FragmentIterati
     public Retrofit retrofit;
     public SignUpApi service;
     DrawerLayout drawerLayout;
-    int currentFragmentID=0;
+    int currentFragmentID = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,42 +86,63 @@ public class ProfileActivity extends FragmentActivity implements FragmentIterati
         service = retrofit.create(SignUpApi.class);
     }
 
-    Fragment currentFragment=null;
+    Fragment currentFragment = null;
+
     public void launchFragment(int pos, Bundle bundle) {
         fragment = null;
         fragment_index = pos;
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.setCustomAnimations(R.anim.slide_in_from_bottom, R.anim.slide_out_top);
-        currentFragmentID=pos;
+        currentFragmentID = pos;
         switch (pos) {
             case Constants.Profile:
-                if(fragments.get(pos)==null) {
-                    fragments.put(pos, ProfileFragment.newInstance(bundle) );
+                if (fragments.get(pos) == null) {
+                    fragments.put(pos, ProfileFragment.newInstance(bundle));
                 }
                 fragment = fragments.get(pos);
                 break;
             case Constants.EditProfile:
-                if(fragments.get(pos)==null) {
+                if (fragments.get(pos) == null) {
                     fragments.put(pos, EditProfileFragment.newInstance(bundle));
                 }
                 fragment = fragments.get(pos);
                 break;
             case Constants.ProfileAddress:
-                if(fragments.get(pos)==null) {
-                    fragments.put(pos,  AddressFragment.newInstance(bundle) );
+                if (fragments.get(pos) == null) {
+                    fragments.put(pos, AddressFragment.newInstance(bundle));
                 }
                 fragment = fragments.get(pos);
                 break;
             case Constants.Notification:
-                if(fragments.get(pos)==null) {
-                    fragments.put(pos, NotificationProfileFragment.newInstance(bundle) );
+                if (fragments.get(pos) == null) {
+                    fragments.put(pos, NotificationProfileFragment.newInstance(bundle));
                 }
                 fragment = fragments.get(pos);
                 break;
             case Constants.Industry:
-                if(fragments.get(pos)==null) {
-                    fragments.put(pos, IndustryFragment.newInstance(bundle) );
+                if (fragments.get(pos) == null) {
+                    // fragments.put(pos, IndustryFragment.newInstance(bundle) );
+                   // fragments.put(pos, new IndustryFragmentNew());
+                    fragments.put(pos, new SelectIndustryFragment());
+                }
+                fragment = fragments.get(pos);
+                break;
+            case Constants.ChangePassword:
+                if (fragments.get(pos) == null) {
+                    fragments.put(pos, new ChangePasswordFragment());
+                }
+                fragment = fragments.get(pos);
+                break;
+            case Constants.PRIVACY:
+                if (fragments.get(pos) == null) {
+                    fragments.put(pos, new PrivacyFragment());
+                }
+                fragment = fragments.get(pos);
+                break;
+            case Constants.PRIVACY_SALES:
+                if (fragments.get(pos) == null) {
+                    fragments.put(pos, new SalesPrivacyFragment());
                 }
                 fragment = fragments.get(pos);
                 break;
@@ -127,16 +152,17 @@ public class ProfileActivity extends FragmentActivity implements FragmentIterati
 
         if (fragment != null) {
             Log.d(TAG, getSupportFragmentManager().getBackStackEntryCount() + "");
-            Logger.write("TAGGGG: "+ fragment.getClass().getName());
+            Logger.write("TAGGGG: " + fragment.getClass().getName());
             addFragment(ft, currentFragment, fragment, fragment.getClass().getName());
         }
-        currentFragment=fragment;
+        currentFragment = fragment;
     }
 
-    static long backPressed=0;
+    static long backPressed = 0;
+
     @Override
     public void onBackPressed() {
-        switch (fragment_index){
+        switch (fragment_index) {
             case Constants.Profile:
                 finish();
             case Constants.EditProfile:
@@ -193,7 +219,7 @@ public class ProfileActivity extends FragmentActivity implements FragmentIterati
 
     @Override
     public void onClick(View v) {
-        Logger.write("ID "+v.getId());
+        Logger.write("ID " + v.getId());
         if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
             drawerLayout.closeDrawer(Gravity.RIGHT);
         }
@@ -207,21 +233,24 @@ public class ProfileActivity extends FragmentActivity implements FragmentIterati
             case Constants.ProfileAddress:
                 fragment = new AddressFragment();
                 break;
+            case Constants.Industry:
+                fragment = new IndustryFragmentNew();
+                break;
         }
     }
 
-    public void profileButtonClicked(View v){
+    public void profileButtonClicked(View v) {
         MyUtils.startActivity(this, MainActivity.class, bundle);
     }
 
     public void addFragment(FragmentTransaction transaction, Fragment currentFragment, Fragment targetFragment, String tag) {
 
         //transaction.setCustomAnimations(0,0,0,0);
-        if(currentFragment!=null) transaction.hide(currentFragment);
+        if (currentFragment != null) transaction.hide(currentFragment);
         // use a fragment tag, so that later on we can find the currently displayed fragment
-        if(targetFragment.isAdded()) {
+        if (targetFragment.isAdded()) {
             transaction.show(targetFragment).commit();
-        }else {
+        } else {
             transaction.add(R.id.fragment_place, targetFragment, tag)
                     .addToBackStack(tag)
                     .commit();

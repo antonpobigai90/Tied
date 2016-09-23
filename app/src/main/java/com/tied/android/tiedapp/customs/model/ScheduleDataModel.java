@@ -1,5 +1,6 @@
 package com.tied.android.tiedapp.customs.model;
 
+import com.google.gson.Gson;
 import com.tied.android.tiedapp.objects.schedule.Schedule;
 
 import java.util.ArrayList;
@@ -75,5 +76,10 @@ public class ScheduleDataModel {
                 ", temperature='" + temperature + '\'' +
                 ", weather='" + weather + '\'' +
                 '}';
+    }
+
+    public String toJSONString() {
+        Gson gson=new Gson();
+        return gson.toJson(this, ScheduleDataModel.class);
     }
 }

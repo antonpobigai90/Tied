@@ -10,7 +10,6 @@ import java.io.File;
 public class Constants {
     public static final String TAG = Constants.class
             .getSimpleName();
-
     public static final String SERVER_URL = "http://tied.goattale.com:8101/api/v1/";
 
     public static final String HOST = "http://tied.goattale.com:8101/";
@@ -28,6 +27,7 @@ public class Constants {
     public static final String GET_AVATAR_ENDPOINT = HOST + "uploads/avatars/";
     public static final String GET_LOGO_ENDPOINT = HOST + "uploads/logos/";
 
+    public static final String USER_FIND_BY_EMAIL = API_PATH + "users/find_by_email/{email}";
     public static final String USER_UPDATE_INFO = API_PATH + "users/me";
     public static final String USER_CHANGE_PASSWORD = API_PATH + "users/changePassword";
 
@@ -36,15 +36,25 @@ public class Constants {
     public static final String USER_CLIENTS_COUNT = API_PATH + "users/me/clients_count";
     public static final String USER_GE0_CLIENTS = API_PATH + "users/me/clients/geo";
 
+    public static final String ADD_COWORKER = API_PATH + "users/{user_id}/coworkers";
+
 
     public static final String LINES = API_PATH + "lines";
     public static final String UPDATE_LINE_WITH_ID = API_PATH + "lines/{line_id}";
     public static final String USER_LINES = API_PATH + "users/me/lines";
     public static final String USER_CLIENT_LINES = API_PATH + "users/me/client_lines";
     public static final String USER_LINE_REVENUES = API_PATH + "users/me/lines/{line_id}/revenues/{page_number}";
-    public static final String GET_LINE_WITH_ID =  API_PATH + "lines/";
+    public static final String GET_LINE_WITH_ID =  API_PATH + "line/{line_id}";
     public static final String USER_LINE_COUNT=  API_PATH + "lines/count";
     public static final String USER_GE0_LINES =  API_PATH + "lines/geo";
+    public static final String TOTAL_LINE_REVENUE =  API_PATH + "lines/{line_id}/total_revenue";
+    public static final String CLIENT_COUNT=  API_PATH + "lines/{line_id}/num_clients";
+    public static final String LINE_CLIENTS=  API_PATH + "lines/{line_id}/clients/{page_number}";
+
+    public static final String REVENUES = API_PATH + "revenue";
+    public static final String UPDATE_REVENUE_WITH_ID = API_PATH + "revenue/{line_id}";
+    public static final String ADD_REVENUE = API_PATH + "revenue";
+
 
     public static final String GET_CLIENT_WITH_ID = API_PATH + "client/{client_id}";
     public static final String UPDATE_CLIENT_WITH_ID = API_PATH + "clients/{client_id}";
@@ -58,9 +68,21 @@ public class Constants {
     public static final String USER_GE0_SCHEDULE = API_PATH + "users/me/schedules/geo";
     public static final String USER_SCHEDULES_BY_DATE = API_PATH + "users/me/schedules/date";
 
+
+    public static final String UPDATE_GOAL_WITH_ID = API_PATH + "goals/{goal_id}";
+    public static final String DELETE_GOAL_WITH_ID = API_PATH + "goals/{goal_id}";
+    public static final String GOALS = API_PATH + "goals";
+    public static final String USER_GOAL = API_PATH + "users/me/goals";
+    public static final String LINE_GOALS = API_PATH + "lines/{line_id}/goals/{status}/{page_num}";
+    public static final String USER_GOALS_BY_DATE = API_PATH + "users/me/goals/date";
+    public static final String NUM_LINE_GOALS = API_PATH + "lines/{line_id}/num_goals";
+
+
     public static final String GET_INDUSTRIES = API_PATH + "config/industries";
 
     public static final String APP_DATA = "app_data";
+    public static final String COWORKER = "coworker";
+    public static final String USER = "user";
     public static final String USER_DATA = "user_data";
     public static final String CLIENT_DATA = "client_data";
     public static final String SCHEDULE_DATA = "schedule_data";
@@ -118,6 +140,7 @@ public class Constants {
     public static final int CoWorkerCount = 18;
     public static final int AddOptions = 19;
     public static final int CoWorker = 20;
+    public static final int GOAL_REQUEST =2300;
 
     public static final int Completed = 25;
 
@@ -147,6 +170,11 @@ public class Constants {
     public static final int EditProfile = 101;
     public static final int ProfileAddress = 102;
     public static final int Notification = 103;
+    public static final int ChangePassword=104;
+    public static final int PRIVACY=105;
+    public static final int PRIVACY_SALES=106;
+
+
 
 
 
@@ -160,6 +188,7 @@ public class Constants {
     public static final String RESULT_DATA_KEY = "data_key";
     public static final int SELECT_CLIENT = 1000;
     public static final int ADD_SALES = 1001;
+    public static final int ADD_CLIENT = 2001;
 
     public static final String TOTAL_SALES = "Total sales";
 
@@ -184,10 +213,17 @@ public class Constants {
     public static final String LINE_CREATED = "a_line_exist";
     public static final String GOOGLE_REVERSE_GEOCODING_URL="https://maps.googleapis.com/maps/api/geocode/json?sensor=true&key=AIzaSyDdWKslIGOEWJMa5RJFwH2dowBc7rEQ14g&latlng=";
     public static final String LINE_DATA = "line";
+    public static final String REVENUE_DATA = "revenue";
     public static final String LINES_lIST = "lines";
+    public static final String SHOW_TERRITORY = "show_territory" ;
     public static PersistentCookieStore MY_COOKIE_STORE=null;
+    public static final String INDUSTRIES="industries";
 
     public static File DIR_ROOT = new File("StreamLive"),
             DIR_CACHE = new File("cache"), DIR_HTML_CACHE = new File("html"), DIR_DOWNLOADS = new File("downloads"), DIR_MEDIA = new File("media");
 
+    public static final String CLIENT_LIST = "client_list";
+
+    public static String GOAL_DATA = "goal";
+    public static final String GOAL_lIST = "goals";
 }

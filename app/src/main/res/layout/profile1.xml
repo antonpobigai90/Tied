@@ -22,7 +22,7 @@
                 android:layout_height="80dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
-                android:src="@mipmap/default_avatar" />
+                android:src="@drawable/avatar_profile" />
 
             <TextView
                 android:id="@+id/name"

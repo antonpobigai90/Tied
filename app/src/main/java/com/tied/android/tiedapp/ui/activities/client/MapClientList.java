@@ -148,7 +148,6 @@ public class MapClientList extends AppCompatActivity implements View.OnClickList
             case R.id.map_layout:
                 MyUtils.startActivity(this, ActivityClient.class);
                 break;
-
         }
     }
 

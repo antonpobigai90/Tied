@@ -8,12 +8,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.google.gson.Gson;
@@ -27,9 +24,7 @@ import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
-import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
-import com.tied.android.tiedapp.ui.activities.signups.WalkThroughActivity;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.Logger;
@@ -165,7 +160,7 @@ public class HomeAddressFragment extends Fragment implements View.OnClickListene
                 break;
             case R.id.address_section:
             case R.id.add_button:
-                MyUtils.showAddressDialog(getActivity(), "Office Address", location, new MyUtils.DialogClickListener() {
+                MyUtils.showAddressDialog(getActivity(), "Office Address", location, new MyUtils.MyDialogClickListener() {
                     @Override
                     public void onClick(Object response) {
                         HomeAddressFragment.this.location=(Location)response;

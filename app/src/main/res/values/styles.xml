@@ -18,6 +18,14 @@
             backward-compatibility can go here.
         -->
     </style>
+    <style name="Transparent" parent="AppTheme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
 
     <!-- Application theme. -->
     <style name="AppTheme" parent="AppBaseTheme">
@@ -51,7 +59,7 @@
     </style>
     <style name="EditTextStyle" parent="RobotoTextViewStyle">
         <item name="android:textColor">@color/tw__medium_gray</item>
-
+        <item name="android:textColorHint">@color/light_gray2</item>
     </style>
     <style name="TabTextStyle" parent="RobotoTextViewStyle">
         <item name="android:textSize">11sp</item>
@@ -69,7 +77,7 @@
         <item name="android:textStyle">bold</item>
     </style>
     <style name="SectionText" parent="RobotoTextViewStyle">
-        <item name="android:textSize">11sp</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:textStyle">normal</item>
         <item name="android:layout_marginTop">10dp</item>
         <item name="android:layout_marginBottom">10dp</item>
@@ -103,6 +111,16 @@
         <item name="android:layout_marginTop">8dip</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
+
+    <style name="SectionLayout2" parent="AppTheme">
+        <item name="android:background">@color/light_gray</item>
+        <item name="android:paddingTop">8dip</item>
+        <item name="android:paddingBottom">8dip</item>
+        <item name="android:paddingLeft">20dip</item>
+        <item name="android:paddingRight">5dip</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
     <style name="SectionDivider" parent="AppTheme">
         <item name="android:background">@color/light_gray</item>
         <item name="android:paddingBottom">3dip</item>
@@ -123,11 +141,11 @@
 
     <style name="SearchEditText" parent="AppTheme">
         <item name="android:background">@drawable/curve_editext</item>
-        <item name="android:drawableLeft">@android:drawable/ic_menu_search</item>
+        <item name="android:drawableLeft">@drawable/ic_search_grey_small</item>
 
         <item name="android:paddingBottom">2dp</item>
-        <item name="android:paddingLeft">5dp</item>
-        <item name="android:paddingRight">5dp</item>
+        <item name="android:paddingLeft">30dp</item>
+        <item name="android:paddingRight">30dp</item>
         <item name="android:paddingTop">2dp</item>
         <item name="android:singleLine">true</item>
         <item name="android:gravity">center</item>
@@ -171,6 +189,11 @@
         <item name="android:layout_height">0.1dp</item>
         <item name="android:background">@color/light_gray</item>
     </style>
+    <style name="ActionBarIcon">
+        <item name="android:layout_width">@dimen/action_bar_icon_height</item>
+        <item name="android:layout_height">@dimen/action_bar_icon_height</item>
+        <item name="android:padding">@dimen/action_bar_icon_padding</item>
+    </style>
     <!--<style name="Widget.CalendarView.Custom" parent="android:Widget.CalendarView">-->
         <!--<item name="android:weekNumberColor">@color/schedule_title_bg_color</item>-->
         <!--<item name="android:focusedMonthDateColor">@color/colorPrimaryDark</item>-->
@@ -178,5 +201,17 @@
         <!--<item name="android:weekDayTextAppearance">@style/RobotoTextViewStyle</item>-->
         <!--<item name="android:dateTextAppearance">@style/RobotoTextViewStyle</item>-->
     <!--</style>-->
+
+    <style name="AppTheme.FullScreen">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
 
 </resources>

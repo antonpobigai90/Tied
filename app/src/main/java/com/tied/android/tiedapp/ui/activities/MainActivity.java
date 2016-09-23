@@ -27,8 +27,10 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.services.LocationService;
-import com.tied.android.tiedapp.ui.activities.client.ActivityClient;
-import com.tied.android.tiedapp.ui.activities.client.SelectClientActivity;
+import com.tied.android.tiedapp.ui.activities.client.ClientMapAndListActivity;
+import com.tied.android.tiedapp.ui.activities.coworker.CoWorkerActivity;
+import com.tied.android.tiedapp.ui.activities.lines.LineGoalActivity;
+import com.tied.android.tiedapp.ui.fragments.DailyStatsFragment;
 import com.tied.android.tiedapp.ui.fragments.activities.ActivityFragment;
 import com.tied.android.tiedapp.ui.fragments.client.ClientAddFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.AddressFragment;
@@ -38,9 +40,8 @@ import com.tied.android.tiedapp.ui.fragments.profile.NotificationProfileFragment
 import com.tied.android.tiedapp.ui.fragments.profile.ProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.sales.*;
 import com.tied.android.tiedapp.ui.fragments.schedule.CreateScheduleFragment;
-import com.tied.android.tiedapp.ui.fragments.DailyStatsFragment;
-import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleSuggestionFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleAppointmentsFragment;
+import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleSuggestionFragment;
 import com.tied.android.tiedapp.ui.fragments.signups.IndustryFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.ui.listeners.ImageReadyForUploadListener;
@@ -72,7 +73,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
 
     private LinearLayout tab_bar, map_tab, relativeLayout, activity_layout, add_layout, more_layout, tab_actvity_schedule, alert_edit_msg, sale_tab;
     private RelativeLayout invite_menu;
-    private TextView txt_schedules, txt_activities, info_msg;
+    private TextView txt_schedules, txt_activities, info_msg, drawerFullName, drawerEmail;
 
     public Bitmap bitmap;
 
@@ -139,6 +140,10 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         invite_menu.setOnClickListener(this);
         map_tab.setOnClickListener(this);
         sale_tab.setOnClickListener(this);
+        drawerFullName=(TextView)findViewById(R.id.full_name_tv);
+        drawerFullName.setText(user.getFirst_name()+" "+user.getLast_name());
+        drawerEmail=(TextView)findViewById(R.id.email_tv);
+        drawerEmail.setText(user.getEmail());
 
         Log.d(TAG, "Avatar Url : " + Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg");
         String avatarURL =Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg";
@@ -165,10 +170,8 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         Gson gson = new Gson();
         String user_json = gson.toJson(user);
 
-        Logger.write("hhhhhhaaaaaaaaaaaaaaaaaaaaaaa");
-
         bundle.putString(Constants.USER_DATA, user_json);
-        if ((new Date().getTime() - MyUtils.getLastTimeAppRan()) != 24*60*60*1000) {
+        if ((new Date().getTime() - MyUtils.getLastTimeAppRan()) > 24*60*60*1000) {
             //launchFragment(Constants.HomeSchedule, bundle);
             MyUtils.startActivity(this, DailyStatsActivity.class);
             MyUtils.setLastTimeAppRan(new Date().getTime());
@@ -425,8 +428,12 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
             case R.id.lines_menu:
                 MyUtils.startActivity(MainActivity.this, LinesAndTerritories.class,bundle);
                 break;
+            case R.id.coworker_menu:
+                MyUtils.startActivity(MainActivity.this, CoWorkerActivity.class,bundle);
+                break;
             case R.id.client_menu:
-                MyUtils.startActivity(MainActivity.this, SelectClientActivity.class,bundle);
+                bundle.putBoolean(Constants.CLIENT_LIST, true);
+                MyUtils.startActivity(MainActivity.this, ClientMapAndListActivity.class,bundle);
                 break;
 
             case R.id.img_user_picture : case R.id.user_picture_iv:
@@ -441,9 +448,11 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 finish();
                 break;
             case R.id.map:
-                //clearTabs();
-                //map_tab.setBackground(getResources().getDrawable(R.drawable.tab_selected));
-                MyUtils.startActivity(this, ActivityClient.class);
+                bundle.putBoolean(Constants.CLIENT_LIST, false);
+                MyUtils.startActivity(this, ClientMapAndListActivity.class, bundle);
+                break;
+            case R.id.goal_menu:
+                MyUtils.startActivity(this, LineGoalActivity.class);
                 break;
             case R.id.sales:
                 if(currentFragmentID==Constants.HomeSale) return;
@@ -461,8 +470,6 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
     private void clearTabs() {
         activity_layout.setBackground(null);
         map_tab.setBackground(null);
-
-
     }
 
     public void ShowSuccessMessage(String message, final String forWhat){

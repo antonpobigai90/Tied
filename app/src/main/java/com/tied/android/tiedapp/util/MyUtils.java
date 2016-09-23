@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.util.Pair;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,8 +30,10 @@ import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.MyStringAsyncTask;
+import com.tied.android.tiedapp.customs.model.DataModel;
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Distance;
+import com.tied.android.tiedapp.objects.Goal;
 import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects._Meta;
 import com.tied.android.tiedapp.objects.client.Client;
@@ -40,9 +43,13 @@ import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
+import com.tied.android.tiedapp.retrofits.services.GoalApi;
 import com.tied.android.tiedapp.retrofits.services.LineApi;
 import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
+import com.tied.android.tiedapp.retrofits.services.SignUpApi;
+import com.tied.android.tiedapp.ui.activities.GeneralSelectObjectActivity;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.ui.dialogs.DatePickerFragment;
 import com.tied.android.tiedapp.ui.listeners.ListAdapterListener;
 
 import org.json.JSONArray;
@@ -52,7 +59,14 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -69,8 +83,8 @@ public abstract class MyUtils {
             if (imageUrl != null && !imageUrl.isEmpty()) {
                 com.squareup.picasso.Picasso.with(MainApplication.getInstance().getApplicationContext())
                         .load(imageUrl)
-//                        .memoryPolicy(MemoryPolicy.NO_CACHE)
-//                        .networkPolicy(NetworkPolicy.NO_CACHE)
+                       // .memoryPolicy(MemoryPolicy.C)
+                        //.networkPolicy(NetworkPolicy.NO_CACHE)
                         .networkPolicy(NetworkPolicy.OFFLINE)
                         .into(imageView, new Callback() {
                             @Override
@@ -188,6 +202,29 @@ public abstract class MyUtils {
         }
     }
 
+    public static void setFocus(View view) {
+        view.setFocusable(true);
+        view.requestFocus();
+        view.setFocusableInTouchMode(true);
+    }
+
+    public static void initiateClientSelector(Activity c,  Object selected, boolean isMultiple) {
+        Intent i = new Intent(c, GeneralSelectObjectActivity.class);
+        Bundle b=new Bundle();
+        b.putInt(GeneralSelectObjectActivity.OBJECT_TYPE, GeneralSelectObjectActivity.SELECT_CLIENT_TYPE);
+        b.putBoolean(GeneralSelectObjectActivity.IS_MULTIPLE, isMultiple);
+        ArrayList<Object> selectedObjects=null;
+        if(!(selected instanceof ArrayList)) {
+            selectedObjects= new ArrayList<Object>(1);
+            selectedObjects.add(selected);
+        }else{
+            selectedObjects=(ArrayList)selected;
+        }
+        if(selected!=null) b.putSerializable(GeneralSelectObjectActivity.SELECTED_OBJECTS, selectedObjects);
+        i.putExtras(b);
+        c.startActivityForResult(i, Constants.SELECT_CLIENT);
+
+    }
     public static void initAvatar(Bundle bundle, ImageView imageView) {
         if (bundle != null) {
             Gson gson = new Gson();
@@ -207,9 +244,13 @@ public abstract class MyUtils {
      * @param requestCode int:bundle data to be passed
      */
     public static void startRequestActivity(Activity a, Class newActivity, int requestCode) {
+       MyUtils.startRequestActivity(a, newActivity, requestCode, null);
+
+    }
+    public static void startRequestActivity(Activity a, Class newActivity, int requestCode, Bundle bundle) {
         Intent i = new Intent(a, newActivity);
 
-
+        if(bundle!=null) i.putExtras(bundle);
         // i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         a.startActivityForResult(i, requestCode);
 
@@ -333,7 +374,9 @@ public abstract class MyUtils {
 
     public static boolean isAuthFailed(JSONObject response) {
         try {
-            return !response.getBoolean("success");
+            if(response.getInt("status")!=400)
+                return !response.getBoolean("success");
+            else return false;
         } catch (Exception e) {
             return false;
         }
@@ -359,7 +402,7 @@ public abstract class MyUtils {
 
             float distance = 0.621371f * (mallLoc.distanceTo(userLoc) / 1000);
             return String.format(Locale.getDefault(), "%.0f", distance)
-                    + " km";
+                    + " miles";
         } catch (Exception e) {
             // TODO Auto-generated catch block
             return "Unknown";
@@ -368,6 +411,12 @@ public abstract class MyUtils {
     public static final int MESSAGE_TOAST=0, ERROR_TOAST=1;
     public static void showAlert(Activity  activity, String message) {
         showAlert(activity, message, MESSAGE_TOAST);
+    }
+    public static void showMessageAlert(Activity  activity, String message) {
+        showAlert(activity, message, MESSAGE_TOAST);
+    }
+    public static void showErrorAlert(Activity  activity, String message) {
+        showAlert(activity, message, ERROR_TOAST);
     }
     public static MyStringAsyncTask animateTask=null;
     public static void showAlert(Activity activity, String message, int type) {
@@ -446,7 +495,68 @@ public abstract class MyUtils {
         Logger.write(message);
     }
 
-    public static void showAddressDialog(final Activity context, String title, final com.tied.android.tiedapp.objects.Location currentLocation, final DialogClickListener okayClicked) {
+
+
+    public static void showLinesRelevantInfoDialog(final Activity context,String title, final Line line, final MyDialogClickListener okayClicked) {
+        // custom dialog
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.line_relevant_info_dialog);
+        //dialog.setTitle(title.toUpperCase());
+        //dialog.setFeatureDrawableAlpha(Backg);
+
+        final EditText websiteET, requestET,openingET;
+        final Spinner reorderSpinner;
+        websiteET=(EditText)dialog.findViewById(R.id.website);
+        websiteET.setText(line.getWebsite()==null?"":line.getWebsite());
+
+        requestET=(EditText)dialog.findViewById(R.id.special_request);
+        requestET.setText(line.getRequest()==null?"":line.getRequest());
+
+        openingET=(EditText)dialog.findViewById(R.id.openings);
+        openingET.setText(line.getOpening()==null?"":line.getOpening());
+        reorderSpinner=(Spinner)dialog.findViewById(R.id.reorders);
+
+
+        // set the custom dialog components - text, image and button
+        TextView text = (TextView) dialog.findViewById(R.id.txt_title);
+        text.setText(title.toUpperCase());
+
+        View.OnClickListener cancelClicked=new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        };
+
+        Button cancelButton = (Button) dialog.findViewById(R.id.cancel_button);
+        // if button is clicked, close the custom dialog
+        cancelButton.setOnClickListener(cancelClicked);
+        View.OnClickListener okayButClicked=new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String website = websiteET.getText().toString().trim();
+                String request = requestET.getText().toString().trim();
+                String opening = openingET.getText().toString().trim();
+                String reorder="";
+                if (reorderSpinner.getSelectedItem() != null) {
+                   reorder = reorderSpinner.getSelectedItem().toString().trim();
+                }
+                line.setRelevantInfo(website, request, opening, reorder);
+                okayClicked.onClick(line);
+                dialog.dismiss();
+            }
+        };
+
+        Button okButton = (Button) dialog.findViewById(R.id.ok_button);
+        // if button is clicked, close the custom dialog
+        okButton.setOnClickListener(okayButClicked);
+
+        dialog.show();
+    }
+
+
+    public static void showAddressDialog(final Activity context, String title, final com.tied.android.tiedapp.objects.Location currentLocation, final MyDialogClickListener okayClicked) {
         // custom dialog
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -515,8 +625,27 @@ public abstract class MyUtils {
 
                     final com.tied.android.tiedapp.objects.Location location = new com.tied.android.tiedapp.objects.Location(city, zip, state,  street);
                     location.setCountry("US");
-                    okayClicked.onClick(location);
-                    dialog.dismiss();
+                    MyUtils.getLatLon(location.getLocationAddress(), new HTTPConnection.AjaxCallback() {
+                        @Override
+                        public void run(int code, String response) {
+                            if(code!=200) {
+                                MyUtils.showToast("Could not validate address!");
+                            }else {
+                                location.setCoordinate(Coordinate.fromJSONString(response));
+                                context.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        okayClicked.onClick(location);
+                                        dialog.dismiss();
+                                    }
+                                });
+
+                            }
+                            //dialog.dismiss();
+                        }
+                    });
+
+
                 }
             };
 
@@ -526,7 +655,48 @@ public abstract class MyUtils {
 
         dialog.show();
     }
-    public interface DialogClickListener {
+    public static void showEditTextDialog(final Activity context, String title, String initialValue, final MyDialogClickListener okayClicked) {
+        // custom dialog
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.edit_text_dialog);
+        //dialog.setTitle(title.toUpperCase());
+        //dialog.setFeatureDrawableAlpha(Backg);
+
+        final EditText textET=(EditText)dialog.findViewById(R.id.text_et);
+
+        textET.setText(initialValue);
+        // set the custom dialog components - text, image and button
+        TextView text = (TextView) dialog.findViewById(R.id.txt_title);
+        text.setText(title.toUpperCase());
+
+        View.OnClickListener cancelClicked=new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        };
+
+
+
+        Button cancelButton = (Button) dialog.findViewById(R.id.cancel_button);
+        // if button is clicked, close the custom dialog
+        cancelButton.setOnClickListener(cancelClicked);
+        View.OnClickListener okayButClicked=new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                okayClicked.onClick(textET.getText().toString());
+                dialog.dismiss();
+            }
+        };
+
+        Button okButton = (Button) dialog.findViewById(R.id.ok_button);
+        // if button is clicked, close the custom dialog
+        okButton.setOnClickListener(okayButClicked);
+
+        dialog.show();
+    }
+    public interface MyDialogClickListener {
         public void onClick(Object response);
     }
 
@@ -548,19 +718,22 @@ public abstract class MyUtils {
                 if ( context == null ) return;
                 DialogUtils.closeProgress();
                 ClientRes clientRes = resResponse.body();
-                if(clientRes.isAuthFailed()){
-                    User.LogOut(context);
-                }
-                else if(clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200){
-                    ArrayList<Client> clients = clientRes.getClients();
-                    if(clients.size() > 0){
-                        MainApplication.clientsList = clients;
-                        if (listAdapterListener != null){
-                            listAdapterListener.listInit(clients);
+                try {
+                    if (clientRes.isAuthFailed()) {
+                        // User.LogOut(context);
+                    } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200) {
+                        ArrayList<Client> clients = clientRes.getClients();
+                        if (clients.size() > 0) {
+                            MainApplication.clientsList = clients;
+                            if (listAdapterListener != null) {
+                                listAdapterListener.listInit(clients);
+                            }
                         }
+                    } else {
+                        Logger.write("Error onResponse", clientRes.getMessage());
                     }
-                }else{
-                    Log.d("Error onResponse", clientRes.getMessage());
+                }catch (Exception e) {
+                    Logger.write(e);
                 }
             }
 
@@ -587,7 +760,12 @@ public abstract class MyUtils {
                     if(meta !=null && meta.getStatus_code() == 200) {
                         ArrayList lines = (ArrayList) response.getDataAsList(Constants.LINES_lIST, Line.class);
                         if(lines.size() > 0){
-                            MainApplication.linesList = lines;
+                            if(MainApplication.linesList!=null) {
+                                MainApplication.linesList.clear();
+                                MainApplication.linesList.addAll(lines);
+                            }else {
+                                MainApplication.linesList=lines;
+                            }
                             if (listAdapterListener != null){
                                 listAdapterListener.listInit(lines);
                             }
@@ -612,6 +790,52 @@ public abstract class MyUtils {
             }
         });
     }
+
+
+    public static void initGoals(final Context context, User user, final ListAdapterListener listAdapterListener){
+        final GoalApi goalApi =  MainApplication.createService(GoalApi.class, user.getToken());
+        Call<ResponseBody> response = goalApi.getUserGoals();
+        response.enqueue(new retrofit2.Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
+                try {
+                    GeneralResponse response = new GeneralResponse(resResponse.body());
+                    if (response.isAuthFailed()) {
+                        User.LogOut(context);
+                        return;
+                    }
+                    _Meta meta=response.getMeta();
+                    if(meta !=null && meta.getStatus_code() == 200) {
+                        ArrayList goals = (ArrayList) response.getDataAsList(Constants.GOAL_lIST, Goal.class);
+                        if(goals.size() > 0){
+                            MainApplication.goals = goals;
+                            if (listAdapterListener != null){
+                                listAdapterListener.listInit(goals);
+                            }
+                        }
+                    }else{
+                        MyUtils.showToast("Error encountered");
+                        DialogUtils.closeProgress();
+                    }
+
+                }catch (IOException ioe) {
+                    Logger.write(ioe);
+                }
+                catch (Exception jo) {
+                    Logger.write(jo);
+                }
+                DialogUtils.closeProgress();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d(" onFailure", t.toString());
+            }
+        });
+    }
+
+
+
 
     public static void initSchedules(final Context context, User user, final ListAdapterListener listAdapterListener){
         final ScheduleApi scheduleApi =  MainApplication.createService(ScheduleApi.class, user.getToken());
@@ -654,4 +878,231 @@ public abstract class MyUtils {
             }
         });
     }
+    public static String getTimeRange(Schedule schedule){
+        String from = schedule.getTime_range().getStart_time();
+        String to = schedule.getTime_range().getEnd_time();
+
+        String range = getMeridianTime(from) +" - "+getMeridianTime(to);
+        long diff = HelperMethods.getTimeDifference(from,to);
+        int abs_difference = Math.abs((int)diff);
+
+        if(abs_difference > 15){
+            range = "All Day";
+        }else if(abs_difference < 1){
+            range = getMeridianTime(from) +" "+getMeridianString(from);
+        }
+        return range;
+    }
+
+    public static String getMeridianString(String hour){
+        String[] hour_min = hour.split(":");
+        int hour_int = Integer.parseInt(hour_min[0]);
+        String str = "am";
+        if(hour_int > 12){
+            str = "pm";
+        }
+        return str;
+    }
+    public static String getMeridianTime(String hour){
+        String[] hour_min = hour.split(":");
+        int hour_int = Integer.parseInt(hour_min[0]);
+
+        String new_hour = hour;
+        if(hour_int > 12){
+            new_hour = String.format("%02d", hour_int - 12) +":"+ hour_min[1];
+        }
+        return new_hour;
+    }
+    public static void showConnectionErrorToast(Activity a) {
+        MyUtils.showToast(a.getString(R.string.connection_error));
+    }
+    public static String getWeekDay(Schedule schedule){
+        int diff = (int) HelperMethods.getDateDifferenceWithToday(schedule.getDate());
+        String result;
+        if(diff < 7 && diff >= 0){
+            switch (diff){
+                case 0:
+                    result = "Today";
+                    break;
+                case 1:
+                    result = "Tomorrow";
+                    break;
+                default:
+                    result = HelperMethods.getDayOfTheWeek(schedule.getDate());
+            }
+        }else{
+            result = HelperMethods.getMonthOfTheYear(schedule.getDate());
+        }
+        return result;
+    }
+    public static String capitalize(final String line) {
+        return Character.toUpperCase(line.charAt(0)) + line.substring(1);
+    }
+    public static String distanceBetween(Coordinate c1, Coordinate c2) {
+        int R = 6371; // km
+        //R = 1; // miles
+        double x = (c2.getLon() - c1.getLon()) * Math.cos((c1.getLat() + c2.getLat()) / 2);
+        double y = (c2.getLat() - c1.getLat());
+       return Math.sqrt(x * x + y * y) * R +" miles";
+    }
+    public static String toNth(Object num) {
+        int dayOfYear;
+        String day=""+num;
+        if(num instanceof Integer) dayOfYear=(Integer)num;
+        else dayOfYear=Integer.parseInt((String)num);
+        switch (dayOfYear > 20 ? (dayOfYear % 10) : dayOfYear) {
+            case 1:
+             day= dayOfYear + "st";
+            break;
+            case 2:
+                day= dayOfYear + "nd";
+            break;
+            case 3:  day=dayOfYear + "rd";
+            break;
+            default:  day= dayOfYear + "th";
+            break;
+        }
+        return day;
+    }
+
+    public static boolean isSameDay(String day1, String day2) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date date1 = sdf.parse(day1);
+            Date date2 = sdf.parse(day2);
+            return date1.compareTo(date2) == 0;
+        } catch (ParseException e) {
+            return false;
+        }
+    }
+
+    public static void initIndustryList(){
+        Call<List<DataModel>> response = MainApplication.getInstance().getRetrofit().create(SignUpApi.class).getIndustries();
+        response.enqueue(new retrofit2.Callback<List<DataModel>>() {
+            @Override
+            public void onResponse(Call<List<DataModel>> call, Response<List<DataModel>> listResponse) {
+                if (MainApplication.getInstance().getApplicationContext() == null) return;
+                //DialogUtils.closeProgress();
+                try {
+                    List<DataModel> dataModelList = listResponse.body();
+                    JSONArray ja= new JSONArray();
+                    for(DataModel data:dataModelList) {
+                        ja.put(data.toJSONString());
+                    }
+                    SharedPreferences.Editor e=MyUtils.getSharedPreferences().edit();
+                    e.putString(Constants.INDUSTRIES, ja.toString());
+                    e.apply();
+
+                }catch (Exception e) {
+
+                }
+                //Log.d(TAG + " onResponse", dataModelList.toString());
+            }
+
+            @Override
+            public void onFailure(Call<List<DataModel>> call, Throwable t) {
+                Logger.write(" onFailure", t.toString());
+               // DialogUtils.closeProgress();
+            }
+        });
+    }
+    public static ArrayList<DataModel> getIndustriesAsList() {
+        SharedPreferences sp=MyUtils.getSharedPreferences();
+        String ind=sp.getString(Constants.INDUSTRIES, null );
+        if(ind==null) {
+            initIndustryList();
+        }
+        ArrayList<DataModel> dataModels=new ArrayList<>(0);
+        try{
+            JSONArray ja=new JSONArray(ind);
+            int len=ja.length();
+             dataModels=new ArrayList<DataModel>(len);
+            Gson gson=new Gson();
+
+            for(int i=0; i<len; i++) {
+                dataModels.add(gson.fromJson(ja.getString(i), DataModel.class));
+            }
+        }catch (Exception e) {
+
+        }
+        return dataModels;
+    }
+
+
+    public static Pair<String,String> getWeekRange(int year, int week_no) {
+
+        Calendar cal = Calendar.getInstance();
+
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.WEEK_OF_YEAR, week_no);
+        Date monday = cal.getTime();
+
+        cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.WEEK_OF_YEAR, week_no);
+        Date sunday = cal.getTime();
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        return new Pair<String,String>(sdf.format(monday), sdf.format(sunday));
+    }
+    public static String getClientName(Client client) {
+        return (client.getCompany()==null || client.getCompany().isEmpty())?client.getFull_name():client.getCompany();
+    }
+
+
+    public static android.util.Pair<String, String> getDateRange() {
+        Date begining, end;
+
+        {
+            Calendar calendar = getCalendarForNow();
+            calendar.set(Calendar.DAY_OF_MONTH,
+                    calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
+            setTimeToBeginningOfDay(calendar);
+            begining = calendar.getTime();
+        }
+
+        {
+            Calendar calendar = getCalendarForNow();
+            calendar.set(Calendar.DAY_OF_MONTH,
+                    calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+            setTimeToEndofDay(calendar);
+            end = calendar.getTime();
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        return new android.util.Pair<String,String>(sdf.format(begining), sdf.format(end));
+    }
+
+    public static Calendar getCalendarForNow() {
+        Calendar calendar = GregorianCalendar.getInstance();
+        calendar.setTime(new Date());
+        return calendar;
+    }
+
+    public static void setTimeToBeginningOfDay(Calendar calendar) {
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+    }
+
+    public static void setTimeToEndofDay(Calendar calendar) {
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+    }
+    public static String formatDate(Date date) {
+        Calendar c= Calendar.getInstance();
+        c.setTime(date);
+        return toNth(c.get(Calendar.DAY_OF_MONTH))+" "+ DatePickerFragment.MONTHS_LIST[c.get(Calendar.MONTH)+1]+", "+c.get(Calendar.YEAR);
+    }
+
+    public static Date parseDate(String pattern, String date) throws Exception {
+        return new SimpleDateFormat(pattern).parse(date);
+    }
+    public static Date parseDate( String date) throws Exception {
+        return new SimpleDateFormat("yy-mm-dd").parse(date);
+    }
+
 }

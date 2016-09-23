@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.client.Client;
+import com.tied.android.tiedapp.ui.activities.client.ClientMapAndListActivity;
 import com.tied.android.tiedapp.ui.listeners.ListAdapterListener;
 import com.tied.android.tiedapp.util.MyUtils;
 import com.tied.android.tiedapp.util.RoundImage;
@@ -76,7 +77,10 @@ public class MapClientListAdapter extends BaseAdapter implements ListAdapterList
 
     @Override
     public void listInit(ArrayList arrayList) {
-
+        this._data = arrayList;
+        android.support.v4.view.ViewPager mViewPager = ((ClientMapAndListActivity) _c).mViewPager;
+        notifyDataSetChanged();
+        mViewPager.getAdapter().notifyDataSetChanged();
     }
 
 
