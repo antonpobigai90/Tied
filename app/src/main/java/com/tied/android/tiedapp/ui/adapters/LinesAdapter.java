@@ -3,6 +3,7 @@ package com.tied.android.tiedapp.ui.adapters;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +13,12 @@ import android.widget.TextView;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Line;
+import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.ui.activities.LinesAndTerritories;
 import com.tied.android.tiedapp.ui.listeners.ListAdapterListener;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by ZuumaPC on 8/18/2016.
@@ -31,13 +32,20 @@ public class LinesAdapter extends BaseAdapter implements ListAdapterListener {
     public static final String TAG = LinesAdapter.class
             .getSimpleName();
 
-    public List<Line> _data;
+    public ArrayList<Line> _data;
     Context _c;
     ViewHolder viewHolder;
+    private Bundle bundle;
+    private Client client;
 
-    public LinesAdapter(List<Line> line_list, Context context) {
+    public LinesAdapter(ArrayList<Line> line_list, Context context, Bundle bundle) {
         _data = line_list;
         _c = context;
+        this.bundle = bundle;
+        client = (Client) bundle.getSerializable(Constants.CLIENT_DATA);
+        if (client != null){
+            _data = client.getLines();
+        }
     }
 
     @Override
@@ -78,12 +86,29 @@ public class LinesAdapter extends BaseAdapter implements ListAdapterListener {
         view.setTag(data);
         return view;
     }
+//
+//    public void filterLines(){
+//        ArrayList<Line> arrayList = new ArrayList<>();
+//        for(Line line: _data){
+//            ArrayList<Client> clients = line.getClients();
+//            for(int i = 0; i < clients.size(); i++){
+//                Client c = clients.get(i);
+//                if(c.getId().equals(client.getId())){
+//                    arrayList.add(line);
+//                }
+//            }
+//        }
+//        _data = arrayList;
+//    }
 
     @Override
     public void listInit(ArrayList arrayList) {
-        this._data = arrayList;
-        android.support.v4.view.ViewPager mViewPager = ((LinesAndTerritories) _c).mViewPager;
-        notifyDataSetChanged();
-        mViewPager.getAdapter().notifyDataSetChanged();
+        if (client == null){
+            this._data = arrayList;
+            android.support.v4.view.ViewPager mViewPager = ((LinesAndTerritories) _c).mViewPager;
+            notifyDataSetChanged();
+            mViewPager.getAdapter().notifyDataSetChanged();
+        }
     }
+
 }

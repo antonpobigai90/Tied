@@ -19,7 +19,7 @@
             android:layout_height="50dp">
 
             <TextView
-                android:id="@+id/txt_signup_label"
+                android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -88,93 +88,89 @@
 
     </LinearLayout>
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/tab_bar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="45dp"
+            android:layout_below="@+id/top_layout"
+            android:paddingTop="1dp"
+            android:background="#f3f5f6"
+            android:orientation="horizontal"
+            android:paddingBottom="1dp">
 
             <LinearLayout
-                android:id="@+id/tab_bar"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_below="@+id/top_layout"
-                android:paddingTop="1dp"
-                android:background="#f3f5f6"
-                android:orientation="horizontal"
-                android:paddingBottom="1dp">
+                android:id="@+id/general_tab"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="bottom"
+                android:orientation="vertical">
 
-                <LinearLayout
-                    android:id="@+id/general_tab"
-                    android:layout_width="fill_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="bottom"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/general_lines"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:text="General"
-                        android:textColor="@color/semi_transparent_black"
-                        android:layout_marginBottom="10dp"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:visibility="gone"
-                        android:id="@+id/indicator_you"
-                        android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:background="@color/button_bg" />
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="0.1dp"
-                    android:layout_height="match_parent"
-                    android:background="@color/light_gray2" />
-
-                <LinearLayout
-                    android:id="@+id/activity_tab"
-                    android:layout_width="fill_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="bottom"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/txt_activity"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:text="Activity"
-                        android:textColor="@color/semi_transparent_black"
-                        android:layout_marginBottom="10dp"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:visibility="gone"
-                        android:id="@+id/indicator_emp"
-                        android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:background="@color/button_bg" />
-                </LinearLayout>
-
+                <TextView
+                    android:id="@+id/general_lines"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="General"
+                    android:textColor="@color/semi_transparent_black"
+                    android:layout_marginBottom="10dp"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/indicator_you"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/button_bg" />
 
             </LinearLayout>
 
-            <android.support.v4.view.ViewPager
-                android:id="@+id/viewpager"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <View
+                android:layout_width="0.1dp"
+                android:layout_height="match_parent"
+                android:background="@color/light_gray2" />
+
+            <LinearLayout
+                android:id="@+id/activity_tab"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:gravity="bottom"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txt_activity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="Activity"
+                    android:textColor="@color/semi_transparent_black"
+                    android:layout_marginBottom="10dp"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/indicator_emp"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/button_bg" />
+            </LinearLayout>
+
 
         </LinearLayout>
-    </ScrollView>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal" />
+
+    </LinearLayout>
 
 </LinearLayout>

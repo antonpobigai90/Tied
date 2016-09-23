@@ -29,6 +29,7 @@ public class Constants {
     public static final String GET_AVATAR_ENDPOINT = HOST + "uploads/avatars/";
     public static final String GET_LOGO_ENDPOINT = HOST + "uploads/logos/";
 
+    public static final String USER_FIND_BY_EMAIL = API_PATH + "users/find_by_email/{email}";
     public static final String USER_UPDATE_INFO = API_PATH + "users/me";
     public static final String USER_CHANGE_PASSWORD = API_PATH + "users/changePassword";
 
@@ -36,6 +37,8 @@ public class Constants {
     public static final String USER_CLIENTS = API_PATH + "users/me/clients";
     public static final String USER_CLIENTS_COUNT = API_PATH + "users/me/clients_count";
     public static final String USER_GE0_CLIENTS = API_PATH + "users/me/clients/geo";
+
+    public static final String ADD_COWORKER = API_PATH + "users/{user_id}/coworkers";
 
 
     public static final String LINES = API_PATH + "lines";
@@ -53,6 +56,7 @@ public class Constants {
     public static final String REVENUES = API_PATH + "revenue";
     public static final String UPDATE_REVENUE_WITH_ID = API_PATH + "revenue/{line_id}";
     public static final String ADD_REVENUE = API_PATH + "revenue";
+
 
     public static final String GET_CLIENT_WITH_ID = API_PATH + "client/{client_id}";
     public static final String UPDATE_CLIENT_WITH_ID = API_PATH + "clients/{client_id}";
@@ -79,6 +83,8 @@ public class Constants {
     public static final String GET_INDUSTRIES = API_PATH + "config/industries";
 
     public static final String APP_DATA = "app_data";
+    public static final String COWORKER = "coworker";
+    public static final String USER = "user";
     public static final String USER_DATA = "user_data";
     public static final String CLIENT_DATA = "client_data";
     public static final String SCHEDULE_DATA = "schedule_data";
@@ -208,6 +214,7 @@ public class Constants {
     public static final String LINE_DATA = "line";
     public static final String REVENUE_DATA = "revenue";
     public static final String LINES_lIST = "lines";
+    public static final String SHOW_TERRITORY = "show_territory" ;
     public static PersistentCookieStore MY_COOKIE_STORE=null;
     public static final String INDUSTRIES="industries";
 

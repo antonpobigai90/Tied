@@ -239,12 +239,18 @@
         <activity android:name=".ui.activities.coworker.ViewCoWorkerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.coworker.CoWorkerSchedulesActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <service android:name="com.mapbox.mapboxsdk.telemetry.TelemetryService" />
 
         <activity android:name=".ui.activities.SelectPicture"
             android:screenOrientation="portrait"
             android:theme="@style/DialogTheme"/>
+        <activity android:name=".ui.activities.coworker.InviteCoWorkerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

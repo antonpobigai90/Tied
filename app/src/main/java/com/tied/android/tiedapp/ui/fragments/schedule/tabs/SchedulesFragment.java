@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.util.Pair;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,14 +11,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.model.ScheduleDataModel;
-import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.responses.ScheduleRes;
 import com.tied.android.tiedapp.objects.schedule.DateRange;
 import com.tied.android.tiedapp.objects.schedule.Schedule;
@@ -31,17 +28,11 @@ import com.tied.android.tiedapp.ui.adapters.ScheduleListAdapter;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.HelperMethods;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
-
 import com.tied.android.tiedapp.util.MyUtils;
+
+import java.util.ArrayList;
+import java.util.Collections;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -155,16 +146,6 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
         });
     }
 
-    private boolean isSameDay(String day1, String day2) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            Date date1 = sdf.parse(day1);
-            Date date2 = sdf.parse(day2);
-            return date1.compareTo(date2) == 0;
-        } catch (ParseException e) {
-            return false;
-        }
-    }
 
     protected ArrayList<ScheduleDataModel> parseSchedules(ArrayList<Schedule> scheduleArrayList) {
         Log.d(TAG + " parseSchedules", scheduleArrayList.toString());
@@ -176,7 +157,7 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
             schedules.add(schedule);
             for (int j = i + 1; j < scheduleArrayList.size(); j++) {
                 Schedule this_schedule = scheduleArrayList.get(j);
-                if (isSameDay(schedule.getDate(), this_schedule.getDate())) {
+                if (MyUtils.isSameDay(schedule.getDate(), this_schedule.getDate())) {
                     schedules.add(this_schedule);
                     Log.d(TAG, "SAME "+schedule.getTitle() + " and "+this_schedule.getTitle());
                     scheduleArrayList.remove(j--);
@@ -186,7 +167,7 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
             long diff_in_date = HelperMethods.getDateDifferenceWithToday(schedule.getDate());
 
             String day = String.format("%02d", HelperMethods.getDayFromSchedule(schedule.getDate()));
-            String week_day = getWeekDay(schedule);
+            String week_day = MyUtils.getWeekDay(schedule);
 
             scheduleDataModel.setSchedules(schedules);
             scheduleDataModel.setDay(day);
@@ -197,27 +178,6 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
         Collections.reverse(scheduleDataModels);
         return scheduleDataModels;
     }
-
-    protected String getWeekDay(Schedule schedule){
-        int diff = (int) HelperMethods.getDateDifferenceWithToday(schedule.getDate());
-        String result;
-        if(diff < 7 && diff >= 0){
-            switch (diff){
-                case 0:
-                    result = "Today";
-                    break;
-                case 1:
-                    result = "Tomorrow";
-                    break;
-                default:
-                    result = HelperMethods.getDayOfTheWeek(schedule.getDate());
-            }
-        }else{
-            result = HelperMethods.getMonthOfTheYear(schedule.getDate());
-        }
-        return result;
-    }
-
 
     @Override
     public void onClick(View v) {
@@ -243,64 +203,4 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
         }
     }
 
-    public static Pair<String,String> getWeekRange(int year, int week_no) {
-
-        Calendar cal = Calendar.getInstance();
-
-        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-        cal.set(Calendar.YEAR, year);
-        cal.set(Calendar.WEEK_OF_YEAR, week_no);
-        Date monday = cal.getTime();
-
-        cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
-        cal.set(Calendar.YEAR, year);
-        cal.set(Calendar.WEEK_OF_YEAR, week_no);
-        Date sunday = cal.getTime();
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        return new Pair<String,String>(sdf.format(monday), sdf.format(sunday));
-    }
-
-
-    public android.util.Pair<String, String> getDateRange() {
-        Date begining, end;
-
-        {
-            Calendar calendar = getCalendarForNow();
-            calendar.set(Calendar.DAY_OF_MONTH,
-                    calendar.getActualMinimum(Calendar.DAY_OF_MONTH));
-            setTimeToBeginningOfDay(calendar);
-            begining = calendar.getTime();
-        }
-
-        {
-            Calendar calendar = getCalendarForNow();
-            calendar.set(Calendar.DAY_OF_MONTH,
-                    calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-            setTimeToEndofDay(calendar);
-            end = calendar.getTime();
-        }
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        return new android.util.Pair<String,String>(sdf.format(begining), sdf.format(end));
-    }
-
-    private static Calendar getCalendarForNow() {
-        Calendar calendar = GregorianCalendar.getInstance();
-        calendar.setTime(new Date());
-        return calendar;
-    }
-
-    private static void setTimeToBeginningOfDay(Calendar calendar) {
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-    }
-
-    private static void setTimeToEndofDay(Calendar calendar) {
-        calendar.set(Calendar.HOUR_OF_DAY, 23);
-        calendar.set(Calendar.MINUTE, 59);
-        calendar.set(Calendar.SECOND, 59);
-        calendar.set(Calendar.MILLISECOND, 999);
-    }
 }

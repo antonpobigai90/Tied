@@ -6,7 +6,8 @@ import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.customs.model.ScheduleDataModel;
+import com.tied.android.tiedapp.customs.model.TerritoryModel;
+import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.util.HelperMethods;
 
@@ -42,6 +43,8 @@ public class Client implements Serializable, Comparable<Client>{
     private int dis_from;
     private ArrayList _score;
     Boolean checkStatus = false;
+    ArrayList<TerritoryModel> territories = new ArrayList<>();
+    private ArrayList<Line> lines =  new ArrayList<>();
 
     public Client() {
     }
@@ -57,6 +60,22 @@ public class Client implements Serializable, Comparable<Client>{
     public static boolean isClientCreated(Context context){
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         return mPrefs.getBoolean(Constants.CLIENT_CREATED, false);
+    }
+
+    public ArrayList<Line> getLines() {
+        return lines;
+    }
+
+    public void setLines(ArrayList<Line> lines) {
+        this.lines = lines;
+    }
+
+    public ArrayList<TerritoryModel> getTerritories() {
+        return territories;
+    }
+
+    public void setTerritories(ArrayList<TerritoryModel> territories) {
+        this.territories = territories;
     }
 
     public String getFax() {
@@ -247,6 +266,8 @@ public class Client implements Serializable, Comparable<Client>{
                 ", visit_id=" + visit_id +
                 ", dis_from=" + dis_from +
                 ", _score=" + _score +
+                ", checkStatus=" + checkStatus +
+                ", territories=" + territories +
                 '}';
     }
 

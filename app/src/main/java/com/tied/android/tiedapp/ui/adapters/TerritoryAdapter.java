@@ -3,6 +3,7 @@ package com.tied.android.tiedapp.ui.adapters;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,9 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
+import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.model.TerritoryModel;
+import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.ui.activities.LinesAndTerritories;
 import com.tied.android.tiedapp.ui.listeners.ListAdapterListener;
 
@@ -32,10 +35,17 @@ public class TerritoryAdapter extends BaseAdapter implements ListAdapterListener
     public List<TerritoryModel> _data;
     Context _c;
     ViewHolder viewHolder;
+    private Client client;
 
-    public TerritoryAdapter(List<TerritoryModel> line_list, Context context) {
+    public TerritoryAdapter(List<TerritoryModel> line_list, Context context, Bundle bundle) {
         _data = line_list;
         _c = context;
+
+        client = (Client) bundle.getSerializable(Constants.CLIENT_DATA);
+
+        if (client != null){
+            _data = client.getTerritories();
+        }
     }
 
     @Override
@@ -76,10 +86,11 @@ public class TerritoryAdapter extends BaseAdapter implements ListAdapterListener
 
     @Override
     public void listInit(ArrayList arrayList) {
-        this._data = arrayList;
-        android.support.v4.view.ViewPager mViewPager = ((LinesAndTerritories) _c).mViewPager;
-        notifyDataSetChanged();
-        mViewPager.getAdapter().notifyDataSetChanged();
+        if (client == null){
+            this._data = arrayList;
+            android.support.v4.view.ViewPager mViewPager = ((LinesAndTerritories) _c).mViewPager;
+            notifyDataSetChanged();
+            mViewPager.getAdapter().notifyDataSetChanged();
+        }
     }
-
 }
