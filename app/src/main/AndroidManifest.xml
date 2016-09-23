@@ -3,7 +3,6 @@
     package="com.tied.android.tiedapp">
 
     <uses-sdk
-        android:minSdkVersion="8"
         android:targetSdkVersion="23" />
 
     <uses-feature
@@ -194,6 +193,23 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.tied.android.tiedapp.ui.activities.MainActivity" />
         </activity>
+        <activity
+            android:name=".ui.activities.sales.ActivitySalesDetails"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".ui.activities.sales.ActivitySalesPrint"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".ui.activities.sales.ActivitySalesFilter"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <service
             android:name=".services.LocationService"

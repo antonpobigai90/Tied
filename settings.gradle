@@ -1,1 +1,2 @@
 include ':app', ':coverflow'
+include ':app', ':MPChartLib'
