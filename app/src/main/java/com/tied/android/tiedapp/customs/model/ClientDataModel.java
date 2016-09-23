@@ -5,33 +5,43 @@ package com.tied.android.tiedapp.customs.model;
  */
 public class ClientDataModel {
 
-    private String client_name;
-    private String month;
+    private String line_name;
+    private String line_date;
+    private String percent;
     private String price;
 
-    public ClientDataModel(String client_name, String month, String price) {
-        this.client_name = client_name;
-        this.month = month;
+    public ClientDataModel(String line_name, String line_date, String percent, String price) {
+        this.line_name = line_name;
+        this.line_date = line_date;
+        this.percent = percent;
         this.price = price;
     }
 
     public ClientDataModel() {
     }
 
-    public String getClient_name() {
-        return client_name;
+    public String getLine_name() {
+        return line_name;
     }
 
-    public void setClient_name(String client_name) {
-        this.client_name = client_name;
+    public void setLine_name(String line_name) {
+        this.line_name = line_name;
     }
 
-    public String getMonth() {
-        return month;
+    public String getLine_date() {
+        return line_date;
     }
 
-    public void setMonth(String month) {
-        this.month = month;
+    public void setLine_date(String line_date) {
+        this.line_date = line_date;
+    }
+
+    public String getPercent() {
+        return percent;
+    }
+
+    public void setPercent(String percent) {
+        this.percent = percent;
     }
 
     public String getPrice() {
@@ -45,8 +55,9 @@ public class ClientDataModel {
     @Override
     public String toString() {
         return "ClientDataModel{" +
-                "client_name='" + client_name + '\'' +
-                ", month='" + month + '\'' +
+                "line_name='" + line_name + '\'' +
+                ", line_date='" + line_date + '\'' +
+                ", percent=" + percent + '\'' +
                 ", price='" + price + '\'' +
                 '}';
     }

@@ -5,11 +5,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.model.ClientDataModel;
+import com.tied.android.tiedapp.customs.model.LineDataModel;
 import com.tied.android.tiedapp.objects.client.Client;
+import com.tied.android.tiedapp.ui.activities.sales.ActivitySalesClientDetails;
+import com.tied.android.tiedapp.ui.activities.sales.ActivitySalesClientSaleDetails;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import java.util.ArrayList;
@@ -22,11 +26,13 @@ public class SaleClientListAdapter extends ClientParentAdapter {
             .getSimpleName();
 
     ViewHolder v;
+    Context context;
     protected ArrayList<ClientDataModel> arraylist = new ArrayList<ClientDataModel>();
 
     public SaleClientListAdapter(ArrayList clients, Context context) {
         super(clients, context);
         this.arraylist = clients;
+        this.context = context;
     }
 
 
@@ -36,16 +42,34 @@ public class SaleClientListAdapter extends ClientParentAdapter {
         if (view == null) {
             v = new ViewHolder();
             LayoutInflater li = (LayoutInflater) _c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = li.inflate(R.layout.sale_client_list_item, viewGroup, false);
+            view = li.inflate(R.layout.sale_line_list_item, viewGroup, false);
 
             ClientDataModel data = (ClientDataModel) _data.get(i);
 
-            v.name = (TextView) view.findViewById(R.id.txt_client_name);
-            v.month = (TextView) view.findViewById(R.id.txt_date);
+            v.item_cell = (RelativeLayout) view.findViewById(R.id.item_cell);
+            v.item_cell.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MyUtils.startActivity(context, ActivitySalesClientSaleDetails.class);
+                }
+            });
+
+            v.imageView = (ImageView) view.findViewById(R.id.dollar_icon);
+            v.line_name = (TextView) view.findViewById(R.id.txt_line_name);
+            v.line_date = (TextView) view.findViewById(R.id.txt_date);
+            v.percent = (TextView) view.findViewById(R.id.txt_percent);
             v.price = (TextView) view.findViewById(R.id.txt_price);
 
-            v.name.setText(data.getClient_name());
-            v.month.setText(data.getMonth());
+            if (i % 2 == 0) {
+                v.item_cell.setBackgroundResource(R.color.white);
+            } else {
+                v.item_cell.setBackgroundResource(R.color.light_grey3);
+            }
+
+            v.imageView.setBackgroundResource(R.drawable.user_example);
+            v.line_name.setText(data.getLine_name());
+            v.line_date.setText(String.format("%s", data.getLine_date()));
+            v.percent.setText(String.format("(%s%s)", data.getPercent(), "%"));
             v.price.setText(data.getPrice());
 
             view.setTag(v);
@@ -64,7 +88,9 @@ public class SaleClientListAdapter extends ClientParentAdapter {
 
 
     static class ViewHolder {
-        TextView name,month,price;
+        RelativeLayout item_cell;
+        ImageView imageView;
+        TextView line_name, line_date, price, percent;
     }
 
 }

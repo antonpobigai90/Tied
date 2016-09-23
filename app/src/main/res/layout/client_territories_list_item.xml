@@ -13,20 +13,13 @@
         android:paddingRight="15dp"
         android:paddingTop="10dp">
 
-        <ImageView
-            android:id="@+id/selector"
-            android:layout_width="30dp"
-            android:layout_height="30dip"
-            android:layout_centerVertical="true"
-            android:src="@drawable/unselectd_bg" />
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginLeft="15dp"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/selector">
+            android:layout_toLeftOf="@+id/selector">
 
             <TextView
                 android:id="@+id/territory"
@@ -50,6 +43,14 @@
                 android:textSize="12sp" />
 
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/selector"
+            android:layout_width="30dp"
+            android:layout_height="30dip"
+            android:layout_centerVertical="true"
+            android:src="@drawable/unselectd_bg"
+            android:layout_alignParentRight="true" />
 
 
     </RelativeLayout>

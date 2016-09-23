@@ -103,18 +103,25 @@ public class SaleViewAllFragment extends Fragment implements View.OnClickListene
 
         ArrayList<LineDataModel> lineDataModels = new ArrayList<>();
 
-        for (int i = 0 ; i < 10 ; i++) {
+        for (int i = 0 ; i < 6 ; i++) {
             LineDataModel lineDataModel = new LineDataModel();
 
-            lineDataModel.setLine_name("CREATIVE CO-OP");
-            lineDataModel.setLine_date("5 days ago");
+            if (i < 2) {
+                lineDataModel.setLine_name("Last Year (YTD)");
+                lineDataModel.setLine_date("Monthly numbers from last year");
+            }
+            else  {
+                lineDataModel.setLine_name("CREATIVE CO-OP");
+                lineDataModel.setLine_date("Last sale : 5 days ago");
+            }
+
             lineDataModel.setPercent("48");
             lineDataModel.setPrice("$1,200,400");
 
             lineDataModels.add(lineDataModel);
         }
 
-        line_adapter = new SaleLineListAdapter(lineDataModels, getActivity());
+        line_adapter = new SaleLineListAdapter(1, lineDataModels, getActivity());
         lines_listview.setAdapter(line_adapter);
         line_adapter.notifyDataSetChanged();
     }

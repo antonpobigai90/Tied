@@ -74,7 +74,7 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
     public FragmentIterationListener mListener;
 
     private ImageView img_segment, img_printer, img_plus, img_filter;
-    private LinearLayout line_layout, client_layout;
+    private LinearLayout sub_layout, line_layout, client_layout;
 
     private SaleLineListAdapter line_adapter;
     private SaleClientListAdapter client_adapter;
@@ -134,15 +134,18 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
         img_filter.setOnClickListener(this);
         img_plus.setOnClickListener(this);
 
+        sub_layout = (LinearLayout) view.findViewById(R.id.sub_layout);
+        sub_layout.setVisibility(View.GONE);
+
         line_layout = (LinearLayout) view.findViewById(R.id.line_layout);
         client_layout = (LinearLayout) view.findViewById(R.id.client_layout);
+        client_layout.setVisibility(View.GONE);
 
         txt_view_all = (TextView) view.findViewById(R.id.txt_view_all);
         txt_view_all.setOnClickListener(this);
 
         lines_listview = (ListView) view.findViewById(R.id.lines_listview);
         client_listview = (ListView) view.findViewById(R.id.client_listview);
-        client_listview.setVisibility(View.GONE);
 
         ArrayList<LineDataModel> lineDataModels = new ArrayList<>();
         ArrayList<ClientDataModel> clientDataModels = new ArrayList<>();
@@ -151,23 +154,24 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
             LineDataModel lineDataModel = new LineDataModel();
 
             lineDataModel.setLine_name("CREATIVE CO-OP");
-            lineDataModel.setLine_date("5 days ago");
+            lineDataModel.setLine_date("Last sale: 5 days ago");
             lineDataModel.setPercent("48");
             lineDataModel.setPrice("$1,200,400");
 
             lineDataModels.add(lineDataModel);
         }
 
-        line_adapter = new SaleLineListAdapter(lineDataModels, getActivity());
+        line_adapter = new SaleLineListAdapter(0, lineDataModels, getActivity());
         lines_listview.setAdapter(line_adapter);
         line_adapter.notifyDataSetChanged();
 
-        for (int i = 0 ; i < 10 ; i++) {
+        for (int i = 0 ; i < 7 ; i++) {
             ClientDataModel clientDataModel = new ClientDataModel();
 
-            clientDataModel.setClient_name("CREATIVE CO-OP");
-            clientDataModel.setMonth("January");
-            clientDataModel.setPrice("$299,400");
+            clientDataModel.setLine_name("Emmanuel lroko");
+            clientDataModel.setLine_date("80 sales");
+            clientDataModel.setPercent("48");
+            clientDataModel.setPrice("$1,200,400");
 
             clientDataModels.add(clientDataModel);
         }
@@ -223,13 +227,17 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
             case R.id.img_segment:
                 bLine = !bLine;
                 if (bLine) {
-                    lines_listview.setVisibility(View.VISIBLE);
-                    client_listview.setVisibility(View.GONE);
+                    line_layout.setVisibility(View.VISIBLE);
+
+                    sub_layout.setVisibility(View.GONE);
+                    client_layout.setVisibility(View.GONE);
 
                     img_segment.setBackgroundResource(R.drawable.line);
                 } else {
-                    lines_listview.setVisibility(View.GONE);
-                    client_listview.setVisibility(View.VISIBLE);
+                    line_layout.setVisibility(View.GONE);
+
+                    sub_layout.setVisibility(View.VISIBLE);
+                    client_layout.setVisibility(View.VISIBLE);
 
                     img_segment.setBackgroundResource(R.drawable.clients);
                 }

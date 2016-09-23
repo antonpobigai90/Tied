@@ -2,7 +2,7 @@ package com.tied.android.tiedapp.ui.activities.sales;
 
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -12,7 +12,7 @@ import android.widget.ListView;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.model.LineDataModel;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.adapters.SalePrintListAdapter;
+import com.tied.android.tiedapp.ui.adapters.SaleLineDetailsListAdapter;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import java.util.ArrayList;
@@ -20,19 +20,23 @@ import java.util.ArrayList;
 /**
  * Created by femi on 8/4/2016.
  */
-public class ActivitySalesPrint extends AppCompatActivity implements  View.OnClickListener{
+public class ActivitySalesClientDetails extends FragmentActivity implements  View.OnClickListener{
+
+    public static final String TAG = ActivitySalesClientDetails.class
+            .getSimpleName();
+
     private Bundle bundle;
     private User user;
 
-    private ImageView img_back, img_filter;
+    private ImageView img_back, img_filter, img_plus;
 
-    private ListView month_listview;
-    private SalePrintListAdapter line_adapter;
+    private ListView clients_listview;
+    private SaleLineDetailsListAdapter line_adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sale_print_report);
+        setContentView(R.layout.activity_sale_client_details);
 
         bundle = getIntent().getExtras();
 
@@ -47,27 +51,40 @@ public class ActivitySalesPrint extends AppCompatActivity implements  View.OnCli
         }
 
         img_back = (ImageView) findViewById(R.id.img_back);
+        img_filter = (ImageView) findViewById(R.id.img_filter);
+        img_plus = (ImageView) findViewById(R.id.img_plus);
 
         img_back.setOnClickListener(this);
+        img_filter.setOnClickListener(this);
+        img_plus.setOnClickListener(this);
 
-        month_listview = (ListView) findViewById(R.id.month_listview);
+        clients_listview = (ListView) findViewById(R.id.clients_listview);
 
-        ArrayList<LineDataModel> lineDataModels = new ArrayList<LineDataModel>();
+        ArrayList<LineDataModel> lineDataModels = new ArrayList<>();
 
         for (int i = 0 ; i < 7 ; i++) {
             LineDataModel lineDataModel = new LineDataModel();
 
-            lineDataModel.setLine_name("January");
-            lineDataModel.setLine_date("$35,000");
-            lineDataModel.setPrice(":35 Clients");
+            if (i < 2) {
+                lineDataModel.setLine_name("Last Year (YTD)");
+                lineDataModel.setLine_date("Monthly numbers from last year");
+            }
+            else  {
+                lineDataModel.setLine_name("CREATIVE CO-OP");
+                lineDataModel.setLine_date("50 sales");
+            }
+
+            lineDataModel.setPercent("48");
+            lineDataModel.setPrice("$1,200,400");
 
             lineDataModels.add(lineDataModel);
         }
 
-        line_adapter = new SalePrintListAdapter(lineDataModels, this);
-        month_listview.setAdapter(line_adapter);
+        line_adapter = new SaleLineDetailsListAdapter(lineDataModels, this);
+        clients_listview.setAdapter(line_adapter);
         line_adapter.notifyDataSetChanged();
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -76,6 +93,9 @@ public class ActivitySalesPrint extends AppCompatActivity implements  View.OnCli
                 break;
             case R.id.img_filter:
                 MyUtils.startActivity(this, ActivitySalesFilter.class);
+                break;
+            case R.id.img_plus:
+                MyUtils.startActivity(this, ActivityAddSales.class);
                 break;
         }
     }

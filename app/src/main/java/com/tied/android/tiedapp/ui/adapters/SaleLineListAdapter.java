@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.model.LineDataModel;
-import com.tied.android.tiedapp.ui.activities.sales.ActivitySalesDetails;
+import com.tied.android.tiedapp.ui.activities.sales.ActivitySalesClientDetails;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import java.util.ArrayList;
@@ -25,11 +25,13 @@ public class SaleLineListAdapter extends ClientParentAdapter {
     ViewHolder v;
     protected ArrayList<LineDataModel> arraylist = new ArrayList<LineDataModel>();
     Context context;
+    int page_index;
 
-    public SaleLineListAdapter(ArrayList<LineDataModel> lines, Context context) {
+    public SaleLineListAdapter(int index, ArrayList<LineDataModel> lines, Context context) {
         super(lines, context);
         this.arraylist = lines;
         this.context = context;
+        this.page_index = index;
     }
 
 
@@ -47,23 +49,36 @@ public class SaleLineListAdapter extends ClientParentAdapter {
             v.item_cell.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MyUtils.startActivity(context, ActivitySalesDetails.class);
+                    MyUtils.startActivity(context, ActivitySalesClientDetails.class);
                 }
             });
 
+            v.imageView = (ImageView) view.findViewById(R.id.dollar_icon);
             v.line_name = (TextView) view.findViewById(R.id.txt_line_name);
             v.line_date = (TextView) view.findViewById(R.id.txt_date);
             v.percent = (TextView) view.findViewById(R.id.txt_percent);
             v.price = (TextView) view.findViewById(R.id.txt_price);
 
-            if (i % 2 == 0) {
-                v.item_cell.setBackgroundResource(R.color.white);
+            if (page_index == 0) {
+                if (i % 2 == 0) {
+                    v.item_cell.setBackgroundResource(R.color.white);
+                } else {
+                    v.item_cell.setBackgroundResource(R.color.light_grey3);
+                }
+
+                v.imageView.setBackgroundResource(R.drawable.dollar_red);
             } else {
-                v.item_cell.setBackgroundResource(R.color.light_grey3);
+                if (i < 2) {
+                    v.item_cell.setBackgroundResource(R.color.light_grey3);
+                    v.imageView.setBackgroundResource(R.drawable.dollar_purple);
+                } else {
+                    v.item_cell.setBackgroundResource(R.color.white);
+                    v.imageView.setBackgroundResource(R.drawable.dollar_blue);
+                }
             }
 
             v.line_name.setText(data.getLine_name());
-            v.line_date.setText(String.format("Last sale: %s", data.getLine_date()));
+            v.line_date.setText(String.format(data.getLine_date()));
             v.percent.setText(String.format("(%s%s)", data.getPercent(), "%"));
             v.price.setText(data.getPrice());
 

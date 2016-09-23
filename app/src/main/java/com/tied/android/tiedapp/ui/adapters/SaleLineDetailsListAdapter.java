@@ -10,7 +10,8 @@ import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.model.LineDataModel;
-import com.tied.android.tiedapp.ui.activities.sales.ActivitySalesDetails;
+import com.tied.android.tiedapp.ui.activities.sales.ActivitySalesClientDetails;
+import com.tied.android.tiedapp.ui.activities.sales.ActivitySalesClientSaleDetails;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import java.util.ArrayList;
@@ -39,17 +40,36 @@ public class SaleLineDetailsListAdapter extends ClientParentAdapter {
         if (view == null) {
             v = new ViewHolder();
             LayoutInflater li = (LayoutInflater) _c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = li.inflate(R.layout.sale_client_list_item, viewGroup, false);
+            view = li.inflate(R.layout.sale_line_list_item, viewGroup, false);
 
             LineDataModel data = (LineDataModel) _data.get(i);
 
-            v.line_name = (TextView) view.findViewById(R.id.txt_client_name);
+            v.item_cell = (RelativeLayout) view.findViewById(R.id.item_cell);
+            v.item_cell.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MyUtils.startActivity(context, ActivitySalesClientSaleDetails.class);
+                }
+            });
+
+            v.imageView = (ImageView) view.findViewById(R.id.dollar_icon);
+            v.line_name = (TextView) view.findViewById(R.id.txt_line_name);
             v.line_date = (TextView) view.findViewById(R.id.txt_date);
             v.price = (TextView) view.findViewById(R.id.txt_price);
+            v.percent = (TextView) view.findViewById(R.id.txt_percent);
+
+            if (i < 2) {
+                v.item_cell.setBackgroundResource(R.color.light_grey3);
+                v.imageView.setBackgroundResource(R.drawable.dollar_purple);
+            } else {
+                v.item_cell.setBackgroundResource(R.color.white);
+                v.imageView.setBackgroundResource(R.drawable.avatar_schedule);
+            }
 
             v.line_name.setText(data.getLine_name());
             v.line_date.setText(data.getLine_date());
             v.price.setText(data.getPrice());
+            v.percent.setText(String.format("(%s%s)", data.getPercent(), "%"));
 
             view.setTag(v);
         } else {
@@ -67,7 +87,9 @@ public class SaleLineDetailsListAdapter extends ClientParentAdapter {
 
 
     static class ViewHolder {
-        TextView line_name, line_date, price;
+        RelativeLayout item_cell;
+        ImageView imageView;
+        TextView line_name, line_date, price, percent;
     }
 
 }

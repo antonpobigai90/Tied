@@ -15,8 +15,7 @@
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:id="@+id/dollar_icon"
-            android:src="@mipmap/dollar_orange" />
+            android:id="@+id/dollar_icon" />
 
         <ImageView
             android:layout_width="10dp"
