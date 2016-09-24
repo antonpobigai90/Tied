@@ -7,6 +7,8 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -50,6 +52,7 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
     EditText saleAmountET, titleET;
     float salesAmount=0.00f;
     String title="";
+    View lineLayout, clientLayout;
     Revenue revenue=new Revenue();
 
    // AddSalesFragment fragment;
@@ -64,10 +67,15 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
         //user = MyUtils.getUserFromBundle(bundle);
        // fragment=AddSalesFragment.newInstance(bundle);
         View getFocus=findViewById(R.id.getFocus);
-        getFocus.requestFocusFromTouch();
+       getFocus.requestFocusFromTouch();
         getFocus.setFocusableInTouchMode(true);
         getFocus.setNextFocusRightId(R.id.sale_amount);
-        line = (Line) bundle.getSerializable(Constants.LINE_DATA);
+        try {
+            line = (Line) bundle.getSerializable(Constants.LINE_DATA);
+            client = (Client) bundle.getSerializable(Constants.CLIENT_DATA);
+        }catch(Exception e) {
+
+        }
 
         initComponent();
     }
@@ -78,19 +86,26 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
         clientPhoto=(ImageView)findViewById(R.id.client_photo);
         saleAmountET=(EditText)findViewById(R.id.sale_amount);
         clientNameTV=(TextView)findViewById(R.id.client_name);
-        dateTV=(TextView)findViewById(R.id.date_sold);
+        dateTV=(TextView)findViewById(R.id.txt_date);
         titleET=(EditText)findViewById(R.id.title);
+        lineLayout=findViewById(R.id.select_line_layout);
+        clientLayout=findViewById(R.id.select_client_layout);
+        if(line == null) lineLayout.setVisibility(View.VISIBLE);
+        else lineLayout.setVisibility(View.GONE);
+
+        if(client == null) clientLayout.setVisibility(View.VISIBLE);
+        else clientLayout.setVisibility(View.GONE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(getResources().getColor(R.color.green_color1));
+           window.setStatusBarColor(getResources().getColor(R.color.green_color1));
         }
     }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.select_client:
+            case R.id.select_client_layout:
                 selectClient(client);
                 break;
 
@@ -122,6 +137,10 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
                     MyUtils.showAlert(this, "You must enter the title for this sale");
                     return;
                 }
+                if(line==null) {
+                    MyUtils.showAlert(this, "You must choose a line");
+                    return;
+                }
                 if(client==null) {
                     MyUtils.showAlert(this, "You must choose a client");
                     return;
@@ -138,7 +157,7 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
                     return;
                 }
                 if(dateString==null || dateString.isEmpty()) {
-                    MyUtils.showAlert(this, "You must enter the sales date");
+                    MyUtils.showAlert(this, "You must enter the date of this sales");
                     return;
                 }
 
@@ -211,6 +230,8 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
                 }
                 catch (Exception jo) {
                     DialogUtils.closeProgress();
+                    MyUtils.showToast("Error encountered. Please check your internet connection.");
+
                     Logger.write(jo);
                 }
 
