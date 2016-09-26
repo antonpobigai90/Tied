@@ -59,6 +59,7 @@ public interface LineApi {
     @GET(Constants.LINE_GOALS)
     Call<ResponseBody> getLineGoals(@Header(Constants.TOKEN_HEADER) String token, @Path("line_id") String line_id,
                                     @Path("page_num") int page_num);
+
     @GET(Constants.NUM_LINE_GOALS)
     Call<ResponseBody> getNumLineGoals(@Header(Constants.TOKEN_HEADER) String token, @Path("line_id") String line_id);
 

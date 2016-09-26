@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.tied.android.tiedapp.MainApplication;
@@ -718,11 +719,13 @@ public abstract class MyUtils {
                 if ( context == null ) return;
                 DialogUtils.closeProgress();
                 ClientRes clientRes = resResponse.body();
+                Logger.write(clientRes.toString());
                 try {
                     if (clientRes.isAuthFailed()) {
                         // User.LogOut(context);
                     } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200) {
                         ArrayList<Client> clients = clientRes.getClients();
+
                         if (clients.size() > 0) {
                             MainApplication.clientsList = clients;
                             if (listAdapterListener != null) {
@@ -1103,6 +1106,12 @@ public abstract class MyUtils {
     }
     public static Date parseDate( String date) throws Exception {
         return new SimpleDateFormat("yy-mm-dd").parse(date);
+    }
+
+    public static class MapObject  {
+        public static  Map<String, Object> create(String jsonString) {
+            return  new Gson().fromJson(jsonString, new TypeToken<HashMap<String, Object>>() {}.getType());
+        }
     }
 
 }

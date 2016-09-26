@@ -32,6 +32,7 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.model.ClientDataModel;
 import com.tied.android.tiedapp.customs.model.LineDataModel;
+import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityAddSales;
 import com.tied.android.tiedapp.ui.activities.sales.ActivitySalesFilter;
@@ -101,22 +102,11 @@ public class SaleViewAllFragment extends Fragment implements View.OnClickListene
 
         lines_listview = (ListView) view.findViewById(R.id.lines_listview);
 
-        ArrayList<LineDataModel> lineDataModels = new ArrayList<>();
+        ArrayList<Line> lineDataModels = new ArrayList<>();
 
         for (int i = 0 ; i < 6 ; i++) {
-            LineDataModel lineDataModel = new LineDataModel();
+            Line lineDataModel = new Line();
 
-            if (i < 2) {
-                lineDataModel.setLine_name("Last Year (YTD)");
-                lineDataModel.setLine_date("Monthly numbers from last year");
-            }
-            else  {
-                lineDataModel.setLine_name("CREATIVE CO-OP");
-                lineDataModel.setLine_date("Last sale : 5 days ago");
-            }
-
-            lineDataModel.setPercent("48");
-            lineDataModel.setPrice("$1,200,400");
 
             lineDataModels.add(lineDataModel);
         }

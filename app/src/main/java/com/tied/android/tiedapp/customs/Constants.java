@@ -10,9 +10,9 @@ import java.io.File;
 public class Constants {
     public static final String TAG = Constants.class
             .getSimpleName();
-    public static final String SERVER_URL = "http://tied.goattale.com:8101/api/v1/";
+    public static final String SERVER_URL = "http://tied.goattale.com:8100/api/v1/";
 
-    public static final String HOST = "http://tied.goattale.com:8101/";
+    public static final String HOST = "http://tied.goattale.com:8100/";
 //    public static final String HOST = "https://tied-api.herokuapp.com/";
 
     public static final int PORT = 3000;
@@ -54,6 +54,8 @@ public class Constants {
     public static final String REVENUES = API_PATH + "revenue";
     public static final String UPDATE_REVENUE_WITH_ID = API_PATH + "revenue/{line_id}";
     public static final String ADD_REVENUE = API_PATH + "revenue";
+    public static final String GET_TOP_FIVE_LINE_REVENUE = API_PATH + "revenue/top_five/by_line";
+    public static final String  GET_TOTAL_REVENUES_FOR_USER = API_PATH + "/users/me/revenue/total";
 
 
     public static final String GET_CLIENT_WITH_ID = API_PATH + "client/{client_id}";

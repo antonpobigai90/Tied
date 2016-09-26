@@ -36,16 +36,26 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.gson.Gson;
+import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.model.*;
+import com.tied.android.tiedapp.objects.Line;
+import com.tied.android.tiedapp.objects.Revenue;
+import com.tied.android.tiedapp.objects._Meta;
+import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.retrofits.services.LineApi;
+import com.tied.android.tiedapp.retrofits.services.RevenueApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
+import com.tied.android.tiedapp.ui.activities.lines.LineRevenueActivity;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityAddSales;
 import com.tied.android.tiedapp.ui.activities.sales.ActivitySalesFilter;
 import com.tied.android.tiedapp.ui.activities.sales.ActivitySalesPrint;
 import com.tied.android.tiedapp.ui.adapters.*;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.fragments.schedule.tabs.AllScheduleFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.tabs.NextWeekScheduleFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.tabs.ThisMonthScheduleFragment;
@@ -56,10 +66,16 @@ import com.tied.android.tiedapp.util.HelperMethods;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 
+import okhttp3.ResponseBody;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Emmanuel on 7/1/2016.
@@ -83,8 +99,10 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
 
     private TextView txt_view_all;
     private PieChart mChart;
-
+    List<Line> lineDataModels = new ArrayList<>();
+    User user;
     boolean bLine = true;
+    String start, stop;
 
     protected String[] mParties = new String[] {
             "Party A", "Party B", "Party C", "Party D"
@@ -93,11 +111,13 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
     public static Fragment newInstance(Bundle bundle) {
         Fragment fragment = new SaleFragment();
         fragment.setArguments(bundle);
+
         return fragment;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
     }
 
@@ -105,7 +125,11 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sale_home, null);
 
+        user=MyUtils.getUserFromBundle(bundle);
         initComponent(view);
+        String today=HelperMethods.getTodayDate();
+        start=HelperMethods.getMonthOfTheYear(today)+" "+today;
+        Logger.write("8888888888888888888888 "+today);
 
         Log.d(TAG, "AM HERE AGAIN");
         return view;
@@ -146,12 +170,13 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
 
         lines_listview = (ListView) view.findViewById(R.id.lines_listview);
         client_listview = (ListView) view.findViewById(R.id.client_listview);
+        loadData();
 
-        ArrayList<LineDataModel> lineDataModels = new ArrayList<>();
+
         ArrayList<ClientDataModel> clientDataModels = new ArrayList<>();
 
-        for (int i = 0 ; i < 4 ; i++) {
-            LineDataModel lineDataModel = new LineDataModel();
+       /* for (int i = 0 ; i < 4 ; i++) {
+            Line lineDataModel = new Line();
 
             lineDataModel.setLine_name("CREATIVE CO-OP");
             lineDataModel.setLine_date("Last sale: 5 days ago");
@@ -159,7 +184,7 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
             lineDataModel.setPrice("$1,200,400");
 
             lineDataModels.add(lineDataModel);
-        }
+        }*/
 
         line_adapter = new SaleLineListAdapter(0, lineDataModels, getActivity());
         lines_listview.setAdapter(line_adapter);
@@ -208,7 +233,7 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
         // add a selection listener
         mChart.setOnChartValueSelectedListener(this);
 
-        setData(3, 100);
+        //setData(3, 100);
 
         mChart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
         // mChart.spin(2000, 0, 360);
@@ -257,24 +282,27 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
         }
     }
 
-    private void setData(int count, float range) {
+    List<Float> topRevenues = new ArrayList<>();
+    List<String> topRevenuesName = new ArrayList<>();
+    private void setData() {
 
-        float mult = range;
+        //float mult = range;
 
         ArrayList<Entry> yVals1 = new ArrayList<Entry>();
 
         // IMPORTANT: In a PieChart, no values (Entry) should have the same
         // xIndex (even if from different DataSets), since no values can be
         // drawn above each other.
-        for (int i = 0; i < count + 1; i++) {
-            yVals1.add(new Entry((float) (Math.random() * mult) + mult / 5, i));
+        for (Float revenue:topRevenues) {
+            yVals1.add(new Entry(revenue, topRevenues.indexOf(revenue)));
         }
+        int count=topRevenues.size();
 
         ArrayList<String> xVals = new ArrayList<String>();
-        for (int i = 0; i < count + 1; i++)
-            xVals.add(mParties[i % mParties.length]);
+        for (int i = 0; i < count; i++)
+            xVals.add(topRevenuesName.get(i));
 
-        PieDataSet dataSet = new PieDataSet(yVals1, "Election Results");
+        PieDataSet dataSet = new PieDataSet(yVals1, "Total Revenues");
         dataSet.setSliceSpace(3f);
         dataSet.setSelectionShift(5f);
 
@@ -282,23 +310,22 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
 
         ArrayList<Integer> colors = new ArrayList<Integer>();
 
-        for (int c : ColorTemplate.VORDIPLOM_COLORS)
-            colors.add(c);
-
-        for (int c : ColorTemplate.JOYFUL_COLORS)
-            colors.add(c);
-
         for (int c : ColorTemplate.COLORFUL_COLORS)
             colors.add(c);
 
-        for (int c : ColorTemplate.LIBERTY_COLORS)
+      for (int c : ColorTemplate.LIBERTY_COLORS)
+            colors.add(c);
+        for (int c : ColorTemplate.VORDIPLOM_COLORS)
+            colors.add(c);
+        /*       for (int c : ColorTemplate.JOYFUL_COLORS)
             colors.add(c);
 
         for (int c : ColorTemplate.PASTEL_COLORS)
             colors.add(c);
 
         colors.add(ColorTemplate.getHoloBlue());
-
+*/
+       // colors.add(ColorTemplate.getHoloBlue());
         dataSet.setColors(colors);
         //dataSet.setSelectionShift(0f);
 
@@ -331,6 +358,77 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
 
     @Override
     public void onNothingSelected() {
+
+    }
+    public void loadData() {
+        // super.loadData();
+        // if(addLinesActivity.getLine()==null) return;
+        // Logger.write("Loading data");
+        DialogUtils.displayProgress(getActivity());
+        RevenueApi lineApi = MainApplication.getInstance().getRetrofit().create(RevenueApi.class);
+        final Call<ResponseBody> response = lineApi.getTopLineRevenues(user.getToken());
+        response.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
+                if (this == null) return;
+                DialogUtils.closeProgress();
+                try {
+                    //Logger.write(resResponse.body().string());
+                    //  JSONObject response = new JSONObject(resResponse.body().string());
+                    GeneralResponse response=new GeneralResponse(resResponse.body());
+
+                    if (response != null && response.isAuthFailed()) {
+                        //User.LogOut(LineRevenueActivity.this);
+                        return;
+                    }
+                    Logger.write(response.toString());
+                    _Meta meta=response.getMeta();
+                    if(meta !=null && meta.getStatus_code()==200) {
+
+                        List<Object> keys=response.getKeys();
+                        JSONObject map=response.getKeyObjects();
+
+                        List<Line> lines = new ArrayList<Line>(keys.size());
+                        Gson gson = new Gson();
+                        topRevenues.clear();
+                        for(Object keyObject:keys) {
+                             Map<String, Object> obj = MyUtils.MapObject.create(keyObject.toString());
+//                            Logger.write(map.get(MyUtils.MapObject.create(keyObject.toString()).get("key")).toString());
+                           // lines.add((Line)map.get(MyUtils.MapObject.create(keyObject.toString()).get("key")));
+                            Line line =gson.fromJson(map.getString(obj.get("key").toString()), Line.class);
+                            Float val=Float.parseFloat(""+(Double)obj.get("value"));
+                            line.setTotal_revenue(val);
+                            topRevenues.add(val);
+                            topRevenuesName.add(line.getName());
+                            lines.add(line);
+                        }
+                        setData();
+                        //Map mapObject = MyUtils.MapObject.create(response.toString());
+                        //Logger.write(.toString());
+                        lineDataModels.addAll(lines);
+                        //
+                        line_adapter.notifyDataSetChanged();
+                    } else {
+                        MyUtils.showToast(getString(R.string.connection_error));
+                    }
+                }catch (Exception e) {
+                    MyUtils.showConnectionErrorToast(getActivity());
+                    Logger.write(e);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                //Log.d(TAG + " onFailure", t.toString());
+                Logger.write(t.getMessage());
+                MyUtils.showConnectionErrorToast(getActivity());
+                DialogUtils.closeProgress();
+            }
+        });
+
+
+        // DialogUtils.displayProgress(this);
+
 
     }
 }

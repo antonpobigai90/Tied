@@ -2,6 +2,7 @@ package com.tied.android.tiedapp.objects.responses;
 
 import com.google.gson.Gson;
 import com.google.gson.internal.Primitives;
+import com.google.gson.reflect.TypeToken;
 import com.tied.android.tiedapp.objects._Meta;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
@@ -14,6 +15,7 @@ import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Femi on 7/29/2016.
@@ -49,6 +51,17 @@ public class GeneralResponse  {
         Gson gson=new Gson();
         return  gson.fromJson(response.getString(key), (Type)classOfT);
 
+    }
+    public JSONObject getKeyObjects() throws Exception {
+        if(response==null) response=new JSONObject(responseBody.string());
+       return new JSONObject(response.getString("result")).getJSONObject("data");
+
+
+    }
+    public List<Object> getKeys() throws Exception {
+       //JSONArray ja= ;
+        Gson gson=new Gson();
+        return gson.fromJson(new JSONObject(response.getString("result")).getString("keys"),  new TypeToken<List<Object>>(){}.getType());
     }
     public _Meta getMeta() throws Exception {
         if(response==null) response=new JSONObject(responseBody.string());

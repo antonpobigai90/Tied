@@ -53,6 +53,8 @@ public interface ClientApi {
     @POST(Constants.USER_GE0_CLIENTS)
     Call<ClientRes> getClientsByLocation(@Body ClientLocation clientLocation);
 
+
+
     @POST(Constants.LINE_CLIENTS)
     Call<ClientRes> getLineClients( @Header(Constants.TOKEN_HEADER) String token,
                                     @Path("line_id") String line_id,

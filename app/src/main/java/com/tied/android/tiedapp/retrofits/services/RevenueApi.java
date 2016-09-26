@@ -22,4 +22,18 @@ public interface RevenueApi {
 
     @POST(Constants.REVENUES)
     Call<ResponseBody> createRevenue(@Body Revenue revenue);
+
+
+    @POST(Constants.GET_TOTAL_REVENUES_FOR_USER)
+    Call<ResponseBody> geTotalForUser(@Header(Constants.TOKEN_HEADER) String token,
+                                      @Field("start") String startDate,
+                                      @Field("end") String endDate);
+
+    @POST(Constants.GET_TOP_FIVE_LINE_REVENUE)
+    Call<ResponseBody> getTopRevenueByLines(@Header(Constants.TOKEN_HEADER) String token,
+                                            @Field("start") String startDate,
+                                            @Field("end") String endDate);
+    @GET(Constants.GET_TOP_FIVE_LINE_REVENUE)
+    Call<ResponseBody> getTopLineRevenues(@Header(Constants.TOKEN_HEADER) String token);
+
 }

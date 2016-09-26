@@ -27,7 +27,7 @@ public class ClientParentAdapter extends BaseAdapter implements ListAdapterListe
     RoundImage roundedImage;
     Context _c;
 
-    public ClientParentAdapter(ArrayList clients, Context context) {
+    public ClientParentAdapter(List clients, Context context) {
         _data = clients;
         _c = context;
     }

@@ -10,10 +10,12 @@ import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.model.LineDataModel;
+import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.ui.activities.sales.ActivitySalesClientDetails;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Emmanuel on 6/28/2016.
@@ -23,11 +25,11 @@ public class SaleLineListAdapter extends ClientParentAdapter {
             .getSimpleName();
 
     ViewHolder v;
-    protected ArrayList<LineDataModel> arraylist = new ArrayList<LineDataModel>();
+    protected List<Line> arraylist = new ArrayList<Line>();
     Context context;
     int page_index;
 
-    public SaleLineListAdapter(int index, ArrayList<LineDataModel> lines, Context context) {
+    public SaleLineListAdapter(int index, List<Line> lines, Context context) {
         super(lines, context);
         this.arraylist = lines;
         this.context = context;
@@ -43,7 +45,7 @@ public class SaleLineListAdapter extends ClientParentAdapter {
             LayoutInflater li = (LayoutInflater) _c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = li.inflate(R.layout.sale_line_list_item, viewGroup, false);
 
-            LineDataModel data = (LineDataModel) _data.get(i);
+            Line data = (Line) _data.get(i);
 
             v.item_cell = (RelativeLayout) view.findViewById(R.id.item_cell);
             v.item_cell.setOnClickListener(new View.OnClickListener() {
@@ -77,10 +79,10 @@ public class SaleLineListAdapter extends ClientParentAdapter {
                 }
             }
 
-            v.line_name.setText(data.getLine_name());
-            v.line_date.setText(String.format(data.getLine_date()));
-            v.percent.setText(String.format("(%s%s)", data.getPercent(), "%"));
-            v.price.setText(data.getPrice());
+            v.line_name.setText(data.getName());
+            //v.line_date.setText(String.format(data.getLine_date()));
+            //v.percent.setText(String.format("(%s%s)", data.getPercent(), "%"));
+            v.price.setText(MyUtils.moneyFormat(data.getTotal_revenue()));
 
             view.setTag(v);
         } else {
