@@ -2,14 +2,18 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     android:orientation="vertical"
     android:background="@color/white">
+
 
     <RelativeLayout
         android:id="@+id/top_layout"
         android:layout_width="match_parent"
         android:layout_height="54dp"
+
         android:background="@mipmap/background_gradient">
+
 
         <TextView
             android:layout_width="wrap_content"
@@ -17,11 +21,13 @@
             android:layout_gravity="center_horizontal"
             android:text="Co-Workers"
             android:textColor="@color/white"
+
             android:textSize="18sp"
             android:textStyle="bold"
             android:id="@+id/textView5"
             android:layout_centerInParent="true"
             style="@style/EditTextStyle" />
+
 
         <LinearLayout
             android:onClick="onClick"
@@ -29,6 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -40,6 +47,7 @@
                 android:src="@mipmap/btn_back_arrow"
                 android:padding="@dimen/action_bar_icon_padding" />
 
+
         </LinearLayout>
 
         <LinearLayout
@@ -48,6 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -59,9 +68,11 @@
                 android:src="@drawable/setting"
                 android:padding="@dimen/action_bar_icon_padding" />
 
+
         </LinearLayout>
 
         <ImageView
+
             android:layout_width="@dimen/action_bar_icon_height"
             android:layout_height="@dimen/action_bar_icon_height"
             android:src="@mipmap/plus_thin"
@@ -216,5 +227,6 @@
             </LinearLayout>
 
     <!--</ScrollView>-->
+
 
 </LinearLayout>

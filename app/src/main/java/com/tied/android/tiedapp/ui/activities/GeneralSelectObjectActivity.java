@@ -119,18 +119,23 @@ public class GeneralSelectObjectActivity extends Activity
     public void initComponent() {
         clientsWithDistance = new ArrayList<Client>();
         listView = (ListView) findViewById(R.id.list);
+
         findViewById(R.id.add_but).setOnClickListener(this);
+
+        //findViewById(R.id.clear_but).setOnClickListener(this);
 
 //        txt_continue = (TextView) findViewById(R.id.txt_continue);
 
         search = (EditText) findViewById(R.id.search);
-//        listView.setOnItemClickListener(this);
+
+        listView.setOnItemClickListener(this);
         addLayout = findViewById(R.id.add_layout);
 
         if(!isMultiple) {
             addLayout.setVisibility(View.GONE);
         }
         finishSelection=findViewById(R.id.add_button);
+finishSelection.setVisibility(View.GONE);
         finishSelection.setOnClickListener(this);
         selectedCountText=(TextView)findViewById(R.id.selected_count);
 
@@ -199,8 +204,11 @@ public class GeneralSelectObjectActivity extends Activity
             case R.id.add_button:
                 finishSelection();
                 break;
+
             case R.id.add_but:
-                showClearWarning();
+
+          //  case R.id.clear_but:
+               // showClearWarning();
                 break;
         }
     }
@@ -251,6 +259,20 @@ private void showClearWarning() {
                 selectedIDs.add(obj.getId());
                 selectedObjects.add(obj);
             }
+        }
+
+       /* Intent intent = new Intent();
+        Bundle b =new Bundle();
+        b.putSerializable("selected", selectedObjects);
+        intent.putExtras(b);
+        setResult(RESULT_OK, intent);
+        finish();*/
+        if(isMultiple) {
+            adapter.setSelected(selectedIDs);
+            adapter.notifyDataSetChanged();
+        }else{
+            finishSelection();
+            return;
         }
        updateNumSelected();
 
@@ -304,7 +326,9 @@ private void showClearWarning() {
                     ArrayList<Client> clients = clientRes.getClients();
                     Log.d(TAG + "", clients.toString());
                     clientsWithDistance = clients;
-                    adapter = new MyClientLineAdapter(clientsWithDistance, GeneralSelectObjectActivity.this);
+
+                    adapter = new MyClientLineAdapter(clientsWithDistance, selectedIDs, GeneralSelectObjectActivity.this, isMultiple);
+
                     listView.setAdapter(adapter);
                     listView.setFastScrollEnabled(true);
                 }else{

@@ -73,7 +73,8 @@ public class AddLinesActivity extends AppCompatActivity implements  View.OnClick
                 saveForm();
                 break;
             case R.id.back_layout:
-                MyUtils.startActivity(this, MainActivity.class);
+
+               onBackPressed();
                 break;
         }
     }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_green"
@@ -26,6 +27,7 @@
                 android:layout_marginTop="0dp"
                 android:text="Add a Sale"
                 android:textColor="@color/white"
+
                 android:textSize="17dp"
                 android:textStyle="bold" />
 
@@ -87,7 +89,7 @@
                 android:orientation="horizontal">
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:onClick="onClick"
-                    android:id="@+id/user_picture_iv"
+                    android:id="@+id/client_photo"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_alignParentLeft="true"
@@ -135,9 +137,11 @@
                     android:layout_height="20dp"
                     android:src="@drawable/ic_arrow_gray"/>
 
+
             </LinearLayout>
             <LinearLayout style="@style/SeperatorHorizontal" />
             <LinearLayout android:layout_width="match_parent"
+
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:onClick="onClick"
@@ -173,12 +177,14 @@
                         android:textSize="15sp"
                         android:layout_height="35dp"
                         android:text="4500"
+                              android:id="@+id/sale_amount"
                         android:inputType="numberDecimal" />
                 </LinearLayout>
 
 
             </LinearLayout>
             <LinearLayout style="@style/SeperatorHorizontal" />
+
             <RelativeLayout android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -268,9 +274,8 @@
 
         </LinearLayout>
 
+
     </LinearLayout>
 
 
 </LinearLayout>
-
-

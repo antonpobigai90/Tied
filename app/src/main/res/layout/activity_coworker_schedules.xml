@@ -15,14 +15,17 @@
         <RelativeLayout
             android:id="@+id/top_layout"
             android:layout_width="match_parent"
+
             android:layout_height="54dp"
             android:background="@mipmap/background_gradient">
+
 
             <TextView
                 android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+
                 android:ellipsize="end"
                 android:gravity="center_horizontal"
                 android:maxLines="1"
@@ -47,6 +50,7 @@
                     android:padding="@dimen/action_bar_icon_padding" />
 
             </LinearLayout>
+
 
         </RelativeLayout>
 
@@ -88,6 +92,7 @@
         android:gravity="center_vertical"
         android:paddingLeft="15dp"
         android:background="@color/sub_title_bg" />
+
     android:layout_below="@+id/textView5" />
 
 </RelativeLayout>

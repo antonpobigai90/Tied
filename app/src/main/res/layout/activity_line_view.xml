@@ -5,7 +5,6 @@
     android:orientation="vertical"
     android:background="@drawable/background">
 
-
     <LinearLayout
         android:id="@+id/top"
         android:layout_width="match_parent"
@@ -62,12 +61,14 @@
                 android:padding="@dimen/action_bar_icon_padding" />
 
 
+
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
+
             android:paddingBottom="2dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp">
@@ -79,7 +80,14 @@
                 android:text="lroko Technologies LLC"
                 android:layout_centerHorizontal="true"
                 android:textSize="14sp"
+
                 android:textStyle="normal" />
+            <ImageView android:layout_width="20dp"
+                       android:layout_height="20dp"
+                       android:id="@+id/name_editor"
+                       android:layout_toRightOf="@+id/name"
+                       android:src="@drawable/icon_edit"
+                       android:layout_alignParentTop="true"/>
 
 
 
@@ -92,23 +100,26 @@
                     android:gravity="center"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="10dp"
+
                     android:id="@+id/total_revenue_txt"
                     android:textStyle="bold"
                     android:textColor="@color/white"
                     android:textSize="22sp" />
 
 
-            <TextView
+          <TextView
                 android:id="@+id/string"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:text="All time sales : 0 clients Total"
+
                 android:layout_below="@+id/total_revenue_txt"
                 android:textSize="13sp"
                 android:alpha="0.5"
                 android:layout_centerHorizontal="true"
                 android:textStyle="bold" />
+
 
         </RelativeLayout>
 
@@ -116,6 +127,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
+
         android:layout_height="match_parent"
         android:background="@color/white">
 
@@ -123,14 +135,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+
             android:paddingBottom="30dp">
 
             <RelativeLayout
                 android:id="@+id/revenue_layout"
                 android:layout_width="match_parent"
+
                 android:layout_height="60dp"
                 android:onClick="onClick"
                 android:paddingLeft="20dp">
+
 
                 <ImageView
                     android:id="@+id/icon_dollar"
@@ -168,7 +183,9 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="25dp"
+
                     android:src="@drawable/ic_arrow_gray" />
+
             </RelativeLayout>
 
             <View
@@ -179,9 +196,11 @@
             <RelativeLayout
                 android:id="@+id/clients_layout"
                 android:layout_width="match_parent"
+
                 android:layout_height="60dp"
                 android:onClick="onClick"
                 android:paddingLeft="20dp">
+
 
                 <ImageView
                     android:id="@+id/icon_clients"
@@ -193,6 +212,7 @@
                 <LinearLayout android:layout_width="wrap_content"
                               android:layout_toRightOf="@+id/icon_clients"
                               android:orientation="vertical"
+
                               android:layout_height="wrap_content"
                     android:layout_centerVertical="true">
 
@@ -242,12 +262,14 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_centerVertical="true"
+
                     android:src="@drawable/goal" />
                 <LinearLayout android:layout_width="wrap_content"
                               android:layout_toRightOf="@+id/icon_goals"
                               android:orientation="vertical"
                               android:layout_height="wrap_content"
                     android:layout_centerVertical="true">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -257,6 +279,16 @@
                         android:text="Goals"
                         android:textColor="@color/schedule_title_bg_color"
                         android:textSize="16sp" />
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="15dp"
+                            android:text="0"
+                            android:id="@+id/num_goals"
+                            android:textColor="@color/light_gray2"
+                            android:textSize="11sp" />
+
                 </LinearLayout>
                 <ImageView
                     android:layout_width="20dp"
@@ -264,18 +296,21 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="25dp"
+
                     android:src="@drawable/ic_arrow_gray" />
             </RelativeLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.1dp"
+
                 android:background="@android:color/darker_gray" />
 
             <RelativeLayout
                 android:id="@+id/territory_layout"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
+
                 android:onClick="onClick"
                 android:paddingBottom="15dp"
                 android:paddingLeft="20dp"
@@ -286,7 +321,9 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_centerVertical="true"
+
                     android:src="@drawable/map_locations" />
+
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -304,6 +341,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="25dp"
+
                     android:src="@drawable/ic_arrow_gray" />
             </RelativeLayout>
 
@@ -319,17 +357,20 @@
                 android:onClick="onClick"
                 android:paddingLeft="20dp">
 
+
                 <ImageView
                     android:id="@+id/icon_ship"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_centerVertical="true"
+
                     android:src="@drawable/shipping" />
                 <LinearLayout android:layout_width="wrap_content"
                               android:layout_toRightOf="@+id/icon_ship"
                               android:orientation="vertical"
                               android:layout_height="wrap_content"
                     android:layout_centerVertical="true">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -357,7 +398,9 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="25dp"
+
                     android:src="@drawable/ic_arrow_gray" />
+
             </RelativeLayout>
 
             <View
@@ -368,7 +411,9 @@
             <RelativeLayout
                 android:id="@+id/info_layout"
                 android:layout_width="match_parent"
+
                 android:layout_height="60dp"
+
                 android:onClick="onClick"
                 android:paddingBottom="15dp"
                 android:paddingLeft="20dp"
@@ -379,6 +424,7 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_centerVertical="true"
+
                     android:src="@drawable/info" />
 
                 <TextView
@@ -397,7 +443,9 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="25dp"
+
                     android:src="@drawable/ic_arrow_gray" />
+
             </RelativeLayout>
 
             <View
@@ -410,12 +458,15 @@
                 style="@style/SectionLayout"
                 android:layout_marginTop="0dp"
                 android:orientation="horizontal"
+
                 android:paddingLeft="20dp"
                 android:layout_height="wrap_content">
 
+
                 <TextView
                     android:id="@+id/txt_title2"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="DESCRIPTION"
@@ -424,6 +475,13 @@
                     android:textSize="14sp"
 
                     android:textStyle="bold" />
+                <ImageView android:layout_width="20dp"
+                           android:layout_height="20dp"
+                           android:id="@+id/description_editor"
+                           android:layout_toRightOf="@+id/name"
+                           android:src="@drawable/icon_edit"
+                           android:layout_alignParentTop="true"/>
+
             </LinearLayout>
 
             <TextView

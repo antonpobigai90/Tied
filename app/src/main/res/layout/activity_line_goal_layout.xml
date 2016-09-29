@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
+
     android:orientation="vertical">
 
     <RelativeLayout
@@ -17,6 +18,7 @@
             android:layout_centerInParent="true" />
 
 
+
         <LinearLayout
             android:id="@+id/back_layout"
             android:layout_width="wrap_content"
@@ -26,16 +28,19 @@
 
             <ImageView
                 android:id="@+id/img_close"
+
                 android:layout_width="@dimen/action_bar_icon_height"
                 android:layout_height="@dimen/action_bar_icon_height"
                 android:layout_centerVertical="true"
                 android:src="@mipmap/btn_back_arrow"
                 android:padding="@dimen/action_bar_icon_padding" />
 
+
         </LinearLayout>
 
         <ImageView
             android:id="@+id/img_add"
+
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:src="@drawable/plus_thin"

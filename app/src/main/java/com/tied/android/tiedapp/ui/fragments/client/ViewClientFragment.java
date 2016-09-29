@@ -41,6 +41,8 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
     private TextView btn_delete;
     RelativeLayout important_info,lines_territory;
 
+    TextView clientNameTV;
+
     private Bundle bundle;
     private User user;
 
@@ -57,12 +59,17 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_view_client, container, false);
+
+        client = (Client) (getArguments().getSerializable(Constants.CLIENT_DATA));
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        clientNameTV=(TextView) view.findViewById(R.id.client_name);
+        clientNameTV.setText(MyUtils.getClientName(client));
 
         initComponent(view);
     }
@@ -91,7 +98,9 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
             String user_json = bundle.getString(Constants.USER_DATA);
             String client_json = bundle.getString(Constants.CLIENT_DATA);
             user = gson.fromJson(user_json, User.class);
-            client = gson.fromJson(client_json, Client.class);
+
+            client = (Client)bundle.getSerializable(Constants.CLIENT_DATA);//gson.fromJson(client_json, Client.class);
+
             if(client==null) return;
             String logo = client.getLogo().equals("") ? null  : client.getLogo();
             Picasso.with(getActivity()).

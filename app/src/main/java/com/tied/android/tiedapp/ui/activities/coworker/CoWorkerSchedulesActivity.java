@@ -1,6 +1,8 @@
 package com.tied.android.tiedapp.ui.activities.coworker;
 
+
 import android.os.Build;
+
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -56,11 +58,11 @@ public class CoWorkerSchedulesActivity extends AppCompatActivity implements Adap
     protected View emptyScheduleMessage;
     protected ProgressBar pb;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coworker_schedules);
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();

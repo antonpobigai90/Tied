@@ -27,6 +27,7 @@ import com.tied.android.tiedapp.R;
 
 import java.util.Locale;
 
+@SuppressWarnings("ResourceType")
 public class PagerSlidingTabStrip extends HorizontalScrollView {
 
 	public interface IconTabProvider {
@@ -90,6 +91,7 @@ public class PagerSlidingTabStrip extends HorizontalScrollView {
 		this(context, attrs, 0);
 	}
 
+	@SuppressWarnings("ResourceType")
 	public PagerSlidingTabStrip(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 

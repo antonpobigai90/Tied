@@ -108,6 +108,7 @@
         <item name="android:paddingBottom">8dip</item>
         <item name="android:paddingLeft">20dip</item>
         <item name="android:paddingRight">5dip</item>
+        <item name="android:layout_marginTop">8dip</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
 
@@ -212,7 +213,6 @@
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
-
 
 
 </resources>

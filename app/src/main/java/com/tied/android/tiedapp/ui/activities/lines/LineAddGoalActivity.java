@@ -228,7 +228,8 @@ public class LineAddGoalActivity extends AppCompatActivity implements View.OnCli
                         if(the_goal.getId().equals(goal.getId())){
                             Logger.write("Update goal id +"+the_goal.getId());
                             bundle.putSerializable(Constants.GOAL_DATA, the_goal);
-                            //MyUtils.startActivity(LineAddGoalActivity.this, LineViewGoalActivity.class, bundle);
+
+                            MyUtils.startActivity(LineAddGoalActivity.this, LineViewGoalActivity.class, bundle);
                         }
                     }else{
                         MyUtils.showToast("Error encountered");

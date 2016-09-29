@@ -19,8 +19,10 @@ import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects._Meta;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
+
+import com.tied.android.tiedapp.retrofits.services.GoalApi;
 import com.tied.android.tiedapp.retrofits.services.LineApi;
-import com.tied.android.tiedapp.ui.activities.goal.LineViewGoalActivity;
+import com.tied.android.tiedapp.ui.activities.lines.LineViewGoalActivity;
 import com.tied.android.tiedapp.ui.adapters.GoalsAdapter;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.Logger;

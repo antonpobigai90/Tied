@@ -35,6 +35,8 @@ import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.util.HelperMethods;
+
+import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import retrofit.Callback;
@@ -103,17 +105,20 @@ public class ViewScheduleFragment extends Fragment implements View.OnClickListen
 
         schedule_title = (TextView) view.findViewById(R.id.schedule_title);
         description = (TextView) view.findViewById(R.id.description);
-        title = (TextView) view.findViewById(R.id.title);
+
+        //title = (TextView) view.findViewById(R.id.title);
         temperature = (TextView) view.findViewById(R.id.weather);
 
-        title.setText(schedule.getTitle());
+        //schedule_title.setText(schedule.getTitle());
         schedule_title.setText(schedule.getTitle());
         description.setText(schedule.getDescription());
 
+        Logger.write(schedule.toString());
         final RequestBuilder weather = new RequestBuilder();
         Request request = new Request();
-        request.setLat("32.00");
-        request.setLng("-81.00");
+        mLocation =schedule.getLocation();
+        request.setLat(""+mLocation.getCoordinate().getLat());
+        request.setLng(""+mLocation.getCoordinate().getLon());
         request.setUnits(Request.Units.US);
         request.setLanguage(Request.Language.ENGLISH);
         request.addExcludeBlock(Request.Block.CURRENTLY);
@@ -153,7 +158,9 @@ public class ViewScheduleFragment extends Fragment implements View.OnClickListen
 
         myMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
 
-        LatLng MELBOURNE = new LatLng(-37.81319, 144.96298);
+
+        LatLng MELBOURNE = new LatLng(mLocation.getCoordinate().getLat(), mLocation.getCoordinate().getLon());
+
         Marker melbourne = myMap.addMarker(new MarkerOptions()
                 .position(MELBOURNE)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
@@ -184,7 +191,9 @@ public class ViewScheduleFragment extends Fragment implements View.OnClickListen
 
             line.setText(client.getCompany());
             address.setText(client.getAddress().getStreet());
-            distance.setText("0.2 miles");
+
+            distance.setText(MyUtils.getDistance(MyUtils.getCurrentLocation(), mLocation.getCoordinate()));
+
 
             Picasso.with(getActivity()).
                     load(Constants.GET_AVATAR_ENDPOINT+"avatar_"+user.getId()+".jpg")

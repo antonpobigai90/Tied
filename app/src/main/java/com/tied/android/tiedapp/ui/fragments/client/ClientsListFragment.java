@@ -53,7 +53,8 @@ public class ClientsListFragment extends Fragment implements AdapterView.OnItemC
         listView = (ListView) view.findViewById(R.id.list);
         listView.setOnItemClickListener(this);
 
-        adapter = new MapClientListAdapter(1, MainApplication.clientsList, getActivity());
+
+        adapter = new MapClientListAdapter(MainApplication.clientsList, getActivity());
         listView.setAdapter(adapter);
         if (MainApplication.clientsList.size() == 0){
             MyUtils.initClient(getActivity(), user, adapter);

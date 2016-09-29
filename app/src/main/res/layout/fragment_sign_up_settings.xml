@@ -38,7 +38,6 @@
             android:text="Reorder info goes here"
             android:ems="10"
             android:id="@+id/re_order" />
-
         <DatePicker
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

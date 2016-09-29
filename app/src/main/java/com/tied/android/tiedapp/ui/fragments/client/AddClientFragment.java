@@ -40,6 +40,8 @@ import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.client.AddClientActivity;
+
+import com.tied.android.tiedapp.ui.activities.client.ViewClientActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.dialogs.SelectDataDialog;
@@ -507,12 +509,16 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
                     if (clientRes.isAuthFailed()) {
                         User.LogOut(getActivity().getApplicationContext());
                     } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 201) {
-                        Log.d(TAG + " client good", clientRes.getClient().toString());
+
+                       // Log.d(TAG + " client good", clientRes.getClient().toString());
+
                         bundle.putBoolean(Constants.NO_CLIENT_FOUND, false);
                         DialogUtils.closeProgress();
                         Client.clientCreated(getActivity().getApplicationContext());
                         MyUtils.showToast("Client successfully created");
-                       // MyUtils.startActivity(getActivity(), MainActivity.class, bundle);
+                        bundle.putSerializable(Constants.CLIENT_DATA, clientRes.getClient());
+                       MyUtils.startActivity(getActivity(), ViewClientActivity.class, bundle);
+
                     } else {
                         DialogUtils.closeProgress();
                         //Toast.makeText(getActivity(), clientRes.getMessage(), Toast.LENGTH_LONG).show();

@@ -76,7 +76,7 @@ public class GoalAddLineActivity extends AppCompatActivity implements View.OnCli
             lineDataModels.add(lineDataModel);
         }
 
-        linesAdapter = new ClientLinesAdapter(3, lineDataModels, this);
+        linesAdapter = new ClientLinesAdapter( lineDataModels, this);
         line_listview.setAdapter(linesAdapter);
         linesAdapter.notifyDataSetChanged();
 

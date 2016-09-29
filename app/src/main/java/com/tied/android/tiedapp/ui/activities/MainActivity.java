@@ -29,9 +29,9 @@ import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.services.LocationService;
 import com.tied.android.tiedapp.ui.activities.client.ClientMapAndListActivity;
 import com.tied.android.tiedapp.ui.activities.coworker.CoWorkerActivity;
-import com.tied.android.tiedapp.ui.activities.goal.LineGoalActivity;
+
+import com.tied.android.tiedapp.ui.activities.lines.LineGoalActivity;
 import com.tied.android.tiedapp.ui.fragments.DailyStatsFragment;
-import com.tied.android.tiedapp.ui.fragments.LinesFragment;
 import com.tied.android.tiedapp.ui.fragments.activities.ActivityFragment;
 import com.tied.android.tiedapp.ui.fragments.client.ClientAddFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.AddressFragment;
@@ -39,7 +39,7 @@ import com.tied.android.tiedapp.ui.fragments.profile.AvatarProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.EditProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.NotificationProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.ProfileFragment;
-import com.tied.android.tiedapp.ui.fragments.sales.*;
+
 import com.tied.android.tiedapp.ui.fragments.schedule.CreateScheduleFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleAppointmentsFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleSuggestionFragment;
@@ -72,7 +72,8 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
     public Fragment profileFragment = null;
     private int fragment_index = 0;
 
-    private LinearLayout tab_bar, map_tab, relativeLayout, activity_layout, add_layout, more_layout, tab_actvity_schedule, alert_edit_msg, sale_tab;
+    private LinearLayout tab_bar, map_tab, relativeLayout, activity_layout, add_layout, more_layout, tab_actvity_schedule, alert_edit_msg;
+
     private RelativeLayout invite_menu;
     private TextView txt_schedules, txt_activities, info_msg, drawerFullName, drawerEmail;
 
@@ -123,7 +124,6 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         add_layout = (LinearLayout) findViewById(R.id.add_layout);
         invite_menu = (RelativeLayout) findViewById(R.id.invite_menu);
         map_tab = (LinearLayout) findViewById(R.id.map);
-        sale_tab = (LinearLayout) findViewById(R.id.sales);
 
         add = (ImageView) findViewById(R.id.add);
         txt_activities = (TextView) findViewById(R.id.txt_activities);
@@ -140,7 +140,6 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         img_user_picture.setOnClickListener(this);
         invite_menu.setOnClickListener(this);
         map_tab.setOnClickListener(this);
-        sale_tab.setOnClickListener(this);
         drawerFullName=(TextView)findViewById(R.id.full_name_tv);
         drawerFullName.setText(user.getFirst_name()+" "+user.getLast_name());
         drawerEmail=(TextView)findViewById(R.id.email_tv);
@@ -187,7 +186,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         else {*/
             launchFragment(Constants.AppointmentList, bundle);
         //}
-        activity_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
+        activity_layout.setBackground(null);
     }
 
     Fragment currentFragment=null;
@@ -198,7 +197,6 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         tab_bar.setVisibility(View.VISIBLE);
         more_layout.setBackground(null);
         activity_layout.setBackground(null);
-        sale_tab.setBackground(null);
         add_layout.setBackground(null);
         relativeLayout.setVisibility(View.VISIBLE);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -228,9 +226,8 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 fragment = fragments.get(pos);
                 break;
             case Constants.HomeSchedule:
-                activity_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
                 tab_bar.setVisibility(View.GONE);
-                if(fragments.get(pos)==null) {
+               if(fragments.get(pos)==null) {
                     fragments.put(pos, DailyStatsFragment.newInstance(bundle) );
                 }
                 fragment = fragments.get(pos);
@@ -295,36 +292,6 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 tab_bar.setVisibility(View.VISIBLE);
                 if(fragments.get(pos)==null) {
                     fragments.put(pos, ScheduleAppointmentsFragment.newInstance(bundle) );
-                    Logger.write("it is new");
-                }
-                fragment = fragments.get(pos);
-                tab_bar.setVisibility(View.VISIBLE);
-                break;
-            case Constants.HomeSale:
-                sale_tab.setBackground(getResources().getDrawable(R.drawable.tab_selected));
-                relativeLayout.setVisibility(View.GONE);
-                if(fragments.get(pos)==null) {
-                    fragments.put(pos, SaleFragment.newInstance(bundle) );
-                    Logger.write("it is new");
-                }
-                fragment = fragments.get(pos);
-                tab_bar.setVisibility(View.VISIBLE);
-                break;
-            case Constants.SaleViewAll:
-                sale_tab.setBackground(getResources().getDrawable(R.drawable.tab_selected));
-                relativeLayout.setVisibility(View.GONE);
-                if(fragments.get(pos)==null) {
-                    fragments.put(pos, SaleViewAllFragment.newInstance(bundle) );
-                    Logger.write("it is new");
-                }
-                fragment = fragments.get(pos);
-                tab_bar.setVisibility(View.VISIBLE);
-                break;
-            case Constants.LineAndTerritory:
-                more_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
-                relativeLayout.setVisibility(View.GONE);
-                if(fragments.get(pos)==null) {
-                    fragments.put(pos, LinesFragment.newInstance(bundle) );
                     Logger.write("it is new");
                 }
                 fragment = fragments.get(pos);
@@ -437,8 +404,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 fragment = new AddressFragment();
                 break;
             case R.id.lines_menu:
-                if(currentFragmentID==Constants.LineAndTerritory) return;
-                launchFragment(Constants.LineAndTerritory, bundle);
+                MyUtils.startActivity(MainActivity.this, LinesAndTerritories.class,bundle);
                 break;
             case R.id.coworker_menu:
                 MyUtils.startActivity(MainActivity.this, CoWorkerActivity.class,bundle);
@@ -465,10 +431,6 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 break;
             case R.id.goal_menu:
                 MyUtils.startActivity(this, LineGoalActivity.class);
-                break;
-            case R.id.sales:
-                if(currentFragmentID==Constants.HomeSale) return;
-                launchFragment(Constants.HomeSale, bundle);
                 break;
         }
     }

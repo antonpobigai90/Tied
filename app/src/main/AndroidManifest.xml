@@ -3,6 +3,8 @@
     package="com.tied.android.tiedapp">
 
     <uses-sdk
+
+        android:minSdkVersion="8"
         android:targetSdkVersion="23" />
 
     <uses-feature
@@ -60,12 +62,13 @@
                 android:value="@string/map_api_key" />
         -->
 
-        <!--<activity-->
-            <!--android:name="com.facebook.FacebookActivity"-->
-            <!--android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"-->
-            <!--android:label="@string/app_name"-->
-            <!--android:theme="@android:style/Theme.Translucent.NoTitleBar" />-->
-
+<!--
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+-->
         <activity
             android:name=".ui.activities.signups.SignUpActivity"
             android:label="@string/app_name"
@@ -245,6 +248,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
 
+
         <!-- Line Moduel -->
         <activity android:name=".ui.activities.lines.LineTerritoriesActivity"
             android:screenOrientation="portrait"
@@ -309,12 +313,14 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden" />
 
+
         <activity android:name=".ui.activities.coworker.ViewCoWorkerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ui.activities.coworker.CoWorkerSchedulesActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
+
         <activity android:name=".ui.activities.coworker.CoWorkerFilterActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
@@ -330,7 +336,6 @@
         <activity android:name=".ui.activities.coworker.CoWorkerSaleActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
-
 
         <service android:name="com.mapbox.mapboxsdk.telemetry.TelemetryService" />
 

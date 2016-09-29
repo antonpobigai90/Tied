@@ -26,7 +26,8 @@ public class CoWorkerGAdapter extends BaseAdapter implements ListAdapterListener
 
     private static class ViewHolder {
         ImageView pic;
-        TextView name;
+
+        TextView name,summary;
     }
 
     public static final String TAG = LinesAdapter.class
@@ -70,6 +71,8 @@ public class CoWorkerGAdapter extends BaseAdapter implements ListAdapterListener
 
         viewHolder.pic = (ImageView) view.findViewById(R.id.pic);
         viewHolder.name = (TextView) view.findViewById(R.id.name);
+
+        viewHolder.summary = (TextView) view.findViewById(R.id.summary);
 
         final Client data = (Client) _data.get(i);
 

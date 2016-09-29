@@ -73,7 +73,7 @@ public class CoWorkerLinesActivity extends AppCompatActivity implements View.OnC
             lineDataModels.add(lineDataModel);
         }
 
-        linesAdapter = new ClientLinesAdapter(page_index, lineDataModels, this);
+        linesAdapter = new ClientLinesAdapter(lineDataModels, this);
         line_listview.setAdapter(linesAdapter);
         linesAdapter.notifyDataSetChanged();
 

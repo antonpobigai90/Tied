@@ -148,7 +148,6 @@
                     android:id="@+id/call"
                     android:layout_width="30dp"
                     android:layout_height="30dp" />
-
             </LinearLayout>
 
         </LinearLayout>

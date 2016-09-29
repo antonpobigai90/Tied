@@ -159,7 +159,6 @@ public class Constants {
     public static final int HomeSale = 42;
     public static final int SaleViewAll = 43;
     public static final int LineAndTerritory = 44;
-
     public static final int Profile = 40;
 
     public static final int Lines = 50;

@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
@@ -29,12 +28,11 @@ public class MapClientListAdapter extends BaseAdapter implements ListAdapterList
     Context _c;
     ViewHolder v;
     RoundImage roundedImage;
-    int page_index;
 
-    public MapClientListAdapter(int page_index, List<Client> clients, Context context) {
+
+    public MapClientListAdapter(List<Client> clients, Context context) {
         _data = clients;
         _c = context;
-        this.page_index = page_index;
     }
 
     @Override
@@ -65,29 +63,11 @@ public class MapClientListAdapter extends BaseAdapter implements ListAdapterList
             v.name = (TextView) view.findViewById(R.id.name);
             v.address = (TextView) view.findViewById(R.id.address);
             v.pic = (ImageView) view.findViewById(R.id.pic);
-            v.client_distance = (TextView) view.findViewById(R.id.client_distance);
-            v.info = (TextView) view.findViewById(R.id.info);
-            v.sales = (TextView) view.findViewById(R.id.sales);
 
-            v.locate = (ImageView) view.findViewById(R.id.locate);
-            v.call = (ImageView) view.findViewById(R.id.call);
-
-            v.time_layout = (LinearLayout) view.findViewById(R.id.time_layout);
 
             v.name.setText(data.getFull_name());
             v.address.setText(data.getAddress().getStreet());
             MyUtils.Picasso.displayImage(data.getLogo(), v.pic);
-
-            if (page_index == 1) {
-                v.time_layout.setVisibility(View.GONE);
-                v.sales.setVisibility(View.GONE);
-
-                v.locate.setBackgroundResource(R.drawable.direction);
-                v.call.setBackgroundResource(R.drawable.phone);
-            } else {
-                v.locate.setBackgroundResource(R.drawable.ic_locate);
-                v.call.setBackgroundResource(R.drawable.ic_call_blue);
-            }
 
             view.setTag(v);
         } else {
@@ -107,9 +87,8 @@ public class MapClientListAdapter extends BaseAdapter implements ListAdapterList
 
 
     static class ViewHolder {
-        ImageView pic, locate, call;
-        TextView name,address, client_distance, info, sales;
-        LinearLayout time_layout;
+        ImageView pic;
+        TextView name,address;
     }
 
     public List getList(){

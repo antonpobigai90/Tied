@@ -1,5 +1,6 @@
 package com.tied.android.tiedapp.ui.activities.coworker;
 
+
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.widget.GridView;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
+
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.client.ClientLocation;
@@ -34,7 +36,6 @@ import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Response;
-
 public class CoWorkerActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnClickListener{
 
     public static final String TAG = CoWorkerActivity.class
@@ -82,6 +83,7 @@ public class CoWorkerActivity extends AppCompatActivity implements AdapterView.O
         gridView.setAdapter(gridAdapter);
         gridView.setOnItemClickListener(this);
 
+
         if (MainApplication.clientsList.size() == 0){
             MyUtils.initClient(this, user, gridAdapter);
         }
@@ -89,6 +91,8 @@ public class CoWorkerActivity extends AppCompatActivity implements AdapterView.O
 //        ViewGroup.LayoutParams layoutParams = gridView.getLayoutParams();
 //        layoutParams.height = 800;
 //        gridView.setLayoutParams(layoutParams);
+
+
     }
 
     @Override

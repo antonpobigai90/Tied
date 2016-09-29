@@ -17,15 +17,16 @@
     <color name="background_tab_pressed">#6633B5E5</color>
     <color name="primary">#002943</color>
     <color name="icon_green">#38df22</color>
-    <color name="color_green">#061204</color>
 
-    <color name="off_white">#fafafa</color>
+    <color name="color_green">#23af10</color>
+
+    <color name="off_white">#FAFAFA</color>
     <color name="background2">#E0E0E0</color>
     <color name="indigo">#3F51B5</color>
-    <color name="blue">#3c96ff</color>
-    <color name="grey">#32323a</color>
+    <color name="blue">#3C96FF</color>
+    <color name="grey">#32323A</color>
     <color name="light_gray">#DAE1E4</color>
-    <color name="light_gray2">#bbbbbb</color>
+    <color name="light_gray2">#BBBBBB</color>
     <color name="drawer_background">#203049</color>
 
     <color name="red_color">#ff1414</color>

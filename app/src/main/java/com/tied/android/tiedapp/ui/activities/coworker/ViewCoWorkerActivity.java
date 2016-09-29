@@ -1,30 +1,24 @@
 package com.tied.android.tiedapp.ui.activities.coworker;
 
-import android.os.Build;
+
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.customs.model.ActivityDataModel;
-import com.tied.android.tiedapp.customs.model.ClientDataModel;
-import com.tied.android.tiedapp.customs.model.LineDataModel;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.activities.LinesAndTerritories;
-import com.tied.android.tiedapp.ui.activities.client.ClientMapAndListActivity;
-import com.tied.android.tiedapp.ui.adapters.ActivityAdapter;
-import com.tied.android.tiedapp.ui.adapters.SaleLineListAdapter;
+import com.tied.android.tiedapp.ui.fragments.coworker.ActivityFragment;
+import com.tied.android.tiedapp.ui.fragments.coworker.GeneralFragment;
 import com.tied.android.tiedapp.util.MyUtils;
-
-import java.util.ArrayList;
 
 public class ViewCoWorkerActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -35,28 +29,21 @@ public class ViewCoWorkerActivity extends AppCompatActivity implements View.OnCl
     private User user;
 
     LinearLayout back_layout;
-    private ImageView avatar, img_segment;
+
+    LinearLayout general_tab, activity_tab, tab_bar;
+    private ImageView avatar;
     private TextView name;
     private Client client;
 
-    Boolean bGeneral = true;
-    private LinearLayout bottom_layout;
+    public ViewPager mViewPager;
+    public PagerAdapter mPagerAdapter;
 
-    private ListView activities_listview;
-    private ActivityAdapter activity_adapter;
-
-    private LinearLayout lines, schedules, territories, clients, goals, sales;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_coworker_view);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(getResources().getColor(R.color.gradient));
-        }
 
         bundle = getIntent().getExtras();
         user = MyUtils.getUserFromBundle(bundle);
@@ -64,52 +51,78 @@ public class ViewCoWorkerActivity extends AppCompatActivity implements View.OnCl
 
         name = (TextView) findViewById(R.id.name);
         avatar = (ImageView) findViewById(R.id.avatar);
-        img_segment  = (ImageView) findViewById(R.id.img_segment);
 
         name.setText(client.getFull_name());
         MyUtils.Picasso.displayImage(client.getLogo(), avatar);
 
         back_layout = (LinearLayout) findViewById(R.id.back_layout);
-        bottom_layout = (LinearLayout) findViewById(R.id.bottom_layout);
-        activities_listview = (ListView) findViewById(R.id.activities_listview);
-        activities_listview.setVisibility(View.GONE);
-
-        ArrayList<ActivityDataModel> activityDataModels = new ArrayList<>();
-
-        for (int i = 0 ; i < 7 ; i++) {
-            ActivityDataModel activityDataModel = new ActivityDataModel();
-
-            activityDataModel.setDay("11");
-            activityDataModel.setMonth("OCT 2016");
-            activityDataModel.setTime_range("3pm - 4pm");
-            activityDataModel.setTitle("Visited Mary Kay Dallas and");
-            activityDataModel.setDescription("something happened");
-
-            activityDataModels.add(activityDataModel);
-        }
-
-        activity_adapter = new ActivityAdapter(activityDataModels, this);
-        activities_listview.setAdapter(activity_adapter);
-        activity_adapter.notifyDataSetChanged();
-
-        lines = (LinearLayout) findViewById(R.id.lines);
-        schedules = (LinearLayout) findViewById(R.id.schedules);
-        territories = (LinearLayout) findViewById(R.id.territories);
-        clients = (LinearLayout) findViewById(R.id.clients);
-        goals = (LinearLayout) findViewById(R.id.goals);
-        sales = (LinearLayout) findViewById(R.id.sales);
 
         back_layout.setOnClickListener(this);
-        img_segment.setOnClickListener(this);
 
-        lines.setOnClickListener(this);
-        schedules.setOnClickListener(this);
-        territories.setOnClickListener(this);
-        clients.setOnClickListener(this);
-        goals.setOnClickListener(this);
-        sales.setOnClickListener(this);
+       // general_tab = (LinearLayout) findViewById(R.id.general_tab);
+       // activity_tab = (LinearLayout) findViewById(R.id.activity_tab);
+        tab_bar = (LinearLayout) findViewById(R.id.tab_bar);
 
-        img_segment.setBackgroundResource(R.drawable.general);
+        general_tab.setOnClickListener(this);
+        activity_tab.setOnClickListener(this);
+
+        mViewPager = (ViewPager) findViewById(R.id.viewpager);
+
+        mPagerAdapter = new PagerAdapter(ViewCoWorkerActivity.this.getSupportFragmentManager());
+        if (mViewPager != null) {
+            mViewPager.setAdapter(mPagerAdapter);
+            mViewPager.setCurrentItem(0);
+            selectTab(tab_bar, 0);
+        }
+
+        onCustomSelected(mViewPager);
+
+    }
+
+    public void selectTab(LinearLayout tab_bar, int position){
+        int index = 0;
+        for(int i = 0; i < tab_bar.getChildCount(); i++){
+            if(tab_bar.getChildAt(i) instanceof LinearLayout){
+                LinearLayout child = (LinearLayout) tab_bar.getChildAt(i);
+                TextView title = (TextView) child.getChildAt(0);
+                TextView indicator = (TextView) child.getChildAt(1);
+                if(position != index){
+                    indicator.setVisibility(View.GONE);
+                    title.setTextColor(getResources().getColor(R.color.semi_transparent_black));
+                }else{
+                    indicator.setVisibility(View.VISIBLE);
+                    title.setTextColor(getResources().getColor(R.color.button_bg));
+                }
+                index++;
+            }
+        }
+    }
+
+    public void onCustomSelected(ViewPager vpPager){
+        // Attaching the page change listener inside the activity
+        vpPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            // This method will be invoked when a new page becomes selected.
+            @Override
+            public void onPageSelected(int position) {
+//                Toast.makeText(LinesAndTerritories.this,"Selected page position: " + position, Toast.LENGTH_SHORT).show();
+                selectTab(tab_bar, position);
+            }
+
+            // This method will be invoked when the current page is scrolled
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                // Code goes here
+            }
+
+            // Called when the scroll state changes:
+            // SCROLL_STATE_IDLE, SCROLL_STATE_DRAGGING, SCROLL_STATE_SETTLING
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                // Code goes here
+            }
+        });
+
     }
 
     @Override
@@ -118,40 +131,41 @@ public class ViewCoWorkerActivity extends AppCompatActivity implements View.OnCl
             case R.id.back_layout:
                 onBackPressed();
                 break;
-            case R.id.img_segment:
-                bGeneral = !bGeneral;
-                if (bGeneral) {
-                    img_segment.setBackgroundResource(R.drawable.general);
 
-                    bottom_layout.setVisibility(View.VISIBLE);
-                    activities_listview.setVisibility(View.GONE);
-                } else {
-                    img_segment.setBackgroundResource(R.drawable.activities);
+            //case R.id.general_tab:
+                //mViewPager.setCurrentItem(0);
+               // break;
+           // case R.id.activity_tab:
+               // mViewPager.setCurrentItem(1);
+               // break;
+        }
+    }
 
-                    bottom_layout.setVisibility(View.GONE);
-                    activities_listview.setVisibility(View.VISIBLE);
-                }
-                break;
-            case R.id.lines:
-                bundle.putInt(Constants.SHOW_LINE, 0);
-                MyUtils.startActivity(this, CoWorkerLinesActivity.class, bundle);
-                break;
-            case R.id.territories:
-                bundle.putInt(Constants.SHOW_TERRITORY, 0);
-                MyUtils.startActivity(this, CoWorkerTerritoriesActivity.class, bundle);
-                break;
-            case R.id.schedules:
-                MyUtils.startActivity(this, CoWorkerSchedulesActivity.class, bundle);
-                break;
-            case R.id.clients:
-                MyUtils.startActivity(this, ClientMapAndListActivity.class, bundle);
-                break;
-            case R.id.goals:
-                MyUtils.startActivity(this, CoWorkergGoalsActivity.class, bundle);
-                break;
-            case R.id.sales:
-                MyUtils.startActivity(this, CoWorkerSaleActivity.class);
-                break;
+    public class PagerAdapter extends FragmentPagerAdapter {
+
+        public PagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            Fragment fragment = null;
+            switch (position){
+                case 0:
+                    fragment = new GeneralFragment();
+                    break;
+                case 1:
+                    fragment = new ActivityFragment();
+                    break;
+            }
+            assert fragment != null;
+            fragment.setArguments(bundle);
+            return fragment;
+        }
+
+        @Override
+        public int getCount() {
+            return 2;
         }
     }
 }

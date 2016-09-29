@@ -21,7 +21,6 @@ import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.GoalApi;
-import com.tied.android.tiedapp.ui.activities.goal.LineViewGoalActivity;
 import com.tied.android.tiedapp.ui.adapters.GoalsAdapter;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.Logger;
@@ -131,9 +130,9 @@ public class PastGoalFragment extends Fragment implements AdapterView.OnItemClic
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.d(TAG, "here---------------- listener");
-//        Goal goal = (Goal) MainApplication.goals.get(position);
-//        bundle.putSerializable(Constants.GOAL_DATA, goal);
-        MyUtils.startActivity(getActivity(), LineViewGoalActivity.class);
+
+        Goal goal = (Goal) MainApplication.goals.get(position);
+        bundle.putSerializable(Constants.GOAL_DATA, goal);
     }
 
     @Override

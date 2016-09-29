@@ -26,13 +26,34 @@ public class MyClientLineAdapter extends BaseAdapter {
     public static final String TAG = ClientScheduleAdapter.class
             .getSimpleName();
 
-    public ArrayList<Client> _data;
+
+    public List<Client> _data;
+    private List<String> selected=null;
     Context _c;
     ViewHolder viewHolder;
+    boolean isMultiple=false;
+   // RoundImage roundedImage;
 
+   /* public MyClientLineAdapter(List<Object> data, Context context) {
+        _data = data;
+        _c = context;
+
+    }*/
+    public MyClientLineAdapter(List<Client> data, List<String> selected, Context context, boolean isMultiple) {
+        _data = data;
+        _c = context;
+        this.selected=(selected==null?new ArrayList<String>():selected);
+        this.isMultiple=isMultiple;
+    }
     public MyClientLineAdapter(ArrayList<Client> data, Context context) {
         _data = data;
         _c = context;
+        this.selected=new ArrayList<String>();
+        this.isMultiple=isMultiple;
+    }
+
+    public void setSelected(List<String> selected) {
+        this.selected=(selected==null?new ArrayList<String>():selected);
     }
 
     @Override
@@ -52,7 +73,8 @@ public class MyClientLineAdapter extends BaseAdapter {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
-    public View getView(final int i, View convertView, ViewGroup viewGroup) {
+
+    public View getView(int i, View convertView, ViewGroup viewGroup) {
         View view = convertView;
         if (view == null) {
             viewHolder=new ViewHolder();
@@ -65,20 +87,27 @@ public class MyClientLineAdapter extends BaseAdapter {
 
             view.setTag(viewHolder);
         } else {
-           viewHolder= (ViewHolder) convertView.getTag();
+
+           viewHolder= (ViewHolder) convertView.getTag();;
         }
 
-        if( _data.get(i) instanceof Client){
+     if( _data.get(i) instanceof Client){
             final Client client = (Client) _data.get(i);
             viewHolder.name.setText(client.getFull_name());
-            MyUtils.Picasso.displayImage(client.getLogo(), viewHolder.roundedImage);
-            viewHolder.description.setText(client.getAddress().getCity()+", "+client.getAddress().getState());
-
-            if (client.getCheckStatus()) {
-                viewHolder.selector.setBackgroundResource(R.drawable.circle_check2);
-            } else {
-                viewHolder.selector.setBackgroundResource(R.drawable.unselectd_bg);
-            }
+             MyUtils.Picasso.displayImage(client.getLogo(), viewHolder.roundedImage);
+             viewHolder.description.setText(client.getAddress().getCity()+", "+client.getAddress().getState());
+         if(isMultiple) {
+             if (selected.contains(client.getId())) {
+                 //viewHolder.selector.setImageResource(R.drawable.selected_bg);
+                 viewHolder.selector.setBackgroundResource(R.drawable.circle_check2);
+             } else {
+                 //viewHolder.selector.setImageResource(R.drawable.unselectd_bg);
+                 viewHolder.selector.setBackgroundResource(R.drawable.unselectd_bg);
+             }
+         }else{
+             viewHolder.selector.setVisibility(View.GONE);
+         }
+            //viewHolder.name.setText(data.getFull_name());
         }
         return view;
     }

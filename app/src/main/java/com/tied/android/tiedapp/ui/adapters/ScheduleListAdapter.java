@@ -148,9 +148,9 @@ public class ScheduleListAdapter extends BaseAdapter{
             LinearLayout linearLayout = (LinearLayout) schedule_view.findViewById(R.id.schedule);
             TextView time = (TextView) linearLayout.findViewById(R.id.time);
             View divider =linearLayout.findViewById(R.id.divider);
-//            if(showDivider) divider.setVisibility(View.VISIBLE);
-//            else
-            divider.setVisibility(View.GONE);
+
+            if(showDivider) divider.setVisibility(View.VISIBLE);
+            else divider.setVisibility(View.GONE);
             showDivider=true;
             int color = getStatusColor(schedule.getStatus());
             time.setBackgroundColor(color);
@@ -167,7 +167,7 @@ public class ScheduleListAdapter extends BaseAdapter{
             message.setText(schedule.getTitle());
             v.timeLine.addView(linearLayout);
 
-//            getWeather(schedules.get(0), v.temperature, v.weather);
+            getWeather(schedules.get(0), v.temperature, v.weather);
         }
         view.setTag(data);
         return view;

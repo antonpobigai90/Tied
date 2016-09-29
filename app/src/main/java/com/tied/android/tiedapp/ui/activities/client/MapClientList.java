@@ -133,6 +133,7 @@ public class MapClientList extends AppCompatActivity implements View.OnClickList
 
     public void initFormattedClient(ArrayList<Client> clients) {
         clientsList = clients;
+
         adapter = new MapClientListAdapter(0, clientsList, this);
         listView.setAdapter(adapter);
         listView.setFastScrollEnabled(true);

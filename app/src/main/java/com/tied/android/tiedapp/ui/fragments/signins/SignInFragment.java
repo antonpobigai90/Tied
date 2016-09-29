@@ -16,7 +16,7 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.objects.responses.LoginUser;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.activities.MainActivity;
+
 import com.tied.android.tiedapp.ui.activities.signups.SignInActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.activities.signups.WalkThroughActivity;
@@ -100,7 +100,6 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
     public void continue_action(){
         emailText = email.getText().toString();
         passwordText = password.getText().toString();
-
         DialogUtils.displayProgress(getActivity());
         SignUpApi signUpApi = ((SignInActivity) getActivity()).service;
         Call<LoginUser> response = signUpApi.LoginUser(emailText, passwordText);
@@ -110,7 +109,6 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
             public void onResponse(Call<LoginUser> call, Response<LoginUser> LoginResponse) {
                 if (getActivity() == null) return;
                 try {
-
                     LoginUser LoginUser = LoginResponse.body();
                     Log.d(TAG, LoginUser.toString());
                     if (LoginUser.isSuccess()) {

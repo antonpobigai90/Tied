@@ -343,7 +343,6 @@
                 android:layout_marginLeft="15dp"
                 android:src="@drawable/default_avatar" />
 
-
             <TextView
                 android:id="@+id/txt_profile_label"
                 android:layout_width="wrap_content"

@@ -69,7 +69,8 @@ public class LinesAdapter extends BaseAdapter implements ListAdapterListener {
         View view = convertView;
         if (view == null) {
             LayoutInflater li = (LayoutInflater) _c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = li.inflate(R.layout.more_line_territoy_list_item, viewGroup,false);
+
+            view = li.inflate(R.layout.lines_list_item, viewGroup,false);
         } else {
             view = convertView;
         }
@@ -105,7 +106,10 @@ public class LinesAdapter extends BaseAdapter implements ListAdapterListener {
     public void listInit(ArrayList arrayList) {
         if (client == null){
             this._data = arrayList;
+
+            android.support.v4.view.ViewPager mViewPager = ((LinesAndTerritories) _c).mViewPager;
             notifyDataSetChanged();
+            mViewPager.getAdapter().notifyDataSetChanged();
         }
     }
 

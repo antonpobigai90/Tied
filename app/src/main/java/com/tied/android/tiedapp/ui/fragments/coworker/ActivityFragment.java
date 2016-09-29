@@ -15,7 +15,8 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Goal;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.activities.goal.LineViewGoalActivity;
+
+import com.tied.android.tiedapp.ui.activities.lines.LineViewGoalActivity;
 import com.tied.android.tiedapp.ui.adapters.GoalsAdapter;
 import com.tied.android.tiedapp.util.MyUtils;
 

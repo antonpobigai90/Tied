@@ -21,7 +21,9 @@ import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.GoalApi;
-import com.tied.android.tiedapp.ui.activities.goal.LineViewGoalActivity;
+
+import com.tied.android.tiedapp.retrofits.services.LineApi;
+import com.tied.android.tiedapp.ui.activities.lines.LineViewGoalActivity;
 import com.tied.android.tiedapp.ui.adapters.GoalsAdapter;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.Logger;
@@ -82,12 +84,12 @@ public class ActiveGoalFragment extends Fragment implements AdapterView.OnItemCl
             loadActiveGoals(getActivity());
         }
     }
-    private void loadAllActive() {
-        if (MainApplication.goals.size() == 0){
-            MyUtils.initGoals(getActivity(), user, adapter);
-        }
-    }
 
+private void loadAllActive() {
+    if (MainApplication.goals.size() == 0){
+        MyUtils.initGoals(getActivity(), user, adapter);
+    }
+}
     private void loadActiveGoals(final Context context) {
         final GoalApi goalApi =  MainApplication.createService(GoalApi.class, user.getToken());
         Call<ResponseBody> response;
@@ -139,10 +141,11 @@ public class ActiveGoalFragment extends Fragment implements AdapterView.OnItemCl
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.d(TAG, "here---------------- listener");
-//        Goal goal = (Goal) MainApplication.goals.get(position);
-//        Log.d(TAG, "here----------------"+goal.toString());
-//        bundle.putSerializable(Constants.GOAL_DATA, goal);
-        MyUtils.startActivity(getActivity(), LineViewGoalActivity.class);
+
+        Goal goal = (Goal) MainApplication.goals.get(position);
+        Log.d(TAG, "here----------------"+goal.toString());
+        bundle.putSerializable(Constants.GOAL_DATA, goal);
+        MyUtils.startActivity(getActivity(), LineViewGoalActivity.class, bundle);
     }
 
     @Override

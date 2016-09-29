@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
@@ -33,14 +34,18 @@ public class ClientMapAndListActivity extends AppCompatActivity implements  View
     private Bundle bundle;
     private User user;
 
-    LinearLayout back_layout;
     ImageView img_segment, img_filter;
 
     boolean bMap = true;
+    LinearLayout back_layout, tab_container;
+    ImageView img_list_clients, img_map_clients, tabBg;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_client_list_layout);
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
@@ -64,22 +69,39 @@ public class ClientMapAndListActivity extends AppCompatActivity implements  View
         img_filter = (ImageView) findViewById(R.id.img_filter);
         img_filter.setOnClickListener(this);
 
+
+        tabBg = (ImageView) findViewById(R.id.tab_bg);
+
+        img_list_clients = (ImageView) findViewById(R.id.img_list_clients);
+        img_map_clients = (ImageView) findViewById(R.id.img_map_clients);
+
+        img_list_clients.setOnClickListener(this);
+        img_map_clients.setOnClickListener(this);
+
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
 
         mPagerAdapter = new PagerAdapter(ClientMapAndListActivity.this.getSupportFragmentManager());
         if (mViewPager != null) {
             mViewPager.setAdapter(mPagerAdapter);
-            if (bundle.getBoolean(Constants.CLIENT_LIST)){
+            if (bundle.getBoolean(Constants.CLIENT_LIST)) {
+
                 mViewPager.setCurrentItem(1);
                 selectTab(1);
-            }else{
+            } else {
                 mViewPager.setCurrentItem(0);
                 selectTab(0);
-            }
+/*
+                mViewPager.setCurrentItem(0);
+                selectTab(tab_container, 0);
+            }else{
+                mViewPager.setCurrentItem(0);
+                selectTab(tab_container, 0);
+                */
 
+            }
+            onCustomSelected(mViewPager);
+            img_segment.setBackgroundResource(R.drawable.map_active);
         }
-        onCustomSelected(mViewPager);
-        img_segment.setBackgroundResource(R.drawable.map_active);
     }
 
     @Override
@@ -88,6 +110,7 @@ public class ClientMapAndListActivity extends AppCompatActivity implements  View
             case R.id.back_layout:
                 onBackPressed();
                 break;
+
             case R.id.img_segment:
                 bMap = !bMap;
                 if (bMap) {
@@ -102,9 +125,16 @@ public class ClientMapAndListActivity extends AppCompatActivity implements  View
                 break;
             case R.id.img_filter:
                 MyUtils.startActivity(this, CoWorkerFilterActivity.class);
+
+            case R.id.img_map_clients:
+                mViewPager.setCurrentItem(0);
+                break;
+            case R.id.img_list_clients:
+                mViewPager.setCurrentItem(1);
                 break;
         }
     }
+
 
     public void selectTab(int position){
         switch (position){
@@ -115,6 +145,7 @@ public class ClientMapAndListActivity extends AppCompatActivity implements  View
             case 1:
                 bMap = false;
                 img_segment.setBackgroundResource(R.drawable.list_active);
+
                 break;
             default:;
         }
@@ -128,7 +159,9 @@ public class ClientMapAndListActivity extends AppCompatActivity implements  View
             @Override
             public void onPageSelected(int position) {
 //                Toast.makeText(LinesAndTerritories.this,"Selected page position: " + position, Toast.LENGTH_SHORT).show();
+
                 selectTab(position);
+
             }
 
             // This method will be invoked when the current page is scrolled

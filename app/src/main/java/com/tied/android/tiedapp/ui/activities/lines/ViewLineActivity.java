@@ -1,12 +1,8 @@
 package com.tied.android.tiedapp.ui.activities.lines;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -20,8 +16,6 @@ import com.tied.android.tiedapp.objects._Meta;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.LineApi;
-import com.tied.android.tiedapp.ui.activities.goal.LineGoalActivity;
-import com.tied.android.tiedapp.ui.activities.sales.ActivityAddSales;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
@@ -40,12 +34,11 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
     private Bundle bundle;
     private User user;
     LinearLayout back_layout;
-    RelativeLayout clients_layout, goals_layout, territory_layout;
-
+    RelativeLayout clients_layout, goals_layout;
     private TextView name, description, totalRevenueHeaderTV, totalRevenueBodyTV, addressTV, numClients, numGoalsTV;
     private Line line;
     Location location;
-    ImageView img_plus, img_edit;
+    View nameEditor, descriptionEditor;
     private static ViewLineActivity viewLineActivity;
 
     public static ViewLineActivity getInstance() {
@@ -58,15 +51,11 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
         setContentView(R.layout.activity_line_view);
         viewLineActivity=this;
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(getResources().getColor(R.color.blue_status_bar));
-        }
 
         bundle = getIntent().getExtras();
         line = (Line) bundle.getSerializable(Constants.LINE_DATA);
         user = MyUtils.getUserFromBundle(bundle);
+
 
         final LineApi lineApi = MainApplication.createService(LineApi.class, user.getToken());
         DialogUtils.displayProgress(this);
@@ -126,9 +115,6 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
         goals_layout = (RelativeLayout) findViewById(R.id.goals_layout);
         goals_layout.setOnClickListener(this);
 
-        territory_layout = (RelativeLayout) findViewById(R.id.territory_layout);
-        territory_layout.setOnClickListener(this);
-
         findViewById(R.id.ship_layout).setOnClickListener(this);
 
         totalRevenueHeaderTV = (TextView) findViewById(R.id.total_revenue_txt);
@@ -138,17 +124,18 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
 
         numClients=(TextView) findViewById(R.id.num_clients);
 
+        numGoalsTV = (TextView) findViewById(R.id.num_goals);
         addressTV=(TextView) findViewById(R.id.ship_from);
         location=line.getAddress();
         if(location!=null)
             addressTV.setText(location.getLocationAddress());
-        numClients.setText(line.getNum_clients() + " Clients added");
 
-        img_plus = (ImageView) findViewById(R.id.img_plus);
-        img_plus.setOnClickListener(this);
+        numClients.setText(""+line.getNum_clients());
 
-        img_edit = (ImageView) findViewById(R.id.img_edit);
-        img_edit.setOnClickListener(this);
+        nameEditor = findViewById(R.id.name_editor);
+        nameEditor.setOnClickListener(this);
+        descriptionEditor = findViewById(R.id.description_editor);
+        descriptionEditor.setOnClickListener(this);
 
         setLineNumClients();
         setLineNumGoals();
@@ -167,25 +154,50 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
                 MyUtils.startActivity(this, LineClientListActivity.class, bundle);
                 break;
             case R.id.info_layout:
-                MyUtils.startActivity(this, LineRelevantInforActivity.class);
+
+                MyUtils.showLinesRelevantInfoDialog(this,"Relevant Information", line, new MyUtils.MyDialogClickListener() {
+                    @Override
+                    public void onClick(Object response) {
+                        line=line;
+                        updateLine(line);
+                    }
+                });
                 break;
             case R.id.goals_layout:
                 MyUtils.startActivity(this, LineGoalActivity.class, bundle);
                 break;
-            case R.id.territory_layout:
-                MyUtils.startActivity(this, LineTerritoriesActivity.class);
-                break;
-            case R.id.ship_layout:
-                MyUtils.startActivity(this, LineShipFromInforActivity.class);
-                break;
-            case R.id.img_plus:
-                bundle.putInt(Constants.SHOW_SALE, 1);
-                MyUtils.startRequestActivity(this, ActivityAddSales.class, Constants.ADD_SALES, bundle);
-                break;
-            case R.id.img_edit:
-                MyUtils.startActivity(this, LineEditInforActivity.class);
-                break;
 
+            case R.id.ship_layout:
+                MyUtils.showAddressDialog(this, "Shipping information",location, new MyUtils.MyDialogClickListener() {
+                    @Override
+                    public void onClick(Object response) {
+
+                        line.setAddress(((Location)response));
+                        addressTV.setText(line.getAddress().getLocationAddress());
+                        updateLine(line);
+                    }
+                });
+                break;
+            case R.id.name_editor:
+                MyUtils.showEditTextDialog(this, "Line Name", line.getName(), new MyUtils.MyDialogClickListener() {
+                    @Override
+                    public void onClick(Object response) {
+                        line.setName((String)response);
+                        name.setText((String)response);
+                        updateLine(line);
+                    }
+                });
+                break;
+            case R.id.description_editor:
+                MyUtils.showEditTextDialog(this, "Line Description", line.getDescription(), new MyUtils.MyDialogClickListener() {
+                    @Override
+                    public void onClick(Object response) {
+                        line.setDescription((String)response);
+                        name.setText((String)response);
+                        updateLine(line);
+                    }
+                });
+                break;
         }
     }
 
@@ -310,7 +322,8 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
                         // adapter.notifyDataSetChanged();
                         line.setNum_clients(response.getData("line", Line.class).getNum_clients());
                         Logger.write("num clientsss "+line.getNum_clients());
-                        numClients.setText(""+line.getNum_clients() + " Clients added");
+
+                        numClients.setText(""+line.getNum_clients());
 
 
                     } else {

@@ -2,7 +2,6 @@ package com.tied.android.tiedapp.ui.fragments.schedule;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Build;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -15,8 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.Window;
-import android.view.WindowManager;
+
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.HorizontalScrollView;
@@ -88,12 +86,6 @@ public class ScheduleAppointmentsFragment extends Fragment implements View.OnCli
         // Set up the ViewPager with the sections adapter.
 
         bundle = getArguments();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getActivity().getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(getActivity().getResources().getColor(R.color.colorPrimaryDark));
-        }
 
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
         tab_bar = (LinearLayout) view.findViewById(R.id.tab_bar);

@@ -429,7 +429,9 @@
                         android:id="@+id/industry"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+
                         android:layout_toLeftOf="@+id/add_industry"
+
                         android:textColor="@color/schedule_title_bg_color"
                         android:textStyle="bold" />
 

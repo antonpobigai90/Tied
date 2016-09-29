@@ -5,8 +5,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -16,7 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -50,8 +48,7 @@ import com.tied.android.tiedapp.retrofits.services.LineApi;
 import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.GeneralSelectObjectActivity;
-import com.tied.android.tiedapp.ui.activities.lines.LineRevenueActivity;
-import com.tied.android.tiedapp.ui.activities.lines.ViewNewLineActivity;
+
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.dialogs.DatePickerFragment;
 import com.tied.android.tiedapp.ui.listeners.ListAdapterListener;
@@ -64,7 +61,9 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.*;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -85,9 +84,11 @@ public abstract class MyUtils {
             if (imageUrl != null && !imageUrl.isEmpty()) {
                 com.squareup.picasso.Picasso.with(MainApplication.getInstance().getApplicationContext())
                         .load(imageUrl)
-                       // .memoryPolicy(MemoryPolicy.C)
+
+                       // .memoryPolicy(MemoryPolicy.)
                         //.networkPolicy(NetworkPolicy.NO_CACHE)
                         .networkPolicy(NetworkPolicy.OFFLINE)
+                        .resize(100,100)
                         .into(imageView, new Callback() {
                             @Override
                             public void onSuccess() {
@@ -505,6 +506,7 @@ public abstract class MyUtils {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.line_relevant_info_dialog);
 
+
         final EditText websiteET, requestET,openingET;
         final Spinner reorderSpinner;
         websiteET=(EditText)dialog.findViewById(R.id.website);
@@ -555,109 +557,118 @@ public abstract class MyUtils {
         dialog.show();
     }
 
-
-    public static void showNewLineDialog(final Activity context, String title, final MyDialogClickListener okayClicked) {
-        // custom dialog
-        final Dialog dialog = new Dialog(context, android.R.style.Theme_Light);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.new_line_dialog);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-        final EditText name, description;
-
-        final Spinner stateSpinner;
-        name=(EditText)dialog.findViewById(R.id.street);
-//        final InputMethodManager inputMethodManager = (InputMethodManager) context
-//                .getSystemService(Context.INPUT_METHOD_SERVICE);
-//        inputMethodManager.showSoftInput(name, InputMethodManager.SHOW_IMPLICIT);
-
-        description=(EditText)dialog.findViewById(R.id.description);
-        //stateSpinner.setSelection(adapter.getPosition("TX"));
-
-        TextView text = (TextView) dialog.findViewById(R.id.txt_title);
-        text.setText(title.toUpperCase());
-
-        View.OnClickListener cancelClicked=new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                }
-            };
-
-        ImageView img_close = (ImageView) dialog.findViewById(R.id.img_close);
-        img_close.setOnClickListener(cancelClicked);
-
-        View.OnClickListener okayButClicked=new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    dialog.dismiss();
-                    MyUtils.startActivity(context, ViewNewLineActivity.class);
-                }
-            };
-
-        TextView txt_create = (TextView) dialog.findViewById(R.id.txt_create);
-        // if button is clicked, close the custom dialog
-        txt_create.setOnClickListener(okayButClicked);
-
-        dialog.show();
-    }
-
-    public static void showLineNewRevenueDialog(final Activity context, String title, final MyDialogClickListener okayClicked) {
+    public static void showAddressDialog(final Activity context, String title, final com.tied.android.tiedapp.objects.Location currentLocation, final MyDialogClickListener okayClicked) {
         // custom dialog
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog_add_ytd_sales);
-
-        final EditText txt_value;
-        final TextView txt_cancel, txt_add, txt_description;
-        txt_value=(EditText)dialog.findViewById(R.id.txt_value);
-
-        txt_cancel=(TextView)dialog.findViewById(R.id.txt_cancel);
-        txt_add=(TextView)dialog.findViewById(R.id.txt_add);
-
-        txt_description=(TextView)dialog.findViewById(R.id.txt_description);
-        txt_description.setText(String.format("What's your %s year YTD", title));
-
-        View.OnClickListener cancelClicked=new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        };
-
-        txt_cancel.setOnClickListener(cancelClicked);
-
-        View.OnClickListener okayButClicked=new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                dialog.dismiss();
-                MyUtils.startActivity(context, LineRevenueActivity.class);
-            }
-        };
-
-        txt_add.setOnClickListener(okayButClicked);
-
-        dialog.show();
-    }
-
-    public static void showAddressDialog(final Activity context, String title, final com.tied.android.tiedapp.objects.Location currentLocation, final MyDialogClickListener okayClicked) {
-        // custom dialog
-        final Dialog dialog = new Dialog(context, android.R.style.Theme_Light);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.new_line_dialog);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
+        dialog.setContentView(R.layout.address_dialog_activity);
         //dialog.setTitle(title.toUpperCase());
         //dialog.setFeatureDrawableAlpha(Backg);
 
-        final EditText name, description;
+        final EditText streetET, cityET,zipET, territoryET;
         final Spinner stateSpinner;
-        name=(EditText)dialog.findViewById(R.id.street);
-        description=(EditText)dialog.findViewById(R.id.description);
+        streetET=(EditText)dialog.findViewById(R.id.street);
+        cityET=(EditText)dialog.findViewById(R.id.city);
+        zipET=(EditText)dialog.findViewById(R.id.zip);
+        stateSpinner = (Spinner) dialog.findViewById(R.id.state);
+        List<String> states = MyUtils.States.asArrayList();
+        states.add(0, "Select...");
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context, R.layout.my_spinner_item, states);
+        adapter.setDropDownViewResource(R.layout.my_spinner_dropdown);
+        stateSpinner.setAdapter(adapter);
         //stateSpinner.setSelection(adapter.getPosition("TX"));
 
+        if(currentLocation!=null) {
+            streetET.setText(currentLocation.getStreet());
+            cityET.setText(currentLocation.getCity());
+            stateSpinner.setSelection(adapter.getPosition(currentLocation.getState()));
+            zipET.setText(currentLocation.getZip());
+        }
+
+        // set the custom dialog components - text, image and button
+        TextView text = (TextView) dialog.findViewById(R.id.txt_title);
+        text.setText(title.toUpperCase());
+
+       View.OnClickListener cancelClicked=new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            };
+
+
+        Button cancelButton = (Button) dialog.findViewById(R.id.cancel_button);
+        // if button is clicked, close the custom dialog
+        cancelButton.setOnClickListener(cancelClicked);
+        View.OnClickListener okayButClicked=new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String street = streetET.getText().toString().trim();
+                    String city = cityET.getText().toString().trim();
+                    String state = stateSpinner.getSelectedItem().toString().trim();
+                    String zip=zipET.getText().toString().trim();
+
+                    if(street.isEmpty()) {
+                        MyUtils.showToast( "You must provide a street address");
+                        return;
+                    }
+                    if(city.isEmpty()) {
+                        MyUtils.showToast("You must enter a city");
+                        return;
+                    }
+                    if(state.isEmpty() || state.toLowerCase().contains("select")) {
+                        MyUtils.showToast("You must provide a state address");
+                        return;
+                    }
+                    if(zip.isEmpty()) {
+                        MyUtils.showToast( "You must provide a zip code");
+                        return;
+                    }
+
+                    final com.tied.android.tiedapp.objects.Location location = new com.tied.android.tiedapp.objects.Location(city, zip, state,  street);
+                    location.setCountry("US");
+                    MyUtils.getLatLon(location.getLocationAddress(), new HTTPConnection.AjaxCallback() {
+                        @Override
+                        public void run(int code, String response) {
+                            if(code!=200) {
+                                MyUtils.showToast("Could not validate address!");
+                            }else {
+                                location.setCoordinate(Coordinate.fromJSONString(response));
+                                context.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        okayClicked.onClick(location);
+                                        dialog.dismiss();
+                                    }
+                                });
+
+                            }
+                            //dialog.dismiss();
+                        }
+                    });
+
+
+                }
+            };
+
+        Button okButton = (Button) dialog.findViewById(R.id.ok_button);
+        // if button is clicked, close the custom dialog
+        okButton.setOnClickListener(okayButClicked);
+
+        dialog.show();
+    }
+    public static void showEditTextDialog(final Activity context, String title, String initialValue, final MyDialogClickListener okayClicked) {
+        // custom dialog
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.edit_text_dialog);
+        //dialog.setTitle(title.toUpperCase());
+        //dialog.setFeatureDrawableAlpha(Backg);
+
+        final EditText textET=(EditText)dialog.findViewById(R.id.text_et);
+
+        textET.setText(initialValue);
+        // set the custom dialog components - text, image and button
         TextView text = (TextView) dialog.findViewById(R.id.txt_title);
         text.setText(title.toUpperCase());
 
@@ -668,54 +679,23 @@ public abstract class MyUtils {
             }
         };
 
-        ImageView img_close = (ImageView) dialog.findViewById(R.id.img_close);
-        img_close.setOnClickListener(cancelClicked);
 
+
+
+        Button cancelButton = (Button) dialog.findViewById(R.id.cancel_button);
+        // if button is clicked, close the custom dialog
+        cancelButton.setOnClickListener(cancelClicked);
         View.OnClickListener okayButClicked=new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String str_name = name.getText().toString().trim();
-                String str_description = description.getText().toString().trim();
-
-                if(str_name.isEmpty()) {
-                    MyUtils.showToast( "You must provide a line name");
-                    return;
-                }
-                if(str_description.isEmpty()) {
-                    MyUtils.showToast("You must enter a description");
-                    return;
-                }
-
+                okayClicked.onClick(textET.getText().toString());
                 dialog.dismiss();
-                MyUtils.startActivity(context, ViewNewLineActivity.class);
-
-//                    final com.tied.android.tiedapp.objects.Location location = new com.tied.android.tiedapp.objects.Location(city, zip, state,  street);
-//                    location.setCountry("US");
-//                    MyUtils.getLatLon(location.getLocationAddress(), new HTTPConnection.AjaxCallback() {
-//                        @Override
-//                        public void run(int code, String response) {
-//                            if(code!=200) {
-//                                MyUtils.showToast("Could not validate address!");
-//                            }else {
-//                                location.setCoordinate(Coordinate.fromJSONString(response));
-//                                context.runOnUiThread(new Runnable() {
-//                                    @Override
-//                                    public void run() {
-//                                        okayClicked.onClick(location);
-//                                        dialog.dismiss();
-//                                    }
-//                                });
-//
-//                            }
-//                            //dialog.dismiss();
-//                        }
-//                    });
             }
         };
 
-        TextView txt_create = (TextView) dialog.findViewById(R.id.txt_create);
+        Button okButton = (Button) dialog.findViewById(R.id.ok_button);
         // if button is clicked, close the custom dialog
-        txt_create.setOnClickListener(okayButClicked);
+        okButton.setOnClickListener(okayButClicked);
 
         dialog.show();
     }

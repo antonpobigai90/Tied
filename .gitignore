@@ -1,7 +1,15 @@
 *.iml
 .gradle
 /local.properties
+<<<<<<< HEAD
 .DS_Store
 /build
 /captures
 /.idea
+=======
+/.idea
+.DS_Store
+/build
+/captures
+.idea/modules/
+>>>>>>> c166f9cba3853ffc61a645aa5f62f62d282c5047
