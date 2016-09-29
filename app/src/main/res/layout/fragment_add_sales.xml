@@ -26,15 +26,31 @@
                 android:onClick="goBack"
                 android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"
-                android:src="@drawable/btn_close" />
+                android:src="@drawable/btn_back_arrow" />
 
-        <ImageView
+        <LinearLayout
                 android:id="@+id/add"
-                style="@style/ActionBarIcon"
+                android:layout_width="wrap_content"
+                android:padding="10dp"
+                android:layout_alignParentTop="true"
+                android:gravity="center"
                 android:onClick="onClick"
-                android:layout_centerVertical="true"
+                android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/add_icon" />
+                android:layout_centerVertical="true"
+
+
+                android:orientation="horizontal">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/action_bar_icon_height"
+                    android:gravity="center"
+                    android:layout_marginRight="20dp"
+                    android:text="Add"
+                    android:textColor="@color/white"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+        </LinearLayout>
 
 
         <ImageView
@@ -81,8 +97,7 @@
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="15dp"
-                        android:focusable="true"
-                         />
+                        android:src="@drawable/ic_briefcase_gray" />
                 <EditText android:layout_width="0dp"
                           android:layout_weight="1"
                           style="@style/EditTextStyle"
@@ -117,6 +132,7 @@ android:visibility="gone"
                         android:src="@drawable/icon_layer_blue" />
                 <TextView android:layout_width="0dp"
                           android:layout_weight="1"
+                          android:id="@+id/lineNameTV"
                           style="@style/EditTextStyle"
                           android:textColor="@color/schedule_title_bg_color"
                           android:layout_height="wrap_content"
@@ -124,7 +140,7 @@ android:visibility="gone"
                           android:textSize="15dp" />
                 <ImageView android:layout_width="20dp"
                            android:layout_height="20dp"
-                           android:src="@drawable/right_arrow"/>
+                           android:src="@drawable/ic_arrow_gray"/>
 
             </LinearLayout>
             <LinearLayout style="@style/SeperatorHorizontal"
@@ -138,10 +154,10 @@ android:visibility="gone"
                 <de.hdodenhof.circleimageview.CircleImageView
                         android:onClick="onClick"
                         android:id="@+id/client_photo"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:padding="10dp"
-                        android:layout_marginRight="15dp"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:padding="15dp"
+                        android:layout_marginRight="20dp"
                         android:layout_alignParentLeft="true"
                         android:layout_centerVertical="true"
                         android:scaleType="centerCrop"

@@ -44,6 +44,7 @@ import com.tied.android.tiedapp.customs.model.*;
 import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects.Revenue;
 import com.tied.android.tiedapp.objects._Meta;
+import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.user.User;
@@ -52,6 +53,7 @@ import com.tied.android.tiedapp.retrofits.services.RevenueApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.lines.LineRevenueActivity;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityAddSales;
+import com.tied.android.tiedapp.ui.activities.sales.ActivityGroupedSales;
 import com.tied.android.tiedapp.ui.activities.sales.ActivitySalesFilter;
 import com.tied.android.tiedapp.ui.activities.sales.ActivitySalesPrint;
 import com.tied.android.tiedapp.ui.adapters.*;
@@ -100,9 +102,12 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
     private TextView txt_view_all;
     private PieChart mChart;
     List<Line> lineDataModels = new ArrayList<>();
+    ArrayList<Client> clientDataModels = new ArrayList<>();
     User user;
     boolean bLine = true;
     String start, stop;
+    String month, year;
+    String group_by="line";
 
     protected String[] mParties = new String[] {
             "Party A", "Party B", "Party C", "Party D"
@@ -130,6 +135,9 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
         String today=HelperMethods.getTodayDate();
         start=HelperMethods.getMonthOfTheYear(today)+" "+today;
         Logger.write("8888888888888888888888 "+today);
+
+        this.month = (HelperMethods.getMonthOfTheYear(today) );
+        this.year = today.substring(0, 4);
 
         Log.d(TAG, "AM HERE AGAIN");
         return view;
@@ -173,7 +181,7 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
         loadData();
 
 
-        ArrayList<ClientDataModel> clientDataModels = new ArrayList<>();
+
 
        /* for (int i = 0 ; i < 4 ; i++) {
             Line lineDataModel = new Line();
@@ -190,20 +198,10 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
         lines_listview.setAdapter(line_adapter);
         line_adapter.notifyDataSetChanged();
 
-        for (int i = 0 ; i < 7 ; i++) {
-            ClientDataModel clientDataModel = new ClientDataModel();
 
-            clientDataModel.setLine_name("Emmanuel lroko");
-            clientDataModel.setLine_date("80 sales");
-            clientDataModel.setPercent("48");
-            clientDataModel.setPrice("$1,200,400");
-
-            clientDataModels.add(clientDataModel);
-        }
 
         client_adapter = new SaleClientListAdapter(clientDataModels, getActivity());
-        client_listview.setAdapter(client_adapter);
-        client_adapter.notifyDataSetChanged();
+
 
         mChart = (PieChart) view.findViewById(R.id.chart1);
         mChart.setUsePercentValues(true);
@@ -212,7 +210,7 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
 
         mChart.setDragDecelerationFrictionCoef(0.95f);
 
-        mChart.setCenterText(generateCenterSpannableText());
+       // mChart.setCenterText(generateCenterSpannableText());
 
         mChart.setDrawHoleEnabled(true);
         mChart.setHoleColor(Color.WHITE);
@@ -246,24 +244,31 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
         Logger.write("It is created again");
     }
 
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.img_segment:
                 bLine = !bLine;
                 if (bLine) {
-                    line_layout.setVisibility(View.VISIBLE);
+                    //line_layout.setVisibility(View.VISIBLE);
 
-                    sub_layout.setVisibility(View.GONE);
-                    client_layout.setVisibility(View.GONE);
+                    //sub_layout.setVisibility(View.GONE);
+                   // client_layout.setVisibility(View.GONE);
+                    this.lines_listview.setAdapter(this.line_adapter);
+                    group_by="line";
+                    loadData();
+
 
                     img_segment.setBackgroundResource(R.drawable.line);
                 } else {
-                    line_layout.setVisibility(View.GONE);
+                    //line_layout.setVisibility(View.GONE);
 
-                    sub_layout.setVisibility(View.VISIBLE);
-                    client_layout.setVisibility(View.VISIBLE);
-
+                   // sub_layout.setVisibility(View.VISIBLE);
+                   // client_layout.setVisibility(View.VISIBLE);
+                    group_by="client";
+                    this.lines_listview.setAdapter(this.client_adapter);
+                    loadClientData();
                     img_segment.setBackgroundResource(R.drawable.clients);
                 }
                 break;
@@ -274,10 +279,12 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
                 MyUtils.startActivity(getActivity(), ActivitySalesPrint.class);
                 break;
             case R.id.img_plus:
-                MyUtils.startActivity(getActivity(), ActivityAddSales.class);
+               MyUtils.initiateAddSales(getActivity(), new Bundle());
                 break;
             case R.id.txt_view_all:
-                ((MainActivity) getActivity()).launchFragment(Constants.SaleViewAll, bundle);
+                bundle.putString("group_by", group_by);
+                //((MainActivity) getActivity()).launchFragment(Constants.SaleViewAll, bundle);
+                MyUtils.startActivity(getActivity(), ActivityGroupedSales.class,  bundle);
                 break;
         }
     }
@@ -299,8 +306,13 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
         int count=topRevenues.size();
 
         ArrayList<String> xVals = new ArrayList<String>();
-        for (int i = 0; i < count; i++)
-            xVals.add(topRevenuesName.get(i));
+        for (int i = 0; i < count; i++) {
+            try{
+            xVals.add(topRevenuesName.get(i).substring(0, 10));
+            }catch (Exception e) {
+                xVals.add(topRevenuesName.get(i));
+            }
+        }
 
         PieDataSet dataSet = new PieDataSet(yVals1, "Total Revenues");
         dataSet.setSliceSpace(3f);
@@ -332,7 +344,7 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
         PieData data = new PieData(xVals, dataSet);
         data.setValueFormatter(new PercentFormatter());
         data.setValueTextSize(11f);
-        data.setValueTextColor(Color.WHITE);
+        data.setValueTextColor(Color.BLACK);
         mChart.setData(data);
 
         // undo all highlights
@@ -341,13 +353,15 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
         mChart.invalidate();
     }
 
-    private SpannableString generateCenterSpannableText() {
+    private SpannableString generateCenterSpannableText(String line1, String line2) {
 
-        SpannableString s = new SpannableString("$1,500.54\nTotal Sales for Feb, 2016");
-        s.setSpan(new RelativeSizeSpan(1.7f), 0, 9, 0);
-        s.setSpan(new StyleSpan(Typeface.NORMAL), 9, s.length(), 0);
-        s.setSpan(new ForegroundColorSpan(Color.GRAY), 9, s.length(), 0);
-        s.setSpan(new RelativeSizeSpan(.8f), 9, s.length(), 0);
+        if(line2==null) line2="Total sales for "+month.substring(0, 3)+" "+year;
+        int len = line1.length();
+        SpannableString s = new SpannableString(line1+"\n"+line2);
+        s.setSpan(new RelativeSizeSpan(15f/len), 0, len, 0);
+        s.setSpan(new StyleSpan(Typeface.NORMAL), len, s.length(), 0);
+        s.setSpan(new ForegroundColorSpan(Color.GRAY), len, s.length(), 0);
+        s.setSpan(new RelativeSizeSpan(.8f), len, s.length(), 0);
         return s;
     }
 
@@ -366,7 +380,7 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
         // Logger.write("Loading data");
         DialogUtils.displayProgress(getActivity());
         RevenueApi lineApi = MainApplication.getInstance().getRetrofit().create(RevenueApi.class);
-        final Call<ResponseBody> response = lineApi.getTopLineRevenues(user.getToken());
+        final Call<ResponseBody> response = lineApi.getTopLineRevenues(user.getToken(), "line");
         response.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
@@ -391,6 +405,8 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
                         List<Line> lines = new ArrayList<Line>(keys.size());
                         Gson gson = new Gson();
                         topRevenues.clear();
+                        topRevenuesName.clear();
+                        double total=0;
                         for(Object keyObject:keys) {
                              Map<String, Object> obj = MyUtils.MapObject.create(keyObject.toString());
 //                            Logger.write(map.get(MyUtils.MapObject.create(keyObject.toString()).get("key")).toString());
@@ -398,16 +414,94 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
                             Line line =gson.fromJson(map.getString(obj.get("key").toString()), Line.class);
                             Float val=Float.parseFloat(""+(Double)obj.get("value"));
                             line.setTotal_revenue(val);
+                            total=total+val;
                             topRevenues.add(val);
                             topRevenuesName.add(line.getName());
                             lines.add(line);
                         }
                         setData();
+                        generateCenterSpannableText(MyUtils.moneyFormat(total), null);
                         //Map mapObject = MyUtils.MapObject.create(response.toString());
                         //Logger.write(.toString());
                         lineDataModels.addAll(lines);
                         //
                         line_adapter.notifyDataSetChanged();
+                    } else {
+                        MyUtils.showToast(getString(R.string.connection_error));
+                    }
+                }catch (Exception e) {
+                    MyUtils.showConnectionErrorToast(getActivity());
+                    Logger.write(e);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                //Log.d(TAG + " onFailure", t.toString());
+                Logger.write(t.getMessage());
+                MyUtils.showConnectionErrorToast(getActivity());
+                DialogUtils.closeProgress();
+            }
+        });
+
+
+        // DialogUtils.displayProgress(this);
+
+
+    }
+    public void loadClientData() {
+        // super.loadData();
+        // if(addLinesActivity.getLine()==null) return;
+        // Logger.write("Loading data");
+        DialogUtils.displayProgress(getActivity());
+        RevenueApi lineApi = MainApplication.getInstance().getRetrofit().create(RevenueApi.class);
+
+        final Call<ResponseBody> response = lineApi.getTopLineRevenues(user.getToken(), "client");
+        response.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
+                if (this == null) return;
+                DialogUtils.closeProgress();
+                try {
+                    //Logger.write(resResponse.body().string());
+                    //  JSONObject response = new JSONObject(resResponse.body().string());
+                    GeneralResponse response=new GeneralResponse(resResponse.body());
+
+                    if (response != null && response.isAuthFailed()) {
+                        //User.LogOut(LineRevenueActivity.this);
+                        return;
+                    }
+                    Logger.write(response.toString());
+                    _Meta meta=response.getMeta();
+                    if(meta !=null && meta.getStatus_code()==200) {
+
+                        List<Object> keys=response.getKeys();
+                        JSONObject map=response.getKeyObjects();
+
+                        List<Client> clients = new ArrayList<Client>(keys.size());
+                        Gson gson = new Gson();
+                        topRevenues.clear();
+                        topRevenuesName.clear();
+                        double total=0;
+                        for(Object keyObject:keys) {
+                            Map<String, Object> obj = MyUtils.MapObject.create(keyObject.toString());
+//                            Logger.write(map.get(MyUtils.MapObject.create(keyObject.toString()).get("key")).toString());
+                            // lines.add((Line)map.get(MyUtils.MapObject.create(keyObject.toString()).get("key")));
+                            Client client =gson.fromJson(map.getString(obj.get("key").toString()), Client.class);
+                            Float val=Float.parseFloat(""+(Double)obj.get("value"));
+                            client.setTotal_revenue(val);
+                            total=total+val;
+                            topRevenues.add(val);
+                            topRevenuesName.add(MyUtils.getClientName(client));
+                            clients.add(client);
+                        }
+                        setData();
+                        generateCenterSpannableText(MyUtils.moneyFormat(total), null);
+                        //Map mapObject = MyUtils.MapObject.create(response.toString());
+                        //Logger.write(.toString());
+                        clientDataModels.addAll(clients);
+                        //
+                        client_adapter.notifyDataSetChanged();
                     } else {
                         MyUtils.showToast(getString(R.string.connection_error));
                     }

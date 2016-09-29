@@ -15,21 +15,20 @@
             android:layout_height="54dp">
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
                 android:id="@+id/img_printer"
                 android:src="@mipmap/printer"
+                style="@style/ActionBarIcon"
                 android:layout_marginLeft="10dp"
                 android:layout_centerVertical="true" />
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+
+               style="@style/ActionBarIcon"
                 android:id="@+id/img_plus"
                 android:src="@mipmap/plus_thin"
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="15dp" />
+                android:layout_marginRight="5dp" />
 
             <ImageView
                 android:layout_width="30dp"
@@ -38,6 +37,7 @@
                 android:src="@mipmap/ic_filter_map"
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/img_plus"
+                android:visibility="gone"
                 android:layout_marginRight="10dp" />
 
             <ImageView

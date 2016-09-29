@@ -72,7 +72,9 @@
                 android:layout_height="wrap_content"
                 android:text="Last sale : 5 days ago"
                 android:id="@+id/txt_date"
-                android:textColor="@color/schedule_title_bg_color"
+
+                android:visibility="gone"
+                android:textColor="@color/gray"
                 android:layout_marginTop="2dp" />
         </LinearLayout>
     </RelativeLayout>

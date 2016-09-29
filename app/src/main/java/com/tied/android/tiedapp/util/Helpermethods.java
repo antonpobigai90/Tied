@@ -117,6 +117,17 @@ public  class HelperMethods {
         String montOfyearName = MONTHS_LIST[montOfyear];
         return montOfyearName;
     }
+    public static int getNumericMonthOfTheYear(String string_date) {
+        GregorianCalendar gregorianCalendar = getGCalendar(string_date);
+        return gregorianCalendar.get(gregorianCalendar.MONTH)+1;
+
+    }
+    public static int getCurrentYear(String string_date) {
+        GregorianCalendar gregorianCalendar = getGCalendar(string_date);
+        int year = gregorianCalendar.get(gregorianCalendar.YEAR);
+
+        return year;
+    }
 
     public static int getDayFromSchedule(String day) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -130,6 +141,8 @@ public  class HelperMethods {
             return 0;
         }
     }
+
+
 
     public static long getDateDifference(String startDate, String endDate) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

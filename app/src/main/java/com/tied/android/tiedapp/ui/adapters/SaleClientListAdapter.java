@@ -27,7 +27,7 @@ public class SaleClientListAdapter extends ClientParentAdapter {
 
     ViewHolder v;
     Context context;
-    protected ArrayList<ClientDataModel> arraylist = new ArrayList<ClientDataModel>();
+    protected ArrayList<Client> arraylist = new ArrayList<Client>();
 
     public SaleClientListAdapter(ArrayList clients, Context context) {
         super(clients, context);
@@ -44,7 +44,7 @@ public class SaleClientListAdapter extends ClientParentAdapter {
             LayoutInflater li = (LayoutInflater) _c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = li.inflate(R.layout.sale_line_list_item, viewGroup, false);
 
-            ClientDataModel data = (ClientDataModel) _data.get(i);
+            Client  data = (Client) _data.get(i);
 
             v.item_cell = (RelativeLayout) view.findViewById(R.id.item_cell);
             v.item_cell.setOnClickListener(new View.OnClickListener() {
@@ -66,11 +66,15 @@ public class SaleClientListAdapter extends ClientParentAdapter {
                 v.item_cell.setBackgroundResource(R.color.light_grey3);
             }
 
-            v.imageView.setBackgroundResource(R.drawable.user_example);
-            v.line_name.setText(data.getLine_name());
-            v.line_date.setText(String.format("%s", data.getLine_date()));
-            v.percent.setText(String.format("(%s%s)", data.getPercent(), "%"));
-            v.price.setText(data.getPrice());
+            v.imageView.setBackgroundResource(R.drawable.client_photo);
+            if(data.getLogo()!=null && !data.getLogo().isEmpty()) {
+                MyUtils.Picasso.displayImage(data.getLogo(), v.imageView);
+            }
+
+            v.line_name.setText(MyUtils.getClientName(data));
+            //v.line_date.setText(String.format("%s", data.getLine_date()));
+           // v.percent.setText(String.format("(%s%s)", data.getPercent(), "%"));
+            v.price.setText(MyUtils.moneyFormat(data.getTotal_revenue()));
 
             view.setTag(v);
         } else {

@@ -54,7 +54,9 @@ public class Constants {
     public static final String REVENUES = API_PATH + "revenue";
     public static final String UPDATE_REVENUE_WITH_ID = API_PATH + "revenue/{line_id}";
     public static final String ADD_REVENUE = API_PATH + "revenue";
-    public static final String GET_TOP_FIVE_LINE_REVENUE = API_PATH + "revenue/top_five/by_line";
+    public static final String GET_TOP_FIVE_REVENUE = API_PATH + "revenue/top_five/{group_by}";
+    public static final String GET_REVENUE_BY_GROUP = API_PATH + "revenue/by_group/{group_by}";
+
     public static final String  GET_TOTAL_REVENUES_FOR_USER = API_PATH + "/users/me/revenue/total";
 
 
@@ -189,8 +191,11 @@ public class Constants {
     public static final String RESULT_ADDRESS = "address";
     public static final String RESULT_DATA_KEY = "data_key";
     public static final int SELECT_CLIENT = 1000;
+    public static final int SELECT_LINE = 1003;
     public static final int ADD_SALES = 1001;
     public static final int ADD_CLIENT = 2001;
+    public static final int FILTER_CODE=302;
+    public static final String FILTER="filter";
 
     public static final String TOTAL_SALES = "Total sales";
 

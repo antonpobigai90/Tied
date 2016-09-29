@@ -70,7 +70,7 @@ public class SaleLineListAdapter extends ClientParentAdapter {
 
                 v.imageView.setBackgroundResource(R.drawable.dollar_red);
             } else {
-                if (i < 2) {
+                if (i % 2==0) {
                     v.item_cell.setBackgroundResource(R.color.light_grey3);
                     v.imageView.setBackgroundResource(R.drawable.dollar_purple);
                 } else {

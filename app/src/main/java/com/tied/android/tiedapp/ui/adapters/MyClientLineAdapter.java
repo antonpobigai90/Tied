@@ -10,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.tied.android.tiedapp.R;
+import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.util.MyUtils;
 import com.tied.android.tiedapp.util.RoundImage;
@@ -96,6 +97,29 @@ public class MyClientLineAdapter extends BaseAdapter {
          }else{
              viewHolder.selector.setVisibility(View.GONE);
          }
+            //viewHolder.name.setText(data.getFull_name());
+
+        }
+        if( _data.get(i) instanceof Line){
+            final Line line = (Line) _data.get(i);
+            viewHolder.name.setText(line.getName());
+           // MyUtils.Picasso.displayImage(client.getLogo(), viewHolder.roundedImage);
+            viewHolder.roundedImage.setVisibility(View.GONE);
+            try{
+                viewHolder.description.setText(line.getDescription().substring(0,20)+"...");
+            }catch (Exception e) {
+                viewHolder.description.setText(line.getDescription());
+            }
+
+            if(isMultiple) {
+                if (selected.contains(line.getId())) {
+                    viewHolder.selector.setImageResource(R.drawable.selected_bg);
+                } else {
+                    viewHolder.selector.setImageResource(R.drawable.unselectd_bg);
+                }
+            }else{
+                viewHolder.selector.setVisibility(View.GONE);
+            }
             //viewHolder.name.setText(data.getFull_name());
 
         }

@@ -48,7 +48,7 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
     String dateString="";
     Line line;
     ImageView clientPhoto;
-    TextView clientNameTV, dateTV;
+    TextView clientNameTV, dateTV, lineNameTV;
     EditText saleAmountET, titleET;
     float salesAmount=0.00f;
     String title="";
@@ -90,6 +90,7 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
         titleET=(EditText)findViewById(R.id.title);
         lineLayout=findViewById(R.id.select_line_layout);
         clientLayout=findViewById(R.id.select_client_layout);
+        lineNameTV = (TextView)findViewById(R.id.lineNameTV);
         if(line == null) lineLayout.setVisibility(View.VISIBLE);
         else lineLayout.setVisibility(View.GONE);
 
@@ -108,6 +109,10 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
             case R.id.select_client_layout:
                 selectClient(client);
                 break;
+            case R.id.select_line_layout:
+                selectLine(line);
+                break;
+
 
             case R.id.select_date:
                 DialogFragment dateFragment = new DatePickerFragment() {
@@ -250,6 +255,12 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
 
         MyUtils.initiateClientSelector(this, client, false);
     }
+    private void selectLine(Line line) {
+        //GeneralSelectObjectActivity.setType(GeneralSelectObjectActivity.SELECT_CLIENT_TYPE, false);
+        // MyUtils.startRequestActivity(this, GeneralSelectObjectActivity.class, Constants.SELECT_CLIENT);
+
+        MyUtils.initiateLineSelector(this, line, false);
+    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -259,6 +270,12 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
             clientNameTV.setText(MyUtils.getClientName(client));
             MyUtils.Picasso.displayImage(client.getLogo(), clientPhoto);
             Logger.write(client.toString());
+        }
+        if(requestCode==Constants.SELECT_LINE && resultCode==RESULT_OK) {
+            line = (Line)(data.getSerializableExtra("selected"));
+            lineNameTV.setText(line.getName());
+            //MyUtils.Picasso.displayImage(client.getLogo(), clientPhoto);
+            //Logger.write(client.toString());
         }
     }
     public void goBack(View v) {

@@ -7,7 +7,7 @@
     <RelativeLayout
         android:id="@+id/top_layout"
         android:layout_width="match_parent"
-        android:layout_height="54dp">
+        android:layout_height="50dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -65,6 +65,7 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:layout_marginTop="15dp"
             android:layout_marginLeft="10dp">
 
@@ -72,6 +73,7 @@
                 android:layout_width="100dp"
                 android:layout_height="40dp"
                 android:text="Default"
+                android:visibility="gone"
                 android:id="@+id/txt_default"
                 android:textColor="@color/schedule_title_bg_color"
                 android:textSize="17dp"
@@ -84,6 +86,7 @@
                 android:text="Highest"
                 android:id="@+id/txt_highest"
                 android:textSize="17dp"
+                android:onClick="onClick"
                 android:background="@drawable/blue_fill_grey_stroke"
                 android:gravity="center_vertical|center_horizontal"
                 android:textColor="@color/white"
@@ -95,6 +98,7 @@
                 android:text="Lowest"
                 android:id="@+id/txt_lowest"
                 android:textSize="17dp"
+                android:onClick="onClick"
                 android:background="@drawable/white_fill_grey_stroke"
                 android:textColor="@color/schedule_title_bg_color"
                 android:gravity="center_vertical|center_horizontal"
@@ -106,23 +110,53 @@
             android:layout_height="0.1dp"
             android:background="@android:color/darker_gray"
             android:layout_marginTop="15dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Month"
-            android:id="@+id/txt_month"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:textColor="@color/schedule_title_bg_color"
-            android:textSize="18dp" />
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:id="@+id/choose_month"
+                      android:onClick="onClick"
+                      android:gravity="center_vertical"
+                      android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Month"
+                    android:id="@+id/txt_month"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:textColor="@color/schedule_title_bg_color"
+                    android:textSize="18dp" />
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="Month"
+                    android:id="@+id/txt_month_val"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:textColor="@color/light_gray2"
+                    android:textSize="18dp" />
+            <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="25dp"
+                    android:src="@mipmap/arrow_right"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="20dp" />
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.1dp"
             android:background="@android:color/darker_gray" />
 
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:gravity="center_vertical"
+                  android:id="@+id/choose_year"
+                  android:onClick="onClick"
+                  android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -134,25 +168,59 @@
             android:textColor="@color/schedule_title_bg_color"
             android:textSize="18dp" />
 
+        <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Year"
+                android:layout_weight="1"
+                android:id="@+id/txt_year_val"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:textColor="@color/light_gray2"
+                android:textSize="18dp" />
+        <ImageView
+                android:layout_width="15dp"
+                android:layout_height="25dp"
+                android:src="@mipmap/arrow_right"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp" />
+        </LinearLayout>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="0.1dp"
             android:background="@android:color/darker_gray" />
 
         <RelativeLayout
-            android:id="@+id/quarter_layout"
+            android:id="@+id/choose_quarter"
             android:layout_width="match_parent"
+            android:onClick="onClick"
             android:layout_height="60dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Quarters"
+                android:id="@+id/quarter_label"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
                 android:textColor="@color/schedule_title_bg_color"
                 android:textSize="18dp" />
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-"
+                    android:layout_toRightOf="@+id/quarter_label"
+android:id="@+id/txt_quarter_val"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:textColor="@color/light_gray2"
+                    android:textSize="18dp" />
 
             <ImageView
                 android:layout_width="15dp"

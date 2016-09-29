@@ -49,6 +49,8 @@ import com.tied.android.tiedapp.retrofits.services.LineApi;
 import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.GeneralSelectObjectActivity;
+import com.tied.android.tiedapp.ui.activities.SelectLineActivity;
+import com.tied.android.tiedapp.ui.activities.sales.ActivityAddSales;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.dialogs.DatePickerFragment;
 import com.tied.android.tiedapp.ui.listeners.ListAdapterListener;
@@ -226,6 +228,28 @@ public abstract class MyUtils {
         c.startActivityForResult(i, Constants.SELECT_CLIENT);
 
     }
+    public static void initiateLineSelector(Activity c,  Object selected, boolean isMultiple) {
+        Intent i = new Intent(c, SelectLineActivity.class);
+        Bundle b=new Bundle();
+        b.putInt(SelectLineActivity.OBJECT_TYPE, SelectLineActivity.SELECT_LINE_TYPE);
+        b.putBoolean(SelectLineActivity.IS_MULTIPLE, isMultiple);
+        ArrayList<Object> selectedObjects=null;
+        if(!(selected instanceof ArrayList)) {
+            selectedObjects= new ArrayList<Object>(1);
+            selectedObjects.add(selected);
+        }else{
+            selectedObjects=(ArrayList)selected;
+        }
+        if(selected!=null) b.putSerializable(SelectLineActivity.SELECTED_OBJECTS, selectedObjects);
+        i.putExtras(b);
+        c.startActivityForResult(i, Constants.SELECT_LINE);
+
+    }
+    public static void initiateAddSales(Activity c,  Bundle bundle) {
+        Intent i = new Intent(c, ActivityAddSales.class);
+        i.putExtras(bundle);
+        c.startActivityForResult(i, Constants.ADD_SALES);
+    }
     public static void initAvatar(Bundle bundle, ImageView imageView) {
         if (bundle != null) {
             Gson gson = new Gson();
@@ -379,7 +403,11 @@ public abstract class MyUtils {
                 return !response.getBoolean("success");
             else return false;
         } catch (Exception e) {
-            return false;
+            try{
+             return response.getBoolean("authFailed");
+            }catch (Exception ee) {
+                return false;
+            }
         }
     }
 

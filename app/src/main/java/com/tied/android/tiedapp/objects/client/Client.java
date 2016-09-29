@@ -36,6 +36,7 @@ public class Client implements Serializable, Comparable<Client>{
     private String note;
     private String revenue;
     private String ytd_revenue;
+    private double total_revenue;
 
     private int Industry_id;
     private int visit_id;
@@ -60,6 +61,14 @@ public class Client implements Serializable, Comparable<Client>{
     public static boolean isClientCreated(Context context){
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         return mPrefs.getBoolean(Constants.CLIENT_CREATED, false);
+    }
+
+    public double getTotal_revenue() {
+        return total_revenue;
+    }
+
+    public void setTotal_revenue(double total_revenue) {
+        this.total_revenue = total_revenue;
     }
 
     public ArrayList<Line> getLines() {

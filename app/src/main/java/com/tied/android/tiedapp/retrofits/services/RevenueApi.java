@@ -7,6 +7,7 @@ package com.tied.android.tiedapp.retrofits.services;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects.Revenue;
+import com.tied.android.tiedapp.objects.RevenueFilter;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 import okhttp3.MultipartBody;
@@ -29,11 +30,11 @@ public interface RevenueApi {
                                       @Field("start") String startDate,
                                       @Field("end") String endDate);
 
-    @POST(Constants.GET_TOP_FIVE_LINE_REVENUE)
-    Call<ResponseBody> getTopRevenueByLines(@Header(Constants.TOKEN_HEADER) String token,
-                                            @Field("start") String startDate,
-                                            @Field("end") String endDate);
-    @GET(Constants.GET_TOP_FIVE_LINE_REVENUE)
-    Call<ResponseBody> getTopLineRevenues(@Header(Constants.TOKEN_HEADER) String token);
+    @POST(Constants.GET_REVENUE_BY_GROUP)
+    Call<ResponseBody> getRevenueByGroup(@Header(Constants.TOKEN_HEADER) String token,
+                                            @Path("group_by") String group_by,
+                                            @Body RevenueFilter filter);
+    @GET(Constants.GET_TOP_FIVE_REVENUE)
+    Call<ResponseBody> getTopLineRevenues(@Header(Constants.TOKEN_HEADER) String token, @Path("group_by") String group_by);
 
 }
