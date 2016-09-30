@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.tied.android.tiedapp">
+
+    <uses-sdk
+            android:targetSdkVersion="23" />
+
+    <uses-feature
+            android:glEsVersion="0x00020000"
+            android:required="true" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- To auto-complete the email text field in the signUpLogin form with the user's emails -->
+    <uses-permission
+            android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+            android:required="true" />
+    <uses-permission
+            android:name="android.permission.READ_EXTERNAL_STORAGE"
+            android:required="true" />
+    <uses-permission
+            android:name="android.permission.CAMERA"
+            android:required="true" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
+    <uses-feature
+            android:name="android.hardware.camera"
+            android:required="true" />
+
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <application
+            android:name=".MainApplication"
+            android:allowBackup="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:supportsRtl="true"
+            android:theme="@style/AppTheme">
+        <meta-data
+                android:name="com.facebook.sdk.ApplicationId"
+                android:value="@string/facebook_app_id" />
+        <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="@string/google_maps_api_key" />
+        <meta-data
+                android:name="com.google.android.gms.version"
+                android:value="@integer/google_play_services_version" />
+
+        <!--
+             <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="@string/map_api_key" />
+        -->
+
+        <activity
+                tools:replace="android:theme"
+                android:name="com.facebook.FacebookActivity"
+                android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+                android:label="@string/app_name"
+                android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+                android:name=".ui.activities.signups.SignUpActivity"
+                android:label="@string/app_name"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar"
+                android:windowSoftInputMode="adjustResize" />
+        <activity
+                android:name=".ui.activities.SelectLineActivity"
+                android:label="@string/app_name"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar"
+                android:windowSoftInputMode="adjustResize" />
+        <activity
+                android:name=".ui.activities.sales.ActivityGroupedSales"
+                android:label="@string/app_name"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar"
+                android:windowSoftInputMode="adjustResize" />
+        <activity
+                android:name=".ui.activities.signups.SignInActivity"
+                android:label="@string/app_name"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+                android:name=".ui.activities.client.ActivityClient"
+                android:label="@string/app_name"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+                android:name=".ui.activities.signups.WalkThroughActivity"
+                android:label="@string/app_name"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+                android:name=".ui.activities.lines.LineRevenueActivity"
+                android:label="@string/app_name"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+                android:name=".ui.activities.sales.ActivityAddSales"
+                android:label="@string/app_name"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
+        <activity
+                android:name=".ui.activities.signups.SplashActivity"
+                android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+                android:name=".ui.activities.MainActivity"
+                android:configChanges="orientation|screenSize"
+                android:label="@string/title_activity_main"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ui.activities.signups.InviteContactActivity" />
+
+        <receiver android:name=".receivers.SMSBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
+        <meta-data
+                android:name="io.fabric.ApiKey"
+                android:value="4b3683ff0e98d5a506af2aca298ceded59107045" />
+
+        <activity
+                android:name=".ui.activities.HelpActivity"
+                android:label="@string/title_activity_help"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+                android:name=".ui.activities.client.AddClientActivity"
+                android:label="@string/app_name"
+                android:parentActivityName=".ui.activities.MainActivity"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar"
+                android:windowSoftInputMode="adjustResize" />
+        <activity
+                android:name=".ui.activities.ProfileActivity"
+                android:label="@string/app_name"
+                android:parentActivityName=".ui.activities.MainActivity"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.FullScreen"
+                android:windowSoftInputMode="adjustResize" />
+        <activity
+                android:name=".ui.activities.schedule.ViewSchedule"
+                android:label="@string/app_name"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+                android:name=".ui.activities.AddOptionsActivity"
+                android:label="@string/app_name"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+                android:name=".ui.activities.GeneralSelectObjectActivity"
+                android:label="@string/app_name"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar"
+                android:windowSoftInputMode="adjustResize" />
+        <activity
+                android:name=".ui.activities.client.SelectClientActivity"
+                android:label="@string/app_name"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+                android:name=".ui.activities.schedule.CreateAppointmentActivity"
+                android:label="@string/app_name"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+                android:name=".ui.activities.lines.AddLinesActivity"
+                android:label="@string/app_name"
+                android:screenOrientation="portrait"
+                android:windowSoftInputMode="adjustResize"
+                android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+                android:name=".ui.activities.lines.ViewLineActivity"
+                android:label="@string/app_name"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+                android:name=".ui.activities.lines.LineClientListActivity"
+                android:label="@string/app_name"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ui.activities.DailyStatsActivity"
+                  android:label="@string/app_name"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ui.activities.SuperActivity"
+                  android:label="@string/app_name"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+                android:name=".ui.activities.SendInviteActivity"
+                android:label="@string/app_name"
+                android:parentActivityName=".ui.activities.MainActivity"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                    android:name="android.support.PARENT_ACTIVITY"
+                    android:value="com.tied.android.tiedapp.ui.activities.MainActivity" />
+        </activity>
+        <activity
+                android:name=".ui.activities.sales.ActivitySalesClientDetails"
+                android:label="@string/app_name"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+                android:name=".ui.activities.sales.ActivitySalesClientSaleDetails"
+                android:label="@string/app_name"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+                android:name=".ui.activities.sales.ActivitySalesPrint"
+                android:label="@string/app_name"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+                android:name=".ui.activities.sales.ActivitySalesFilter"
+                android:label="@string/app_name"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar" />
+
+        <service
+                android:name=".services.LocationService"
+                android:label="My Location Service" />
+
+        <activity
+                android:name=".ui.activities.client.ClientInfo"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ui.activities.LinesAndTerritories"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.client.ClientMapAndListActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.client.MapClientList"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.goal.LineGoalActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.lines.LineAddGoalActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.lines.LineViewGoalActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.coworker.CoWorkerActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.coworker.ViewCoWorkerActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.coworker.CoWorkerSchedulesActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.coworker.CoWorkerFilterActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".ui.activities.goal.LineViewGoalActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.goal.LineAddGoalActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.goal.GoalMoreClientActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.goal.GoalMoreSaleActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.goal.GoalEditActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.goal.GoalAddLineActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar"/>
+
+
+        <!--  Co-Worker Activities -->
+
+
+        <activity android:name=".ui.activities.coworker.CoWorkerLinesActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.lines.LineGoalActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.coworker.CoWorkerTerritoriesActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.coworker.CoWorkergGoalsActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.coworker.CoWorkerSaleActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar"/>
+
+
+        <service android:name="com.mapbox.mapboxsdk.telemetry.TelemetryService" />
+
+        <activity android:name=".ui.activities.SelectPicture"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/DialogTheme"/>
+        <activity android:name=".ui.activities.coworker.InviteCoWorkerActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@style/AppTheme.NoActionBar"/>
+
+
+    </application>
+
+</manifest>
