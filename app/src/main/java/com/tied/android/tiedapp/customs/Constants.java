@@ -10,9 +10,9 @@ import java.io.File;
 public class Constants {
     public static final String TAG = Constants.class
             .getSimpleName();
-    public static final String SERVER_URL = "http://tied.goattale.com:8100/api/v1/";
+    public static final String SERVER_URL = "http://tied.goattale.com:8101/api/v1/";
 
-    public static final String HOST = "http://tied.goattale.com:8100/";
+    public static final String HOST = "http://tied.goattale.com:8101/";
 //    public static final String HOST = "https://tied-api.herokuapp.com/";
 
     public static final int PORT = 3000;
@@ -166,6 +166,7 @@ public class Constants {
     public static final int Profile = 40;
 
     public static final int MapFragment = 45;
+    public static final int ProfileFragment = 46;
 
     public static final int Lines = 50;
 

@@ -62,6 +62,9 @@ public class GoalActivitiesActivity extends AppCompatActivity implements  View.O
 
         listAdapter = new ExpendableActivitiesListAdapter(this, listDataHeader, listDataChild);
         expandableListView.setAdapter(listAdapter);
+
+        expandableListView.expandGroup(0);
+        expandableListView.expandGroup(1);
     }
 
     private void prepareListData() {

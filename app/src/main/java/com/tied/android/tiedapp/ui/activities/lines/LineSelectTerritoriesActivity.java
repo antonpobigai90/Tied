@@ -36,7 +36,8 @@ public class LineSelectTerritoriesActivity extends AppCompatActivity implements 
     LineSelectTerritoriesAdapter territoriesAdapter;
 
     ImageView img_close;
-    TextView txt_done;
+    TextView txt_done, txt_client_info;
+    int page_index;
 
     private Line line;
     @Override
@@ -45,6 +46,7 @@ public class LineSelectTerritoriesActivity extends AppCompatActivity implements 
         setContentView(R.layout.activity_select_territory);
 
         bundle = getIntent().getExtras();
+        page_index = bundle.getInt(Constants.SHOW_LINE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
@@ -75,6 +77,13 @@ public class LineSelectTerritoriesActivity extends AppCompatActivity implements 
 
         txt_done = (TextView) findViewById(R.id.txt_done);
         txt_done.setOnClickListener(this);
+
+        txt_client_info = (TextView) findViewById(R.id.txt_client_info);
+        if (page_index == 0) {
+            txt_client_info.setText("Select Line");
+        } else {
+            txt_client_info.setText("Select Territory");
+        }
 
         listview = (ListView) findViewById(R.id.listView);
 

@@ -18,10 +18,10 @@
             android:layout_alignParentBottom="true"
             android:background="@android:color/transparent"
             android:gravity="center"
-            android:padding="10dp"
+            android:padding="20dp"
             android:text="@string/select_photo"
             android:textAllCaps="false"
-            android:textColor="@color/grey" />
+            android:textColor="@color/blue" />
 
         <View
             android:layout_width="match_parent"
@@ -35,10 +35,10 @@
             android:layout_alignParentBottom="true"
             android:background="@android:color/transparent"
             android:gravity="center"
-            android:padding="10dp"
+            android:padding="20dp"
             android:text="@string/take_new_photo"
             android:textAllCaps="false"
-            android:textColor="@color/grey" />
+            android:textColor="@color/blue" />
 
         <View
             android:layout_width="match_parent"
@@ -52,10 +52,10 @@
             android:layout_alignParentBottom="true"
             android:background="@android:color/transparent"
             android:gravity="center"
-            android:padding="10dp"
+            android:padding="20dp"
             android:text="@string/option_3"
             android:textAllCaps="false"
-            android:textColor="@color/grey" />
+            android:textColor="@color/blue" />
 
     </LinearLayout>
 
@@ -68,8 +68,8 @@
         android:layout_marginTop="5dp"
         android:background="@drawable/bg_white_rounded"
         android:gravity="center"
-        android:padding="10dp"
-        android:text="@string/cancel"
+        android:padding="20dp"
+        android:text="CANCEL"
         android:textAllCaps="false"
         android:textColor="@color/red_color" />
 </RelativeLayout>

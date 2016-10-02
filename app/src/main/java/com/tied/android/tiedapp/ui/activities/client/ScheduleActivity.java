@@ -1,12 +1,13 @@
-package com.tied.android.tiedapp.ui.fragments.schedule;
+package com.tied.android.tiedapp.ui.activities.client;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Build;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -20,6 +21,7 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -40,78 +42,63 @@ import java.util.List;
 /**
  * Created by Emmanuel on 7/1/2016.
  */
-public class ScheduleAppointmentsFragment extends Fragment implements View.OnClickListener {
+public class ScheduleActivity extends FragmentActivity implements FragmentIterationListener, View.OnClickListener {
 
-    public static final String TAG = ScheduleAppointmentsFragment.class
+    public static final String TAG = ScheduleActivity.class
             .getSimpleName();
 
     public static ViewPager mViewPager;
     public PagerAdapter mPagerAdapter;
     private Bundle bundle;
     private User user;
+    ImageView img_close;
 
     public FragmentIterationListener mListener;
 
-    LinearLayout all_tab, today_tab, this_week_tab, next_week_tab, tab_bar, this_month, alert_edit_msg;
+    LinearLayout upcoming_tab, overdue_tab, completed_tab, tab_bar, alert_edit_msg;
     HorizontalScrollView tab_scroll;
     List<Fragment> fragmentList = new ArrayList<Fragment>();
 
-
-    public static Fragment newInstance(Bundle bundle) {
-        Fragment fragment = new ScheduleAppointmentsFragment();
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPagerAdapter = new PagerAdapter(getActivity().getSupportFragmentManager());
+        setContentView(R.layout.activity_schedule_timeline);
+
+        mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
         fragmentList.add(new TodayScheduleFragment());
         fragmentList.add(new AllScheduleFragment());
         fragmentList.add(new ThisWeekScheduleFragment());
-        fragmentList.add(new NextWeekScheduleFragment());
-        fragmentList.add(new ThisMonthScheduleFragment());
+
+        initComponent();
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_schedule_timeline, null);
-
-        initComponent(view);
-
-        Log.d(TAG, "AM HERE AGAIN");
-        return view;
-    }
-
-    public void initComponent(View view) {
+    public void initComponent() {
         // Set up the ViewPager with the sections adapter.
 
-        bundle = getArguments();
+        bundle = getIntent().getExtras();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getActivity().getWindow();
+            Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(getActivity().getResources().getColor(R.color.blue_status_bar));
+            window.setStatusBarColor(getResources().getColor(R.color.blue_status_bar));
         }
 
-        mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
-        tab_bar = (LinearLayout) view.findViewById(R.id.tab_bar);
-        all_tab = (LinearLayout) view.findViewById(R.id.all_tab);
-        today_tab = (LinearLayout) view.findViewById(R.id.today_tab);
-        this_week_tab = (LinearLayout) view.findViewById(R.id.this_week_tab);
-        next_week_tab = (LinearLayout) view.findViewById(R.id.next_week_tab);
-        this_month = (LinearLayout) view.findViewById(R.id.this_month);
-        tab_scroll = (HorizontalScrollView) view.findViewById(R.id.tab_scroll);
+        img_close = (ImageView) findViewById(R.id.img_close);
+        img_close.setOnClickListener(this);
 
-        alert_edit_msg = (LinearLayout) getActivity().findViewById(R.id.alert_edit_msg);
+        mViewPager = (ViewPager) findViewById(R.id.viewpager);
+        tab_bar = (LinearLayout) findViewById(R.id.tab_bar);
+        upcoming_tab = (LinearLayout) findViewById(R.id.upcoming_tab);
+        overdue_tab = (LinearLayout) findViewById(R.id.overdue_tab);
+        completed_tab = (LinearLayout) findViewById(R.id.completed_tab);
+        tab_scroll = (HorizontalScrollView) findViewById(R.id.tab_scroll);
+
+        alert_edit_msg = (LinearLayout) findViewById(R.id.alert_edit_msg);
         // moveViewToScreenCenter( alert_edit_msg, "Your edit was successful");
 
-        all_tab.setOnClickListener(this);
-        today_tab.setOnClickListener(this);
-        this_week_tab.setOnClickListener(this);
-        next_week_tab.setOnClickListener(this);
-        this_month.setOnClickListener(this);
+        upcoming_tab.setOnClickListener(this);
+        overdue_tab.setOnClickListener(this);
+        completed_tab.setOnClickListener(this);
 
 
         if (mViewPager != null) {
@@ -127,20 +114,17 @@ public class ScheduleAppointmentsFragment extends Fragment implements View.OnCli
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.all_tab:
+            case R.id.img_close:
+                finish();
+                break;
+            case R.id.upcoming_tab:
                 mViewPager.setCurrentItem(1);
                 break;
-            case R.id.today_tab:
+            case R.id.overdue_tab:
                 mViewPager.setCurrentItem(0);
                 break;
-            case R.id.this_week_tab:
+            case R.id.completed_tab:
                 mViewPager.setCurrentItem(2);
-                break;
-            case R.id.next_week_tab:
-                mViewPager.setCurrentItem(3);
-                break;
-            case R.id.this_month:
-                mViewPager.setCurrentItem(4);
                 break;
         }
     }
@@ -201,21 +185,6 @@ public class ScheduleAppointmentsFragment extends Fragment implements View.OnCli
         });
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        /*if(mPagerAdapter == null){
-            mPagerAdapter = new PagerAdapter(getFragmentManager());
-        }
-        if (context instanceof FragmentIterationListener) {
-            mListener = (FragmentIterationListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }*/
-    }
-
     public void nextAction(int action, Bundle bundle) {
         if (mListener != null) {
             mListener.OnFragmentInteractionListener(action, bundle);
@@ -241,9 +210,7 @@ public class ScheduleAppointmentsFragment extends Fragment implements View.OnCli
                         @Override
                         public void onGlobalLayout() {
                             tab_scroll.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                            if (position == 4 || position == 3) {
-                                tab_scroll.fullScroll(HorizontalScrollView.FOCUS_RIGHT);
-                            } else if (position == 0) {
+                            if (position == 0) {
                                 tab_scroll.fullScroll(HorizontalScrollView.FOCUS_LEFT);
                             } else {
                                 tab_scroll.scrollTo((int) title.getScaleX(), 0);
@@ -254,6 +221,11 @@ public class ScheduleAppointmentsFragment extends Fragment implements View.OnCli
                 index++;
             }
         }
+    }
+
+    @Override
+    public void OnFragmentInteractionListener(int action, Bundle bundle) {
+        mViewPager.setCurrentItem(action);
     }
 
     public class PagerAdapter extends FragmentStatePagerAdapter {
@@ -284,16 +256,6 @@ public class ScheduleAppointmentsFragment extends Fragment implements View.OnCli
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("curChoice", mCurCheckPosition);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if (savedInstanceState != null) {
-            // Restore last state for checked position.
-            mCurCheckPosition = savedInstanceState.getInt("curChoice", 0);
-        }
-        // Logger.write("femiiiiiiiiiiiiiiii");
     }
 
     @Override

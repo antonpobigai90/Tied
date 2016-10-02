@@ -50,6 +50,9 @@ public class LineTerritoriesActivity extends AppCompatActivity implements  View.
     LineTerritoriesAdapter territoriesAdapter;
 
     ImageView img_close, img_edit;
+    int page_index;
+
+    TextView txt_client_info, txt_description;
 
     private Line line;
     @Override
@@ -58,6 +61,7 @@ public class LineTerritoriesActivity extends AppCompatActivity implements  View.
         setContentView(R.layout.activity_territory);
 
         bundle = getIntent().getExtras();
+        page_index = bundle.getInt(Constants.SHOW_LINE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
@@ -76,7 +80,7 @@ public class LineTerritoriesActivity extends AppCompatActivity implements  View.
                 finish();
                 break;
             case R.id.img_edit:
-                MyUtils.startActivity(this, LineSelectTerritoriesActivity.class);
+                MyUtils.startActivity(this, LineSelectTerritoriesActivity.class, bundle);
                 break;
         }
     }
@@ -89,6 +93,16 @@ public class LineTerritoriesActivity extends AppCompatActivity implements  View.
         img_edit = (ImageView) findViewById(R.id.img_edit);
         img_edit.setOnClickListener(this);
 
+        txt_client_info = (TextView) findViewById(R.id.txt_client_info);
+        txt_description = (TextView) findViewById(R.id.txt_description);
+
+        if (page_index == 0) {
+            txt_client_info.setText("Lines");
+            txt_description.setText("You currently serve 20 lines for");
+        } else {
+            txt_client_info.setText("Territories");
+            txt_description.setText("You currently serve 20 territories for");
+        }
         territories_listview = (ListView) findViewById(R.id.listView);
 
         ArrayList<TerritoryModel> territoryModels = new ArrayList<TerritoryModel>();

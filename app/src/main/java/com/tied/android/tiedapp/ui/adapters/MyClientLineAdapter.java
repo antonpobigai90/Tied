@@ -45,11 +45,11 @@ public class MyClientLineAdapter extends BaseAdapter {
         this.selected=(selected==null?new ArrayList<String>():selected);
         this.isMultiple=isMultiple;
     }
-    public MyClientLineAdapter(ArrayList data, Context context) {
+    public MyClientLineAdapter(ArrayList data, Context context, boolean isMultiple) {
         _data = data;
         _c = context;
         this.selected=new ArrayList<String>();
-        this.isMultiple=false;
+        this.isMultiple=isMultiple;
     }
 
     public void setSelected(List<String> selected) {
@@ -95,7 +95,7 @@ public class MyClientLineAdapter extends BaseAdapter {
              MyUtils.Picasso.displayImage(client.getLogo(), viewHolder.roundedImage);
              viewHolder.description.setText(client.getAddress().getCity()+", "+client.getAddress().getState());
          if(isMultiple) {
-             if (selected.contains(client.getId())) {
+             if (client.getCheckStatus()) {
                  viewHolder.selector.setImageResource(R.drawable.selected_bg);
              } else {
                  viewHolder.selector.setImageResource(R.drawable.unselectd_bg);

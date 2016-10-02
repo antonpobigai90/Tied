@@ -11,7 +11,7 @@
         android:id="@+id/top_layout"
         android:layout_width="match_parent"
         android:layout_height="54dp"
-        android:background="@drawable/background_layout">
+        android:background="@drawable/background">
 
         <TextView
             android:id="@+id/txt_signup_label"
@@ -39,270 +39,171 @@
 
             <ImageView
                 android:id="@+id/img_close"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="@dimen/action_bar_icon_height"
+                android:layout_height="@dimen/action_bar_icon_height"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:src="@mipmap/btn_back_arrow" />
+                android:src="@mipmap/btn_back_arrow"
+                android:padding="@dimen/action_bar_icon_padding" />
 
-            <TextView
-                android:id="@+id/txt_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/img_close"
-                android:text="@string/str_back"
-                android:textColor="@color/white"
-                android:textSize="17sp" />
         </LinearLayout>
 
         <ImageView
             android:id="@+id/img_edit"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="@dimen/action_bar_icon_height"
+            android:layout_height="@dimen/action_bar_icon_height"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="15dp"
-            android:src="@mipmap/icon_edit" />
+            android:src="@mipmap/icon_edit"
+            android:padding="@dimen/action_bar_icon_padding" />
 
     </RelativeLayout>
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="15dp">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="40dp">
+            android:layout_height="160dp"
+            android:background="@mipmap/header_default"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="160dp"
-                android:background="@mipmap/header_default"
-                android:gravity="center_vertical"
-                android:orientation="vertical">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/avatar"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginBottom="15dp"
-                    android:src="@mipmap/default_avatar" />
-
-                <RelativeLayout
-                    android:id="@+id/info"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_horizontal">
-
-                    <ImageView
-                        android:id="@+id/icon_symbol"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_centerVertical="true"
-                        android:src="@mipmap/info_red" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="10dp"
-                        android:layout_toRightOf="@+id/icon_symbol"
-                        android:text="last visit 10 days ago"
-                        android:textColor="@color/white"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
-
-                </RelativeLayout>
-
-
-            </LinearLayout>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/avatar"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="15dp"
+                android:src="@mipmap/default_avatar" />
 
             <RelativeLayout
+                android:id="@+id/info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:paddingBottom="10dp"
-                android:paddingTop="10dp">
+                android:gravity="center_horizontal">
 
+                <ImageView
+                    android:id="@+id/icon_symbol"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/info_red" />
 
-                <LinearLayout
-                    android:id="@+id/icon_plus"
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
-                    android:gravity="center_horizontal"
-                    android:background="@drawable/blue_dot"
-                    android:layout_marginRight="10dp">
-
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:scaleType="fitXY"
-                        android:layout_gravity="center_vertical"
-                        android:src="@mipmap/icon_add" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/icon_mail"
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
-                    android:layout_toRightOf="@id/icon_plus"
-                    android:gravity="center_horizontal"
-                    android:background="@drawable/blue_dot"
-                    android:layout_marginRight="10dp">
-
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:scaleType="fitXY"
-                        android:layout_gravity="center_vertical"
-                        android:src="@mipmap/email" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/icon_call"
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
-                    android:layout_toRightOf="@id/icon_mail"
-                    android:gravity="center_horizontal"
-                    android:background="@drawable/blue_dot"
-                    android:layout_marginRight="10dp">
-
-                    <ImageView
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:scaleType="fitXY"
-                        android:layout_gravity="center_vertical"
-                        android:src="@mipmap/phone" />
-
-                </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_toRightOf="@+id/icon_symbol"
+                    android:text="last visit 10 days ago"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
             </RelativeLayout>
 
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp">
+
+
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/curve_white_background_with_stroke"
+                android:id="@+id/icon_plus"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:gravity="center_horizontal"
+                android:background="@drawable/blue_dot"
+                android:layout_marginRight="20dp">
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:scaleType="fitXY"
+                    android:layout_gravity="center_vertical"
+                    android:src="@mipmap/icon_add" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/icon_mail"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_toRightOf="@id/icon_plus"
+                android:gravity="center_horizontal"
+                android:layout_marginRight="20dp">
+
+                <ImageView
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:scaleType="fitXY"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_message" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/icon_call"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_toRightOf="@id/icon_mail"
+                android:gravity="center_horizontal">
+
+                <ImageView
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:scaleType="fitXY"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/phone" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:orientation="vertical">
+
+            <LinearLayout
                 android:orientation="vertical"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:paddingLeft="10dp">
-
-                <!--<RelativeLayout-->
-                    <!--android:id="@+id/total_sales"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:paddingBottom="10dp"-->
-                    <!--android:paddingTop="10dp">-->
-
-                    <!--<ImageView-->
-                        <!--android:id="@+id/ring_total_sales"-->
-                        <!--android:layout_width="25dp"-->
-                        <!--android:layout_height="25dp"-->
-                        <!--android:src="@mipmap/ring_red" />-->
-
-                    <!--<LinearLayout-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="match_parent"-->
-                        <!--android:layout_marginLeft="15dp"-->
-                        <!--android:layout_toRightOf="@+id/ring_total_sales"-->
-                        <!--android:orientation="vertical">-->
-
-
-                        <!--<RelativeLayout-->
-                            <!--android:layout_width="match_parent"-->
-                            <!--android:layout_height="wrap_content">-->
-
-                            <!--<LinearLayout-->
-                                <!--android:layout_width="match_parent"-->
-                                <!--android:layout_height="wrap_content"-->
-                                <!--android:layout_toLeftOf="@+id/sales_right"-->
-                                <!--android:orientation="vertical">-->
-
-                                <!--<TextView-->
-                                    <!--android:layout_width="wrap_content"-->
-                                    <!--android:layout_height="wrap_content"-->
-                                    <!--android:layout_centerVertical="true"-->
-                                    <!--android:text="Total Sales"-->
-                                    <!--android:textStyle="bold"-->
-                                    <!--android:textColor="@color/schedule_title_bg_color"-->
-                                    <!--android:textSize="16sp" />-->
-
-                                <!--<TextView-->
-                                    <!--android:layout_width="wrap_content"-->
-                                    <!--android:layout_height="wrap_content"-->
-                                    <!--android:layout_centerVertical="true"-->
-                                    <!--android:text="How much you made from this client till date"-->
-                                    <!--android:textColor="@color/schedule_title_bg_color"-->
-                                    <!--android:textSize="11sp" />-->
-
-                            <!--</LinearLayout>-->
-
-                            <!--<LinearLayout-->
-                                <!--android:id="@+id/sales_right"-->
-                                <!--android:layout_width="wrap_content"-->
-                                <!--android:layout_height="wrap_content"-->
-                                <!--android:layout_alignParentRight="true"-->
-                                <!--android:layout_centerVertical="true"-->
-                                <!--android:layout_marginRight="10dp"-->
-                                <!--android:orientation="horizontal">-->
-
-                                <!--<TextView-->
-                                    <!--android:id="@+id/sales_amount"-->
-                                    <!--android:layout_width="wrap_content"-->
-                                    <!--android:layout_height="wrap_content"-->
-                                    <!--android:text="$2,202,298"-->
-                                    <!--android:layout_gravity="center_vertical"-->
-                                    <!--android:textSize="12sp"-->
-                                    <!--android:textColor="@color/schedule_title_bg_color"/>-->
-
-                                <!--<ImageView-->
-                                    <!--android:id="@+id/sales_arrow"-->
-                                    <!--android:layout_width="20dp"-->
-                                    <!--android:layout_height="20dp"-->
-                                    <!--android:src="@mipmap/right_arrow" />-->
-
-                            <!--</LinearLayout>-->
-
-
-
-                        <!--</RelativeLayout>-->
-
-                        <!--<View-->
-                            <!--android:layout_width="match_parent"-->
-                            <!--android:layout_height="0.1dp"-->
-                            <!--android:layout_marginTop="5dp"-->
-                            <!--android:background="@android:color/darker_gray" />-->
-                    <!--</LinearLayout>-->
-
-                <!--</RelativeLayout>-->
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@+id/txt_delete"
+                android:background="@drawable/curve_white_background_with_stroke">
 
                 <RelativeLayout
-                    android:id="@+id/schedule"
+                    android:id="@+id/total_sale"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp">
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical">
 
                     <ImageView
-                        android:id="@+id/ring_schedule"
+                        android:id="@+id/ring_sale"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@mipmap/ring_blue" />
+                        android:src="@mipmap/ring_red"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="15dp"
-                        android:layout_toRightOf="@+id/ring_schedule"
-                        android:orientation="vertical">
+                        android:layout_toRightOf="@+id/ring_sale"
+                        android:orientation="vertical"
+                        android:gravity="center_vertical">
 
 
                         <RelativeLayout
@@ -314,6 +215,92 @@
                                 android:layout_height="wrap_content"
                                 android:layout_toLeftOf="@+id/layout_schedule_right"
                                 android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:text="Total Sales"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/schedule_title_bg_color"
+                                    android:textSize="16sp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:text="How much you made from .."
+                                    android:textColor="@color/schedule_title_bg_color"
+                                    android:textSize="11sp" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/layout_schedule_right"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginRight="10dp"
+                                android:orientation="horizontal">
+
+
+                                <ImageView
+                                    android:id="@+id/schedule_arrow"
+                                    android:layout_width="15dp"
+                                    android:layout_height="15dp"
+                                    android:src="@drawable/ic_arrow_gray" />
+
+                            </LinearLayout>
+
+
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.1dp"
+                        android:background="@android:color/darker_gray"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="50dp" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/schedule"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:id="@+id/ring_schedule"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@mipmap/ring_blue"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="15dp"
+                        android:layout_toRightOf="@+id/ring_schedule"
+                        android:orientation="vertical"
+                        android:gravity="center_vertical">
+
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:layout_centerVertical="true">
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -335,7 +322,6 @@
                             </LinearLayout>
 
                             <LinearLayout
-                                android:id="@+id/layout_schedule_right"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
@@ -345,10 +331,92 @@
 
 
                                 <ImageView
-                                    android:id="@+id/schedule_arrow"
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
-                                    android:src="@mipmap/right_arrow" />
+                                    android:layout_width="15dp"
+                                    android:layout_height="15dp"
+                                    android:src="@drawable/ic_arrow_gray" />
+
+                            </LinearLayout>
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="0.1dp"
+                                android:background="@android:color/darker_gray"
+                                android:layout_alignParentBottom="true" />
+
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/special"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:id="@+id/ring_special"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@mipmap/ring_orange"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="15dp"
+                        android:layout_toRightOf="@+id/ring_special"
+                        android:orientation="vertical"
+                        android:gravity="center_vertical">
+
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="center_vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:text="Specials"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/schedule_title_bg_color"
+                                    android:textSize="16sp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:text="You have 10 upcoming"
+                                    android:textColor="@color/schedule_title_bg_color"
+                                    android:textSize="11sp" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginRight="10dp"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical">
+
+
+                                <ImageView
+                                    android:layout_width="15dp"
+                                    android:layout_height="15dp"
+                                    android:src="@drawable/ic_arrow_gray" />
 
                             </LinearLayout>
 
@@ -356,115 +424,120 @@
 
                         </RelativeLayout>
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.1dp"
-                            android:layout_marginTop="5dp"
-                            android:background="@android:color/darker_gray" />
                     </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.1dp"
+                        android:background="@android:color/darker_gray"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="50dp" />
 
                 </RelativeLayout>
 
-                <!--<RelativeLayout-->
-                    <!--android:id="@+id/specials"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:paddingBottom="10dp"-->
-                    <!--android:paddingTop="10dp">-->
+                <RelativeLayout
+                    android:id="@+id/goal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
 
-                    <!--<ImageView-->
-                        <!--android:id="@+id/ring_special"-->
-                        <!--android:layout_width="25dp"-->
-                        <!--android:layout_height="25dp"-->
-                        <!--android:src="@mipmap/ring_orange" />-->
+                    <ImageView
+                        android:id="@+id/ring_goal"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@mipmap/ring_green"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp" />
 
-                    <!--<LinearLayout-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="match_parent"-->
-                        <!--android:layout_marginLeft="15dp"-->
-                        <!--android:layout_toRightOf="@+id/ring_special"-->
-                        <!--android:orientation="vertical">-->
-
-
-                        <!--<RelativeLayout-->
-                            <!--android:layout_width="match_parent"-->
-                            <!--android:layout_height="wrap_content">-->
-
-                            <!--<LinearLayout-->
-                                <!--android:layout_width="match_parent"-->
-                                <!--android:layout_height="wrap_content"-->
-                                <!--android:layout_toLeftOf="@+id/layout_special_right"-->
-                                <!--android:orientation="vertical">-->
-
-                                <!--<TextView-->
-                                    <!--android:layout_width="wrap_content"-->
-                                    <!--android:layout_height="wrap_content"-->
-                                    <!--android:layout_centerVertical="true"-->
-                                    <!--android:text="Special"-->
-                                    <!--android:textStyle="bold"-->
-                                    <!--android:textColor="@color/schedule_title_bg_color"-->
-                                    <!--android:textSize="16sp" />-->
-
-                                <!--<TextView-->
-                                    <!--android:layout_width="wrap_content"-->
-                                    <!--android:layout_height="wrap_content"-->
-                                    <!--android:layout_centerVertical="true"-->
-                                    <!--android:text="You have 10 upcoming"-->
-                                    <!--android:textColor="@color/schedule_title_bg_color"-->
-                                    <!--android:textSize="11sp" />-->
-
-                            <!--</LinearLayout>-->
-
-                            <!--<LinearLayout-->
-                                <!--android:id="@+id/layout_special_right"-->
-                                <!--android:layout_width="wrap_content"-->
-                                <!--android:layout_height="wrap_content"-->
-                                <!--android:layout_alignParentRight="true"-->
-                                <!--android:layout_centerVertical="true"-->
-                                <!--android:layout_marginRight="10dp"-->
-                                <!--android:orientation="horizontal">-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="15dp"
+                        android:layout_toRightOf="@+id/ring_goal"
+                        android:orientation="vertical"
+                        android:gravity="center_vertical">
 
 
-                                <!--<ImageView-->
-                                    <!--android:id="@+id/special_arrow"-->
-                                    <!--android:layout_width="20dp"-->
-                                    <!--android:layout_height="20dp"-->
-                                    <!--android:src="@mipmap/right_arrow" />-->
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
 
-                            <!--</LinearLayout>-->
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:text="Goals"
+                                    android:textStyle="bold"
+                                    android:textColor="@color/schedule_title_bg_color"
+                                    android:textSize="16sp" />
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:text="You have 10 upcoming"
+                                    android:textColor="@color/schedule_title_bg_color"
+                                    android:textSize="11sp" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginRight="10dp"
+                                android:orientation="horizontal">
+
+
+                                <ImageView
+                                    android:layout_width="15dp"
+                                    android:layout_height="15dp"
+                                    android:src="@drawable/ic_arrow_gray" />
+
+                            </LinearLayout>
 
 
 
-                        <!--</RelativeLayout>-->
+                        </RelativeLayout>
 
-                        <!--<View-->
-                            <!--android:layout_width="match_parent"-->
-                            <!--android:layout_height="0.1dp"-->
-                            <!--android:layout_marginTop="5dp"-->
-                            <!--android:background="@android:color/darker_gray" />-->
-                    <!--</LinearLayout>-->
+                    </LinearLayout>
 
-                <!--</RelativeLayout>-->
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.1dp"
+                        android:background="@android:color/darker_gray"
+                        android:layout_marginLeft="50dp"
+                        android:layout_alignParentBottom="true" />
+
+                </RelativeLayout>
 
                 <RelativeLayout
-                    android:id="@+id/important_info"
+                    android:id="@+id/line"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="5dp"
-                    android:paddingTop="5dp">
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
 
                     <ImageView
                         android:id="@+id/ring_important_info"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@mipmap/ring_green" />
+                        android:src="@mipmap/ring_purple"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="15dp"
                         android:layout_toRightOf="@+id/ring_important_info"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:gravity="center_vertical">
 
 
                         <RelativeLayout
@@ -481,18 +554,10 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerVertical="true"
-                                    android:text="Important Info"
+                                    android:text="Lines"
                                     android:textStyle="bold"
                                     android:textColor="@color/schedule_title_bg_color"
                                     android:textSize="16sp" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_centerVertical="true"
-                                    android:text="Fax, phone, email, office address"
-                                    android:textColor="@color/schedule_title_bg_color"
-                                    android:textSize="11sp" />
 
                             </LinearLayout>
 
@@ -508,42 +573,47 @@
 
                                 <ImageView
                                     android:id="@+id/important_info_arrow"
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
-                                    android:src="@mipmap/right_arrow" />
+                                    android:layout_width="15dp"
+                                    android:layout_height="15dp"
+                                    android:src="@drawable/ic_arrow_gray" />
 
                             </LinearLayout>
 
                         </RelativeLayout>
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.1dp"
-                            android:layout_marginTop="5dp"
-                            android:background="@android:color/darker_gray" />
                     </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.1dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@android:color/darker_gray"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="50dp" />
 
                 </RelativeLayout>
 
                 <RelativeLayout
-                    android:id="@+id/lines_territory"
+                    android:id="@+id/territory"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="8dp"
-                    android:paddingTop="5dp">
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
 
                     <ImageView
                         android:id="@+id/ring_lines_territory"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@mipmap/ring_purple" />
+                        android:src="@mipmap/ring_blue"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="15dp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="15dp"
                         android:layout_toRightOf="@+id/ring_lines_territory"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:gravity="center_vertical">
 
 
                         <RelativeLayout
@@ -560,7 +630,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_centerVertical="true"
-                                    android:text="Lines/Territory"
+                                    android:text="Carrolton Territory"
                                     android:textStyle="bold"
                                     android:textColor="@color/schedule_title_bg_color"
                                     android:textSize="16sp" />
@@ -581,16 +651,10 @@
                                     android:id="@+id/lines_territory_number"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="50"
+                                    android:text="Edit"
                                     android:layout_gravity="center_vertical"
                                     android:textSize="12sp"
-                                    android:textColor="@color/schedule_title_bg_color"/>
-
-                                <ImageView
-                                    android:id="@+id/lines_territory_arrow"
-                                    android:layout_width="20dp"
-                                    android:layout_height="20dp"
-                                    android:src="@drawable/right_arrow" />
+                                    android:textColor="@color/blue"/>
 
                             </LinearLayout>
 
@@ -601,25 +665,24 @@
                     </LinearLayout>
 
                 </RelativeLayout>
-
             </LinearLayout>
 
             <TextView
-                android:id="@+id/btn_delete"
-                android:layout_width="wrap_content"
+                android:id="@+id/txt_delete"
+                android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/btn_curve_red_stroke"
-                android:gravity="center_vertical"
-                android:paddingLeft="50dp"
-                android:paddingRight="50dp"
+                android:gravity="center_vertical|center_horizontal"
                 android:text="DELETE CLIENT"
                 android:textColor="@color/red_color"
                 android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_alignParentBottom="true" />
 
-        </LinearLayout>
-    </ScrollView>
+        </RelativeLayout>
+
+    </LinearLayout>
 
 </LinearLayout>

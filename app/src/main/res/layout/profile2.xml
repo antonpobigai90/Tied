@@ -60,7 +60,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="COMPLETED"
-                        android:textColor="@color/white"
+                        android:textColor="@color/gray"
                         android:textSize="15sp"
                         android:layout_gravity="center_horizontal" />
 
@@ -110,7 +110,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="OVERDUE"
-                        android:textColor="@color/white"
+                        android:textColor="@color/gray"
                         android:textSize="15sp"
                         android:layout_gravity="center_horizontal" />
 

@@ -1,56 +1,79 @@
 package com.tied.android.tiedapp.ui.fragments.profile;
 
-/**
- * Created by Emmanuel on 6/17/2016.
- */
-
-import android.content.Context;
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.soundcloud.android.crop.Crop;
+import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
-import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.ui.activities.ProfileActivity;
-import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.retrofits.services.SignUpApi;
+import com.tied.android.tiedapp.ui.activities.profile.ChangePasswordActivity;
+import com.tied.android.tiedapp.ui.activities.profile.EditProfileActivity;
+import com.tied.android.tiedapp.ui.activities.profile.NotificationProfileActivity;
+import com.tied.android.tiedapp.ui.activities.profile.PrivacyActivity;
+import com.tied.android.tiedapp.ui.listeners.ImageReadyForUploadListener;
 import com.tied.android.tiedapp.util.DemoData;
+import com.tied.android.tiedapp.util.MyUtils;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 import me.relex.circleindicator.CircleIndicator;
+import retrofit2.Retrofit;
 
 /**
- * A placeholder fragment containing a simple view.
+ * Created by Daniel on 5/3/2016.
  */
 public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     public static final String TAG = ProfileFragment.class
             .getSimpleName();
 
-    public ImageView avatar;
-    private LinearLayout back_layout;
+    public ImageView img_user_picture, add, drawerUserPicture;
+    private ImageReadyForUploadListener imageReadyForUploadListener;
 
+    private Fragment fragment = null;
+    private int fragment_index = 0;
+    public Fragment profileFragment = null;
+    public Bitmap bitmap;
 
-    private RelativeLayout rlIndustries;
+    public Uri imageUri = null, outputUri = null;
+    Map<Integer, Fragment> fragments = new HashMap<Integer, Fragment>();
 
-    public FragmentIterationListener mListener;
+    User user;
+    public Bundle bundle;
 
-    private AppCompatTextView atvPersonalInfo, atvNotifications, atvChangePassword, atvIndustries, atvPrivacy, atvHelp, atvLogout;
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
+    // Code for our image picker select action.
+    public final int IMAGE_PICKER_SELECT = 999;
+
+    // Activity result key for camera
+    public final int REQUEST_TAKE_PHOTO = 11111;
+
+    public Retrofit retrofit;
+    public SignUpApi service;
+
     private ViewPager vpProfile;
     private PagerAdapter mPagerAdapter;
     private CircleIndicator circleIndicator;
-    private Bundle bundle;
+
+    private RelativeLayout atvPersonalInfo, atvNotifications, atvChangePassword, atvPrivacy, atvHelp, atvLogout;
 
     public static Fragment newInstance(Bundle bundle) {
         Fragment fragment = new ProfileFragment();
@@ -68,74 +91,52 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     }
 
     public void initComponent(View view) {
-        // Set up the ViewPager with the sections adapter.
-
-        vpProfile = (ViewPager) view.findViewById(R.id.vpProfile);
-        circleIndicator = (CircleIndicator) view.findViewById(R.id.circleIndicator);
-        vpProfile.setAdapter(mPagerAdapter);
-        circleIndicator.setViewPager(vpProfile);
-
-        atvNotifications = (AppCompatTextView) view.findViewById(R.id.atvNotifications);
-        atvNotifications.setOnClickListener(this);
-        atvPersonalInfo = (AppCompatTextView) view.findViewById(R.id.atvPersonalInfo);
-        atvPersonalInfo.setOnClickListener(this);
-
-        atvChangePassword = (AppCompatTextView) view.findViewById(R.id.atvChangePassword);
-        atvChangePassword.setOnClickListener(this);
-
-        atvIndustries = (AppCompatTextView) view.findViewById(R.id.atvIndustries);
-        atvIndustries.setOnClickListener(this);
-
-        atvPrivacy = (AppCompatTextView) view.findViewById(R.id.atvPrivacy);
-        atvPrivacy.setOnClickListener(this);
-
-        back_layout = (LinearLayout) view.findViewById(R.id.back_layout);
-        back_layout.setOnClickListener(this);
-
 
         bundle = getArguments();
 
-        Log.d(TAG, "am her 1");
-    }
+        vpProfile = (ViewPager) view.findViewById(R.id.vpProfile);
+        circleIndicator = (CircleIndicator) view.findViewById(R.id.circleIndicator);
+        mPagerAdapter = new PagerAdapter(getFragmentManager());
+        vpProfile.setAdapter(mPagerAdapter);
+        circleIndicator.setViewPager(vpProfile);
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        Log.d(TAG, "am her 2");
-        if (mPagerAdapter == null) {
-            mPagerAdapter = new PagerAdapter(getFragmentManager());
-        }
-        if (context instanceof FragmentIterationListener) {
-            mListener = (FragmentIterationListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
+        atvNotifications = (RelativeLayout) view.findViewById(R.id.rlNotifications);
+        atvNotifications.setOnClickListener(this);
 
-    public void nextAction(int action, Bundle bundle) {
-        if (mListener != null) {
-            mListener.OnFragmentInteractionListener(action, bundle);
-        }
+        atvPersonalInfo = (RelativeLayout) view.findViewById(R.id.rlEditInfo);
+        atvPersonalInfo.setOnClickListener(this);
+
+        atvChangePassword = (RelativeLayout) view.findViewById(R.id.rlChangePassword);
+        atvChangePassword.setOnClickListener(this);
+
+        atvPrivacy = (RelativeLayout) view.findViewById(R.id.rlPrivacy);
+        atvPrivacy.setOnClickListener(this);
+
+        atvHelp = (RelativeLayout) view.findViewById(R.id.rlHelp);
+        atvHelp.setOnClickListener(this);
+
+        atvLogout = (RelativeLayout) view.findViewById(R.id.rlLogout);
+        atvLogout.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.atvPersonalInfo:
-                nextAction(Constants.EditProfile, bundle);
+            case R.id.rlEditInfo:
+                MyUtils.startActivity(getActivity(), EditProfileActivity.class, bundle);
                 break;
-            case R.id.back_layout:
-                nextAction(Constants.CreateSchedule, bundle);
+            case R.id.rlNotifications:
+                MyUtils.startActivity(getActivity(), NotificationProfileActivity.class, bundle);
                 break;
-            case R.id.atvNotifications:
-                nextAction(Constants.Notification, bundle);
+            case R.id.rlChangePassword:
+                MyUtils.startActivity(getActivity(), ChangePasswordActivity.class, bundle);
                 break;
-            case R.id.atvIndustries:
-                nextAction(Constants.Industry, bundle);
+            case R.id.rlPrivacy:
+                MyUtils.startActivity(getActivity(), PrivacyActivity.class, bundle);
                 break;
-            case R.id.atvPrivacy:
-                nextAction(Constants.PRIVACY, bundle);
+            case R.id.rlHelp:
+                break;
+            case R.id.rlLogout:
                 break;
         }
     }
@@ -153,7 +154,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             switch (position) {
                 case 0:
                     fragment = new AvatarProfileFragment();
-                    ((ProfileActivity) getActivity()).profileFragment = fragment;
                     break;
                 case 1:
                     fragment = new GoalProfileFragment();
@@ -172,4 +172,5 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             return DemoData.profile_layout.length;
         }
     }
+
 }

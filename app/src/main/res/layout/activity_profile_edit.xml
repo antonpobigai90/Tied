@@ -2,15 +2,73 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@drawable/background">
+
+    <RelativeLayout
+        android:id="@+id/top_layout"
+        android:layout_width="match_parent"
+        android:layout_height="54dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="PROFILE EDIT"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:id="@+id/textView5"
+            android:layout_centerInParent="true"
+            style="@style/EditTextStyle" />
+
+        <LinearLayout
+            android:onClick="onClick"
+            android:id="@+id/back_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/img_close"
+                android:layout_width="@dimen/action_bar_icon_height"
+                android:layout_height="@dimen/action_bar_icon_height"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/btn_back_arrow"
+                android:padding="@dimen/action_bar_icon_padding"
+                android:nestedScrollingEnabled="false" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/action_bar_icon_height"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/action_bar_icon_padding"
+                android:text="Save"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:id="@+id/txt_save" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/btnSaveChange"
-        android:orientation="vertical">
-
-        <include layout="@layout/row_header_layout"></include>
+        android:orientation="vertical"
+        android:layout_below="@+id/top_layout"
+        android:background="@color/white">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -41,9 +99,8 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingLeft="4dp"
                             android:text="First Name"
-                            android:textColor="@color/schedule_title_bg_color"
+                            android:textColor="@color/gray"
                             android:textSize="12sp" />
 
                         <EditText
@@ -52,10 +109,10 @@
                             android:layout_height="wrap_content"
                             android:backgroundTint="@android:color/transparent"
                             android:inputType="text"
-                            android:text=""
                             android:textColor="@color/schedule_title_bg_color"
                             android:textSize="14sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:layout_marginTop="7dp" />
 
                     </LinearLayout>
 
@@ -68,9 +125,8 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:paddingLeft="4dp"
                             android:text="Last Name"
-                            android:textColor="@color/schedule_title_bg_color"
+                            android:textColor="@color/gray"
                             android:textSize="12sp" />
 
                         <EditText
@@ -81,7 +137,8 @@
                             android:text=""
                             android:textColor="@color/schedule_title_bg_color"
                             android:textSize="14sp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:layout_marginTop="7dp" />
 
                     </LinearLayout>
 
@@ -91,7 +148,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
-                    android:background="@android:color/darker_gray" />
+                    android:background="@color/gray_light" />
 
                 <LinearLayout
                     android:layout_width="fill_parent"
@@ -105,9 +162,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="4dp"
                         android:text="Email"
-                        android:textColor="@color/schedule_title_bg_color"
+                        android:textColor="@color/gray"
                         android:textSize="12sp" />
 
                     <EditText
@@ -119,13 +175,15 @@
                         android:text=""
                         android:textColor="@color/schedule_title_bg_color"
                         android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:layout_marginTop="7dp"
+                        android:inputType="textEmailAddress" />
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
-                    android:background="@android:color/darker_gray" />
+                    android:background="@color/gray_light" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -139,9 +197,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="4dp"
                         android:text="@string/phone_number"
-                        android:textColor="@color/schedule_title_bg_color"
+                        android:textColor="@color/gray"
                         android:textSize="12sp" />
 
                     <EditText
@@ -152,13 +209,14 @@
                         android:inputType="number"
                         android:textColor="@color/schedule_title_bg_color"
                         android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:layout_marginTop="7dp" />
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
-                    android:background="@android:color/darker_gray" />
+                    android:background="@color/gray_light" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -172,9 +230,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="4dp"
                         android:text="Fax Number"
-                        android:textColor="@color/schedule_title_bg_color"
+                        android:textColor="@color/gray"
                         android:textSize="12sp" />
 
                     <EditText
@@ -185,13 +242,15 @@
                         android:text=""
                         android:textColor="@color/schedule_title_bg_color"
                         android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:inputType="number"
+                        android:layout_marginTop="7dp" />
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
-                    android:background="@android:color/darker_gray" />
+                    android:background="@color/gray_light" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -205,9 +264,8 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="4dp"
                         android:text="Company Legal Name"
-                        android:textColor="@color/schedule_title_bg_color"
+                        android:textColor="@color/gray"
                         android:textSize="12sp" />
 
                     <EditText
@@ -218,13 +276,14 @@
                         android:text=""
                         android:textColor="@color/schedule_title_bg_color"
                         android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:layout_marginTop="7dp" />
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
-                    android:background="@android:color/darker_gray" />
+                    android:background="@color/gray_light" />
 
                 <LinearLayout
                     android:id="@+id/home_address"
@@ -238,15 +297,13 @@
 
                     <RelativeLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingBottom="10dp"
-                        android:paddingLeft="4dp">
+                        android:layout_height="wrap_content">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Home Address"
-                            android:textColor="@color/schedule_title_bg_color"
+                            android:textColor="@color/gray"
                             android:textSize="12sp" />
 
                         <TextView
@@ -265,17 +322,17 @@
                         android:id="@+id/home_address_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="4dp"
                         android:text=""
                         android:textColor="@color/schedule_title_bg_color"
                         android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:layout_marginTop="7dp" />
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
-                    android:background="@android:color/darker_gray" />
+                    android:background="@color/gray_light" />
 
                 <LinearLayout
                     android:id="@+id/office_address"
@@ -291,10 +348,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:paddingBottom="10dp"
-                        android:paddingLeft="4dp"
                         android:text="Office Address"
-                        android:textColor="@color/schedule_title_bg_color"
+                        android:textColor="@color/gray"
                         android:textSize="12sp" />
 
                     <TextView
@@ -302,29 +357,21 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:paddingLeft="4dp"
                         android:text=""
                         android:textColor="@color/schedule_title_bg_color"
                         android:textSize="14sp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        android:layout_marginTop="7dp" />
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.1dp"
-                    android:background="@android:color/darker_gray" />
+                    android:background="@color/gray_light" />
 
             </LinearLayout>
         </ScrollView>
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btnSaveChange"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@color/blue"
-        android:text="@string/save_changes"
-        android:textColor="@color/white" />
 </RelativeLayout>
