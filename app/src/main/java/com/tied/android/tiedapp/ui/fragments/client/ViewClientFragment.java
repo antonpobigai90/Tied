@@ -70,7 +70,7 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
     }
 
     private void initComponent(View view) {
-        btn_delete = (TextView) view.findViewById(R.id.btn_delete);
+        btn_delete = (TextView) view.findViewById(R.id.txt_delete);
         icon_plus = (LinearLayout) view.findViewById(R.id.icon_plus);
         icon_call = (LinearLayout) view.findViewById(R.id.icon_call);
         client_name = (TextView) view.findViewById(R.id.client_name);
@@ -127,7 +127,7 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
     public void onClick(View v) {
         int color = this.getResources().getColor(R.color.schedule_title_bg_color);
         switch (v.getId()){
-            case R.id.btn_delete:
+            case R.id.txt_delete:
                 color = this.getResources().getColor(R.color.alert_bg_color);
                 DialogYesNo alert_delete = new DialogYesNo(getActivity(),"DELETE CLIENT","Are you sure want to delete this client","YES DELETE!",color,0);
                 alert_delete.showDialog();
@@ -144,10 +144,10 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
             case R.id.img_edit:
 
                 break;
-            case R.id.important_info:
+            case R.id.goal:
                 MyUtils.startActivity(getActivity(), ClientInfo.class, bundle);
                 break;
-            case R.id.lines_territory:
+            case R.id.territory:
                 MyUtils.startActivity(getActivity(), LinesAndTerritories.class, bundle);
                 break;
         }

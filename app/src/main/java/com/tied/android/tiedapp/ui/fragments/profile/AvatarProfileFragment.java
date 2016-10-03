@@ -1,8 +1,11 @@
 package com.tied.android.tiedapp.ui.fragments.profile;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -16,21 +19,23 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.soundcloud.android.crop.Crop;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ProfileApi;
-import com.tied.android.tiedapp.ui.activities.ProfileActivity;
 import com.tied.android.tiedapp.ui.activities.SelectPicture;
 import com.tied.android.tiedapp.ui.listeners.ImageReadyForUploadListener;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -42,10 +47,13 @@ import retrofit2.Response;
  * Created by Emmanuel on 6/22/2016.
  */
 public class AvatarProfileFragment extends Fragment implements View.OnClickListener, ImageReadyForUploadListener{
-    public static final String TAG = ProfileFragment.class
+    public static final String TAG = ProfileFragment1.class
             .getSimpleName();
 
     public ImageView avatar;
+    public static Uri imageUri = null, outputUri = null;
+    private ImageReadyForUploadListener imageReadyForUploadListener;
+    public Bitmap bitmap;
 
     // Code for our image picker select action.
     public final int IMAGE_PICKER_SELECT = 999;
@@ -80,9 +88,8 @@ public class AvatarProfileFragment extends Fragment implements View.OnClickListe
     @Override
     public void onResume() {
         super.onResume();
-        Uri myUri = ((ProfileActivity) getActivity()).outputUri;
-        if(myUri != null){
-            avatar.setImageURI(myUri);
+        if(outputUri != null){
+            avatar.setImageURI(outputUri);
         }
     }
 
@@ -90,49 +97,37 @@ public class AvatarProfileFragment extends Fragment implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.avatar:
-                //showChooser();
                 startActivity(new Intent(getActivity(), SelectPicture.class));
                 break;
         }
     }
 
-    public void showChooser() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Choose Image Source");
-        builder.setItems(new CharSequence[]{"Take a pics", "Browse Gallery"},
-                new DialogInterface.OnClickListener() {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Crop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
+            handleCrop(outputUri);
+        } else if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
+            outputUri = Uri.fromFile(new File(getActivity().getFilesDir(), "cropped.jpg"));
+            Uri selectedImage = imageUri;
+            Crop.of(selectedImage, outputUri).asSquare().start(getActivity());
+        } else if (requestCode == IMAGE_PICKER_SELECT && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
+            Uri selectedImage = data.getData();
+            outputUri = Uri.fromFile(new File(getActivity().getFilesDir(), "cropped.jpg"));
+            Crop.of(selectedImage, outputUri).asSquare().start(getActivity());
+        }
+    }
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch (which) {
-                            case 0:
-                                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                                File photo = new File(Environment.getExternalStorageDirectory(), "Pic.jpg");
-                                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
-                                ((ProfileActivity) getActivity()).imageUri = Uri.fromFile(photo);
-                                getActivity().startActivityForResult(intent, REQUEST_TAKE_PHOTO);
-                                break;
-
-                            case 1:
-                                Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                                getIntent.setType("image/*");
-
-                                Intent pickIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                                pickIntent.setType("image/*");
-
-                                Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
-                                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
-
-                                getActivity().startActivityForResult(chooserIntent, IMAGE_PICKER_SELECT);
-
-                                break;
-
-                            default:
-                                break;
-                        }
-                    }
-                });
-        builder.show();
+    private void handleCrop(Uri outputUri) {
+        imageReadyForUploadListener = this;
+        bundle.putString(Constants.AVATAR_STATE_SAVED, outputUri.toString());
+        avatar.setImageBitmap(null);
+        try {
+            bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), outputUri);
+            avatar.setImageBitmap(bitmap);
+            imageReadyForUploadListener.imageReadyUri(outputUri);
+        } catch (IOException e) {
+            MyUtils.showToast("An error occurred. Please try again.");
+        }
     }
 
     @Override
@@ -201,4 +196,5 @@ public class AvatarProfileFragment extends Fragment implements View.OnClickListe
             }
         });
     }
+
 }

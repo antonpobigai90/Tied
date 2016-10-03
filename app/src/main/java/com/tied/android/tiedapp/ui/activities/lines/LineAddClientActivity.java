@@ -156,7 +156,7 @@ public class LineAddClientActivity extends AppCompatActivity implements  View.On
                     ArrayList<Client> clients = clientRes.getClients();
                     Log.d(TAG + "", clients.toString());
                     clientsWithDistance = clients;
-                    adapter = new MyClientLineAdapter(clientsWithDistance,  LineAddClientActivity.this);
+                    adapter = new MyClientLineAdapter(clientsWithDistance,  LineAddClientActivity.this, false);
                     line_listview.setAdapter(adapter);
                     line_listview.setFastScrollEnabled(true);
                 }else{

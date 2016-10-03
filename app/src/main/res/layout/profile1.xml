@@ -22,7 +22,7 @@
                 android:layout_height="80dp"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
-                android:src="@drawable/avatar_profile" />
+                android:src="@drawable/avatar" />
 
             <TextView
                 android:id="@+id/name"
@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/avatar"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="15dp"
                 android:text="Emily Thomas"
                 android:textColor="@color/white"
                 android:textSize="18sp"
@@ -45,8 +45,10 @@
                 android:layout_marginTop="10dp"
                 android:gravity="center_horizontal"
                 android:text="Good job you have completed 6% more tasks this month"
-                android:textColor="@color/white"
-                android:textSize="13sp" />
+                android:textColor="@color/gray_light"
+                android:textSize="13sp"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp" />
 
         </RelativeLayout>
 

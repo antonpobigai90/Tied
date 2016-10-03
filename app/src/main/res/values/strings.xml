@@ -214,14 +214,10 @@
     <string name="back">Back</string>
     <!--row_header_layout ends here-->
 
-    <!--fragment_profile_edit starts here-->
     <string name="phone_number">Phone Number</string>
     <string name="change">CHANGE</string>
-    <!--fragment_profile_edit ends here-->
 
-    <!--fragment_change_password starts here-->
     <string name="address">Address</string>
-    <!--fragment_change_password ends here-->
 
     <!--fragment_privacy starts here-->
     <string name="sales">Sales</string>

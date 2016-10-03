@@ -30,17 +30,18 @@ import com.tied.android.tiedapp.services.LocationService;
 import com.tied.android.tiedapp.ui.activities.client.ClientMapAndListActivity;
 import com.tied.android.tiedapp.ui.activities.coworker.CoWorkerActivity;
 import com.tied.android.tiedapp.ui.activities.goal.LineGoalActivity;
+
 import com.tied.android.tiedapp.ui.activities.sales.ActivityGroupedSales;
+import com.tied.android.tiedapp.ui.dialogs.DialogNewClient;
 import com.tied.android.tiedapp.ui.fragments.DailyStatsFragment;
 import com.tied.android.tiedapp.ui.fragments.LinesFragment;
 import com.tied.android.tiedapp.ui.fragments.activities.ActivityFragment;
 import com.tied.android.tiedapp.ui.fragments.client.ClientAddFragment;
 import com.tied.android.tiedapp.ui.fragments.client.MapFragment;
-import com.tied.android.tiedapp.ui.fragments.profile.AddressFragment;
+import com.tied.android.tiedapp.ui.activities.profile.AddressActivity;
 import com.tied.android.tiedapp.ui.fragments.profile.AvatarProfileFragment;
-import com.tied.android.tiedapp.ui.fragments.profile.EditProfileFragment;
-import com.tied.android.tiedapp.ui.fragments.profile.NotificationProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.ProfileFragment;
+import com.tied.android.tiedapp.ui.fragments.profile.ProfileFragment1;
 import com.tied.android.tiedapp.ui.fragments.sales.*;
 import com.tied.android.tiedapp.ui.fragments.schedule.CreateScheduleFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleAppointmentsFragment;
@@ -255,8 +256,9 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                     fragments.put(pos, ProfileFragment.newInstance(bundle) );
                 }
                 fragment = fragments.get(pos);
+               // tab_bar.setVisibility(View.VISIBLE);
                 break;
-            case Constants.EditProfile:
+          /*  case Constants.EditProfile:
                 //relativeLayout.setVisibility(View.GONE);
                 more_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
                 if(fragments.get(pos)==null) {
@@ -271,13 +273,14 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                     fragments.put(pos,  AddressFragment.newInstance(bundle) );
                 }
                 fragment = fragments.get(pos);
-                break;
+
+                break;*/
             case Constants.Notification:
-                more_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
-                if(fragments.get(pos)==null) {
-                    fragments.put(pos, NotificationProfileFragment.newInstance(bundle) );
-                }
-                fragment = fragments.get(pos);
+//                more_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
+//                if(fragments.get(pos)==null) {
+//                    fragments.put(pos, NotificationProfileFragment.newInstance(bundle) );
+//                }
+//                fragment = fragments.get(pos);
                 break;
 
             case Constants.HomeSale:
@@ -424,8 +427,9 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         switch (v.getId()) {
             case R.id.add:
                 //launchFragment(Constants.AddScheduleActivity, bundle);
-                MyUtils.startActivity(this, AddOptionsActivity.class);
-
+//                MyUtils.startActivity(this, AddOptionsActivity.class);
+                DialogNewClient alert = new DialogNewClient();
+                alert.showDialog(this, bundle);
                 break;
            /* case R.id.txt_activities:
                 if(currentFragmentID==Constants.ActivityFragment) return;
@@ -446,13 +450,13 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 launchFragment(Constants.ActivityFragment, bundle);
                 break;
             case Constants.Profile:
-                fragment = new ProfileFragment();
+                fragment = new ProfileFragment1();
                 break;
             case Constants.EditProfile:
-                fragment = new EditProfileFragment();
+//                fragment = new EditProfileFragment();
                 break;
             case Constants.ProfileAddress:
-                fragment = new AddressFragment();
+//                fragment = new AddressActivity();
                 break;
             //case R.id.lines_menu:
                // MyUtils.startActivity(MainActivity.this, LinesAndTerritories.class,bundle);
@@ -477,7 +481,10 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
 
 
             case R.id.img_user_picture : case R.id.user_picture_iv:
-                MyUtils.startActivity(MainActivity.this, ProfileActivity.class, bundle);
+                if(currentFragmentID==Constants.ProfileFragment) return;
+                launchFragment(Constants.ProfileFragment, bundle);
+
+//                MyUtils.startActivity(MainActivity.this, ProfileFragment.class, bundle);
                 break;
 
             case R.id.invite_menu:

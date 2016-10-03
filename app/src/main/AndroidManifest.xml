@@ -158,13 +158,6 @@
                 android:theme="@style/AppTheme.NoActionBar"
                 android:windowSoftInputMode="adjustResize" />
         <activity
-                android:name=".ui.activities.ProfileActivity"
-                android:label="@string/app_name"
-                android:parentActivityName=".ui.activities.MainActivity"
-                android:screenOrientation="portrait"
-                android:theme="@style/AppTheme.FullScreen"
-                android:windowSoftInputMode="adjustResize" />
-        <activity
                 android:name=".ui.activities.schedule.ViewSchedule"
                 android:label="@string/app_name"
                 android:screenOrientation="portrait"
@@ -326,6 +319,43 @@
                   android:screenOrientation="portrait"
                   android:theme="@style/AppTheme.NoActionBar"/>
 
+        <activity android:name=".ui.activities.profile.ChangePasswordActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".ui.activities.profile.AddressActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".ui.activities.profile.EditProfileActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".ui.activities.profile.NotificationProfileActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.profile.PrivacyActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.profile.SalePrivacyActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.profile.IndustryActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".ui.activities.client.NewClientActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.client.TotalSalesActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.client.SpecialActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.client.ScheduleActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <service android:name="com.mapbox.mapboxsdk.telemetry.TelemetryService" />
 

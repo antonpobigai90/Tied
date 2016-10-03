@@ -1,13 +1,9 @@
-package com.tied.android.tiedapp.ui.fragments.profile;
+package com.tied.android.tiedapp.ui.activities.profile;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -16,62 +12,56 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
-import com.tied.android.tiedapp.ui.activities.ProfileActivity;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
-import com.tied.android.tiedapp.ui.dialogs.PasswordDialog;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.util.MyUtils;
 
-import org.apache.commons.lang.StringUtils;
+import org.w3c.dom.Text;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
 
 /**
  * Created by Emmanuel on 6/22/2016.
  */
-public class EditProfileFragment extends Fragment implements View.OnClickListener {
-
-    public static final String TAG = EditProfileFragment.class
-            .getSimpleName();
+public class EditProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText first_name, last_name, email, fax, company_name;
     private String firstNameText, lastNameText, emailText, faxText, companyNameText, homeAddressText, officeAddressText;
 
-    private ImageView add_industry;
+    private ImageView img_close;
     private Bundle bundle;
     private User user;
 
-    private TextView office_address_text, home_address_text;
+    private TextView office_address_text, home_address_text, txt_save;
 
     private LinearLayout home_address, office_address;
     public FragmentIterationListener mListener;
 
-    private Button btnSaveChange, btnBack;
     private TextView tvTitle,tvChange;
+    Context context;
 
-    public static Fragment newInstance(Bundle bundle) {
-        Fragment fragment = new EditProfileFragment();
-        fragment.setArguments(bundle);
-        return fragment;
-    }
+    public Retrofit retrofit;
+    public SignUpApi service;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_profile_edit, container, false);
-        return view;
-    }
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_profile_edit);
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        context = this;
+        retrofit = MainApplication.getInstance().getRetrofit();
+        service = retrofit.create(SignUpApi.class);
 
-        initComponent(view);
+        initComponent();
     }
 
     @Override
@@ -92,38 +82,31 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
 
     }
 
-    public void initComponent(View view) {
+    public void initComponent() {
 
-        first_name = (EditText) view.findViewById(R.id.first_name);
-        last_name = (EditText) view.findViewById(R.id.last_name);
-        email = (EditText) view.findViewById(R.id.email);
-        fax = (EditText) view.findViewById(R.id.fax);
-        company_name = (EditText) view.findViewById(R.id.company_name);
+        img_close = (ImageView) findViewById(R.id.img_close);
+        img_close.setOnClickListener(this);
 
-        home_address = (LinearLayout) view.findViewById(R.id.home_address);
-        home_address_text = (TextView) view.findViewById(R.id.home_address_text);
+        txt_save = (TextView) findViewById(R.id.txt_save);
+        txt_save.setOnClickListener(this);
 
-        office_address = (LinearLayout) view.findViewById(R.id.office_address);
-        office_address_text = (TextView) view.findViewById(R.id.office_address_text);
 
-        //add_industry = (ImageView) view.findViewById(R.id.add_industry);
-//        add_industry.setOnClickListener(this);
-    //    office_address.setOnClickListener(this);
-      //  home_address.setOnClickListener(this);
+        first_name = (EditText) findViewById(R.id.first_name);
+        last_name = (EditText) findViewById(R.id.last_name);
+        email = (EditText) findViewById(R.id.email);
+        fax = (EditText) findViewById(R.id.fax);
+        company_name = (EditText) findViewById(R.id.company_name);
 
-        btnSaveChange = (Button) view.findViewById(R.id.btnSaveChange);
-        btnSaveChange.setOnClickListener(this);
+        home_address = (LinearLayout) findViewById(R.id.home_address);
+        home_address_text = (TextView) findViewById(R.id.home_address_text);
 
-        btnBack = (Button) view.findViewById(R.id.btnBack);
-        btnBack.setOnClickListener(this);
+        office_address = (LinearLayout) findViewById(R.id.office_address);
+        office_address_text = (TextView) findViewById(R.id.office_address_text);
 
-        tvTitle = (TextView) view.findViewById(R.id.tvTitle);
-        tvTitle.setText(getResources().getString(R.string.profile_edit));
-
-        tvChange=(TextView)view.findViewById(R.id.tvChange);
+        tvChange=(TextView) findViewById(R.id.tvChange);
         tvChange.setOnClickListener(this);
 
-        bundle = getArguments();
+        bundle = getIntent().getExtras();
         if (bundle != null) {
             Gson gson = new Gson();
             String user_json = bundle.getString(Constants.USER_DATA);
@@ -150,65 +133,46 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         }
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof FragmentIterationListener) {
-            mListener = (FragmentIterationListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    public void nextAction(int action, Bundle bundle) {
-        if (mListener != null) {
-            mListener.OnFragmentInteractionListener(action, bundle);
-        }
-    }
-
     private void confirmEdit() {
         if (validate()) {
-            DialogUtils.displayProgress(getActivity());
+            DialogUtils.displayProgress(this);
 
             user.setFirst_name(firstNameText);
             user.setLast_name(lastNameText);
             user.setFax(faxText);
             user.setCo_workers(companyNameText);
 
-            SignUpApi signUpApi = ((ProfileActivity) getActivity()).service;
-            Call<ServerRes> response = signUpApi.updateUser(user);
+            Call<ServerRes> response = service.updateUser(user);
             response.enqueue(new Callback<ServerRes>() {
                 @Override
                 public void onResponse(Call<ServerRes> call, Response<ServerRes> ServerResponseResponse) {
-                    if (getActivity() == null) return;
                     ServerRes ServerRes = ServerResponseResponse.body();
-                    Log.d(TAG + " onFailure", ServerResponseResponse.body().toString());
+
                     if (ServerRes.isAuthFailed()) {
                         DialogUtils.closeProgress();
-                        User.LogOut(getActivity());
+                        User.LogOut(context);
                     } else if (ServerRes.isSuccess()) {
-                        boolean saved = user.save(getActivity().getApplicationContext());
+                        boolean saved = user.save(context.getApplicationContext());
                         if (saved) {
                             Gson gson = new Gson();
                             String json = gson.toJson(user);
                             bundle.putString(Constants.USER_DATA, json);
                             DialogUtils.closeProgress();
-                            Toast.makeText(getActivity(), ServerRes.getMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, ServerRes.getMessage(), Toast.LENGTH_LONG).show();
                         } else {
                             DialogUtils.closeProgress();
-                            Toast.makeText(getActivity(), "user info  was not updated", Toast.LENGTH_LONG).show();
+                            Toast.makeText(context, "user info  was not updated", Toast.LENGTH_LONG).show();
                         }
                     } else {
-                        Toast.makeText(getActivity(), ServerRes.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, ServerRes.getMessage(), Toast.LENGTH_LONG).show();
                     }
                     DialogUtils.closeProgress();
                 }
 
                 @Override
                 public void onFailure(Call<ServerRes> ServerResponseCall, Throwable t) {
-                    Toast.makeText(getActivity(), "On failure : error encountered", Toast.LENGTH_LONG).show();
-                    Log.d(TAG + " onFailure", t.toString());
+                    Toast.makeText(context, "On failure : error encountered", Toast.LENGTH_LONG).show();
+
                     DialogUtils.closeProgress();
                 }
             });
@@ -228,23 +192,16 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btnSaveChange:
+            case R.id.txt_save:
                 confirmEdit();
                 break;
-            case R.id.btnBack:
-                nextAction(Constants.Profile, bundle);
+            case R.id.img_close:
+                finish();
                 break;
             case R.id.tvChange:
-                nextAction(Constants.ProfileAddress, bundle);
+
+                MyUtils.startActivity(this, AddressActivity.class);
                 break;
-/*            case R.id.change:
-                PasswordDialog alert = new PasswordDialog();
-                alert.showDialog(getActivity(), user);
-                break;*/
-            /*case R.id.add_industry:
-                bundle.putBoolean(Constants.EditingProfile, true);
-                nextAction(Constants.Industry, bundle);
-                break;*/
         }
     }
 }

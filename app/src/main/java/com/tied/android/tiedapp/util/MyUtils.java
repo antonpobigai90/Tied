@@ -48,6 +48,7 @@ import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.GeneralSelectObjectActivity;
 import com.tied.android.tiedapp.ui.activities.SelectLineActivity;
+import com.tied.android.tiedapp.ui.activities.client.NewClientActivity;
 import com.tied.android.tiedapp.ui.activities.lines.LineRevenueActivity;
 import com.tied.android.tiedapp.ui.activities.lines.ViewNewLineActivity;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityAddSales;
@@ -1181,19 +1182,19 @@ public abstract class MyUtils {
             }
         };
 
-        ImageView img_close = (ImageView) dialog.findViewById(R.id.img_close);
-        img_close.setOnClickListener(cancelClicked);
+        TextView txt_cancel = (TextView) dialog.findViewById(R.id.txt_cancel);
+        txt_cancel.setOnClickListener(cancelClicked);
 
         View.OnClickListener okayButClicked=new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 dialog.dismiss();
-                MyUtils.startActivity(context, ViewNewLineActivity.class);
+                MyUtils.startActivity(context, NewClientActivity.class);
             }
         };
 
-        TextView txt_create = (TextView) dialog.findViewById(R.id.txt_create);
+        TextView txt_create = (TextView) dialog.findViewById(R.id.txt_add);
         // if button is clicked, close the custom dialog
         txt_create.setOnClickListener(okayButClicked);
 

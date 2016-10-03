@@ -13,8 +13,7 @@
         android:background="@drawable/bg_white_rounded"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp">
+        android:layout_centerInParent="true">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -25,7 +24,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="Create New Line"
+                android:text="Add New Client"
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:textSize="15sp"
@@ -36,7 +35,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="creating a line helps you a lot. Just a text"
+                android:text="Sweet. Add a client and begin awesomeness"
                 android:id="@+id/textView23"
                 android:textColor="@color/black"
                 android:layout_below="@+id/txt_title"
@@ -44,15 +43,6 @@
                 android:layout_marginTop="10dp"
                 android:singleLine="true"
                 android:textSize="13sp" />
-
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:id="@+id/img_close"
-                android:src="@drawable/btn_close_grey"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp" />
 
         </RelativeLayout>
 
@@ -68,7 +58,7 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
             style="@style/EditTextStyle"
-            android:text="Name of Line"
+            android:text="Client Legal Name"
             android:textColor="@color/black"
             android:textSize="13sp" />
 
@@ -104,18 +94,47 @@
                 android:inputType="textMultiLine"
                 android:textSize="13sp" />
         </LinearLayout>
-    </LinearLayout>
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="60dp"
-        android:text="CREATE"
-        android:id="@+id/txt_create"
-        android:background="@color/blue"
-        android:gravity="center_vertical|center_horizontal"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        android:layout_alignParentBottom="true"
-        android:textColor="@color/white" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_marginTop="20dp"
+            android:layout_height="0.1dp"
+            android:background="@color/light_gray2"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:layout_height="54dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Cancel"
+                android:id="@+id/txt_cancel"
+                android:layout_weight="1"
+                android:textColor="@color/blue"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:gravity="center_vertical|center_horizontal" />
+
+            <View
+                android:layout_height="match_parent"
+                android:layout_width="0.1dp"
+                android:background="@color/light_gray2"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Add"
+                android:id="@+id/txt_add"
+                android:layout_weight="1"
+                android:textColor="@color/blue"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:gravity="center_vertical|center_horizontal" />
+
+        </LinearLayout>
+    </LinearLayout>
 
 </RelativeLayout>
