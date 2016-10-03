@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background">
+              android:id="@+id/main_layout">
 
     <RelativeLayout
         android:id="@+id/top_layout"
@@ -33,8 +33,7 @@
             android:textSize="20dp" />
 
         <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            style="@style/ActionBarIcon"
             android:id="@+id/img_plus"
             android:src="@drawable/plus_thin"
             android:layout_alignParentRight="true"
@@ -43,10 +42,31 @@
 
     </RelativeLayout>
 
+
+<LinearLayout android:layout_width="match_parent"
+              android:orientation="vertical"
+              android:gravity="center"
+              android:background="@android:color/white"
+              android:layout_height="match_parent">
+
+    <TextView android:layout_width="wrap_content"
+              android:gravity="center"
+              android:layout_gravity="center"
+              android:text="No lines found"
+              android:layout_margin="30dp"
+              android:background="@drawable/white_fill_grey_stroke"
+              android:padding="20dp"
+              android:textSize="15sp"
+              android:visibility="gone"
+              android:textColor="@color/light_gray"
+              android:id="@+id/no_results"
+              android:layout_height="wrap_content"/>
     <ListView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/lines_listview"
-        android:background="@color/white" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lines_listview"
+            android:background="@color/white" />
+</LinearLayout>
+
 
 </LinearLayout>

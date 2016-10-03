@@ -1,6 +1,7 @@
 package com.tied.android.tiedapp.ui.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -20,15 +21,28 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects.Location;
+import com.tied.android.tiedapp.objects._Meta;
+import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.retrofits.services.LineApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.lines.AddLinesActivity;
 import com.tied.android.tiedapp.ui.activities.lines.ViewLineActivity;
 import com.tied.android.tiedapp.ui.activities.lines.ViewNewLineActivity;
 import com.tied.android.tiedapp.ui.adapters.LinesAdapter;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.ui.listeners.ListAdapterListener;
+import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import junit.framework.Test;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Response;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -42,6 +56,7 @@ public class LinesFragment extends Fragment implements AdapterView.OnItemClickLi
     protected User user;
     protected Bundle bundle;
     protected ListView listView;
+    List<Line> lines =new ArrayList<>();
 
     protected LinesAdapter adapter;
     ImageView img_plus;
@@ -61,11 +76,7 @@ public class LinesFragment extends Fragment implements AdapterView.OnItemClickLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_lines, container, false);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getActivity().getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(getActivity().getResources().getColor(R.color.blue_status_bar));
-        }
+
 
         initComponent(view);
         return view;
@@ -74,8 +85,10 @@ public class LinesFragment extends Fragment implements AdapterView.OnItemClickLi
     public void initComponent(View view){
         bundle = getArguments();
         user = MyUtils.getUserFromBundle(bundle);
+        MyUtils.setColorTheme(getActivity(), bundle.getInt(Constants.SOURCE), view.findViewById(R.id.main_layout));
 
         img_plus = (ImageView) view.findViewById(R.id.img_plus);
+
         img_plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,16 +98,21 @@ public class LinesFragment extends Fragment implements AdapterView.OnItemClickLi
 
                     }
                 });*/
-                MyUtils.startActivity(getActivity(), AddLinesActivity.class);
+                MyUtils.startActivity(getActivity(), AddLinesActivity.class, bundle);
             }
         });
 
         listView = (ListView) view.findViewById(R.id.lines_listview);
-        listView.setOnItemClickListener(this);
+        if(!MyUtils.currentUserIs(user)) {
+            img_plus.setVisibility(View.GONE);
+        }
 
-        adapter = new LinesAdapter(MainApplication.linesList, getActivity(), bundle);
+
+        adapter = new LinesAdapter(lines, getActivity(), bundle);
         listView.setAdapter(adapter);
-        MyUtils.initLines(getActivity(), user, adapter);
+        Logger.write(user.toString());
+        initLines(getActivity(), user, adapter);
+        listView.setOnItemClickListener(this);
 
     }
 
@@ -105,10 +123,51 @@ public class LinesFragment extends Fragment implements AdapterView.OnItemClickLi
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    public void onItemClick(AdapterView<?> parent, View view, int
+            position, long id) {
         Log.d(TAG, "here---------------- listener");
-        Line line = (Line) MainApplication.linesList.get(position);
+        Line line = lines.get(position);
         bundle.putSerializable(Constants.LINE_DATA, line);
         MyUtils.startActivity(getActivity(), ViewLineActivity.class, bundle);
+    }
+    public void initLines(final Context context, User user, final ListAdapterListener listAdapterListener){
+        final LineApi lineApi =  MainApplication.createService(LineApi.class, user.getToken());
+        Call<ResponseBody> response = lineApi.getUserLines(user.getId(), 1);
+        response.enqueue(new retrofit2.Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
+                try {
+                    GeneralResponse response = new GeneralResponse(resResponse.body());
+                    Logger.write(response.toString());
+                    if (response.isAuthFailed()) {
+                        User.LogOut(context);
+                        return;
+                    }
+                    _Meta meta=response.getMeta();
+                    if(meta !=null && meta.getStatus_code() == 200) {
+
+                         lines .addAll( (ArrayList) response.getDataAsList(Constants.LINES_lIST, Line.class));
+                        Logger.write("Lines loadeddddddddddddddddddddddddddddddddddddddddddddddd "+lines.size());
+                         adapter.notifyDataSetChanged();
+                        if(lines.isEmpty()) MyUtils.showNoResults(getView());
+                    }else{
+                        MyUtils.showToast("Error encountered");
+                        DialogUtils.closeProgress();
+                    }
+
+                }catch (IOException ioe) {
+                    Logger.write(ioe);
+                }
+                catch (Exception jo) {
+                    Logger.write(jo);
+                }
+                DialogUtils.closeProgress();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d(" onFailure", t.toString());
+            }
+        });
     }
 }

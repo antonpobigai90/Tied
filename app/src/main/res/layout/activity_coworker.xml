@@ -62,8 +62,7 @@
         </LinearLayout>
 
         <ImageView
-            android:layout_width="@dimen/action_bar_icon_height"
-            android:layout_height="@dimen/action_bar_icon_height"
+           style="@style/ActionBarIcon"
             android:src="@mipmap/plus_thin"
             android:layout_alignParentTop="false"
             android:onClick="onClick"
@@ -88,6 +87,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:focusable="true"
+
             android:id="@+id/getFocus" />
 
         <EditText
@@ -167,9 +167,11 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="0dp"
+                    android:paddingTop="8dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:background="#fef9ff"
                     android:orientation="vertical">
 
                     <TextView

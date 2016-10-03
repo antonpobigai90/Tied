@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -54,7 +53,7 @@ public class GoalAddLineActivity extends AppCompatActivity implements View.OnCli
         bundle = getIntent().getExtras();
 
         top_layout = (RelativeLayout) findViewById(R.id.top_layout);
-        top_layout.setBackgroundResource(R.drawable.background);
+        top_layout.setBackgroundResource(R.drawable.background_blue);
 
         img_close = (ImageView) findViewById(R.id.img_close);
         img_close.setOnClickListener(this);

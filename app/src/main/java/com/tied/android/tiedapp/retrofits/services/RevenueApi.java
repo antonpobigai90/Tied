@@ -34,6 +34,12 @@ public interface RevenueApi {
     Call<ResponseBody> getRevenueByGroup(@Header(Constants.TOKEN_HEADER) String token,
                                          @Path("group_by") String group_by,
                                          @Body RevenueFilter filter);
+    @POST(Constants.GET_USER_REVENUES)
+    Call<ResponseBody> getUserRevenues(@Header(Constants.TOKEN_HEADER) String token,
+                                       @Path("group_by") String group_by,
+                                       @Path("object_id") String object_id,
+                                       @Path("page_number") int page_number,
+                                       @Body RevenueFilter filter);
     @GET(Constants.GET_TOP_FIVE_REVENUE)
     Call<ResponseBody> getTopLineRevenues(@Header(Constants.TOKEN_HEADER) String token, @Path("group_by") String group_by);
 

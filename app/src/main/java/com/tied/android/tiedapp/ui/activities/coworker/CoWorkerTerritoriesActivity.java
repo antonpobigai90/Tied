@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.model.TerritoryModel;
-import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.adapters.ClientTerritoriesAdapter;
 import com.tied.android.tiedapp.util.MyUtils;
@@ -62,7 +61,7 @@ public class CoWorkerTerritoriesActivity extends AppCompatActivity implements Vi
 
         top_layout = (RelativeLayout) findViewById(R.id.top_layout);
         if (filter_index == 0) {
-            top_layout.setBackgroundResource(R.drawable.background);
+            top_layout.setBackgroundResource(R.drawable.background_blue);
         } else {
             top_layout.setBackgroundResource(R.drawable.background_gradient);
         }

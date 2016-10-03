@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Emmanuel"
+            android:text=""
             android:textColor="@android:color/black"
             android:gravity="center_horizontal"
             android:id="@+id/name"

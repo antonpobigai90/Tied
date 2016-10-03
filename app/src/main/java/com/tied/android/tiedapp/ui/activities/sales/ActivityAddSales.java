@@ -41,6 +41,7 @@ import java.util.GregorianCalendar;
 /**
  * Created by femi on 8/4/2016.
  */
+@SuppressWarnings("ValidFragment")
 public class ActivityAddSales extends AppCompatActivity implements  View.OnClickListener{
     private Bundle bundle;
     private User user;
@@ -83,6 +84,7 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
       /*  FragmentTransaction ft= getSupportFragmentManager().beginTransaction();
         ft.add(R.id.fragment_container, fragment);
         ft.commit();*/
+        MyUtils.setColorTheme(this, bundle.getInt(Constants.SOURCE), findViewById(R.id.parent));
         clientPhoto=(ImageView)findViewById(R.id.client_photo);
         saleAmountET=(EditText)findViewById(R.id.sale_amount);
         clientNameTV=(TextView)findViewById(R.id.client_name);

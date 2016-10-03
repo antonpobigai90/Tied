@@ -161,7 +161,7 @@ public class AddClientActivity extends FragmentActivity implements View.OnClickL
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+       // super.onBackPressed();
         finish();
         /*
         if (Constants.AddClient == fragment_index){
@@ -188,13 +188,13 @@ public class AddClientActivity extends FragmentActivity implements View.OnClickL
         //transaction.setCustomAnimations(0,0,0,0);
         if(currentFragment!=null) transaction.hide(currentFragment);
         // use a fragment tag, so that later on we can find the currently displayed fragment
-        if(targetFragment.isAdded()) {
-            transaction.show(targetFragment).commit();
-        }else {
-            transaction.add(R.id.fragment_place, targetFragment, tag)
+       // if(targetFragment.isAdded()) {
+       //     transaction.show(targetFragment).commit();
+       // }else {
+            transaction.replace(R.id.fragment_place, targetFragment, tag)
                     .addToBackStack(tag)
                     .commit();
-        }
+       // }
     }
 
     @Override

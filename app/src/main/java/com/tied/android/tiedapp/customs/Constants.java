@@ -28,6 +28,7 @@ public class Constants {
     public static final String GET_LOGO_ENDPOINT = HOST + "uploads/logos/";
 
     public static final String USER_FIND_BY_EMAIL = API_PATH + "users/find_by_email/{email}";
+    public static final String USER_FIND_BY_EMAIL_OR_PHONE = API_PATH + "users/find_by_email_or_phone";
     public static final String USER_UPDATE_INFO = API_PATH + "users/me";
     public static final String USER_CHANGE_PASSWORD = API_PATH + "users/changePassword";
 
@@ -36,14 +37,14 @@ public class Constants {
     public static final String USER_CLIENTS_COUNT = API_PATH + "users/me/clients_count";
     public static final String USER_GE0_CLIENTS = API_PATH + "users/me/clients/geo";
 
-    public static final String ADD_COWORKER = API_PATH + "users/{user_id}/coworkers";
-
+    public static final String ADD_COWORKER = API_PATH + "users/me/coworkers";
+    public static final String GET_COWORKERS = API_PATH + "coworker/{user_id}/{group}/{count}/{filter}";
 
     public static final String LINES = API_PATH + "lines";
     public static final String UPDATE_LINE_WITH_ID = API_PATH + "lines/{line_id}";
-    public static final String USER_LINES = API_PATH + "users/me/lines";
+    public static final String USER_LINES = API_PATH + "users/{user_id}/lines/{page_number}";
     public static final String USER_CLIENT_LINES = API_PATH + "users/me/client_lines";
-    public static final String USER_LINE_REVENUES = API_PATH + "users/me/lines/{line_id}/revenues/{page_number}";
+    public static final String GET_USER_REVENUES = API_PATH + "users/me/{group_by}/{object_id}/revenues/{page_number}";
     public static final String GET_LINE_WITH_ID =  API_PATH + "line/{line_id}";
     public static final String USER_LINE_COUNT=  API_PATH + "lines/count";
     public static final String USER_GE0_LINES =  API_PATH + "lines/geo";
@@ -180,6 +181,11 @@ public class Constants {
     public static final int PRIVACY=105;
     public static final int PRIVACY_SALES=106;
     public static final int LineAndTerritory=920390;
+    public static final int REVENUE_LIST=23450;
+    public static final int SALES_SOURCE=90000;
+    public static final int LINE_SOURCE=90001;
+    public static final int COWORKER_SOURCE=90002;
+    public static final int PICK_CONTACT=123;
 
 
 
@@ -199,6 +205,7 @@ public class Constants {
     public static final int ADD_CLIENT = 2001;
     public static final int FILTER_CODE=302;
     public static final String FILTER="filter";
+    public static final String SOURCE="source";
 
     public static final String TOTAL_SALES = "Total sales";
 

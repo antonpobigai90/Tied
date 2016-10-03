@@ -13,10 +13,12 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects.Revenue;
+import com.tied.android.tiedapp.objects.RevenueFilter;
 import com.tied.android.tiedapp.objects._Meta;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.LineApi;
+import com.tied.android.tiedapp.retrofits.services.RevenueApi;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityAddSales;
 import com.tied.android.tiedapp.ui.activities.sales.ActivitySalesFilter;
 import com.tied.android.tiedapp.ui.adapters.RevenueAdapter;
@@ -81,8 +83,8 @@ public class LineRevenueActivity  extends AppCompatActivity implements  View.OnC
 
     public void initComponents() {
         revenueLV=(ListView)findViewById(R.id.list);
-        addBut = findViewById(R.id.add);
-        addBut.setOnClickListener(this);
+     //   addBut = findViewById(R.id.add);
+//        addBut.setOnClickListener(this);
 
         adapter=new RevenueAdapter(this, revenueList);
         revenueLV.setAdapter(adapter);
@@ -96,8 +98,8 @@ public class LineRevenueActivity  extends AppCompatActivity implements  View.OnC
         //if(addLinesActivity.getLine()==null) return;
         Logger.write("Loading data");
         DialogUtils.displayProgress(this);
-        LineApi lineApi = MainApplication.getInstance().getRetrofit().create(LineApi.class);
-        final Call<ResponseBody> response = lineApi.getLineRevenues(user.getToken(), line.getId(), page);
+        RevenueApi lineApi = MainApplication.getInstance().getRetrofit().create(RevenueApi.class);
+        final Call<ResponseBody> response = lineApi.getUserRevenues(user.getToken(), "line", line.getId(), page, new RevenueFilter());
         response.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {

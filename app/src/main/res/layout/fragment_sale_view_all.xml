@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:orientation="vertical" android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@mipmap/background_green">
+                android:id="@+id/main_layout">
 
     <LinearLayout
             android:id="@+id/top_layout"
@@ -69,7 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="All time sales"
-                android:id="@+id/totalSalesLable"
+                android:id="@+id/totalSalesLabel"
                 android:textColor="@color/white"
                 android:textSize="15dp"
                 style="@style/EditTextStyle"

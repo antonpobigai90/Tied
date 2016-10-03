@@ -18,6 +18,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -81,6 +83,7 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
                 getActivity().getFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.fragment_container, mMapFragment);
         fragmentTransaction.commit();
+
         mMapFragment.getMapAsync(this);
         user = MyUtils.getUserLoggedIn();
     }
@@ -89,6 +92,19 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
 
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity()) == ConnectionResult.SUCCESS) {
+            System.gc();
+            googleMap.clear();
+        }
+    }
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+        System.gc();
+    }
     @Override
     public void onMapReady(GoogleMap googleMap) {
         // Setting a custom info window adapter for the google map
@@ -111,8 +127,13 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
                        getActivity().getApplicationContext(), R.style.Transparent);
 
                 //Client client=markerClientMap.get((String)marker.getTag());
-                Client client = clients.get((int) marker.getTag());
-                if (client == null) return null;
+                Client client;
+                try {
+                    client = clients.get((int) marker.getTag());
+                    if (client == null) return null;
+                }catch (Exception e) {
+                    return null;
+                }
 
                 // Getting view from the layout file info_window_layout
                 LayoutInflater inflater = (LayoutInflater) cw
@@ -179,7 +200,6 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
         final User user = MyUtils.getUserLoggedIn();
         ClientLocation clientLocation = new ClientLocation();
         clientLocation.setDistance("100000" + MyUtils.getPreferredDistanceUnit());
-        MyUtils.setCurrentLocation(new Coordinate(33.894212, -84.231574));
         Coordinate coordinate = MyUtils.getCurrentLocation();
         if (coordinate == null) {
             coordinate = user.getOffice_address().getCoordinate();
@@ -200,7 +220,7 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
                     clients = clientRes.getClients();
                     Coordinate currentLocation=MyUtils.getCurrentLocation();
                     LatLng loc=new LatLng(currentLocation.getLat(), currentLocation.getLon());
-                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 3.0f));
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 5.0f));
                     googleMap.addMarker(new MarkerOptions()
                             .position(loc));
 

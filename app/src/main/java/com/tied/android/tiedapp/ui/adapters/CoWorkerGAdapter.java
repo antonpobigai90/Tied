@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.client.Client;
+import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.listeners.ListAdapterListener;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
@@ -32,11 +33,11 @@ public class CoWorkerGAdapter extends BaseAdapter implements ListAdapterListener
     public static final String TAG = LinesAdapter.class
             .getSimpleName();
 
-    public List<Client> _data;
+    public List<User> _data;
     Context _c;
     ViewHolder viewHolder;
 
-    public CoWorkerGAdapter(List<Client> line_list, Context context) {
+    public CoWorkerGAdapter(List<User> line_list, Context context) {
         _data = line_list;
         _c = context;
     }
@@ -72,13 +73,13 @@ public class CoWorkerGAdapter extends BaseAdapter implements ListAdapterListener
         viewHolder.name = (TextView) view.findViewById(R.id.name);
        // viewHolder.summary = (TextView) view.findViewById(R.id.summary);
 
-        final Client data = (Client) _data.get(i);
+        final User data = (User) _data.get(i);
 
-        Logger.write("Client Name "+data.getFull_name());
+        Logger.write("Client Name "+data.getFirst_name());
 
-        String logo = data.getLogo().equals("") ? null  : data.getLogo();
+        String logo = data.getAvatarURL().equals("") ? null  : data.getAvatarURL();
         MyUtils.Picasso.displayImage(logo ,viewHolder.pic);
-        viewHolder.name.setText(data.getFull_name());
+        viewHolder.name.setText(data.getFirst_name()+" "+data.getLast_name());
         view.setTag(data);
         return view;
     }

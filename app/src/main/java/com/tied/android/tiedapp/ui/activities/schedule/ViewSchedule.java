@@ -46,7 +46,7 @@ import java.util.Date;
 /**
  * Created by Emmanuel on 6/23/2016.
  */
-public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallback {
+public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallback, View.OnClickListener {
     public static final String TAG = ViewSchedule.class
             .getSimpleName();
 
@@ -56,6 +56,7 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
     private Client client;
     private Schedule schedule;
     TextView dayTV, weekTV, timeRange;
+    Bundle bundle;
 
 
     private TextView description, temperature,  schedule_title, weatherInfo;
@@ -64,11 +65,12 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_schedule_view);
+        bundle=getIntent().getExtras();
 
-        user = User.getUser(getApplicationContext());
+        user = MyUtils.getUserFromBundle(bundle);
 
-        client = (Client) getIntent().getSerializableExtra(Constants.CLIENT_DATA);
-        schedule = (Schedule) getIntent().getSerializableExtra(Constants.SCHEDULE_DATA);
+        client = (Client) bundle.getSerializable(Constants.CLIENT_DATA);
+        schedule = (Schedule) bundle.getSerializable(Constants.SCHEDULE_DATA);
 
         final MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
@@ -159,6 +161,17 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
         myMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
         melbourne.showInfoWindow();
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch(view.getId()) {
+            case R.id.img_close:
+                onBackPressed();
+                break;
+            case R.id.img_edit:
+                MyUtils.startRequestActivity(this, CreateAppointmentActivity.class,  Constants.AddScheduleActivity, bundle);
+        }
     }
 
     class MyInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {

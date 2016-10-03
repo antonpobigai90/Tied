@@ -9,7 +9,7 @@
         android:id="@+id/top_layout"
         android:layout_width="match_parent"
         android:layout_height="54dp"
-        android:background="@drawable/background">
+        android:background="@drawable/background_blue">
 
         <RelativeLayout
             android:layout_width="140dp"

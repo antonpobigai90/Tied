@@ -82,7 +82,7 @@ public class CoWorkerSaleActivity extends AppCompatActivity implements View.OnCl
         img_filter = (ImageView) findViewById(R.id.img_filter);
         img_plus = (ImageView) findViewById(R.id.img_plus);
 
-        img_back.setOnClickListener(this);
+//        img_back.setOnClickListener(this);
         img_filter.setOnClickListener(this);
         img_plus.setOnClickListener(this);
 

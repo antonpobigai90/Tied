@@ -1,6 +1,8 @@
 package com.tied.android.tiedapp.ui.adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,11 +11,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
-import com.tied.android.tiedapp.customs.model.ClientDataModel;
-import com.tied.android.tiedapp.customs.model.LineDataModel;
+import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.client.Client;
-import com.tied.android.tiedapp.ui.activities.sales.ActivitySalesClientDetails;
-import com.tied.android.tiedapp.ui.activities.sales.ActivitySalesClientSaleDetails;
+import com.tied.android.tiedapp.ui.activities.sales.ActivityLineClientSales;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import java.util.ArrayList;
@@ -27,12 +27,17 @@ public class SaleClientListAdapter extends ClientParentAdapter {
 
     ViewHolder v;
     Context context;
+    int source = Constants.LINE_SOURCE;
     protected ArrayList<Client> arraylist = new ArrayList<Client>();
 
     public SaleClientListAdapter(ArrayList clients, Context context) {
         super(clients, context);
         this.arraylist = clients;
         this.context = context;
+    }
+    public SaleClientListAdapter( ArrayList<Client> lines, Context context, int source) {
+        this(lines, context);
+        this.source=source;
     }
 
 
@@ -44,13 +49,16 @@ public class SaleClientListAdapter extends ClientParentAdapter {
             LayoutInflater li = (LayoutInflater) _c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = li.inflate(R.layout.sale_line_list_item, viewGroup, false);
 
-            Client  data = (Client) _data.get(i);
+            final Client  data = (Client) _data.get(i);
 
             v.item_cell = (RelativeLayout) view.findViewById(R.id.item_cell);
             v.item_cell.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-                    MyUtils.startActivity(context, ActivitySalesClientSaleDetails.class);
+                public void onClick(View v) {  Bundle bundle = new Bundle();
+                    bundle.putSerializable(Constants.CLIENT_DATA, data);
+                    bundle.putInt(Constants.SOURCE, source);
+                    MyUtils.startRequestActivity((Activity)context, ActivityLineClientSales.class, Constants.REVENUE_LIST, bundle);
+
                 }
             });
 

@@ -21,12 +21,12 @@
             android:layout_above="@+id/tab_bar"
             android:orientation="vertical">
 
-            <LinearLayout
+          <!--  <LinearLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/button_bg"
-                android:visibility="gone">
+                >
 
                 <RelativeLayout
                     android:id="@+id/relativeLayout"
@@ -85,12 +85,11 @@
                 </RelativeLayout>
 
             </LinearLayout>
-
+-->
             <FrameLayout
                 android:id="@+id/fragment_place"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_below="@+id/linearLayout"
                 android:orientation="vertical"></FrameLayout>
 
             <LinearLayout
@@ -145,7 +144,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="3dp"
-                    android:text="Activities"
+                    android:text="Schedule"
                     android:textSize="13dp" />
             </LinearLayout>
 

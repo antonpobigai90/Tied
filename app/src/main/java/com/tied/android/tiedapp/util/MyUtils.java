@@ -8,16 +8,14 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.util.Pair;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
+import android.view.*;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,11 +34,7 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.MyStringAsyncTask;
 import com.tied.android.tiedapp.customs.model.DataModel;
-import com.tied.android.tiedapp.objects.Coordinate;
-import com.tied.android.tiedapp.objects.Distance;
-import com.tied.android.tiedapp.objects.Goal;
-import com.tied.android.tiedapp.objects.Line;
-import com.tied.android.tiedapp.objects._Meta;
+import com.tied.android.tiedapp.objects.*;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.client.ClientLocation;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
@@ -59,7 +53,6 @@ import com.tied.android.tiedapp.ui.activities.lines.ViewNewLineActivity;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityAddSales;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.dialogs.DatePickerFragment;
-import com.tied.android.tiedapp.ui.fragments.sales.SaleViewAllFragment;
 import com.tied.android.tiedapp.ui.listeners.ListAdapterListener;
 
 import org.json.JSONArray;
@@ -72,7 +65,6 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -107,7 +99,7 @@ public abstract class MyUtils {
                                 //Try again online if cache failed
                                 com.squareup.picasso.Picasso.with(MainApplication.getInstance().getApplicationContext())
                                         .load(imageUrl)
-                                        .error(R.mipmap.ic_launcher)
+                                        .error(R.drawable.default_avatar)
                                         .into(imageView, new Callback() {
                                             @Override
                                             public void onSuccess() {
@@ -124,7 +116,7 @@ public abstract class MyUtils {
             } else {
                 com.squareup.picasso.Picasso.with(MainApplication.getInstance().getApplicationContext())
                         .load("/")
-                        .error(R.mipmap.ic_launcher)
+                        .error(R.drawable.default_avatar)
                         .into(imageView, new Callback() {
 
                             @Override
@@ -337,7 +329,11 @@ public abstract class MyUtils {
             if (bundle != null) {
 
                 String user_json = bundle.getString(Constants.USER_DATA);
-                if(user_json==null)  user = getUserLoggedIn();
+                if(user_json==null) {
+                    user=(User)bundle.getSerializable(Constants.USER_DATA);
+                    if(user==null)
+                        user = getUserLoggedIn();
+                }
                 else user = gson.fromJson(user_json, User.class);
 
             } else {
@@ -426,8 +422,7 @@ public abstract class MyUtils {
     public static String moneyFormat(double amount) {
         return NumberFormat.getCurrencyInstance(new Locale("en", "US")).format(amount);
     }
-
-    public static String getDistance(Coordinate start, Coordinate stop) {
+    public static String getDistance(Coordinate start, Coordinate stop, boolean showUnit) {
         try {
             Location mallLoc = new Location("");
             mallLoc.setLatitude(start.getLat());
@@ -439,11 +434,14 @@ public abstract class MyUtils {
 
             float distance = 0.621371f * (mallLoc.distanceTo(userLoc) / 1000);
             return String.format(Locale.getDefault(), "%.0f", distance)
-                    + " miles";
+                    + (showUnit?" miles":"");
         } catch (Exception e) {
             // TODO Auto-generated catch block
             return "Unknown";
         }
+    }
+    public static String getDistance(Coordinate start, Coordinate stop) {
+       return getDistance(start, stop, true);
     }
     public static final int MESSAGE_TOAST=0, ERROR_TOAST=1;
     public static void showAlert(Activity  activity, String message) {
@@ -785,7 +783,7 @@ public abstract class MyUtils {
 
     public static void initLines(final Context context, User user, final ListAdapterListener listAdapterListener){
         final LineApi lineApi =  MainApplication.createService(LineApi.class, user.getToken());
-        Call<ResponseBody> response = lineApi.getUserLines();
+        Call<ResponseBody> response = lineApi.getUserLines(user.getId(), 1);
         response.enqueue(new retrofit2.Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
@@ -831,6 +829,9 @@ public abstract class MyUtils {
     }
 
 
+    public static boolean currentUserIs(User user) {
+        return MyUtils.getUserLoggedIn().getId().equals(user.getId());
+    }
     public static void initGoals(final Context context, User user, final ListAdapterListener listAdapterListener){
         final GoalApi goalApi =  MainApplication.createService(GoalApi.class, user.getToken());
         Call<ResponseBody> response = goalApi.getUserGoals();
@@ -1250,6 +1251,52 @@ public abstract class MyUtils {
                     .commit();
         }
     }
+    public static RevenueFilter initializeFilter() {
+        String todaysDate=HelperMethods.getTodayDate();
+        RevenueFilter filter=new RevenueFilter();
+        filter.setSort("desc");
+        int year=HelperMethods.getCurrentYear(HelperMethods.getTodayDate());
+        filter.setStart_date(year+"-01-01");
+        int endMonth=Arrays.asList(HelperMethods.MONTHS_LIST).indexOf(HelperMethods.getMonthOfTheYear(todaysDate));
+        endMonth=endMonth+2;
+        if(endMonth>12) endMonth=1;
+        filter.setEnd_date(year+"-"+endMonth+"-01");
+        return filter;
+    }
 
+    public static void setColorTheme(Activity activity, int source, View backgroundView) {
+
+        int color=R.color.blue, backgroundDrawable=R.drawable.background_blue;
+        if(backgroundView==null) {
+            backgroundView= activity.getWindow().getDecorView().getRootView();
+        }
+        switch (source) {
+            case Constants.SALES_SOURCE:
+                color=R.color.green_color1;
+                backgroundDrawable=R.mipmap.background_green;
+
+                break;
+            case Constants.LINE_SOURCE:
+                color=R.color.blue;
+                backgroundDrawable=R.drawable.background_blue;
+                break;
+            case Constants.COWORKER_SOURCE:
+                color=R.color.gradient;
+                backgroundDrawable=R.drawable.background_gradient;
+                break;
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = activity.getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(activity.getResources().getColor(color));
+        }
+        backgroundView.setBackground(activity.getResources().getDrawable(backgroundDrawable));
+    }
+    public static void showNoResults(View parentView) {
+        parentView.findViewById(R.id.no_results).setVisibility(View.VISIBLE);
+    }
+    public static void hideNoResults(View parentView) {
+        parentView.findViewById(R.id.no_results).setVisibility(View.GONE);
+    }
 
 }

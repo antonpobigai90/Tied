@@ -2,27 +2,26 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+   android:background="@mipmap/background_gradient"
     android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/top_layout"
         android:layout_width="match_parent"
         android:layout_height="54dp"
-        android:background="@color/schedule_title_bg_color">
+        >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
             android:text="Co-Workers"
             android:textColor="@color/white"
             android:textSize="17sp"
             android:textStyle="bold"
+            android:layout_centerHorizontal="true"
             android:id="@+id/textView5"
             android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/back_layout"
-            android:layout_marginStart="29dp" />
+            />
 
         <LinearLayout
             android:onClick="onClick"
@@ -56,47 +55,72 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
+    <LinearLayout
+
         android:id="@+id/main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="10dp"
+        android:background="@android:color/white"
+        android:gravity="center_horizontal"
         android:orientation="vertical">
+        <TextView android:layout_width="match_parent"
+                  android:text="How do you want to add your co-worker?"
+                  android:textSize="13sp"
+                  android:textColor="@color/grey"
+                  android:layout_marginBottom="20dp"
+                  android:layout_marginTop="20dp"
+                  android:gravity="center_horizontal"
+                  android:layout_height="wrap_content"/>
 
+        <Button android:layout_width="match_parent"
+                android:text="Choose from Contact List"
+                android:background="@drawable/button_round"
+                android:layout_marginBottom="20dp"
+                android:onClick="onClick"
+                android:id="@+id/contact_list_button"
+                android:layout_height="wrap_content"/>
+<View style="@style/SeperatorHorizontal" ></View>
+        <TextView android:layout_width="match_parent"
+                  android:text="OR"
+                  android:textSize="13sp"
+                  android:textColor="@color/grey"
+                  android:layout_marginTop="20dp"
+                  android:gravity="center_horizontal"
+                  android:layout_height="wrap_content"/>
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
-            android:textSize="20sp"
+            android:textSize="14sp"
+            android:layout_marginTop="20dp"
             android:id="@+id/email"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingRight="30dp"
+            android:paddingLeft="30dp"
+            android:background="@drawable/white_fill_grey_stroke"
+            style="@style/EditTextStyle"
             android:textColor="@android:color/black"
-            android:layout_marginTop="155dp"
-            android:text="nondefyde@gmail.co"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:layout_above="@+id/invite"
-            android:layout_alignParentEnd="true" />
+            android:hint="Enter email or phone number"
+            android:text="" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Enter email"
-            android:textColor="@android:color/black"
-            android:id="@+id/text"
-            android:textSize="30sp"
-            android:layout_alignBottom="@+id/email"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="80dp" />
 
-        <Button
+
+
+
+    </LinearLayout>
+    <TextView
             android:onClick="onClick"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Invite"
-            android:id="@+id/invite"
-            android:layout_centerVertical="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true" />
-
-    </RelativeLayout>
+            android:layout_width="match_parent"
+            android:background="@color/blue"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:textColor="@android:color/white"
+            android:layout_height="50dp"
+            android:text="Find"
+            android:layout_gravity="bottom"
+            android:id="@+id/invite" />
 
 </LinearLayout>

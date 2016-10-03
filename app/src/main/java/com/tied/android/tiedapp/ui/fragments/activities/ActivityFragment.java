@@ -106,7 +106,7 @@ public class ActivityFragment extends Fragment implements View.OnClickListener {
             // This method will be invoked when a new page becomes selected.
             @Override
             public void onPageSelected(int position) {
-                Toast.makeText(getActivity(),"Selected page position: " + position, Toast.LENGTH_SHORT).show();
+               // Toast.makeText(getActivity(),"Selected page position: " + position, Toast.LENGTH_SHORT).show();
                 selectTab(tab_bar, position);
             }
 

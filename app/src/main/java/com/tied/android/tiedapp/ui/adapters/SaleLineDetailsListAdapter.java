@@ -10,8 +10,7 @@ import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.model.LineDataModel;
-import com.tied.android.tiedapp.ui.activities.sales.ActivitySalesClientDetails;
-import com.tied.android.tiedapp.ui.activities.sales.ActivitySalesClientSaleDetails;
+import com.tied.android.tiedapp.ui.activities.sales.ActivityLineClientSales;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import java.util.ArrayList;
@@ -48,7 +47,7 @@ public class SaleLineDetailsListAdapter extends ClientParentAdapter {
             v.item_cell.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MyUtils.startActivity(context, ActivitySalesClientSaleDetails.class);
+                    MyUtils.startActivity(context, ActivityLineClientSales.class);
                 }
             });
 

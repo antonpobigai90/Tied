@@ -122,7 +122,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:gravity="center_horizontal"
-                    android:text="20 ACTIVE"
+                    android:text="0 ACTIVE"
                     android:textColor="@color/accentColor"
                     android:textSize="14sp" />
 
@@ -165,7 +165,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:gravity="center_horizontal"
-                    android:text="40 ACTIVE"
+                    android:text="0 ACTIVE"
                     android:textColor="@color/accentColor"
                     android:textSize="14sp" />
 
@@ -217,7 +217,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:gravity="center_horizontal"
-                    android:text="$900,000,000"
+                    android:text="$0.00"
                     android:textColor="@color/accentColor"
                     android:textSize="14sp" />
 
@@ -260,7 +260,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:gravity="center_horizontal"
-                    android:text="20 ACTIVE"
+                    android:text="0 ACTIVE"
                     android:textColor="@color/accentColor"
                     android:textSize="14sp" />
 
@@ -312,7 +312,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:gravity="center_horizontal"
-                    android:text="16 TOTAL"
+                    android:text="0 TOTAL"
                     android:textColor="@color/accentColor"
                     android:textSize="14sp" />
 
@@ -355,7 +355,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:gravity="center_horizontal"
-                    android:text="20 TOTAL"
+                    android:text="0 TOTAL"
                     android:textColor="@color/accentColor"
                     android:textSize="14sp" />
 

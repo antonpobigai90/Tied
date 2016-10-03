@@ -19,6 +19,7 @@ import com.tied.android.tiedapp.ui.listeners.ListAdapterListener;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ZuumaPC on 8/18/2016.
@@ -32,13 +33,13 @@ public class LinesAdapter extends BaseAdapter implements ListAdapterListener {
     public static final String TAG = LinesAdapter.class
             .getSimpleName();
 
-    public ArrayList<Line> _data;
+    public List<Line> _data;
     Context _c;
     ViewHolder viewHolder;
     private Bundle bundle;
     private Client client;
 
-    public LinesAdapter(ArrayList<Line> line_list, Context context, Bundle bundle) {
+    public LinesAdapter(List<Line> line_list, Context context, Bundle bundle) {
         _data = line_list;
         _c = context;
         this.bundle = bundle;

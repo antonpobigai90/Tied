@@ -106,7 +106,7 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
         office_address = (LinearLayout) view.findViewById(R.id.office_address);
         office_address_text = (TextView) view.findViewById(R.id.office_address_text);
 
-        add_industry = (ImageView) view.findViewById(R.id.add_industry);
+        //add_industry = (ImageView) view.findViewById(R.id.add_industry);
 //        add_industry.setOnClickListener(this);
     //    office_address.setOnClickListener(this);
       //  home_address.setOnClickListener(this);
@@ -241,10 +241,10 @@ public class EditProfileFragment extends Fragment implements View.OnClickListene
                 PasswordDialog alert = new PasswordDialog();
                 alert.showDialog(getActivity(), user);
                 break;*/
-            case R.id.add_industry:
+            /*case R.id.add_industry:
                 bundle.putBoolean(Constants.EditingProfile, true);
                 nextAction(Constants.Industry, bundle);
-                break;
+                break;*/
         }
     }
 }

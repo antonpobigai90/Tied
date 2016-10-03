@@ -26,11 +26,7 @@ import android.widget.TextView;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.fragments.schedule.tabs.AllScheduleFragment;
-import com.tied.android.tiedapp.ui.fragments.schedule.tabs.NextWeekScheduleFragment;
-import com.tied.android.tiedapp.ui.fragments.schedule.tabs.ThisMonthScheduleFragment;
-import com.tied.android.tiedapp.ui.fragments.schedule.tabs.ThisWeekScheduleFragment;
-import com.tied.android.tiedapp.ui.fragments.schedule.tabs.TodayScheduleFragment;
+import com.tied.android.tiedapp.ui.fragments.schedule.tabs.*;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.Logger;
 
@@ -45,7 +41,7 @@ public class ScheduleAppointmentsFragment extends Fragment implements View.OnCli
     public static final String TAG = ScheduleAppointmentsFragment.class
             .getSimpleName();
 
-    public static ViewPager mViewPager;
+    public ViewPager mViewPager;
     public PagerAdapter mPagerAdapter;
     private Bundle bundle;
     private User user;
@@ -54,7 +50,7 @@ public class ScheduleAppointmentsFragment extends Fragment implements View.OnCli
 
     LinearLayout all_tab, today_tab, this_week_tab, next_week_tab, tab_bar, this_month, alert_edit_msg;
     HorizontalScrollView tab_scroll;
-    List<Fragment> fragmentList = new ArrayList<Fragment>();
+    List<SchedulesFragment> fragmentList = new ArrayList<SchedulesFragment>();
 
 
     public static Fragment newInstance(Bundle bundle) {
@@ -66,12 +62,9 @@ public class ScheduleAppointmentsFragment extends Fragment implements View.OnCli
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPagerAdapter = new PagerAdapter(getActivity().getSupportFragmentManager());
-        fragmentList.add(new TodayScheduleFragment());
-        fragmentList.add(new AllScheduleFragment());
-        fragmentList.add(new ThisWeekScheduleFragment());
-        fragmentList.add(new NextWeekScheduleFragment());
-        fragmentList.add(new ThisMonthScheduleFragment());
+        mPagerAdapter = new PagerAdapter(getChildFragmentManager());
+        setRetainInstance(true);
+
     }
 
     @Override
@@ -81,6 +74,10 @@ public class ScheduleAppointmentsFragment extends Fragment implements View.OnCli
         initComponent(view);
 
         Log.d(TAG, "AM HERE AGAIN");
+        if (savedInstanceState != null) {
+            int  position= savedInstanceState.getInt(key);
+            mViewPager.setCurrentItem(position);
+        }
         return view;
     }
 
@@ -94,6 +91,7 @@ public class ScheduleAppointmentsFragment extends Fragment implements View.OnCli
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(getActivity().getResources().getColor(R.color.colorPrimaryDark));
         }
+
 
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
         tab_bar = (LinearLayout) view.findViewById(R.id.tab_bar);
@@ -122,6 +120,7 @@ public class ScheduleAppointmentsFragment extends Fragment implements View.OnCli
         onCustomSelected(mViewPager);
         Logger.write("It is created again");
 
+
     }
 
     @Override
@@ -143,6 +142,13 @@ public class ScheduleAppointmentsFragment extends Fragment implements View.OnCli
                 mViewPager.setCurrentItem(4);
                 break;
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPagerAdapter.notifyDataSetChanged();
+        Logger.write("It has resumed oooooooooooooooh");
     }
 
     public static void moveViewToScreenCenter(final View view, String message) {
@@ -265,25 +271,31 @@ public class ScheduleAppointmentsFragment extends Fragment implements View.OnCli
         public Fragment getItem(int position) {
             Fragment fragment = null;
             Log.d(TAG, "position : " + position);
+            switch (position) {
+                        case 0: fragment = new TodayScheduleFragment(); break;
+                        case 1: fragment = new  AllScheduleFragment(); break;
+                        case 2: fragment = new ThisWeekScheduleFragment(); break;
+                        case 3: fragment = new NextWeekScheduleFragment(); break;
+                        case 4: fragment = new ThisMonthScheduleFragment(); break;
+            }
 
-            fragment = fragmentList.get(position);
-
+            bundle.putInt("position", position);
             fragment.setArguments(bundle);
             return fragment;
         }
 
         @Override
         public int getCount() {
-            return fragmentList.size();
+            return 5;
         }
     }
 
     private static int mCurCheckPosition = 0;
-
+private String key="curTab";
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt("curChoice", mCurCheckPosition);
+        outState.putInt(key, mViewPager.getCurrentItem());
     }
 
     @Override
@@ -295,6 +307,7 @@ public class ScheduleAppointmentsFragment extends Fragment implements View.OnCli
         }
         // Logger.write("femiiiiiiiiiiiiiiii");
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

@@ -126,6 +126,9 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_client, container, false);
+        View focusView=view.findViewById(R.id.getFocus);
+        focusView.requestFocus();
+        focusView.setFocusableInTouchMode(true);
         return view;
     }
 

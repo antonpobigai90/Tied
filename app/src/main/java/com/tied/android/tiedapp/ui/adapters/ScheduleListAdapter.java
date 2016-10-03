@@ -96,7 +96,7 @@ public class ScheduleListAdapter extends BaseAdapter{
             }
         }
         notifyDataSetChanged();
-        ScheduleAppointmentsFragment.mViewPager.getAdapter().notifyDataSetChanged();
+        //ScheduleAppoientsFragment.mViewPager.getAdapter().notifyDataSetChanged();
     }
 
     public void updateStatus(String id, int status){
@@ -111,7 +111,7 @@ public class ScheduleListAdapter extends BaseAdapter{
             }
         }
         notifyDataSetChanged();
-        ScheduleAppointmentsFragment.mViewPager.getAdapter().notifyDataSetChanged();
+       //ScheduleAppointmentsFragment.mViewPager.getAdapter().notifyDataSetChanged();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

@@ -8,11 +8,12 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="15dp">
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
 
         <LinearLayout
             android:id="@+id/layout_pic"
-            android:layout_width="50dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:orientation="vertical">
@@ -26,15 +27,16 @@
 
             <TextView
                 android:id="@+id/client_distance"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="1"
+                android:maxLines="2"
                 android:text="3 Miles"
+                android:gravity="center"
                 android:textColor="@color/schedule_title_bg_color"
-                android:textSize="12sp"
+                android:textSize="10sp"
                 android:layout_gravity="center_horizontal"
-                android:textStyle="bold" />
+                android:textStyle="normal" />
+
 
         </LinearLayout>
 
@@ -75,7 +77,7 @@
                 <TextView
                     android:id="@+id/address"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:gravity="center_vertical"
                     android:maxLines="1"
@@ -96,10 +98,11 @@
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:layout_marginRight="4dp"
+
                     android:src="@mipmap/info_warning" />
 
                 <TextView
-                    android:id="@+id/info"
+                    android:id="@+id/last_visited"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
@@ -127,7 +130,7 @@
                 android:layout_gravity="center_horizontal"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="$20,000,0000000"
+                android:text="$0.00"
                 android:textColor="@color/schedule_title_bg_color"
                 android:textSize="12sp" />
 

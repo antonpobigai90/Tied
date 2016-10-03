@@ -17,6 +17,7 @@ import com.tied.android.tiedapp.objects._Meta;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.LineApi;
+import com.tied.android.tiedapp.ui.activities.sales.ActivityLineClientSales;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
@@ -115,8 +116,8 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
         clients_layout = (RelativeLayout) findViewById(R.id.clients_layout);
         clients_layout.setOnClickListener(this);
 
-        goals_layout = (RelativeLayout) findViewById(R.id.goals_layout);
-        goals_layout.setOnClickListener(this);
+       // goals_layout = (RelativeLayout) findViewById(R.id.goals_layout);
+//        goals_layout.setOnClickListener(this);
 
         findViewById(R.id.ship_layout).setOnClickListener(this);
 
@@ -126,7 +127,7 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
         totalRevenueBodyTV.setText(""+MyUtils.moneyFormat(line.getTotal_revenue()));
 
         numClients=(TextView) findViewById(R.id.num_clients);
-        numGoalsTV = (TextView) findViewById(R.id.num_goals);
+       // numGoalsTV = (TextView) findViewById(R.id.num_goals);
 
         addressTV=(TextView) findViewById(R.id.ship_from);
         location=line.getAddress();
@@ -151,7 +152,8 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
                 onBackPressed();
                 break;
             case R.id.revenue_layout:
-                MyUtils.startActivity(this, LineRevenueActivity.class, bundle);
+                bundle.putInt(Constants.SOURCE, Constants.LINE_SOURCE);
+                MyUtils.startActivity(this, ActivityLineClientSales.class, bundle);
                 break;
             case R.id.clients_layout:
                 MyUtils.startActivity(this, LineClientListActivity.class, bundle);

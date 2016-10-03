@@ -51,7 +51,7 @@ public class AllScheduleFragment extends SchedulesFragment implements View.OnCli
 //        super.initComponent(view);
 //    }
 
-    protected void initSchedule() {
+    public void initSchedule() {
         ScheduleApi scheduleApi = MainApplication.getInstance().getRetrofit().create(ScheduleApi.class);
         Call<ScheduleRes> response = scheduleApi.getSchedule(user.getToken());
         response.enqueue(new Callback<ScheduleRes>() {

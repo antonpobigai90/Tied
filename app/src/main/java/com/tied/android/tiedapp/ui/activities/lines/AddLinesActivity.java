@@ -39,6 +39,7 @@ public class AddLinesActivity extends AppCompatActivity implements  View.OnClick
     LinearLayout back_layout;
 
     EditText descriptonET, nameET;
+    Line line;
 
 
     @Override
@@ -49,9 +50,7 @@ public class AddLinesActivity extends AppCompatActivity implements  View.OnClick
 
         bundle = getIntent().getExtras();
         user = MyUtils.getUserFromBundle(bundle);
-
-        MyUtils.initLines(this, user, null);
-
+        line = (Line) bundle.getSerializable(Constants.LINE_DATA);
         initComponent();
     }
 
@@ -60,10 +59,15 @@ public class AddLinesActivity extends AppCompatActivity implements  View.OnClick
         nameET =(EditText) findViewById(R.id.name);
         descriptonET =(EditText) findViewById(R.id.description);
 
+
         btn_add = (TextView) findViewById(R.id.btn_add);
         btn_add.setOnClickListener(this);
         back_layout = (LinearLayout) findViewById(R.id.back_layout);
         back_layout.setOnClickListener(this);
+        if(line!=null) {
+            nameET.setText(line.getName());
+            descriptonET.setText(line.getDescription());
+        }
     }
 
     @Override
@@ -92,7 +96,9 @@ public class AddLinesActivity extends AppCompatActivity implements  View.OnClick
         line.setName(lineName);
         line.setDescription(description);
 
-        saveLine(line);
+        if(line.getId()!=null && !line.getId().isEmpty())
+            updateLine(line);
+        else saveLine(line);
     }
 
     private void saveLine(final Line line) {
@@ -124,6 +130,65 @@ public class AddLinesActivity extends AppCompatActivity implements  View.OnClick
                             public void run() {
                                 DialogUtils.closeProgress();
                                 MyUtils.startActivity(AddLinesActivity.this, ViewLineActivity.class, bundle);
+                                finish();
+                            }
+                        }, 2000);
+
+                    }else{
+                        MyUtils.showToast("Error encountered");
+                        DialogUtils.closeProgress();
+                    }
+
+                }catch (IOException ioe) {
+                    DialogUtils.closeProgress();
+                    MyUtils.showToast("Error encountered. Please check your internet connection.");
+
+                    Logger.write(ioe);
+                }
+                catch (Exception jo) {
+                    DialogUtils.closeProgress();
+                    Logger.write(jo);
+                }
+
+            }
+            @Override
+            public void onFailure(Call<ResponseBody> ClientResponseCall, Throwable t) {
+                Logger.write("Request failed: "+t.getCause());
+                MyUtils.showConnectionErrorToast(AddLinesActivity.this);
+                DialogUtils.closeProgress();
+            }
+        });
+    }
+
+    private void updateLine(final Line line) {
+
+        LineApi lineApi = MainApplication.createService(LineApi.class, user.getToken());
+        DialogUtils.displayProgress(this);
+        Call<ResponseBody> response = lineApi.updateLine(line.getId(), line);
+        response.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
+                if (this == null) return;
+                try {
+                    GeneralResponse response =new GeneralResponse(resResponse.body());
+                    if (response.isAuthFailed()) {
+                        User.LogOut(AddLinesActivity.this);
+                        return;
+                    }
+                    _Meta meta=response.getMeta();
+                    if(meta !=null && meta.getStatus_code()==201) {
+
+                        Line the_line = response.getData(Constants.LINE_DATA, Line.class);
+                        Logger.write("the_line: "+the_line.toString());
+                        final Bundle bundle = new Bundle();
+                        bundle.putSerializable(Constants.LINE_DATA, the_line);
+                        MainApplication.linesList.clear();
+                        MyUtils.showMessageAlert(AddLinesActivity.this, "Line \""+nameET.getText().toString()+"\" created!");
+                        nameET.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                DialogUtils.closeProgress();
+                               // MyUtils.startActivity(AddLinesActivity.this, ViewLineActivity.class, bundle);
                                 finish();
                             }
                         }, 2000);

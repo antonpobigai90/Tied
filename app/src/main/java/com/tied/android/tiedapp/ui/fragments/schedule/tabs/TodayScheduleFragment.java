@@ -1,5 +1,6 @@
 package com.tied.android.tiedapp.ui.fragments.schedule.tabs;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.View;
 
@@ -9,6 +10,7 @@ import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.schedule.ScheduleDate;
 import com.tied.android.tiedapp.objects.schedule.TimeRange;
 import com.tied.android.tiedapp.util.HelperMethods;
+import com.tied.android.tiedapp.util.Logger;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -20,12 +22,28 @@ import java.util.Locale;
  * Created by Emmanuel on 7/15/2016.
  */
 
-public class TodayScheduleFragment extends SchedulesFragment implements View.OnClickListener {
 
+public class TodayScheduleFragment extends SchedulesFragment implements View.OnClickListener {
+    public static ArrayList<ScheduleDataModel> todayScheduleDataModels;
     public static final String TAG = TodayScheduleFragment.class
             .getSimpleName();
 
-    protected void initComponent(View view) {
+    public static SchedulesFragment getInstance(ArrayList<ScheduleDataModel> data) {
+        TodayScheduleFragment sf=new TodayScheduleFragment();
+        if(data != null) {
+            sf.scheduleDataModels=data;
+        }
+        return sf;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+
+    }
+
+    public void initComponent(View view) {
         Calendar cal = Calendar.getInstance();
         Date now = cal.getTime();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -34,6 +52,7 @@ public class TodayScheduleFragment extends SchedulesFragment implements View.OnC
         dateRange = new DateRange(today, today);
         scheduleDate = new ScheduleDate(timeRange, dateRange);
         super.initComponent(view);
+        Logger.write("I am attaching");
     }
 
     @Override

@@ -38,8 +38,8 @@ public class ClientDatePickerFragment extends DialogFragment implements DatePick
         // Do something with the date chosen by the user
         String month_name = MONTHS_LIST[view.getMonth()];
 
-        TextView tv1 = (TextView) getActivity().findViewById(R.id.birthday);
-        tv1.setText("" + view.getDayOfMonth() + " " + month_name + " " + view.getYear());
+       // TextView tv1 = (TextView) getActivity().findViewById(R.id.birthday);
+        //tv1.setText("" + view.getDayOfMonth() + " " + month_name + " " + view.getYear());
 
     }
 }

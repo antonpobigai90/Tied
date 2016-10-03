@@ -12,13 +12,11 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.adapters.ClientLinesAdapter;
-import com.tied.android.tiedapp.ui.adapters.MapClientListAdapter;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import java.util.ArrayList;
@@ -64,7 +62,7 @@ public class CoWorkerLinesActivity extends AppCompatActivity implements View.OnC
 
         top_layout = (RelativeLayout) findViewById(R.id.top_layout);
         if (page_index == 2 || filter_index == 0) {
-            top_layout.setBackgroundResource(R.drawable.background);
+            top_layout.setBackgroundResource(R.drawable.background_blue);
         } else {
             top_layout.setBackgroundResource(R.drawable.background_gradient);
         }

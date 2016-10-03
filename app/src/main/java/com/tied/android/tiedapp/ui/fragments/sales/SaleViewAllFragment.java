@@ -15,10 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.*;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
@@ -52,6 +49,7 @@ import com.tied.android.tiedapp.ui.adapters.SaleClientListAdapter;
 import com.tied.android.tiedapp.ui.adapters.SaleLineListAdapter;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.util.HelperMethods;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 import okhttp3.ResponseBody;
@@ -61,13 +59,14 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 /**
  * Created by Emmanuel on 7/1/2016.
  */
-public class SaleViewAllFragment extends Fragment implements View.OnClickListener {
+public class SaleViewAllFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     public static final String TAG = SaleViewAllFragment.class
             .getSimpleName();
@@ -114,14 +113,16 @@ public class SaleViewAllFragment extends Fragment implements View.OnClickListene
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sale_view_all, null);
 
+
         bundle=getArguments();
+        MyUtils.setColorTheme(getActivity(), bundle.getInt(Constants.SOURCE), view.findViewById(R.id.main_layout));
         user = MyUtils.getUserFromBundle(bundle);
 
         group_by=bundle.getString("group_by");
+        if(group_by==null) group_by="line";
 
-        filter=new RevenueFilter();
-        filter.setSort("desc");
-
+        String todaysDate=HelperMethods.getTodayDate();
+        filter=MyUtils.initializeFilter();
         initComponent(view);
         return view;
     }
@@ -138,26 +139,30 @@ public class SaleViewAllFragment extends Fragment implements View.OnClickListene
         img_plus.setOnClickListener(this);
         titleTV=(TextView) view.findViewById(R.id.title);
         totalSalesTV = (TextView)  view.findViewById(R.id.totalSales);
+        totalSalesLabelTV = (TextView) view.findViewById(R.id.totalSalesLabel);
+        totalSalesLabelTV.setText("All time sales");
 
 
         line_layout = (LinearLayout) view.findViewById(R.id.line_layout);
 
         lines_listview = (ListView) view.findViewById(R.id.lines_listview);
+        lines_listview.setOnItemClickListener(this);
 
 
 
         if(group_by.equals("line")) {
-            line_adapter = new SaleLineListAdapter(1, lineDataModels, getActivity());
+            line_adapter = new SaleLineListAdapter(1, lineDataModels, getActivity(), Constants.SALES_SOURCE);
             lines_listview.setAdapter(line_adapter);
             titleTV.setText("Sales by Line");
             loadData();
 
         }else{
-            client_adapter=new SaleClientListAdapter(clientDataModels, getActivity());
+            client_adapter=new SaleClientListAdapter(clientDataModels, getActivity(), Constants.SALES_SOURCE);
             lines_listview.setAdapter(client_adapter);
             titleTV.setText("Sales by Client");
             loadClientData();
         }
+        updateSalesLabel();
 
     }
     public void load() {
@@ -182,7 +187,7 @@ public class SaleViewAllFragment extends Fragment implements View.OnClickListene
                 //((MainActivity) getActivity()).launchFragment(Constants.HomeSale, bundle);
                 break;
             case R.id.img_filter:
-                Bundle bundle=new Bundle();
+                //Bundle bundle2=new Bundle();
                 bundle.putSerializable(Constants.FILTER, filter);
                 MyUtils.startRequestActivity(getActivity(), ActivitySalesFilter.class, Constants.FILTER_CODE, bundle);
                 break;
@@ -190,7 +195,7 @@ public class SaleViewAllFragment extends Fragment implements View.OnClickListene
                 MyUtils.startActivity(getActivity(), ActivitySalesPrint.class);
                 break;
             case R.id.img_plus:
-                MyUtils.startActivity(getActivity(), ActivityAddSales.class);
+                MyUtils.startActivity(getActivity(), ActivityAddSales.class, bundle);
                 break;
         }
     }
@@ -345,6 +350,22 @@ public class SaleViewAllFragment extends Fragment implements View.OnClickListene
 
     }
 
+    private void updateSalesLabel() {
+        if(filter.getStart_date()!= null && !filter.getStart_date().isEmpty()) {
+            String endMonth = HelperMethods.getMonthOfTheYear(filter.getEnd_date());
+            int position= Arrays.asList(HelperMethods.MONTHS_LIST).indexOf(endMonth)-1;
+           if(position<0) position=11;
+            endMonth=HelperMethods.MONTHS_LIST[position];
+            String startMonth = HelperMethods.getMonthOfTheYear(filter.getStart_date());
+            if(endMonth.equalsIgnoreCase(startMonth)) {
+                totalSalesLabelTV.setText(startMonth+" "+HelperMethods.getCurrentYear(filter.getStart_date()));
+            }else         totalSalesLabelTV.setText(startMonth+" to "+endMonth+", "+HelperMethods.getCurrentYear(filter.getStart_date()));
+        }else{
+            totalSalesLabelTV.setText("All time sales");
+        }
+
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -352,7 +373,13 @@ public class SaleViewAllFragment extends Fragment implements View.OnClickListene
             lineDataModels.clear();
             clientDataModels.clear();
             filter = (RevenueFilter) (data.getSerializableExtra(Constants.FILTER));
+            updateSalesLabel();
             load();
         }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
     }
 }

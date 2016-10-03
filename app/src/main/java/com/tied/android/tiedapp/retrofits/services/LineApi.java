@@ -38,12 +38,7 @@ public interface LineApi {
     Call<ResponseBody> getLineWithId(@Header(Constants.TOKEN_HEADER) String token, @Path("line_id") String line_id);
 
     @GET(Constants.USER_LINES)
-    Call<ResponseBody> getUserLines();
-
-    @GET(Constants.USER_LINE_REVENUES)
-    Call<ResponseBody> getLineRevenues(@Header(Constants.TOKEN_HEADER) String token,
-                                       @Path("line_id") String line_id,
-                                       @Path("page_number") int page_number);
+    Call<ResponseBody> getUserLines(@Path("user_id") String user_id, @Path("page_number") int page_number);
 
     @GET(Constants.USER_LINE_COUNT)
     Call<ResponseBody> getLineCount(@Header(Constants.TOKEN_HEADER) String token,

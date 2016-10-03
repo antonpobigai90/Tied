@@ -2,33 +2,37 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:orientation="vertical" android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@mipmap/background_green">
+                android:id="@+id/main_layout">
 
     <RelativeLayout
             android:id="@+id/top_layout"
             android:layout_width="match_parent"
             android:layout_height="50dp">
-
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/txt_reset"
-                android:layout_marginLeft="10dp"
+
                 android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
                 android:text="Reset"
+                android:layout_marginRight="15dp"
                 android:textSize="17dp"
                 android:textStyle="bold"
+                android:padding="10dp"
                 android:textColor="@color/white" />
+
 
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/txt_cancel"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="15dp"
-                android:layout_alignParentRight="true"
+                android:layout_marginLeft="10dp"
+                android:layout_alignParentLeft="true"
                 android:text="Cancel"
                 android:textSize="17dp"
+                android:padding="10dp"
                 android:textStyle="bold"
                 android:textColor="@color/white" />
 

@@ -123,34 +123,6 @@
 
         </RelativeLayout>
         <RelativeLayout
-                android:id="@+id/client_menu"
-                style="@style/DrawerMenuItem"
-                android:onClick="onClick">
-            <ImageView
-                    style="@style/DrawerMenuIcon"
-                    android:src="@drawable/ic_user_gray"
-            />
-            <TextView android:layout_width="wrap_content"
-                      android:text="Clients"
-                      style="@style/DrawerMenuText"
-                      android:layout_height="wrap_content"/>
-
-        </RelativeLayout>
-        <RelativeLayout
-                android:id="@+id/goal_menu"
-                style="@style/DrawerMenuItem"
-                android:onClick="onClick">
-            <ImageView
-                    style="@style/DrawerMenuIcon"
-                    android:src="@drawable/ic_trophy_gray"
-            />
-            <TextView android:layout_width="wrap_content"
-                      android:text="Goals"
-                      style="@style/DrawerMenuText"
-                      android:layout_height="wrap_content"/>
-
-        </RelativeLayout>
-        <RelativeLayout
                 android:id="@+id/lines_menu"
                 android:onClick="onClick"
                 style="@style/DrawerMenuItem">
@@ -165,15 +137,46 @@
 
         </RelativeLayout>
         <RelativeLayout
+                android:id="@+id/visits"
+                style="@style/DrawerMenuItem"
+                android:onClick="onClick">
+            <ImageView
+                    style="@style/DrawerMenuIcon"
+                    android:src="@drawable/ic_user_gray"
+            />
+            <TextView android:layout_width="wrap_content"
+                      android:text="Visits and Trips"
+                      style="@style/DrawerMenuText"
+                      android:layout_height="wrap_content"/>
+
+        </RelativeLayout>
+        <RelativeLayout
+                android:id="@+id/goal_menu"
+                style="@style/DrawerMenuItem"
+                android:visibility="gone"
+                android:onClick="onClick">
+            <ImageView
+                    style="@style/DrawerMenuIcon"
+                    android:src="@drawable/ic_trophy_gray"
+            />
+            <TextView android:layout_width="wrap_content"
+                      android:text="Goals"
+                      style="@style/DrawerMenuText"
+                      android:layout_height="wrap_content"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
                 android:id="@+id/specials_menu"
                 android:onClick="onClick"
+                android:visibility="gone"
                 style="@style/DrawerMenuItem">
             <ImageView
                     style="@style/DrawerMenuIcon"
                     android:src="@drawable/ic_star_gray"
             />
             <TextView android:layout_width="wrap_content"
-                      android:text="Specials"
+                      android:text="Sales"
                       style="@style/DrawerMenuText"
                       android:layout_height="wrap_content"/>
 
@@ -201,6 +204,7 @@
         <RelativeLayout
                 android:id="@+id/boss_menu"
                 style="@style/DrawerMenuItem"
+                android:visibility="gone"
                 android:onClick="onClick">
             <ImageView
                     style="@style/DrawerMenuIcon"

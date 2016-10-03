@@ -9,8 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import android.widget.TextView;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.client.Client;
+import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.listeners.ListAdapterListener;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
@@ -25,16 +27,15 @@ import java.util.List;
 public class CoWorkerHAdapter extends RecyclerView.Adapter<CoWorkerHAdapter.ViewHolder> implements ListAdapterListener {
 
     private Activity activity;
-    public List<Client> _data;
-    private ArrayList<Client> arraylist;
+    public List<User> _data;
 
     RoundImage roundedImage;
 
-    public CoWorkerHAdapter(List<Client> clients, Activity activity) {
+    public CoWorkerHAdapter(List<User> clients, Activity activity) {
         this.activity = activity;
         _data = clients;
-        this.arraylist = new ArrayList<Client>();
-        this.arraylist.addAll(_data);
+       // this.arraylist = new ArrayList<Client>();
+       // this.arraylist.addAll(_data);
     }
 
     @Override
@@ -49,11 +50,13 @@ public class CoWorkerHAdapter extends RecyclerView.Adapter<CoWorkerHAdapter.View
     @Override
     public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
 
-        final Client data = (Client) _data.get(position);
-        String logo = data.getLogo().equals("") ? null  : data.getLogo();
+        final User data = (User) _data.get(position);
+        String logo = data.getAvatar().equals("") ? null  : data.getAvatar_uri();
         MyUtils.Picasso.displayImage(logo ,viewHolder.pic);
         MyListener myListener = new MyListener(data);
+        viewHolder.name.setText(data.getFirst_name());
         viewHolder.pic.setOnClickListener(myListener);
+
 
     }
 
@@ -69,9 +72,9 @@ public class CoWorkerHAdapter extends RecyclerView.Adapter<CoWorkerHAdapter.View
     }
 
     private class MyListener implements View.OnClickListener{
-        private Client client;
-        public MyListener(Client client){
-            this.client = client;
+        private User user;
+        public MyListener(User client){
+            this.user = client;
         }
         @Override
         public void onClick(View v) {
@@ -88,9 +91,11 @@ public class CoWorkerHAdapter extends RecyclerView.Adapter<CoWorkerHAdapter.View
      */
     protected class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView pic;
+        private TextView name;
         public ViewHolder(View view) {
             super(view);
             pic = (ImageView) view.findViewById(R.id.pic);
+            name = (TextView) view.findViewById(R.id.name);
         }
     }
 }

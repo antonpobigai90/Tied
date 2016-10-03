@@ -20,6 +20,8 @@ import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.LinesAndTerritories;
 import com.tied.android.tiedapp.ui.activities.client.ClientMapAndListActivity;
+import com.tied.android.tiedapp.ui.activities.sales.ActivityGroupedSales;
+import com.tied.android.tiedapp.ui.activities.sales.ActivityLineClientSales;
 import com.tied.android.tiedapp.ui.adapters.ActivityAdapter;
 import com.tied.android.tiedapp.ui.adapters.SaleLineListAdapter;
 import com.tied.android.tiedapp.util.MyUtils;
@@ -37,7 +39,7 @@ public class ViewCoWorkerActivity extends AppCompatActivity implements View.OnCl
     LinearLayout back_layout;
     private ImageView avatar, img_segment;
     private TextView name;
-    private Client client;
+    private User coworker;
 
     Boolean bGeneral = true;
     private LinearLayout bottom_layout;
@@ -60,14 +62,15 @@ public class ViewCoWorkerActivity extends AppCompatActivity implements View.OnCl
 
         bundle = getIntent().getExtras();
         user = MyUtils.getUserFromBundle(bundle);
-        client = (Client) bundle.getSerializable(Constants.CLIENT_DATA);
+        bundle.putInt(Constants.SOURCE, Constants.COWORKER_SOURCE);
+        coworker = (User) bundle.getSerializable(Constants.USER_DATA);
 
         name = (TextView) findViewById(R.id.name);
         avatar = (ImageView) findViewById(R.id.avatar);
         img_segment  = (ImageView) findViewById(R.id.img_segment);
 
-        name.setText(client.getFull_name());
-        MyUtils.Picasso.displayImage(client.getLogo(), avatar);
+        name.setText(user.getFirst_name()+" "+user.getLast_name());
+        MyUtils.Picasso.displayImage(user.getAvatarURL(), avatar);
 
         back_layout = (LinearLayout) findViewById(R.id.back_layout);
         bottom_layout = (LinearLayout) findViewById(R.id.bottom_layout);
@@ -135,7 +138,7 @@ public class ViewCoWorkerActivity extends AppCompatActivity implements View.OnCl
             case R.id.lines:
                 bundle.putInt(Constants.SHOW_LINE, 0);
                 bundle.putInt(Constants.SHOW_FILTER, 1);
-                MyUtils.startActivity(this, CoWorkerLinesActivity.class, bundle);
+                MyUtils.startActivity(this, LinesAndTerritories.class, bundle);
                 break;
             case R.id.territories:
                 bundle.putInt(Constants.SHOW_TERRITORY, 0);
@@ -153,7 +156,7 @@ public class ViewCoWorkerActivity extends AppCompatActivity implements View.OnCl
                 MyUtils.startActivity(this, CoWorkergGoalsActivity.class, bundle);
                 break;
             case R.id.sales:
-                MyUtils.startActivity(this, CoWorkerSaleActivity.class);
+                MyUtils.startActivity(this, ActivityGroupedSales.class, bundle);
                 break;
         }
     }

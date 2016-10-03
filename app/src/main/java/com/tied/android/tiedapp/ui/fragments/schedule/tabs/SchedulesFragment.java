@@ -28,10 +28,12 @@ import com.tied.android.tiedapp.ui.adapters.ScheduleListAdapter;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.HelperMethods;
+import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -60,7 +62,11 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
     protected Bundle bundle;
     protected User user;
 
+    public int num;
+
     protected ProgressBar pb;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.schedule_list, container, false);
@@ -81,12 +87,21 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
         pb=(ProgressBar)view.findViewById(R.id.progress_bar);
         pb.setVisibility(View.GONE);
         bundle = getArguments();
+
         if (bundle != null) {
             Gson gson = new Gson();
             String user_json = bundle.getString(Constants.USER_DATA);
             user = gson.fromJson(user_json, User.class);
-            initSchedule();
+           // initSchedule();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //Logger.write("shedule fragment resumed");
+        //if(scheduleDataModels==null || scheduleDataModels.isEmpty())
+       // initSchedule();
     }
 
     @Override
@@ -102,9 +117,16 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
         DialogUtils.closeProgress();
         nextAction(Constants.ScheduleSuggestions, bundle);*/
     }
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        initSchedule();
+    }
 
-    protected void initSchedule() {
-        Log.d(TAG + " scheduleDate", scheduleDate.toString());
+
+
+    public void initSchedule() {
+//        Log.d(TAG + " scheduleDate", scheduleDate.toString());
        pb.setVisibility(View.VISIBLE);
         emptyScheduleMessage.setVisibility(View.GONE);
         ScheduleApi scheduleApi = MainApplication.getInstance().getRetrofit().create(ScheduleApi.class);

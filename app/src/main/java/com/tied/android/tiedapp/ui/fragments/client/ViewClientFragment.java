@@ -38,7 +38,7 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
 
     public ImageView avatar,img_edit;
     private LinearLayout icon_plus, icon_call;
-    private TextView btn_delete;
+    private TextView btn_delete, client_name;
     RelativeLayout important_info,lines_territory;
 
     private Bundle bundle;
@@ -63,7 +63,9 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        bundle = getArguments();
+        user = MyUtils.getUserFromBundle(bundle);
+        client=(Client) bundle.getSerializable(Constants.CLIENT_DATA);
         initComponent(view);
     }
 
@@ -71,9 +73,12 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
         btn_delete = (TextView) view.findViewById(R.id.btn_delete);
         icon_plus = (LinearLayout) view.findViewById(R.id.icon_plus);
         icon_call = (LinearLayout) view.findViewById(R.id.icon_call);
+        client_name = (TextView) view.findViewById(R.id.client_name);
+        client_name.setText(MyUtils.getClientName(client));
         img_edit = (ImageView) view.findViewById(R.id.img_edit);
         important_info = (RelativeLayout) view.findViewById(R.id.important_info);
         lines_territory = (RelativeLayout) view.findViewById(R.id.lines_territory);
+        MyUtils.Picasso.displayImage(client.getLogo(), (ImageView)view.findViewById(R.id.avatar));
 
         avatar = (ImageView) view.findViewById(R.id.avatar);
 

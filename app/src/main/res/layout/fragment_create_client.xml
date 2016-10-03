@@ -38,10 +38,8 @@
                 <ImageView
                     android:id="@+id/img_close"
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/action_bar_icon_height"
-                    android:padding="@dimen/action_bar_icon_padding"
+                    style="@style/ActionBarIcon"
                     android:onClick="goBack"
-                    android:layout_marginLeft="10dp"
                     android:src="@drawable/btn_close" />
 
             </LinearLayout>
@@ -123,6 +121,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         style="@style/FieldLabels"
+                        android:id="@+id/getFocus"
+                        android:focusable="true"
                         android:text="COMPANY LEGAL NAME" />
 
                 <EditText
@@ -429,7 +429,6 @@
                         android:id="@+id/industry"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_toLeftOf="@+id/add_industry"
                         android:textColor="@color/schedule_title_bg_color"
                         android:textStyle="bold" />
 

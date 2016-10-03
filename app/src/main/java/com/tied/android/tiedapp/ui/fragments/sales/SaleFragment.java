@@ -130,11 +130,13 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sale_home, null);
 
+        bundle=getArguments();
         user=MyUtils.getUserFromBundle(bundle);
         initComponent(view);
         String today=HelperMethods.getTodayDate();
         start=HelperMethods.getMonthOfTheYear(today)+" "+today;
         Logger.write("8888888888888888888888 "+today);
+        bundle.putInt(Constants.SOURCE, Constants.SALES_SOURCE);
 
         this.month = (HelperMethods.getMonthOfTheYear(today) );
         this.year = today.substring(0, 4);
@@ -227,6 +229,8 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
         // enable rotation of the chart by touch
         mChart.setRotationEnabled(true);
         mChart.setHighlightPerTapEnabled(true);
+        mChart.setBackgroundColor(Color.WHITE); //set whatever color you prefer
+
 
         // add a selection listener
         mChart.setOnChartValueSelectedListener(this);
@@ -283,6 +287,7 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
                 break;
             case R.id.txt_view_all:
                 bundle.putString("group_by", group_by);
+
                 //((MainActivity) getActivity()).launchFragment(Constants.SaleViewAll, bundle);
                 MyUtils.startActivity(getActivity(), ActivityGroupedSales.class,  bundle);
                 break;
@@ -322,22 +327,22 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
 
         ArrayList<Integer> colors = new ArrayList<Integer>();
 
+        for (int c : ColorTemplate.VORDIPLOM_COLORS)
+            colors.add(c);
+
+        for (int c : ColorTemplate.JOYFUL_COLORS)
+            colors.add(c);
+
         for (int c : ColorTemplate.COLORFUL_COLORS)
             colors.add(c);
 
-      for (int c : ColorTemplate.LIBERTY_COLORS)
-            colors.add(c);
-        for (int c : ColorTemplate.VORDIPLOM_COLORS)
-            colors.add(c);
-        /*       for (int c : ColorTemplate.JOYFUL_COLORS)
+        for (int c : ColorTemplate.LIBERTY_COLORS)
             colors.add(c);
 
         for (int c : ColorTemplate.PASTEL_COLORS)
             colors.add(c);
 
         colors.add(ColorTemplate.getHoloBlue());
-*/
-       // colors.add(ColorTemplate.getHoloBlue());
         dataSet.setColors(colors);
         //dataSet.setSelectionShift(0f);
 
@@ -392,7 +397,7 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
                     GeneralResponse response=new GeneralResponse(resResponse.body());
 
                     if (response != null && response.isAuthFailed()) {
-                        //User.LogOut(LineRevenueActivity.this);
+                        User.LogOut(getActivity());
                         return;
                     }
                     Logger.write(response.toString());
@@ -408,9 +413,9 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
                         topRevenuesName.clear();
                         double total=0;
                         for(Object keyObject:keys) {
-                             Map<String, Object> obj = MyUtils.MapObject.create(keyObject.toString());
-//                            Logger.write(map.get(MyUtils.MapObject.create(keyObject.toString()).get("key")).toString());
-                           // lines.add((Line)map.get(MyUtils.MapObject.create(keyObject.toString()).get("key")));
+                            Map<String, Object> obj = MyUtils.MapObject.create(keyObject.toString());
+                            //Logger.write(map.get(MyUtils.MapObject.create(keyObject.toString()).get("key")).toString());
+                            // lines.add((Line)map.get(MyUtils.MapObject.create(keyObject.toString()).get("key")));
                             Line line =gson.fromJson(map.getString(obj.get("key").toString()), Line.class);
                             Float val=Float.parseFloat(""+(Double)obj.get("value"));
                             line.setTotal_revenue(val);
@@ -423,6 +428,7 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
                         generateCenterSpannableText(MyUtils.moneyFormat(total), null);
                         //Map mapObject = MyUtils.MapObject.create(response.toString());
                         //Logger.write(.toString());
+                        lineDataModels.clear();
                         lineDataModels.addAll(lines);
                         //
                         line_adapter.notifyDataSetChanged();
@@ -499,6 +505,7 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
                         generateCenterSpannableText(MyUtils.moneyFormat(total), null);
                         //Map mapObject = MyUtils.MapObject.create(response.toString());
                         //Logger.write(.toString());
+                        clientDataModels.clear();
                         clientDataModels.addAll(clients);
                         //
                         client_adapter.notifyDataSetChanged();

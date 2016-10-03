@@ -153,7 +153,7 @@ public class LocationService extends Service {
 
         public void onLocationChanged(final Location loc)
         {
-            //Logger.write("**************************************", "Location changed");
+
             if(isBetterLocation(loc, previousBestLocation)) {
                 /*loc.getLatitude();
                 loc.getLongitude();
@@ -161,20 +161,22 @@ public class LocationService extends Service {
                 intent.putExtra("Longitude", loc.getLongitude());
                 intent.putExtra("Provider", loc.getProvider());
                 sendBroadcast(intent);*/
-                MyUtils.setCurrentLocation(new Coordinate(loc.getLatitude(), loc.getLongitude()));
+                Coordinate co=new Coordinate(loc.getLatitude(), loc.getLongitude());
+                Logger.write("************************************** "+co.toString());
+                MyUtils.setCurrentLocation(co);
 
             }
         }
 
         public void onProviderDisabled(String provider)
         {
-            Toast.makeText( getApplicationContext(), "Gps Disabled", Toast.LENGTH_SHORT ).show();
+            //Toast.makeText( getApplicationContext(), "Gps Disabled", Toast.LENGTH_SHORT ).show();
         }
 
 
         public void onProviderEnabled(String provider)
         {
-            Toast.makeText( getApplicationContext(), "Gps Enabled", Toast.LENGTH_SHORT).show();
+           // Toast.makeText( getApplicationContext(), "Gps Enabled", Toast.LENGTH_SHORT).show();
         }
 
 

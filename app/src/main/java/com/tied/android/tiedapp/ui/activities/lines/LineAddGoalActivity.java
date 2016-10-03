@@ -34,7 +34,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
+@SuppressWarnings("ValidFragment")
 public class LineAddGoalActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static final String TAG = LineAddGoalActivity.class

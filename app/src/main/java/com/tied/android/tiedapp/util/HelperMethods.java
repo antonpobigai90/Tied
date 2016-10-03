@@ -112,8 +112,26 @@ public  class HelperMethods {
     }
 
     public static String getMonthOfTheYear(String string_date) {
-        GregorianCalendar gregorianCalendar = getGCalendar(string_date);
-        int montOfyear = gregorianCalendar.get(gregorianCalendar.MONTH);
+        String montOfyearName="";
+        //String dtStart = "2010-10-15";
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date date = format.parse(string_date);
+            System.out.println(date);
+            montOfyearName=getMonthOfTheYear(date);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+
+        }
+        return montOfyearName;
+    }
+    public static String getMonthOfTheYear(Date date) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        int montOfyear = calendar.get(calendar.MONTH);
+       // Logger.write("month of the yeah in "+string_date+" is "+montOfyear);
         String montOfyearName = MONTHS_LIST[montOfyear];
         return montOfyearName;
     }
@@ -123,8 +141,23 @@ public  class HelperMethods {
 
     }
     public static int getCurrentYear(String string_date) {
-        GregorianCalendar gregorianCalendar = getGCalendar(string_date);
-        int year = gregorianCalendar.get(gregorianCalendar.YEAR);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        int year=2016;
+        try {
+            Date date = format.parse(string_date);
+            System.out.println(date);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+
+            year = calendar.get(calendar.YEAR);
+            // Logger.write("month of the yeah in "+string_date+" is "+montOfyear);
+          //  String montOfyearName = MONTHS_LIST[montOfyear];
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+
+        }
+
+
 
         return year;
     }

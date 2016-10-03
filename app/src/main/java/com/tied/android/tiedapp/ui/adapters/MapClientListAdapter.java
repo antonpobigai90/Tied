@@ -12,6 +12,7 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.ui.activities.client.ClientMapAndListActivity;
 import com.tied.android.tiedapp.ui.listeners.ListAdapterListener;
+import com.tied.android.tiedapp.util.HelperMethods;
 import com.tied.android.tiedapp.util.MyUtils;
 import com.tied.android.tiedapp.util.RoundImage;
 
@@ -61,11 +62,25 @@ public class MapClientListAdapter extends BaseAdapter implements ListAdapterList
 
             v.name = (TextView) view.findViewById(R.id.name);
             v.address = (TextView) view.findViewById(R.id.address);
+            v.client_distance = (TextView)view.findViewById(R.id.client_distance);
             v.pic = (ImageView) view.findViewById(R.id.pic);
+            v.last_visited=(TextView) view.findViewById(R.id.last_visited);
+            v.timeLayout=view.findViewById(R.id.time_layout);
+            v.sales = (TextView)view.findViewById(R.id.sales);
 
-            v.name.setText(data.getFull_name());
+
+            if(data.getLast_visited()!=null) {
+                long diff_in_date = HelperMethods.getDateDifferenceWithToday(data.getLast_visited());
+                v.last_visited.setText("Last visited: "+diff_in_date);
+            }else{
+                v.timeLayout.setVisibility(View.GONE);
+            }
+            v.sales.setText(MyUtils.moneyFormat(data.getTotal_revenue()));
+
+            v.name.setText(MyUtils.getClientName(data));
             v.address.setText(data.getAddress().getStreet());
             MyUtils.Picasso.displayImage(data.getLogo(), v.pic);
+            v.client_distance.setText(MyUtils.getDistance(MyUtils.getCurrentLocation(), data.getAddress().getCoordinate(), false)+"m");
 
             view.setTag(v);
         } else {
@@ -86,7 +101,8 @@ public class MapClientListAdapter extends BaseAdapter implements ListAdapterList
 
     static class ViewHolder {
         ImageView pic;
-        TextView name,address;
+        TextView name,address, client_distance, last_visited, sales;
+        View timeLayout;
     }
 
     public List getList(){

@@ -103,10 +103,10 @@ public class ViewScheduleFragment extends Fragment implements View.OnClickListen
 
         schedule_title = (TextView) view.findViewById(R.id.schedule_title);
         description = (TextView) view.findViewById(R.id.description);
-        title = (TextView) view.findViewById(R.id.title);
+        //title = (TextView) view.findViewById(R.id.title);
         temperature = (TextView) view.findViewById(R.id.weather);
 
-        title.setText(schedule.getTitle());
+        //title.setText(schedule.getTitle());
         schedule_title.setText(schedule.getTitle());
         description.setText(schedule.getDescription());
 

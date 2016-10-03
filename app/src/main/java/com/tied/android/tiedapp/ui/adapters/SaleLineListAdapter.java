@@ -1,6 +1,8 @@
 package com.tied.android.tiedapp.ui.adapters;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +11,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
-import com.tied.android.tiedapp.customs.model.LineDataModel;
+import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Line;
-import com.tied.android.tiedapp.ui.activities.sales.ActivitySalesClientDetails;
+import com.tied.android.tiedapp.ui.activities.sales.ActivityLineClientSales;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ public class SaleLineListAdapter extends ClientParentAdapter {
     public static final String TAG = SaleLineListAdapter.class
             .getSimpleName();
 
+    int source = Constants.LINE_SOURCE;
     ViewHolder v;
     protected List<Line> arraylist = new ArrayList<Line>();
     Context context;
@@ -35,6 +38,10 @@ public class SaleLineListAdapter extends ClientParentAdapter {
         this.context = context;
         this.page_index = index;
     }
+    public SaleLineListAdapter(int index, List<Line> lines, Context context, int source) {
+        this(index, lines, context);
+        this.source=source;
+    }
 
 
     public View getView(int i, View convertView, ViewGroup viewGroup) {
@@ -45,13 +52,16 @@ public class SaleLineListAdapter extends ClientParentAdapter {
             LayoutInflater li = (LayoutInflater) _c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = li.inflate(R.layout.sale_line_list_item, viewGroup, false);
 
-            Line data = (Line) _data.get(i);
+            final Line data = (Line) _data.get(i);
 
             v.item_cell = (RelativeLayout) view.findViewById(R.id.item_cell);
             v.item_cell.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MyUtils.startActivity(context, ActivitySalesClientDetails.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(Constants.LINE_DATA, data);
+                    bundle.putInt(Constants.SOURCE, source);
+                    MyUtils.startRequestActivity((Activity)context, ActivityLineClientSales.class, Constants.REVENUE_LIST, bundle);
                 }
             });
 

@@ -40,6 +40,7 @@ public class Client implements Serializable, Comparable<Client>{
 
     private int Industry_id;
     private int visit_id;
+    private String last_visited;
 
     private int dis_from;
     private ArrayList _score;
@@ -56,6 +57,14 @@ public class Client implements Serializable, Comparable<Client>{
         SharedPreferences.Editor prefsEditor = mPrefs.edit();
         prefsEditor.putBoolean(Constants.CLIENT_CREATED, true );
         prefsEditor.apply();
+    }
+
+    public String getLast_visited() {
+        return last_visited;
+    }
+
+    public void setLast_visited(String last_visited) {
+        this.last_visited = last_visited;
     }
 
     public static boolean isClientCreated(Context context){

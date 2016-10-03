@@ -1,7 +1,5 @@
 package com.tied.android.tiedapp.ui.fragments.client;
 
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,11 +7,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
-import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,37 +14,12 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
 
-import com.github.mikephil.charting.animation.Easing;
-import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.formatter.PercentFormatter;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.customs.model.ClientDataModel;
-import com.tied.android.tiedapp.customs.model.LineDataModel;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.activities.MainActivity;
-import com.tied.android.tiedapp.ui.activities.client.ClientMapAndListActivity;
 import com.tied.android.tiedapp.ui.activities.coworker.CoWorkerFilterActivity;
-import com.tied.android.tiedapp.ui.activities.sales.ActivityAddSales;
-import com.tied.android.tiedapp.ui.activities.sales.ActivitySalesFilter;
-import com.tied.android.tiedapp.ui.activities.sales.ActivitySalesPrint;
-import com.tied.android.tiedapp.ui.adapters.SaleClientListAdapter;
-import com.tied.android.tiedapp.ui.adapters.SaleLineListAdapter;
-import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
-import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
-
-import java.util.ArrayList;
 
 /**
  * Created by Emmanuel on 7/1/2016.
@@ -101,7 +69,7 @@ public class MapFragment extends Fragment implements View.OnClickListener {
         bundle = getArguments();
 
         parent = (LinearLayout) view.findViewById(R.id.parent);
-        parent.setBackgroundResource(R.drawable.background);
+        parent.setBackgroundResource(R.drawable.background_blue);
 
         back_layout = (LinearLayout) view.findViewById(R.id.back_layout);
         back_layout.setVisibility(View.GONE);
@@ -114,7 +82,7 @@ public class MapFragment extends Fragment implements View.OnClickListener {
 
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
 
-        mPagerAdapter = new PagerAdapter(getActivity().getSupportFragmentManager());
+        mPagerAdapter = new PagerAdapter(getChildFragmentManager());
         if (mViewPager != null) {
             mViewPager.setAdapter(mPagerAdapter);
             if (bundle.getBoolean(Constants.CLIENT_LIST)){

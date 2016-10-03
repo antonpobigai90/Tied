@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/background_green">
+                android:id="@+id/main_layout"
+    >
 
     <RelativeLayout
         android:id="@+id/top_layout"
@@ -36,11 +37,11 @@
             android:layout_marginRight="10dp" />
 
         <TextView
-            android:id="@+id/txt_selected_client"
+            android:id="@+id/title"
             android:layout_width="150dp"
             android:layout_height="40dp"
             android:layout_centerInParent="true"
-            android:text="Addison LLC"
+            android:text="Title"
             style="@style/EditTextStyle"
             android:textStyle="bold"
             android:textSize="18sp"
@@ -76,7 +77,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="July 2016"
-                    android:id="@+id/txt_year"
+                    android:id="@+id/period_label"
                     android:textColor="@color/schedule_title_bg_color"
                     android:textStyle="bold"
                     android:textSize="16dp" />
@@ -88,6 +89,7 @@
                     android:id="@+id/txt_count"
                     android:textColor="@color/schedule_title_bg_color"
                     android:layout_marginTop="2dp"
+                    android:visibility="gone"
                     android:textSize="12dp" />
             </LinearLayout>
 
@@ -112,8 +114,8 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="$15,980,123,000"
-                    android:id="@+id/txt_total_price"
+                    android:text="$0.00"
+                    android:id="@+id/txt_total_sales"
                     android:gravity="right"
                     android:textStyle="bold"
                     android:textSize="18sp"

@@ -68,7 +68,7 @@ public class ActivitySalesFilter extends AppCompatActivity implements  View.OnCl
     }
 
     private void initComponent() {
-
+        MyUtils.setColorTheme(this, bundle.getInt(Constants.SOURCE), findViewById(R.id.main_layout));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -83,6 +83,8 @@ public class ActivitySalesFilter extends AppCompatActivity implements  View.OnCl
         }catch (Exception e) {
             try {
                 month = HelperMethods.getMonthOfTheYear(revenueFilter.getStart_date());
+                Logger.write("&&&&&&  "+month);
+                Logger.write("&&&&&&  "+revenueFilter.getStart_date());
 
             }catch (Exception ee) {
                 month="";
@@ -202,7 +204,7 @@ public class ActivitySalesFilter extends AppCompatActivity implements  View.OnCl
                 }
                 if(!month.isEmpty() ) {
                     revenueFilter.setStart_date(year+"-"+(Arrays.asList(HelperMethods.MONTHS_LIST).indexOf(month)+1)+"-1");
-                    int endMonth =Arrays.asList(HelperMethods.MONTHS_LIST).indexOf(month)+1+1;
+                    int endMonth =Arrays.asList(HelperMethods.MONTHS_LIST).indexOf(month)+2;
                     if(endMonth>12) {
                         endMonth=1;
                         year=""+(Integer.parseInt(year)+1);
