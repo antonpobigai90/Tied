@@ -384,8 +384,8 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
         // if(addLinesActivity.getLine()==null) return;
         // Logger.write("Loading data");
         DialogUtils.displayProgress(getActivity());
-        RevenueApi lineApi = MainApplication.getInstance().getRetrofit().create(RevenueApi.class);
-        final Call<ResponseBody> response = lineApi.getTopLineRevenues(user.getToken(), "line");
+        RevenueApi lineApi = MainApplication.createService(RevenueApi.class);
+        final Call<ResponseBody> response = lineApi.getTopLineRevenues(user.getId(), "line");
         response.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {

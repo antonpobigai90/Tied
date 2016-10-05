@@ -13,6 +13,7 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.util.FontsOverride;
 import com.tied.android.tiedapp.util.Logger;
+import com.tied.android.tiedapp.util.MyUtils;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.twitter.sdk.android.core.TwitterCore;
 
@@ -90,7 +91,7 @@ public class MainApplication extends Application {
     }
 
     public static <S> S createService(Class<S> serviceClass) {
-        return createService(serviceClass, null);
+        return createService(serviceClass, (MyUtils.getUserLoggedIn()==null?null:MyUtils.getUserLoggedIn().getToken()));
     }
 
     public static <S> S createService(Class<S> serviceClass, final String authToken) {

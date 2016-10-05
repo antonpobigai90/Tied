@@ -61,14 +61,29 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
     String TAG = "ACTIVIY_CLINET";
     Map<String, Client> markerClientMap = new HashMap<String, Client>();
     User user;
-    ArrayList<Client> clients;
+    ArrayList<Client> clients=new ArrayList<>();
     GoogleMap googleMap;
     ImageView img_list_clients;
+    Bundle bundle;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_client_map_layout, container, false);
         return view;
+    }
+
+    public static ClientsMapFragment newInstance(Bundle bundle, ArrayList<Client> clients) {
+        ClientsMapFragment cmf=new ClientsMapFragment();
+        cmf.setArguments(bundle);
+        cmf.setClients(clients);
+        return cmf;
+    }
+
+    public void setClients(ArrayList<Client> clients) {
+        this.clients = clients;
+    }
+    public void addClients(ArrayList<Client> clients) {
+        this.clients.addAll( clients);
     }
 
     @Override
@@ -78,6 +93,8 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
     }
 
     public void initComponent(View view) {
+        bundle=getArguments();
+        user=MyUtils.getUserFromBundle(bundle);
         mMapFragment = MapFragment.newInstance();
         FragmentTransaction fragmentTransaction =
                 getActivity().getFragmentManager().beginTransaction();
@@ -85,7 +102,7 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
         fragmentTransaction.commit();
 
         mMapFragment.getMapAsync(this);
-        user = MyUtils.getUserLoggedIn();
+       // user = MyUtils.getUserLoggedIn();
     }
 
     public void loadClients() {
@@ -197,7 +214,7 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
 
 
     public void loadClients(final GoogleMap googleMap) {
-        final User user = MyUtils.getUserLoggedIn();
+
         ClientLocation clientLocation = new ClientLocation();
         clientLocation.setDistance("100000" + MyUtils.getPreferredDistanceUnit());
         Coordinate coordinate = MyUtils.getCurrentLocation();
@@ -206,8 +223,8 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
         }
         clientLocation.setCoordinate(coordinate);
 
-        ClientApi clientApi = MainApplication.createService(ClientApi.class, user.getToken());
-        Call<ClientRes> response = clientApi.getClientsByLocation(clientLocation);
+        ClientApi clientApi = MainApplication.createService(ClientApi.class);
+        Call<ClientRes> response = clientApi.getClientsByLocation(user.getId(), clientLocation);
         response.enqueue(new Callback<ClientRes>() {
             @Override
             public void onResponse(Call<ClientRes> call, Response<ClientRes> resResponse) {
@@ -215,9 +232,14 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
                 DialogUtils.closeProgress();
                 ClientRes clientRes = resResponse.body();
                 if (clientRes.isAuthFailed()) {
-                    User.LogOut(getActivity().getApplicationContext());
+                    //User.LogOut(getActivity().getApplicationContext());
                 } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200) {
-                    clients = clientRes.getClients();
+                    clients.addAll(clientRes.getClients());
+                    googleMap.clear();
+                    if(clients.size()==0) {
+                        MyUtils.showToast("No clients found");
+                        return;
+                    }
                     Coordinate currentLocation=MyUtils.getCurrentLocation();
                     LatLng loc=new LatLng(currentLocation.getLat(), currentLocation.getLon());
                     googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 5.0f));

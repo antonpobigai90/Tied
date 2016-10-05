@@ -81,6 +81,7 @@ import retrofit2.Response;
  * Created by Femi on 7/19/2016.
  */
 public abstract class MyUtils {
+    public static User userLoggedIn=null;
     public static class Picasso {
         public static void displayImage(final String imageUrl, final ImageView imageView) {
             if (imageUrl != null && !imageUrl.isEmpty()) {
@@ -349,8 +350,12 @@ public abstract class MyUtils {
     }
 
     public static User getUserLoggedIn() {
-        Gson gson = new Gson();
-        return gson.fromJson(getSharedPreferences().getString(Constants.CURRENT_USER, null), User.class);
+        if(userLoggedIn==null) {
+            Gson gson = new Gson();
+            userLoggedIn=gson.fromJson(getSharedPreferences().getString(Constants.CURRENT_USER, null), User.class);
+        }
+        return userLoggedIn;
+
     }
 
     public static void showToast(String message) {
@@ -747,7 +752,7 @@ public abstract class MyUtils {
         clientLocation.setCoordinate(coordinate);
 
         final ClientApi clientApi =  MainApplication.createService(ClientApi.class, user.getToken());
-        Call<ClientRes> response = clientApi.getClientsByLocation(clientLocation);
+        Call<ClientRes> response = clientApi.getClientsByLocation(user.getId(), clientLocation);
         response.enqueue(new retrofit2.Callback<ClientRes>() {
             @Override
             public void onResponse(Call<ClientRes> call, Response<ClientRes> resResponse) {
@@ -784,7 +789,7 @@ public abstract class MyUtils {
 
     public static void initLines(final Context context, User user, final ListAdapterListener listAdapterListener){
         final LineApi lineApi =  MainApplication.createService(LineApi.class, user.getToken());
-        Call<ResponseBody> response = lineApi.getUserLines(user.getId(), 1);
+        Call<ResponseBody> response = lineApi.getUserLines( user.getId(), 1);
         response.enqueue(new retrofit2.Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
@@ -1293,8 +1298,8 @@ public abstract class MyUtils {
         }
         backgroundView.setBackground(activity.getResources().getDrawable(backgroundDrawable));
     }
-    public static void showNoResults(View parentView) {
-        parentView.findViewById(R.id.no_results).setVisibility(View.VISIBLE);
+    public static void showNoResults(View parentView, int viewID) {
+        parentView.findViewById(viewID).setVisibility(View.VISIBLE);
     }
     public static void hideNoResults(View parentView) {
         parentView.findViewById(R.id.no_results).setVisibility(View.GONE);

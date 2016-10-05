@@ -52,7 +52,7 @@ public interface ClientApi {
     Call<Count> getClientsCount(@Header(Constants.TOKEN_HEADER) String token);
 
     @POST(Constants.USER_GE0_CLIENTS)
-    Call<ClientRes> getClientsByLocation(@Body ClientLocation clientLocation);
+    Call<ClientRes> getClientsByLocation(@Path("user_id") String user_id, @Body ClientLocation clientLocation);
 
 
 

@@ -131,7 +131,7 @@ public class LinesFragment extends Fragment implements AdapterView.OnItemClickLi
         MyUtils.startActivity(getActivity(), ViewLineActivity.class, bundle);
     }
     public void initLines(final Context context, User user, final ListAdapterListener listAdapterListener){
-        final LineApi lineApi =  MainApplication.createService(LineApi.class, user.getToken());
+        final LineApi lineApi =  MainApplication.createService(LineApi.class);
         Call<ResponseBody> response = lineApi.getUserLines(user.getId(), 1);
         response.enqueue(new retrofit2.Callback<ResponseBody>() {
             @Override
@@ -149,7 +149,7 @@ public class LinesFragment extends Fragment implements AdapterView.OnItemClickLi
                          lines .addAll( (ArrayList) response.getDataAsList(Constants.LINES_lIST, Line.class));
                         Logger.write("Lines loadeddddddddddddddddddddddddddddddddddddddddddddddd "+lines.size());
                          adapter.notifyDataSetChanged();
-                        if(lines.isEmpty()) MyUtils.showNoResults(getView());
+                        if(lines.isEmpty()) MyUtils.showNoResults(getView(), R.id.no_results);
                     }else{
                         MyUtils.showToast("Error encountered");
                         DialogUtils.closeProgress();

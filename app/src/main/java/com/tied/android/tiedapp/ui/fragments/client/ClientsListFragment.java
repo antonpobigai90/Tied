@@ -58,6 +58,21 @@ public class ClientsListFragment extends Fragment implements AdapterView.OnItemC
         super.onViewCreated(view, savedInstanceState);
         initComponent(view);
     }
+    public static ClientsListFragment newInstance(Bundle bundle, ArrayList<Client> clients) {
+        ClientsListFragment cmf=new ClientsListFragment();
+        cmf.setArguments(bundle);
+        cmf.setClients(clients);
+        return cmf;
+    }
+
+    public void setClients(ArrayList<Client> clients) {
+        this.clients = clients;
+        adapter.notifyDataSetChanged();
+    }
+    public void addClients(ArrayList<Client> clients) {
+        this.clients.addAll( clients);
+        adapter.notifyDataSetChanged();
+    }
 
     public void initComponent(View view){
         bundle = getArguments();
@@ -96,8 +111,8 @@ public class ClientsListFragment extends Fragment implements AdapterView.OnItemC
         }
         clientLocation.setCoordinate(coordinate);
 
-        final ClientApi clientApi =  MainApplication.createService(ClientApi.class, user.getToken());
-        Call<ClientRes> response = clientApi.getClientsByLocation(clientLocation);
+        final ClientApi clientApi =  MainApplication.createService(ClientApi.class);
+        Call<ClientRes> response = clientApi.getClientsByLocation(user.getId(), clientLocation);
         response.enqueue(new retrofit2.Callback<ClientRes>() {
             @Override
             public void onResponse(Call<ClientRes> call, Response<ClientRes> resResponse) {
@@ -114,13 +129,12 @@ public class ClientsListFragment extends Fragment implements AdapterView.OnItemC
                          User.LogOut(getActivity());
                     } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200) {
                           clients.addAll(clientRes.getClients());
-                          /*
-                            if (clients.size() > 0) {
-                              clients = clients;
-                                if (adapter != null) {
-                                    adapter.listInit(clients);
-                                }
-                            }*/
+                        clients.addAll(clientRes.getClients());
+
+                        if(clients.size()==0) {
+                            MyUtils.showNoResults(getView(), R.id.no_results);
+
+                        }
 
                         adapter.notifyDataSetChanged();
                     } else {

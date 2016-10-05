@@ -32,6 +32,7 @@ import com.tied.android.tiedapp.ui.activities.coworker.CoWorkerActivity;
 import com.tied.android.tiedapp.ui.activities.goal.LineGoalActivity;
 
 import com.tied.android.tiedapp.ui.activities.sales.ActivityGroupedSales;
+import com.tied.android.tiedapp.ui.activities.territories.ActivityTerritories;
 import com.tied.android.tiedapp.ui.dialogs.DialogNewClient;
 import com.tied.android.tiedapp.ui.fragments.DailyStatsFragment;
 import com.tied.android.tiedapp.ui.fragments.LinesFragment;
@@ -485,6 +486,9 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 launchFragment(Constants.ProfileFragment, bundle);
 
 //                MyUtils.startActivity(MainActivity.this, ProfileFragment.class, bundle);
+                break;
+            case R.id.territories_menu:
+                MyUtils.startActivity(MainActivity.this, ActivityTerritories.class,bundle);
                 break;
 
             case R.id.invite_menu:

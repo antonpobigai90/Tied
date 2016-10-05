@@ -137,6 +137,20 @@
 
         </RelativeLayout>
         <RelativeLayout
+                android:id="@+id/territories_menu"
+                android:onClick="onClick"
+                style="@style/DrawerMenuItem">
+            <ImageView
+                    style="@style/DrawerMenuIcon"
+                    android:src="@drawable/icon_location"
+            />
+            <TextView android:layout_width="wrap_content"
+                      android:text="Territories"
+                      style="@style/DrawerMenuText"
+                      android:layout_height="wrap_content"/>
+
+        </RelativeLayout>
+        <RelativeLayout
                 android:id="@+id/visits"
                 style="@style/DrawerMenuItem"
                 android:onClick="onClick">

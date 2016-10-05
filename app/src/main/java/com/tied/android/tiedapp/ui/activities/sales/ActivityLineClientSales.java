@@ -149,9 +149,9 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
         //if(addLinesActivity.getLine()==null) return;
         Logger.write("Loading data");
         DialogUtils.displayProgress(this);
-        RevenueApi revenueApi = MainApplication.getInstance().getRetrofit().create(RevenueApi.class);
+        RevenueApi revenueApi = MainApplication.createService(RevenueApi.class);
         String id=(client==null?line.getId():client.getId());
-        final Call<ResponseBody> response = revenueApi.getUserRevenues(user.getToken(), type, id, page, filter);
+        final Call<ResponseBody> response = revenueApi.getUserRevenues(user.getId(), type, id, page, filter);
         response.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {

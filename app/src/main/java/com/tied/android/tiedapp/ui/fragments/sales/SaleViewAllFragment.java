@@ -86,7 +86,7 @@ public class SaleViewAllFragment extends Fragment implements View.OnClickListene
     String group_by="line";
     ArrayList<Line> lineDataModels = new ArrayList<>();
     ArrayList<Client> clientDataModels = new ArrayList<>();
-    User user;
+    User user, userLoggedIn;
     TextView titleTV, totalSalesTV, totalSalesLabelTV;
 
 
@@ -123,6 +123,7 @@ public class SaleViewAllFragment extends Fragment implements View.OnClickListene
 
         String todaysDate=HelperMethods.getTodayDate();
         filter=MyUtils.initializeFilter();
+        userLoggedIn=MyUtils.getUserLoggedIn();
         initComponent(view);
         return view;
     }
@@ -205,8 +206,8 @@ public class SaleViewAllFragment extends Fragment implements View.OnClickListene
         // if(addLinesActivity.getLine()==null) return;
         // Logger.write("Loading data");
         DialogUtils.displayProgress(getActivity());
-        RevenueApi lineApi = MainApplication.getInstance().getRetrofit().create(RevenueApi.class);
-        final Call<ResponseBody> response = lineApi.getRevenueByGroup(user.getToken(), "line", filter);
+        RevenueApi lineApi = MainApplication.createService(RevenueApi.class);
+        final Call<ResponseBody> response = lineApi.getRevenueByGroup( user.getId(), "line", filter);
         response.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
@@ -280,9 +281,9 @@ public class SaleViewAllFragment extends Fragment implements View.OnClickListene
         // if(addLinesActivity.getLine()==null) return;
         // Logger.write("Loading data");
         DialogUtils.displayProgress(getActivity());
-        RevenueApi lineApi = MainApplication.getInstance().getRetrofit().create(RevenueApi.class);
+        RevenueApi lineApi = MainApplication.createService(RevenueApi.class);
 
-        final Call<ResponseBody> response = lineApi.getRevenueByGroup(user.getToken(), "client", filter);
+        final Call<ResponseBody> response = lineApi.getRevenueByGroup(user.getId(), "client", filter);
         response.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
@@ -310,7 +311,7 @@ public class SaleViewAllFragment extends Fragment implements View.OnClickListene
                         double total=0;
                         for(Object keyObject:keys) {
                             Map<String, Object> obj = MyUtils.MapObject.create(keyObject.toString());
-//                            Logger.write(map.get(MyUtils.MapObject.create(keyObject.toString()).get("key")).toString());
+                            // Logger.write(map.get(MyUtils.MapObject.create(keyObject.toString()).get("key")).toString());
                             // lines.add((Line)map.get(MyUtils.MapObject.create(keyObject.toString()).get("key")));
                             Client client =gson.fromJson(map.getString(obj.get("key").toString()), Client.class);
                             Float val=Float.parseFloat(""+(Double)obj.get("value"));

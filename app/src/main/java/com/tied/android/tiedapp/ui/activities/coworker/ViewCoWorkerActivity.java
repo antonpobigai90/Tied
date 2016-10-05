@@ -99,7 +99,7 @@ public class ViewCoWorkerActivity extends AppCompatActivity implements View.OnCl
         schedules = (LinearLayout) findViewById(R.id.schedules);
         territories = (LinearLayout) findViewById(R.id.territories);
         clients = (LinearLayout) findViewById(R.id.clients);
-        goals = (LinearLayout) findViewById(R.id.goals);
+        //goals = (LinearLayout) findViewById(R.id.goals);
         sales = (LinearLayout) findViewById(R.id.sales);
 
         back_layout.setOnClickListener(this);
@@ -109,7 +109,7 @@ public class ViewCoWorkerActivity extends AppCompatActivity implements View.OnCl
         schedules.setOnClickListener(this);
         territories.setOnClickListener(this);
         clients.setOnClickListener(this);
-        goals.setOnClickListener(this);
+       // goals.setOnClickListener(this);
         sales.setOnClickListener(this);
 
         img_segment.setBackgroundResource(R.drawable.general);
@@ -152,9 +152,9 @@ public class ViewCoWorkerActivity extends AppCompatActivity implements View.OnCl
                 bundle.putInt(Constants.SHOW_FILTER, 1);
                 MyUtils.startActivity(this, ClientMapAndListActivity.class, bundle);
                 break;
-            case R.id.goals:
-                MyUtils.startActivity(this, CoWorkergGoalsActivity.class, bundle);
-                break;
+           // case R.id.goals:
+            //    MyUtils.startActivity(this, CoWorkergGoalsActivity.class, bundle);
+            //    break;
             case R.id.sales:
                 MyUtils.startActivity(this, ActivityGroupedSales.class, bundle);
                 break;

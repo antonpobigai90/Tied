@@ -10,9 +10,9 @@ import java.io.File;
 public class Constants {
     public static final String TAG = Constants.class
             .getSimpleName();
-    public static final String SERVER_URL = "http://tied.goattale.com:8101/api/v1/";
+    public static final String SERVER_URL = "http://tied.goattale.com:8100/api/v1/";
 
-    public static final String HOST = "http://tied.goattale.com:8101/";
+    public static final String HOST = "http://tied.goattale.com:8100/";
 //    public static final String HOST = "https://tied-api.herokuapp.com/";
 
     public static final int PORT = 3000;
@@ -33,18 +33,19 @@ public class Constants {
     public static final String USER_CHANGE_PASSWORD = API_PATH + "users/changePassword";
 
     public static final String CLIENTS = API_PATH + "clients";
-    public static final String USER_CLIENTS = API_PATH + "users/me/clients";
-    public static final String USER_CLIENTS_COUNT = API_PATH + "users/me/clients_count";
-    public static final String USER_GE0_CLIENTS = API_PATH + "users/me/clients/geo";
+    public static final String USER_CLIENTS = API_PATH + "users/{user_id}/clients";
+    public static final String USER_CLIENTS_COUNT = API_PATH + "users/{user_id}/clients_count";
+    public static final String USER_GE0_CLIENTS = API_PATH + "users/{user_id}/clients/geo";
 
     public static final String ADD_COWORKER = API_PATH + "users/me/coworkers";
     public static final String GET_COWORKERS = API_PATH + "coworker/{user_id}/{group}/{count}/{filter}";
 
     public static final String LINES = API_PATH + "lines";
+
     public static final String UPDATE_LINE_WITH_ID = API_PATH + "lines/{line_id}";
     public static final String USER_LINES = API_PATH + "users/{user_id}/lines/{page_number}";
     public static final String USER_CLIENT_LINES = API_PATH + "users/me/client_lines";
-    public static final String GET_USER_REVENUES = API_PATH + "users/me/{group_by}/{object_id}/revenues/{page_number}";
+    public static final String GET_USER_REVENUES = API_PATH + "users/{user_id}/{group_by}/{object_id}/revenues/{page_number}";
     public static final String GET_LINE_WITH_ID =  API_PATH + "line/{line_id}";
     public static final String USER_LINE_COUNT=  API_PATH + "lines/count";
     public static final String USER_GE0_LINES =  API_PATH + "lines/geo";
@@ -52,11 +53,16 @@ public class Constants {
     public static final String CLIENT_COUNT=  API_PATH + "lines/{line_id}/num_clients";
     public static final String LINE_CLIENTS=  API_PATH + "lines/{line_id}/clients/{page_number}";
 
+    public static final String TERRITORIES = API_PATH + "territories";
+
+    public static final String UPDATE_TERRITORY_WITH_ID = API_PATH + "territory/{territory_id}";
+    public static final String USER_TERRITORIES = API_PATH + "users/{user_id}/territories/{page_number}";
+
     public static final String REVENUES = API_PATH + "revenue";
     public static final String UPDATE_REVENUE_WITH_ID = API_PATH + "revenue/{line_id}";
     public static final String ADD_REVENUE = API_PATH + "revenue";
-    public static final String GET_TOP_FIVE_REVENUE = API_PATH + "revenue/top_five/{group_by}";
-    public static final String GET_REVENUE_BY_GROUP = API_PATH + "revenue/by_group/{group_by}";
+    public static final String GET_TOP_FIVE_REVENUE = API_PATH + "revenue/{user_id}/top_five/{group_by}";
+    public static final String GET_REVENUE_BY_GROUP = API_PATH + "revenue/{user_id}/by_group/{group_by}";
 
     public static final String  GET_TOTAL_REVENUES_FOR_USER = API_PATH + "/users/me/revenue/total";
 
@@ -123,6 +129,8 @@ public class Constants {
     public static final String COMPANY_NAME = "company_name";
 
     public static final String PREVIOUS = "previous";
+
+    public static final String TerritoryData="territories";
 
     public static final int Help = 0;
     public static final int SignInUser = 1;
