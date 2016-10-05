@@ -21,6 +21,8 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.soundcloud.android.crop.Crop;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
@@ -151,9 +153,10 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         //String avatarURL =Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg";
        // MyUtils.Picasso.displayImage(user.getAvatarURL(), img_user_picture);
 //        MyUtils.Picasso.displayImage(user.getAvatar(), drawerUserPicture);
-        Picasso.with(this).load(user.getAvatar()).into(drawerUserPicture);
         retrofit = MainApplication.getInstance().getRetrofit();
         service = retrofit.create(SignUpApi.class);
+
+        Picasso.with(this).load(user.getAvatar()).into(drawerUserPicture);
 
         bundle = getIntent().getExtras();
         if(bundle == null){
@@ -514,6 +517,9 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
             drawerLayout.closeDrawer(Gravity.RIGHT);
         } else {
             drawerLayout.openDrawer(Gravity.RIGHT);
+            Picasso.with(this).load(user.getAvatar())
+                    .memoryPolicy(MemoryPolicy.NO_CACHE)
+                    .networkPolicy(NetworkPolicy.NO_CACHE).into(drawerUserPicture);
         }
     }
     private void clearTabs() {

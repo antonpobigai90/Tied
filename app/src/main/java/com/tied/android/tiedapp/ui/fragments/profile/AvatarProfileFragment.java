@@ -75,14 +75,9 @@ public class AvatarProfileFragment extends Fragment implements View.OnClickListe
         if (user != null) {
             name.setText(user.getFullName());
             Log.d(TAG, "user.getAvatar()"+user.getAvatar());
-            Picasso.with(getActivity()).load(user.getAvatar()).into(image);
-//            MyUtils.Picasso.displayImage(user.getAvatar(),avatar);
-//            if (user.getAvatar_uri() != null && new File(user.getAvatar_uri()).exists()) {
-//                Uri myUri = Uri.parse(user.getAvatar_uri());
-//                avatar.setImageURI(myUri);
-//            }else{
-//                MyUtils.Picasso.displayImage(user.getAvatar(),avatar);
-//            }
+            Picasso.with(getActivity()).load(user.getAvatar())
+                    .memoryPolicy(MemoryPolicy.NO_CACHE)
+                    .networkPolicy(NetworkPolicy.NO_CACHE).into(image);
         }
     }
 
@@ -155,5 +150,4 @@ public class AvatarProfileFragment extends Fragment implements View.OnClickListe
             }
         });
     }
-
 }
