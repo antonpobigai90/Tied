@@ -1,15 +1,8 @@
 package com.tied.android.tiedapp.ui.fragments.profile;
 
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,23 +12,20 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.soundcloud.android.crop.Crop;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ProfileApi;
-import com.tied.android.tiedapp.ui.activities.SelectPicture;
-import com.tied.android.tiedapp.ui.listeners.ImageReadyForUploadListener;
+import com.tied.android.tiedapp.ui.dialogs.DialogSelectPicture;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.ui.listeners.ImageReadyForUploadListener;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Date;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -75,12 +65,13 @@ public class AvatarProfileFragment extends Fragment implements View.OnClickListe
             String user_json = bundle.getString(Constants.USER_DATA);
             User user = gson.fromJson(user_json, User.class);
             Log.d(TAG, "user.getAvatar()"+user.getAvatar());
-            if (user.getAvatar_uri() != null && new File(user.getAvatar_uri()).exists()) {
-                Uri myUri = Uri.parse(user.getAvatar_uri());
-                avatar.setImageURI(myUri);
-            }else{
-                MyUtils.Picasso.displayImage(user.getAvatar(),avatar);
-            }
+            MyUtils.Picasso.displayImage(user.getAvatar(),avatar);
+//            if (user.getAvatar_uri() != null && new File(user.getAvatar_uri()).exists()) {
+//                Uri myUri = Uri.parse(user.getAvatar_uri());
+//                avatar.setImageURI(myUri);
+//            }else{
+//
+//            }
         }
         return view;
     }
@@ -97,36 +88,10 @@ public class AvatarProfileFragment extends Fragment implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.avatar:
-                startActivity(new Intent(getActivity(), SelectPicture.class));
+//                startActivity(new Intent(getActivity(), SelectPicture.class));
+                DialogSelectPicture alert = new DialogSelectPicture();
+                alert.showDialog(getActivity(),bundle);
                 break;
-        }
-    }
-
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Crop.REQUEST_CROP && resultCode == Activity.RESULT_OK) {
-            handleCrop(outputUri);
-        } else if (requestCode == REQUEST_TAKE_PHOTO && resultCode == Activity.RESULT_OK) {
-            outputUri = Uri.fromFile(new File(getActivity().getFilesDir(), "cropped.jpg"));
-            Uri selectedImage = imageUri;
-            Crop.of(selectedImage, outputUri).asSquare().start(getActivity());
-        } else if (requestCode == IMAGE_PICKER_SELECT && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
-            Uri selectedImage = data.getData();
-            outputUri = Uri.fromFile(new File(getActivity().getFilesDir(), "cropped.jpg"));
-            Crop.of(selectedImage, outputUri).asSquare().start(getActivity());
-        }
-    }
-
-    private void handleCrop(Uri outputUri) {
-        imageReadyForUploadListener = this;
-        bundle.putString(Constants.AVATAR_STATE_SAVED, outputUri.toString());
-        avatar.setImageBitmap(null);
-        try {
-            bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), outputUri);
-            avatar.setImageBitmap(bitmap);
-            imageReadyForUploadListener.imageReadyUri(outputUri);
-        } catch (IOException e) {
-            MyUtils.showToast("An error occurred. Please try again.");
         }
     }
 
@@ -178,7 +143,7 @@ public class AvatarProfileFragment extends Fragment implements View.OnClickListe
                         DialogUtils.closeProgress();
                         user_json = gson.toJson(user);
                         bundle.putString(Constants.USER_DATA, user_json);
-                        Toast.makeText(getActivity(), ServerRes.getMessage(), Toast.LENGTH_LONG).show();
+                        ProfileFragment.vpProfile.getAdapter().notifyDataSetChanged();
                     }else {
                         DialogUtils.closeProgress();
                         Toast.makeText(getActivity(), "user information  was not updated", Toast.LENGTH_LONG).show();

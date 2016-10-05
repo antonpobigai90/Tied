@@ -27,22 +27,19 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.services.LocationService;
-import com.tied.android.tiedapp.ui.activities.client.ClientMapAndListActivity;
 import com.tied.android.tiedapp.ui.activities.coworker.CoWorkerActivity;
 import com.tied.android.tiedapp.ui.activities.goal.LineGoalActivity;
-
 import com.tied.android.tiedapp.ui.activities.sales.ActivityGroupedSales;
 import com.tied.android.tiedapp.ui.dialogs.DialogNewClient;
 import com.tied.android.tiedapp.ui.fragments.DailyStatsFragment;
 import com.tied.android.tiedapp.ui.fragments.LinesFragment;
-import com.tied.android.tiedapp.ui.fragments.activities.ActivityFragment;
 import com.tied.android.tiedapp.ui.fragments.client.ClientAddFragment;
 import com.tied.android.tiedapp.ui.fragments.client.MapFragment;
-import com.tied.android.tiedapp.ui.activities.profile.AddressActivity;
 import com.tied.android.tiedapp.ui.fragments.profile.AvatarProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.ProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.ProfileFragment1;
-import com.tied.android.tiedapp.ui.fragments.sales.*;
+import com.tied.android.tiedapp.ui.fragments.sales.SaleFragment;
+import com.tied.android.tiedapp.ui.fragments.sales.SaleViewAllFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.CreateScheduleFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleAppointmentsFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleSuggestionFragment;
@@ -323,7 +320,6 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 //tab_bar.setVisibility(View.VISIBLE);
                 if(fragments.get(pos)==null) {
                     fragments.put(pos, ScheduleAppointmentsFragment.newInstance(bundle) );
-                    Logger.write("it is new");
                 }
                 fragment = fragments.get(pos);
                 //tab_bar.setVisibility(View.VISIBLE);
@@ -334,9 +330,6 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 //relativeLayout.setVisibility(View.GONE);
                 if(fragments.get(pos)==null) {
                     fragments.put(pos, LinesFragment.newInstance(bundle) );
-
-
-                    Logger.write("it is new");
                 }
                 fragment = fragments.get(pos);
                // tab_bar.setVisibility(View.VISIBLE);
@@ -349,6 +342,13 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 }
                 fragment = fragments.get(pos);
                 //tab_bar.setVisibility(View.VISIBLE);
+                break;
+            case Constants.ProfileFragment:
+                more_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
+                if(fragments.get(pos)==null) {
+                    fragments.put(pos, ProfileFragment.newInstance(bundle));
+                }
+                fragment = fragments.get(pos);
                 break;
 
             default:
@@ -431,16 +431,6 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 DialogNewClient alert = new DialogNewClient();
                 alert.showDialog(this, bundle);
                 break;
-           /* case R.id.txt_activities:
-                if(currentFragmentID==Constants.ActivityFragment) return;
-                tab_actvity_schedule.setBackgroundResource(R.drawable.base_activities);
-                launchFragment(Constants.ActivityFragment, bundle);
-                break;
-            case R.id.txt_schedules:
-                if(currentFragmentID==Constants.AppointmentList) return;
-                tab_actvity_schedule.setBackgroundResource(R.drawable.base_schedule);
-                launchFragment(Constants.AppointmentList, bundle);
-                break;*/
             case R.id.more:
                 toggelDrawer();
                 break;
@@ -479,12 +469,9 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 MyUtils.startActivity(MainActivity.this, ActivityGroupedSales.class,bundle);
                 break;
 
-
             case R.id.img_user_picture : case R.id.user_picture_iv:
                 if(currentFragmentID==Constants.ProfileFragment) return;
                 launchFragment(Constants.ProfileFragment, bundle);
-
-//                MyUtils.startActivity(MainActivity.this, ProfileFragment.class, bundle);
                 break;
 
             case R.id.invite_menu:

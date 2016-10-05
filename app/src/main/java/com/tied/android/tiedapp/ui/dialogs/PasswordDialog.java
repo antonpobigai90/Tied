@@ -3,6 +3,7 @@ package com.tied.android.tiedapp.ui.dialogs;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -39,6 +40,7 @@ public class PasswordDialog implements View.OnClickListener{
         context = activity;
         this.user = user;
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.dialog_change_password);
 

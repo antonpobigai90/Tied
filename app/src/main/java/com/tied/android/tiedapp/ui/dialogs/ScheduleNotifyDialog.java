@@ -2,6 +2,7 @@ package com.tied.android.tiedapp.ui.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -46,6 +47,7 @@ public class ScheduleNotifyDialog implements View.OnClickListener{
 //        this.user = user;
 
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.dialog_schedule_notify);
 

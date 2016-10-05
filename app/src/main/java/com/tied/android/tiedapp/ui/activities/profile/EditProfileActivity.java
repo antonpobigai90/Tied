@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,8 +21,6 @@ import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.MyUtils;
 
-import org.w3c.dom.Text;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,8 +31,8 @@ import retrofit2.Retrofit;
  */
 public class EditProfileActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private EditText first_name, last_name, email, fax, company_name;
-    private String firstNameText, lastNameText, emailText, faxText, companyNameText, homeAddressText, officeAddressText;
+    private EditText first_name, last_name, email, fax, company_name, phone;
+    private String firstNameText, lastNameText, emailText, faxText, companyNameText, phoneText, homeAddressText, officeAddressText;
 
     private ImageView img_close;
     private Bundle bundle;
@@ -71,12 +68,14 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         firstNameText = first_name.getText().toString();
         lastNameText = last_name.getText().toString();
         emailText = email.getText().toString();
+        phoneText = email.getText().toString();
         faxText = fax.getText().toString();
         companyNameText = company_name.getText().toString();
 
         outState.putString(Constants.FIRST_NAME, firstNameText);
         outState.putString(Constants.LAST_NAME, lastNameText);
         outState.putString(Constants.EMAIL, emailText);
+        outState.putString(Constants.PHONE, emailText);
         outState.putString(Constants.FAX, faxText);
         outState.putString(Constants.COMPANY_NAME, companyNameText);
 
@@ -91,6 +90,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
         txt_save.setOnClickListener(this);
 
 
+        phone = (EditText) findViewById(R.id.etPhoneNumber);
         first_name = (EditText) findViewById(R.id.first_name);
         last_name = (EditText) findViewById(R.id.last_name);
         email = (EditText) findViewById(R.id.email);
@@ -115,6 +115,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
             first_name.setText(user.getFirst_name());
             last_name.setText(user.getLast_name());
             email.setText(user.getEmail());
+            phone.setText(user.getPhone());
             fax.setText(user.getFax());
             company_name.setText(user.getCompany_name());
 
@@ -199,8 +200,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
                 finish();
                 break;
             case R.id.tvChange:
-
-                MyUtils.startActivity(this, AddressActivity.class);
+                MyUtils.startActivity(this, AddressActivity.class, bundle);
                 break;
         }
     }

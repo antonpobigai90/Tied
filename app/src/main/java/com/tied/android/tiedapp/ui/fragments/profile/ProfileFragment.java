@@ -1,13 +1,9 @@
 package com.tied.android.tiedapp.ui.fragments.profile;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -18,11 +14,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.soundcloud.android.crop.Crop;
-import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
+import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.profile.ChangePasswordActivity;
 import com.tied.android.tiedapp.ui.activities.profile.EditProfileActivity;
 import com.tied.android.tiedapp.ui.activities.profile.NotificationProfileActivity;
@@ -31,7 +26,6 @@ import com.tied.android.tiedapp.ui.listeners.ImageReadyForUploadListener;
 import com.tied.android.tiedapp.util.DemoData;
 import com.tied.android.tiedapp.util.MyUtils;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,8 +63,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     public Retrofit retrofit;
     public SignUpApi service;
 
-    private ViewPager vpProfile;
-    private PagerAdapter mPagerAdapter;
+    public static ViewPager vpProfile;
+    public PagerAdapter mPagerAdapter;
     private CircleIndicator circleIndicator;
 
     private RelativeLayout atvPersonalInfo, atvNotifications, atvChangePassword, atvPrivacy, atvHelp, atvLogout;
@@ -137,6 +131,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             case R.id.rlHelp:
                 break;
             case R.id.rlLogout:
+                User.LogOut(getActivity().getApplicationContext());
                 break;
         }
     }
@@ -154,6 +149,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             switch (position) {
                 case 0:
                     fragment = new AvatarProfileFragment();
+                    ((MainActivity)  getActivity()).profileFragment = fragment;
                     break;
                 case 1:
                     fragment = new GoalProfileFragment();

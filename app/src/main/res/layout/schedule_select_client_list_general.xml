@@ -147,13 +147,11 @@
         </LinearLayout>
     </LinearLayout>
 
-
     <!--<RelativeLayout-->
         <!--android:id="@+id/bottom_layout"-->
         <!--android:layout_alignParentBottom="true"-->
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="wrap_content">-->
-
         <!--<TextView-->
             <!--android:id="@+id/txt_continue"-->
             <!--android:layout_width="fill_parent"-->
@@ -165,9 +163,6 @@
             <!--android:textColor="@color/white"-->
             <!--android:textSize="18dp"-->
             <!--android:textStyle="bold" />-->
-
-
     <!--</RelativeLayout>-->
-
 
 </RelativeLayout>
