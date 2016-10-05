@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.soundcloud.android.crop.Crop;
+import com.squareup.picasso.Picasso;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
@@ -149,7 +150,8 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         Log.d(TAG, "Avatar Url : " + Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg");
         //String avatarURL =Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg";
        // MyUtils.Picasso.displayImage(user.getAvatarURL(), img_user_picture);
-        MyUtils.Picasso.displayImage(user.getAvatarURL(), drawerUserPicture);
+//        MyUtils.Picasso.displayImage(user.getAvatar(), drawerUserPicture);
+        Picasso.with(this).load(user.getAvatar()).into(drawerUserPicture);
         retrofit = MainApplication.getInstance().getRetrofit();
         service = retrofit.create(SignUpApi.class);
 
@@ -382,7 +384,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
 
     private void handleCrop(Uri outputUri) {
         imageReadyForUploadListener = (AvatarProfileFragment) profileFragment;
-        ImageView avatar = ((AvatarProfileFragment) profileFragment).avatar;
+        ImageView avatar = ((AvatarProfileFragment) profileFragment).image;
         bundle.putString(Constants.AVATAR_STATE_SAVED, outputUri.toString());
         avatar.setImageBitmap(null);
         try {
@@ -420,6 +422,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
 
     @Override
     public void onClick(View v) {
+//        android:background="@color/semi_transparent_black"
         Logger.write("ID "+v.getId());
         if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
             drawerLayout.closeDrawer(Gravity.RIGHT);

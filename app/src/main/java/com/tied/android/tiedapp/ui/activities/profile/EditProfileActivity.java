@@ -159,10 +159,11 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
                             String json = gson.toJson(user);
                             bundle.putString(Constants.USER_DATA, json);
                             DialogUtils.closeProgress();
-                            Toast.makeText(context, ServerRes.getMessage(), Toast.LENGTH_LONG).show();
+                            MyUtils.showToast("Information has been updated");
+                            onBackPressed();
                         } else {
                             DialogUtils.closeProgress();
-                            Toast.makeText(context, "user info  was not updated", Toast.LENGTH_LONG).show();
+                            MyUtils.showAlert(EditProfileActivity.this, "user info  was not updated");
                         }
                     } else {
                         Toast.makeText(context, ServerRes.getMessage(), Toast.LENGTH_LONG).show();
@@ -172,8 +173,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
 
                 @Override
                 public void onFailure(Call<ServerRes> ServerResponseCall, Throwable t) {
-                    Toast.makeText(context, "On failure : error encountered", Toast.LENGTH_LONG).show();
-
+                    MyUtils.showAlert(EditProfileActivity.this, "Server error. try again later");
                     DialogUtils.closeProgress();
                 }
             });

@@ -72,8 +72,7 @@ public class SimpleDialogSelector implements View.OnClickListener{
         listView.setAdapter(adapter);
 
         this.dataModel = listData.get(0);
-
-
+        
         dialog.show();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

@@ -14,7 +14,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
+import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
@@ -64,7 +66,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     public SignUpApi service;
 
     public static ViewPager vpProfile;
-    public PagerAdapter mPagerAdapter;
+    public static PagerAdapter mPagerAdapter;
     private CircleIndicator circleIndicator;
 
     private RelativeLayout atvPersonalInfo, atvNotifications, atvChangePassword, atvPrivacy, atvHelp, atvLogout;
@@ -87,6 +89,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     public void initComponent(View view) {
 
         bundle = getArguments();
+        user = User.getUser(getActivity().getApplicationContext());
+        Gson gson = new Gson();
+        String json = gson.toJson(user);
+        bundle.putString(Constants.USER_DATA, json);
 
         vpProfile = (ViewPager) view.findViewById(R.id.vpProfile);
         circleIndicator = (CircleIndicator) view.findViewById(R.id.circleIndicator);
@@ -111,6 +117,17 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         atvLogout = (RelativeLayout) view.findViewById(R.id.rlLogout);
         atvLogout.setOnClickListener(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        user = User.getUser(getActivity().getApplicationContext());
+        Gson gson = new Gson();
+        String json = gson.toJson(user);
+        bundle.putString(Constants.USER_DATA, json);
+        mPagerAdapter.notifyDataSetChanged();
+        Log.d(TAG, "user : " + user.toString());
     }
 
     @Override
@@ -149,7 +166,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             switch (position) {
                 case 0:
                     fragment = new AvatarProfileFragment();
-                    ((MainActivity)  getActivity()).profileFragment = fragment;
+                    ((MainActivity) getActivity()).profileFragment = fragment;
                     break;
                 case 1:
                     fragment = new GoalProfileFragment();

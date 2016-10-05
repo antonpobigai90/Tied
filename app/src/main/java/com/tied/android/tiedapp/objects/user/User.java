@@ -8,7 +8,6 @@ import com.google.gson.Gson;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
-import com.tied.android.tiedapp.ui.activities.signups.SignInActivity;
 import com.tied.android.tiedapp.ui.activities.signups.WalkThroughActivity;
 import com.tied.android.tiedapp.util.MyUtils;
 
@@ -319,6 +318,10 @@ public class User implements Serializable {
     }
     public String getAvatarURL() {
         return Constants.GET_AVATAR_ENDPOINT + "avatar_" + getId() + ".jpg";
+    }
+
+    public String getFullName(){
+        return first_name +" "+last_name;
     }
 
     @Override

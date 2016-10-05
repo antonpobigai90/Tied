@@ -17,6 +17,7 @@ import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ProfileApi;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.util.MyUtils;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -63,10 +64,17 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
                 String old_pass = etCurrentPassword.getText().toString();
                 String new_pass = etNewPassword.getText().toString();
                 String conf_pass = etReNewPassword.getText().toString();
-                if(new_pass.equals(conf_pass) && conf_pass.length() > 0 && old_pass.length() > 0){
+                if(old_pass.length() == 0){
+                    MyUtils.showAlert(this, "Pls enter current password");
+                }
+                else if(!new_pass.equals(conf_pass)){
+                    MyUtils.showAlert(this, "New password does not match");
+                }
+                else if(new_pass.length() == 0){
+                    MyUtils.showAlert(this, "New password cannot be empty");
+                }
+                else{
                     changePassword();
-                }else{
-                    Toast.makeText(ChangePasswordActivity.this, "password input mismatch", Toast.LENGTH_LONG).show();
                 }
                 break;
         }

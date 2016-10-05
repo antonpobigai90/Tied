@@ -9,12 +9,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import com.google.gson.Gson;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
-import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ProfileApi;
@@ -24,7 +25,6 @@ import com.tied.android.tiedapp.ui.listeners.ImageReadyForUploadListener;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import java.io.File;
-import java.util.Date;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -40,7 +40,8 @@ public class AvatarProfileFragment extends Fragment implements View.OnClickListe
     public static final String TAG = ProfileFragment1.class
             .getSimpleName();
 
-    public ImageView avatar;
+    public ImageView image;
+    public TextView name;
     public static Uri imageUri = null, outputUri = null;
     private ImageReadyForUploadListener imageReadyForUploadListener;
     public Bitmap bitmap;
@@ -51,28 +52,15 @@ public class AvatarProfileFragment extends Fragment implements View.OnClickListe
     // Activity result key for camera
     public final int REQUEST_TAKE_PHOTO = 11111;
     public Bundle bundle;
+    private User user;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.profile1, container, false);
 
-        avatar = (ImageView) view.findViewById(R.id.avatar);
-        avatar.setOnClickListener(this);
-
-        bundle = getArguments();
-        if (bundle != null) {
-            Gson gson = new Gson();
-            String user_json = bundle.getString(Constants.USER_DATA);
-            User user = gson.fromJson(user_json, User.class);
-            Log.d(TAG, "user.getAvatar()"+user.getAvatar());
-            MyUtils.Picasso.displayImage(user.getAvatar(),avatar);
-//            if (user.getAvatar_uri() != null && new File(user.getAvatar_uri()).exists()) {
-//                Uri myUri = Uri.parse(user.getAvatar_uri());
-//                avatar.setImageURI(myUri);
-//            }else{
-//
-//            }
-        }
+        image = (ImageView) view.findViewById(R.id.avatar);
+        name = (TextView) view.findViewById(R.id.name);
+        image.setOnClickListener(this);
         return view;
     }
 
@@ -80,7 +68,21 @@ public class AvatarProfileFragment extends Fragment implements View.OnClickListe
     public void onResume() {
         super.onResume();
         if(outputUri != null){
-            avatar.setImageURI(outputUri);
+            image.setImageURI(outputUri);
+        }
+
+        user = User.getUser(getActivity().getApplicationContext());
+        if (user != null) {
+            name.setText(user.getFullName());
+            Log.d(TAG, "user.getAvatar()"+user.getAvatar());
+            Picasso.with(getActivity()).load(user.getAvatar()).into(image);
+//            MyUtils.Picasso.displayImage(user.getAvatar(),avatar);
+//            if (user.getAvatar_uri() != null && new File(user.getAvatar_uri()).exists()) {
+//                Uri myUri = Uri.parse(user.getAvatar_uri());
+//                avatar.setImageURI(myUri);
+//            }else{
+//                MyUtils.Picasso.displayImage(user.getAvatar(),avatar);
+//            }
         }
     }
 
@@ -88,7 +90,6 @@ public class AvatarProfileFragment extends Fragment implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.avatar:
-//                startActivity(new Intent(getActivity(), SelectPicture.class));
                 DialogSelectPicture alert = new DialogSelectPicture();
                 alert.showDialog(getActivity(),bundle);
                 break;
@@ -99,10 +100,6 @@ public class AvatarProfileFragment extends Fragment implements View.OnClickListe
     public void imageReadyUri(final Uri uri) {
 
         DialogUtils.displayProgress(getActivity());
-        Gson gson = new Gson();
-        String user_json = bundle.getString(Constants.USER_DATA);
-        User user = gson.fromJson(user_json, User.class);
-
         File file = new File(uri.getPath());
 
         Log.d("Uri", uri.getPath());
@@ -132,25 +129,22 @@ public class AvatarProfileFragment extends Fragment implements View.OnClickListe
                 ServerRes ServerRes = updateAvatarResponse.body();
                 Log.d(TAG, ServerRes.toString() );
                 if(ServerRes.isSuccess()){
-                    Gson gson = new Gson();
-                    Bundle bundle = getArguments();
-                    String user_json = bundle.getString(Constants.USER_DATA, "");
-                    User user = gson.fromJson(user_json, User.class);
                     user.setAvatar_uri(null);
-                    user.setAvatar(ServerRes.getUser().getAvatar()+new Date().getTime());
+                    user.setAvatar(ServerRes.getUser().getAvatar());
                     boolean saved = user.save(getActivity().getApplicationContext());
                     if(saved){
                         DialogUtils.closeProgress();
-                        user_json = gson.toJson(user);
-                        bundle.putString(Constants.USER_DATA, user_json);
-                        ProfileFragment.vpProfile.getAdapter().notifyDataSetChanged();
+                        Picasso.with(getActivity()).load(user.getAvatar())
+                                .memoryPolicy(MemoryPolicy.NO_CACHE)
+                                .networkPolicy(NetworkPolicy.NO_CACHE).into(image);
+                        ProfileFragment.mPagerAdapter.notifyDataSetChanged();
                     }else {
                         DialogUtils.closeProgress();
-                        Toast.makeText(getActivity(), "user information  was not updated", Toast.LENGTH_LONG).show();
+                        MyUtils.showAlert(getActivity(), "user information  was not updated");
                     }
                 }else{
                     DialogUtils.closeProgress();
-                    Toast.makeText(getActivity(), ServerRes.getMessage(), Toast.LENGTH_LONG).show();
+                    MyUtils.showAlert(getActivity(), ServerRes.getMessage());
                 }
             }
 

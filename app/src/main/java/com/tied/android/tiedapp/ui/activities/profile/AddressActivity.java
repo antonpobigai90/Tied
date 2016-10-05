@@ -81,14 +81,11 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.confirm_edit:
-                confirmEdit();
-                break;
             case R.id.img_close : case R.id.back_layout:
                 onBackPressed();
                 break;
             case R.id.txt_save:
-                new GeocodeAsyncTask().execute();
+                confirmEdit();
                 break;
         }
     }
@@ -227,8 +224,8 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
                             String json = gson.toJson(user);
                             bundle.putString(Constants.USER_DATA, json);
                             DialogUtils.closeProgress();
-                            Toast.makeText(context, "information updated", Toast.LENGTH_LONG).show();
-                            MyUtils.startActivity(AddressActivity.this, EditProfileActivity.class, bundle);
+                            MyUtils.showMessageAlert(AddressActivity.this, "Information successfully updated");
+//                            MyUtils.startActivity(AddressActivity.this, EditProfileActivity.class, bundle);
                         } else {
                             DialogUtils.closeProgress();
                             Toast.makeText(context, "user info  was not updated", Toast.LENGTH_LONG).show();
