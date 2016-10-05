@@ -145,9 +145,9 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         map_tab.setOnClickListener(this);
         sale_tab.setOnClickListener(this);
         drawerFullName=(TextView)findViewById(R.id.full_name_tv);
-        drawerFullName.setText(user.getFirst_name()+" "+user.getLast_name());
         drawerEmail=(TextView)findViewById(R.id.email_tv);
         drawerEmail.setText(user.getEmail());
+        drawerFullName.setText(user.getFirst_name()+" "+user.getLast_name());
 
         Log.d(TAG, "Avatar Url : " + Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg");
         //String avatarURL =Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg";
@@ -517,6 +517,11 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
             drawerLayout.closeDrawer(Gravity.RIGHT);
         } else {
             drawerLayout.openDrawer(Gravity.RIGHT);
+
+            user = User.getUser(getApplicationContext());
+            drawerEmail.setText(user.getEmail());
+            drawerFullName.setText(user.getFirst_name()+" "+user.getLast_name());
+
             Picasso.with(this).load(user.getAvatar())
                     .memoryPolicy(MemoryPolicy.NO_CACHE)
                     .networkPolicy(NetworkPolicy.NO_CACHE).into(drawerUserPicture);
