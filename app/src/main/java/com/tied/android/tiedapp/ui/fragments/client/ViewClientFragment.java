@@ -75,8 +75,7 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
         client_name = (TextView) view.findViewById(R.id.client_name);
         client_name.setText(MyUtils.getClientName(client));
         img_edit = (ImageView) view.findViewById(R.id.img_edit);
-//        important_info = (RelativeLayout) view.findViewById(R.id.important_info);
-//        lines_territory = (RelativeLayout) view.findViewById(R.id.lines_territory);
+
         MyUtils.Picasso.displayImage(client.getLogo(), (ImageView)view.findViewById(R.id.avatar));
 
         avatar = (ImageView) view.findViewById(R.id.avatar);
@@ -84,8 +83,8 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
         btn_delete.setOnClickListener(this);
         icon_plus.setOnClickListener(this);
         icon_call.setOnClickListener(this);
-        important_info.setOnClickListener(this);
-        lines_territory.setOnClickListener(this);
+     //  important_info.setOnClickListener(this);
+       // lines_territory.setOnClickListener(this);
 
         if (bundle != null) {
             Log.d(TAG, "bundle not null");

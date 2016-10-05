@@ -31,16 +31,16 @@ public interface RevenueApi {
                                       @Field("end") String endDate);
 
     @POST(Constants.GET_REVENUE_BY_GROUP)
-    Call<ResponseBody> getRevenueByGroup(@Header(Constants.TOKEN_HEADER) String token,
+    Call<ResponseBody> getRevenueByGroup(@Path("user_id") String user_id,
                                          @Path("group_by") String group_by,
                                          @Body RevenueFilter filter);
     @POST(Constants.GET_USER_REVENUES)
-    Call<ResponseBody> getUserRevenues(@Header(Constants.TOKEN_HEADER) String token,
+    Call<ResponseBody> getUserRevenues(@Path("user_id") String user_id,
                                        @Path("group_by") String group_by,
                                        @Path("object_id") String object_id,
                                        @Path("page_number") int page_number,
                                        @Body RevenueFilter filter);
     @GET(Constants.GET_TOP_FIVE_REVENUE)
-    Call<ResponseBody> getTopLineRevenues(@Header(Constants.TOKEN_HEADER) String token, @Path("group_by") String group_by);
+    Call<ResponseBody> getTopLineRevenues(@Path("user_id") String user_id, @Path("group_by") String group_by);
 
 }

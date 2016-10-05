@@ -15,11 +15,23 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.objects.Coordinate;
+import com.tied.android.tiedapp.objects.client.Client;
+import com.tied.android.tiedapp.objects.client.ClientLocation;
+import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.ui.activities.coworker.CoWorkerFilterActivity;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
+import retrofit2.Call;
+import retrofit2.Response;
+
+import java.util.ArrayList;
 
 /**
  * Created by Emmanuel on 7/1/2016.
@@ -32,10 +44,12 @@ public class MapFragment extends Fragment implements View.OnClickListener {
     public ViewPager mViewPager;
     public PagerAdapter mPagerAdapter;
     private Bundle bundle;
-    private User user;
-
+    private ClientsMapFragment clientsMapFragment;
+    ClientsListFragment clientsListFragment;
     LinearLayout parent, back_layout;
     ImageView img_segment, img_filter;
+    User user;
+    ArrayList<Client> clients;
 
     boolean bMap = true;
 
@@ -170,10 +184,16 @@ public class MapFragment extends Fragment implements View.OnClickListener {
             Fragment fragment = null;
             switch (position){
                 case 0:
-                    fragment = new ClientsMapFragment();
+                    if(clientsMapFragment==null) {
+                        clientsMapFragment=new ClientsMapFragment();
+                    }
+                    fragment = clientsMapFragment;
                     break;
                 case 1:
-                    fragment = new ClientsListFragment();
+                    if(clientsListFragment==null) {
+                        clientsListFragment=new ClientsListFragment();
+                    }
+                    fragment = clientsListFragment;
                     break;
             }
             assert fragment != null;
@@ -185,5 +205,58 @@ public class MapFragment extends Fragment implements View.OnClickListener {
         public int getCount() {
             return 2;
         }
+    }
+
+    private void loadClients() {
+        ClientLocation clientLocation = new ClientLocation();
+        clientLocation.setDistance("0m");
+
+        Coordinate coordinate = MyUtils.getCurrentLocation();
+        if( coordinate == null ){
+            coordinate = user.getOffice_address().getCoordinate();
+        }
+        clientLocation.setCoordinate(coordinate);
+
+        final ClientApi clientApi =  MainApplication.createService(ClientApi.class);
+        Call<ClientRes> response = clientApi.getClientsByLocation(user.getId(), clientLocation);
+        response.enqueue(new retrofit2.Callback<ClientRes>() {
+            @Override
+            public void onResponse(Call<ClientRes> call, Response<ClientRes> resResponse) {
+                if (getActivity()== null ) {
+                    // Logger.write("null activity");
+                    return;
+                }
+                //Logger.write("(((((((((((((((((((((((((((((999999");
+                DialogUtils.closeProgress();
+                ClientRes clientRes = resResponse.body();
+                //Logger.write(clientRes.toString());
+                try {
+                    if (clientRes.isAuthFailed()) {
+                        // User.LogOut(getActivity());
+                    } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200) {
+                        clients.addAll(clientRes.getClients());
+                          /*
+                            if (clients.size() > 0) {
+                              clients = clients;
+                                if (adapter != null) {
+                                    adapter.listInit(clients);
+                                }
+                            }*/
+
+                       // adapter.notifyDataSetChanged();
+                    } else {
+                        Logger.write("Error onResponse", clientRes.getMessage());
+                    }
+                }catch (Exception e) {
+                    Logger.write(e);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ClientRes> call, Throwable t) {
+
+                Logger.write(" onFailure", t.toString());
+            }
+        });
     }
 }
