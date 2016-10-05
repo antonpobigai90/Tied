@@ -4,12 +4,9 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -27,8 +24,8 @@ import com.tied.android.tiedapp.objects.responses.ServerRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
-import com.tied.android.tiedapp.ui.fragments.profile.ProfileFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.util.MyUtils;
 
 import org.json.JSONObject;
 
@@ -62,8 +59,8 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
 
     int fetchType = Constants.USE_ADDRESS_NAME;
 
-    private Button btnBack, btnSaveChange;
-    ImageView img_close;
+    private Button btnSaveChange;
+    ImageView btnBack;
     TextView txt_save;
     Context context;
 
@@ -87,11 +84,11 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.confirm_edit:
                 confirmEdit();
                 break;
-            case R.id.img_close:
-
+            case R.id.img_close : case R.id.back_layout:
+                onBackPressed();
                 break;
             case R.id.txt_save:
-
+                new GeocodeAsyncTask().execute();
                 break;
         }
     }
@@ -99,7 +96,7 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
     public void initComponent() {
         TextView tvTitle = (TextView) findViewById(R.id.tvTitle);
         tvTitle.setText(getResources().getString(R.string.address));
-        btnBack = (Button) findViewById(R.id.btnBack);
+        btnBack = (ImageView) findViewById(R.id.img_close);
         btnBack.setOnClickListener(this);
 
         etHomeZipCode = (EditText) findViewById(R.id.etHomeZipCode);
@@ -156,7 +153,6 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
             home_location.setStreet(home_streetName);
             home_location.setCity(home_cityName);
             home_location.setZip(home_zipName);
-
             new GeocodeAsyncTask().execute();
         }
     }
@@ -220,7 +216,6 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
                 @Override
                 public void onResponse(Call<ServerRes> call, Response<ServerRes> ServerResponseResponse) {
                     ServerRes ServerRes = ServerResponseResponse.body();
-                    Log.d(TAG + " onFailure", ServerResponseResponse.body().toString());
                     if (ServerRes.isAuthFailed()) {
                         DialogUtils.closeProgress();
                         User.LogOut(context);
@@ -232,6 +227,8 @@ public class AddressActivity extends AppCompatActivity implements View.OnClickLi
                             String json = gson.toJson(user);
                             bundle.putString(Constants.USER_DATA, json);
                             DialogUtils.closeProgress();
+                            Toast.makeText(context, "information updated", Toast.LENGTH_LONG).show();
+                            MyUtils.startActivity(AddressActivity.this, EditProfileActivity.class, bundle);
                         } else {
                             DialogUtils.closeProgress();
                             Toast.makeText(context, "user info  was not updated", Toast.LENGTH_LONG).show();

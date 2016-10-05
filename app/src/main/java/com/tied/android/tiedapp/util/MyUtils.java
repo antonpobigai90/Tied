@@ -15,7 +15,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.util.Pair;
 import android.util.Log;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,7 +38,12 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.MyStringAsyncTask;
 import com.tied.android.tiedapp.customs.model.DataModel;
-import com.tied.android.tiedapp.objects.*;
+import com.tied.android.tiedapp.objects.Coordinate;
+import com.tied.android.tiedapp.objects.Distance;
+import com.tied.android.tiedapp.objects.Goal;
+import com.tied.android.tiedapp.objects.Line;
+import com.tied.android.tiedapp.objects.RevenueFilter;
+import com.tied.android.tiedapp.objects._Meta;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.client.ClientLocation;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
@@ -50,10 +59,9 @@ import com.tied.android.tiedapp.ui.activities.GeneralSelectObjectActivity;
 import com.tied.android.tiedapp.ui.activities.SelectLineActivity;
 import com.tied.android.tiedapp.ui.activities.client.NewClientActivity;
 import com.tied.android.tiedapp.ui.activities.lines.LineRevenueActivity;
-import com.tied.android.tiedapp.ui.activities.lines.ViewNewLineActivity;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityAddSales;
-import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.dialogs.DatePickerFragment;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.listeners.ListAdapterListener;
 
 import org.json.JSONArray;
@@ -63,15 +71,17 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -88,7 +98,7 @@ public abstract class MyUtils {
                 com.squareup.picasso.Picasso.with(MainApplication.getInstance().getApplicationContext())
                         .load(imageUrl)
                        // .memoryPolicy(MemoryPolicy.C)
-                        //.networkPolicy(NetworkPolicy.NO_CACHE)
+                        .networkPolicy(NetworkPolicy.NO_CACHE)
                         .networkPolicy(NetworkPolicy.OFFLINE)
                         .into(imageView, new Callback() {
                             @Override

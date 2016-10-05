@@ -1,13 +1,15 @@
-package com.tied.android.tiedapp.ui.activities;
+package com.tied.android.tiedapp.ui.dialogs;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatTextView;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -18,29 +20,41 @@ import com.tied.android.tiedapp.ui.fragments.profile.AvatarProfileFragment;
 import java.io.File;
 
 /**
- * Created by hitendra on 9/11/2016.
+ * Created by Emmanuel on 7/18/2016.
  */
-public class SelectPicture extends AppCompatActivity {
+public class DialogSelectPicture {
+
+    public static final String TAG = DialogSelectPicture.class
+            .getSimpleName();
 
     public final int REQUEST_TAKE_PHOTO = 11111;
     public final int IMAGE_PICKER_SELECT = 999;
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.dialog_select_picture);
+    private Dialog dialog;
+    Activity _c;
+    Bundle bundle;
 
-        AppCompatTextView atvCancel = (AppCompatTextView) findViewById(R.id.atvCancel);
+    public void showDialog(final Activity activity, Bundle bundle1){
+        _c = activity;
+        bundle = bundle1;
+        dialog = new Dialog(activity);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setCancelable(true);
+
+        // Setting dialogview
+        Window window = dialog.getWindow();
+        dialog.setContentView(R.layout.dialog_select_picture);
+
+        AppCompatTextView atvCancel = (AppCompatTextView) dialog.findViewById(R.id.atvCancel);
         atvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                dialog.dismiss();
             }
         });
 
-        AppCompatTextView atvSelectPhoto = (AppCompatTextView) findViewById(R.id.atvSelectPhoto);
+        AppCompatTextView atvSelectPhoto = (AppCompatTextView) dialog.findViewById(R.id.atvSelectPhoto);
         atvSelectPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,11 +68,12 @@ public class SelectPicture extends AppCompatActivity {
                 Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
                 chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
 
-                startActivityForResult(chooserIntent, IMAGE_PICKER_SELECT);
+                activity.startActivityForResult(chooserIntent, IMAGE_PICKER_SELECT);
+                dialog.dismiss();
             }
         });
 
-        AppCompatTextView atvTakeNewPhoto = (AppCompatTextView) findViewById(R.id.atvTakeNewPhoto);
+        AppCompatTextView atvTakeNewPhoto = (AppCompatTextView) dialog.findViewById(R.id.atvTakeNewPhoto);
         atvTakeNewPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,8 +82,13 @@ public class SelectPicture extends AppCompatActivity {
                 File photo = new File(Environment.getExternalStorageDirectory(), "Pic.jpg");
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
                 AvatarProfileFragment.imageUri = Uri.fromFile(photo);
-                startActivityForResult(intent, REQUEST_TAKE_PHOTO);
+                activity.startActivityForResult(intent, REQUEST_TAKE_PHOTO);
+                dialog.dismiss();
             }
         });
+
+        window.setGravity(Gravity.BOTTOM);
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        dialog.show();
     }
 }

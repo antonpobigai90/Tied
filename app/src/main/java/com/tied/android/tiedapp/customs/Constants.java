@@ -53,6 +53,7 @@ public class Constants {
     public static final String CLIENT_COUNT=  API_PATH + "lines/{line_id}/num_clients";
     public static final String LINE_CLIENTS=  API_PATH + "lines/{line_id}/clients/{page_number}";
 
+
     public static final String TERRITORIES = API_PATH + "territories";
 
     public static final String UPDATE_TERRITORY_WITH_ID = API_PATH + "territory/{territory_id}";
@@ -64,7 +65,7 @@ public class Constants {
     public static final String GET_TOP_FIVE_REVENUE = API_PATH + "revenue/{user_id}/top_five/{group_by}";
     public static final String GET_REVENUE_BY_GROUP = API_PATH + "revenue/{user_id}/by_group/{group_by}";
 
-    public static final String  GET_TOTAL_REVENUES_FOR_USER = API_PATH + "/users/me/revenue/total";
+    public static final String GET_TOTAL_REVENUES_FOR_USER = API_PATH + "/users/me/revenue/total";
 
 
     public static final String GET_CLIENT_WITH_ID = API_PATH + "client/{client_id}";
@@ -126,6 +127,7 @@ public class Constants {
     public static final String LAST_NAME = "last_name";
     public static final String EMAIL = "email";
     public static final String FAX = "fax";
+    public static final String PHONE = "phone";
     public static final String COMPANY_NAME = "company_name";
 
     public static final String PREVIOUS = "previous";
@@ -153,7 +155,7 @@ public class Constants {
     public static final int CoWorkerCount = 18;
     public static final int AddOptions = 19;
     public static final int CoWorker = 20;
-    public static final int GOAL_REQUEST =2300;
+    public static final int GOAL_REQUEST = 2300;
 
     public static final int Completed = 25;
 
@@ -186,18 +188,15 @@ public class Constants {
     public static final int EditProfile = 101;
     public static final int ProfileAddress = 102;
     public static final int Notification = 103;
-    public static final int ChangePassword=104;
-    public static final int PRIVACY=105;
-    public static final int PRIVACY_SALES=106;
-    public static final int LineAndTerritory=920390;
-    public static final int REVENUE_LIST=23450;
-    public static final int SALES_SOURCE=90000;
-    public static final int LINE_SOURCE=90001;
-    public static final int COWORKER_SOURCE=90002;
-    public static final int PICK_CONTACT=123;
-
-
-
+    public static final int ChangePassword = 104;
+    public static final int PRIVACY = 105;
+    public static final int PRIVACY_SALES = 106;
+    public static final int LineAndTerritory = 920390;
+    public static final int REVENUE_LIST = 23450;
+    public static final int SALES_SOURCE = 90000;
+    public static final int LINE_SOURCE = 90001;
+    public static final int COWORKER_SOURCE = 90002;
+    public static final int PICK_CONTACT = 123;
 
 
     public static final String RECEIVER = "geo_address_receiver";
@@ -212,9 +211,9 @@ public class Constants {
     public static final int SELECT_LINE = 1003;
     public static final int ADD_SALES = 1001;
     public static final int ADD_CLIENT = 2001;
-    public static final int FILTER_CODE=302;
-    public static final String FILTER="filter";
-    public static final String SOURCE="source";
+    public static final int FILTER_CODE = 302;
+    public static final String FILTER = "filter";
+    public static final String SOURCE = "source";
 
     public static final String TOTAL_SALES = "Total sales";
 
@@ -237,18 +236,18 @@ public class Constants {
     public static final String NO_CLIENT_FOUND = "no_client_found";
     public static final String NO_SCHEDULE_FOUND = "no_schedule_found";
     public static final String LINE_CREATED = "a_line_exist";
-    public static final String GOOGLE_REVERSE_GEOCODING_URL="https://maps.googleapis.com/maps/api/geocode/json?sensor=true&key=AIzaSyDdWKslIGOEWJMa5RJFwH2dowBc7rEQ14g&latlng=";
+    public static final String GOOGLE_REVERSE_GEOCODING_URL = "https://maps.googleapis.com/maps/api/geocode/json?sensor=true&key=AIzaSyDdWKslIGOEWJMa5RJFwH2dowBc7rEQ14g&latlng=";
     public static final String LINE_DATA = "line";
     public static final String REVENUE_DATA = "revenue";
     public static final String LINES_lIST = "lines";
-    public static final String SHOW_TERRITORY = "show_territory" ;
-    public static PersistentCookieStore MY_COOKIE_STORE=null;
-    public static final String INDUSTRIES="industries";
+    public static final String SHOW_TERRITORY = "show_territory";
+    public static PersistentCookieStore MY_COOKIE_STORE = null;
+    public static final String INDUSTRIES = "industries";
     public static final String SHOW_SALE = "showsale";
-    public static final String SHOW_FILTER ="showfilter";
+    public static final String SHOW_FILTER = "showfilter";
     public static final String SHOW_CLIENT = "showClient";
-    public static final String  SHOW_LINE = "showLine";
-    public static final String  SHOW_MORE_CLIENT = "showMoreClients";
+    public static final String SHOW_LINE = "showLine";
+    public static final String SHOW_MORE_CLIENT = "showMoreClients";
 
     public static File DIR_ROOT = new File("StreamLive"),
             DIR_CACHE = new File("cache"), DIR_HTML_CACHE = new File("html"), DIR_DOWNLOADS = new File("downloads"), DIR_MEDIA = new File("media");
@@ -257,4 +256,5 @@ public class Constants {
 
     public static String GOAL_DATA = "goal";
     public static final String GOAL_lIST = "goals";
+
 }

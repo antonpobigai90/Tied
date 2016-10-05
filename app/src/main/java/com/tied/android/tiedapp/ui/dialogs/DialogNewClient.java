@@ -3,6 +3,7 @@ package com.tied.android.tiedapp.ui.dialogs;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
@@ -53,6 +54,7 @@ public class DialogNewClient implements View.OnClickListener {
         this.adapter = adapter;
         dialog = new Dialog(activity);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setCancelable(true);
 
         // Setting dialogview

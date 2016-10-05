@@ -18,7 +18,7 @@
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:id="@+id/textView5"
+            android:id="@+id/tvTitle"
             android:layout_centerInParent="true"
             style="@style/EditTextStyle" />
 
@@ -33,6 +33,7 @@
 
             <ImageView
                 android:id="@+id/img_close"
+                android:onClick="onClick"
                 android:layout_width="@dimen/action_bar_icon_height"
                 android:layout_height="@dimen/action_bar_icon_height"
                 android:layout_centerVertical="true"
@@ -51,6 +52,7 @@
             android:orientation="horizontal">
 
             <TextView
+                android:onClick="onClick"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/action_bar_icon_height"
                 android:layout_centerVertical="true"

@@ -2,6 +2,7 @@ package com.tied.android.tiedapp.ui.dialogs;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.Window;
@@ -52,6 +53,7 @@ public class SelectDataDialog implements View.OnClickListener{
         context = fragment.getActivity();
 
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setCancelable(false);
         dialog.setContentView(R.layout.dialog_select_data);
 
