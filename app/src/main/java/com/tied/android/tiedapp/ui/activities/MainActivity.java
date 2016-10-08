@@ -21,6 +21,9 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.soundcloud.android.crop.Crop;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
@@ -144,16 +147,18 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         map_tab.setOnClickListener(this);
         sale_tab.setOnClickListener(this);
         drawerFullName=(TextView)findViewById(R.id.full_name_tv);
-        drawerFullName.setText(user.getFirst_name()+" "+user.getLast_name());
         drawerEmail=(TextView)findViewById(R.id.email_tv);
         drawerEmail.setText(user.getEmail());
+        drawerFullName.setText(user.getFirst_name()+" "+user.getLast_name());
 
         Log.d(TAG, "Avatar Url : " + Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg");
         //String avatarURL =Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg";
        // MyUtils.Picasso.displayImage(user.getAvatarURL(), img_user_picture);
-        MyUtils.Picasso.displayImage(user.getAvatarURL(), drawerUserPicture);
+//        MyUtils.Picasso.displayImage(user.getAvatar(), drawerUserPicture);
         retrofit = MainApplication.getInstance().getRetrofit();
         service = retrofit.create(SignUpApi.class);
+
+        Picasso.with(this).load(user.getAvatar()).into(drawerUserPicture);
 
         bundle = getIntent().getExtras();
         if(bundle == null){
@@ -381,7 +386,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
 
     private void handleCrop(Uri outputUri) {
         imageReadyForUploadListener = (AvatarProfileFragment) profileFragment;
-        ImageView avatar = ((AvatarProfileFragment) profileFragment).avatar;
+        ImageView avatar = ((AvatarProfileFragment) profileFragment).image;
         bundle.putString(Constants.AVATAR_STATE_SAVED, outputUri.toString());
         avatar.setImageBitmap(null);
         try {
@@ -419,6 +424,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
 
     @Override
     public void onClick(View v) {
+//        android:background="@color/semi_transparent_black"
         Logger.write("ID "+v.getId());
         if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
             drawerLayout.closeDrawer(Gravity.RIGHT);
@@ -527,6 +533,14 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
             drawerLayout.closeDrawer(Gravity.RIGHT);
         } else {
             drawerLayout.openDrawer(Gravity.RIGHT);
+
+            user = User.getUser(getApplicationContext());
+            drawerEmail.setText(user.getEmail());
+            drawerFullName.setText(user.getFirst_name()+" "+user.getLast_name());
+
+            Picasso.with(this).load(user.getAvatar())
+                    .memoryPolicy(MemoryPolicy.NO_CACHE)
+                    .networkPolicy(NetworkPolicy.NO_CACHE).into(drawerUserPicture);
         }
     }
     private void clearTabs() {

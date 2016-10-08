@@ -91,7 +91,6 @@
                 android:onClick="onClick"
                 android:id="@+id/subscription_menu"
                 style="@style/DrawerMenuItem"
-                android:background="@color/semi_transparent_black"
         >
             <ImageView
                     style="@style/DrawerMenuIcon"

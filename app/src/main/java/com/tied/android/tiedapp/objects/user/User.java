@@ -321,6 +321,10 @@ public class User implements Serializable {
         return Constants.GET_AVATAR_ENDPOINT + "avatar_" + getId() + ".jpg";
     }
 
+    public String getFullName(){
+        return first_name +" "+last_name;
+    }
+
     @Override
     public String toString() {
         return "User{" +

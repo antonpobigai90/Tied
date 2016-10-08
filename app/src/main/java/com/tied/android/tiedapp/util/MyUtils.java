@@ -32,6 +32,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Callback;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
@@ -96,8 +97,8 @@ public abstract class MyUtils {
             if (imageUrl != null && !imageUrl.isEmpty()) {
                 com.squareup.picasso.Picasso.with(MainApplication.getInstance().getApplicationContext())
                         .load(imageUrl)
-                       // .memoryPolicy(MemoryPolicy.C)
-                        .networkPolicy(NetworkPolicy.NO_CACHE)
+//                        .memoryPolicy(MemoryPolicy.NO_CACHE)
+//                        .networkPolicy(NetworkPolicy.NO_CACHE)
                         .networkPolicy(NetworkPolicy.OFFLINE)
                         .into(imageView, new Callback() {
                             @Override
@@ -458,12 +459,17 @@ public abstract class MyUtils {
     public static String getDistance(Coordinate start, Coordinate stop) {
        return getDistance(start, stop, true);
     }
+
+
     public static final int MESSAGE_TOAST=0, ERROR_TOAST=1;
     public static void showAlert(Activity  activity, String message) {
         showAlert(activity, message, MESSAGE_TOAST);
     }
     public static void showMessageAlert(Activity  activity, String message) {
         showAlert(activity, message, MESSAGE_TOAST);
+    }
+    public static void showMessageSuccess(Activity  activity, String message) {
+        showAlert(activity, message, 3);
     }
     public static void showErrorAlert(Activity  activity, String message) {
         showAlert(activity, message, ERROR_TOAST);
@@ -476,6 +482,11 @@ public abstract class MyUtils {
         boolean isFirstTime=false;
         View layout= activity.getWindow().getDecorView().getRootView();
         View view=layout.findViewById(R.id.custom_alert);
+
+//        if (type == 3){
+//            view.setBackground(activity.getResources().getDrawable(R.color.green_color));
+//        }
+
         if(view==null) {
             isFirstTime=true;
             LayoutInflater inflater = LayoutInflater.from(MainApplication.getInstance().getApplicationContext());
