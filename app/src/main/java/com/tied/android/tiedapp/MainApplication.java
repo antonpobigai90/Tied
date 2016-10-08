@@ -127,14 +127,13 @@ public class MainApplication extends Application {
     }
 
     public Retrofit getRetrofit() {
-        if (retrofit == null) {
-            OkHttpClient okHttpClient = getOkHttpClient();
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(Constants.HOST)
-                    .client(okHttpClient)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
+        if (httpClient == null) {
+            httpClient = new OkHttpClient.Builder();
+
         }
+            OkHttpClient client = httpClient.build();
+            retrofit = builder.client(client).build();
+
         return retrofit;
     }
 

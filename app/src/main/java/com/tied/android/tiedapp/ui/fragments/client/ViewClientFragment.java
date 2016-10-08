@@ -24,10 +24,11 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.client.ClientInfo;
-import com.tied.android.tiedapp.ui.activities.LinesAndTerritories;
+import com.tied.android.tiedapp.ui.activities.lines.LinesListActivity;
 import com.tied.android.tiedapp.ui.dialogs.DialogClientOptions;
 import com.tied.android.tiedapp.ui.dialogs.DialogYesNo;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 
 
@@ -78,6 +79,7 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
 
         MyUtils.Picasso.displayImage(client.getLogo(), (ImageView)view.findViewById(R.id.avatar));
 
+        Logger.write("ava ttttttttttttttttt "+client.getLogo());
         avatar = (ImageView) view.findViewById(R.id.avatar);
 
         btn_delete.setOnClickListener(this);
@@ -144,7 +146,7 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
                 MyUtils.startActivity(getActivity(), ClientInfo.class, bundle);
                 break;
             case R.id.territory:
-                MyUtils.startActivity(getActivity(), LinesAndTerritories.class, bundle);
+                MyUtils.startActivity(getActivity(), LinesListActivity.class, bundle);
                 break;
         }
     }

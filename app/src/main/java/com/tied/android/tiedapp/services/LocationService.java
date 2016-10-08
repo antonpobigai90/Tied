@@ -162,7 +162,7 @@ public class LocationService extends Service {
                 intent.putExtra("Provider", loc.getProvider());
                 sendBroadcast(intent);*/
                 Coordinate co=new Coordinate(loc.getLatitude(), loc.getLongitude());
-                Logger.write("************************************** "+co.toString());
+                Log.i("CURRENT LOCATION", co.toString());
                 MyUtils.setCurrentLocation(co);
 
             }

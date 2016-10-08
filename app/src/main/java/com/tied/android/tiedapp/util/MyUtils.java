@@ -58,7 +58,6 @@ import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.GeneralSelectObjectActivity;
 import com.tied.android.tiedapp.ui.activities.SelectLineActivity;
 import com.tied.android.tiedapp.ui.activities.client.NewClientActivity;
-import com.tied.android.tiedapp.ui.activities.lines.LineRevenueActivity;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityAddSales;
 import com.tied.android.tiedapp.ui.dialogs.DatePickerFragment;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
@@ -1158,7 +1157,7 @@ public abstract class MyUtils {
         return new SimpleDateFormat(pattern).parse(date);
     }
     public static Date parseDate( String date) throws Exception {
-        return new SimpleDateFormat("yy-mm-dd").parse(date);
+        return new SimpleDateFormat("yyyy-MM-dd").parse(date);
     }
 
     public static class MapObject  {
@@ -1246,7 +1245,7 @@ public abstract class MyUtils {
             public void onClick(View v) {
 
                 dialog.dismiss();
-                MyUtils.startActivity(context, LineRevenueActivity.class);
+               // MyUtils.startActivity(context, LineRevenueActivity.class);
             }
         };
 
@@ -1272,7 +1271,7 @@ public abstract class MyUtils {
         RevenueFilter filter=new RevenueFilter();
         filter.setSort("desc");
         int year=HelperMethods.getCurrentYear(HelperMethods.getTodayDate());
-        filter.setStart_date(year+"-01-01");
+        filter.setStart_date(year+"-"+HelperMethods.getNumericMonthOfTheYear(todaysDate)+"-01");
         int endMonth=Arrays.asList(HelperMethods.MONTHS_LIST).indexOf(HelperMethods.getMonthOfTheYear(todaysDate));
         endMonth=endMonth+2;
         if(endMonth>12) endMonth=1;

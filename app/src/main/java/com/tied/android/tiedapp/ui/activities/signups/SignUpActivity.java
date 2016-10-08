@@ -87,7 +87,7 @@ public class SignUpActivity extends AppCompatActivity implements FragmentIterati
         super.onCreate(savedInstanceState);
         this.overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.slide_out_top);
         setContentView(R.layout.activity_sign_up);
-//        User user = User.getUser(getApplicationContext());
+//        User user = User.getCurrentUser(getApplicationContext());
 //        Log.d(TAG, user.toString());
 //        Gson gson = new Gson();
 //        String user_json = gson.toJson(user);
@@ -362,8 +362,8 @@ public void goBack(View v) {
     }
 
     public void profileButtonClicked(View v) {
-        User.LogInUser(getApplicationContext());
-        MyUtils.startActivity(this, MainActivity.class);
+
+      User.getCurrentUser(this).LogIn(this);
         WalkThroughActivity.getInstance().finish();
         finish();
 

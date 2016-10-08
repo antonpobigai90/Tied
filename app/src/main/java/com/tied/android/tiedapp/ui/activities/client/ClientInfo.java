@@ -49,7 +49,7 @@ public class ClientInfo extends AppCompatActivity implements View.OnClickListene
             client = gson.fromJson(client_json, Client.class);
 
 
-////            user = User.getUser(getApplicationContext());
+////            user = User.getCurrentUser(getApplicationContext());
 //            String user_json = gson.toJson(user);
 //            String client_json = gson.toJson(client);
 //            bundle.putString(Constants.USER_DATA, user_json);

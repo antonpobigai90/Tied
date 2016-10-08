@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 import android.widget.TextView;
+import com.google.gson.Gson;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
@@ -28,12 +29,15 @@ import com.tied.android.tiedapp.util.HelperMethods;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 import okhttp3.ResponseBody;
+import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by femi on 8/4/2016.
@@ -59,6 +63,7 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
     RevenueFilter filter;
     TextView periodLabelTV;
     int source=Constants.SALES_SOURCE;
+    private boolean revenueAdded=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,14 +129,14 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
         client_sale_adapter.notifyDataSetChanged();
         loadData();
         updateSalesLabel();
-//       setLineTotalRevenue();
+       setLineTotalRevenue();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.img_back:
-                finish();
+                onBackPressed();
                 break;
             case R.id.img_filter:
                 bundle.putSerializable(Constants.FILTER, filter);
@@ -151,7 +156,7 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
         DialogUtils.displayProgress(this);
         RevenueApi revenueApi = MainApplication.createService(RevenueApi.class);
         String id=(client==null?line.getId():client.getId());
-        final Call<ResponseBody> response = revenueApi.getUserRevenues(user.getId(), type, id, page, filter);
+        final Call<ResponseBody> response = revenueApi.getLineRevenues( id, page, filter);
         response.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
@@ -169,7 +174,35 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
                     Logger.write(response.toString());
                     _Meta meta=response.getMeta();
                     if(meta !=null && meta.getStatus_code()==200) {
-                        revenueList.addAll(response.getDataAsList("revenues", Revenue.class));
+                        //revenueList.addAll(response.getDataAsList("revenues", Revenue.class));
+                        //client_sale_adapter.notifyDataSetChanged();
+                        Gson gson = new Gson();
+                       // topRevenues.clear();
+                        //topRevenuesName.clear();
+                        List<Object> keys=response.getKeys();
+                        JSONObject map=response.getKeyObjects();
+                        //double total=0;
+                        for(Object keyObject:keys) {
+                            Map<String, Object> obj = MyUtils.MapObject.create(keyObject.toString());
+//                            Logger.write(map.get(MyUtils.MapObject.create(keyObject.toString()).get("key")).toString());
+                            // lines.add((Line)map.get(MyUtils.MapObject.create(keyObject.toString()).get("key")));
+                            Client client =gson.fromJson(map.getString(obj.get("key").toString()), Client.class);
+                            Float val=Float.parseFloat(""+(Double)obj.get("value"));
+                            client.setTotal_revenue(val);
+                            //total=total+val;
+                            //topRevenues.add(val);
+                            //topRevenuesName.add(MyUtils.getClientName(client));
+                            //clients.add(client);
+                            Logger.write(""+val);
+                            Revenue revenue=new Revenue();
+                            revenue.setClient_id(client.getId());
+                            revenue.setValue(val);
+                            revenue.setDate_sold("");
+                            revenue.setLine_id(line.getId());
+                            revenue.setTitle(MyUtils.getClientName(client));
+
+                            revenueList.add(revenue);
+                        }
                         client_sale_adapter.notifyDataSetChanged();
                     } else {
                         MyUtils.showToast(getString(R.string.connection_error));
@@ -196,8 +229,8 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
     }
 
     public void setLineTotalRevenue() {
-        LineApi lineApi = MainApplication.getInstance().getRetrofit().create(LineApi.class);
-        final Call<ResponseBody> response2 = lineApi.getLineTotalRevenue(user.getToken(), line.getId());
+        LineApi lineApi = MainApplication.createService(LineApi.class);
+        final Call<ResponseBody> response2 = lineApi.getFilteredLineTotalRevenue(line.getId(),filter);
         response2.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
@@ -256,25 +289,37 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
 
     @Override
     public void onBackPressed() {
-        if(ViewLineActivity.getInstance()!=null) {
-            ViewLineActivity.getInstance().setLineNumClients();
-            ViewLineActivity.getInstance().setLineTotalRevenue();
-        }
-        super.onBackPressed();
+     // if(revenueAdded) {
+            Intent intent = new Intent();
+            Bundle b =new Bundle();
+            b.putSerializable(Constants.LINE_DATA, line);
+
+            intent.putExtras(b);
+            setResult(RESULT_OK, intent);
+            finishActivity(Constants.ADD_SALES);
+            finish();
+            return;
+       // }
+        //super.onBackPressed();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //super.onActivityResult(requestCode, resultCode, data);
-        Logger.write("REgdlkadf ajsdpfjasdf "+requestCode);
-        if(requestCode== Constants.ADD_SALES && requestCode==RESULT_OK) {
+
+        if(requestCode== Constants.ADD_SALES && resultCode==RESULT_OK) {
+           // Logger.write("REgdlkadf ajsdpfjasdf "+requestCode+":"+RESULT_OK);
+            revenueAdded=true;
             revenueList.clear();
+            client_sale_adapter.notifyDataSetChanged();
             loadData();
             setLineTotalRevenue();
         }
+        Logger.write("REgdlkadf ajsdpfjasdf "+requestCode+":"+RESULT_OK);
         if(requestCode==Constants.FILTER_CODE && resultCode== Activity.RESULT_OK) {
-
+            Logger.write("REgdlkadf ajsdpfjasdf "+requestCode+":"+RESULT_OK);
             revenueList.clear();
+            client_sale_adapter.notifyDataSetChanged();
             filter = (RevenueFilter) (data.getSerializableExtra(Constants.FILTER));
             updateSalesLabel();
             loadData();

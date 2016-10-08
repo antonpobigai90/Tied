@@ -164,7 +164,7 @@ public class GeneralSelectObjectActivity extends Activity
 
 
 
-        //user = User.getUser(getActivity().getApplicationContext());//
+        //user = User.getCurrentUser(getActivity().getApplicationContext());//
         //
 
         bundle = getIntent().getExtras();

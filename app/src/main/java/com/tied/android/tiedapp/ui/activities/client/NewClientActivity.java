@@ -108,11 +108,11 @@ public class NewClientActivity extends AppCompatActivity implements View.OnClick
         schedule = (RelativeLayout) findViewById(R.id.schedule);
         schedule.setOnClickListener(this);
 
-        special = (RelativeLayout) findViewById(R.id.special);
-        special.setOnClickListener(this);
+       // special = (RelativeLayout) findViewById(R.id.special);
+       // special.setOnClickListener(this);
 
-        goal = (RelativeLayout) findViewById(R.id.goal);
-        goal.setOnClickListener(this);
+       // goal = (RelativeLayout) findViewById(R.id.goal);
+      // goal.setOnClickListener(this);
 
         line = (RelativeLayout) findViewById(R.id.line);
         line.setOnClickListener(this);
@@ -155,9 +155,9 @@ public class NewClientActivity extends AppCompatActivity implements View.OnClick
 
                 MyUtils.startActivity(this, ScheduleActivity.class);
                 break;
-            case R.id.special:
-                MyUtils.startActivity(this, SpecialActivity.class);
-                break;
+           // case R.id.special:
+              //  MyUtils.startActivity(this, SpecialActivity.class);
+              //  break;
             case R.id.goal:
                 MyUtils.startActivity(this, LineGoalActivity.class);
                 break;

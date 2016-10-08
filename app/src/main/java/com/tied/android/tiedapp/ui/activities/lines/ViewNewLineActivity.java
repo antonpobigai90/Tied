@@ -21,6 +21,7 @@ import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.LineApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
+import com.tied.android.tiedapp.ui.activities.territories.ActivityTerritories;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
@@ -107,7 +108,7 @@ public class ViewNewLineActivity extends AppCompatActivity implements  View.OnCl
                 MyUtils.startActivity(this, LineCreateGoalActivity.class);
                 break;
             case R.id.territory_layout:
-                MyUtils.startActivity(this, LineAddTerritoryActivity.class);
+                MyUtils.startActivity(this, ActivityTerritories.class);
                 break;
             case R.id.ship_layout:
                 MyUtils.startActivity(this, LineShipFromInforActivity.class);

@@ -70,7 +70,7 @@ public class AddClientActivity extends FragmentActivity implements View.OnClickL
         if(bundle == null){
             bundle = new Bundle();
         }
-        user = User.getUser(getApplicationContext());
+        user = User.getCurrentUser(getApplicationContext());
         Client client = (Client) getIntent().getSerializableExtra(Constants.CLIENT_DATA);
 
         Gson gson = new Gson();

@@ -36,12 +36,12 @@ public class ActivityClientProfile extends AppCompatActivity implements  View.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_client_lines_territories);
+
 
         bundle = getIntent().getExtras();
         user = MyUtils.getUserFromBundle(bundle);
         //initComponent();
-        setContentView(R.layout.activity_fragment_container);
+       setContentView(R.layout.activity_fragment_container);
         FragmentManager fm =getSupportFragmentManager();
         FragmentTransaction ft=fm.beginTransaction();
         ViewClientFragment linesFragment=(ViewClientFragment)ViewClientFragment.newInstance(bundle);
@@ -64,6 +64,7 @@ public class ActivityClientProfile extends AppCompatActivity implements  View.On
             case R.id.territories_tab:
                 mViewPager.setCurrentItem(1);
                 break;
+
         }
     }
 

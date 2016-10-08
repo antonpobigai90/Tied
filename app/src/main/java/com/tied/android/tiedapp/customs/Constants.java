@@ -46,6 +46,7 @@ public class Constants {
     public static final String USER_LINES = API_PATH + "users/{user_id}/lines/{page_number}";
     public static final String USER_CLIENT_LINES = API_PATH + "users/me/client_lines";
     public static final String GET_USER_REVENUES = API_PATH + "users/{user_id}/{group_by}/{object_id}/revenues/{page_number}";
+    public static final String GET_LINE_REVENUES = API_PATH + "/lines/{line_id}/revenues/{page_number}";
     public static final String GET_LINE_WITH_ID =  API_PATH + "line/{line_id}";
     public static final String USER_LINE_COUNT=  API_PATH + "lines/count";
     public static final String USER_GE0_LINES =  API_PATH + "lines/geo";
@@ -106,7 +107,7 @@ public class Constants {
     public static final String NEW_USER = "new_user";
     public static final String SPLASH_SCREEN_DONE = "sp_lash_screen_done";
     public static final String RETURNING_USER = "returning_user";
-    public static final String LOGGED_IN_USER = "login";
+    public static final String IS_LOGGED_IN_USER = "login";
     public static final String AVATAR_STATE_SAVED = "avatar_state";
     public static final String EditingProfile = "editing_profile";
     public static final String DISTANCE_UNIT = "distance_unit";
@@ -211,6 +212,7 @@ public class Constants {
     public static final int SELECT_LINE = 1003;
     public static final int ADD_SALES = 1001;
     public static final int ADD_CLIENT = 2001;
+    public static final int ADD_LINE = 3001;
     public static final int FILTER_CODE = 302;
     public static final String FILTER = "filter";
     public static final String SOURCE = "source";

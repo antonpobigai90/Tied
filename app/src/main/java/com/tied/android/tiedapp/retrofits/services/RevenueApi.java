@@ -40,6 +40,10 @@ public interface RevenueApi {
                                        @Path("object_id") String object_id,
                                        @Path("page_number") int page_number,
                                        @Body RevenueFilter filter);
+    @POST(Constants.GET_LINE_REVENUES)
+    Call<ResponseBody> getLineRevenues(@Path("line_id") String line_id,
+                                       @Path("page_number") int page_number,
+                                       @Body RevenueFilter filter);
     @GET(Constants.GET_TOP_FIVE_REVENUE)
     Call<ResponseBody> getTopLineRevenues(@Path("user_id") String user_id, @Path("group_by") String group_by);
 

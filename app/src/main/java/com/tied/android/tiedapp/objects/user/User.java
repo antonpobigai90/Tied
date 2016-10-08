@@ -1,5 +1,6 @@
 package com.tied.android.tiedapp.objects.user;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -8,7 +9,6 @@ import com.google.gson.Gson;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
-import com.tied.android.tiedapp.ui.activities.signups.SignInActivity;
 import com.tied.android.tiedapp.ui.activities.signups.WalkThroughActivity;
 import com.tied.android.tiedapp.util.MyUtils;
 
@@ -89,7 +89,7 @@ public class User implements Serializable {
     public User() {
     }
 
-    public static User getUser(Context context){
+    public static User getCurrentUser(Context context){
         Gson gson = new Gson();
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         String json = mPrefs.getString(Constants.CURRENT_USER, "");
@@ -100,24 +100,17 @@ public class User implements Serializable {
         User user = this;
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor prefsEditor = mPrefs.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(user); // myObject - instance of MyObject
-        prefsEditor.putString(Constants.CURRENT_USER, json);
+        prefsEditor.putString(Constants.CURRENT_USER,this.toJSONString());
+        //prefsEditor.putString(Constants.IS_LOGGED_IN_USER, json);
         prefsEditor.apply();
         return true;
     }
 
     public static boolean isUserLoggedIn(Context context){
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-        return mPrefs.getBoolean(Constants.LOGGED_IN_USER, false);
+        return mPrefs.getBoolean(Constants.IS_LOGGED_IN_USER, false);
     }
 
-    public static void LogInUser(Context context){
-        SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = mPrefs.edit();
-        editor.putBoolean(Constants.LOGGED_IN_USER,true);
-        editor.apply();
-    }
 
     public void LogIn(Context context){
         User user = this;
@@ -125,7 +118,8 @@ public class User implements Serializable {
         if(saved){
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
             SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putBoolean(Constants.LOGGED_IN_USER,true);
+            //editor.putString(Constants.CURRENT_USER,this.toJSONString());
+            editor.putBoolean(Constants.IS_LOGGED_IN_USER,true);
             editor.apply();
             MyUtils.startActivity(context, MainActivity.class);
         }
@@ -134,10 +128,16 @@ public class User implements Serializable {
     public static void LogOut(Context context){
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
         SharedPreferences.Editor prefsEditor = mPrefs.edit();
-        prefsEditor.putString(Constants.CURRENT_USER, null);
-        prefsEditor.putBoolean(Constants.LOGGED_IN_USER,false);
+        prefsEditor.putBoolean(Constants.IS_LOGGED_IN_USER,false);
+        prefsEditor.remove(Constants.CURRENT_USER);
         prefsEditor.apply();
+
         MyUtils.startActivity(context, WalkThroughActivity.class);
+        try{
+            ((Activity)context).finish();
+        }catch (Exception e) {
+
+        }
 
     }
 
@@ -346,5 +346,10 @@ public class User implements Serializable {
                 ", updatedAt='" + updatedAt + '\'' +
                 ", token='" + token + '\'' +
                 '}';
+    }
+
+    public String toJSONString() {
+        Gson gson=new Gson();
+        return gson.toJson(this, User.class);
     }
 }

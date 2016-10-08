@@ -138,6 +138,7 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
                 pb.setVisibility(View.GONE);
                 try {
                     ScheduleRes scheduleRes = resResponse.body();
+                    Logger.write(scheduleRes.toString());
                     if (scheduleRes != null && scheduleRes.isAuthFailed()) {
                         User.LogOut(getActivity());
                     } else if (scheduleRes != null && scheduleRes.get_meta() != null && scheduleRes.get_meta().getStatus_code() == 200) {

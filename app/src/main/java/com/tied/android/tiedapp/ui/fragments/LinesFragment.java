@@ -56,9 +56,9 @@ public class LinesFragment extends Fragment implements AdapterView.OnItemClickLi
     protected User user;
     protected Bundle bundle;
     protected ListView listView;
-    List<Line> lines =new ArrayList<>();
+    public List<Line> lines =new ArrayList<>();
 
-    protected LinesAdapter adapter;
+    public LinesAdapter adapter;
     ImageView img_plus;
 
     public static Fragment newInstance(Bundle bundle) {
@@ -98,7 +98,7 @@ public class LinesFragment extends Fragment implements AdapterView.OnItemClickLi
 
                     }
                 });*/
-                MyUtils.startActivity(getActivity(), AddLinesActivity.class, bundle);
+                MyUtils.startRequestActivity(getActivity(), AddLinesActivity.class, Constants.ADD_LINE, bundle);
             }
         });
 
@@ -111,7 +111,7 @@ public class LinesFragment extends Fragment implements AdapterView.OnItemClickLi
         adapter = new LinesAdapter(lines, getActivity(), bundle);
         listView.setAdapter(adapter);
         Logger.write(user.toString());
-        initLines(getActivity(), user, adapter);
+        initLines();
         listView.setOnItemClickListener(this);
 
     }
@@ -128,9 +128,9 @@ public class LinesFragment extends Fragment implements AdapterView.OnItemClickLi
         Log.d(TAG, "here---------------- listener");
         Line line = lines.get(position);
         bundle.putSerializable(Constants.LINE_DATA, line);
-        MyUtils.startActivity(getActivity(), ViewLineActivity.class, bundle);
+        MyUtils.startRequestActivity(getActivity(), ViewLineActivity.class, Constants.ADD_SALES, bundle);
     }
-    public void initLines(final Context context, User user, final ListAdapterListener listAdapterListener){
+    public void initLines(){
         final LineApi lineApi =  MainApplication.createService(LineApi.class);
         Call<ResponseBody> response = lineApi.getUserLines(user.getId(), 1);
         response.enqueue(new retrofit2.Callback<ResponseBody>() {
@@ -140,7 +140,7 @@ public class LinesFragment extends Fragment implements AdapterView.OnItemClickLi
                     GeneralResponse response = new GeneralResponse(resResponse.body());
                     Logger.write(response.toString());
                     if (response.isAuthFailed()) {
-                        User.LogOut(context);
+                        User.LogOut(getActivity());
                         return;
                     }
                     _Meta meta=response.getMeta();

@@ -130,7 +130,7 @@ public class ClientMapAndListActivity extends AppCompatActivity implements  View
             // This method will be invoked when a new page becomes selected.
             @Override
             public void onPageSelected(int position) {
-//                Toast.makeText(LinesAndTerritories.this,"Selected page position: " + position, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(LinesListActivity.this,"Selected page position: " + position, Toast.LENGTH_SHORT).show();
                 selectTab(position);
             }
 

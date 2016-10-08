@@ -153,7 +153,8 @@ public class Client implements Serializable, Comparable<Client>{
     }
 
     public String getFull_name() {
-        return full_name;
+        Client client=this;
+        return   (client.getCompany()==null || client.getCompany().isEmpty())?client.getFull_name():client.getCompany();
     }
 
     public void setFull_name(String full_name) {

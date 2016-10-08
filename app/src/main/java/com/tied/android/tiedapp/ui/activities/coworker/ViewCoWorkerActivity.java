@@ -14,16 +14,11 @@ import android.widget.TextView;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.model.ActivityDataModel;
-import com.tied.android.tiedapp.customs.model.ClientDataModel;
-import com.tied.android.tiedapp.customs.model.LineDataModel;
-import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.activities.LinesAndTerritories;
+import com.tied.android.tiedapp.ui.activities.lines.LinesListActivity;
 import com.tied.android.tiedapp.ui.activities.client.ClientMapAndListActivity;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityGroupedSales;
-import com.tied.android.tiedapp.ui.activities.sales.ActivityLineClientSales;
 import com.tied.android.tiedapp.ui.adapters.ActivityAdapter;
-import com.tied.android.tiedapp.ui.adapters.SaleLineListAdapter;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import java.util.ArrayList;
@@ -138,7 +133,7 @@ public class ViewCoWorkerActivity extends AppCompatActivity implements View.OnCl
             case R.id.lines:
                 bundle.putInt(Constants.SHOW_LINE, 0);
                 bundle.putInt(Constants.SHOW_FILTER, 1);
-                MyUtils.startActivity(this, LinesAndTerritories.class, bundle);
+                MyUtils.startActivity(this, LinesListActivity.class, bundle);
                 break;
             case R.id.territories:
                 bundle.putInt(Constants.SHOW_TERRITORY, 0);

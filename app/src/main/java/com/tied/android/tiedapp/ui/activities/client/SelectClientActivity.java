@@ -17,12 +17,10 @@ import com.google.gson.Gson;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.fragments.client.tab.ClientAlphabeticalListFragment;
 import com.tied.android.tiedapp.ui.fragments.client.tab.ClientDistanceListFragment;
 import com.tied.android.tiedapp.ui.fragments.client.tab.LastVisitedClientListFragment;
 import com.tied.android.tiedapp.util.DemoData;
-import com.tied.android.tiedapp.util.MyUtils;
 
 public class SelectClientActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -76,7 +74,7 @@ public class SelectClientActivity extends AppCompatActivity implements View.OnCl
         if (bundle == null){
             bundle = new Bundle();
         }
-        user = User.getUser(getApplicationContext());
+        user = User.getCurrentUser(getApplicationContext());
         Gson gson = new Gson();
         String user_json = gson.toJson(user);
         bundle.putString(Constants.USER_DATA, user_json);

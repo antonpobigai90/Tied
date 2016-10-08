@@ -6,6 +6,7 @@ package com.tied.android.tiedapp.retrofits.services;
 
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Line;
+import com.tied.android.tiedapp.objects.RevenueFilter;
 import com.tied.android.tiedapp.objects.client.ClientLocation;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.responses.Count;
@@ -48,9 +49,13 @@ public interface LineApi {
     Call<ResponseBody> getClientCount(@Header(Constants.TOKEN_HEADER) String token,
                                       @Path("line_id") String line_id);
 
-    @GET(Constants.TOTAL_LINE_REVENUE)
-    Call<ResponseBody> getLineTotalRevenue(@Header(Constants.TOKEN_HEADER) String token,
-                                           @Path("line_id") String line_id);
+    @GET (Constants.TOTAL_LINE_REVENUE)
+    Call<ResponseBody> getLineTotalRevenue(@Path("line_id") String line_id);
+
+    @POST (Constants.TOTAL_LINE_REVENUE)
+    Call<ResponseBody> getFilteredLineTotalRevenue(@Path("line_id") String line_id,
+                                                   @Body RevenueFilter filter);
+
     @GET(Constants.LINE_GOALS)
     Call<ResponseBody> getLineGoals(@Header(Constants.TOKEN_HEADER) String token, @Path("line_id") String line_id,
                                     @Path("page_num") int page_num);

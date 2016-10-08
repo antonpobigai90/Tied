@@ -1,15 +1,11 @@
 package com.tied.android.tiedapp.ui.fragments.sales;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
@@ -18,12 +14,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
-import android.widget.HorizontalScrollView;
 import android.widget.*;
 
 import com.github.mikephil.charting.animation.Easing;
@@ -40,29 +32,17 @@ import com.google.gson.Gson;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.customs.model.*;
 import com.tied.android.tiedapp.objects.Line;
-import com.tied.android.tiedapp.objects.Revenue;
 import com.tied.android.tiedapp.objects._Meta;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
-import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.retrofits.services.LineApi;
 import com.tied.android.tiedapp.retrofits.services.RevenueApi;
-import com.tied.android.tiedapp.ui.activities.MainActivity;
-import com.tied.android.tiedapp.ui.activities.lines.LineRevenueActivity;
-import com.tied.android.tiedapp.ui.activities.sales.ActivityAddSales;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityGroupedSales;
 import com.tied.android.tiedapp.ui.activities.sales.ActivitySalesFilter;
 import com.tied.android.tiedapp.ui.activities.sales.ActivitySalesPrint;
 import com.tied.android.tiedapp.ui.adapters.*;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
-import com.tied.android.tiedapp.ui.fragments.schedule.tabs.AllScheduleFragment;
-import com.tied.android.tiedapp.ui.fragments.schedule.tabs.NextWeekScheduleFragment;
-import com.tied.android.tiedapp.ui.fragments.schedule.tabs.ThisMonthScheduleFragment;
-import com.tied.android.tiedapp.ui.fragments.schedule.tabs.ThisWeekScheduleFragment;
-import com.tied.android.tiedapp.ui.fragments.schedule.tabs.TodayScheduleFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.HelperMethods;
 import com.tied.android.tiedapp.util.Logger;
@@ -70,7 +50,6 @@ import com.tied.android.tiedapp.util.MyUtils;
 
 import okhttp3.ResponseBody;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -209,6 +188,7 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
         mChart.setUsePercentValues(true);
         mChart.setDescription("");
         mChart.setExtraOffsets(5, 10, 5, 5);
+        mChart.setDrawSliceText(false);
 
         mChart.setDragDecelerationFrictionCoef(0.95f);
 

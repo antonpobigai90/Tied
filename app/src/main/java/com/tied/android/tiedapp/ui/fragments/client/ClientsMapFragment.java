@@ -33,12 +33,14 @@ import com.squareup.picasso.Target;
 import com.squareup.picasso.Transformation;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
+import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.client.ClientLocation;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
+import com.tied.android.tiedapp.ui.activities.client.ActivityClientProfile;
 import com.tied.android.tiedapp.ui.activities.client.MapClientList;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.Logger;
@@ -85,11 +87,12 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
     public void addClients(ArrayList<Client> clients) {
         this.clients.addAll( clients);
     }
-
+    ImageView i;
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initComponent(view);
+        i=new ImageView(getActivity());
     }
 
     public void initComponent(View view) {
@@ -158,7 +161,7 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
                 View v = inflater.inflate(R.layout.map_marker_info_window, null);
 
                 ImageView photo = (ImageView) v.findViewById(R.id.user_picture_iv);
-                if (!client.getLogo().isEmpty())
+                if (!client.getLogo().isEmpty()) client.setLogo("/logo");
                     MyUtils.Picasso.displayImage(client.getLogo(), photo);
                 // Getting the position from the marker
                 //LatLng latLng = arg0.getPosition();
@@ -171,9 +174,19 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
 
                 // Getting reference to the TextView to set longitude
                 TextView tvDistance = (TextView) v.findViewById(R.id.distance);
+                TextView totalEarnings = (TextView) v.findViewById(R.id.total_earnings);
+                TextView lastVisited = (TextView) v.findViewById(R.id.last_visited);
 
                 tvName.setText(client.getFull_name());
                 tvAddress.setText(client.getAddress().getStreet() + " " + client.getAddress().getCity());
+
+                totalEarnings.setText("Total Earnings: "+MyUtils.moneyFormat(client.getTotal_revenue()));
+                try {
+                    lastVisited.setText("Last Visited: " + MyUtils.parseDate(client.getLast_visited()));
+                }catch (Exception e) {
+
+                }
+        Logger.write(MyUtils.getCurrentLocation()+"  "+client.getAddress().getCoordinate());
 
                 tvDistance.setText(MyUtils.getDistance(MyUtils.getCurrentLocation(), client.getAddress().getCoordinate()));
 
@@ -183,7 +196,22 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
             }
         });
 
-        // Adding and showing marker while touching the GoogleMap
+        googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                                                   @Override
+                                                   public void onInfoWindowClick(Marker marker) {
+                                                       try {
+                                                           Client client = clients.get((int) marker.getTag());
+                                                           Bundle bundle=new Bundle();
+                                                           bundle.putSerializable(Constants.CLIENT_DATA, client);
+                                                           bundle.putSerializable(Constants.USER_DATA, user);
+                                                           MyUtils.startActivity(getActivity(), ActivityClientProfile.class, bundle);
+                                                       }catch (Exception e) {
+
+                                                       }
+                                                   }
+                                               });
+
+                // Adding and showing marker while touching the GoogleMap
         /*googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
             @Override
@@ -209,7 +237,7 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
             }
         });*/
 
-        loadClients(googleMap);
+                loadClients(googleMap);
     }
 
 
@@ -231,8 +259,9 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
                 if (this == null) return;
                 DialogUtils.closeProgress();
                 ClientRes clientRes = resResponse.body();
+                Logger.write(clientRes.toString());
                 if (clientRes.isAuthFailed()) {
-                    //User.LogOut(getActivity().getApplicationContext());
+                    User.LogOut(getActivity().getApplicationContext());
                 } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200) {
                     clients.addAll(clientRes.getClients());
                     googleMap.clear();
@@ -244,12 +273,16 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
                     LatLng loc=new LatLng(currentLocation.getLat(), currentLocation.getLon());
                     googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 5.0f));
                     googleMap.addMarker(new MarkerOptions()
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
                             .position(loc));
+                    googleMap.animateCamera(CameraUpdateFactory.newLatLng(loc));
 
 
                     boolean centered = false;
                     int i = -1;
                     for (Client client : clients) {
+                       if(client.getLogo().isEmpty()) client.setLogo("/ogo");
+                        Logger.write(client.getLogo());
                         i++;
                         LatLng latLng = new LatLng(client.getAddress().getCoordinate().getLat(),
                                 client.getAddress().getCoordinate().getLon());
@@ -262,11 +295,18 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
                                 .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_white)).anchor(0.5f, 1f).position(latLng));
                         // client.setLogo(user.getAvatar());
                         marker.setTag(i);
+                       // setData(userMarkerClickListener)
+                        /*Picasso.with(getActivity())
+                                .load(client.getLogo())
+                                .placeholder(R.drawable.avatar_profile)
+                                .into(i, new MarkerCallback(marker));*/
+                       // googleMap.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
 
-                        if (client.getLogo() != null && !client.getLogo().isEmpty()) {
+
+                       // if (client.getLogo() != null && !client.getLogo().isEmpty()) {
                             //Logger.write(TAG + " "+client.getLogo());
-                            new MyPicassoTarget(googleMap, client);
-                        }
+                            new MyPicassoTarget(client, marker, i);
+                        //}
 
                     }
 
@@ -287,6 +327,20 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
 
     @Override
     public boolean onMarkerClick(Marker marker) {
+
+
+       /* try {
+            Client client = clients.get((int) marker.getTag());
+            if(client.getLogo().isEmpty()) client.setLogo(user.getAvatarURL());
+            Logger.write("Logo "+client.getLogo());
+            Picasso.with(getActivity())
+                    .load(client.getLogo())
+                    .placeholder(R.drawable.avatar_profile)
+                    .into(i, new MarkerCallback(marker));
+
+        }catch (Exception e){
+                Logger.write(e);
+        }*/
         marker.showInfoWindow();
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
         return true;
@@ -302,15 +356,54 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
         }
     }
 
-    class MyPicassoTarget {
+    class MarkerCallback implements com.squareup.picasso.Callback {
+        Marker marker=null;
 
-        public MyPicassoTarget(final GoogleMap googleMap, final Client client) {
+        MarkerCallback(Marker marker) {
+            this.marker=marker;
+        }
+
+        @Override
+        public void onError() {
+            marker.showInfoWindow();
+            Log.e(getClass().getSimpleName(), "Error loading thumbnail!");
+        }
+
+        @Override
+        public void onSuccess() {
+            if (marker != null && marker.isInfoWindowShown()) {
+                marker.hideInfoWindow();
+                marker.showInfoWindow();
+            }
+        }
+    }
+
+    private GoogleMap.OnMarkerClickListener userMarkerClickListener = new GoogleMap.OnMarkerClickListener() {
+        @Override
+        public boolean onMarkerClick(Marker marker) {
+            // show dialog
+            marker.showInfoWindow();
+            return true;
+        }
+    };
+    class MyPicassoTarget {
+        Client client; Marker marker; int tag;
+        public MyPicassoTarget( final Client client, final Marker marker, int tag) {
+           this.client=client; this.marker=marker; this.tag=tag;
             Target target = new Target() {
                 @Override
-                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                public void onBitmapLoaded(final  Bitmap bitmap, Picasso.LoadedFrom from) {
                     Logger.write("Image loaded " + bitmap.getWidth());
-                    Marker marker = googleMap.addMarker(new MarkerOptions().anchor(0.5f, 1.5f)
-                            .icon(BitmapDescriptorFactory.fromBitmap(bitmap)).position(new LatLng(client.getAddress().getCoordinate().getLat(), client.getAddress().getCoordinate().getLon())));
+                    getView().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Marker nMarker=googleMap.addMarker(new MarkerOptions().anchor(0.5f, 1.5f).icon(BitmapDescriptorFactory.fromBitmap(bitmap))
+                                    .position(MyPicassoTarget.this.marker.getPosition()));
+                            nMarker.setTag(MyPicassoTarget.this.tag);
+                        }
+                    }, 300);
+
+
                     // marker.setTag(client.getId());
                     // markerClientMap.put(client.getId(), client);
 
@@ -319,7 +412,10 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
 
                 @Override
                 public void onBitmapFailed(Drawable errorDrawable) {
-                    Logger.write("Image not loaded ");
+                    Marker marker
+                            =  googleMap.addMarker(new MarkerOptions().anchor(0.5f, 1.5f).icon(BitmapDescriptorFactory.fromResource(R.drawable.avatar_profile))
+                            .position(MyPicassoTarget.this.marker.getPosition()));
+
                 }
 
                 @Override
@@ -327,7 +423,10 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
                 }
             };
 //Logger.write(url);
-            Picasso.with(getActivity()).load(client.getLogo()).centerCrop().transform(new CircleTransform()).resize(100, 100).into(target);
+            //if(client.getLogo().isEmpty())
+             //   Picasso.with(getActivity()).load(R.drawable.avatar_profile).centerCrop().transform(new CircleTransform()).resize(100, 100).into(target);
+           // else
+                Picasso.with(getActivity()).load(client.getLogo()).centerCrop().error(R.drawable.avatar_profile).transform(new CircleTransform()).resize(100, 100).into(target);
         }
     }
 

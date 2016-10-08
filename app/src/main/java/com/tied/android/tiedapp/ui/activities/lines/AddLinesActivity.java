@@ -129,7 +129,7 @@ public class AddLinesActivity extends AppCompatActivity implements  View.OnClick
                             @Override
                             public void run() {
                                 DialogUtils.closeProgress();
-                                MyUtils.startActivity(AddLinesActivity.this, ViewLineActivity.class, bundle);
+                                MyUtils.startRequestActivity(AddLinesActivity.this, ViewLineActivity.class, Constants.ADD_SALES, bundle);
                                 finish();
                             }
                         }, 2000);

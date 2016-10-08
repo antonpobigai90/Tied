@@ -137,7 +137,7 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
                                 Gson gson = new Gson();
                                 String user_json = gson.toJson(loggedIn_user);
                                 bundle.putString(Constants.USER_DATA, user_json);
-                                User.LogInUser(getActivity());
+                                //user.LogIn(getActivity());
                                 WalkThroughActivity.getInstance().finish();
                                 nextAction(Constants.PhoneAndFax, bundle);
                             } else {

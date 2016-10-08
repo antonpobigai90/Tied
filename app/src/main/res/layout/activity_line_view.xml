@@ -113,7 +113,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
-                android:text="All time sales : 0 clients Total"
+                android:text="All time sales"
                 android:layout_below="@+id/total_revenue_txt"
                 android:textSize="13sp"
                 android:alpha="0.5"

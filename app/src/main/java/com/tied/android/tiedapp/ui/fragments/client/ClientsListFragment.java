@@ -91,8 +91,10 @@ public class ClientsListFragment extends Fragment implements AdapterView.OnItemC
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.d(TAG, "here---------------- listener");
-        Client client = clients.get(position);
-        bundle.putSerializable(Constants.CLIENT_DATA, client);
+        //Client client = clients.get(position);
+        Bundle bundle =new Bundle();
+        bundle.putSerializable(Constants.USER_DATA, user);
+        bundle.putSerializable(Constants.CLIENT_DATA, clients.get(position));
         MyUtils.startActivity(getActivity(), ActivityClientProfile.class, bundle);
     }
 

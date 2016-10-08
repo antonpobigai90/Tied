@@ -25,7 +25,6 @@ import java.util.List;
 public class RevenueAdapter extends BaseAdapter {
     private Context context;
     private List<Revenue> rowItems;
-    DateFormat df=new SimpleDateFormat("yyyy-mm-dd");
 
 
     public RevenueAdapter(Context context, List<Revenue> rowItems) {
@@ -80,8 +79,8 @@ public class RevenueAdapter extends BaseAdapter {
         viewHoder.description.setText(MyUtils.moneyFormat(beanClass.getValue()));
         if(beanClass.getDate_sold()!=null) {
             try {
-                Date date = df.parse(beanClass.getDate_sold());
-                viewHoder.dateSold.setText(MyUtils.formatDate(date));
+
+                viewHoder.dateSold.setText(MyUtils.formatDate(MyUtils.parseDate(beanClass.getDate_sold())));
 
             }catch (Exception e) {
                 Logger.write(e);

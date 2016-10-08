@@ -116,6 +116,7 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
                 break;
 
 
+            case R.id.txt_date:
             case R.id.select_date:
                 DialogFragment dateFragment = new DatePickerFragment() {
                     @Override

@@ -234,15 +234,19 @@ public class SaleViewAllFragment extends Fragment implements View.OnClickListene
 
                         double total=0;
                         for(Object keyObject:keys) {
-                            Map<String, Object> obj = MyUtils.MapObject.create(keyObject.toString());
+                            try {
+                                Map<String, Object> obj = MyUtils.MapObject.create(keyObject.toString());
 //                            Logger.write(map.get(MyUtils.MapObject.create(keyObject.toString()).get("key")).toString());
-                            // lines.add((Line)map.get(MyUtils.MapObject.create(keyObject.toString()).get("key")));
-                            Line line =gson.fromJson(map.getString(obj.get("key").toString()), Line.class);
-                            Float val=Float.parseFloat(""+(Double)obj.get("value"));
-                            line.setTotal_revenue(val);
-                            total=total+val;
+                                // lines.add((Line)map.get(MyUtils.MapObject.create(keyObject.toString()).get("key")));
+                                Line line = gson.fromJson(map.getString(obj.get("key").toString()), Line.class);
+                                Float val = Float.parseFloat("" + (Double) obj.get("value"));
+                                line.setTotal_revenue(val);
+                                total = total + val;
 
-                            lines.add(line);
+                                lines.add(line);
+                            }catch (Exception e) {
+                                Logger.write(e);
+                            }
                         }
                         totalSalesTV.setText(MyUtils.moneyFormat(total));
 

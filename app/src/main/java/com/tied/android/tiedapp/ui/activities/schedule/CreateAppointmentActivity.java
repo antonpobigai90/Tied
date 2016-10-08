@@ -52,7 +52,7 @@ public class CreateAppointmentActivity extends FragmentActivity implements Fragm
         this.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
         setContentView(R.layout.activity_fragment_container);
 
-        user = User.getUser(getApplicationContext());
+        user = User.getCurrentUser(getApplicationContext());
         Client client = (Client) getIntent().getSerializableExtra(Constants.CLIENT_DATA);
 
         bundle = getIntent().getExtras();

@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.model.TerritoryModel;
 import com.tied.android.tiedapp.objects.Line;
-import com.tied.android.tiedapp.ui.activities.lines.LineAddTerritoryActivity;
 
 import java.util.List;
 

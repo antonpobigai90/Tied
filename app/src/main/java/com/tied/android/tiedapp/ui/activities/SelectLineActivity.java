@@ -168,7 +168,7 @@ public class SelectLineActivity extends Activity
 
 
 
-        //user = User.getUser(getActivity().getApplicationContext());//
+        //user = User.getCurrentUser(getActivity().getApplicationContext());//
         //
 
         bundle = getIntent().getExtras();

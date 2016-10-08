@@ -71,6 +71,34 @@
             android:background="@drawable/rounded_white_background"
             android:padding="10dp"
             android:layout_margin="10dp">
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Label or Title of sale"
+                        android:id="@+id/textView9"
+                        android:textColor="@color/grey"
+                        android:layout_marginTop="10dp"
+                        android:textSize="10dp" />
+
+                <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text|textMultiLine"
+                        android:ems="10"
+                        android:id="@+id/title"
+                        android:layout_marginTop="7dp"
+                        android:textColorHint="@color/light_gray"
+                        android:hint="Enter title or description"
+                        android:text=""
+                        android:textColor="@color/schedule_title_bg_color" />
+                <LinearLayout style="@style/SeperatorHorizontal" />
+            </LinearLayout>
             <LinearLayout android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
@@ -80,12 +108,13 @@
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:onClick="onClick"
                     android:id="@+id/client_photo"
-                    android:layout_width="50dp"
+                    android:layout_width="45dp"
                     android:padding="6dp"
                     android:layout_height="50dp"
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="15dp"
+                    android:layout_marginBottom="3dp"
                     android:src="@drawable/default_avatar" />
                 <TextView android:layout_width="0dp"
                     android:layout_weight="1"
@@ -219,6 +248,7 @@
                         android:textColorHint="@color/light_gray2"
                         android:textColor="@color/grey"
                         android:textSize="13sp"
+                        android:onClick="onClick"
                         android:layout_height="35dp"
                         android:text="July 11, 2016"
                         android:inputType="number"
@@ -243,34 +273,7 @@
 
             <LinearLayout style="@style/SeperatorHorizontal" />
 
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Note Text"
-                    android:id="@+id/textView9"
-                    android:textColor="@color/grey"
-                    android:layout_marginTop="10dp"
-                    android:textSize="10dp" />
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text|textMultiLine"
-                    android:ems="10"
-                    android:id="@+id/title"
-                    android:layout_marginTop="7dp"
-                    android:textColorHint="@color/light_gray"
-                    android:hint="Enter title or description"
-                    android:text=""
-                    android:textColor="@color/schedule_title_bg_color" />
-                <LinearLayout style="@style/SeperatorHorizontal" />
-            </LinearLayout>
 
         </LinearLayout>
 

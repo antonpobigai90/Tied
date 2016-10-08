@@ -91,7 +91,7 @@ public class MyClientLineAdapter extends BaseAdapter {
 
      if( _data.get(i) instanceof Client){
             final Client client = (Client) _data.get(i);
-            viewHolder.name.setText(client.getFull_name());
+            viewHolder.name.setText( MyUtils.getClientName(client));
              MyUtils.Picasso.displayImage(client.getLogo(), viewHolder.roundedImage);
              viewHolder.description.setText(client.getAddress().getCity()+", "+client.getAddress().getState());
          if(isMultiple) {

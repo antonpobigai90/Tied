@@ -14,6 +14,7 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.objects._Meta;
+import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.LineApi;
@@ -153,7 +154,7 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
                 break;
             case R.id.revenue_layout:
                 bundle.putInt(Constants.SOURCE, Constants.LINE_SOURCE);
-                MyUtils.startActivity(this, ActivityLineClientSales.class, bundle);
+                MyUtils.startRequestActivity(this, ActivityLineClientSales.class, Constants.ADD_SALES, bundle);
                 break;
             case R.id.clients_layout:
                 MyUtils.startActivity(this, LineClientListActivity.class, bundle);
@@ -208,6 +209,23 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
         }
     }
 
+    boolean revenueUpdated=false;
+    @Override
+    public void onBackPressed() {
+        if(revenueUpdated) {
+            Intent intent = new Intent();
+            Bundle b =new Bundle();
+            b.putSerializable(Constants.LINE_DATA, line);
+
+            intent.putExtras(b);
+            setResult(RESULT_OK, intent);
+            finishActivity(Constants.ADD_SALES);
+            finish();
+            return;
+        }
+        super.onBackPressed();
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -260,8 +278,8 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
     }
 
     public void setLineTotalRevenue() {
-        LineApi lineApi = MainApplication.getInstance().getRetrofit().create(LineApi.class);
-        final Call<ResponseBody> response2 = lineApi.getLineTotalRevenue(user.getToken(), line.getId());
+        LineApi lineApi = MainApplication.createService(LineApi.class);
+        final Call<ResponseBody> response2 = lineApi.getLineTotalRevenue(line.getId());
         response2.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
@@ -284,6 +302,7 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
                         line.setTotal_revenue(response.getData("line", Line.class).getTotal_revenue());
                         totalRevenueHeaderTV.setText(MyUtils.moneyFormat(line.getTotal_revenue()));
                         totalRevenueBodyTV.setText(MyUtils.moneyFormat(line.getTotal_revenue()));
+                        updateLine(line);
 
                     } else {
                        // MyUtils.showToast(getString(R.string.connection_error));
@@ -401,8 +420,10 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==Constants.Lines && RESULT_OK==resultCode) {
-
+        Logger.write(requestCode+" : "+resultCode);
+        if(requestCode==Constants.ADD_SALES && RESULT_OK==resultCode) {
+            setLineTotalRevenue();
+            revenueUpdated=true;
         }
     }
 }

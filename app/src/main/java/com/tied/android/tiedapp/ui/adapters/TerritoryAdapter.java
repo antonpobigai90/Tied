@@ -14,7 +14,7 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.model.TerritoryModel;
 import com.tied.android.tiedapp.objects.client.Client;
-import com.tied.android.tiedapp.ui.activities.LinesAndTerritories;
+import com.tied.android.tiedapp.ui.activities.lines.LinesListActivity;
 import com.tied.android.tiedapp.ui.listeners.ListAdapterListener;
 
 import java.util.ArrayList;
@@ -88,7 +88,7 @@ public class TerritoryAdapter extends BaseAdapter implements ListAdapterListener
     public void listInit(ArrayList arrayList) {
         if (client == null){
             this._data = arrayList;
-            android.support.v4.view.ViewPager mViewPager = ((LinesAndTerritories) _c).mViewPager;
+            android.support.v4.view.ViewPager mViewPager = ((LinesListActivity) _c).mViewPager;
             notifyDataSetChanged();
             mViewPager.getAdapter().notifyDataSetChanged();
         }

@@ -47,7 +47,11 @@ public class SaleClientDetailsListAdapter extends ClientParentAdapter {
 
             v.txt_price.setText(MyUtils.moneyFormat(data.getValue()));
             try {
-                v.txt_date.setText(MyUtils.formatDate(MyUtils.parseDate(data.getDate_sold())));
+                Logger.write(data.getDate_sold());
+                if(!data.getDate_sold().isEmpty()) {
+                    v.txt_date.setText(MyUtils.formatDate(MyUtils.parseDate(data.getDate_sold())));
+                    v.txt_date.setVisibility(View.VISIBLE);
+                }else v.txt_date.setVisibility(View.GONE);
             }catch (Exception e){
                 Logger.write(e);
             }

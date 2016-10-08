@@ -89,13 +89,10 @@ private User user;
                 txt_client_info = (TextView) findViewById(R.id.txt_client_info);
                 txt_description = (TextView) findViewById(R.id.txt_description);
 
-                if (page_index == 0) {
-                txt_client_info.setText("Lines");
-                txt_description.setText("You currently serve 20 lines for");
-                } else {
+
                 txt_client_info.setText("Territories");
                 txt_description.setText("You currently serve 20 territories for");
-                }
+
                 territories_listview = (ListView) findViewById(R.id.listView);
 
                 ArrayList<TerritoryModel> territoryModels = new ArrayList<TerritoryModel>();

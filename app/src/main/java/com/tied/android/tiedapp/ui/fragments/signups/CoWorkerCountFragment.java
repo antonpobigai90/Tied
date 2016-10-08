@@ -167,7 +167,7 @@ public class CoWorkerCountFragment extends Fragment implements View.OnClickListe
                     Bundle bundle = new Bundle();
                     boolean saved = user.save(getActivity().getApplicationContext());
                     if(saved){
-                        User.LogInUser(getActivity().getApplicationContext());
+                        user.LogIn(getActivity().getApplicationContext());
                     }else{
                         DialogUtils.closeProgress();
                         Toast.makeText(getActivity(), "user info  was not updated", Toast.LENGTH_LONG).show();
