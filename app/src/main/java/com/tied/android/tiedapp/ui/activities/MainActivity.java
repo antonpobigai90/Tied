@@ -19,6 +19,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.braintreepayments.api.BraintreePaymentActivity;
+import com.braintreepayments.api.models.PaymentMethodNonce;
 import com.google.gson.Gson;
 import com.soundcloud.android.crop.Crop;
 import com.squareup.picasso.MemoryPolicy;
@@ -87,6 +89,9 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
 
     User user;
     public Bundle bundle;
+
+    //
+    private final int BRAIN_REQUEST_CODE = 10010;
 
     // Code for our image picker select action.
     public final int IMAGE_PICKER_SELECT = 999;
@@ -422,6 +427,21 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
             outputUri = Uri.fromFile(new File(getFilesDir(), "cropped.jpg"));
             Crop.of(selectedImage, outputUri).asSquare().start(this);
         }
+
+        if (requestCode == BRAIN_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                PaymentMethodNonce paymentMethodNonce = data.getParcelableExtra(
+                        BraintreePaymentActivity.EXTRA_PAYMENT_METHOD_NONCE
+                );
+                String nonce = paymentMethodNonce.getNonce();
+                // Send the nonce to your server.
+            }
+        }
+    }
+
+    public void onBraintreeSubmit(View v) {
+//        To do
+        //https://developers.braintreepayments.com/start/hello-client/android/v2
     }
 
     @Override
@@ -531,6 +551,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                     .networkPolicy(NetworkPolicy.NO_CACHE).into(drawerUserPicture);
         }
     }
+
     private void clearTabs() {
         activity_layout.setBackground(null);
         map_tab.setBackground(null);
