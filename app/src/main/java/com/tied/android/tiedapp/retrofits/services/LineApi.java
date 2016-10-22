@@ -49,12 +49,12 @@ public interface LineApi {
     Call<ResponseBody> getClientCount(@Header(Constants.TOKEN_HEADER) String token,
                                       @Path("line_id") String line_id);
 
-    @GET (Constants.TOTAL_LINE_REVENUE)
+   /* @GET (Constants.TOTAL_LINE_REVENUE)
     Call<ResponseBody> getLineTotalRevenue(@Path("line_id") String line_id);
 
     @POST (Constants.TOTAL_LINE_REVENUE)
     Call<ResponseBody> getFilteredLineTotalRevenue(@Path("line_id") String line_id,
-                                                   @Body RevenueFilter filter);
+                                                   @Body RevenueFilter filter);*/
 
     @GET(Constants.LINE_GOALS)
     Call<ResponseBody> getLineGoals(@Header(Constants.TOKEN_HEADER) String token, @Path("line_id") String line_id,

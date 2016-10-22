@@ -11,13 +11,12 @@ import android.widget.TextView;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.objects.Line;
-import com.tied.android.tiedapp.objects.Location;
-import com.tied.android.tiedapp.objects._Meta;
+import com.tied.android.tiedapp.objects.*;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.LineApi;
+import com.tied.android.tiedapp.retrofits.services.RevenueApi;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityLineClientSales;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.Logger;
@@ -278,8 +277,10 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
     }
 
     public void setLineTotalRevenue() {
-        LineApi lineApi = MainApplication.createService(LineApi.class);
-        final Call<ResponseBody> response2 = lineApi.getLineTotalRevenue(line.getId());
+        RevenueApi lineApi = MainApplication.createService(RevenueApi.class);
+        RevenueFilter rf=new RevenueFilter();
+        rf.setStart_date("2015-01-01");
+        final Call<ResponseBody> response2 = lineApi.getTotalRevenues("line", line.getId(), rf);
         response2.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {

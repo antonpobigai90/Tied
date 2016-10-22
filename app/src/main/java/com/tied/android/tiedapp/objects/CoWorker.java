@@ -1,5 +1,7 @@
 package com.tied.android.tiedapp.objects;
 
+import com.google.gson.Gson;
+
 import java.io.Serializable;
 
 /**
@@ -14,6 +16,7 @@ public class CoWorker implements Serializable {
     private String coworker_id;
     private boolean verified;
     private String created;
+    private Public can_see;
 
     public CoWorker() {
     }
@@ -66,6 +69,14 @@ public class CoWorker implements Serializable {
         this.created = created;
     }
 
+    public void setCan_see(Public is_public) {
+        this.can_see = is_public;
+    }
+
+    public Public getCan_see() {
+        return can_see;
+    }
+
     @Override
     public String toString() {
         return "CoWorker{" +
@@ -76,6 +87,12 @@ public class CoWorker implements Serializable {
                 ", created='" + created + '\'' +
                 '}';
     }
+
+    public String toJSONString() {
+        return new Gson().toJson(this);
+    }
+
+
 }
 
 

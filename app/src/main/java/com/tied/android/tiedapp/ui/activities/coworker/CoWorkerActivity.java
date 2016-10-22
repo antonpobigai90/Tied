@@ -29,6 +29,7 @@ import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.retrofits.services.CoworkerApi;
 import com.tied.android.tiedapp.retrofits.services.RevenueApi;
+import com.tied.android.tiedapp.ui.activities.profile.PrivacyActivity;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityLineClientSales;
 import com.tied.android.tiedapp.ui.adapters.CoWorkerGAdapter;
 import com.tied.android.tiedapp.ui.adapters.CoWorkerHAdapter;
@@ -93,6 +94,8 @@ public class CoWorkerActivity extends AppCompatActivity implements AdapterView.O
 
 
 
+
+
         gridView = (GridView) findViewById(R.id.gridView);
         gridAdapter = new CoWorkerGAdapter(coworkersThatAddedMe, this);
         gridView.setAdapter(gridAdapter);
@@ -140,6 +143,11 @@ public class CoWorkerActivity extends AppCompatActivity implements AdapterView.O
                     if(meta !=null && meta.getStatus_code()==200) {
                         coworkersIAdded.addAll(response.getDataAsList("coworkers", User.class));
                         horizontalAdapter.notifyDataSetChanged();
+                        if(coworkersIAdded.size()==0) {
+                            findViewById(R.id.no_results).setVisibility(View.VISIBLE);
+                        }else{
+                            findViewById(R.id.no_results).setVisibility(View.GONE);
+                        }
                     } else {
                         MyUtils.showToast(getString(R.string.connection_error));
                     }
@@ -171,7 +179,7 @@ public class CoWorkerActivity extends AppCompatActivity implements AdapterView.O
         DialogUtils.displayProgress(this);
         CoworkerApi coworkerApi = MainApplication.getInstance().getRetrofit().create(CoworkerApi.class);
         String group="added_me";
-        final Call<ResponseBody> response = coworkerApi.getCoworkers( user.getToken(), user.getId(), "i_added",  10, new RevenueFilter());
+        final Call<ResponseBody> response = coworkerApi.getCoworkers( user.getToken(), user.getId(), "added_me",  10, new RevenueFilter());
         response.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
@@ -191,6 +199,11 @@ public class CoWorkerActivity extends AppCompatActivity implements AdapterView.O
                     if(meta !=null && meta.getStatus_code()==200) {
                         coworkersThatAddedMe.addAll(response.getDataAsList("coworkers", User.class));
                         gridAdapter.notifyDataSetChanged();
+                        if(coworkersThatAddedMe.size()==0) {
+                            findViewById(R.id.no_results_2).setVisibility(View.VISIBLE);
+                        }else{
+                            findViewById(R.id.no_results_2).setVisibility(View.GONE);
+                        }
                     } else {
                         MyUtils.showToast(getString(R.string.connection_error));
                     }
@@ -224,6 +237,9 @@ public class CoWorkerActivity extends AppCompatActivity implements AdapterView.O
                 break;
             case R.id.add:
                 MyUtils.startActivity(this, InviteCoWorkerActivity.class, bundle);
+                break;
+            case R.id.privacy_button:
+                MyUtils.startActivity(this, PrivacyActivity.class, bundle);
                 break;
         }
     }

@@ -70,6 +70,7 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.schedule_list, container, false);
+
         return view;
     }
 
@@ -79,7 +80,7 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
         initComponent(view);
     }
 
-    protected void initComponent(View view){
+    protected void initComponent(View view) {
         listView = (ListView) view.findViewById(R.id.list);
         listView.setOnItemClickListener(this);
         emptyScheduleMessage=view.findViewById(R.id.empty_schedule);
@@ -91,7 +92,7 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
         if (bundle != null) {
             Gson gson = new Gson();
             String user_json = bundle.getString(Constants.USER_DATA);
-            user = gson.fromJson(user_json, User.class);
+            user =MyUtils.getUserFromBundle(bundle);
            // initSchedule();
         }
     }
@@ -129,8 +130,9 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
 //        Log.d(TAG + " scheduleDate", scheduleDate.toString());
        pb.setVisibility(View.VISIBLE);
         emptyScheduleMessage.setVisibility(View.GONE);
-        ScheduleApi scheduleApi = MainApplication.getInstance().getRetrofit().create(ScheduleApi.class);
-        Call<ScheduleRes> response = scheduleApi.getScheduleByDate(user.getToken(), scheduleDate);
+        ScheduleApi scheduleApi = MainApplication.createService(ScheduleApi.class);
+        Logger.write("Userrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr  "+user.toString());
+        Call<ScheduleRes> response = scheduleApi.getScheduleByDate(user.getId(), scheduleDate);
         response.enqueue(new Callback<ScheduleRes>() {
             @Override
             public void onResponse(Call<ScheduleRes> call, Response<ScheduleRes> resResponse) {
@@ -180,14 +182,21 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
             schedules.add(schedule);
             for (int j = i + 1; j < scheduleArrayList.size(); j++) {
                 Schedule this_schedule = scheduleArrayList.get(j);
-                if (MyUtils.isSameDay(schedule.getDate(), this_schedule.getDate())) {
-                    schedules.add(this_schedule);
-                    Log.d(TAG, "SAME "+schedule.getTitle() + " and "+this_schedule.getTitle());
-                    scheduleArrayList.remove(j--);
+                try {
+                    if (MyUtils.isSameDay(schedule.getDate(), this_schedule.getDate())) {
+                        schedules.add(this_schedule);
+                        Log.d(TAG, "SAME " + schedule.getTitle() + " and " + this_schedule.getTitle());
+                        scheduleArrayList.remove(j--);
+                    }
+                }catch (Exception e) {
+
                 }
             }
-
-            long diff_in_date = HelperMethods.getDateDifferenceWithToday(schedule.getDate());
+            try {
+                long diff_in_date = HelperMethods.getDateDifferenceWithToday(schedule.getDate());
+            }catch (Exception e) {
+                continue;
+            }
 
             String day = String.format("%02d", HelperMethods.getDayFromSchedule(schedule.getDate()));
             String week_day = MyUtils.getWeekDay(schedule);

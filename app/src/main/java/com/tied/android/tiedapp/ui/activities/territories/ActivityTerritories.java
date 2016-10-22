@@ -48,7 +48,7 @@ private User user;
 
         ImageView img_close, img_edit;
         int page_index;
-    ArrayList<Territory> territories =new ArrayList<>();
+    ArrayList<Territory> territoryModels = new ArrayList<Territory>();
         TextView txt_client_info, txt_description;
 
             @Override
@@ -72,8 +72,9 @@ private User user;
                 case R.id.img_close:
                 finish();
                 break;
-                case R.id.img_edit:
-                //MyUtils.startActivity(this, LineSelectTerritoriesActivity.class, bundle);
+                case R.id.img_add:
+                    bundle.putSerializable("my_territories", territoryModels);
+                MyUtils.startRequestActivity(this, ActivityAddTerritory.class, Constants.ADD_TERRITORY, bundle);
                 break;
                 }
         }
@@ -83,8 +84,8 @@ private User user;
                 img_close = (ImageView) findViewById(R.id.img_close);
                 img_close.setOnClickListener(this);
 
-                img_edit = (ImageView) findViewById(R.id.img_edit);
-                img_edit.setOnClickListener(this);
+               // img_edit = (ImageView) findViewById(R.id.img_edit);
+               // img_edit.setOnClickListener(this);
 
                 txt_client_info = (TextView) findViewById(R.id.txt_client_info);
                 txt_description = (TextView) findViewById(R.id.txt_description);
@@ -95,31 +96,27 @@ private User user;
 
                 territories_listview = (ListView) findViewById(R.id.listView);
 
-                ArrayList<TerritoryModel> territoryModels = new ArrayList<TerritoryModel>();
-                for (int i = 0 ; i < 10; i++) {
-                TerritoryModel territoryModel = new TerritoryModel();
-
-                territoryModel.setTerritory_name("Denton Tap, MD");
-                if (i % 2 == 0) {
-                territoryModel.setCheck_status(true);
-                } else {
-                territoryModel.setCheck_status(false);
-                }
-
-                territoryModels.add(territoryModel);
-                }
 
                 territoriesAdapter = new LineTerritoriesAdapter(territoryModels, this);
                 territories_listview.setAdapter(territoriesAdapter);
                 territoriesAdapter.notifyDataSetChanged();
-            initTerritories();
+                initTerritories();
         }
 
         @Override
         protected void onActivityResult(int requestCode, int resultCode, Intent data) {
                 //super.onActivityResult(requestCode, resultCode, data);
                 Logger.write("REgdlkadf ajsdpfjasdf "+requestCode);
-                if(requestCode==Constants.ADD_SALES && requestCode==RESULT_OK) {
+                if(requestCode==Constants.ADD_TERRITORY && resultCode==RESULT_OK) {
+                    MyUtils.showMessageAlert(this, "Territory successfully added!");
+                    territoryModels.clear();
+                    territoriesAdapter.notifyDataSetChanged();
+                    territories_listview.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            initTerritories();
+                        }
+                    }, 200);
 
                 }
         }
@@ -137,12 +134,14 @@ private User user;
                         return;
                     }
                     _Meta meta=response.getMeta();
+
+
                     if(meta !=null && meta.getStatus_code() == 200) {
 
-                        territories.addAll( (ArrayList) response.getDataAsList(Constants.TerritoryData, Territory.class));
+                        territoryModels.addAll( (ArrayList) response.getDataAsList(Constants.TerritoryData, Territory.class));
                         //Logger.write("Lines loadeddddddddddddddddddddddddddddddddddddddddddddddd "+territories.size());
                         territoriesAdapter.notifyDataSetChanged();
-                        if(territories.isEmpty()) MyUtils.showNoResults(ActivityTerritories.this.findViewById(R.id.main_layout), R.id.no_results);
+                        if( territoryModels.isEmpty()) MyUtils.showNoResults(ActivityTerritories.this.findViewById(R.id.main_layout), R.id.no_results);
                     }else{
                         MyUtils.showToast("Error encountered");
                         DialogUtils.closeProgress();

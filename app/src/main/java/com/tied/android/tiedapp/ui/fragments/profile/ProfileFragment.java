@@ -89,7 +89,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     public void initComponent(View view) {
 
         bundle = getArguments();
-        user = User.getUser(getActivity().getApplicationContext());
+        user = User.getCurrentUser(getActivity().getApplicationContext());
         Gson gson = new Gson();
         String json = gson.toJson(user);
         bundle.putString(Constants.USER_DATA, json);
@@ -122,7 +122,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        user = User.getUser(getActivity().getApplicationContext());
+        user = User.getCurrentUser(getActivity().getApplicationContext());
         Gson gson = new Gson();
         String json = gson.toJson(user);
         bundle.putString(Constants.USER_DATA, json);

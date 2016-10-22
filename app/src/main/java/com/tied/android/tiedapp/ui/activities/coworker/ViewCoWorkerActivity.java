@@ -11,17 +11,30 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.model.ActivityDataModel;
+import com.tied.android.tiedapp.objects.CoWorker;
+import com.tied.android.tiedapp.objects.RevenueFilter;
+import com.tied.android.tiedapp.objects._Meta;
+import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.retrofits.services.CoworkerApi;
 import com.tied.android.tiedapp.ui.activities.lines.LinesListActivity;
 import com.tied.android.tiedapp.ui.activities.client.ClientMapAndListActivity;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityGroupedSales;
 import com.tied.android.tiedapp.ui.adapters.ActivityAdapter;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ViewCoWorkerActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -29,12 +42,13 @@ public class ViewCoWorkerActivity extends AppCompatActivity implements View.OnCl
             .getSimpleName();
 
     private Bundle bundle;
-    private User user;
+    private User currentUser;
 
     LinearLayout back_layout;
     private ImageView avatar, img_segment;
     private TextView name;
     private User coworker;
+    View activitiesSection ;
 
     Boolean bGeneral = true;
     private LinearLayout bottom_layout;
@@ -56,7 +70,7 @@ public class ViewCoWorkerActivity extends AppCompatActivity implements View.OnCl
         }
 
         bundle = getIntent().getExtras();
-        user = MyUtils.getUserFromBundle(bundle);
+        currentUser = MyUtils.getUserLoggedIn();
         bundle.putInt(Constants.SOURCE, Constants.COWORKER_SOURCE);
         coworker = (User) bundle.getSerializable(Constants.USER_DATA);
 
@@ -64,13 +78,16 @@ public class ViewCoWorkerActivity extends AppCompatActivity implements View.OnCl
         avatar = (ImageView) findViewById(R.id.avatar);
         img_segment  = (ImageView) findViewById(R.id.img_segment);
 
-        name.setText(user.getFirst_name()+" "+user.getLast_name());
-        MyUtils.Picasso.displayImage(user.getAvatarURL(), avatar);
+        name.setText(coworker.getFirst_name()+" "+coworker.getLast_name());
+        MyUtils.Picasso.displayImage(coworker.getAvatarURL(), avatar);
 
         back_layout = (LinearLayout) findViewById(R.id.back_layout);
         bottom_layout = (LinearLayout) findViewById(R.id.bottom_layout);
         activities_listview = (ListView) findViewById(R.id.activities_listview);
-        activities_listview.setVisibility(View.GONE);
+
+
+        activitiesSection = findViewById(R.id.activities_section);
+        activitiesSection.setVisibility(View.GONE);
 
         ArrayList<ActivityDataModel> activityDataModels = new ArrayList<>();
 
@@ -90,6 +107,8 @@ public class ViewCoWorkerActivity extends AppCompatActivity implements View.OnCl
         activities_listview.setAdapter(activity_adapter);
         activity_adapter.notifyDataSetChanged();
 
+        //check relationship
+
         lines = (LinearLayout) findViewById(R.id.lines);
         schedules = (LinearLayout) findViewById(R.id.schedules);
         territories = (LinearLayout) findViewById(R.id.territories);
@@ -100,14 +119,19 @@ public class ViewCoWorkerActivity extends AppCompatActivity implements View.OnCl
         back_layout.setOnClickListener(this);
         img_segment.setOnClickListener(this);
 
+
+
+        img_segment.setBackgroundResource(R.drawable.general);
+        checkCoworkers();
+    }
+
+    private void setListeners() {
         lines.setOnClickListener(this);
         schedules.setOnClickListener(this);
         territories.setOnClickListener(this);
         clients.setOnClickListener(this);
-       // goals.setOnClickListener(this);
+        // goals.setOnClickListener(this);
         sales.setOnClickListener(this);
-
-        img_segment.setBackgroundResource(R.drawable.general);
     }
 
     @Override
@@ -122,12 +146,12 @@ public class ViewCoWorkerActivity extends AppCompatActivity implements View.OnCl
                     img_segment.setBackgroundResource(R.drawable.general);
 
                     bottom_layout.setVisibility(View.VISIBLE);
-                    activities_listview.setVisibility(View.GONE);
+                    activitiesSection.setVisibility(View.GONE);
                 } else {
                     img_segment.setBackgroundResource(R.drawable.activities);
 
                     bottom_layout.setVisibility(View.GONE);
-                    activities_listview.setVisibility(View.VISIBLE);
+                    activitiesSection.setVisibility(View.VISIBLE);
                 }
                 break;
             case R.id.lines:
@@ -154,5 +178,86 @@ public class ViewCoWorkerActivity extends AppCompatActivity implements View.OnCl
                 MyUtils.startActivity(this, ActivityGroupedSales.class, bundle);
                 break;
         }
+    }
+    public void checkCoworkers() {
+        //super.loadData();
+        //if(addLinesActivity.getLine()==null) return;
+        Logger.write("Loading data");
+        DialogUtils.displayProgress(this);
+        CoworkerApi coworkerApi = MainApplication.createService(CoworkerApi.class);
+
+        final Call<ResponseBody> response = coworkerApi.isCoworker( currentUser.getId(), coworker.getId());
+        response.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
+                if (this == null) return;
+                DialogUtils.closeProgress();
+                try {
+                    //Logger.write(resResponse.body().string());
+                    //  JSONObject response = new JSONObject(resResponse.body().string());
+                    GeneralResponse response=new GeneralResponse(resResponse.body());
+                    Logger.write(response.toString());
+                    if (response != null && response.isAuthFailed()) {
+                        User.LogOut(ViewCoWorkerActivity.this);
+                        return;
+                    }
+                    Logger.write(response.toString());
+                    _Meta meta=response.getMeta();
+                    if(meta !=null && meta.getStatus_code()==200) {
+                        List<CoWorker> coworkers= response.getDataAsList("coworkers", CoWorker.class);
+                        if(coworkers.size()==0) {
+                           TextView tv=(TextView)findViewById(R.id.no_results);
+                            tv.setText("You have not been added as a coworker by "+coworker.getFirst_name());
+                            tv.setVisibility(View.VISIBLE);
+                            findViewById(R.id.bottom_layout).setAlpha(0.1f);
+                        }else{
+                            CoWorker coWorker=coworkers.get(0);
+                            if(coWorker.getCan_see().getClients()) {
+                                clients.setOnClickListener(ViewCoWorkerActivity.this);
+                            }else {
+                                clients.setAlpha(0.1f);
+                            }
+                            if(coWorker.getCan_see().getLine()) lines.setOnClickListener(ViewCoWorkerActivity.this);
+                            else{
+                                lines.setAlpha(0.1f);
+                            }
+                            if(coWorker.getCan_see().getSales()) sales.setOnClickListener(ViewCoWorkerActivity.this);
+                            else sales.setAlpha(0.1f);
+
+                            if(coWorker.getCan_see().getTerritory()) territories.setOnClickListener(ViewCoWorkerActivity.this);
+                            else territories.setAlpha(0.1f);
+
+                            if(coWorker.getCan_see().getSchedules()) schedules.setOnClickListener(ViewCoWorkerActivity.this);
+                            else schedules.setAlpha(0.1f);
+
+                            if(!coWorker.getCan_see().getActivities()) {
+                                activities_listview.setVisibility(View.GONE);
+                                TextView tv=(TextView)findViewById(R.id.no_results_2);
+                                tv.setVisibility(View.VISIBLE);
+                                tv.setText("You cannot view "+MyUtils.makePossesive(coworker.getFirst_name())+" activities");
+                            }
+                        }
+                    } else {
+                        MyUtils.showToast(getString(R.string.connection_error));
+                    }
+                }catch (Exception e) {
+                    MyUtils.showConnectionErrorToast(ViewCoWorkerActivity.this);
+                    Logger.write(e);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                //Log.d(TAG + " onFailure", t.toString());
+                Logger.write(t.getMessage());
+                MyUtils.showConnectionErrorToast(ViewCoWorkerActivity.this);
+                DialogUtils.closeProgress();
+            }
+        });
+
+
+        // DialogUtils.displayProgress(this);
+
+
     }
 }

@@ -40,17 +40,21 @@ public class Constants {
     public static final String ADD_COWORKER = API_PATH + "users/me/coworkers";
     public static final String GET_COWORKERS = API_PATH + "coworker/{user_id}/{group}/{count}/{filter}";
 
+    public static final String IS_ADDED_USER_AS_COWORKER = API_PATH + "coworkers/are_coworkers/{user_id}/{coworker_id}";
+    public static final String COWORKERS_THAT_CAN_SEE = API_PATH + "coworkers/can_see/{user_id}/{section}";
+
     public static final String LINES = API_PATH + "lines";
 
     public static final String UPDATE_LINE_WITH_ID = API_PATH + "lines/{line_id}";
     public static final String USER_LINES = API_PATH + "users/{user_id}/lines/{page_number}";
     public static final String USER_CLIENT_LINES = API_PATH + "users/me/client_lines";
     public static final String GET_USER_REVENUES = API_PATH + "users/{user_id}/{group_by}/{object_id}/revenues/{page_number}";
-    public static final String GET_LINE_REVENUES = API_PATH + "/lines/{line_id}/revenues/{page_number}";
+    public static final String GET_OBJECT_REVENUES = API_PATH + "revenues/get_list/{object_type}/{object_id}/{page_number}";
     public static final String GET_LINE_WITH_ID =  API_PATH + "line/{line_id}";
     public static final String USER_LINE_COUNT=  API_PATH + "lines/count";
     public static final String USER_GE0_LINES =  API_PATH + "lines/geo";
-    public static final String TOTAL_LINE_REVENUE =  API_PATH + "lines/{line_id}/total_revenue";
+    //public static final String TOTAL_LINE_REVENUE =  API_PATH + "lines/{line_id}/total_revenue";
+    public static final String GET_TOTAL_REVENUE =  API_PATH + "revenues/get_total/{object_type}/{object_id}";
     public static final String CLIENT_COUNT=  API_PATH + "lines/{line_id}/num_clients";
     public static final String LINE_CLIENTS=  API_PATH + "lines/{line_id}/clients/{page_number}";
 
@@ -76,10 +80,11 @@ public class Constants {
     public static final String UPDATE_SCHEDULE_WITH_ID = API_PATH + "schedules/{schedule_id}";
     public static final String DELETE_SCHEDULE_WITH_ID = API_PATH + "schedules/{schedule_id}";
     public static final String SCHEDULES = API_PATH + "schedules";
-    public static final String USER_SCHEDULE = API_PATH + "users/me/schedules";
+    public static final String USER_SCHEDULE = API_PATH + "users/{user_id}/schedules";
+    public static final String USER_GET_SCHEDULE = API_PATH + "users/{user_id}/schedules";
     public static final String USER_SCHEDULE_COUNT = API_PATH + "users/me/schedules_count";
     public static final String USER_GE0_SCHEDULE = API_PATH + "users/me/schedules/geo";
-    public static final String USER_SCHEDULES_BY_DATE = API_PATH + "users/me/schedules/date";
+    public static final String USER_SCHEDULES_BY_DATE = API_PATH + "users/{user_id}/schedules/date";
 
 
     public static final String UPDATE_GOAL_WITH_ID = API_PATH + "goals/{goal_id}";
@@ -170,6 +175,7 @@ public class Constants {
     public static final int CreateAppointment = 37;
     public static final int ViewSchedule = 38;
     public static final int AppointmentList = 39;
+    public static final int ADD_TERRITORY =89;
     public static final int AppointmentCalendar = 41;
 
     public static final int HomeSale = 42;
@@ -209,6 +215,7 @@ public class Constants {
     public static final String RESULT_ADDRESS = "address";
     public static final String RESULT_DATA_KEY = "data_key";
     public static final int SELECT_CLIENT = 1000;
+    public static final int SELECT_USER = 1005;
     public static final int SELECT_LINE = 1003;
     public static final int ADD_SALES = 1001;
     public static final int ADD_CLIENT = 2001;

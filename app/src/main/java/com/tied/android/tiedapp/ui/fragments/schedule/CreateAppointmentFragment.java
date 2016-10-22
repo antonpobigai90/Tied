@@ -33,6 +33,7 @@ import com.tied.android.tiedapp.objects.schedule.TimeRange;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
+import com.tied.android.tiedapp.ui.activities.schedule.ViewSchedule;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.dialogs.ScheduleNotifyDialog;
 import com.tied.android.tiedapp.ui.dialogs.DatePickerFragment;
@@ -308,6 +309,10 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
       //  cityText = city.getText().toString();
        // zipText = zip.getText().toString();
         //stateText = state.getText().toString();
+        if(client==null) {
+            MyUtils.showAlert(getActivity(), "You must select a client");
+            return false;
+        }
         if(titleText.trim().isEmpty()) {
             MyUtils.showAlert(getActivity(), "Schedule title is required");
             return false;
@@ -424,13 +429,14 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
                         Log.d(TAG + " Schedule", scheduleRes.getSchedule().toString());
                         Gson gson = new Gson();
                         Schedule mainSchedule = scheduleRes.getSchedule();
-                        String schedule_string = gson.toJson(mainSchedule, Schedule.class);
-                        bundle.putSerializable(Constants.SCHEDULE_DATA, schedule_string);
-                        if(client!=null) bundle.putSerializable(Constants.CLIENT_DATA, gson.toJson(client, Client.class));
+                        bundle.putSerializable(Constants.SCHEDULE_DATA, mainSchedule);
+                        if(client!=null) bundle.putSerializable(Constants.CLIENT_DATA, client);
                         Schedule.scheduleCreated(getActivity().getApplicationContext());
                         bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
                         DialogUtils.closeProgress();
-                        nextAction(Constants.ScheduleSuggestions, bundle);
+                        //nextAction(Constants.ActivitySchedule, bundle);
+                        MyUtils.startActivity(getActivity(), ViewSchedule.class, bundle);
+                        getActivity().finish();
                     } else {
                         DialogUtils.closeProgress();
                         nextAction(Constants.CreateSchedule, bundle);
@@ -482,12 +488,15 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
                         Gson gson = new Gson();
                         Schedule updatedSchedule = scheduleRes.getSchedule();
                         if (updatedSchedule.getId().equals(schedule.getId())) {
-                            String schedule_string = gson.toJson(schedule, Schedule.class);
-                            bundle.putSerializable(Constants.SCHEDULE_DATA, schedule_string);
+                           // String schedule_string = gson.toJson(schedule, Schedule.class);
+                            bundle.putSerializable(Constants.SCHEDULE_DATA, schedule);
                             bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
                             bundle.putBoolean(Constants.SCHEDULE_EDITED, true);
+                            bundle.putSerializable(Constants.CLIENT_DATA, client);
 
-                            MyUtils.startActivity(getActivity(), MainActivity.class, bundle);
+                           // MyUtils.startActivity(getActivity(), MainActivity.class, bundle);
+
+                            getActivity().finish();
 //                        Schedule.scheduleCreated(getActivity().getApplicationContext());
 //                        DialogUtils.closeProgress();
 //                        nextAction(Constants.ScheduleSuggestions, bundle);

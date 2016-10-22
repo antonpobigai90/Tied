@@ -100,7 +100,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
     public void continue_action(){
         emailText = email.getText().toString();
         passwordText = password.getText().toString();
-
+        Logger.write("loggin in................");
         DialogUtils.displayProgress(getActivity());
         SignUpApi signUpApi = ((SignInActivity) getActivity()).service;
         Call<LoginUser> response = signUpApi.LoginUser(emailText, passwordText);
@@ -109,10 +109,11 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
             @Override
             public void onResponse(Call<LoginUser> call, Response<LoginUser> LoginResponse) {
                 if (getActivity() == null) return;
+                Logger.write("loggin in again................");
                 try {
 
                     LoginUser LoginUser = LoginResponse.body();
-                    Log.d(TAG, LoginUser.toString());
+                    Logger.write(TAG, LoginUser.toString());
                     if (LoginUser.isSuccess()) {
                         User loggedIn_user = LoginUser.getUser();
                         loggedIn_user.setToken(LoginUser.getToken());

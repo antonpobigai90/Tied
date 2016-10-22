@@ -1,60 +1,22 @@
 package com.tied.android.tiedapp.ui.activities.client;
 
-import android.app.Activity;
-import android.app.FragmentTransaction;
-import android.graphics.Bitmap;
-import android.graphics.BitmapShader;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
-import com.squareup.picasso.Transformation;
-import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.client.Client;
-import com.tied.android.tiedapp.objects.client.ClientLocation;
-import com.tied.android.tiedapp.objects.responses.ClientRes;
-import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.retrofits.services.ClientApi;
-import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.lines.LineGoalActivity;
 import com.tied.android.tiedapp.ui.activities.lines.LineTerritoriesActivity;
-import com.tied.android.tiedapp.ui.dialogs.DialogClientOptions;
-import com.tied.android.tiedapp.ui.dialogs.DialogNewClient;
 import com.tied.android.tiedapp.ui.dialogs.DialogNewClient1;
-import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.dialogs.DialogYesNo;
-import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by femi on 8/10/2016.
@@ -86,7 +48,7 @@ public class NewClientActivity extends AppCompatActivity implements View.OnClick
         bundle = new Bundle();
 
         img_close = (ImageView) findViewById(R.id.img_close);
-        img_close.setOnClickListener(this);
+        //img_close.setOnClickListener(this);
 
         img_edit = (ImageView) findViewById(R.id.img_edit);
         img_edit.setOnClickListener(this);
@@ -117,8 +79,8 @@ public class NewClientActivity extends AppCompatActivity implements View.OnClick
         line = (RelativeLayout) findViewById(R.id.line);
         line.setOnClickListener(this);
 
-        territory = (RelativeLayout) findViewById(R.id.territory);
-        territory.setOnClickListener(this);
+       // territory = (RelativeLayout) findViewById(R.id.territory);
+        //territory.setOnClickListener(this);
     }
 
     @Override
@@ -148,7 +110,7 @@ public class NewClientActivity extends AppCompatActivity implements View.OnClick
             case R.id.icon_call:
 
                 break;
-            case R.id.total_sale:
+            case R.id.sale_layout:
                 MyUtils.startActivity(this, TotalSalesActivity.class);
                 break;
             case R.id.schedule:

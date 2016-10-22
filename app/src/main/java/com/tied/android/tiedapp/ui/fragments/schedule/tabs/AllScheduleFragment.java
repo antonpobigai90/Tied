@@ -52,8 +52,8 @@ public class AllScheduleFragment extends SchedulesFragment implements View.OnCli
 //    }
 
     public void initSchedule() {
-        ScheduleApi scheduleApi = MainApplication.getInstance().getRetrofit().create(ScheduleApi.class);
-        Call<ScheduleRes> response = scheduleApi.getSchedule(user.getToken());
+        ScheduleApi scheduleApi = MainApplication.createService(ScheduleApi.class);
+        Call<ScheduleRes> response = scheduleApi.getSchedule(user.getId());
         response.enqueue(new Callback<ScheduleRes>() {
             @Override
             public void onResponse(Call<ScheduleRes> call, Response<ScheduleRes> resResponse) {
@@ -65,9 +65,13 @@ public class AllScheduleFragment extends SchedulesFragment implements View.OnCli
                     User.LogOut(getActivity());
                 } else if (scheduleRes != null && scheduleRes.get_meta() != null && scheduleRes.get_meta().getStatus_code() == 200) {
                     ArrayList<Schedule> scheduleArrayList = scheduleRes.getSchedules();
+
                     scheduleDataModels = parseSchedules(scheduleArrayList);
                     adapter = new ScheduleListAdapter(scheduleDataModels, getActivity(), bundle);
                     listView.setAdapter(adapter);
+                    if(scheduleArrayList.size()==0) {
+                        emptyScheduleMessage.setVisibility(View.VISIBLE);
+                    }
                 } else {
                     Toast.makeText(getActivity(), "encountered error with server", Toast.LENGTH_LONG).show();
                 }

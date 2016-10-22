@@ -2,20 +2,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+                android:background="@drawable/background_blue"
     android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/background_layout"
+
         android:orientation="vertical">
 
         <RelativeLayout
             android:id="@+id/top_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="@dimen/action_bar_height">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -30,14 +30,14 @@
             <LinearLayout
                 android:id="@+id/back_layout"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+
                 android:gravity="center_vertical"
                 android:layout_alignParentTop="true"
                 android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/img_close"
-                    android:layout_width="wrap_content"
                     style="@style/ActionBarIcon"
                     android:onClick="goBack"
                     android:src="@drawable/btn_close" />
@@ -49,7 +49,7 @@
                 android:layout_width="wrap_content"
                 android:layout_alignParentTop="true"
                 android:gravity="center"
-                android:layout_height="@dimen/action_bar_icon_height"
+                android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:orientation="horizontal">
@@ -99,8 +99,9 @@
     <ScrollView
         android:id="@+id/scroll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@id/top"
+        android:background="@android:color/white"
         android:paddingBottom="0dp">
 
         <LinearLayout
@@ -127,6 +128,7 @@
                         android:text="COMPANY LEGAL NAME" />
 
                 <EditText
+                        android:paddingLeft="5dp"
                         android:id="@+id/company"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -153,6 +155,7 @@
                     android:text="CONTACT PERSON" />
 
                 <EditText
+                        android:paddingLeft="5dp"
                     android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -170,6 +173,9 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:paddingBottom="2dp"
+                android:onClick="onClick"
+                android:background="@android:color/white"
+                android:id="@+id/address_layout"
                 android:paddingTop="5dp">
 
                 <LinearLayout
@@ -185,16 +191,29 @@
                         android:layout_height="wrap_content"
                         android:text="LOCATION"
                         style="@style/FieldLabels"/>
+                    <RelativeLayout
 
+                            android:onClick="onClick"
+                            android:layout_width="match_parent"
+                            android:layout_height="fill_parent">
                     <TextView
+                            android:paddingLeft="5dp"
                         android:id="@+id/address_tv"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="@android:color/transparent"
+                        android:layout_height="match_parent"
+                            android:background="@android:color/white"
                         android:textColor="@color/grey"
                         android:inputType="text"
                         android:maxLines="1"
-                        android:text=""/>
+                        android:text="Click to add address"/>
+                        <ImageView android:layout_width="wrap_content"
+                                   android:layout_height="wrap_content"
+                                   android:src="@drawable/right_arrow"
+                                   android:layout_alignParentBottom="true"
+                                   android:paddingBottom="10dp"
+                                   android:layout_marginRight="5dp"
+                                   android:layout_alignParentRight="true"/>
+                    </RelativeLayout>
                     <View android:layout_width="match_parent"
                           android:layout_height="0.1dp"
                           android:background="@color/light_gray"
@@ -202,13 +221,7 @@
 
 
                 </LinearLayout>
-                <ImageView android:layout_width="wrap_content"
-                           android:layout_height="wrap_content"
-                android:src="@drawable/right_arrow"
-                           android:layout_alignParentBottom="true"
-                           android:paddingBottom="10dp"
-                           android:layout_marginRight="5dp"
-                android:layout_alignParentRight="true"/>
+
 
             </RelativeLayout>
 
@@ -243,6 +256,7 @@
                             android:backgroundTint="@android:color/transparent"
                             android:inputType="phone"
                             android:maxLines="1"
+                            android:paddingLeft="5dp"
                             android:textColor="@color/grey"
                             android:text="" />
                     <View android:layout_width="match_parent"
@@ -309,6 +323,7 @@
 
                     <EditText
                         android:id="@+id/email"
+                        android:paddingLeft="5dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:backgroundTint="@android:color/transparent"
@@ -327,6 +342,7 @@
             </LinearLayout>
 
             <LinearLayout
+                    android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -375,6 +391,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingBottom="2dp"
+                android:visibility="gone"
                 android:paddingTop="5dp">
 
                 <TextView
@@ -418,7 +435,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="SELECT INDUSTRY"
+                    android:text="INDUSTRY"
                     style="@style/FieldLabels" />
 
                 <RelativeLayout
@@ -427,9 +444,11 @@
                     android:layout_height="wrap_content">
 
                     <TextView
+                            android:paddingLeft="5dp"
                         android:id="@+id/industry"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:text="Click to select industry"
                         android:textColor="@color/schedule_title_bg_color"
                         android:textStyle="bold" />
 
@@ -453,17 +472,19 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:paddingBottom="2dp"
+                android:visibility="gone"
                 android:paddingTop="5dp">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="SELECT LINE"
+                    android:text="LINE"
                     style="@style/FieldLabels"/>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:id="@+id/line_layout"
                     android:paddingTop="8dp">
 
                     <TextView
@@ -471,7 +492,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
 
-                        android:text=""
+                        android:text="Click to select line"
                         android:textStyle="bold"
                         android:textColor="@color/grey" />
 
@@ -509,6 +530,7 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
                     android:text=""
+                    android:paddingLeft="5dp"
                     android:textColor="@color/grey"/>
                 <View android:layout_width="match_parent"
                       android:layout_height="0.1dp"

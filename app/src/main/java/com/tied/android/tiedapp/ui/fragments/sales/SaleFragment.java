@@ -33,6 +33,7 @@ import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Line;
+import com.tied.android.tiedapp.objects.RevenueFilter;
 import com.tied.android.tiedapp.objects._Meta;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
@@ -87,6 +88,7 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
     String start, stop;
     String month, year;
     String group_by="line";
+    RevenueFilter filter=MyUtils.initializeFilter();
 
     protected String[] mParties = new String[] {
             "Party A", "Party B", "Party C", "Party D"
@@ -115,7 +117,6 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
         String today=HelperMethods.getTodayDate();
         start=HelperMethods.getMonthOfTheYear(today)+" "+today;
         Logger.write("8888888888888888888888 "+today);
-        bundle.putInt(Constants.SOURCE, Constants.SALES_SOURCE);
 
         this.month = (HelperMethods.getMonthOfTheYear(today) );
         this.year = today.substring(0, 4);
@@ -231,6 +232,8 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
 
     @Override
     public void onClick(View v) {
+        final Bundle bundle=new Bundle();
+        bundle.putInt(Constants.SOURCE, Constants.SALES_SOURCE);
         switch (v.getId()) {
             case R.id.img_segment:
                 bLine = !bLine;
@@ -257,13 +260,15 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
                 }
                 break;
             case R.id.img_filter:
-                MyUtils.startActivity(getActivity(), ActivitySalesFilter.class);
+
+
+                MyUtils.startActivity(getActivity(), ActivitySalesFilter.class, bundle);
                 break;
             case R.id.img_printer:
-                MyUtils.startActivity(getActivity(), ActivitySalesPrint.class);
+                MyUtils.startActivity(getActivity(), ActivitySalesPrint.class, bundle);
                 break;
             case R.id.img_plus:
-               MyUtils.initiateAddSales(getActivity(), new Bundle());
+               MyUtils.initiateAddSales(getActivity(), bundle);
                 break;
             case R.id.txt_view_all:
                 bundle.putString("group_by", group_by);
@@ -365,7 +370,7 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
         // Logger.write("Loading data");
         DialogUtils.displayProgress(getActivity());
         RevenueApi lineApi = MainApplication.createService(RevenueApi.class);
-        final Call<ResponseBody> response = lineApi.getTopLineRevenues(user.getId(), "line");
+        final Call<ResponseBody> response = lineApi.getTopLineRevenues(user.getId(), "line", filter);
         response.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
@@ -392,6 +397,11 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
                         topRevenues.clear();
                         topRevenuesName.clear();
                         double total=0;
+                        int count=0;
+                        Line others=new Line();
+                        others.setName("Others");
+                        others.setId("others");
+                        others.setTotal_revenue(0);
                         for(Object keyObject:keys) {
                             Map<String, Object> obj = MyUtils.MapObject.create(keyObject.toString());
                             //Logger.write(map.get(MyUtils.MapObject.create(keyObject.toString()).get("key")).toString());
@@ -400,16 +410,24 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
                             Float val=Float.parseFloat(""+(Double)obj.get("value"));
                             line.setTotal_revenue(val);
                             total=total+val;
-                            topRevenues.add(val);
-                            topRevenuesName.add(line.getName());
-                            lines.add(line);
+
+                            if(count<4) {
+                                lines.add(line);
+                                topRevenues.add(val);
+                                topRevenuesName.add(line.getName());
+                            }
+                            else others.setTotal_revenue(others.getTotal_revenue()+val);
+                            count++;
                         }
+                        topRevenues.add(Float.valueOf(""+others.getTotal_revenue()));
+                        topRevenuesName.add("Others");
                         setData();
-                        generateCenterSpannableText(MyUtils.moneyFormat(total), null);
+                        mChart.setCenterText(generateCenterSpannableText(MyUtils.moneyFormat(total), null));
                         //Map mapObject = MyUtils.MapObject.create(response.toString());
                         //Logger.write(.toString());
                         lineDataModels.clear();
                         lineDataModels.addAll(lines);
+                        if(others.getTotal_revenue()>0) lineDataModels.add(others);
                         //
                         line_adapter.notifyDataSetChanged();
                     } else {
@@ -442,7 +460,7 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
         DialogUtils.displayProgress(getActivity());
         RevenueApi lineApi = MainApplication.getInstance().getRetrofit().create(RevenueApi.class);
 
-        final Call<ResponseBody> response = lineApi.getTopLineRevenues(user.getToken(), "client");
+        final Call<ResponseBody> response = lineApi.getTopLineRevenues(user.getId(), "client", filter);
         response.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
@@ -469,6 +487,11 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
                         topRevenues.clear();
                         topRevenuesName.clear();
                         double total=0;
+                        int count=0;
+                        Client others=new Client();
+                        others.setCompany("Others");
+                        others.setId("others");
+                        others.setTotal_revenue(0);
                         for(Object keyObject:keys) {
                             Map<String, Object> obj = MyUtils.MapObject.create(keyObject.toString());
 //                            Logger.write(map.get(MyUtils.MapObject.create(keyObject.toString()).get("key")).toString());
@@ -477,16 +500,25 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
                             Float val=Float.parseFloat(""+(Double)obj.get("value"));
                             client.setTotal_revenue(val);
                             total=total+val;
-                            topRevenues.add(val);
-                            topRevenuesName.add(MyUtils.getClientName(client));
-                            clients.add(client);
+
+
+                            if(count<4){
+                                clients.add(client);
+                                topRevenues.add(val);
+                                topRevenuesName.add(MyUtils.getClientName(client));
+                            }
+                            else others.setTotal_revenue(others.getTotal_revenue()+val);
+                            count ++;
                         }
+                        topRevenues.add(Float.valueOf(""+others.getTotal_revenue()));
+                        topRevenuesName.add("Others");
                         setData();
-                        generateCenterSpannableText(MyUtils.moneyFormat(total), null);
+                        mChart.setCenterText(generateCenterSpannableText(MyUtils.moneyFormat(total), null));
                         //Map mapObject = MyUtils.MapObject.create(response.toString());
                         //Logger.write(.toString());
                         clientDataModels.clear();
                         clientDataModels.addAll(clients);
+                        if(others.getTotal_revenue()>0) clientDataModels.add(others);
                         //
                         client_adapter.notifyDataSetChanged();
                     } else {

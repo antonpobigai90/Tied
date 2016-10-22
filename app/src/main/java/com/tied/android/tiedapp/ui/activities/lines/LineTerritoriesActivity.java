@@ -18,6 +18,7 @@ import com.tied.android.tiedapp.customs.model.LineDataModel;
 import com.tied.android.tiedapp.customs.model.TerritoryModel;
 import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects.Revenue;
+import com.tied.android.tiedapp.objects.Territory;
 import com.tied.android.tiedapp.objects._Meta;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
@@ -105,16 +106,12 @@ public class LineTerritoriesActivity extends AppCompatActivity implements  View.
         }
         territories_listview = (ListView) findViewById(R.id.listView);
 
-        ArrayList<TerritoryModel> territoryModels = new ArrayList<TerritoryModel>();
+        ArrayList<Territory> territoryModels = new ArrayList<Territory>();
         for (int i = 0 ; i < 10; i++) {
-            TerritoryModel territoryModel = new TerritoryModel();
+            Territory territoryModel = new Territory();
 
-            territoryModel.setTerritory_name("Denton Tap, MD");
-            if (i % 2 == 0) {
-                territoryModel.setCheck_status(true);
-            } else {
-                territoryModel.setCheck_status(false);
-            }
+            territoryModel.setCounty("Denton Tap, MD");
+
 
             territoryModels.add(territoryModel);
         }

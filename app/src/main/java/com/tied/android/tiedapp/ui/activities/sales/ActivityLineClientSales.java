@@ -129,7 +129,7 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
         client_sale_adapter.notifyDataSetChanged();
         loadData();
         updateSalesLabel();
-       setLineTotalRevenue();
+         setLineTotalRevenue();
     }
 
     @Override
@@ -156,7 +156,8 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
         DialogUtils.displayProgress(this);
         RevenueApi revenueApi = MainApplication.createService(RevenueApi.class);
         String id=(client==null?line.getId():client.getId());
-        final Call<ResponseBody> response = revenueApi.getLineRevenues( id, page, filter);
+        String type=(client==null?"line":"client");
+        final Call<ResponseBody> response = revenueApi.getLineRevenues( type, id, page, filter);
         response.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
@@ -171,7 +172,7 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
                         User.LogOut(ActivityLineClientSales.this);
                         return;
                     }
-                    Logger.write(response.toString());
+                    Logger.write("************************** "+response.toString());
                     _Meta meta=response.getMeta();
                     if(meta !=null && meta.getStatus_code()==200) {
                         //revenueList.addAll(response.getDataAsList("revenues", Revenue.class));
@@ -186,20 +187,38 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
                             Map<String, Object> obj = MyUtils.MapObject.create(keyObject.toString());
 //                            Logger.write(map.get(MyUtils.MapObject.create(keyObject.toString()).get("key")).toString());
                             // lines.add((Line)map.get(MyUtils.MapObject.create(keyObject.toString()).get("key")));
-                            Client client =gson.fromJson(map.getString(obj.get("key").toString()), Client.class);
-                            Float val=Float.parseFloat(""+(Double)obj.get("value"));
-                            client.setTotal_revenue(val);
-                            //total=total+val;
-                            //topRevenues.add(val);
-                            //topRevenuesName.add(MyUtils.getClientName(client));
-                            //clients.add(client);
-                            Logger.write(""+val);
-                            Revenue revenue=new Revenue();
-                            revenue.setClient_id(client.getId());
-                            revenue.setValue(val);
-                            revenue.setDate_sold("");
-                            revenue.setLine_id(line.getId());
-                            revenue.setTitle(MyUtils.getClientName(client));
+                            Revenue revenue = new Revenue();
+                            if(line==null) {
+                                Line mLine = gson.fromJson(map.getString(obj.get("key").toString()), Line.class);
+                                Float val = Float.parseFloat("" + (Double) obj.get("value"));
+                                mLine.setTotal_revenue(val);
+                                //total=total+val;
+                                //topRevenues.add(val);
+                                //topRevenuesName.add(MyUtils.getClientName(client));
+                                //clients.add(client);
+                                Logger.write("" + val);
+
+                                revenue.setClient_id(client.getId());
+                                revenue.setValue(val);
+                                revenue.setDate_sold("");
+                                revenue.setLine_id(mLine.getId());
+                                revenue.setTitle(mLine.getName());
+                            }else {
+                                Client client = gson.fromJson(map.getString(obj.get("key").toString()), Client.class);
+                                Float val = Float.parseFloat("" + (Double) obj.get("value"));
+                                client.setTotal_revenue(val);
+                                //total=total+val;
+                                //topRevenues.add(val);
+                                //topRevenuesName.add(MyUtils.getClientName(client));
+                                //clients.add(client);
+                                Logger.write("" + val);
+
+                                revenue.setClient_id(client.getId());
+                                revenue.setValue(val);
+                                revenue.setDate_sold("");
+                                revenue.setLine_id(line.getId());
+                                revenue.setTitle(MyUtils.getClientName(client));
+                            }
 
                             revenueList.add(revenue);
                         }
@@ -229,8 +248,10 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
     }
 
     public void setLineTotalRevenue() {
-        LineApi lineApi = MainApplication.createService(LineApi.class);
-        final Call<ResponseBody> response2 = lineApi.getFilteredLineTotalRevenue(line.getId(),filter);
+        RevenueApi revenueApi = MainApplication.createService(RevenueApi.class);
+        String id=(client==null?line.getId():client.getId());
+        String type=(client==null?"line":"client");
+        final Call<ResponseBody> response2 = revenueApi.getTotalRevenues(type, id,filter);
         response2.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
@@ -250,8 +271,13 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
                     if(meta !=null && meta.getStatus_code()==200) {
                         // revenueList.addAll(response.getDataAsList("revenues", Revenue.class));
                         // adapter.notifyDataSetChanged();
-                        line.setTotal_revenue(response.getData("line", Line.class).getTotal_revenue());
-                        totalRevenue.setText(MyUtils.moneyFormat(line.getTotal_revenue()));
+                        if(line!=null) {
+                            line.setTotal_revenue(response.getData("line", Line.class).getTotal_revenue());
+                            totalRevenue.setText(MyUtils.moneyFormat(line.getTotal_revenue()));
+                        }else{
+                            client.setTotal_revenue(response.getData("line", Client.class).getTotal_revenue());
+                            totalRevenue.setText(MyUtils.moneyFormat(client.getTotal_revenue()));
+                        }
                         //totalRevenueBodyTV.setText(MyUtils.moneyFormat(line.getTotal_revenue()));
 
                     } else {

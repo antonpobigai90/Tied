@@ -145,7 +145,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="20dp"
                             android:paddingLeft="4dp"
-                            android:text="Client (Optional)"
+                            android:text="Client"
                             android:textColor="@color/accentColor"
                             android:textSize="14sp" />
                     <RelativeLayout

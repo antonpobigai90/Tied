@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects.client.Client;
+import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.util.MyUtils;
 import com.tied.android.tiedapp.util.RoundImage;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -83,6 +84,7 @@ public class MyClientLineAdapter extends BaseAdapter {
             viewHolder.name=(TextView)view.findViewById(R.id.name);
             viewHolder.description=(TextView)view.findViewById(R.id.description);
             viewHolder.selector=(ImageView)view.findViewById(R.id.selector);
+            viewHolder.pic=(ImageView)view.findViewById(R.id.pic);
 
             view.setTag(viewHolder);
         } else {
@@ -129,13 +131,42 @@ public class MyClientLineAdapter extends BaseAdapter {
             //viewHolder.name.setText(data.getFull_name());
 
         }
+
+        if( _data.get(i) instanceof User){
+            final User user = (User) _data.get(i);
+            viewHolder.name.setText(user.getFullName());
+            // MyUtils.Picasso.displayImage(client.getLogo(), viewHolder.roundedImage);
+            viewHolder.roundedImage.setVisibility(View.GONE);
+            try{
+                viewHolder.description.setText("");
+            }catch (Exception e) {
+                //viewHolder.description.setText(line.getDescription());
+            }
+            if(viewHolder.pic.getTag() == null || !viewHolder.pic.getTag().equals(user.getAvatarURL())) {
+                MyUtils.Picasso.displayImage(user.getAvatarURL(), viewHolder.pic);
+            }
+            viewHolder.pic.setTag(user.getAvatarURL());
+            viewHolder.pic.setVisibility(View.VISIBLE);
+
+            if(isMultiple) {
+                if (selected.contains(user.getId())) {
+                    viewHolder.selector.setImageResource(R.drawable.selected_bg);
+                } else {
+                    viewHolder.selector.setImageResource(R.drawable.unselectd_bg);
+                }
+            }else{
+                viewHolder.selector.setVisibility(View.GONE);
+            }
+            //viewHolder.name.setText(data.getFull_name());
+
+        }
         return view;
     }
 
 
 
     static class ViewHolder {
-        ImageView selector;
+        ImageView selector, pic;
         TextView name, description;
         CircleImageView roundedImage;
     }

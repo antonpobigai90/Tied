@@ -283,30 +283,35 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
                     for (Client client : clients) {
                        if(client.getLogo().isEmpty()) client.setLogo("/ogo");
                         Logger.write(client.getLogo());
-                        i++;
-                        LatLng latLng = new LatLng(client.getAddress().getCoordinate().getLat(),
-                                client.getAddress().getCoordinate().getLon());
+                        try {
+
+                            LatLng latLng = new LatLng(client.getAddress().getCoordinate().getLat(),
+                                    client.getAddress().getCoordinate().getLon());
+                            i++;
                       /*  if (!centered) {
                             Logger.write(client.getLogo());
                             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(33.8960935, -84.2319696), 3.0f));
                             centered = true;
                         }*/
-                        Marker marker = googleMap.addMarker(new MarkerOptions()
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_white)).anchor(0.5f, 1f).position(latLng));
-                        // client.setLogo(user.getAvatar());
-                        marker.setTag(i);
-                       // setData(userMarkerClickListener)
+                            Marker marker = googleMap.addMarker(new MarkerOptions()
+                                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_marker_white)).anchor(0.5f, 1f).position(latLng));
+                            // client.setLogo(user.getAvatar());
+                            marker.setTag(i);
+                            // setData(userMarkerClickListener)
                         /*Picasso.with(getActivity())
                                 .load(client.getLogo())
                                 .placeholder(R.drawable.avatar_profile)
                                 .into(i, new MarkerCallback(marker));*/
-                       // googleMap.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
+                            // googleMap.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
 
 
-                       // if (client.getLogo() != null && !client.getLogo().isEmpty()) {
+                            // if (client.getLogo() != null && !client.getLogo().isEmpty()) {
                             //Logger.write(TAG + " "+client.getLogo());
                             new MyPicassoTarget(client, marker, i);
-                        //}
+                            //}
+                        }catch (NullPointerException npe) {
+                            continue;
+                        }
 
                     }
 

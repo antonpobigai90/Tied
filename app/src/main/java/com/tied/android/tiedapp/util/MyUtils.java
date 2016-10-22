@@ -97,6 +97,7 @@ public abstract class MyUtils {
             if (imageUrl != null && !imageUrl.isEmpty()) {
                 com.squareup.picasso.Picasso.with(MainApplication.getInstance().getApplicationContext())
                         .load(imageUrl)
+                .placeholder(MainApplication.getInstance().getApplicationContext().getResources().getDrawable(R.drawable.default_avatar))
 //                        .memoryPolicy(MemoryPolicy.NO_CACHE)
 //                        .networkPolicy(NetworkPolicy.NO_CACHE)
                         .networkPolicy(NetworkPolicy.OFFLINE)
@@ -260,6 +261,10 @@ public abstract class MyUtils {
         Intent i = new Intent(c, ActivityAddSales.class);
         i.putExtras(bundle);
         c.startActivityForResult(i, Constants.ADD_SALES);
+    }
+    public static String makePossesive(String name) {
+        if(!name.endsWith("s")) return name+"'s";
+        else return name+"'";
     }
     public static void initAvatar(Bundle bundle, ImageView imageView) {
         if (bundle != null) {
@@ -905,7 +910,7 @@ public abstract class MyUtils {
 
     public static void initSchedules(final Context context, User user, final ListAdapterListener listAdapterListener){
         final ScheduleApi scheduleApi =  MainApplication.createService(ScheduleApi.class, user.getToken());
-        Call<ResponseBody> response = scheduleApi.getSchedules();
+        Call<ResponseBody> response = scheduleApi.getSchedules(user.getId());
         response.enqueue(new retrofit2.Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
@@ -1189,7 +1194,7 @@ public abstract class MyUtils {
         final EditText name, description;
 
         final Spinner stateSpinner;
-        name=(EditText)dialog.findViewById(R.id.street);
+        name=(EditText)dialog.findViewById(R.id.name);
 //        final InputMethodManager inputMethodManager = (InputMethodManager) context
 //                .getSystemService(Context.INPUT_METHOD_SERVICE);
 //        inputMethodManager.showSoftInput(name, InputMethodManager.SHOW_IMPLICIT);
@@ -1213,9 +1218,20 @@ public abstract class MyUtils {
         View.OnClickListener okayButClicked=new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String company=name.getText().toString().trim();
+                String desc = description.getText().toString().trim();
+                if(company.isEmpty()) {
+                    MyUtils.showErrorAlert((Activity)context, "You must provide a name for your client");
+                    return;
+                }
+
+
+                Client client=new Client();
+                client.setCompany(company);
+                client.setDescription(desc);
 
                 dialog.dismiss();
-                MyUtils.startActivity(context, NewClientActivity.class);
+                okayClicked.onClick(client);
             }
         };
 
@@ -1299,7 +1315,7 @@ public abstract class MyUtils {
         switch (source) {
             case Constants.SALES_SOURCE:
                 color=R.color.green_color1;
-                backgroundDrawable=R.mipmap.background_green;
+                backgroundDrawable=R.drawable.background_green;
 
                 break;
             case Constants.LINE_SOURCE:

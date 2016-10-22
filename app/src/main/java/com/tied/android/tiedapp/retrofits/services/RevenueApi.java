@@ -34,17 +34,26 @@ public interface RevenueApi {
     Call<ResponseBody> getRevenueByGroup(@Path("user_id") String user_id,
                                          @Path("group_by") String group_by,
                                          @Body RevenueFilter filter);
+
     @POST(Constants.GET_USER_REVENUES)
     Call<ResponseBody> getUserRevenues(@Path("user_id") String user_id,
                                        @Path("group_by") String group_by,
                                        @Path("object_id") String object_id,
                                        @Path("page_number") int page_number,
                                        @Body RevenueFilter filter);
-    @POST(Constants.GET_LINE_REVENUES)
-    Call<ResponseBody> getLineRevenues(@Path("line_id") String line_id,
+    @POST(Constants.GET_OBJECT_REVENUES)
+    Call<ResponseBody> getLineRevenues(
+            @Path("object_type") String object_type,
+            @Path("object_id") String object_id,
                                        @Path("page_number") int page_number,
                                        @Body RevenueFilter filter);
-    @GET(Constants.GET_TOP_FIVE_REVENUE)
-    Call<ResponseBody> getTopLineRevenues(@Path("user_id") String user_id, @Path("group_by") String group_by);
+    @POST(Constants.GET_TOTAL_REVENUE)
+    Call<ResponseBody> getTotalRevenues(
+            @Path("object_type") String object_type,
+            @Path("object_id") String object_id,
+            @Body RevenueFilter filter);
+
+    @POST(Constants.GET_TOP_FIVE_REVENUE)
+    Call<ResponseBody> getTopLineRevenues(@Path("user_id") String user_id, @Path("group_by") String group_by, @Body RevenueFilter filter);
 
 }

@@ -21,6 +21,7 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.model.ScheduleDataModel;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.schedule.Schedule;
+import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.dialogs.DialogScheduleEventOptions;
 import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleAppointmentsFragment;
 import com.tied.android.tiedapp.util.HelperMethods;
@@ -28,6 +29,7 @@ import com.tied.android.tiedapp.util.HelperMethods;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tied.android.tiedapp.util.MyUtils;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -44,6 +46,7 @@ public class ScheduleListAdapter extends BaseAdapter{
     ViewHolder v;
     Bundle bundle;
     private Client client;
+    User currentUser;
 
     public ScheduleListAdapter(List<ScheduleDataModel> schedules, Activity context, Bundle bundle) {
         _data = schedules;
@@ -52,6 +55,7 @@ public class ScheduleListAdapter extends BaseAdapter{
         if (client != null){
             filterForClient();
         }
+        currentUser= MyUtils.getUserLoggedIn();
     }
 
     public void filterForClient(){
@@ -153,13 +157,15 @@ public class ScheduleListAdapter extends BaseAdapter{
             showDivider=true;
             int color = getStatusColor(schedule.getStatus());
             time.setBackgroundColor(color);
-            linearLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    DialogScheduleEventOptions alert = new DialogScheduleEventOptions();
-                    alert.showDialog(schedule,ScheduleListAdapter.this,_c,bundle);
-                }
-            });
+            if(schedule.getUser_id().equals(currentUser.getId())) {
+                linearLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DialogScheduleEventOptions alert = new DialogScheduleEventOptions();
+                        alert.showDialog(schedule, ScheduleListAdapter.this, _c, bundle);
+                    }
+                });
+            }
             TextView message = (TextView) linearLayout.findViewById(R.id.message);
             String timeRange = getTimeRange(schedule);
             time.setText(timeRange);

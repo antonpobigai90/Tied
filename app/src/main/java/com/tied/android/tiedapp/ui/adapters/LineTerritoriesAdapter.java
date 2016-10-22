@@ -13,7 +13,9 @@ import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.model.TerritoryModel;
+import com.tied.android.tiedapp.objects.Territory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,20 +23,30 @@ import java.util.List;
  */
 public class LineTerritoriesAdapter extends BaseAdapter {
 
+    ArrayList<Territory> selected = new ArrayList<>();
     private static class ViewHolder {
         TextView txt_territoy_name;
     }
 
+    public void setSelected(ArrayList<Territory> selected) {
+        this.selected=selected;
+    }
     public static final String TAG = LineTerritoriesAdapter.class
             .getSimpleName();
 
-    public List<TerritoryModel> _data;
+    public List<Territory> _data;
     Context _c;
     ViewHolder viewHolder;
 
-    public LineTerritoriesAdapter(List<TerritoryModel> territory_list, Context context) {
+    public LineTerritoriesAdapter(List<Territory> territory_list, Context context) {
         _data = territory_list;
         _c = context;
+    }
+
+    public LineTerritoriesAdapter(List<Territory> territory_list, Context context, ArrayList<Territory> selected) {
+        _data = territory_list;
+        _c = context;
+        this.selected=selected;
     }
 
     @Override
@@ -57,25 +69,29 @@ public class LineTerritoriesAdapter extends BaseAdapter {
     public View getView(final int i, View convertView, ViewGroup viewGroup) {
         View view = convertView;
         if (view == null) {
+            viewHolder = new ViewHolder();
             LayoutInflater li = (LayoutInflater) _c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = li.inflate(R.layout.territories_list_item, viewGroup,false);
+
         } else {
-            view = convertView;
+            viewHolder = (ViewHolder)view.getTag();
         }
-        viewHolder = new ViewHolder();
+
 
         viewHolder.txt_territoy_name = (TextView) view.findViewById(R.id.territory);
 
-        final TerritoryModel data = (TerritoryModel) _data.get(i);
+        final Territory data = (Territory) _data.get(i);
 
-        viewHolder.txt_territoy_name.setText(data.getTerritory_name());
-        if (data.isCheck_status()) {
-            viewHolder.txt_territoy_name.setTextColor(_c.getResources().getColor(R.color.light_gray));
+        viewHolder.txt_territoy_name.setText(data.getCounty()+", "+data.getState());
+        if (!selected.contains(data)) {
+            viewHolder.txt_territoy_name.setTextColor(_c.getResources().getColor(R.color.gray));
+            view.setBackgroundColor(_c.getResources().getColor(android.R.color.white));
         } else {
-            viewHolder.txt_territoy_name.setTextColor(_c.getResources().getColor(R.color.grey));
+            viewHolder.txt_territoy_name.setTextColor(_c.getResources().getColor(R.color.blue));
+            view.setBackgroundColor(_c.getResources().getColor(R.color.light_gray));
         }
 
-        view.setTag(data);
+        view.setTag(viewHolder);
         return view;
     }
 }

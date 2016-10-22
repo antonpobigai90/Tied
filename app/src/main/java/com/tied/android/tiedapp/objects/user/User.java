@@ -102,8 +102,8 @@ public class User implements Serializable {
         SharedPreferences.Editor prefsEditor = mPrefs.edit();
         prefsEditor.putString(Constants.CURRENT_USER,this.toJSONString());
         //prefsEditor.putString(Constants.IS_LOGGED_IN_USER, json);
-        prefsEditor.apply();
-        return true;
+        return prefsEditor.commit();
+
     }
 
     public static boolean isUserLoggedIn(Context context){
@@ -120,7 +120,7 @@ public class User implements Serializable {
             SharedPreferences.Editor editor = sharedPref.edit();
             //editor.putString(Constants.CURRENT_USER,this.toJSONString());
             editor.putBoolean(Constants.IS_LOGGED_IN_USER,true);
-            editor.apply();
+            editor.commit();
             MyUtils.startActivity(context, MainActivity.class);
         }
     }

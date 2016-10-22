@@ -9,6 +9,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
 import com.johnhiott.darkskyandroidlib.ForecastApi;
+import com.squareup.picasso.OkHttpDownloader;
+import com.squareup.picasso.Picasso;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.util.FontsOverride;
@@ -76,6 +78,13 @@ public class MainApplication extends Application {
         FontsOverride.setDefaultFont(this, "SERIF", "fonts/brandon_reg.ttf");
         FontsOverride.setDefaultFont(this, "SANS_SERIF", "fonts/brandon_reg.ttf");
 
+        Picasso.Builder builder = new Picasso.Builder(this);
+        builder.downloader(new OkHttpDownloader(this,Integer.MAX_VALUE));
+        Picasso built = builder.build();
+        built.setIndicatorsEnabled(true);
+        built.setLoggingEnabled(true);
+        Picasso.setSingletonInstance(built);
+
 //        try {
 //            PackageInfo info = getPackageManager().getPackageInfo(
 //                    "com.tied.android.tiedapp",
@@ -93,9 +102,26 @@ public class MainApplication extends Application {
     public static <S> S createService(Class<S> serviceClass) {
         return createService(serviceClass, (MyUtils.getUserLoggedIn()==null?null:MyUtils.getUserLoggedIn().getToken()));
     }
+    public static void updateToken(final String authToken) {
+        httpClient.interceptors().clear();
+        httpClient.addInterceptor(new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                okhttp3.Request original = chain.request();
 
+                // Request customization: add request headers
+                okhttp3.Request.Builder requestBuilder = original.newBuilder()
+                        .header("x-access-token", authToken)
+                        .method(original.method(), original.body());
+
+                okhttp3.Request request = requestBuilder.build();
+                return chain.proceed(request);
+            }
+        });
+    }
     public static <S> S createService(Class<S> serviceClass, final String authToken) {
         if (authToken != null) {
+            httpClient.interceptors().clear();
             httpClient.addInterceptor(new Interceptor() {
                 @Override
                 public Response intercept(Chain chain) throws IOException {

@@ -1,8 +1,13 @@
 package com.tied.android.tiedapp.ui.activities.schedule;
 
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
@@ -43,6 +48,7 @@ import retrofit.client.Response;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 /**
  * Created by Emmanuel on 6/23/2016.
  */
@@ -56,20 +62,24 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
     private Client client;
     private Schedule schedule;
     TextView dayTV, weekTV, timeRange;
+    View callClient;
     Bundle bundle;
 
 
-    private TextView description, temperature,  schedule_title, weatherInfo;
+    private TextView description, temperature, schedule_title, weatherInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_schedule_view);
-        bundle=getIntent().getExtras();
+        bundle = getIntent().getExtras();
 
         user = MyUtils.getUserFromBundle(bundle);
+        try {
+            client = (Client) bundle.getSerializable(Constants.CLIENT_DATA);
+        } catch (Exception e) {
 
-        client = (Client) bundle.getSerializable(Constants.CLIENT_DATA);
+        }
         schedule = (Schedule) bundle.getSerializable(Constants.SCHEDULE_DATA);
 
         final MapFragment mapFragment = (MapFragment) getFragmentManager()
@@ -85,23 +95,24 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
         //title.setText(schedule.getTitle());
         schedule_title.setText(schedule.getTitle());
         description.setText(schedule.getDescription());
-        if(schedule.getDescription()==null || schedule.getDescription().isEmpty()) description.setVisibility(View.GONE);
+        if (schedule.getDescription() == null || schedule.getDescription().isEmpty())
+            description.setVisibility(View.GONE);
 
-        dayTV=(TextView) findViewById(R.id.day);
-        weekTV=(TextView) findViewById(R.id.week_day);
-        timeRange =(TextView) findViewById(R.id.time_range);
+        dayTV = (TextView) findViewById(R.id.day);
+        weekTV = (TextView) findViewById(R.id.week_day);
+        timeRange = (TextView) findViewById(R.id.time_range);
 
-            long diff_in_date = HelperMethods.getDateDifferenceWithToday(schedule.getDate());
+        long diff_in_date = HelperMethods.getDateDifferenceWithToday(schedule.getDate());
 
-            String day = String.format("%02d", HelperMethods.getDayFromSchedule(schedule.getDate()));
-           // String week_day = MyUtils.getWeekDay(schedule);
+        String day = String.format("%02d", HelperMethods.getDayFromSchedule(schedule.getDate()));
+        // String week_day = MyUtils.getWeekDay(schedule);
         dayTV.setText(MyUtils.toNth(day));
-       // long epoch=SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        // long epoch=SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         long epoch = 0;
-        Logger.write(schedule.getDate()+" "+schedule.getTime_range().getStart_time());
-        timeRange.setText(schedule.getTime_range().getStart_time()+" - "+schedule.getTime_range().getEnd_time());
+        Logger.write(schedule.getDate() + " " + schedule.getTime_range().getStart_time());
+        timeRange.setText(schedule.getTime_range().getStart_time() + " - " + schedule.getTime_range().getEnd_time());
         try {
-            epoch = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(schedule.getDate()+" "+schedule.getTime_range().getStart_time()).getTime();
+            epoch = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(schedule.getDate() + " " + schedule.getTime_range().getStart_time()).getTime();
             System.out.println(epoch);
         } catch (ParseException e) {
             // TODO Auto-generated catch block
@@ -109,18 +120,16 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
         }
         //String timePassedString = ""+ android.text.format.DateUtils.getRelativeTimeSpanString(epoch, System.currentTimeMillis(), android.text.format.DateUtils.WEEK_IN_MILLIS);
         weekTV.setText(MyUtils.getWeekDay(schedule));
-        weatherInfo=(TextView) findViewById(R.id.weather_info);
-
-
+        weatherInfo = (TextView) findViewById(R.id.weather_info);
 
 
         String timeRange = MyUtils.getTimeRange(schedule);
-       // time.setText(timeRange);
+        // time.setText(timeRange);
 
         final RequestBuilder weather = new RequestBuilder();
         Request request = new Request();
-        request.setLat(""+schedule.getLocation().getCoordinate().getLat());
-        request.setLng(""+schedule.getLocation().getCoordinate().getLon());
+        request.setLat("" + schedule.getLocation().getCoordinate().getLat());
+        request.setLng("" + schedule.getLocation().getCoordinate().getLon());
         request.setUnits(Request.Units.US);
         request.setLanguage(Request.Language.ENGLISH);
         request.addExcludeBlock(Request.Block.CURRENTLY);
@@ -155,7 +164,7 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
         Marker melbourne = myMap.addMarker(new MarkerOptions()
                 .position(location)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-        LatLng location2=new LatLng(location.latitude+0.002, location.longitude);
+        LatLng location2 = new LatLng(location.latitude + 0.002, location.longitude);
         myMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location2, 15));
 
         myMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
@@ -165,12 +174,29 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onClick(View view) {
-        switch(view.getId()) {
+        switch (view.getId()) {
             case R.id.img_close:
                 onBackPressed();
                 break;
             case R.id.img_edit:
-                MyUtils.startRequestActivity(this, CreateAppointmentActivity.class,  Constants.AddScheduleActivity, bundle);
+                MyUtils.startRequestActivity(this, CreateAppointmentActivity.class, Constants.AddScheduleActivity, bundle);
+                break;
+            case R.id.call_client:
+                String number = "tel:" + client.getPhone().trim();
+                Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse(number));
+
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
+                }
+                startActivity(callIntent);
+                break;
         }
     }
 

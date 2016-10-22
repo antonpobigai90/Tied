@@ -37,6 +37,7 @@ public class Client implements Serializable, Comparable<Client>{
     private String revenue;
     private String ytd_revenue;
     private double total_revenue;
+    private String territory_id;
 
     private int Industry_id;
     private int visit_id;
@@ -61,6 +62,14 @@ public class Client implements Serializable, Comparable<Client>{
 
     public String getLast_visited() {
         return last_visited;
+    }
+
+    public void setTerritory_id(String territory_id) {
+        this.territory_id = territory_id;
+    }
+
+    public String getTerritory_id() {
+        return territory_id;
     }
 
     public void setLast_visited(String last_visited) {

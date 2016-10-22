@@ -141,12 +141,12 @@ public class ProfileFragment1 extends Fragment implements View.OnClickListener {
                     fragment = new AvatarProfileFragment();
 //                    ((ProfileFragment) getActivity()).profileFragment = fragment;
                     break;
-                case 1:
+               /* case 1:
                     fragment = new GoalProfileFragment();
                     break;
                 case 2:
                     fragment = new SalesProfileFragment();
-                    break;
+                    break;*/
             }
             assert fragment != null;
             fragment.setArguments(bundle);

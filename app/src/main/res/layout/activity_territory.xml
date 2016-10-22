@@ -45,8 +45,9 @@
         <ImageView
             android:layout_width="@dimen/action_bar_icon_height"
             android:layout_height="@dimen/action_bar_icon_height"
-            android:id="@+id/img_edit"
-            android:src="@drawable/edit"
+            android:id="@+id/img_add"
+            android:onClick="onClick"
+            android:src="@drawable/plus_thin"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:padding="@dimen/action_bar_icon_padding" />
@@ -57,6 +58,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="75dp"
+        android:visibility="gone"
         android:background="@color/sub_title_bg"
         android:gravity="center_vertical">
 
@@ -93,10 +95,16 @@
                 android:layout_marginTop="5dp" />
         </LinearLayout>
     </LinearLayout>
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:background="@android:color/white"
+    android:orientation="vertical">
+
+
     <TextView android:layout_width="wrap_content"
               android:gravity="center"
               android:layout_gravity="center"
-              android:text="No lines found"
+              android:text="No territories found"
               android:layout_margin="30dp"
               android:background="@drawable/white_fill_grey_stroke"
               android:padding="20dp"
@@ -110,5 +118,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/listView"
         android:background="@color/white" />
+    </LinearLayout>
 
 </LinearLayout>

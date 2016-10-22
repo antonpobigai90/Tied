@@ -12,7 +12,7 @@
         android:layout_height="210dp"
         android:orientation="vertical"
         android:paddingBottom="10dp"
-        android:background="@mipmap/background_gradient">
+        android:background="@drawable/background_gradient">
 
         <RelativeLayout
             android:id="@+id/top_layout"
@@ -92,40 +92,40 @@
             android:layout_weight="1">
 
             <LinearLayout
-                android:id="@+id/lines"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:padding="10dp"
-                android:gravity="center_vertical">
+                    android:id="@+id/clients"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:gravity="center_vertical">
 
                 <ImageView
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/icon_layer_blue" />
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/users" />
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="7dp"
-                    android:gravity="center_horizontal"
-                    android:text="Lines"
-                    android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:gravity="center_horizontal"
+                        android:text="Clients"
+                        android:textColor="@color/schedule_title_bg_color"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/lines_active"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:gravity="center_horizontal"
-                    android:text="0 ACTIVE"
-                    android:textColor="@color/accentColor"
-                    android:textSize="14sp" />
-
+                        android:visibility="gone"
+                        android:id="@+id/clients_active"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center_horizontal"
+                        android:text="0 ACTIVE"
+                        android:textColor="@color/accentColor"
+                        android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -133,43 +133,45 @@
                 android:layout_width="0.1dp"
                 android:layout_height="match_parent"
                 android:background="@color/light_gray" />
-
             <LinearLayout
-                android:id="@+id/clients"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:padding="10dp"
-                android:gravity="center_vertical">
+                    android:id="@+id/lines"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    android:gravity="center_vertical">
 
                 <ImageView
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_gravity="center_horizontal"
-                    android:src="@drawable/users" />
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_gravity="center_horizontal"
+                        android:src="@drawable/icon_layer_blue" />
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="7dp"
-                    android:gravity="center_horizontal"
-                    android:text="Clients"
-                    android:textColor="@color/schedule_title_bg_color"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="7dp"
+                        android:gravity="center_horizontal"
+                        android:text="Lines"
+                        android:textColor="@color/schedule_title_bg_color"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/clients_active"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:gravity="center_horizontal"
-                    android:text="0 ACTIVE"
-                    android:textColor="@color/accentColor"
-                    android:textSize="14sp" />
+                        android:id="@+id/lines_active"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:gravity="center_horizontal"
+                        android:text="0 ACTIVE"
+                        android:visibility="gone"
+                        android:textColor="@color/accentColor"
+                        android:textSize="14sp" />
+
 
             </LinearLayout>
+
 
 
         </LinearLayout>
@@ -213,6 +215,7 @@
 
                 <TextView
                     android:id="@+id/sales_total"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
@@ -255,6 +258,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                        android:visibility="gone"
                     android:id="@+id/territories_active"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -350,6 +354,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                        android:visibility="gone"
                     android:id="@+id/schedules_total"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -364,11 +369,33 @@
 
         </LinearLayout>
     </LinearLayout>
+    <TextView
+            android:layout_below="@+id/top"
+            android:text="You have not been added as a coworker"
+            android:id="@+id/no_results"
+            android:visibility="gone"
 
+            android:layout_centerHorizontal="true"
+            style="@style/NoResultText"/>
+<LinearLayout android:layout_width="match_parent"
+              android:orientation="vertical"
+              android:id="@+id/activities_section"
+              android:layout_below="@+id/top"
+              android:layout_height="match_parent">
+    <TextView
+            android:layout_below="@+id/top"
+            android:text="You cannot view activities"
+            android:id="@+id/no_results_2"
+
+            android:visibility="gone"
+
+            android:layout_centerHorizontal="true"
+            style="@style/NoResultText"/>
     <ListView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/activities_listview"
-        android:layout_below="@+id/top" />
+    />
+</LinearLayout>
 
 </RelativeLayout>

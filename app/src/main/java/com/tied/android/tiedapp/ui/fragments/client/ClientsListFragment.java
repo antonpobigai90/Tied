@@ -125,13 +125,12 @@ public class ClientsListFragment extends Fragment implements AdapterView.OnItemC
                 //Logger.write("(((((((((((((((((((((((((((((999999");
                 DialogUtils.closeProgress();
                 ClientRes clientRes = resResponse.body();
-                //Logger.write(clientRes.toString());
+                Logger.write(clientRes.toString());
                 try {
                     if (clientRes.isAuthFailed()) {
                          User.LogOut(getActivity());
                     } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200) {
                           clients.addAll(clientRes.getClients());
-                        clients.addAll(clientRes.getClients());
 
                         if(clients.size()==0) {
                             MyUtils.showNoResults(getView(), R.id.no_results);

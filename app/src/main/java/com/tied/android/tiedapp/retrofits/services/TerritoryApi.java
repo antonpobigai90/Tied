@@ -8,12 +8,14 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.*;
 
+import java.util.ArrayList;
+
 /**
  * Created by femi on 10/4/2016.
  */
 public interface  TerritoryApi {
     @POST(Constants.TERRITORIES)
-    Call<ResponseBody> create(@Body Line line);
+    Call<ResponseBody> create(@Body ArrayList<Territory> territories);
 
     @PUT(Constants.UPDATE_TERRITORY_WITH_ID)
     Call<ResponseBody> update(@Path("territory_id") String line_id, @Body Territory territory);

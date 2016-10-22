@@ -3,6 +3,7 @@ package com.tied.android.tiedapp.ui.adapters;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,8 +12,10 @@ import android.widget.ImageView;
 
 import android.widget.TextView;
 import com.tied.android.tiedapp.R;
+import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.ui.activities.coworker.ViewCoWorkerActivity;
 import com.tied.android.tiedapp.ui.listeners.ListAdapterListener;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
@@ -78,11 +81,9 @@ public class CoWorkerHAdapter extends RecyclerView.Adapter<CoWorkerHAdapter.View
         }
         @Override
         public void onClick(View v) {
-            switch (v.getId()){
-                case R.id.menu_icon:
-
-                    break;
-            }
+            Bundle bundle=new Bundle();
+            bundle.putSerializable(Constants.USER_DATA, user);
+            MyUtils.startActivity(activity, ViewCoWorkerActivity.class, bundle);
         }
     }
 

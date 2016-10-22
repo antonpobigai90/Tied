@@ -1,5 +1,6 @@
 package com.tied.android.tiedapp.ui.fragments.client;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -39,12 +40,15 @@ import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
+import com.tied.android.tiedapp.ui.activities.client.ActivityClientProfile;
 import com.tied.android.tiedapp.ui.activities.client.AddClientActivity;
+import com.tied.android.tiedapp.ui.activities.lines.LinesListActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.dialogs.SelectDataDialog;
 import com.tied.android.tiedapp.ui.dialogs.SimpleDialogSelector;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.util.HTTPConnection;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import org.json.JSONObject;
@@ -75,6 +79,7 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
     Boolean[] industry_status = {false,false,false,false};
     ArrayList<DataModel> listIndustry;
 
+    View addressLayout;
     int[] id_line = {1, 2};
     String[] txt_line = {"Line1","Line2"};
     Boolean[] line_status = {false,false};
@@ -100,6 +105,7 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
     LinearLayout visit_radio, birthday_layout;
     RelativeLayout industry_layout;
     Integer industryId=null, lineId=null;
+    View lineLayout;
 
 
     //int industry_id = 1;
@@ -148,7 +154,12 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
        // street = (EditText) view.findViewById(R.id.street);
        // zip = (EditText) view.findViewById(R.id.zip);
        // city = (EditText) view.findViewById(R.id.city);
-        view.findViewById(R.id.location_layout).setOnClickListener(this);
+        //view.findViewById(R.id.location_layout).setOnClickListener(this);
+        lineLayout=view.findViewById(R.id.line_layout);
+        lineLayout.setOnClickListener(this);
+
+        addressLayout=view.findViewById(R.id.address_layout);
+        addressLayout.setOnClickListener(this);
 
      //   stateSpinner = (Spinner) view.findViewById(R.id.state);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(), R.layout.my_spinner_item, MyUtils.States.asArrayList());
@@ -216,7 +227,9 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
                 ///street.setText(client.getAddress().getStreet());
                 //zip.setText(client.getAddress().getZip());
                 //city.setText(client.getAddress().getCity());
-                stateSpinner.setSelection(adapter.getPosition(client.getAddress().getState()));
+               // stateSpinner.setSelection(adapter.getPosition(client.getAddress().getState()));
+                location=client.getAddress();
+                address.setText(location.getStreet()+", "+location.getCity()+", "+location.getState()+" "+location.getZip());
                 phone.setText(client.getPhone());
                 fax.setText(client.getFax());
                 revenue.setText(client.getRevenue());
@@ -315,21 +328,22 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
                 });
                 alert.showDialog();
                 break;
-            case R.id.line:
+            case R.id.line_layout:
                // SelectDataDialog alert_line = new SelectDataDialog(listLine,line,this);
-                SimpleDialogSelector alert_line = new SimpleDialogSelector(getActivity(), listLine, new SimpleDialogSelector.SelectedListener() {
+               /* SimpleDialogSelector alert_line = new SimpleDialogSelector(getActivity(), listLine, new SimpleDialogSelector.SelectedListener() {
                     @Override
                     public void selected(DataModel dataModel) {
                         lineId=dataModel.getId();
                         line.setText(dataModel.getName());
                     }
                 });
-                alert_line.showDialog();
+                alert_line.showDialog();*/
+                MyUtils.startRequestActivity(getActivity(), LinesListActivity.class, Constants.ADD_LINE, bundle);
                 break;
             case R.id.avatar:
                 showChooser();
                 break;
-            case R.id.location_layout:
+            case R.id.address_layout:
                 MyUtils.showAddressDialog(getActivity(), "Address", location , new MyUtils.MyDialogClickListener() {
                     @Override
                     public void onClick(Object response) {
@@ -506,7 +520,7 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
                 if (getActivity() == null) return;
                 try {
                     Log.d(TAG + " onResponse", resResponse.body().toString());
-                    ClientRes clientRes = resResponse.body();
+                    final ClientRes clientRes = resResponse.body();
                     if (clientRes.isAuthFailed()) {
                         User.LogOut(getActivity().getApplicationContext());
                     } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 201) {
@@ -514,7 +528,17 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
                         bundle.putBoolean(Constants.NO_CLIENT_FOUND, false);
                         DialogUtils.closeProgress();
                         Client.clientCreated(getActivity().getApplicationContext());
-                        MyUtils.showToast("Client successfully created");
+                        MyUtils.showMessageAlert(getActivity(), "Client successfully created");
+                        name.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Bundle bundle=new Bundle();
+                                bundle.putSerializable(Constants.CLIENT_DATA, clientRes.getClient());
+                                bundle.putSerializable(Constants.USER_DATA, user);
+                                MyUtils.startActivity(getActivity(), ActivityClientProfile.class, bundle);
+                                getActivity().finish();
+                            }
+                        }, 1000);
                        // MyUtils.startActivity(getActivity(), MainActivity.class, bundle);
                     } else {
                         DialogUtils.closeProgress();
@@ -536,11 +560,58 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
         });
     }
 
+    public static void createClient(final Client client, final Context context, final HTTPConnection.AjaxCallback callback) {
+
+        MultipartBody.Part body=null;
+
+        RequestBody clientReq =
+                RequestBody.create(
+                        MediaType.parse("multipart/form-data"), new Gson().toJson(client));
+        User user=MyUtils.getUserLoggedIn();
+        ClientApi clientApi = MainApplication.getInstance().getRetrofit().create(ClientApi.class);
+        Call<ClientRes> response = clientApi.createClient(user.getToken(), clientReq, body);
+        response.enqueue(new Callback<ClientRes>() {
+            @Override
+            public void onResponse(Call<ClientRes> call, Response<ClientRes> resResponse) {
+                if (context == null) return;
+                try {
+                    Log.d(TAG + " onResponse", resResponse.body().toString());
+                    ClientRes clientRes = resResponse.body();
+                    if (clientRes.isAuthFailed()) {
+                        User.LogOut(context);
+                    } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 201) {
+                        Log.d(TAG + " client good", clientRes.getClient().toString());
+                        //bundle.putBoolean(Constants.NO_CLIENT_FOUND, false);
+                        DialogUtils.closeProgress();
+                        Client.clientCreated(context.getApplicationContext());
+                        MyUtils.showToast("Client successfully created");
+                        callback.run(201, clientRes.toString());
+                        // MyUtils.startActivity(getActivity(), MainActivity.class, bundle);
+                    } else {
+                        DialogUtils.closeProgress();
+                        //Toast.makeText(getActivity(), clientRes.getMessage(), Toast.LENGTH_LONG).show();
+                        MyUtils.showErrorAlert((Activity)context, clientRes.getMessage());
+                    }
+                }catch (Exception e) {
+                    MyUtils.showToast(context.getString(R.string.connection_error));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ClientRes> ClientResponseCall, Throwable t) {
+                //Toast.makeText(getActivity(), "On failure create: error encountered", Toast.LENGTH_LONG).show();
+                //Log.d(TAG + " onFailure create", t.toString());
+                MyUtils.showToast(context.getString(R.string.connection_error));
+                DialogUtils.closeProgress();
+            }
+        });
+    }
+
 
     private void editClient() {
         client = initClient(client);
 
-        ClientApi clientApi = MainApplication.getInstance().getRetrofit().create(ClientApi.class);
+        ClientApi clientApi = MainApplication.createService(ClientApi.class);
         Call<ClientRes> response = null;
         if(uri != null){
             File file = new File(uri.getPath());

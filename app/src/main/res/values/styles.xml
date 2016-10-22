@@ -11,6 +11,22 @@
         <item name="android:textViewStyle">@style/RobotoTextViewStyle</item>
     </style>
 
+    <style name="NoResultText" parent="AppTheme">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:gravity">center</item>
+
+        <item name="android:layout_gravity">center</item>
+
+        <item name="android:layout_margin">30dp</item>
+        <item name="android:background">@drawable/white_fill_grey_stroke</item>
+        <item name="android:padding">20dp</item>
+        <item name="android:textSize">15sp</item>
+
+        <item name="android:textColor">@color/light_gray</item>
+
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
     <style name="AppBaseTheme" parent="Theme.AppCompat">
         <!--
             Theme customizations available in newer API levels can go in

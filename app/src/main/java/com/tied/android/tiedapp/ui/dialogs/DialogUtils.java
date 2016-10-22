@@ -41,8 +41,12 @@ public class DialogUtils {
 
     public static void closeProgress(){
         if (progressIndicator != null && progressIndicator.isShowing()) {
-            progressIndicator.dismiss();
-            progressIndicator = null;
+            try {
+                progressIndicator.dismiss();
+                progressIndicator = null;
+            }catch (Exception e) {
+
+            }
         }
     }
 }

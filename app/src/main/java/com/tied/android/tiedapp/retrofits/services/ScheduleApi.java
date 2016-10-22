@@ -32,10 +32,13 @@ public interface ScheduleApi {
                                      @Body Schedule schedule);
 
     @GET(Constants.USER_SCHEDULE)
-    Call<ScheduleRes> getSchedule(@Header(Constants.TOKEN_HEADER) String token);
+    Call<ScheduleRes> getSchedule(@Path("user_id") String user_id);
 
     @GET(Constants.USER_SCHEDULE)
-    Call<ResponseBody> getSchedules();
+    Call<ScheduleRes> getUserSchedules(@Path("user_id") String user_id);
+
+    @GET(Constants.USER_SCHEDULE)
+    Call<ResponseBody> getSchedules(@Path("user_id") String user_id);
 
 
     @GET(Constants.USER_SCHEDULE_COUNT)
@@ -43,7 +46,7 @@ public interface ScheduleApi {
 
 
     @POST(Constants.USER_SCHEDULES_BY_DATE)
-    Call<ScheduleRes> getScheduleByDate(@Header(Constants.TOKEN_HEADER) String token, @Body ScheduleDate scheduleDate);
+    Call<ScheduleRes> getScheduleByDate(@Path("user_id") String user_id, @Body ScheduleDate scheduleDate);
 
     @DELETE(Constants.DELETE_SCHEDULE_WITH_ID)
     Call<ResponseBody> deleteSchedule(@Header(Constants.TOKEN_HEADER) String token,

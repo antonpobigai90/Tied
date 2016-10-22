@@ -36,7 +36,7 @@ import com.tied.android.tiedapp.ui.activities.goal.LineGoalActivity;
 import com.tied.android.tiedapp.ui.activities.lines.LinesListActivity;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityGroupedSales;
 import com.tied.android.tiedapp.ui.activities.territories.ActivityTerritories;
-import com.tied.android.tiedapp.ui.dialogs.DialogNewClient;
+import com.tied.android.tiedapp.ui.dialogs.DialogAddNewItem;
 import com.tied.android.tiedapp.ui.fragments.DailyStatsFragment;
 import com.tied.android.tiedapp.ui.fragments.LinesFragment;
 import com.tied.android.tiedapp.ui.fragments.client.ClientAddFragment;
@@ -433,7 +433,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
             case R.id.add:
                 //launchFragment(Constants.AddScheduleActivity, bundle);
 //                MyUtils.startActivity(this, AddOptionsActivity.class);
-                DialogNewClient alert = new DialogNewClient();
+                DialogAddNewItem alert = new DialogAddNewItem();
                 alert.showDialog(this, bundle);
                 break;
            /* case R.id.txt_activities:
@@ -488,7 +488,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
 
             case R.id.img_user_picture : case R.id.user_picture_iv:
                 if(currentFragmentID==Constants.ProfileFragment) return;
-                launchFragment(Constants.ProfileFragment, bundle);
+                launchFragment(Constants.Profile, bundle);
 
 //                MyUtils.startActivity(MainActivity.this, ProfileFragment.class, bundle);
                 break;
@@ -534,7 +534,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         } else {
             drawerLayout.openDrawer(Gravity.RIGHT);
 
-            user = User.getUser(getApplicationContext());
+            user = User.getCurrentUser(getApplicationContext());
             drawerEmail.setText(user.getEmail());
             drawerFullName.setText(user.getFirst_name()+" "+user.getLast_name());
 

@@ -71,7 +71,7 @@ public class AvatarProfileFragment extends Fragment implements View.OnClickListe
             image.setImageURI(outputUri);
         }
 
-        user = User.getUser(getActivity().getApplicationContext());
+        user = User.getCurrentUser(getActivity().getApplicationContext());
         if (user != null) {
             name.setText(user.getFullName());
             Log.d(TAG, "user.getAvatar()"+user.getAvatar());
