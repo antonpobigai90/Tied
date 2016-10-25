@@ -130,7 +130,7 @@ public class User implements Serializable {
         SharedPreferences.Editor prefsEditor = mPrefs.edit();
         prefsEditor.putBoolean(Constants.IS_LOGGED_IN_USER,false);
         prefsEditor.remove(Constants.CURRENT_USER);
-        prefsEditor.apply();
+        prefsEditor.commit();
 
         MyUtils.startActivity(context, WalkThroughActivity.class);
         try{
