@@ -128,7 +128,7 @@ public class LinesFragment extends Fragment implements AdapterView.OnItemClickLi
         Log.d(TAG, "here---------------- listener");
         Line line = lines.get(position);
         bundle.putSerializable(Constants.LINE_DATA, line);
-        MyUtils.startRequestActivity(getActivity(), ViewLineActivity.class, Constants.ADD_SALES, bundle);
+        MyUtils.startRequestActivity(getActivity(), ViewLineActivity.class, Constants.LineDelete, bundle);
     }
     public void initLines(){
         final LineApi lineApi =  MainApplication.createService(LineApi.class);
@@ -145,10 +145,10 @@ public class LinesFragment extends Fragment implements AdapterView.OnItemClickLi
                     }
                     _Meta meta=response.getMeta();
                     if(meta !=null && meta.getStatus_code() == 200) {
-
-                         lines .addAll( (ArrayList) response.getDataAsList(Constants.LINES_lIST, Line.class));
+                        lines.clear();
+                        lines .addAll( (ArrayList) response.getDataAsList(Constants.LINES_lIST, Line.class));
                         Logger.write("Lines loadeddddddddddddddddddddddddddddddddddddddddddddddd "+lines.size());
-                         adapter.notifyDataSetChanged();
+                        adapter.notifyDataSetChanged();
                         if(lines.isEmpty()) MyUtils.showNoResults(getView(), R.id.no_results);
                     }else{
                         MyUtils.showToast("Error encountered");

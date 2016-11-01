@@ -691,7 +691,8 @@
                 android:textColor="@color/red_color"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:layout_alignParentBottom="true" />
+                android:layout_alignParentBottom="true"
+                android:visibility="gone"/>
 
         </RelativeLayout>
 

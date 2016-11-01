@@ -13,6 +13,7 @@ import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.model.TerritoryModel;
 import com.tied.android.tiedapp.objects.Coordinate;
+import com.tied.android.tiedapp.objects.Territory;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.client.ClientLocation;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
@@ -42,7 +43,7 @@ public class IndustryActivity extends AppCompatActivity implements View.OnClickL
 
     ListView line_listview;
     ClientTerritoriesAdapter territoriesAdapter;
-    ArrayList<TerritoryModel> territoryModels = new ArrayList<TerritoryModel>();
+    ArrayList<Territory> territoryModels = new ArrayList<Territory>();
 
     private User user;
 
@@ -63,14 +64,13 @@ public class IndustryActivity extends AppCompatActivity implements View.OnClickL
 
         line_listview = (ListView) findViewById(R.id.list);
 
-        for (int i = 0 ; i < 10; i++) {
-            TerritoryModel territoryModel = new TerritoryModel();
-
-            territoryModel.setTerritory_name("lroko Technologies LLC");
-            territoryModel.setNo_clients(30);
-
-            territoryModels.add(territoryModel);
-        }
+//        for (int i = 0 ; i < 10; i++) {
+//            Territory territoryModel = new Territory();
+//
+//            territoryModel.set.setTerritory_name("lroko Technologies LLC");
+//
+//            territoryModels.add(territoryModel);
+//        }
 
         territoriesAdapter = new ClientTerritoriesAdapter(1, territoryModels, this);
         line_listview.setAdapter(territoriesAdapter);

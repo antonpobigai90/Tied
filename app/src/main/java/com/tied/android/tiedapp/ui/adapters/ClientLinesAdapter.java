@@ -65,26 +65,28 @@ public class ClientLinesAdapter extends BaseAdapter {
         viewHolder = new ViewHolder();
 
         viewHolder.txt_line_name = (TextView) view.findViewById(R.id.line);
-        viewHolder.txt_line_sales = (TextView) view.findViewById(R.id.sales);
+//        viewHolder.txt_line_sales = (TextView) view.findViewById(R.id.sales);
         viewHolder.img_check = (ImageView) view.findViewById(R.id.selector);
 
         final Line data = (Line) _data.get(i);
 
         viewHolder.txt_line_name.setText(data.getName());
-        String sales = data.getSales() + "Total sales";
-        viewHolder.txt_line_sales.setText(sales);
+//        String sales = data.getSales() + "Total sales";
+//        viewHolder.txt_line_sales.setText(sales);
         if (data.isCheck_status()) {
             viewHolder.img_check.setBackgroundResource(R.drawable.circle_check2);
+            viewHolder.txt_line_name.setTextColor(_c.getResources().getColor(R.color.light_gray2));
         } else {
             viewHolder.img_check.setBackgroundResource(R.drawable.unselectd_bg);
+            viewHolder.txt_line_name.setTextColor(_c.getResources().getColor(R.color.grey));
         }
 
-        viewHolder.img_check.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setSelectedIndex(i);
-            }
-        });
+//        viewHolder.img_check.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                setSelectedIndex(i);
+//            }
+//        });
 
         view.setTag(data);
         return view;

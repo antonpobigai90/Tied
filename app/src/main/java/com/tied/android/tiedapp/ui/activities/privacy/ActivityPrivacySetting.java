@@ -202,9 +202,6 @@ public class ActivityPrivacySetting extends Activity
             case R.id.add_button:
                 finishSelection();
                 break;
-            case R.id.clear_but:
-                showClearWarning();
-                break;
             case R.id.img_close:
                 onBackPressed();
                 break;

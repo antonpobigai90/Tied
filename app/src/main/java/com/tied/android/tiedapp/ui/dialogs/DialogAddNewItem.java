@@ -23,7 +23,6 @@ import com.tied.android.tiedapp.ui.activities.sales.ActivityAddSales;
 import com.tied.android.tiedapp.ui.activities.schedule.CreateAppointmentActivity;
 import com.tied.android.tiedapp.ui.adapters.ScheduleListAdapter;
 import com.tied.android.tiedapp.ui.fragments.client.AddClientFragment;
-import com.tied.android.tiedapp.ui.fragments.sales.AddSalesFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.CreateScheduleFragment;
 import com.tied.android.tiedapp.util.HTTPConnection;
 import com.tied.android.tiedapp.util.Logger;

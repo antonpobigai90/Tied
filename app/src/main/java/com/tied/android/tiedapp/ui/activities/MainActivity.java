@@ -29,6 +29,7 @@ import com.squareup.picasso.Picasso;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.objects.Territory;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.services.LocationService;
@@ -58,6 +59,7 @@ import com.tied.android.tiedapp.util.MyUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -105,6 +107,17 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
     NavigationView navigationView;
     DrawerLayout drawerLayout;
     int currentFragmentID=0;
+
+    public static ArrayList<String> selectedLines = new ArrayList<String>();
+    public static ArrayList<Territory> selectedTerritories = new ArrayList<Territory>();
+    public static String search_name = "";
+    public static int distance = 10000;
+    public static String group = "me";
+    public static int last_visited = 1;
+    public static String orderby = "distance";
+    public static String order = "desc";
+    public static boolean isClientFilter = false;
+    public static boolean isClear = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -434,6 +447,13 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 String nonce = paymentMethodNonce.getNonce();
                 // Send the nonce to your server.
             }
+        }
+
+        if (requestCode == Constants.ClientFilter && resultCode == Activity.RESULT_OK) {
+            launchFragment(Constants.MapFragment, bundle);
+        }
+        if (requestCode == Constants.ClientDelete && resultCode == Activity.RESULT_OK) {
+            launchFragment(Constants.MapFragment, bundle);
         }
     }
 

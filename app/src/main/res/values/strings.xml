@@ -174,7 +174,8 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_send_invite">SendInviteActivity</string>
 
-    <string name="google_maps_api_key">AIzaSyC0m7wUq4hxxLG3D4YA63U6Qa4AhAFb-4M</string>
+    <!--<string name="google_maps_api_key">AIzaSyC0m7wUq4hxxLG3D4YA63U6Qa4AhAFb-4M</string>-->
+    <string name="google_maps_api_key">AIzaSyBTlxNeahCm5MLSJnI7JNCpefRjqSaY5o4</string>
     <string name="track_progress">Track your progress with a line, this is a great way to measure how you are doing over time. You can start now</string>
     <string name="lorem">Lorem ipsum lorem ipsum lorep inmun ghryfu yu vaety barety asahsh asas kksas ksas</string>
 

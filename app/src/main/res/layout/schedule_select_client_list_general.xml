@@ -22,7 +22,7 @@
                     android:layout_centerInParent="true"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="0dp"
-                    android:text="Select Client for Sale"
+                    android:text="Select Line for Sale"
                     android:textColor="@color/white"
                     android:textSize="18sp" />
 
@@ -40,7 +40,8 @@
                         android:layout_width="@dimen/action_bar_icon_height"
                         android:layout_height="@dimen/action_bar_icon_height"
                         android:padding="@dimen/action_bar_icon_padding"
-                    android:src="@drawable/btn_back_arrow" />
+                    android:src="@drawable/btn_back_arrow"
+                    android:onClick="goBack" />
 
             </LinearLayout>
             <LinearLayout
@@ -52,15 +53,14 @@
                     android:layout_centerVertical="true"
                 android:orientation="horizontal">
 
-                    <ImageView
-
+                    <TextView
                         android:layout_alignParentTop="true"
                         android:padding="@dimen/action_bar_icon_padding"
-                        android:layout_width="@dimen/action_bar_icon_height"
+                        android:layout_width="wrap_content"
                         android:layout_height="@dimen/action_bar_icon_height"
-                        android:id="@+id/clear_but"
-
-                        android:src="@drawable/btn_close" />
+                        android:text="Done"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
             </LinearLayout>
 
         </RelativeLayout>
@@ -91,7 +91,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/SearchEditText"
-                android:hint="Search Client by Name"/>
+                android:hint="Search Line by Name"/>
 
         </RelativeLayout>
 

@@ -2,6 +2,7 @@ package com.tied.android.tiedapp.retrofits.services;
 
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.client.Client;
+import com.tied.android.tiedapp.objects.client.ClientFilter;
 import com.tied.android.tiedapp.objects.client.ClientLocation;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.responses.Count;
@@ -11,6 +12,7 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Multipart;
@@ -62,5 +64,9 @@ public interface ClientApi {
                                    @Path("page_number") int page,
                                    @Body ClientLocation clientLocation);
 
+    @POST(Constants.USER_GE0_CLIENTS)
+    Call<ClientRes> getClientsFilter(@Path("user_id") String user_id, @Body ClientFilter clientFilter);
 
+    @DELETE(Constants.CLIENT_DELETE)
+    Call<ResponseBody> deleteClient(@Path("client_id") String client_id);
 }

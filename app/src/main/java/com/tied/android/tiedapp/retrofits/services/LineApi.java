@@ -7,6 +7,7 @@ package com.tied.android.tiedapp.retrofits.services;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects.RevenueFilter;
+import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.client.ClientLocation;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.responses.Count;
@@ -14,6 +15,7 @@ import com.tied.android.tiedapp.objects.responses.Count;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -65,4 +67,10 @@ public interface LineApi {
 
     @POST(Constants.USER_GE0_LINES)
     Call<ClientRes> getLineByLocation(@Header(Constants.TOKEN_HEADER) String token, @Body ClientLocation clientLocation);
+
+    @DELETE(Constants.LINE_DELETE)
+    Call<ResponseBody> deleteLine(@Path("line_id") String line_id);
+
+    @PUT(Constants.ADD_LINE_CLIENT)
+    Call<ResponseBody> addLineClient(@Path("line_id") String line_id, @Body Client client);
 }

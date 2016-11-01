@@ -1,8 +1,10 @@
 package com.tied.android.tiedapp.ui.activities.coworker;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -12,14 +14,28 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.model.TerritoryModel;
+import com.tied.android.tiedapp.objects.Territory;
+import com.tied.android.tiedapp.objects._Meta;
+import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.retrofits.services.TerritoryApi;
+import com.tied.android.tiedapp.ui.activities.MainActivity;
+import com.tied.android.tiedapp.ui.activities.territories.ActivityTerritories;
 import com.tied.android.tiedapp.ui.adapters.ClientTerritoriesAdapter;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Response;
 
 public class CoWorkerTerritoriesActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -29,13 +45,14 @@ public class CoWorkerTerritoriesActivity extends AppCompatActivity implements Vi
     private Bundle bundle;
     private User user;
 
-    LinearLayout back_layout;
+    LinearLayout back_layout, add_button;
     TextView txt_title;
 
     ListView line_listview;
     RelativeLayout top_layout;
     ClientTerritoriesAdapter territoriesAdapter;
-    ArrayList<TerritoryModel> territoryModels = new ArrayList<TerritoryModel>();
+    ArrayList<Territory> territoryModels = new ArrayList<Territory>();
+    ArrayList<Territory> selectedTerritories = new ArrayList<Territory>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,35 +86,87 @@ public class CoWorkerTerritoriesActivity extends AppCompatActivity implements Vi
         back_layout = (LinearLayout) findViewById(R.id.back_layout);
         back_layout.setOnClickListener(this);
 
+        add_button = (LinearLayout) findViewById(R.id.add_button);
+        add_button.setOnClickListener(this);
+
         txt_title = (TextView) findViewById(R.id.txt_title);
         line_listview = (ListView) findViewById(R.id.lines_listview);
 
         String title = (page_index == 0) ? "Territories" : "Filter Territory";
         txt_title.setText(title);
 
-        for (int i = 0 ; i < 10; i++) {
-            TerritoryModel territoryModel = new TerritoryModel();
-
-            territoryModel.setTerritory_name("lroko Technologies LLC");
-            territoryModel.setNo_clients(30);
-
-            territoryModels.add(territoryModel);
-        }
-
         territoriesAdapter = new ClientTerritoriesAdapter(page_index, territoryModels, this);
         line_listview.setAdapter(territoriesAdapter);
         territoriesAdapter.notifyDataSetChanged();
 
+        initTerritories();
+
         line_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Territory item = territoryModels.get(position);
+
                 if (territoryModels.get(position).isCheck_status()) {
                     territoryModels.get(position).setCheck_status(false);
+
+                    for (int i = 0; i < selectedTerritories.size(); i++) {
+                        Territory selectedTerritory = selectedTerritories.get(i);
+
+                        if (selectedTerritory.getId().equals(item.getId())) {
+                            selectedTerritories.remove(i);
+                        }
+                    }
                 } else {
                     territoryModels.get(position).setCheck_status(true);
+
+                    selectedTerritories.add(item);
                 }
 
                 territoriesAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    public void initTerritories(){
+        final TerritoryApi territoryApi =  MainApplication.createService(TerritoryApi.class);
+        Call<ResponseBody> response = territoryApi.getTerritories(user.getId(), 1);
+        response.enqueue(new retrofit2.Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
+                try {
+                    GeneralResponse response = new GeneralResponse(resResponse.body());
+                    Logger.write(response.toString());
+                    if (response.isAuthFailed()) {
+                        User.LogOut(CoWorkerTerritoriesActivity.this);
+                        return;
+                    }
+                    _Meta meta=response.getMeta();
+
+
+                    if(meta !=null && meta.getStatus_code() == 200) {
+
+                        territoryModels.addAll( (ArrayList) response.getDataAsList(Constants.TerritoryData, Territory.class));
+                        //Logger.write("Lines loadeddddddddddddddddddddddddddddddddddddddddddddddd "+territories.size());
+                        territoriesAdapter.notifyDataSetChanged();
+                        if( territoryModels.isEmpty()) MyUtils.showNoResults(CoWorkerTerritoriesActivity.this.findViewById(R.id.parent), R.id.no_results);
+                    }else{
+                        MyUtils.showToast("Error encountered");
+                        DialogUtils.closeProgress();
+                    }
+
+                }catch (IOException ioe) {
+                    Logger.write(ioe);
+                }
+                catch (Exception jo) {
+                    Logger.write(jo);
+                }
+                DialogUtils.closeProgress();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d(" onFailure", t.toString());
             }
         });
     }
@@ -107,7 +176,11 @@ public class CoWorkerTerritoriesActivity extends AppCompatActivity implements Vi
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.back_layout:
-                super.onBackPressed();
+                finish();
+                break;
+            case R.id.add_button:
+                MainActivity.selectedTerritories = selectedTerritories;
+                finish();
                 break;
         }
     }

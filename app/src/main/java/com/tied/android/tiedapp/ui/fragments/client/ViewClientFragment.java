@@ -36,9 +36,7 @@ import com.tied.android.tiedapp.retrofits.services.RevenueApi;
 import com.tied.android.tiedapp.ui.activities.client.AddClientActivity;
 import com.tied.android.tiedapp.ui.activities.client.ClientInfo;
 import com.tied.android.tiedapp.ui.activities.goal.LineGoalActivity;
-import com.tied.android.tiedapp.ui.activities.lines.LinesListActivity;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityLineClientSales;
-import com.tied.android.tiedapp.ui.activities.schedule.ClientSchedulesActivity;
 import com.tied.android.tiedapp.ui.dialogs.DialogClientOptions;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.dialogs.DialogYesNo;
@@ -160,6 +158,10 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
             lastVisitedTV.setText("Last Visited: "+ (lastVisited==null || lastVisited.isEmpty()?"Never":HelperMethods.getDateDifferenceWithToday(lastVisited)));
         }
         setTotalRevenue();
+
+        if (user.getId().equals(client.getUser_id())) {
+            btn_delete.setVisibility(View.VISIBLE);
+        }
     }
 
 
@@ -174,7 +176,7 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
 
             case R.id.txt_delete:
                 color = this.getResources().getColor(R.color.alert_bg_color);
-                DialogYesNo alert_delete = new DialogYesNo(getActivity(),"DELETE CLIENT","Are you sure want to delete this client","YES DELETE!",color,0);
+                DialogYesNo alert_delete = new DialogYesNo(getActivity(),client, "DELETE CLIENT","Are you sure want to delete this client","YES DELETE!",color,0);
                 alert_delete.showDialog();
                 break;
             case R.id.icon_plus:
@@ -210,7 +212,7 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
                 MyUtils.startActivity(getActivity(), ClientInfo.class, bundle);
                 break;
             case R.id.territory:
-                MyUtils.startActivity(getActivity(), LinesListActivity.class, bundle);
+//                MyUtils.startActivity(getActivity(), LinesListActivity.class, bundle);
                 break;
             case R.id.sales_layout:
               //  MyUtils.startRequestActivity(getActivity(), ActivityLineClientSales.class, Constants.SALES_SOURCE, bundle);
@@ -220,10 +222,10 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
                 break;
             case R.id.schedule_layout:
 
-                MyUtils.startRequestActivity(getActivity(), ClientSchedulesActivity.class, Constants.SELECT_CLIENT, bundle);
+//                MyUtils.startRequestActivity(getActivity(), ClientSchedulesActivity.class, Constants.SELECT_CLIENT, bundle);
                 break;
             case R.id.line_layout:
-                MyUtils.startRequestActivity(getActivity(), LinesListActivity.class, Constants.SELECT_CLIENT, bundle);
+//                MyUtils.startRequestActivity(getActivity(), LinesListActivity.class, Constants.SELECT_CLIENT, bundle);
                 break;
         }
     }

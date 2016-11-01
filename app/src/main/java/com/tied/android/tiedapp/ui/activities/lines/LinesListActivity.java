@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import com.tied.android.tiedapp.R;
+import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.fragments.LinesFragment;
 import com.tied.android.tiedapp.util.MyUtils;
@@ -29,12 +30,12 @@ public class LinesListActivity extends AppCompatActivity implements  View.OnClic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_client_lines_territories);
+        setContentView(R.layout.activity_fragment_container);
 
         bundle = getIntent().getExtras();
         user = MyUtils.getUserFromBundle(bundle);
         //initComponent();
-        setContentView(R.layout.activity_fragment_container);
+
         FragmentManager fm =getSupportFragmentManager();
         FragmentTransaction ft=fm.beginTransaction();
         linesFragment=(LinesFragment)LinesFragment.newInstance(getIntent().getExtras());
@@ -71,9 +72,8 @@ public class LinesListActivity extends AppCompatActivity implements  View.OnClic
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode==RESULT_OK) {
-            linesFragment.lines.clear();
-            linesFragment.adapter.notifyDataSetChanged();
+        if(requestCode== Constants.LineDelete && resultCode==RESULT_OK) {
+            MyUtils.showToast("Delete Successfully");
             linesFragment.initLines();
         }
     }

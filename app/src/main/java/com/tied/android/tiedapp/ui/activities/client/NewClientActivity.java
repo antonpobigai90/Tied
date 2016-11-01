@@ -95,8 +95,8 @@ public class NewClientActivity extends AppCompatActivity implements View.OnClick
                 break;
             case R.id.txt_delete:
                 color = this.getResources().getColor(R.color.alert_bg_color);
-                DialogYesNo alert_delete = new DialogYesNo(this,"DELETE CLIENT","Are you sure want to delete this client","YES DELETE!",color,0);
-                alert_delete.showDialog();
+//                DialogYesNo alert_delete = new DialogYesNo(this, null, "DELETE CLIENT","Are you sure want to delete this client","YES DELETE!",color,0);
+//                alert_delete.showDialog();
                 break;
             case R.id.icon_plus:
                 DialogNewClient1 alert = new DialogNewClient1();
@@ -104,8 +104,8 @@ public class NewClientActivity extends AppCompatActivity implements View.OnClick
                 break;
             case R.id.icon_mail:
                 color = this.getResources().getColor(R.color.green_color);
-                DialogYesNo alert_call = new DialogYesNo(this,"CALL CLIENT","Are you sure want to call this client?. Call charges may apply","YES, CALL!",color,1);
-                alert_call.showDialog();
+//                DialogYesNo alert_call = new DialogYesNo(this,"CALL CLIENT","Are you sure want to call this client?. Call charges may apply","YES, CALL!",color,1);
+//                alert_call.showDialog();
                 break;
             case R.id.icon_call:
 
