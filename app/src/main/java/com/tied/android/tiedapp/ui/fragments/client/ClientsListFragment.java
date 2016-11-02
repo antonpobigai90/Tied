@@ -105,7 +105,7 @@ public class ClientsListFragment extends Fragment implements AdapterView.OnItemC
 
     private void loadClients() {
         ClientLocation clientLocation = new ClientLocation();
-        clientLocation.setDistance("0m");
+        clientLocation.setDistance("10000m");
 
         Coordinate coordinate = MyUtils.getCurrentLocation();
         if( coordinate == null ){

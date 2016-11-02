@@ -296,6 +296,7 @@ public class Client implements Serializable, Comparable<Client>{
                 ", _score=" + _score +
                 ", checkStatus=" + checkStatus +
                 ", territories=" + territories +
+                ", total_revenue=" + total_revenue +
                 '}';
     }
 
