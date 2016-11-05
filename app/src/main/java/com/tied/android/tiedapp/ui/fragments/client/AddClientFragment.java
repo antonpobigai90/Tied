@@ -34,6 +34,7 @@ import com.tied.android.tiedapp.customs.MyAddressAsyncTask;
 import com.tied.android.tiedapp.customs.model.DataModel;
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Location;
+import com.tied.android.tiedapp.objects.Territory;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.user.User;
@@ -42,6 +43,7 @@ import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.client.ActivityClientProfile;
 import com.tied.android.tiedapp.ui.activities.client.AddClientActivity;
+import com.tied.android.tiedapp.ui.activities.coworker.CoWorkerTerritoriesActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.dialogs.SelectDataDialog;
@@ -83,7 +85,7 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
     String[] txt_line = {"Line1","Line2"};
     Boolean[] line_status = {false,false};
     ArrayList<DataModel> listLine;
-
+    ArrayList<Territory> selectedTerritories = new ArrayList<Territory>();
 
 
     public ImageView avatar;
@@ -102,10 +104,10 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
 //    private ImageView img_weekly, img_two_weeks,img_monthly,img_three_weeks;
     private LinearLayout weekly_layout, two_weeks_layout,monthly_layout,three_weeks_layout;
     LinearLayout visit_radio, birthday_layout;
-    RelativeLayout industry_layout;
+    RelativeLayout industry_layout, territory_layout;
     Integer industryId=null, lineId=null;
     View lineLayout;
-
+    TextView txt_title;
 
     //int industry_id = 1;
 
@@ -147,9 +149,10 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
 
 
     public void initComponent(View view) {
+        txt_title =(TextView) view.findViewById(R.id.txt_title);
         company = (EditText) view.findViewById(R.id.company);
         name = (EditText) view.findViewById(R.id.name);
-        address=(TextView) view.findViewById(R.id.address_tv);
+        address =(TextView) view.findViewById(R.id.address_tv);
        // street = (EditText) view.findViewById(R.id.street);
        // zip = (EditText) view.findViewById(R.id.zip);
        // city = (EditText) view.findViewById(R.id.city);
@@ -179,6 +182,9 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
         industry_layout = (RelativeLayout) view.findViewById(R.id.industry_layout);
         industry = (TextView) view.findViewById(R.id.industry);
         industry.setOnClickListener(this);
+
+        territory_layout = (RelativeLayout) view.findViewById(R.id.territory_layout);
+        territory_layout.setOnClickListener(this);
 
         line = (TextView) view.findViewById(R.id.line);
         line.setOnClickListener(this);
@@ -220,6 +226,7 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
             String client_json = bundle.getString(Constants.CLIENT_DATA);
             client = gson.fromJson(client_json, Client.class);
             if (client != null){
+                txt_title.setText("Update Client");
                 MyUtils.Picasso.displayImage(client.getLogo(), avatar);
                 name.setText(client.getFull_name());
                 company.setText(client.getCompany());
@@ -256,6 +263,15 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == Constants.SELECT_TERRITORY && resultCode == Activity.RESULT_OK) {
+            selectedTerritories = (ArrayList<Territory>) (data.getSerializableExtra("selected"));
+        }
+    }
+
     private boolean validated() {
         companyText = company.getText().toString();
         if(companyText.isEmpty()) {
@@ -276,6 +292,12 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
             MyUtils.showErrorAlert(getActivity(), "Enter client location");
             return false;
         }
+
+        if (selectedTerritories.size() == 0) {
+            MyUtils.showErrorAlert(getActivity(), "You must select an territory");
+            return false;
+        }
+
         //birthdayText = birthday.getText().toString();
         if(industryId==null) {
             MyUtils.showErrorAlert(getActivity(), "You must select an industry");
@@ -350,6 +372,12 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
                         address.setText(location.getLocationAddress());
                     }
                 });
+                break;
+            case R.id.territory_layout:
+                bundle.putInt(Constants.SHOW_TERRITORY, 0);
+                bundle.putBoolean("single", true);
+                MyUtils.startRequestActivity(getActivity(), CoWorkerTerritoriesActivity.class, Constants.SELECT_TERRITORY, bundle);
+                break;
         }
     }
 
@@ -477,6 +505,7 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
         client.setVisit_id(visit_frequency);
         //client.setBirthday(birthdayText);
         client.setDescription(noteText);
+        client.setTerritory(selectedTerritories.get(0));
 
         return client;
     }

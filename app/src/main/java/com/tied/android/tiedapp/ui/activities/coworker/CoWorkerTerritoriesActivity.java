@@ -53,6 +53,7 @@ public class CoWorkerTerritoriesActivity extends AppCompatActivity implements Vi
     ClientTerritoriesAdapter territoriesAdapter;
     ArrayList<Territory> territoryModels = new ArrayList<Territory>();
     ArrayList<Territory> selectedTerritories = new ArrayList<Territory>();
+    Boolean signle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +63,7 @@ public class CoWorkerTerritoriesActivity extends AppCompatActivity implements Vi
         bundle = getIntent().getExtras();
         int page_index = bundle.getInt(Constants.SHOW_TERRITORY);
         int filter_index = bundle.getInt(Constants.SHOW_FILTER);
+        signle = bundle.getBoolean("single");
 
         user = MyUtils.getUserFromBundle(bundle);
 
@@ -107,20 +109,32 @@ public class CoWorkerTerritoriesActivity extends AppCompatActivity implements Vi
 
                 Territory item = territoryModels.get(position);
 
-                if (territoryModels.get(position).isCheck_status()) {
-                    territoryModels.get(position).setCheck_status(false);
+                if (!signle) {
+                    if (territoryModels.get(position).isCheck_status()) {
+                        territoryModels.get(position).setCheck_status(false);
 
-                    for (int i = 0; i < selectedTerritories.size(); i++) {
-                        Territory selectedTerritory = selectedTerritories.get(i);
+                        for (int i = 0; i < selectedTerritories.size(); i++) {
+                            Territory selectedTerritory = selectedTerritories.get(i);
 
-                        if (selectedTerritory.getId().equals(item.getId())) {
-                            selectedTerritories.remove(i);
+                            if (selectedTerritory.getId().equals(item.getId())) {
+                                selectedTerritories.remove(i);
+                            }
                         }
+                    } else {
+                        territoryModels.get(position).setCheck_status(true);
+
+                        selectedTerritories.add(item);
                     }
                 } else {
+                    selectedTerritories.clear();
                     territoryModels.get(position).setCheck_status(true);
-
                     selectedTerritories.add(item);
+
+                    for (int i = 0 ; i < territoryModels.size() ; i++) {
+                        if (!item.getId().equals(territoryModels.get(i).getId())) {
+                            territoryModels.get(i).setCheck_status(false);
+                        }
+                    }
                 }
 
                 territoriesAdapter.notifyDataSetChanged();
@@ -179,7 +193,13 @@ public class CoWorkerTerritoriesActivity extends AppCompatActivity implements Vi
                 finish();
                 break;
             case R.id.add_button:
-                MainActivity.selectedTerritories = selectedTerritories;
+                Intent intent = new Intent();
+                Bundle b =new Bundle();
+                b.putSerializable("selected", selectedTerritories);
+
+                intent.putExtras(b);
+                setResult(RESULT_OK, intent);
+                finishActivity(Constants.SELECT_TERRITORY);
                 finish();
                 break;
         }

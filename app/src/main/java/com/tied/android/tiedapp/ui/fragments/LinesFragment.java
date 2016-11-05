@@ -22,8 +22,10 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.objects._Meta;
+import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.retrofits.services.LineApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.lines.AddLinesActivity;
@@ -54,6 +56,7 @@ public class LinesFragment extends Fragment implements AdapterView.OnItemClickLi
             .getSimpleName();
 
     protected User user;
+    protected Client client;
     protected Bundle bundle;
     protected ListView listView;
     public List<Line> lines =new ArrayList<>();
@@ -76,8 +79,6 @@ public class LinesFragment extends Fragment implements AdapterView.OnItemClickLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_lines, container, false);
 
-
-
         initComponent(view);
         return view;
     }
@@ -85,6 +86,8 @@ public class LinesFragment extends Fragment implements AdapterView.OnItemClickLi
     public void initComponent(View view){
         bundle = getArguments();
         user = MyUtils.getUserFromBundle(bundle);
+        client = (Client) bundle.getSerializable(Constants.CLIENT_DATA);
+
         MyUtils.setColorTheme(getActivity(), bundle.getInt(Constants.SOURCE), view.findViewById(R.id.main_layout));
 
         img_plus = (ImageView) view.findViewById(R.id.img_plus);
@@ -107,13 +110,12 @@ public class LinesFragment extends Fragment implements AdapterView.OnItemClickLi
             img_plus.setVisibility(View.GONE);
         }
 
-
         adapter = new LinesAdapter(lines, getActivity(), bundle);
         listView.setAdapter(adapter);
         Logger.write(user.toString());
+
         initLines();
         listView.setOnItemClickListener(this);
-
     }
 
     @Override
@@ -130,9 +132,18 @@ public class LinesFragment extends Fragment implements AdapterView.OnItemClickLi
         bundle.putSerializable(Constants.LINE_DATA, line);
         MyUtils.startRequestActivity(getActivity(), ViewLineActivity.class, Constants.LineDelete, bundle);
     }
+
     public void initLines(){
-        final LineApi lineApi =  MainApplication.createService(LineApi.class);
-        Call<ResponseBody> response = lineApi.getUserLines(user.getId(), 1);
+        Call<ResponseBody> response;
+
+        if (client == null) {
+            final LineApi lineApi = MainApplication.createService(LineApi.class);
+            response = lineApi.getUserLines(user.getId(), 1);
+        } else {
+            final ClientApi clientApi =  MainApplication.createService(ClientApi.class);
+            response = clientApi.getClientLine(client.getId(), 1);
+        }
+
         response.enqueue(new retrofit2.Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
@@ -170,4 +181,5 @@ public class LinesFragment extends Fragment implements AdapterView.OnItemClickLi
             }
         });
     }
+
 }

@@ -36,7 +36,10 @@ import com.tied.android.tiedapp.retrofits.services.RevenueApi;
 import com.tied.android.tiedapp.ui.activities.client.AddClientActivity;
 import com.tied.android.tiedapp.ui.activities.client.ClientInfo;
 import com.tied.android.tiedapp.ui.activities.goal.LineGoalActivity;
+import com.tied.android.tiedapp.ui.activities.lines.LineClientVisitsActivity;
+import com.tied.android.tiedapp.ui.activities.lines.LinesListActivity;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityLineClientSales;
+import com.tied.android.tiedapp.ui.activities.schedule.ClientSchedulesActivity;
 import com.tied.android.tiedapp.ui.dialogs.DialogClientOptions;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.dialogs.DialogYesNo;
@@ -105,7 +108,6 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
         view.findViewById(R.id.visits_layout).setOnClickListener(this);
         view.findViewById(R.id.line_layout).setOnClickListener(this);
         lastVisitedTV=(TextView)view.findViewById(R.id.last_visited) ;
-
 
         MyUtils.Picasso.displayImage(client.getLogo(), (ImageView)view.findViewById(R.id.avatar));
 
@@ -221,11 +223,13 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
                 MyUtils.startRequestActivity(getActivity(), ActivityLineClientSales.class, Constants.REVENUE_LIST, bundle);
                 break;
             case R.id.schedule_layout:
-
-//                MyUtils.startRequestActivity(getActivity(), ClientSchedulesActivity.class, Constants.SELECT_CLIENT, bundle);
+                MyUtils.startRequestActivity(getActivity(), ClientSchedulesActivity.class, Constants.SELECT_CLIENT, bundle);
                 break;
             case R.id.line_layout:
-//                MyUtils.startRequestActivity(getActivity(), LinesListActivity.class, Constants.SELECT_CLIENT, bundle);
+                MyUtils.startRequestActivity(getActivity(), LinesListActivity.class, Constants.SELECT_CLIENT, bundle);
+                break;
+            case R.id.visits_layout:
+                MyUtils.startRequestActivity(getActivity(), LineClientVisitsActivity.class, Constants.SELECT_CLIENT, bundle);
                 break;
         }
     }

@@ -34,11 +34,12 @@ public class LinesListActivity extends AppCompatActivity implements  View.OnClic
 
         bundle = getIntent().getExtras();
         user = MyUtils.getUserFromBundle(bundle);
+
         //initComponent();
 
         FragmentManager fm =getSupportFragmentManager();
         FragmentTransaction ft=fm.beginTransaction();
-        linesFragment=(LinesFragment)LinesFragment.newInstance(getIntent().getExtras());
+        linesFragment=(LinesFragment)LinesFragment.newInstance(bundle);
         String tag =linesFragment.getClass().getName();
         ft.replace(R.id.fragment_place,linesFragment, tag)
                 .addToBackStack(tag)
@@ -72,8 +73,7 @@ public class LinesListActivity extends AppCompatActivity implements  View.OnClic
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode== Constants.LineDelete && resultCode==RESULT_OK) {
-            MyUtils.showToast("Delete Successfully");
+        if(resultCode == RESULT_OK) {
             linesFragment.initLines();
         }
     }

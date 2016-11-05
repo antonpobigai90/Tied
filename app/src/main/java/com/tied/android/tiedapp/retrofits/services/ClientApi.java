@@ -69,4 +69,7 @@ public interface ClientApi {
 
     @DELETE(Constants.CLIENT_DELETE)
     Call<ResponseBody> deleteClient(@Path("client_id") String client_id);
+
+    @GET(Constants.CLIENT_LINE)
+    Call<ResponseBody> getClientLine(@Path("client_id") String client_id, @Path("page_number") int page);
 }

@@ -34,6 +34,9 @@ public interface ScheduleApi {
     @GET(Constants.USER_SCHEDULE)
     Call<ScheduleRes> getSchedule(@Path("user_id") String user_id);
 
+    @GET(Constants.CLIENT_SCHEDULES)
+    Call<ScheduleRes> getClientSchedule(@Path("client_id") String client_id);
+
     @GET(Constants.USER_SCHEDULE)
     Call<ScheduleRes> getUserSchedules(@Path("user_id") String user_id);
 

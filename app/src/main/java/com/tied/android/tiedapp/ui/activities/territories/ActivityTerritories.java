@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -23,6 +24,8 @@ import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.LineApi;
 import com.tied.android.tiedapp.retrofits.services.TerritoryApi;
+import com.tied.android.tiedapp.ui.activities.client.ActivityClientProfile;
+import com.tied.android.tiedapp.ui.activities.lines.LineClientListActivity;
 import com.tied.android.tiedapp.ui.adapters.LineTerritoriesAdapter;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.listeners.ListAdapterListener;
@@ -40,10 +43,13 @@ import static com.tied.android.tiedapp.customs.Constants.Territory;
 /**
  * Created by femi on 10/4/2016.
  */
-public class ActivityTerritories extends AppCompatActivity implements  View.OnClickListener{
+public class ActivityTerritories extends AppCompatActivity implements  View.OnClickListener, AdapterView.OnItemClickListener{
 
-private Bundle bundle;
-private User user;
+        public static final String TAG = ActivityTerritories.class
+            .getSimpleName();
+
+        private Bundle bundle;
+        private User user;
 
         ListView territories_listview;
         LineTerritoriesAdapter territoriesAdapter;
@@ -98,7 +104,7 @@ private User user;
                 txt_description.setText("You currently serve 20 territories for");
 
                 territories_listview = (ListView) findViewById(R.id.listView);
-
+                territories_listview.setOnItemClickListener(this);
 
                 territoriesAdapter = new LineTerritoriesAdapter(territoryModels, this);
                 territories_listview.setAdapter(territoriesAdapter);
@@ -122,6 +128,17 @@ private User user;
                     }, 200);
 
                 }
+        }
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Log.d(TAG, "here---------------- listener");
+            //Client client = clients.get(position);
+            Bundle bundle =new Bundle();
+            bundle.putSerializable(Constants.USER_DATA, user);
+            bundle.putSerializable(Constants.TERRITORY_DATA, territoryModels.get(position));
+            bundle.putString(Constants.CLIENT_LIST, "territory");
+            MyUtils.startActivity(this, LineClientListActivity.class, bundle);
         }
         public void initTerritories(){
             final TerritoryApi territoryApi =  MainApplication.createService(TerritoryApi.class);

@@ -19,6 +19,7 @@ import com.google.gson.Gson;
 import com.soundcloud.android.crop.Crop;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.objects.Territory;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.fragments.client.AddClientFragment;
@@ -29,6 +30,7 @@ import com.tied.android.tiedapp.util.Logger;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -110,6 +112,8 @@ public class AddClientActivity extends FragmentActivity implements View.OnClickL
             Uri selectedImage = data.getData();
             outputUri = Uri.fromFile(new File(getFilesDir(), "client.jpg"));
             Crop.of(selectedImage, outputUri).asSquare().start(this);
+        } else if (requestCode == Constants.SELECT_TERRITORY && resultCode == Activity.RESULT_OK) {
+            fragment.onActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -182,6 +186,8 @@ public class AddClientActivity extends FragmentActivity implements View.OnClickL
                 break;
         }
     }
+
+
 
     public void addFragment(FragmentTransaction transaction, Fragment currentFragment, Fragment targetFragment, String tag) {
 

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 
@@ -42,7 +43,7 @@ import java.util.Map;
 /**
  * Created by femi on 8/4/2016.
  */
-public class ActivityLineClientSales extends FragmentActivity implements  View.OnClickListener{
+public class ActivityLineClientSales extends FragmentActivity implements  View.OnClickListener, AdapterView.OnItemClickListener{
 
     public static final String TAG = ActivityLineClientSales.class
             .getSimpleName();
@@ -122,14 +123,12 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
 
         client_sales_listview = (ListView) findViewById(R.id.client_sales_listview);
 
-
-
         client_sale_adapter = new SaleClientDetailsListAdapter(revenueList, this);
         client_sales_listview.setAdapter(client_sale_adapter);
         client_sale_adapter.notifyDataSetChanged();
         loadData();
         updateSalesLabel();
-         setLineTotalRevenue();
+        setLineTotalRevenue();
     }
 
     @Override
@@ -148,6 +147,10 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
         }
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+    }
 
     public void loadData() {
         //super.loadData();

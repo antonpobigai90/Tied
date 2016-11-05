@@ -33,6 +33,7 @@ import com.tied.android.tiedapp.objects.schedule.TimeRange;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
+import com.tied.android.tiedapp.ui.activities.coworker.CoWorkerTerritoriesActivity;
 import com.tied.android.tiedapp.ui.activities.schedule.ViewSchedule;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.dialogs.ScheduleNotifyDialog;

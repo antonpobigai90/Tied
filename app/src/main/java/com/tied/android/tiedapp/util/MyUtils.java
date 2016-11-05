@@ -1122,7 +1122,6 @@ public abstract class MyUtils {
         return (client.getCompany()==null || client.getCompany().isEmpty())?client.getFull_name():client.getCompany();
     }
 
-
     public static android.util.Pair<String, String> getDateRange() {
         Date begining, end;
 

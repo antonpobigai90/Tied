@@ -9,6 +9,7 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.model.TerritoryModel;
 import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects.Location;
+import com.tied.android.tiedapp.objects.Territory;
 import com.tied.android.tiedapp.util.HelperMethods;
 
 import java.io.Serializable;
@@ -38,6 +39,7 @@ public class Client implements Serializable, Comparable<Client>{
     private String ytd_revenue;
     private double total_revenue;
     private String territory_id;
+    private Territory territory;
 
     private int Industry_id;
     private int visit_id;
@@ -272,6 +274,14 @@ public class Client implements Serializable, Comparable<Client>{
         this.checkStatus = checkStatus;
     }
 
+    public Territory getTerritory() {
+        return territory;
+    }
+
+    public void setTerritory(Territory territory) {
+        this.territory = territory;
+    }
+
     @Override
     public String toString() {
         return "Client{" +
@@ -296,6 +306,7 @@ public class Client implements Serializable, Comparable<Client>{
                 ", _score=" + _score +
                 ", checkStatus=" + checkStatus +
                 ", territories=" + territories +
+                ", territory=" + territory +
                 '}';
     }
 

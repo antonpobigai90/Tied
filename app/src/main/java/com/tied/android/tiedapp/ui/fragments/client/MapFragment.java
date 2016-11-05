@@ -59,6 +59,7 @@ public class MapFragment extends Fragment implements View.OnClickListener {
     boolean bMap = true;
     EditText search;
     TextView search_button;
+    Fragment fragment = null;
 
     public static Fragment newInstance(Bundle bundle) {
         Fragment fragment = new MapFragment();
@@ -208,7 +209,7 @@ public class MapFragment extends Fragment implements View.OnClickListener {
 
         @Override
         public Fragment getItem(int position) {
-            Fragment fragment = null;
+
             switch (position){
                 case 0:
                     if(clientsMapFragment==null) {
@@ -287,5 +288,10 @@ public class MapFragment extends Fragment implements View.OnClickListener {
         });
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        fragment.onActivityResult(requestCode, resultCode, data);
+    }
 }
