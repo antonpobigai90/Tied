@@ -46,6 +46,8 @@ public class CoWorkerFilterActivity extends AppCompatActivity implements View.On
     String order = "desc";
     int distance = 10000;
     String orderby = "distance";
+    ArrayList<Territory> selectedTerritories = new ArrayList<Territory>();
+    ArrayList<String> selectedLines = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -338,6 +340,8 @@ public class CoWorkerFilterActivity extends AppCompatActivity implements View.On
                 MainActivity.last_visited = last_visited;
                 MainActivity.order = order;
                 MainActivity.orderby = orderby;
+                MainActivity.selectedTerritories = selectedTerritories;
+                MainActivity.selectedLines = selectedLines;
 
                 Intent intent = new Intent();
                 setResult(RESULT_OK, intent);
@@ -354,12 +358,24 @@ public class CoWorkerFilterActivity extends AppCompatActivity implements View.On
                 break;
             case R.id.territory_layout:
                 bundle.putInt(Constants.SHOW_TERRITORY, 1);
-                MyUtils.startActivity(this, CoWorkerTerritoriesActivity.class, bundle);
+                bundle.putBoolean("single", false);
+                MyUtils.startRequestActivity(this, CoWorkerTerritoriesActivity.class, Constants.SELECT_TERRITORY, bundle);
                 break;
             case R.id.line_layout:
                 bundle.putInt(Constants.SHOW_LINE, 1);
-                MyUtils.startActivity(this, CoWorkerLinesActivity.class, bundle);
+                MyUtils.startRequestActivity(this, CoWorkerLinesActivity.class, Constants.SELECT_LINE, bundle);
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == Constants.SELECT_TERRITORY && resultCode == this.RESULT_OK) {
+            selectedTerritories = (ArrayList<Territory>) (data.getSerializableExtra("selected"));
+        } else if (requestCode == Constants.SELECT_LINE && resultCode == this.RESULT_OK) {
+            selectedLines = (ArrayList<String>) (data.getSerializableExtra("selected"));
         }
     }
 }

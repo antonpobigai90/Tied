@@ -122,17 +122,6 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-
-        if (MainActivity.isClientFilter) {
-            loadClientsFilter(MainActivity.search_name);
-        } else if (MainActivity.isClear) {
-            loadClients(googleMap);
-        }
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         if(GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity()) == ConnectionResult.SUCCESS) {
@@ -564,6 +553,19 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
         @Override
         public String key() {
             return "circle";
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == Constants.ClientFilter && resultCode == Activity.RESULT_OK) {
+            if (MainActivity.isClientFilter) {
+                loadClientsFilter(MainActivity.search_name);
+            } else if (MainActivity.isClear) {
+                loadClients(googleMap);
+            }
         }
     }
 }

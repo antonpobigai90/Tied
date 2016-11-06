@@ -37,13 +37,17 @@ import com.tied.android.tiedapp.ui.activities.coworker.CoWorkerActivity;
 import com.tied.android.tiedapp.ui.activities.goal.LineGoalActivity;
 
 import com.tied.android.tiedapp.ui.activities.lines.LinesListActivity;
+import com.tied.android.tiedapp.ui.activities.report.ReportActivity;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityGroupedSales;
 import com.tied.android.tiedapp.ui.activities.territories.ActivityTerritories;
+import com.tied.android.tiedapp.ui.activities.visits.ActivityAddVisits;
+import com.tied.android.tiedapp.ui.activities.visits.ActivityVisits;
 import com.tied.android.tiedapp.ui.dialogs.DialogAddNewItem;
 import com.tied.android.tiedapp.ui.fragments.DailyStatsFragment;
 import com.tied.android.tiedapp.ui.fragments.LinesFragment;
 import com.tied.android.tiedapp.ui.fragments.client.ClientAddFragment;
 import com.tied.android.tiedapp.ui.fragments.client.MapFragment;
+import com.tied.android.tiedapp.ui.fragments.notification.NotificationFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.AvatarProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.ProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.ProfileFragment1;
@@ -82,7 +86,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
     private int fragment_index = 0;
     //LinearLayout relativeLayout , tab_bar;
     private LinearLayout  map_tab,  activity_layout, add_layout, more_layout, tab_actvity_schedule, alert_edit_msg, sale_tab;
-    private RelativeLayout invite_menu;
+    private RelativeLayout invite_menu, notification_menu, subscription_menu;
     private TextView txt_schedules, txt_activities, info_msg, drawerFullName, drawerEmail;
 
     public Bitmap bitmap;
@@ -154,6 +158,8 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
 
         img_user_picture = (ImageView) findViewById(R.id.img_user_picture);
         drawerUserPicture = (ImageView) findViewById(R.id.user_picture_iv);
+        notification_menu = (RelativeLayout) findViewById(R.id.notification_menu);
+        subscription_menu = (RelativeLayout) findViewById(R.id.subscription_menu);
 
         more_layout.setOnClickListener(this);
         add.setOnClickListener(this);
@@ -164,6 +170,8 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         invite_menu.setOnClickListener(this);
         map_tab.setOnClickListener(this);
         sale_tab.setOnClickListener(this);
+        notification_menu.setOnClickListener(this);
+        subscription_menu.setOnClickListener(this);
         drawerFullName=(TextView)findViewById(R.id.full_name_tv);
         drawerEmail=(TextView)findViewById(R.id.email_tv);
         drawerEmail.setText(user.getEmail());
@@ -298,11 +306,11 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
 
                 break;*/
             case Constants.Notification:
-//                more_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
-//                if(fragments.get(pos)==null) {
-//                    fragments.put(pos, NotificationProfileFragment.newInstance(bundle) );
-//                }
-//                fragment = fragments.get(pos);
+                more_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
+                if(fragments.get(pos)==null) {
+                    fragments.put(pos, NotificationFragment.newInstance(bundle) );
+                }
+                fragment = fragments.get(pos);
                 break;
 
             case Constants.HomeSale:
@@ -449,11 +457,9 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
             }
         }
 
-        if (requestCode == Constants.ClientFilter && resultCode == Activity.RESULT_OK) {
-            launchFragment(Constants.MapFragment, bundle);
-        }
-        if (requestCode == Constants.ClientDelete && resultCode == Activity.RESULT_OK) {
-            launchFragment(Constants.MapFragment, bundle);
+        if ((requestCode == Constants.ClientFilter || requestCode == Constants.ClientDelete) && resultCode == Activity.RESULT_OK) {
+//            launchFragment(Constants.MapFragment, bundle);
+            fragment.onActivityResult(requestCode, resultCode, data);
         }
     }
 
@@ -565,6 +571,19 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
             case R.id.sales:
                 if(currentFragmentID==Constants.HomeSale) return;
                 launchFragment(Constants.HomeSale, bundle);
+                break;
+            case R.id.notification_menu:
+                if(currentFragmentID==Constants.Notification) return;
+                launchFragment(Constants.Notification, bundle);
+                break;
+            case R.id.subscription_menu:
+                MyUtils.startActivity(this, SubscriptionActivity.class);
+                break;
+            case R.id.visits:
+                MyUtils.startActivity(this, ActivityVisits.class);
+                break;
+            case R.id.reports_menu:
+                MyUtils.startActivity(this, ReportActivity.class);
                 break;
         }
     }

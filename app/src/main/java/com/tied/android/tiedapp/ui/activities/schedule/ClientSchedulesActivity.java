@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.ui.fragments.client.ClientScheduleFragment;
 import com.tied.android.tiedapp.ui.fragments.client.ViewClientFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.tabs.AllScheduleFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
@@ -33,7 +34,7 @@ public class ClientSchedulesActivity extends AppCompatActivity implements Fragme
 
         FragmentManager fm =getSupportFragmentManager();
         FragmentTransaction ft=fm.beginTransaction();
-        AllScheduleFragment scheduleFragment=new  AllScheduleFragment();
+        ClientScheduleFragment scheduleFragment=new  ClientScheduleFragment();
         scheduleFragment.setArguments(bundle);
         ft.replace(R.id.fragment_place , scheduleFragment, scheduleFragment.getClass().getName());
         ft.commit();

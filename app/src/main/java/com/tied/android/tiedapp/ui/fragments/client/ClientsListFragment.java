@@ -106,17 +106,6 @@ public class ClientsListFragment extends Fragment implements AdapterView.OnItemC
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-
-        if (MainActivity.isClientFilter) {
-            loadClientsFilter(MainActivity.search_name);
-        } else if (MainActivity.isClear) {
-            loadClients();
-        }
-    }
-
-    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.d(TAG, "here---------------- listener");
         //Client client = clients.get(position);
@@ -253,4 +242,16 @@ public class ClientsListFragment extends Fragment implements AdapterView.OnItemC
         });
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == Constants.ClientFilter && resultCode == Activity.RESULT_OK) {
+            if (MainActivity.isClientFilter) {
+                loadClientsFilter(MainActivity.search_name);
+            } else if (MainActivity.isClear) {
+                loadClients();
+            }
+        }
+    }
 }

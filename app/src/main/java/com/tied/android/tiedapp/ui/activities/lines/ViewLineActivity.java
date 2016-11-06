@@ -164,6 +164,7 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
                 MyUtils.startRequestActivity(this, ActivityLineClientSales.class, Constants.ADD_SALES, bundle);
                 break;
             case R.id.clients_layout:
+                bundle.putString(Constants.CLIENT_LIST, "line");
                 MyUtils.startActivity(this, LineClientListActivity.class, bundle);
                 break;
             case R.id.info_layout:
@@ -224,18 +225,17 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
     boolean revenueUpdated=false;
     @Override
     public void onBackPressed() {
-        if(revenueUpdated) {
+//        if(revenueUpdated) {
             Intent intent = new Intent();
             Bundle b =new Bundle();
             b.putSerializable(Constants.LINE_DATA, line);
 
             intent.putExtras(b);
             setResult(RESULT_OK, intent);
-            finishActivity(Constants.LineDelete);
+            finishActivity(Constants.ADD_SALES);
             finish();
             return;
-        }
-        super.onBackPressed();
+//        }
     }
 
     @Override

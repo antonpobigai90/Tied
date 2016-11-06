@@ -42,10 +42,10 @@ public class LinesAdapter extends BaseAdapter implements ListAdapterListener {
         _data = line_list;
         _c = context;
         this.bundle = bundle;
-        client = (Client) bundle.getSerializable(Constants.CLIENT_DATA);
-        if (client != null){
-            _data = client.getLines();
-        }
+//        client = (Client) bundle.getSerializable(Constants.CLIENT_DATA);
+//        if (client != null){
+//            _data = client.getLines();
+//        }
     }
 
     @Override

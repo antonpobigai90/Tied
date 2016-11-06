@@ -1,17 +1,21 @@
-package com.tied.android.tiedapp.ui.fragments.schedule.tabs;
+package com.tied.android.tiedapp.ui.fragments.client;
 
+import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.tied.android.tiedapp.MainApplication;
+import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.responses.ScheduleRes;
 import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
 import com.tied.android.tiedapp.ui.adapters.ScheduleListAdapter;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.ui.fragments.schedule.tabs.SchedulesFragment;
 
 import java.util.ArrayList;
 
@@ -22,40 +26,25 @@ import retrofit2.Response;
 /**
  * Created by Emmanuel on 7/15/2016.
  */
-public class AllScheduleFragment extends SchedulesFragment implements View.OnClickListener{
+public class ClientScheduleFragment extends SchedulesFragment implements View.OnClickListener{
 
-    public static final String TAG = AllScheduleFragment.class
+    public static final String TAG = ClientScheduleFragment.class
             .getSimpleName();
     int page=1;
     Parcelable mListViewState;
+    private Client client;
+    Bundle bundle;
 
-    public AllScheduleFragment() {
+    public ClientScheduleFragment() {
         super();
-
     }
 
-//    @Override
-//    public void onCreate(@Nullable Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//    }
-//
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        if(mListViewState != null) {
-//             Logger.write("Restoring the listview's state.");
-//            listView.onRestoreInstanceState(mListViewState);
-//        }
-//
-//        return super.onCreateView(inflater, container, savedInstanceState);
-//    }
-
-//    protected void initComponent(View view) {
-//        super.initComponent(view);
-//    }
-
     public void initSchedule() {
+        bundle = getArguments();
+        client = (Client)bundle.getSerializable(Constants.CLIENT_DATA);
+
         ScheduleApi scheduleApi = MainApplication.createService(ScheduleApi.class);
-        Call<ScheduleRes> response = scheduleApi.getSchedule(user.getId());
+        Call<ScheduleRes> response = scheduleApi.getClientSchedule(client.getId());
         response.enqueue(new Callback<ScheduleRes>() {
             @Override
             public void onResponse(Call<ScheduleRes> call, Response<ScheduleRes> resResponse) {

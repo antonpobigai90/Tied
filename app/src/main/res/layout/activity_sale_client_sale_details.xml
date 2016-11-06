@@ -21,15 +21,13 @@
             android:id="@+id/img_plus"
             android:src="@mipmap/plus_thin"
             android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="15dp" />
+            android:layout_alignParentRight="true" />
 
         <ImageView style="@style/ActionBarIcon"
             android:id="@+id/img_filter"
             android:src="@mipmap/ic_filter_map"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/img_plus"
-            android:layout_marginRight="10dp" />
+            android:layout_toLeftOf="@+id/img_plus" />
 
         <TextView
             android:id="@+id/title"

@@ -62,11 +62,13 @@ public class Constants {
     public static final String LINE_DELETE=  API_PATH + "lines/{line_id}/";
     public static final String ADD_LINE_CLIENT=  API_PATH + "lines/{line_id}/add_client/";
     public static final String CLIENT_DELETE=  API_PATH + "clients/{client_id}/";
+    public static final String CLIENT_LINE=  API_PATH + "clients/{client_id}/lines/{page_number}";
 
     public static final String TERRITORIES = API_PATH + "territories";
 
     public static final String UPDATE_TERRITORY_WITH_ID = API_PATH + "territory/{territory_id}";
     public static final String USER_TERRITORIES = API_PATH + "users/{user_id}/territories/{page_number}";
+    public static final String TERRITORY_CLIENTS = API_PATH + "territories/get_clients";
 
     public static final String REVENUES = API_PATH + "revenue";
     public static final String UPDATE_REVENUE_WITH_ID = API_PATH + "revenue/{line_id}";
@@ -84,6 +86,7 @@ public class Constants {
     public static final String UPDATE_SCHEDULE_WITH_ID = API_PATH + "schedules/{schedule_id}";
     public static final String DELETE_SCHEDULE_WITH_ID = API_PATH + "schedules/{schedule_id}";
     public static final String SCHEDULES = API_PATH + "schedules";
+    public static final String CLIENT_SCHEDULES = API_PATH + "schedules/{client_id}/upcoming";
     public static final String USER_SCHEDULE = API_PATH + "users/{user_id}/schedules";
     public static final String USER_GET_SCHEDULE = API_PATH + "users/{user_id}/schedules";
     public static final String USER_SCHEDULE_COUNT = API_PATH + "users/me/schedules_count";
@@ -99,6 +102,9 @@ public class Constants {
     public static final String USER_GOALS_BY_DATE = API_PATH + "users/me/goals/date";
     public static final String NUM_LINE_GOALS = API_PATH + "lines/{line_id}/num_goals";
 
+    public static final String ADD_VISIT = API_PATH + "visit";
+    public static final String USER_VISITS = API_PATH + "users/{user_id}/visits";
+    public static final String CLIENT_VISITS = API_PATH + "clients/{client_id}/visits";
 
     public static final String GET_INDUSTRIES = API_PATH + "config/industries";
 
@@ -198,6 +204,7 @@ public class Constants {
     public static final int ClientFilter = 80;
     public static final int ClientDelete = 81;
     public static final int LineDelete = 82;
+    public static final int Visits = 83;
 
     //    Profile Activity fragments indexes
     public static final int EditProfile = 101;
@@ -258,6 +265,8 @@ public class Constants {
     public static final String LINE_DATA = "line";
     public static final String REVENUE_DATA = "revenue";
     public static final String LINES_lIST = "lines";
+    public static final String VISITS_lIST = "visits";
+    public static final String CLIENTS_lIST = "clients";
     public static final String SHOW_TERRITORY = "show_territory";
     public static PersistentCookieStore MY_COOKIE_STORE = null;
     public static final String INDUSTRIES = "industries";

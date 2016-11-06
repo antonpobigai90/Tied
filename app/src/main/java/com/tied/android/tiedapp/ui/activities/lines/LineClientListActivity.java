@@ -20,6 +20,7 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Line;
+import com.tied.android.tiedapp.objects.Territory;
 import com.tied.android.tiedapp.objects._Meta;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.client.ClientLocation;
@@ -28,6 +29,7 @@ import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.retrofits.services.LineApi;
+import com.tied.android.tiedapp.retrofits.services.TerritoryApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.client.ActivityClientProfile;
 import com.tied.android.tiedapp.ui.adapters.LineClientAdapter;
@@ -55,11 +57,13 @@ public class LineClientListActivity extends AppCompatActivity implements View.On
 
     protected LineClientAdapter adapter;
     protected ArrayList<Client> clientsList;
+    protected Territory territory;
     ArrayList search_data = new ArrayList<>();
 
-    TextView num_clients;
+    TextView txt_title, num_clients;
     EditText search;
     ImageView img_plus;
+    String client_list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +73,9 @@ public class LineClientListActivity extends AppCompatActivity implements View.On
         user = MyUtils.getUserLoggedIn();
         bundle = getIntent().getExtras();
         line = (Line) bundle.getSerializable(Constants.LINE_DATA);
+        territory = (Territory) bundle.getSerializable(Constants.TERRITORY_DATA);
+        client_list = bundle.getString(Constants.CLIENT_LIST);
+
         back_layout = (LinearLayout) findViewById(R.id.back_layout);
         img_plus = (ImageView) findViewById(R.id.img_plus);
         img_plus.setOnClickListener(this);
@@ -83,6 +90,13 @@ public class LineClientListActivity extends AppCompatActivity implements View.On
 
         if (clientsList.size() == 0) {
             initClient();
+        }
+
+        txt_title = (TextView) findViewById(R.id.txt_title);
+        if (client_list.equals("line")) {
+            txt_title.setText(String.format("Clients for %s", line.getName()));
+        } else if (client_list.equals("territory")) {
+            txt_title.setText(String.format("Clients for %s", territory.getCounty()));
         }
 
         num_clients = (TextView) findViewById(R.id.num_clients);
@@ -129,16 +143,22 @@ public class LineClientListActivity extends AppCompatActivity implements View.On
 
     protected void initClient() {
 
-        ClientLocation clientLocation = new ClientLocation();
-        clientLocation.setDistance("0km");
-        Coordinate coordinate = MyUtils.getCurrentLocation();
-        if (coordinate == null) {
-            coordinate = user.getOffice_address().getCoordinate();
-        }
-        clientLocation.setCoordinate(coordinate);
+        Call<ClientRes> response;
+        if (client_list.equals("line")) {
+            ClientLocation clientLocation = new ClientLocation();
+            clientLocation.setDistance("0km");
+            Coordinate coordinate = MyUtils.getCurrentLocation();
+            if (coordinate == null) {
+                coordinate = user.getOffice_address().getCoordinate();
+            }
+            clientLocation.setCoordinate(coordinate);
 
-        final ClientApi clientApi = MainApplication.createService(ClientApi.class, user.getToken());
-        Call<ClientRes> response = clientApi.getLineClients(user.getToken(), line.getId(), 0, clientLocation);
+            final ClientApi clientApi = MainApplication.createService(ClientApi.class, user.getToken());
+            response = clientApi.getLineClients(user.getToken(), line.getId(), 0, clientLocation);
+        } else {
+            final TerritoryApi territoryApi = MainApplication.createService(TerritoryApi.class, user.getToken());
+            response = territoryApi.getTerritoryClient(territory);
+        }
         response.enqueue(new Callback<ClientRes>() {
             @Override
             public void onResponse(Call<ClientRes> call, Response<ClientRes> resResponse) {
@@ -164,7 +184,7 @@ public class LineClientListActivity extends AppCompatActivity implements View.On
                     }
                     Log.d(TAG + " onResponse", resResponse.body().toString());
                 }catch (Exception e) {
-Logger.write(e);
+                    Logger.write(e);
                 }
             }
 

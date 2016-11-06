@@ -176,7 +176,13 @@ public class CoWorkerLinesActivity extends AppCompatActivity implements View.OnC
                 finish();
                 break;
             case R.id.add_button:
-                MainActivity.selectedLines = selectedLines;
+                Intent intent = new Intent();
+                Bundle b =new Bundle();
+                b.putSerializable("selected", selectedLines);
+
+                intent.putExtras(b);
+                setResult(RESULT_OK, intent);
+                finishActivity(Constants.SELECT_LINE);
                 finish();
                 break;
         }

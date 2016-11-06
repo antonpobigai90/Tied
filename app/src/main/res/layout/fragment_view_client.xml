@@ -451,14 +451,14 @@
                             android:layout_marginLeft="15dp"
                             android:layout_toRightOf="@+id/ring_invites"
                             android:orientation="vertical"
-                            android:gravity="center_vertical">
+                            android:gravity="center_vertical"
+                            android:id="@+id/visits_layout"
+                        android:onClick="onClick">
 
 
                         <RelativeLayout
-                                android:onClick="onClick"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:id="@+id/visits_layout">
+                            android:layout_width="match_parent"
+                                android:layout_height="wrap_content" >
 
                             <LinearLayout
                                     android:layout_width="match_parent"
