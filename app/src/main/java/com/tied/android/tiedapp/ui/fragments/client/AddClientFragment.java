@@ -42,7 +42,6 @@ import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.client.ActivityClientProfile;
 import com.tied.android.tiedapp.ui.activities.client.AddClientActivity;
-import com.tied.android.tiedapp.ui.activities.lines.LinesListActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.dialogs.SelectDataDialog;
@@ -338,7 +337,7 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
                     }
                 });
                 alert_line.showDialog();*/
-                MyUtils.startRequestActivity(getActivity(), LinesListActivity.class, Constants.ADD_LINE, bundle);
+//                MyUtils.startRequestActivity(getActivity(), LinesListActivity.class, Constants.ADD_LINE, bundle);
                 break;
             case R.id.avatar:
                 showChooser();

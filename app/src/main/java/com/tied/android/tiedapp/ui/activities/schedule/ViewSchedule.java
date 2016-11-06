@@ -14,6 +14,7 @@ import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.tied.android.tiedapp.util.Logger;
 import org.apache.commons.lang.time.DateUtils;
@@ -48,6 +49,7 @@ import retrofit.client.Response;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by Emmanuel on 6/23/2016.
@@ -67,6 +69,8 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
 
 
     private TextView description, temperature, schedule_title, weatherInfo;
+    private LinearLayout description_layout;
+    View line;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,11 +96,17 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
         //title = (TextView) findViewById(R.id.title);
         temperature = (TextView) findViewById(R.id.weather);
 
+        description_layout = (LinearLayout) findViewById(R.id.description_layout);
+        line = (View) findViewById(R.id.line);
+
         //title.setText(schedule.getTitle());
         schedule_title.setText(schedule.getTitle());
         description.setText(schedule.getDescription());
-        if (schedule.getDescription() == null || schedule.getDescription().isEmpty())
+        if (schedule.getDescription() == null || schedule.getDescription().isEmpty()) {
             description.setVisibility(View.GONE);
+            description_layout.setVisibility(View.GONE);
+            line.setVisibility(View.GONE);
+        }
 
         dayTV = (TextView) findViewById(R.id.day);
         weekTV = (TextView) findViewById(R.id.week_day);
@@ -160,7 +170,7 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
 
         myMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
 
-        LatLng location = new LatLng(schedule.getLocation().getCoordinate().getLat(), schedule.getLocation().getCoordinate().getLon());
+        final LatLng location = new LatLng(schedule.getLocation().getCoordinate().getLat(), schedule.getLocation().getCoordinate().getLon());
         Marker melbourne = myMap.addMarker(new MarkerOptions()
                 .position(location)
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
@@ -169,6 +179,20 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
 
         myMap.setInfoWindowAdapter(new MyInfoWindowAdapter());
         melbourne.showInfoWindow();
+
+        myMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+
+                MyUtils.setCurrentLocation(new Coordinate(33.894212, -84.231574));
+                Coordinate coordinate = MyUtils.getCurrentLocation();
+
+                String uri = String.format(Locale.ENGLISH, "http://maps.google.com/maps?saddr=%f&daddr=%f,%f", coordinate.getLat(), coordinate.getLon(), location.latitude, location.longitude);
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -224,7 +248,7 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
             TextView address = ((TextView) myContentsView.findViewById(R.id.address));
             TextView distance = ((TextView) myContentsView.findViewById(R.id.distance));
             final ImageView image = ((ImageView) myContentsView.findViewById(R.id.image));
-            if(client==null) image.setVisibility(View.GONE);
+
             try {
                 line.setText(MyUtils.getClientName(client));
                 address.setText(schedule.getLocation().getLocationAddress());

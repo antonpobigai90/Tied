@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.model.TerritoryModel;
 import com.tied.android.tiedapp.objects.Line;
+import com.tied.android.tiedapp.objects.Territory;
 
 import java.util.List;
 
@@ -31,12 +32,12 @@ public class ClientTerritoriesAdapter extends BaseAdapter {
     public static final String TAG = ClientTerritoriesAdapter.class
             .getSimpleName();
 
-    public List<TerritoryModel> _data;
+    public List<Territory> _data;
     Context _c;
     ViewHolder viewHolder;
     int _page_index;
 
-    public ClientTerritoriesAdapter(int page_index, List<TerritoryModel> territory_list, Context context) {
+    public ClientTerritoriesAdapter(int page_index, List<Territory> territory_list, Context context) {
         _data = territory_list;
         _c = context;
         _page_index = page_index;
@@ -70,20 +71,11 @@ public class ClientTerritoriesAdapter extends BaseAdapter {
         viewHolder = new ViewHolder();
 
         viewHolder.txt_territoy_name = (TextView) view.findViewById(R.id.territory);
-        viewHolder.txt_territory_client = (TextView) view.findViewById(R.id.no_clients);
         viewHolder.img_check = (ImageView) view.findViewById(R.id.selector);
 
-        if (_page_index == 0) {
-            viewHolder.img_check.setVisibility(View.GONE);
-        } else {
-            viewHolder.txt_territory_client.setVisibility(View.GONE);
-        }
+        final Territory data = (Territory) _data.get(i);
 
-        final TerritoryModel data = (TerritoryModel) _data.get(i);
-
-        viewHolder.txt_territoy_name.setText(data.getTerritory_name());
-        String sales = data.getNo_clients() + " Clients";
-        viewHolder.txt_territory_client.setText(sales);
+        viewHolder.txt_territoy_name.setText(data.getCounty()+", "+data.getState());
         if (data.isCheck_status()) {
             viewHolder.img_check.setBackgroundResource(R.drawable.circle_check2);
             viewHolder.txt_territoy_name.setTextColor(_c.getResources().getColor(R.color.light_gray2));

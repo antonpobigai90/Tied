@@ -10,7 +10,7 @@ import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.model.TerritoryModel;
-import com.tied.android.tiedapp.objects.Territory;
+import com.tied.android.tiedapp.objects.*;
 import com.tied.android.tiedapp.objects._Meta;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
@@ -223,10 +223,17 @@ public class ActivityAddTerritory extends AppCompatActivity implements  View.OnC
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         Territory territory=territoryModels.get(i);
         //Logger.write(id);
-        if(myTerritories.contains(territory)) {
-            MyUtils.showToast("Territory - "+territory.getCounty()+" "+territory.getState()+" already exists!");
-            return;
+
+        int count = 0;
+        for (int index = 0 ; index < myTerritories.size() ; index++) {
+            Territory item = myTerritories.get(index);
+
+            if (item.getCounty().equals(territory.getCounty())) {
+                MyUtils.showToast("Territory - "+territory.getCounty()+" "+territory.getState()+" already exists!");
+                return;
+            }
         }
+
         if(selected.contains(territory)) {
             selected.remove(selected.indexOf(territory));
         }else{

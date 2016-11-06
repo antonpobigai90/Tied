@@ -57,35 +57,35 @@ public class MapClientListAdapter extends BaseAdapter implements ListAdapterList
             v = new ViewHolder();
             LayoutInflater li = (LayoutInflater) _c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = li.inflate(R.layout.map_client_list_item, viewGroup, false);
-
-            Client data = (Client) _data.get(i);
-
-            v.name = (TextView) view.findViewById(R.id.name);
-            v.address = (TextView) view.findViewById(R.id.address);
-            v.client_distance = (TextView)view.findViewById(R.id.client_distance);
-            v.pic = (ImageView) view.findViewById(R.id.pic);
-            v.last_visited=(TextView) view.findViewById(R.id.last_visited);
-            v.timeLayout=view.findViewById(R.id.time_layout);
-            v.sales = (TextView)view.findViewById(R.id.sales);
-
-
-            if(data.getLast_visited()!=null) {
-                long diff_in_date = HelperMethods.getDateDifferenceWithToday(data.getLast_visited());
-                v.last_visited.setText("Last visited: "+diff_in_date);
-            }else{
-                v.timeLayout.setVisibility(View.GONE);
-            }
-            v.sales.setText(MyUtils.moneyFormat(data.getTotal_revenue()));
-
-            v.name.setText(MyUtils.getClientName(data));
-            v.address.setText(data.getAddress().getStreet());
-            MyUtils.Picasso.displayImage(data.getLogo(), v.pic);
-            v.client_distance.setText(MyUtils.getDistance(MyUtils.getCurrentLocation(), data.getAddress().getCoordinate(), false)+"m");
-
-            view.setTag(v);
         } else {
             v = (ViewHolder) convertView.getTag();;
         }
+
+        Client data = (Client) _data.get(i);
+
+        v.name = (TextView) view.findViewById(R.id.name);
+        v.address = (TextView) view.findViewById(R.id.address);
+        v.client_distance = (TextView)view.findViewById(R.id.client_distance);
+        v.pic = (ImageView) view.findViewById(R.id.pic);
+        v.last_visited=(TextView) view.findViewById(R.id.last_visited);
+        v.timeLayout=view.findViewById(R.id.time_layout);
+        v.sales = (TextView)view.findViewById(R.id.sales);
+
+
+        if(data.getLast_visited()!=null) {
+            long diff_in_date = HelperMethods.getDateDifferenceWithToday(data.getLast_visited());
+            v.last_visited.setText("Last visited: "+diff_in_date);
+        }else{
+            v.timeLayout.setVisibility(View.GONE);
+        }
+        v.sales.setText(MyUtils.moneyFormat(data.getTotal_revenue()));
+
+        v.name.setText(MyUtils.getClientName(data));
+        v.address.setText(data.getAddress().getStreet());
+        MyUtils.Picasso.displayImage(data.getLogo(), v.pic);
+        v.client_distance.setText(MyUtils.getDistance(MyUtils.getCurrentLocation(), data.getAddress().getCoordinate(), false)+"m");
+
+        view.setTag(v);
 
         return view;
     }

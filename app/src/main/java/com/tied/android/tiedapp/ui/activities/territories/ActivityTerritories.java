@@ -35,6 +35,8 @@ import retrofit2.Response;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import static com.tied.android.tiedapp.customs.Constants.Territory;
+
 /**
  * Created by femi on 10/4/2016.
  */
@@ -48,7 +50,8 @@ private User user;
 
         ImageView img_close, img_edit;
         int page_index;
-    ArrayList<Territory> territoryModels = new ArrayList<Territory>();
+
+        ArrayList<Territory> territoryModels = new ArrayList<Territory>();
         TextView txt_client_info, txt_description;
 
             @Override
@@ -57,7 +60,7 @@ private User user;
                     setContentView(R.layout.activity_territory);
 
                     bundle = getIntent().getExtras();
-                user=MyUtils.getUserFromBundle(bundle);
+                    user=MyUtils.getUserFromBundle(bundle);
                     page_index = bundle.getInt(Constants.SHOW_LINE);
 
                     MyUtils.setColorTheme(this, bundle.getInt(Constants.SOURCE), findViewById(R.id.main_layout));
@@ -69,13 +72,13 @@ private User user;
         public void onClick(View view) {
                 int id=view.getId();
                 switch (id) {
-                case R.id.img_close:
-                finish();
-                break;
-                case R.id.img_add:
-                    bundle.putSerializable("my_territories", territoryModels);
-                MyUtils.startRequestActivity(this, ActivityAddTerritory.class, Constants.ADD_TERRITORY, bundle);
-                break;
+                    case R.id.img_close:
+                        finish();
+                        break;
+                    case R.id.img_add:
+                        bundle.putSerializable("my_territories", territoryModels);
+                        MyUtils.startRequestActivity(this, ActivityAddTerritory.class, Constants.ADD_TERRITORY, bundle);
+                        break;
                 }
         }
 
@@ -120,46 +123,46 @@ private User user;
 
                 }
         }
-    public void initTerritories(){
-        final TerritoryApi territoryApi =  MainApplication.createService(TerritoryApi.class);
-        Call<ResponseBody> response = territoryApi.getTerritories(user.getId(), 1);
-        response.enqueue(new retrofit2.Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
-                try {
-                    GeneralResponse response = new GeneralResponse(resResponse.body());
-                    Logger.write(response.toString());
-                    if (response.isAuthFailed()) {
-                        User.LogOut(ActivityTerritories.this);
-                        return;
+        public void initTerritories(){
+            final TerritoryApi territoryApi =  MainApplication.createService(TerritoryApi.class);
+            Call<ResponseBody> response = territoryApi.getTerritories(user.getId(), 1);
+            response.enqueue(new retrofit2.Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
+                    try {
+                        GeneralResponse response = new GeneralResponse(resResponse.body());
+                        Logger.write(response.toString());
+                        if (response.isAuthFailed()) {
+                            User.LogOut(ActivityTerritories.this);
+                            return;
+                        }
+                        _Meta meta=response.getMeta();
+
+
+                        if(meta !=null && meta.getStatus_code() == 200) {
+
+                            territoryModels.addAll( (ArrayList) response.getDataAsList(Constants.TerritoryData, Territory.class));
+                            //Logger.write("Lines loadeddddddddddddddddddddddddddddddddddddddddddddddd "+territories.size());
+                            territoriesAdapter.notifyDataSetChanged();
+                            if( territoryModels.isEmpty()) MyUtils.showNoResults(ActivityTerritories.this.findViewById(R.id.main_layout), R.id.no_results);
+                        }else{
+                            MyUtils.showToast("Error encountered");
+                            DialogUtils.closeProgress();
+                        }
+
+                    }catch (IOException ioe) {
+                        Logger.write(ioe);
                     }
-                    _Meta meta=response.getMeta();
-
-
-                    if(meta !=null && meta.getStatus_code() == 200) {
-
-                        territoryModels.addAll( (ArrayList) response.getDataAsList(Constants.TerritoryData, Territory.class));
-                        //Logger.write("Lines loadeddddddddddddddddddddddddddddddddddddddddddddddd "+territories.size());
-                        territoriesAdapter.notifyDataSetChanged();
-                        if( territoryModels.isEmpty()) MyUtils.showNoResults(ActivityTerritories.this.findViewById(R.id.main_layout), R.id.no_results);
-                    }else{
-                        MyUtils.showToast("Error encountered");
-                        DialogUtils.closeProgress();
+                    catch (Exception jo) {
+                        Logger.write(jo);
                     }
-
-                }catch (IOException ioe) {
-                    Logger.write(ioe);
+                    DialogUtils.closeProgress();
                 }
-                catch (Exception jo) {
-                    Logger.write(jo);
-                }
-                DialogUtils.closeProgress();
-            }
 
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.d(" onFailure", t.toString());
-            }
-        });
-    }
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Log.d(" onFailure", t.toString());
+                }
+            });
+        }
 }

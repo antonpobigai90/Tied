@@ -1,11 +1,18 @@
 package com.tied.android.tiedapp.ui.activities.lines;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tied.android.tiedapp.MainApplication;
@@ -13,12 +20,16 @@ import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Line;
+import com.tied.android.tiedapp.objects._Meta;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.client.ClientLocation;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
+import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
+import com.tied.android.tiedapp.retrofits.services.LineApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
+import com.tied.android.tiedapp.ui.activities.client.ActivityClientProfile;
 import com.tied.android.tiedapp.ui.adapters.LineClientAdapter;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.Logger;
@@ -26,11 +37,12 @@ import com.tied.android.tiedapp.util.MyUtils;
 
 import java.util.ArrayList;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LineClientListActivity extends AppCompatActivity implements View.OnClickListener {
+public class LineClientListActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     public static final String TAG = LineClientListActivity.class
             .getSimpleName();
@@ -42,7 +54,12 @@ public class LineClientListActivity extends AppCompatActivity implements View.On
     protected ListView listView;
 
     protected LineClientAdapter adapter;
-    protected ArrayList clientsList;
+    protected ArrayList<Client> clientsList;
+    ArrayList search_data = new ArrayList<>();
+
+    TextView num_clients;
+    EditText search;
+    ImageView img_plus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +70,8 @@ public class LineClientListActivity extends AppCompatActivity implements View.On
         bundle = getIntent().getExtras();
         line = (Line) bundle.getSerializable(Constants.LINE_DATA);
         back_layout = (LinearLayout) findViewById(R.id.back_layout);
+        img_plus = (ImageView) findViewById(R.id.img_plus);
+        img_plus.setOnClickListener(this);
 
         if (back_layout != null) {
             back_layout.setOnClickListener(this);
@@ -60,10 +79,50 @@ public class LineClientListActivity extends AppCompatActivity implements View.On
 
         clientsList = new ArrayList<>();
         listView = (ListView) findViewById(R.id.list);
+        listView.setOnItemClickListener(this);
 
         if (clientsList.size() == 0) {
             initClient();
         }
+
+        num_clients = (TextView) findViewById(R.id.num_clients);
+
+        search = (EditText) findViewById(R.id.search);
+        search.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before,
+                                      int count) {
+
+                search_data.clear();
+                // TODO Auto-generated method stub
+                for(int i = 0 ; i < clientsList.size() ; i++) {
+                    Client model = (Client) clientsList.get(i);
+
+                    String title = MyUtils.getClientName(model);
+                    if(title.matches("(?i).*" + search.getText().toString() + ".*")) {
+                        search_data.add(model);
+                    }
+                }
+
+                adapter = new LineClientAdapter(search_data, getApplicationContext());
+                listView.setAdapter(adapter);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // TODO Auto-generated method stub
+
+            }
+
+        });
 
     }
 
@@ -121,6 +180,9 @@ Logger.write(e);
 
     public void initFormattedClient(ArrayList<Client> clients) {
         clientsList = clients;
+
+        num_clients.setText(String.format("%d Clients", clientsList.size()));
+
         adapter = new LineClientAdapter(clientsList, this);
         listView.setAdapter(adapter);
         listView.setFastScrollEnabled(true);
@@ -133,8 +195,92 @@ Logger.write(e);
             case R.id.back_layout:
                 onBackPressed();
                 break;
-
+            case R.id.img_plus:
+                MyUtils.initiateClientSelector(this, null, false);
+                break;
         }
     }
 
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Log.d(TAG, "here---------------- listener");
+        //Client client = clients.get(position);
+        Bundle bundle =new Bundle();
+        bundle.putSerializable(Constants.USER_DATA, user);
+        bundle.putSerializable(Constants.CLIENT_DATA, clientsList.get(position));
+        MyUtils.startRequestActivity(this, ActivityClientProfile.class, Constants.ClientDelete, bundle);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Logger.write(requestCode+" "+resultCode);
+        if(requestCode==Constants.SELECT_CLIENT && resultCode==RESULT_OK) {
+            Client client = (Client)(data.getSerializableExtra("selected"));
+
+            int count = 0;
+            for (int i = 0 ; i < clientsList.size() ; i++) {
+                Client item = (Client) clientsList.get(i);
+
+                if (item.getId().equals(client.getId())) {
+                    count++;
+                }
+            }
+
+            if (count == 0) {
+                clientsList.add(client);
+
+                num_clients.setText(String.format("%d Clients", clientsList.size()));
+
+                adapter = new LineClientAdapter(clientsList, this);
+                listView.setAdapter(adapter);
+
+                //integrate of api
+                addLineClient(client);
+            } else {
+                MyUtils.showToast("Already existing!");
+            }
+        } else if (requestCode==Constants.ClientDelete && resultCode==RESULT_OK) {
+            MyUtils.showToast("Delete Successfully");
+            initClient();
+        }
+    }
+
+    public void addLineClient(Client client) {
+        LineApi lineApi = MainApplication.getInstance().getRetrofit().create(LineApi.class);
+        final Call<ResponseBody> response2 = lineApi.addLineClient(line.getId(), client);
+        response2.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
+                if (this == null) return;
+                DialogUtils.closeProgress();
+                try {
+                    GeneralResponse response=new GeneralResponse(resResponse.body());
+
+                    if (response != null && response.isAuthFailed()) {
+                        User.LogOut(LineClientListActivity.this);
+                        return;
+                    }
+
+                    _Meta meta=response.getMeta();
+                    if(meta !=null && meta.getStatus_code()==201) {
+                        MyUtils.showToast("Add Successfully");
+                    } else {
+                        MyUtils.showToast(getString(R.string.connection_error));
+                    }
+                }catch (Exception e) {
+                    // MyUtils.showConnectionErrorToast(LineRevenueActivity.this);
+                    //Logger.write(e);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                //Log.d(TAG + " onFailure", t.toString());
+                Logger.write(t.getMessage());
+                MyUtils.showConnectionErrorToast(LineClientListActivity.this);
+                DialogUtils.closeProgress();
+            }
+        });
+    }
 }

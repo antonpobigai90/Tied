@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.client.Client;
+import com.tied.android.tiedapp.ui.activities.schedule.CreateAppointmentActivity;
+import com.tied.android.tiedapp.util.MyUtils;
 
 /**
  * Created by Emmanuel on 7/20/2016.
@@ -22,8 +24,7 @@ public class DialogClientOptions implements View.OnClickListener {
     public static final String TAG = DialogClientOptions.class
             .getSimpleName();
     RelativeLayout cancel;
-    private TextView create_schedule,add_new_line;
-//    private TextView create_schedule,add_new_goal,add_new_line,add_new_sales;
+    private TextView create_schedule;
     private Dialog dialog;
     private Client client;
     Activity activity;
@@ -48,15 +49,7 @@ public class DialogClientOptions implements View.OnClickListener {
         window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
         create_schedule = (TextView) dialog.findViewById(R.id.create_schedule);
-        add_new_line = (TextView) dialog.findViewById(R.id.add_new_line);
-//        add_new_goal = (TextView) dialog.findViewById(R.id.add_new_goal);
-//        add_new_sales = (TextView) dialog.findViewById(R.id.add_new_sales);
-
         create_schedule.setOnClickListener(this);
-        add_new_line.setOnClickListener(this);
-//        add_new_sales.setOnClickListener(this);
-//        add_new_goal.setOnClickListener(this);
-
 
         cancel = (RelativeLayout) dialog.findViewById(R.id.cancel);
         cancel.setOnClickListener(this);
@@ -70,18 +63,9 @@ public class DialogClientOptions implements View.OnClickListener {
                 dialog.dismiss();
                 break;
             case R.id.create_schedule:
-
+                MyUtils.startActivity(activity, CreateAppointmentActivity.class, bundle);
+                dialog.dismiss();
                 break;
-            case R.id.add_new_line:
-
-                break;
-//            case R.id.add_new_goal:
-//
-//                break;
-//            case R.id.add_new_sales:
-//
-//                break;
-
         }
     }
 

@@ -10,9 +10,9 @@ import java.io.File;
 public class Constants {
     public static final String TAG = Constants.class
             .getSimpleName();
-    public static final String SERVER_URL = "http://tied.goattale.com:8100/api/v1/";
+    public static final String SERVER_URL = "http://tied.goattale.com:8101/api/v1/";
 
-    public static final String HOST = "http://tied.goattale.com:8100/";
+    public static final String HOST = "http://tied.goattale.com:8101/";
 //    public static final String HOST = "https://tied-api.herokuapp.com/";
 
     public static final int PORT = 3000;
@@ -56,8 +56,12 @@ public class Constants {
     //public static final String TOTAL_LINE_REVENUE =  API_PATH + "lines/{line_id}/total_revenue";
     public static final String GET_TOTAL_REVENUE =  API_PATH + "revenues/get_total/{object_type}/{object_id}";
     public static final String CLIENT_COUNT=  API_PATH + "lines/{line_id}/num_clients";
+
     public static final String LINE_CLIENTS=  API_PATH + "lines/{line_id}/clients/{page_number}";
 
+    public static final String LINE_DELETE=  API_PATH + "lines/{line_id}/";
+    public static final String ADD_LINE_CLIENT=  API_PATH + "lines/{line_id}/add_client/";
+    public static final String CLIENT_DELETE=  API_PATH + "clients/{client_id}/";
 
     public static final String TERRITORIES = API_PATH + "territories";
 
@@ -191,6 +195,10 @@ public class Constants {
     public static final int AddClient = 60;
     public static final int ViewClient = 61;
 
+    public static final int ClientFilter = 80;
+    public static final int ClientDelete = 81;
+    public static final int LineDelete = 82;
+
     //    Profile Activity fragments indexes
     public static final int EditProfile = 101;
     public static final int ProfileAddress = 102;
@@ -217,6 +225,7 @@ public class Constants {
     public static final int SELECT_CLIENT = 1000;
     public static final int SELECT_USER = 1005;
     public static final int SELECT_LINE = 1003;
+    public static final int SELECT_TERRITORY = 1004;
     public static final int ADD_SALES = 1001;
     public static final int ADD_CLIENT = 2001;
     public static final int ADD_LINE = 3001;

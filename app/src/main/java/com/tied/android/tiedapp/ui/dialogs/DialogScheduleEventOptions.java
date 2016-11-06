@@ -99,6 +99,7 @@ public class DialogScheduleEventOptions implements View.OnClickListener {
                 dialog.dismiss();
                 break;
             case R.id.edit:
+                dialog.dismiss();
                 doAction(schedule, CreateAppointmentActivity.class, bundle);
                 break;
             case R.id.mark_as_completed:

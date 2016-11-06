@@ -68,34 +68,15 @@ public class LineClientAdapter extends BaseAdapter {
         v = new ViewHolder();
         v.name = (TextView) view.findViewById(R.id.name);
         v.imageView = (ImageView) view.findViewById(R.id.pic);
-        v.check = (ImageView) view.findViewById(R.id.selector);
+        v.selector = (ImageView) view.findViewById(R.id.selector);
+        v.selector.setVisibility(View.GONE);
+
         v.description=(TextView)view.findViewById(R.id.description);
 
         final Client data = (Client) _data.get(i);
         MyUtils.Picasso.displayImage(data.getLogo(), v.imageView);
         v.name.setText(MyUtils.getClientName(data));
         v.description.setText(MyUtils.getDistance(MyUtils.getCurrentLocation(), data.getAddress().getCoordinate()));
-      /*  if (data.getCheckStatus()) {
-            v.check.setBackgroundResource(R.drawable.circle_check2);
-        } else {
-            v.check.setBackgroundResource(R.drawable.circle_uncheck);
-        }
-
-        // Set check box listener android
-        v.check.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                boolean same = data.getCheckStatus();
-                if (same) {
-                    data.setCheckStatus(false);
-                    v.check.setBackgroundResource(R.drawable.circle_uncheck);
-                } else {
-                    data.setCheckStatus(true);
-                    v.check.setBackgroundResource(R.drawable.circle_check2);
-                }
-                notifyDataSetChanged();
-            }
-        });*/
 
         view.setTag(data);
         return view;
@@ -119,7 +100,7 @@ public class LineClientAdapter extends BaseAdapter {
     }
 
     static class ViewHolder {
-        ImageView imageView,check;
+        ImageView imageView,selector;
         TextView name, description;
     }
 

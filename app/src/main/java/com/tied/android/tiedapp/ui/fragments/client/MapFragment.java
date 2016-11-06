@@ -1,5 +1,7 @@
 package com.tied.android.tiedapp.ui.fragments.client;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,8 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
@@ -24,6 +28,7 @@ import com.tied.android.tiedapp.objects.client.ClientLocation;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
+import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.coworker.CoWorkerFilterActivity;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.Logger;
@@ -52,6 +57,8 @@ public class MapFragment extends Fragment implements View.OnClickListener {
     ArrayList<Client> clients;
 
     boolean bMap = true;
+    EditText search;
+    TextView search_button;
 
     public static Fragment newInstance(Bundle bundle) {
         Fragment fragment = new MapFragment();
@@ -76,6 +83,12 @@ public class MapFragment extends Fragment implements View.OnClickListener {
 
         initComponent(view);
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
     }
 
     private void initComponent(View view) {
@@ -110,6 +123,10 @@ public class MapFragment extends Fragment implements View.OnClickListener {
         }
         onCustomSelected(mViewPager);
         img_segment.setBackgroundResource(R.drawable.map_active);
+
+        search = (EditText) view.findViewById(R.id.search);
+        search_button = (TextView) view.findViewById(R.id.search_button);
+        search_button.setOnClickListener(this);
     }
 
     @Override
@@ -128,7 +145,17 @@ public class MapFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.img_filter:
-                MyUtils.startActivity(getActivity(), CoWorkerFilterActivity.class, bundle);
+                MainActivity.search_name = search.getText().toString();
+                MyUtils.startRequestActivity(getActivity(), CoWorkerFilterActivity.class, Constants.ClientFilter, bundle);
+                break;
+            case R.id.search_button:
+                if (search.getText().toString().length() > 3) {
+                    if (bMap) {
+                        clientsMapFragment.loadClientsFilter(search.getText().toString());
+                    } else {
+                        clientsListFragment.loadClientsFilter(search.getText().toString());
+                    }
+                }
                 break;
         }
     }
@@ -259,4 +286,6 @@ public class MapFragment extends Fragment implements View.OnClickListener {
             }
         });
     }
+
+
 }

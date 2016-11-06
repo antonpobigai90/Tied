@@ -50,6 +50,44 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/search_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/schedule_create_appointment_bg_color"
+        android:paddingBottom="10dp"
+        android:paddingLeft="30dp"
+        android:paddingRight="10dp"
+        android:paddingTop="10dp">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:focusable="true"
+            android:id="@+id/getFocus" />
+
+        <EditText
+            android:id="@+id/search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/SearchEditText"
+            android:hint="Search Client by Name"
+            android:layout_toLeftOf="@+id/search_button"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp" />
+
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Search"
+            android:id="@+id/search_button"
+            android:padding="7dp"
+            android:textColor="@android:color/darker_gray"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/curve_white_stroke"
+            android:layout_alignParentRight="true" />
+
+    </RelativeLayout>
+
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="wrap_content"

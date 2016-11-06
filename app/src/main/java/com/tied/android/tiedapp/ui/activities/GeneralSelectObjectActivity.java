@@ -26,6 +26,7 @@ import com.tied.android.tiedapp.objects.client.ClientLocation;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
+import com.tied.android.tiedapp.ui.adapters.LineClientAdapter;
 import com.tied.android.tiedapp.ui.adapters.MyClientLineAdapter;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.fragments.client.tab.LastVisitedClientListFragment;
@@ -65,6 +66,8 @@ public class GeneralSelectObjectActivity extends Activity
 
 
     private ArrayList clientsWithDistance;
+    ArrayList search_data = new ArrayList<>();
+
     private ArrayList<String> selectedIDs=new ArrayList<String>(0);
     private ListView listView;
 
@@ -106,22 +109,10 @@ public class GeneralSelectObjectActivity extends Activity
         MyUtils.setFocus(findViewById(R.id.getFocus));
         initComponent();
     }
-   /* public static void setType(int objectType, boolean isMultiple) {
-      //  ACTIVITY_TYPE=objectType;
-      //  IS_MULTIPLE=isMultiple;
-       // this.objectType=objectType;
-       // this.isMultiple=isMultiple
-       // GeneralSelectObjectActivity.IS_MULTIPLE=isMultiple;
-    }*/
-
-
 
     public void initComponent() {
         clientsWithDistance = new ArrayList<Client>();
         listView = (ListView) findViewById(R.id.list);
-        findViewById(R.id.clear_but).setOnClickListener(this);
-
-//        txt_continue = (TextView) findViewById(R.id.txt_continue);
 
         search = (EditText) findViewById(R.id.search);
         listView.setOnItemClickListener(this);
@@ -137,13 +128,24 @@ public class GeneralSelectObjectActivity extends Activity
 
         updateNumSelected();
 
-
         search.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // TODO Auto-generated method stub
+                search_data.clear();
+                // TODO Auto-generated method stub
+                for(int i = 0 ; i < clientsWithDistance.size() ; i++) {
+                    Client model = (Client) clientsWithDistance.get(i);
 
+                    String title = MyUtils.getClientName(model);
+                    if(title.matches("(?i).*" + search.getText().toString() + ".*")) {
+                        search_data.add(model);
+                    }
+                }
+
+                adapter = new MyClientLineAdapter(search_data, selectedIDs, GeneralSelectObjectActivity.this, isMultiple);
+                listView.setAdapter(adapter);
             }
 
             @Override
@@ -156,16 +158,9 @@ public class GeneralSelectObjectActivity extends Activity
             @Override
             public void afterTextChanged(Editable s) {
                 // TODO Auto-generated method stub
-                String searchData = search.getText().toString().trim().toLowerCase();
-                //adapter.filter(searchData);
+
             }
         });
-
-
-
-
-        //user = User.getCurrentUser(getActivity().getApplicationContext());//
-        //
 
         bundle = getIntent().getExtras();
         user = MyUtils.getUserFromBundle(bundle);
@@ -200,30 +195,28 @@ public class GeneralSelectObjectActivity extends Activity
             case R.id.add_button:
                 finishSelection();
                 break;
-            case R.id.clear_but:
-                showClearWarning();
-                break;
         }
     }
-private void showClearWarning() {
-     final AlertDialog ad= new AlertDialog.Builder(this).create();
-    ad.setMessage("This will clear all selections. Are you sure you want to proceed?");
-    ad.setButton(AlertDialog.BUTTON_POSITIVE, "YES", new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialogInterface, int i) {
-            selectedIDs.clear();
-            selectedObjects.clear();
-            finishSelection();
-        }
-    });
-    ad.setButton(AlertDialog.BUTTON_NEGATIVE, "NO", new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialogInterface, int i) {
-            dialogInterface.dismiss();
-        }
-    });
-    ad.show();
-}
+    private void showClearWarning() {
+        final AlertDialog ad= new AlertDialog.Builder(this).create();
+        ad.setMessage("This will clear all selections. Are you sure you want to proceed?");
+        ad.setButton(AlertDialog.BUTTON_POSITIVE, "YES", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                selectedIDs.clear();
+                selectedObjects.clear();
+                finishSelection();
+            }
+        });
+        ad.setButton(AlertDialog.BUTTON_NEGATIVE, "NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        ad.show();
+    }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.d("search", "here---------------- listener");

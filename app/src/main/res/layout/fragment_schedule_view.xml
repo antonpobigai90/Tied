@@ -216,7 +216,9 @@
                 android:paddingLeft="12dp"
                 android:paddingRight="12dp"
                 android:paddingBottom="10dp"
-                android:paddingTop="10dp">
+                android:paddingTop="10dp"
+                android:orientation="vertical"
+                android:id="@+id/description_layout">
 
                 <TextView
                     android:id="@+id/description"
@@ -228,6 +230,7 @@
             </LinearLayout>
 
             <View
+                android:id="@+id/line"
                 android:layout_width="match_parent"
                 android:layout_height="0.1dp"
                 android:background="@android:color/darker_gray" />

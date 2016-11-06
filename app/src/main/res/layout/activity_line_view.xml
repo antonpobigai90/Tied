@@ -468,6 +468,22 @@
                 android:textSize="13sp" />
 
 
+            <TextView
+                android:id="@+id/txt_delete"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/btn_curve_red_stroke"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="DELETE LINE"
+                android:textColor="@color/red_color"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:visibility="gone" />
         </LinearLayout>
 
     </ScrollView>

@@ -76,7 +76,7 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
     private ScheduleNotifyModel scheduleNotifyModel;
 
     private String endTimeText, startTimeText, dateText, titleText, streetText, cityText, stateText, zipText;
-    private TextView txt_create_schedule;
+    private TextView title, txt_create_schedule;
     RelativeLayout layout_date, layout_time, layout_reminder;
 
     ScheduleNotifyDialog alert;
@@ -132,6 +132,8 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
         layout_date.setOnClickListener(this);
         layout_time.setOnClickListener(this);
         layout_reminder.setOnClickListener(this);
+
+        title = (TextView) view.findViewById(R.id.title);
 
         txt_create_schedule = (TextView) view.findViewById(R.id.txt_create_schedule);
         txt_create_schedule.setOnClickListener(this);
@@ -194,12 +196,13 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
                 txt_date_selected.setText(schedule.getDate());
                 txt_date.setText(HelperMethods.getFormatedDate(schedule.getDate()));
                 txt_create_schedule.setText("UPDATE SCHEDULE");
-
+                title.setText("Update Appointment");
             }else{
                /* street.setText(client.getAddress().getStreet());
                 city.setText(client.getAddress().getCity());
                 zip.setText(client.getAddress().getZip());
                 state.setText(client.getAddress().getState());*/
+                title.setText("Create Appointment");
                 if(client!=null) location=client.getAddress();
 
             }

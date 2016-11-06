@@ -162,20 +162,6 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
         client_listview = (ListView) view.findViewById(R.id.client_listview);
         loadData();
 
-
-
-
-       /* for (int i = 0 ; i < 4 ; i++) {
-            Line lineDataModel = new Line();
-
-            lineDataModel.setLine_name("CREATIVE CO-OP");
-            lineDataModel.setLine_date("Last sale: 5 days ago");
-            lineDataModel.setPercent("48");
-            lineDataModel.setPrice("$1,200,400");
-
-            lineDataModels.add(lineDataModel);
-        }*/
-
         line_adapter = new SaleLineListAdapter(0, lineDataModels, getActivity());
         lines_listview.setAdapter(line_adapter);
         line_adapter.notifyDataSetChanged();
@@ -183,7 +169,6 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
 
 
         client_adapter = new SaleClientListAdapter(clientDataModels, getActivity());
-
 
         mChart = (PieChart) view.findViewById(R.id.chart1);
         mChart.setUsePercentValues(true);
@@ -193,7 +178,7 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
 
         mChart.setDragDecelerationFrictionCoef(0.95f);
 
-       // mChart.setCenterText(generateCenterSpannableText());
+//        mChart.setCenterText(generateCenterSpannableText());
 
         mChart.setDrawHoleEnabled(true);
         mChart.setHoleColor(Color.WHITE);
@@ -210,13 +195,11 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
         // enable rotation of the chart by touch
         mChart.setRotationEnabled(true);
         mChart.setHighlightPerTapEnabled(true);
-        mChart.setBackgroundColor(Color.WHITE); //set whatever color you prefer
-
 
         // add a selection listener
         mChart.setOnChartValueSelectedListener(this);
 
-        //setData(3, 100);
+//        setData(3, 100);
 
         mChart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
         // mChart.spin(2000, 0, 360);
@@ -298,7 +281,7 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
         ArrayList<String> xVals = new ArrayList<String>();
         for (int i = 0; i < count; i++) {
             try{
-            xVals.add(topRevenuesName.get(i).substring(0, 10));
+                xVals.add(topRevenuesName.get(i).substring(0, 10));
             }catch (Exception e) {
                 xVals.add(topRevenuesName.get(i));
             }
@@ -306,7 +289,7 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
 
         PieDataSet dataSet = new PieDataSet(yVals1, "Total Revenues");
         dataSet.setSliceSpace(3f);
-        dataSet.setSelectionShift(5f);
+//        dataSet.setSelectionShift(5f);
 
         // add a lot of colors
 

@@ -3,8 +3,9 @@ package com.tied.android.tiedapp.ui.activities.sales;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
@@ -12,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
@@ -23,10 +25,8 @@ import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.RevenueApi;
-import com.tied.android.tiedapp.ui.activities.GeneralSelectObjectActivity;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.dialogs.DatePickerFragment;
-import com.tied.android.tiedapp.ui.fragments.sales.AddSalesFragment;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 import okhttp3.ResponseBody;
@@ -46,7 +46,7 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
     private Bundle bundle;
     private User user;
     Client client;
-    String dateString="";
+//    String dateString="";
     Line line;
     ImageView clientPhoto;
     TextView clientNameTV, dateTV, lineNameTV;
@@ -55,6 +55,8 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
     String title="";
     View lineLayout, clientLayout;
     Revenue revenue=new Revenue();
+    RelativeLayout select_date;
+    TextView date_selected;
 
    // AddSalesFragment fragment;
 
@@ -68,7 +70,7 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
         //user = MyUtils.getUserFromBundle(bundle);
        // fragment=AddSalesFragment.newInstance(bundle);
         View getFocus=findViewById(R.id.getFocus);
-       getFocus.requestFocusFromTouch();
+        getFocus.requestFocusFromTouch();
         getFocus.setFocusableInTouchMode(true);
         getFocus.setNextFocusRightId(R.id.sale_amount);
         try {
@@ -93,6 +95,9 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
         lineLayout=findViewById(R.id.select_line_layout);
         clientLayout=findViewById(R.id.select_client_layout);
         lineNameTV = (TextView)findViewById(R.id.lineNameTV);
+        select_date = (RelativeLayout)findViewById(R.id.select_date);
+        select_date.setOnClickListener(this);
+        date_selected = (TextView)findViewById(R.id.date_selected);
         if(line == null) lineLayout.setVisibility(View.VISIBLE);
         else lineLayout.setVisibility(View.GONE);
 
@@ -114,30 +119,28 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
             case R.id.select_line_layout:
                 selectLine(line);
                 break;
-
-
-            case R.id.txt_date:
             case R.id.select_date:
-                DialogFragment dateFragment = new DatePickerFragment() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int day) {
-                        String month_name = MONTHS_LIST[view.getMonth()];
-                        GregorianCalendar gregorianCalendar = new GregorianCalendar(view.getYear(), view.getMonth(), view.getDayOfMonth() - 1);
-
-                        int dayOfWeek = gregorianCalendar.get(gregorianCalendar.DAY_OF_WEEK);
-                        String dayOfWeekName = WEEK_LIST[dayOfWeek];
-
-                        dateTV.setText("" + dayOfWeekName + " " + view.getDayOfMonth() + " " + month_name + " , " + view.getYear());
-
-                       dateString = year + "-" + String.format("%02d", month + 1) + "-" + String.format("%02d", day);
-                       // TextView tv2 = (TextView) getActivity().findViewById(R.id.date_selected);
-                       // tv2.setText(selected);
-                    }
-                };
-                Bundle data = new Bundle();
-                data.putString("date", dateString); //
-                dateFragment.setArguments(data);
-                dateFragment.show(getSupportFragmentManager(), "datePicker");
+                DialogFragment dateFragment = new DatePickerFragment();
+//                {
+//                    @Override
+//                    public void onDateSet(DatePicker view, int year, int month, int day) {
+//                        String month_name = MONTHS_LIST[view.getMonth()];
+//                        GregorianCalendar gregorianCalendar = new GregorianCalendar(view.getYear(), view.getMonth(), view.getDayOfMonth() - 1);
+//
+//                        int dayOfWeek = gregorianCalendar.get(gregorianCalendar.DAY_OF_WEEK);
+//                        String dayOfWeekName = WEEK_LIST[dayOfWeek];
+//
+//                        dateTV.setText("" + dayOfWeekName + " " + view.getDayOfMonth() + " " + month_name + " , " + view.getYear());
+//
+//                       dateString = year + "-" + String.format("%02d", month + 1) + "-" + String.format("%02d", day);
+//                       // TextView tv2 = (TextView) getActivity().findViewById(R.id.date_selected);
+//                       // tv2.setText(selected);
+//                    }
+//                };
+//                Bundle data = new Bundle();
+//                data.putString("date", dateString); //
+//                dateFragment.setArguments(data);
+                dateFragment.show(this.getSupportFragmentManager(), "datePicker");
                 break;
             case R.id.add_button:
                 title=titleET.getText().toString().trim();
@@ -164,7 +167,7 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
                     MyUtils.showAlert(this, "You must enter a valid sales amount");
                     return;
                 }
-                if(dateString==null || dateString.isEmpty()) {
+                if(date_selected.getText().toString().trim().isEmpty()) {
                     MyUtils.showAlert(this, "You must enter the date of this sales");
                     return;
                 }
@@ -174,13 +177,13 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
                 revenue.setTitle(title);
                 revenue.setUser_id(user.getId());
                 revenue.setLine_id(line.getId());
-                revenue.setDate_sold(dateString);
+                revenue.setDate_sold(date_selected.getText().toString());
 
-                if(revenue.getId()!=null && !revenue.getId().isEmpty()) {
-                    //update
-                }else{
+//                if(revenue.getId()!=null && !revenue.getId().isEmpty()) {
+//                    //update
+//                }else{
                     saveRevenue(revenue);
-                }
+//                }
 
                 break;
         }
@@ -259,9 +262,6 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
         MyUtils.initiateClientSelector(this, client, false);
     }
     private void selectLine(Line line) {
-        //GeneralSelectObjectActivity.setType(GeneralSelectObjectActivity.SELECT_CLIENT_TYPE, false);
-        // MyUtils.startRequestActivity(this, GeneralSelectObjectActivity.class, Constants.SELECT_CLIENT);
-
         MyUtils.initiateLineSelector(this, line, false);
     }
     @Override
@@ -277,8 +277,6 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
         if(requestCode==Constants.SELECT_LINE && resultCode==RESULT_OK) {
             line = (Line)(data.getSerializableExtra("selected"));
             lineNameTV.setText(line.getName());
-            //MyUtils.Picasso.displayImage(client.getLogo(), clientPhoto);
-            //Logger.write(client.toString());
         }
     }
     public void goBack(View v) {

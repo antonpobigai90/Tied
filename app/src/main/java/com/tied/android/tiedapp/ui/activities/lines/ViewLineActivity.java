@@ -1,6 +1,7 @@
 package com.tied.android.tiedapp.ui.activities.lines;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.tied.android.tiedapp.retrofits.services.LineApi;
 import com.tied.android.tiedapp.retrofits.services.RevenueApi;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityLineClientSales;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.ui.dialogs.DialogYesNo;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 import com.tied.android.tiedapp.ui.activities.goal.LineGoalActivity;
@@ -44,6 +46,7 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
     Location location;
     View nameEditor, descriptionEditor;
     private static ViewLineActivity viewLineActivity;
+    TextView txt_delete;
 
     public static ViewLineActivity getInstance() {
         return viewLineActivity;
@@ -58,8 +61,6 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
         bundle = getIntent().getExtras();
         line = (Line) bundle.getSerializable(Constants.LINE_DATA);
         user = MyUtils.getUserFromBundle(bundle);
-
-
 
         final LineApi lineApi = MainApplication.createService(LineApi.class, user.getToken());
         DialogUtils.displayProgress(this);
@@ -102,7 +103,7 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
         });
 
 
-       // setLineTotalRevenue();
+        setLineTotalRevenue();
 
     }
 
@@ -123,8 +124,8 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
 
         totalRevenueHeaderTV = (TextView) findViewById(R.id.total_revenue_txt);
         totalRevenueBodyTV = (TextView) findViewById(R.id.total_revenue);
-        totalRevenueHeaderTV.setText(""+MyUtils.moneyFormat(line.getTotal_revenue()));
-        totalRevenueBodyTV.setText(""+MyUtils.moneyFormat(line.getTotal_revenue()));
+        totalRevenueHeaderTV.setText(MyUtils.moneyFormat(line.getTotal_revenue()));
+        totalRevenueBodyTV.setText(MyUtils.moneyFormat(line.getTotal_revenue()));
 
         numClients=(TextView) findViewById(R.id.num_clients);
        // numGoalsTV = (TextView) findViewById(R.id.num_goals);
@@ -140,10 +141,17 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
         descriptionEditor = findViewById(R.id.description_editor);
         descriptionEditor.setOnClickListener(this);
 
-        setLineNumClients();
-        setLineNumGoals();
+        txt_delete = (TextView) findViewById(R.id.txt_delete);
+        txt_delete.setOnClickListener(this);
 
+//        setLineNumGoals();
+
+        if (user.getId().equals(line.getUser_id())) {
+            txt_delete.setVisibility(View.VISIBLE);
+        }
     }
+
+
 
     @Override
     public void onClick(View v) {
@@ -205,6 +213,11 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
 
                 MyUtils.startRequestActivity(this, AddLinesActivity.class, Constants.Lines, bundle);
                 break;
+            case R.id.txt_delete:
+                int color = this.getResources().getColor(R.color.alert_bg_color);
+                DialogYesNo alert_delete = new DialogYesNo(ViewLineActivity.this, line, "DELETE LINE","Are you sure want to delete this line","YES DELETE!",color,1);
+                alert_delete.showDialog();
+                break;
         }
     }
 
@@ -218,7 +231,7 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
 
             intent.putExtras(b);
             setResult(RESULT_OK, intent);
-            finishActivity(Constants.ADD_SALES);
+            finishActivity(Constants.LineDelete);
             finish();
             return;
         }
@@ -229,6 +242,8 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
     protected void onResume() {
         super.onResume();
         if(line==null) finish();
+
+        setLineNumClients();
     }
 
     private void updateLine(final Line line) {

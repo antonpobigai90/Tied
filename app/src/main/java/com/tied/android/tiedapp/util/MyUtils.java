@@ -128,7 +128,8 @@ public abstract class MyUtils {
                         });
             } else {
                 com.squareup.picasso.Picasso.with(MainApplication.getInstance().getApplicationContext())
-                        .load("/")
+                        .load(R.drawable.default_avatar)
+                        .placeholder(MainApplication.getInstance().getApplicationContext().getResources().getDrawable(R.drawable.default_avatar))
                         .error(R.drawable.default_avatar)
                         .into(imageView, new Callback() {
 

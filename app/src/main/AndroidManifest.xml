@@ -5,6 +5,7 @@
           android:largeHeap="true">
 
     <uses-sdk
+            android:minSdkVersion="16"
             android:targetSdkVersion="23" />
 
     <uses-feature

@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.ui.activities.lines.ViewLineActivity;
 import com.tied.android.tiedapp.ui.fragments.LinesFragment;
 import com.tied.android.tiedapp.ui.fragments.TerritoriesFragment;
 import com.tied.android.tiedapp.ui.fragments.client.ViewClientFragment;
@@ -37,11 +38,10 @@ public class ActivityClientProfile extends AppCompatActivity implements  View.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         bundle = getIntent().getExtras();
         user = MyUtils.getUserFromBundle(bundle);
         //initComponent();
-       setContentView(R.layout.activity_fragment_container);
+        setContentView(R.layout.activity_fragment_container);
         FragmentManager fm =getSupportFragmentManager();
         FragmentTransaction ft=fm.beginTransaction();
         ViewClientFragment linesFragment=(ViewClientFragment)ViewClientFragment.newInstance(bundle);

@@ -59,6 +59,7 @@ public class ViewScheduleFragment extends Fragment implements View.OnClickListen
     private LinearLayout back_layout;
 
     private TextView description, temperature, title, schedule_title;
+    private View line;
 
 
     public static Fragment newInstance(Bundle bundle) {
@@ -105,6 +106,7 @@ public class ViewScheduleFragment extends Fragment implements View.OnClickListen
         description = (TextView) view.findViewById(R.id.description);
         //title = (TextView) view.findViewById(R.id.title);
         temperature = (TextView) view.findViewById(R.id.weather);
+        line = (View) view.findViewById(R.id.line);
 
         //title.setText(schedule.getTitle());
         schedule_title.setText(schedule.getTitle());
