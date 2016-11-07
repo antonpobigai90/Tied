@@ -191,8 +191,8 @@ public class ClientsListFragment extends Fragment implements AdapterView.OnItemC
 
     private void loadClients() {
         ClientLocation clientLocation = new ClientLocation();
-        clientLocation.setDistance("100000" + MyUtils.getPreferredDistanceUnit());
 
+        clientLocation.setDistance("100000" + MyUtils.getPreferredDistanceUnit());
         Coordinate coordinate = MyUtils.getCurrentLocation();
         if( coordinate == null ){
             coordinate = user.getOffice_address().getCoordinate();

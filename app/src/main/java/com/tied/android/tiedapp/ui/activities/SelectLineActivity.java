@@ -206,6 +206,7 @@ public class SelectLineActivity extends Activity
         finish();
     }
 
+
     public void initLines(){
         final LineApi lineApi =  MainApplication.createService(LineApi.class);
         Call<ResponseBody> response = lineApi.getUserLines(user.getId(), 1);
