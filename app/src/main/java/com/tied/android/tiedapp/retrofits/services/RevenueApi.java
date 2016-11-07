@@ -56,4 +56,13 @@ public interface RevenueApi {
     @POST(Constants.GET_TOP_FIVE_REVENUE)
     Call<ResponseBody> getTopLineRevenues(@Path("user_id") String user_id, @Path("group_by") String group_by, @Body RevenueFilter filter);
 
+    @POST(Constants.GET_LINE_REVENUES)
+    Call<ResponseBody> getUniqueLineRevenues(
+            @Path("line_id") String line_id,
+            @Path("page_number") int page_number, @Body RevenueFilter filter);
+
+    @POST(Constants.GET_CLIENT_REVENUES)
+    Call<ResponseBody> getUniqueClientRevenues(
+            @Path("client_id") String client_id,
+            @Path("page_number") int page_number, @Body RevenueFilter filter);
 }

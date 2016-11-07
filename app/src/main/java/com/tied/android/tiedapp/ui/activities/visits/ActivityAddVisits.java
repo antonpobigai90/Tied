@@ -92,6 +92,7 @@ public class ActivityAddVisits extends AppCompatActivity implements  View.OnClic
 
         select_time = (RelativeLayout)findViewById(R.id.select_time);
         select_time.setOnClickListener(this);
+
         time_selected = (TextView)findViewById(R.id.time_selected);
         time = (TextView)findViewById(R.id.time);
 
@@ -126,7 +127,7 @@ public class ActivityAddVisits extends AppCompatActivity implements  View.OnClic
                 break;
             case R.id.select_time:
                 TimeRangePickerDialog timePickerDialog2 = TimeRangePickerDialog.newInstance(
-                        ActivityAddVisits.this, false);
+                        ActivityAddVisits.this, true);
                 timePickerDialog2.show(this.getSupportFragmentManager(), TAG);
                 break;
             case R.id.add_button:
