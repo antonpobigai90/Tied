@@ -148,7 +148,7 @@ public class ActivitySalesFilter extends AppCompatActivity implements  View.OnCl
         }
     }
     private void showList(String[] items, AdapterView.OnItemClickListener onSelect) {
-       AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         ListView lv=new ListView(this);
         ArrayAdapter adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items) {
             @Override

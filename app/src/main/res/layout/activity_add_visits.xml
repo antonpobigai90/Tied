@@ -315,7 +315,7 @@
                         android:textColor="@color/grey"
                         android:textSize="13sp"
                         android:layout_height="35dp"
-                        android:text="23:23 PM"
+                        android:text="23:23"
                         android:inputType="number"
                         android:gravity="center_vertical" />
 
@@ -328,6 +328,7 @@
 
                 </LinearLayout>
                 <ImageView
+                    android:onClick="onClick"
                     android:id="@+id/below1"
                     android:layout_width="20dp"
                     android:layout_height="20dp"

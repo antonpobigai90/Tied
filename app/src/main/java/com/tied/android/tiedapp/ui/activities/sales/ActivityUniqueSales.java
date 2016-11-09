@@ -8,8 +8,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
-
 import android.widget.TextView;
+
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
@@ -17,35 +17,36 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects.Revenue;
 import com.tied.android.tiedapp.objects.RevenueFilter;
+import com.tied.android.tiedapp.objects.Visit;
 import com.tied.android.tiedapp.objects._Meta;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.retrofits.services.LineApi;
 import com.tied.android.tiedapp.retrofits.services.RevenueApi;
-import com.tied.android.tiedapp.ui.activities.lines.ViewLineActivity;
 import com.tied.android.tiedapp.ui.adapters.SaleClientDetailsListAdapter;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.HelperMethods;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
-import okhttp3.ResponseBody;
+
 import org.json.JSONObject;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 /**
  * Created by femi on 8/4/2016.
  */
-public class ActivityLineClientSales extends FragmentActivity implements  View.OnClickListener{
+public class ActivityUniqueSales extends FragmentActivity implements  View.OnClickListener{
 
-    public static final String TAG = ActivityLineClientSales.class
+    public static final String TAG = ActivityUniqueSales.class
             .getSimpleName();
 
     private Bundle bundle;
@@ -129,19 +130,6 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
         loadData();
         updateSalesLabel();
         setLineTotalRevenue();
-
-        client_sales_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (client == null) {
-                    bundle.putSerializable(Constants.LINE_DATA, line);
-                } else {
-                    bundle.putSerializable(Constants.CLIENT_DATA, client);
-                }
-
-                MyUtils.startActivity(ActivityLineClientSales.this, ActivityUniqueSales.class, bundle);
-            }
-        });
     }
 
     @Override
@@ -161,14 +149,17 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
     }
 
     public void loadData() {
-        //super.loadData();
-        //if(addLinesActivity.getLine()==null) return;
+        final Call<ResponseBody> response;
+
         Logger.write("Loading data");
         DialogUtils.displayProgress(this);
         RevenueApi revenueApi = MainApplication.createService(RevenueApi.class);
         String id=(client==null?line.getId():client.getId());
-        String type=(client==null?"line":"client");
-        final Call<ResponseBody> response = revenueApi.getLineRevenues( type, id, page, filter);
+        if (client == null) {
+            response = revenueApi.getUniqueLineRevenues(id, page, filter);
+        } else {
+            response = revenueApi.getUniqueClientRevenues(id, page, filter);
+        }
         response.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
@@ -180,65 +171,21 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
                     GeneralResponse response=new GeneralResponse(resResponse.body());
 
                     if (response != null && response.isAuthFailed()) {
-                        User.LogOut(ActivityLineClientSales.this);
+                        User.LogOut(ActivityUniqueSales.this);
                         return;
                     }
                     Logger.write("************************** "+response.toString());
                     _Meta meta=response.getMeta();
                     if(meta !=null && meta.getStatus_code()==200) {
-                        //revenueList.addAll(response.getDataAsList("revenues", Revenue.class));
-                        //client_sale_adapter.notifyDataSetChanged();
-                        Gson gson = new Gson();
-                       // topRevenues.clear();
-                        //topRevenuesName.clear();
-                        List<Object> keys=response.getKeys();
-                        JSONObject map=response.getKeyObjects();
-                        //double total=0;
-                        for(Object keyObject:keys) {
-                            Map<String, Object> obj = MyUtils.MapObject.create(keyObject.toString());
-//                            Logger.write(map.get(MyUtils.MapObject.create(keyObject.toString()).get("key")).toString());
-                            // lines.add((Line)map.get(MyUtils.MapObject.create(keyObject.toString()).get("key")));
-                            Revenue revenue = new Revenue();
-                            if(line==null) {
-                                Line mLine = gson.fromJson(map.getString(obj.get("key").toString()), Line.class);
-                                Float val = Float.parseFloat("" + (Double) obj.get("value"));
-                                mLine.setTotal_revenue(val);
-                                //total=total+val;
-                                //topRevenues.add(val);
-                                //topRevenuesName.add(MyUtils.getClientName(client));
-                                //clients.add(client);
-                                Logger.write("" + val);
 
-                                revenue.setClient_id(client.getId());
-                                revenue.setValue(val);
-                                revenue.setDate_sold("");
-                                revenue.setLine_id(mLine.getId());
-                                revenue.setTitle(mLine.getName());
-                            }else {
-                                Client client = gson.fromJson(map.getString(obj.get("key").toString()), Client.class);
-                                Float val = Float.parseFloat("" + (Double) obj.get("value"));
-                                client.setTotal_revenue(val);
-                                //total=total+val;
-                                //topRevenues.add(val);
-                                //topRevenuesName.add(MyUtils.getClientName(client));
-                                //clients.add(client);
-                                Logger.write("" + val);
+                        revenueList.addAll( (ArrayList) response.getDataAsList("revenues", Revenue.class));
 
-                                revenue.setClient_id(client.getId());
-                                revenue.setValue(val);
-                                revenue.setDate_sold("");
-                                revenue.setLine_id(line.getId());
-                                revenue.setTitle(MyUtils.getClientName(client));
-                            }
-
-                            revenueList.add(revenue);
-                        }
                         client_sale_adapter.notifyDataSetChanged();
                     } else {
                         MyUtils.showToast(getString(R.string.connection_error));
                     }
                 }catch (Exception e) {
-                    MyUtils.showConnectionErrorToast(ActivityLineClientSales.this);
+                    MyUtils.showConnectionErrorToast(ActivityUniqueSales.this);
                     Logger.write(e);
                 }
             }
@@ -247,7 +194,7 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 //Log.d(TAG + " onFailure", t.toString());
                 Logger.write(t.getMessage());
-                MyUtils.showConnectionErrorToast(ActivityLineClientSales.this);
+                MyUtils.showConnectionErrorToast(ActivityUniqueSales.this);
                 DialogUtils.closeProgress();
             }
         });
@@ -274,7 +221,7 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
                     GeneralResponse response=new GeneralResponse(resResponse.body());
                     // Logger.write("RESPONSSSSSSSSSSSSSSSSSSSS "+response.toString());
                     if (response != null && response.isAuthFailed()) {
-                        User.LogOut(ActivityLineClientSales.this);
+                        User.LogOut(ActivityUniqueSales.this);
                         return;
                     }
 
@@ -304,7 +251,7 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 //Log.d(TAG + " onFailure", t.toString());
                 Logger.write(t.getMessage());
-                MyUtils.showConnectionErrorToast(ActivityLineClientSales.this);
+                MyUtils.showConnectionErrorToast(ActivityUniqueSales.this);
                 DialogUtils.closeProgress();
             }
         });

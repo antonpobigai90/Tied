@@ -335,6 +335,9 @@
         <activity android:name=".ui.activities.report.ReportActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.sales.ActivityUniqueSales"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <!--  Co-Worker Activities -->
 

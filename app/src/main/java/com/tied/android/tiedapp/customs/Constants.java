@@ -50,6 +50,10 @@ public class Constants {
     public static final String USER_CLIENT_LINES = API_PATH + "users/me/client_lines";
     public static final String GET_USER_REVENUES = API_PATH + "users/{user_id}/{group_by}/{object_id}/revenues/{page_number}";
     public static final String GET_OBJECT_REVENUES = API_PATH + "revenues/get_list/{object_type}/{object_id}/{page_number}";
+
+    public static final String GET_LINE_REVENUES = API_PATH + "lines/{line_id}/revenues/{page_number}";
+    public static final String GET_CLIENT_REVENUES = API_PATH + "clients/{client_id}/revenues/{page_number}";
+
     public static final String GET_LINE_WITH_ID =  API_PATH + "line/{line_id}";
     public static final String USER_LINE_COUNT=  API_PATH + "lines/count";
     public static final String USER_GE0_LINES =  API_PATH + "lines/geo";
@@ -107,6 +111,8 @@ public class Constants {
     public static final String CLIENT_VISITS = API_PATH + "clients/{client_id}/visits";
 
     public static final String GET_INDUSTRIES = API_PATH + "config/industries";
+
+    public static final String REPORT = API_PATH + "report";
 
     public static final String APP_DATA = "app_data";
     public static final String COWORKER = "coworker";
