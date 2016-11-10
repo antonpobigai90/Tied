@@ -18,13 +18,16 @@
     <color name="primary">#002943</color>
     <color name="icon_green">#38df22</color>
     <color name="color_green">#061204</color>
+    <color name="black">#000000</color>
 
     <color name="off_white">#fafafa</color>
     <color name="background2">#E0E0E0</color>
     <color name="indigo">#3f51b5</color>
     <color name="blue">#3c96ff</color>
     <color name="grey">#32323a</color>
+    <color name="gray">#32323a</color>
     <color name="light_gray">#dae1e4</color>
+    <color name="gray_light">#dae1e4</color>
     <color name="light_gray2">#bbbbbb</color>
     <color name="drawer_background">#203049</color>
 

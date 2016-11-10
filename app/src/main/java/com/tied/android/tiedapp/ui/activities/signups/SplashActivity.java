@@ -7,11 +7,13 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
+import com.crashlytics.android.Crashlytics;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.util.MyUtils;
+import io.fabric.sdk.android.Fabric;
 
 
 /**
@@ -34,7 +36,7 @@ public class SplashActivity extends Activity {
         this.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
         setContentView(R.layout.activity_splash);
         final SplashActivity sPlashScreen = this;
-
+        Fabric.with(this, new Crashlytics());
         context = this;
 
         final SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);

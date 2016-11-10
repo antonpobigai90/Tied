@@ -9,6 +9,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.crashlytics.android.Crashlytics;
 import com.johnhiott.darkskyandroidlib.ForecastApi;
+import com.onesignal.OneSignal;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
 import com.tied.android.tiedapp.customs.Constants;
@@ -65,9 +66,15 @@ public class MainApplication extends Application {
         ForecastApi.create("c6b01fe1df9d21e3f3c55a48243781f1");
 
         TwitterAuthConfig authConfig = new TwitterAuthConfig(Constants.TWITTER_API_KEY, Constants.TWITTER_API_SECRET);
-        Fabric.with(this, new TwitterCore(authConfig));
+        //Fabric.with(this, new TwitterCore(authConfig));
 
-        Fabric.with(this, new Crashlytics());
+        final Fabric fabric = new Fabric.Builder(this)
+                .kits(new Crashlytics())
+                .debuggable(true)
+                .build();
+        Fabric.with(fabric);
+        OneSignal.startInit(this).init();
+
         mInstance = this;
         Logger.write("apppppppppppppp started");
         FontsOverride.setDefaultFont(this, "MONOSPACE", "fonts/brandon_reg.ttf");

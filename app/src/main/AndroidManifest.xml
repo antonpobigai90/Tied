@@ -59,6 +59,9 @@
         <meta-data
                 android:name="com.google.android.gms.version"
                 android:value="@integer/google_play_services_version" />
+        <meta-data
+                android:name="io.fabric.ApiKey"
+                android:value="86c1fb407b27a6b13b7588dbee2d502e177c7790" />
 
         <!--
              <meta-data
@@ -156,9 +159,6 @@
             </intent-filter>
         </receiver>
 
-        <meta-data
-                android:name="io.fabric.ApiKey"
-                android:value="4b3683ff0e98d5a506af2aca298ceded59107045" />
 
         <activity
                 android:name=".ui.activities.HelpActivity"
