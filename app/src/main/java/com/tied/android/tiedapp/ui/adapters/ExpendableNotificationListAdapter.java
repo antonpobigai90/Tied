@@ -1,6 +1,7 @@
 package com.tied.android.tiedapp.ui.adapters;
 
 import android.content.Context;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,12 +9,16 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
-import com.tied.android.tiedapp.customs.model.ClientSaleDataModel;
-import com.tied.android.tiedapp.customs.model.NotificationDataModel;
+import com.tied.android.tiedapp.objects.Notification;
+import com.tied.android.tiedapp.util.MyUtils;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by ZuumaPC on 8/18/2016.
@@ -23,10 +28,10 @@ public class ExpendableNotificationListAdapter extends BaseExpandableListAdapter
     private Context _context;
     private List<String> _listDataHeader; // header titles
     // child data in format of header title, child title
-    private HashMap<String, ArrayList<NotificationDataModel>> _listDataChild;
+    private HashMap<String, ArrayList<Notification>> _listDataChild;
 
     public ExpendableNotificationListAdapter(Context context, List<String> listDataHeader,
-                                             HashMap<String, ArrayList<NotificationDataModel>> listChildData) {
+                                             HashMap<String, ArrayList<Notification>> listChildData) {
         this._context = context;
         this._listDataHeader = listDataHeader;
         this._listDataChild = listChildData;
@@ -47,7 +52,7 @@ public class ExpendableNotificationListAdapter extends BaseExpandableListAdapter
     public View getChildView(int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
-        NotificationDataModel model = (NotificationDataModel) getChild(groupPosition, childPosition);
+        Notification model = (Notification) getChild(groupPosition, childPosition);
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
@@ -56,17 +61,15 @@ public class ExpendableNotificationListAdapter extends BaseExpandableListAdapter
         }
 
         TextView txt_title = (TextView) convertView.findViewById(R.id.txt_time);
-        TextView txt_first = (TextView) convertView.findViewById(R.id.txt_first);
-        TextView txt_end = (TextView) convertView.findViewById(R.id.txt_end);
-        TextView txt_user = (TextView) convertView.findViewById(R.id.txt_user);
+        TextView txt_comment = (TextView) convertView.findViewById(R.id.txt_comment);
         TextView txt_new = (TextView) convertView.findViewById(R.id.txt_new);
 
-        txt_title.setText(model.getTxt_time());
-        txt_first.setText(model.getTxt_first());
-        txt_end.setText(model.getTxt_end());
-        txt_user.setText(model.getTxt_user());
+        String datetime = getTime(model.getCreated());
+        String[] time = datetime.split(" ");
+        txt_title.setText(datetime);
+        txt_comment.setText(model.getComment());
 
-        if (model.isbNew()) {
+        if (!model.isSeen()) {
             txt_new.setVisibility(View.VISIBLE);
         } else {
             txt_new.setVisibility(View.GONE);
@@ -107,8 +110,25 @@ public class ExpendableNotificationListAdapter extends BaseExpandableListAdapter
             convertView = infalInflater.inflate(R.layout.notification_group_item, null);
         }
 
+        String str = headerTitle;
+        String[] date = str.split("-");
+        String title = "";
+        String day = "";
+        if (date[2].equals("01") || date[2].equals("11") || date[2].equals("21") || date[2].equals("31")) {
+            if (date[2].equals("01")) day = "1st";
+            else day = date[2] + "st";
+        } else if (date[2].equals("02") || date[2].equals("12") || date[2].equals("22")){
+            if (date[2].equals("02")) day = "2nd";
+            else day = date[2] + "nd";
+        } else {
+            day = date[2] + "th";
+        }
+
+        String month = MyUtils.MONTHS_LIST[Integer.valueOf(date[1]).intValue() - 1];
+        title = month + " " + day;
+
         TextView txt_date = (TextView) convertView.findViewById(R.id.txt_date);
-        txt_date.setText(headerTitle);
+        txt_date.setText(title);
 
         return convertView;
     }
@@ -121,5 +141,13 @@ public class ExpendableNotificationListAdapter extends BaseExpandableListAdapter
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
+    }
+
+    private String getTime(long created) {
+        Timestamp stamp = new Timestamp(created);
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+        Date date = new Date(stamp.getTime());
+        String time = sdf.format(date);
+        return time;
     }
 }

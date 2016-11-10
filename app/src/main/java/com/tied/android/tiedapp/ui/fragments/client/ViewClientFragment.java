@@ -32,6 +32,7 @@ import com.tied.android.tiedapp.objects._Meta;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.retrofits.services.RevenueApi;
 import com.tied.android.tiedapp.ui.activities.client.AddClientActivity;
 import com.tied.android.tiedapp.ui.activities.client.ClientInfo;
@@ -40,6 +41,7 @@ import com.tied.android.tiedapp.ui.activities.lines.LineClientVisitsActivity;
 import com.tied.android.tiedapp.ui.activities.lines.LinesListActivity;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityLineClientSales;
 import com.tied.android.tiedapp.ui.activities.schedule.ClientSchedulesActivity;
+import com.tied.android.tiedapp.ui.activities.visits.ActivityVisitDetails;
 import com.tied.android.tiedapp.ui.dialogs.DialogClientOptions;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.dialogs.DialogYesNo;
@@ -68,6 +70,8 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
     private User user;
 
     private Client client;
+    private String client_id;
+
     int source;
     RevenueFilter filter=MyUtils.initializeFilter();
 
@@ -91,6 +95,8 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
         bundle = getArguments();
         user = MyUtils.getUserFromBundle(bundle);
         client=(Client) bundle.getSerializable(Constants.CLIENT_DATA);
+        client_id = (String) bundle.getSerializable("client_id");
+
         initComponent(view);
     }
 
@@ -128,13 +134,13 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
      //  important_info.setOnClickListener(this);
        // lines_territory.setOnClickListener(this);
 
-        if (bundle != null) {
+        if (bundle != null && client != null) {
             Log.d(TAG, "bundle not null");
             Gson gson = new Gson();
 
             user = MyUtils.getUserFromBundle(bundle);
             client = (Client)bundle.getSerializable(Constants.CLIENT_DATA);
-            if(client==null) return;
+
             String logo = client.getLogo().equals("") ? null  : client.getLogo();
             Picasso.with(getActivity()).
                     load(logo)
@@ -158,12 +164,14 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
                     });
             String lastVisited=client.getLast_visited();
             lastVisitedTV.setText("Last Visited: "+ (lastVisited==null || lastVisited.isEmpty()?"Never":HelperMethods.getDateDifferenceWithToday(lastVisited)));
-        }
-        setTotalRevenue();
 
-        if (user.getId().equals(client.getUser_id())) {
-            btn_delete.setVisibility(View.VISIBLE);
+            setTotalRevenue();
+            setVisibile();
         }
+        else if (client == null && !client_id.isEmpty()) {
+            getClient();
+        }
+
     }
 
 
@@ -297,5 +305,62 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
                 DialogUtils.closeProgress();
             }
         });
+    }
+
+    private void getClient() {
+        final ClientApi clientApi =  MainApplication.createService(ClientApi.class);
+        Call<ResponseBody> response = clientApi.getClient(client_id);
+        response.enqueue(new retrofit2.Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
+                if (this == null) {
+                    // Logger.write("null activity");
+                    return;
+                }
+                //Logger.write("(((((((((((((((((((((((((((((999999");
+                DialogUtils.closeProgress();
+
+                try {
+                    GeneralResponse response = new GeneralResponse(resResponse.body());
+
+                    if (response.isAuthFailed()) {
+                        User.LogOut(getActivity());
+                        return;
+                    }
+
+                    _Meta meta = response.getMeta();
+                    if (meta != null && meta.getStatus_code() == 200) {
+
+                        client = ( (Client) response.getData("client", Client.class));
+
+                        MyUtils.Picasso.displayImage(client.getLogo(), avatar);
+                        String lastVisited=client.getLast_visited();
+                        lastVisitedTV.setText("Last Visited: "+ (lastVisited==null || lastVisited.isEmpty()?"Never":HelperMethods.getDateDifferenceWithToday(lastVisited)));
+
+                        setTotalRevenue();
+                        setVisibile();
+
+                    } else {
+                        MyUtils.showToast("Error encountered");
+                        DialogUtils.closeProgress();
+                    }
+
+                } catch (Exception e) {
+                    Logger.write(e);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                Logger.write(" onFailure", t.toString());
+            }
+        });
+    }
+
+    private void setVisibile() {
+        if (user.getId().equals(client.getUser_id())) {
+            btn_delete.setVisibility(View.VISIBLE);
+        }
     }
 }

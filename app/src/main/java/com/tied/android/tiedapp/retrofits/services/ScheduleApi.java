@@ -54,4 +54,7 @@ public interface ScheduleApi {
     @DELETE(Constants.DELETE_SCHEDULE_WITH_ID)
     Call<ResponseBody> deleteSchedule(@Header(Constants.TOKEN_HEADER) String token,
                                       @Path("schedule_id") String schedule_id);
+
+    @GET(Constants.GET_SCHEDULE_WITH_ID)
+    Call<ResponseBody> getScheduleID(@Path("schedule_id") String schedule_id);
 }

@@ -105,113 +105,157 @@ public class ActivityAddTerritory extends AppCompatActivity implements  View.OnC
     public void doSearch() {
         searchKey=search.getText().toString().trim();
         territoriesAdapter.notifyDataSetChanged();
-        DialogUtils.displayProgress(this);
-        new HTTPConnection(new HTTPConnection.AjaxCallback() {
+
+        final TerritoryApi territoryApi =  MainApplication.createService(TerritoryApi.class);
+        Call<ResponseBody> response = territoryApi.getTerritoriesDatabase(searchKey);
+        response.enqueue(new retrofit2.Callback<ResponseBody>() {
             @Override
-            public void run(int code, String response) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
+                try {
+                    GeneralResponse response = new GeneralResponse(resResponse.body());
+                    Logger.write(response.toString());
+                    if (response.isAuthFailed()) {
+                        User.LogOut(ActivityAddTerritory.this);
+                        return;
+                    }
+                    _Meta meta=response.getMeta();
 
-                DialogUtils.closeProgress();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+
+                    if(meta !=null && meta.getStatus_code() == 200) {
                         territoryModels.clear();
+                        territoryModels.addAll( (ArrayList) response.getDataAsList(Constants.TerritoryData, Territory.class));
+                        //Logger.write("Lines loadeddddddddddddddddddddddddddddddddddddddddddddddd "+territories.size());
                         territoriesAdapter.notifyDataSetChanged();
+                        if( territoryModels.isEmpty()) MyUtils.showNoResults(ActivityAddTerritory.this.findViewById(R.id.main_layout), R.id.no_results);
+                        else findViewById(R.id.no_results).setVisibility(View.GONE);
+                    }else{
+                        MyUtils.showToast("Error encountered");
+                        DialogUtils.closeProgress();
                     }
-                });
 
-                if(code==0) {
-                    Logger.write("no response");
-                    return;
-                }else{
-
-
-                    try{
-
-                        JSONObject jo=new JSONObject(response);
-                        JSONArray ja=new JSONArray(jo.getString("results"));
-                        int lent=ja.length();
-
-
-                        for(int k=0; k<lent; k++) {
-                            JSONObject addrJO=new JSONObject(new JSONArray(jo.getString("results")).get(k).toString());
-                            JSONArray addressCompJA=new JSONArray(addrJO.getString("address_components"));
-                            int len=addressCompJA.length();
-                            String city="", county="", state="", country="";
-                            state=null; city=state=county=null;
-                            for(int i=0; i<len; i++) {
-                                JSONObject component=new JSONObject(addressCompJA.get(i).toString());
-                                JSONArray types=new JSONArray(component.getString("types"));
-
-                                for(int j=0; j<types.length(); j++) {
-                                    if(types.getString(j).equalsIgnoreCase("locality")) {
-                                        city=component.getString("long_name");
-                                        break;
-                                    }
-                                    if(types.getString(j).equalsIgnoreCase("administrative_area_level_1")) {
-                                        state=component.getString("short_name");
-                                        break;
-                                    }
-                                    if(types.getString(j).equalsIgnoreCase("administrative_area_level_2")) {
-                                        county=component.getString("long_name");
-                                        break;
-                                    }
-                                    if(types.getString(j).equalsIgnoreCase("country")) {
-                                        country=component.getString("short_name");
-                                        break;
-                                    }
-                                }
-
-                                if(state!=null && city!=null && country!=null) break;
-                            }
-                            if(county==null) continue;
-                            if((state==null && city==null && country==null) || (state.equalsIgnoreCase("null") && country.equalsIgnoreCase("null")  && city.equalsIgnoreCase("null"))) continue;
-
-                            String location="";
-
-                            if(city!=null && !city.equalsIgnoreCase("null") && !city.trim().isEmpty()) location+=city;
-                            if(state!=null && !state.equalsIgnoreCase("null") && !state.trim().isEmpty())  location+=(location.isEmpty()?state:", "+state);
-                            if(country!=null && !country.equalsIgnoreCase("null") && !country.trim().isEmpty()) location+=(location.isEmpty()?country:", "+country);
-
-                            if(location.isEmpty()) continue;
-                            final Territory territory=new Territory();
-                            territory.setCity(city);
-                            territory.setCounty(county);
-                            territory.setCountry(country);
-                            territory.setState(state);
-                            runOnUiThread(new Runnable() {
-                                              @Override
-                                              public void run() {
-                                                  if (!territoryModels.contains(territory))
-                                                      territoryModels.add(territory);
-                                              }
-                                          });
-
-                            // Logger.write(territories.toString());
-
-                            //JSONObject coordCompObj = new JSONObject(addrJO.getString("geometry"));
-                            //JSONObject locObj=new JSONObject(coordCompObj.getString("location"));
-                            //coord.add(locObj.getDouble("lat")+","+locObj.getDouble("lng"));
-                        }
-
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Logger.write("updating..................");
-                                territoriesAdapter.notifyDataSetChanged();
-                            }
-                        });
-
-                    }catch (JSONException je) {
-                        MyUtils.showConnectionErrorToast(ActivityAddTerritory.this);
-                        Logger.write(je);
-                    }catch (Exception e) {
-                        Logger.write(e);
-                    }
+                }catch (IOException ioe) {
+                    Logger.write(ioe);
                 }
-
+                catch (Exception jo) {
+                    Logger.write(jo);
+                }
+                DialogUtils.closeProgress();
             }
-        }).load(Constants.GOOGLE_REVERSE_GEOCODING_URL +"&address="+searchKey+" county, USA");
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.d(" onFailure", t.toString());
+            }
+        });
+
+//        DialogUtils.displayProgress(this);
+//
+//        new HTTPConnection(new HTTPConnection.AjaxCallback() {
+//            @Override
+//            public void run(int code, String response) {
+//
+//                DialogUtils.closeProgress();
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        territoryModels.clear();
+//                        territoriesAdapter.notifyDataSetChanged();
+//                    }
+//                });
+//
+//                if(code==0) {
+//                    Logger.write("no response");
+//                    return;
+//                }else{
+//
+//
+//                    try{
+//
+//                        JSONObject jo=new JSONObject(response);
+//                        JSONArray ja=new JSONArray(jo.getString("results"));
+//                        int lent=ja.length();
+//
+//
+//                        for(int k=0; k<lent; k++) {
+//                            JSONObject addrJO=new JSONObject(new JSONArray(jo.getString("results")).get(k).toString());
+//                            JSONArray addressCompJA=new JSONArray(addrJO.getString("address_components"));
+//                            int len=addressCompJA.length();
+//                            String city="", county="", state="", country="";
+//                            state=null; city=state=county=null;
+//                            for(int i=0; i<len; i++) {
+//                                JSONObject component=new JSONObject(addressCompJA.get(i).toString());
+//                                JSONArray types=new JSONArray(component.getString("types"));
+//
+//                                for(int j=0; j<types.length(); j++) {
+//                                    if(types.getString(j).equalsIgnoreCase("locality")) {
+//                                        city=component.getString("long_name");
+//                                        break;
+//                                    }
+//                                    if(types.getString(j).equalsIgnoreCase("administrative_area_level_1")) {
+//                                        state=component.getString("short_name");
+//                                        break;
+//                                    }
+//                                    if(types.getString(j).equalsIgnoreCase("administrative_area_level_2")) {
+//                                        county=component.getString("long_name");
+//                                        break;
+//                                    }
+//                                    if(types.getString(j).equalsIgnoreCase("country")) {
+//                                        country=component.getString("short_name");
+//                                        break;
+//                                    }
+//                                }
+//
+//                                if(state!=null && city!=null && country!=null) break;
+//                            }
+//                            if(county==null) continue;
+//                            if((state==null && city==null && country==null) || (state.equalsIgnoreCase("null") && country.equalsIgnoreCase("null")  && city.equalsIgnoreCase("null"))) continue;
+//
+//                            String location="";
+//
+//                            if(city!=null && !city.equalsIgnoreCase("null") && !city.trim().isEmpty()) location+=city;
+//                            if(state!=null && !state.equalsIgnoreCase("null") && !state.trim().isEmpty())  location+=(location.isEmpty()?state:", "+state);
+//                            if(country!=null && !country.equalsIgnoreCase("null") && !country.trim().isEmpty()) location+=(location.isEmpty()?country:", "+country);
+//
+//                            if(location.isEmpty()) continue;
+//                            final Territory territory=new Territory();
+//                            territory.setCity(city);
+//                            territory.setCounty(county);
+//                            territory.setCountry(country);
+//                            territory.setState(state);
+//                            runOnUiThread(new Runnable() {
+//                                              @Override
+//                                              public void run() {
+//                                                  if (!territoryModels.contains(territory))
+//                                                      territoryModels.add(territory);
+//                                              }
+//                                          });
+//
+//                            // Logger.write(territories.toString());
+//
+//                            //JSONObject coordCompObj = new JSONObject(addrJO.getString("geometry"));
+//                            //JSONObject locObj=new JSONObject(coordCompObj.getString("location"));
+//                            //coord.add(locObj.getDouble("lat")+","+locObj.getDouble("lng"));
+//                        }
+//
+//
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                Logger.write("updating..................");
+//                                territoriesAdapter.notifyDataSetChanged();
+//                            }
+//                        });
+//
+//                    }catch (JSONException je) {
+//                        MyUtils.showConnectionErrorToast(ActivityAddTerritory.this);
+//                        Logger.write(je);
+//                    }catch (Exception e) {
+//                        Logger.write(e);
+//                    }
+//                }
+//
+//            }
+//        }).load(Constants.GOOGLE_REVERSE_GEOCODING_URL +"&address="+searchKey+" county, USA");
 
     }
     private void toggleAddButton() {

@@ -36,4 +36,13 @@ public interface VisitApi {
 
     @POST(Constants.CLIENT_VISITS)
     Call<ResponseBody> getClientVisits(@Path("client_id") String user_id, @Body VisitFilter visitFilter);
+
+    @POST(Constants.VISIT_DELETE)
+    Call<ResponseBody> deleteVisit(@Path("visit_id") String visit_id);
+
+    @PUT(Constants.VISIT_UPDATE)
+    Call<ResponseBody> updateVisit(@Path("visit_id") String visit_id, @Body Visit visit);
+
+    @GET(Constants.GET_VISIT)
+    Call<ResponseBody> getVisit(@Path("visit_id") String visit_id);
 }

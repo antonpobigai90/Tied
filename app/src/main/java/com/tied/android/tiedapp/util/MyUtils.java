@@ -70,6 +70,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.sql.Timestamp;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -92,6 +93,10 @@ import retrofit2.Response;
  */
 public abstract class MyUtils {
     public static User userLoggedIn=null;
+
+    public static String[] MONTHS_LIST = {"January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"};
+
     public static class Picasso {
         public static void displayImage(final String imageUrl, final ImageView imageView) {
             if (imageUrl != null && !imageUrl.isEmpty()) {
@@ -1122,6 +1127,12 @@ public abstract class MyUtils {
         return (client.getCompany()==null || client.getCompany().isEmpty())?client.getFull_name():client.getCompany();
     }
 
+    public static String getDate(long timestamp) {
+        Timestamp stamp = new Timestamp(timestamp);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Date date = new Date(stamp.getTime());
+        return sdf.format(date);
+    }
     public static android.util.Pair<String, String> getDateRange() {
         Date begining, end;
 
@@ -1166,7 +1177,7 @@ public abstract class MyUtils {
     public static String formatDate(Date date) {
         Calendar c= Calendar.getInstance();
         c.setTime(date);
-        return toNth(c.get(Calendar.DAY_OF_MONTH))+" "+ DatePickerFragment.MONTHS_LIST[c.get(Calendar.MONTH)+1]+", "+c.get(Calendar.YEAR);
+        return toNth(c.get(Calendar.DAY_OF_MONTH))+" "+ MyUtils.MONTHS_LIST[c.get(Calendar.MONTH)+1]+", "+c.get(Calendar.YEAR);
     }
 
     public static Date parseDate(String pattern, String date) throws Exception {
@@ -1299,7 +1310,7 @@ public abstract class MyUtils {
         filter.setSort("desc");
         int year=HelperMethods.getCurrentYear(HelperMethods.getTodayDate());
         filter.setStart_date(year+"-"+HelperMethods.getNumericMonthOfTheYear(todaysDate)+"-01");
-        int endMonth=Arrays.asList(HelperMethods.MONTHS_LIST).indexOf(HelperMethods.getMonthOfTheYear(todaysDate));
+        int endMonth=Arrays.asList(MONTHS_LIST).indexOf(HelperMethods.getMonthOfTheYear(todaysDate));
         endMonth=endMonth+2;
         if(endMonth>12) endMonth=1;
         filter.setEnd_date(year+"-"+endMonth+"-01");

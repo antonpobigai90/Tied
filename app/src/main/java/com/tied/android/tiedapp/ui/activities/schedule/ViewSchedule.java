@@ -16,6 +16,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.tied.android.tiedapp.MainApplication;
+import com.tied.android.tiedapp.objects._Meta;
+import com.tied.android.tiedapp.objects.responses.GeneralResponse;
+import com.tied.android.tiedapp.retrofits.services.ClientApi;
+import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
+import com.tied.android.tiedapp.ui.activities.visits.ActivityVisitDetails;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.Logger;
 import org.apache.commons.lang.time.DateUtils;
 
@@ -42,9 +50,12 @@ import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.util.HelperMethods;
 import com.tied.android.tiedapp.util.MyUtils;
+
+import okhttp3.ResponseBody;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import retrofit2.Call;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -63,14 +74,16 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
     private User user;
     private Client client;
     private Schedule schedule;
+    private String schedule_id;
     TextView dayTV, weekTV, timeRange;
     View callClient;
     Bundle bundle;
 
-
     private TextView description, temperature, schedule_title, weatherInfo;
     private LinearLayout description_layout;
     View line;
+
+    MapFragment mapFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,81 +98,30 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
 
         }
         schedule = (Schedule) bundle.getSerializable(Constants.SCHEDULE_DATA);
+        schedule_id = (String) bundle.getSerializable("schedule_id");
 
-        final MapFragment mapFragment = (MapFragment) getFragmentManager()
+        mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
 
         mapFragment.getMapAsync(ViewSchedule.this);
 
         schedule_title = (TextView) findViewById(R.id.schedule_title);
         description = (TextView) findViewById(R.id.description);
-        //title = (TextView) findViewById(R.id.title);
         temperature = (TextView) findViewById(R.id.weather);
 
         description_layout = (LinearLayout) findViewById(R.id.description_layout);
         line = (View) findViewById(R.id.line);
 
-        //title.setText(schedule.getTitle());
-        schedule_title.setText(schedule.getTitle());
-        description.setText(schedule.getDescription());
-        if (schedule.getDescription() == null || schedule.getDescription().isEmpty()) {
-            description.setVisibility(View.GONE);
-            description_layout.setVisibility(View.GONE);
-            line.setVisibility(View.GONE);
-        }
-
         dayTV = (TextView) findViewById(R.id.day);
         weekTV = (TextView) findViewById(R.id.week_day);
         timeRange = (TextView) findViewById(R.id.time_range);
-
-        long diff_in_date = HelperMethods.getDateDifferenceWithToday(schedule.getDate());
-
-        String day = String.format("%02d", HelperMethods.getDayFromSchedule(schedule.getDate()));
-        // String week_day = MyUtils.getWeekDay(schedule);
-        dayTV.setText(MyUtils.toNth(day));
-        // long epoch=SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        long epoch = 0;
-        Logger.write(schedule.getDate() + " " + schedule.getTime_range().getStart_time());
-        timeRange.setText(schedule.getTime_range().getStart_time() + " - " + schedule.getTime_range().getEnd_time());
-        try {
-            epoch = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(schedule.getDate() + " " + schedule.getTime_range().getStart_time()).getTime();
-            System.out.println(epoch);
-        } catch (ParseException e) {
-            // TODO Auto-generated catch block
-            Logger.write(e);
-        }
-        //String timePassedString = ""+ android.text.format.DateUtils.getRelativeTimeSpanString(epoch, System.currentTimeMillis(), android.text.format.DateUtils.WEEK_IN_MILLIS);
-        weekTV.setText(MyUtils.getWeekDay(schedule));
         weatherInfo = (TextView) findViewById(R.id.weather_info);
 
-
-        String timeRange = MyUtils.getTimeRange(schedule);
-        // time.setText(timeRange);
-
-        final RequestBuilder weather = new RequestBuilder();
-        Request request = new Request();
-        request.setLat("" + schedule.getLocation().getCoordinate().getLat());
-        request.setLng("" + schedule.getLocation().getCoordinate().getLon());
-        request.setUnits(Request.Units.US);
-        request.setLanguage(Request.Language.ENGLISH);
-        request.addExcludeBlock(Request.Block.CURRENTLY);
-
-        weather.getWeather(request, new Callback<WeatherResponse>() {
-            @Override
-            public void success(WeatherResponse weatherResponse, Response response) {
-                Log.d(TAG, "temperature : " + weatherResponse.getDaily().getData().get(0).getApparentTemperatureMax() + "");
-                int temp_max = (int) weatherResponse.getDaily().getData().get(0).getApparentTemperatureMax();
-                temp_max = (int) HelperMethods.convertFahrenheitToCelcius(temp_max);
-                temperature.setText(temp_max + "°");
-                weatherInfo.setText(weatherResponse.getDaily().getData().get(0).getSummary());
-            }
-
-            @Override
-            public void failure(RetrofitError retrofitError) {
-                Log.d(TAG, "Error while calling: " + retrofitError.getUrl());
-            }
-        });
-
+        if (schedule != null) {
+            initValue();
+        } else if (!schedule_id.isEmpty()){
+            getSchedule(schedule_id);
+        }
     }
 
 
@@ -263,14 +225,160 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
             return myContentsView;
         }
 
-
-
-
         @Override
         public View getInfoContents(Marker marker) {
             // TODO Auto-generated method stub
             return null;
         }
 
+    }
+
+    private void initValue() {
+        schedule_title.setText(schedule.getTitle());
+        description.setText(schedule.getDescription());
+        if (schedule.getDescription() == null || schedule.getDescription().isEmpty()) {
+            description.setVisibility(View.GONE);
+            description_layout.setVisibility(View.GONE);
+            line.setVisibility(View.GONE);
+        }
+
+        long diff_in_date = HelperMethods.getDateDifferenceWithToday(schedule.getDate());
+
+        String day = String.format("%02d", HelperMethods.getDayFromSchedule(schedule.getDate()));
+
+        dayTV.setText(MyUtils.toNth(day));
+
+        long epoch = 0;
+        Logger.write(schedule.getDate() + " " + schedule.getTime_range().getStart_time());
+        timeRange.setText(schedule.getTime_range().getStart_time() + " - " + schedule.getTime_range().getEnd_time());
+        try {
+            epoch = new SimpleDateFormat("yyyy-MM-dd HH:mm").parse(schedule.getDate() + " " + schedule.getTime_range().getStart_time()).getTime();
+            System.out.println(epoch);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            Logger.write(e);
+        }
+
+        weekTV.setText(MyUtils.getWeekDay(schedule));
+
+        setTemperature();
+    }
+
+    private void setTemperature() {
+        final RequestBuilder weather = new RequestBuilder();
+        Request request = new Request();
+        request.setLat("" + schedule.getLocation().getCoordinate().getLat());
+        request.setLng("" + schedule.getLocation().getCoordinate().getLon());
+        request.setUnits(Request.Units.US);
+        request.setLanguage(Request.Language.ENGLISH);
+        request.addExcludeBlock(Request.Block.CURRENTLY);
+
+        weather.getWeather(request, new Callback<WeatherResponse>() {
+            @Override
+            public void success(WeatherResponse weatherResponse, Response response) {
+                Log.d(TAG, "temperature : " + weatherResponse.getDaily().getData().get(0).getApparentTemperatureMax() + "");
+                int temp_max = (int) weatherResponse.getDaily().getData().get(0).getApparentTemperatureMax();
+                temp_max = (int) HelperMethods.convertFahrenheitToCelcius(temp_max);
+                temperature.setText(temp_max + "°");
+                weatherInfo.setText(weatherResponse.getDaily().getData().get(0).getSummary());
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                Log.d(TAG, "Error while calling: " + retrofitError.getUrl());
+            }
+        });
+    }
+
+    private void getSchedule(String schedule_id) {
+        final ScheduleApi scheduleApi =  MainApplication.createService(ScheduleApi.class);
+        Call<ResponseBody> response = scheduleApi.getScheduleID(schedule_id);
+        response.enqueue(new retrofit2.Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> resResponse) {
+                if (this == null) {
+                    // Logger.write("null activity");
+                    return;
+                }
+                //Logger.write("(((((((((((((((((((((((((((((999999");
+                DialogUtils.closeProgress();
+
+                try {
+                    GeneralResponse response = new GeneralResponse(resResponse.body());
+
+                    if (response.isAuthFailed()) {
+                        User.LogOut(ViewSchedule.this);
+                        return;
+                    }
+
+                    _Meta meta = response.getMeta();
+                    if (meta != null && meta.getStatus_code() == 200) {
+
+                        schedule = ( (Schedule) response.getData("schedules", Schedule.class));
+
+                        initValue();
+                        getClientObject(schedule.getClient_id());
+
+                    } else {
+                        MyUtils.showToast("Error encountered");
+                        DialogUtils.closeProgress();
+                    }
+
+                } catch (Exception e) {
+                    Logger.write(e);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                Logger.write(" onFailure", t.toString());
+            }
+        });
+    }
+
+    private void getClientObject(String client_id) {
+        final ClientApi clientApi =  MainApplication.createService(ClientApi.class);
+        Call<ResponseBody> response = clientApi.getClient(client_id);
+        response.enqueue(new retrofit2.Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> resResponse) {
+                if (this == null) {
+                    // Logger.write("null activity");
+                    return;
+                }
+                //Logger.write("(((((((((((((((((((((((((((((999999");
+                DialogUtils.closeProgress();
+
+                try {
+                    GeneralResponse response = new GeneralResponse(resResponse.body());
+
+                    if (response.isAuthFailed()) {
+                        User.LogOut(ViewSchedule.this);
+                        return;
+                    }
+
+                    _Meta meta = response.getMeta();
+                    if (meta != null && meta.getStatus_code() == 200) {
+
+                        client = ( (Client) response.getData("client", Client.class));
+                        mapFragment.getMapAsync(ViewSchedule.this);
+
+                    } else {
+                        MyUtils.showToast("Error encountered");
+                        DialogUtils.closeProgress();
+                    }
+
+                } catch (Exception e) {
+                    Logger.write(e);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                Logger.write(" onFailure", t.toString());
+            }
+        });
     }
 }

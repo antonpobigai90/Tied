@@ -9,6 +9,7 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
+import com.tied.android.tiedapp.util.MyUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -21,8 +22,6 @@ import java.util.Locale;
  */
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
-    public static String[] MONTHS_LIST = {"January", "Febuary", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"};
     public static String[] WEEK_LIST = {"", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
 
     @NonNull
@@ -57,7 +56,7 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
         // Do something with the date chosen by the user
-        String month_name = MONTHS_LIST[view.getMonth()];
+        String month_name = MyUtils.MONTHS_LIST[view.getMonth()];
         GregorianCalendar gregorianCalendar = new GregorianCalendar(view.getYear(), view.getMonth(), view.getDayOfMonth() - 1);
 
         int dayOfWeek = gregorianCalendar.get(gregorianCalendar.DAY_OF_WEEK);

@@ -27,4 +27,7 @@ public interface  TerritoryApi {
 
     @POST(Constants.TERRITORY_CLIENTS)
     Call<ClientRes> getTerritoryClient(@Body Territory territory);
+
+    @GET(Constants.TERRITORY_FROM_DATABASE)
+    Call<ResponseBody> getTerritoriesDatabase(@Path("query") String query);
 }

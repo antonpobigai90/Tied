@@ -54,17 +54,18 @@ public class ActivityAddVisits extends AppCompatActivity implements  View.OnClic
     public static final String TAG = ActivityAddVisits.class
             .getSimpleName();
 
+    private Bundle bundle;
     private User user;
     Client client;
+    Visit visit;
     Location location;
 
     ImageView clientPhoto;
     TextView clientNameTV, dateTV, locationTV;
     EditText distance, titleET;
-    float salesAmount=0.00f;
     String title="";
     RelativeLayout select_date, select_time;
-    TextView time_selected, time;
+    TextView time_selected, date, time;
     TextView date_selected;
 
    // AddSalesFragment fragment;
@@ -74,7 +75,10 @@ public class ActivityAddVisits extends AppCompatActivity implements  View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_visits);
 
+        bundle = getIntent().getExtras();
         user=MyUtils.getUserLoggedIn();
+        client = (Client) bundle.getSerializable(Constants.CLIENT_DATA);
+        visit = (Visit) bundle.getSerializable(Constants.VISIT_DATA);
 
         initComponent();
     }
@@ -94,12 +98,28 @@ public class ActivityAddVisits extends AppCompatActivity implements  View.OnClic
         select_time.setOnClickListener(this);
 
         time_selected = (TextView)findViewById(R.id.time_selected);
+
+        date = (TextView)findViewById(R.id.date);
         time = (TextView)findViewById(R.id.time);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(getResources().getColor(R.color.blue_status_bar));
+        }
+
+        if (client != null) {
+            clientNameTV.setText(MyUtils.getClientName(client));
+            MyUtils.Picasso.displayImage(client.getLogo(), clientPhoto);
+        }
+
+        if (visit != null) {
+            titleET.setText(visit.getTitle());
+            locationTV.setText(visit.getAddress().getStreet() + ", " + visit.getAddress().getCity() + ", " + visit.getAddress().getState() + ", " + visit.getAddress().getZip());
+            distance.setText(visit.getDistance());
+            String[] strdate = visit.getVisit_date().split("-");
+            date.setText(MyUtils.MONTHS_LIST[Integer.valueOf(strdate[1]).intValue() - 1] + " " + strdate[2] + ", " + strdate[0]);
+            time.setText(visit.getVisit_time());
         }
     }
     @Override
@@ -181,7 +201,13 @@ public class ActivityAddVisits extends AppCompatActivity implements  View.OnClic
 
         VisitApi visitApi = MainApplication.createService(VisitApi.class, user.getToken());
         DialogUtils.displayProgress(this);
-        Call<ResponseBody> response = visitApi.addVisit(visit);
+
+        Call<ResponseBody> response;
+        if (visit == null) {
+            response = visitApi.addVisit(visit);
+        } else {
+            response = visitApi.updateVisit(visit.getId(), visit);
+        }
         response.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
@@ -195,7 +221,9 @@ public class ActivityAddVisits extends AppCompatActivity implements  View.OnClic
                     _Meta meta=response.getMeta();
                     if(meta !=null && meta.getStatus_code()==201) {
                         DialogUtils.closeProgress();
-                        finish();
+                        Intent intent = new Intent();
+                        setResult(RESULT_OK, intent);
+                        finishActivity(Constants.Visits);
                     }else{
                         MyUtils.showToast("Error encountered");
                         DialogUtils.closeProgress();

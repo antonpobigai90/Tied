@@ -19,8 +19,8 @@ public  class HelperMethods {
     protected static final String TAG = HelperMethods.class
             .getSimpleName();
 
-    public static String[] MONTHS_LIST = {"January", "Febuary", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"};
+    public static String[] MONTHS_LIST = {"Jan", "Feb", "March", "Apr", "May", "June",
+            "July", "Aug", "Sept", "Oct", "Nov", "Dec"};
 
     public static String[] WEEK_LIST = {"", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
 
@@ -35,7 +35,7 @@ public  class HelperMethods {
             int month = c.get(Calendar.MONTH);
             int day = c.get(Calendar.DAY_OF_MONTH);
 
-            String month_name=MONTHS_LIST[month];
+            String month_name=MyUtils.MONTHS_LIST[month];
             GregorianCalendar gregorianCalendar = getGCalendar(string_date);
 
             int dayOfWeek=gregorianCalendar.get(gregorianCalendar.DAY_OF_WEEK);
@@ -132,7 +132,7 @@ public  class HelperMethods {
 
         int montOfyear = calendar.get(calendar.MONTH);
        // Logger.write("month of the yeah in "+string_date+" is "+montOfyear);
-        String montOfyearName = MONTHS_LIST[montOfyear];
+        String montOfyearName = MyUtils.MONTHS_LIST[montOfyear];
         return montOfyearName;
     }
     public static int getNumericMonthOfTheYear(String string_date) {

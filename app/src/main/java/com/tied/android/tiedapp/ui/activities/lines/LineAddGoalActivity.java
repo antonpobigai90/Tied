@@ -258,7 +258,7 @@ public class LineAddGoalActivity extends AppCompatActivity implements View.OnCli
                 DialogFragment dateFragment = new DatePickerFragment() {
                     public void onDateSet(DatePicker view, int year, int month, int day) {
                         // Do something with the date chosen by the user
-                        String month_name = MONTHS_LIST[view.getMonth()];
+                        String month_name = MyUtils.MONTHS_LIST[view.getMonth()];
                         GregorianCalendar gregorianCalendar = new GregorianCalendar(view.getYear(), view.getMonth(), view.getDayOfMonth() - 1);
 
                         int dayOfWeek = gregorianCalendar.get(gregorianCalendar.DAY_OF_WEEK);
