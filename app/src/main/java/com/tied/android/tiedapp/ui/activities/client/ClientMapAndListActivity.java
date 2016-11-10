@@ -20,7 +20,6 @@ import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.coworker.CoWorkerFilterActivity;
 import com.tied.android.tiedapp.ui.fragments.client.ClientsListFragment;
 import com.tied.android.tiedapp.ui.fragments.client.ClientsMapFragment;
-import com.tied.android.tiedapp.ui.fragments.client.MapboxFragment;
 import com.tied.android.tiedapp.util.MyUtils;
 
 public class ClientMapAndListActivity extends AppCompatActivity implements  View.OnClickListener {

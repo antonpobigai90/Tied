@@ -21,7 +21,9 @@ import android.widget.TextView;
 
 import com.braintreepayments.api.BraintreePaymentActivity;
 import com.braintreepayments.api.models.PaymentMethodNonce;
+import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
+import com.onesignal.OneSignal;
 import com.soundcloud.android.crop.Crop;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
@@ -68,6 +70,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.fabric.sdk.android.Fabric;
 import retrofit2.Retrofit;
 
 /**
@@ -126,8 +129,12 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
+
+
         this.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
         setContentView(R.layout.activity_main);
+        OneSignal.sendTag("user_id", MyUtils.getUserLoggedIn().getId());
 
         user = User.getCurrentUser(getApplicationContext());
         if(user == null){
@@ -142,8 +149,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         //relativeLayout = (LinearLayout) findViewById(R.id.linearLayout);
        // tab_bar = (LinearLayout) findViewById(R.id.tab_bar);
         alert_edit_msg = (LinearLayout) findViewById(R.id.alert_edit_msg);
-
-        //tab_actvity_schedule = (LinearLayout) findViewById(R.id.tab_activity_schedule);
+       //tab_actvity_schedule = (LinearLayout) findViewById(R.id.tab_activity_schedule);
 
         more_layout = (LinearLayout) findViewById(R.id.more);
         activity_layout = (LinearLayout) findViewById(R.id.activity);
@@ -588,6 +594,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         }
     }
     private void toggelDrawer() {
+        OneSignal.sendTag("user_id", MyUtils.getUserLoggedIn().getId());
         if (drawerLayout.isDrawerOpen(Gravity.RIGHT)) {
             drawerLayout.closeDrawer(Gravity.RIGHT);
         } else {

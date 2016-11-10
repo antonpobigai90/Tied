@@ -30,6 +30,9 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true
+        manifestPlaceholders = [onesignal_app_id: "1f0fbe0c-52f5-4bd8-8b0b-ba60849ed4ef",
+                                // Project number pulled from dashboard, local value is ignored.
+                                onesignal_google_project_number: "716681828169"]
     }
     dexOptions {
         incremental true
@@ -81,6 +84,7 @@ dependencies {
     /* compile files('libs/httpcore-4.2.3.jar')*/
     compile files('libs/httpmime-4.0.1.jar')
     compile files('libs/urlimageviewhelper-1.0.4.jar')
+    compile 'com.android.support:design:23.1.1'
     compile('com.crashlytics.sdk.android:crashlytics:2.5.6@aar') {
         transitive = true;
     }
@@ -102,6 +106,7 @@ dependencies {
     compile 'com.github.johnhiott:DarkSkyApi:v0.1.4'
     compile 'com.github.tittojose:timerangepicker-library:0.2'
     compile 'com.google.android.gms:play-services-maps:9.4.0'
+    /*
     compile 'io.realm:realm-android:0.87.5'
     compile ('com.mapbox.mapboxsdk:mapbox-android-sdk:4.2.0-beta.1@aar'){
         transitive=true
@@ -109,6 +114,16 @@ dependencies {
     compile('com.mapbox.mapboxsdk:mapbox-android-services:2.0.0-SNAPSHOT@aar') {
         transitive = true
     }
+    */
+    compile 'com.onesignal:OneSignal:3.+@aar'
+
+    // Required for OneSignal, even if you have added FCM.
+    compile 'com.google.android.gms:play-services-gcm:+'
+
+
+    // play-services-analytics is only needed when using 8.1.0 or older.
+    // compile 'com.google.android.gms:play-services-analytics:+'
+
 
     compile 'com.braintreepayments.api:braintree:2.+'
     compile 'com.braintreepayments.api:drop-in:2.+'
