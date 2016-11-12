@@ -216,7 +216,7 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
                 startActivity(callIntent);
                 break;
             case R.id.img_edit:
-                MyUtils.startRequestActivity(getActivity(), AddClientActivity.class, Constants.ADD_CLIENT, bundle);
+                MyUtils.startRequestActivity(getActivity(), AddClientActivity.class, Constants.EDIT_CLIENT, bundle);
                 break;
             case R.id.goal:
                 MyUtils.startActivity(getActivity(), ClientInfo.class, bundle);
@@ -239,6 +239,17 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
             case R.id.visits_layout:
                 MyUtils.startRequestActivity(getActivity(), LineClientVisitsActivity.class, Constants.SELECT_CLIENT, bundle);
                 break;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == Constants.EDIT_CLIENT && resultCode == Activity.RESULT_OK) {
+            Bundle bundle = data.getExtras();
+            client_id = (String) bundle.getSerializable("client_id");
+            getClient();
         }
     }
 

@@ -341,6 +341,12 @@
         <activity android:name=".ui.activities.visits.ActivityVisitDetails"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.lines.LinesSelect"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".ui.activities.visits.VisitFilterActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <!--  Co-Worker Activities -->
 

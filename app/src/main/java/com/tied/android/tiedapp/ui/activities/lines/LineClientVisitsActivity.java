@@ -22,6 +22,7 @@ import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.objects.visit.VisitFilter;
 import com.tied.android.tiedapp.retrofits.services.VisitApi;
 import com.tied.android.tiedapp.ui.activities.visits.ActivityAddVisits;
+import com.tied.android.tiedapp.ui.activities.visits.VisitFilterActivity;
 import com.tied.android.tiedapp.ui.adapters.VisitListAdapter;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.Logger;
@@ -47,6 +48,8 @@ public class LineClientVisitsActivity extends AppCompatActivity implements View.
 
     private Bundle bundle;
     private User user;
+    VisitFilter visitFilter;
+
     protected ListView listView;
     List<Visit> visits = new ArrayList<Visit>();
     private  Client client;
@@ -80,19 +83,22 @@ public class LineClientVisitsActivity extends AppCompatActivity implements View.
 
         adapter = new VisitListAdapter(visits, null, this);
         listView.setAdapter(adapter);
-        loadVisits();
+        setDefaultVisitFilter();
     }
 
-    private void loadVisits() {
-        VisitFilter visitFilter = new VisitFilter();
-        visitFilter.setClient_id(client.getId());
-        visitFilter.setSchedule_id(null);
+    private void setDefaultVisitFilter() {
+        visitFilter = new VisitFilter();
+        visitFilter.setClient(null);
         visitFilter.setMonth(11);
         visitFilter.setYear(2016);
-        visitFilter.setDate("2016-11-04");
         visitFilter.setDistance(4500);
         visitFilter.setUnit("mi");
+        visitFilter.setSort("recent");
 
+        loadVisits(visitFilter);
+    }
+
+    private void loadVisits(VisitFilter visitFilter) {
         final VisitApi visitApi =  MainApplication.createService(VisitApi.class);
         Call<ResponseBody> response = visitApi.getClientVisits(client.getId(), visitFilter);
         response.enqueue(new retrofit2.Callback<ResponseBody>() {
@@ -145,9 +151,12 @@ public class LineClientVisitsActivity extends AppCompatActivity implements View.
                 finish();
                 break;
             case R.id.img_filter:
+                bundle.putSerializable(Constants.VISIT_DATA, visitFilter);
+                MyUtils.startRequestActivity(this, VisitFilterActivity.class, Constants.VISIT_FILTER, bundle);
                 break;
             case R.id.img_plus:
-                MyUtils.startRequestActivity(this, ActivityAddVisits.class, Constants.Visits);
+                bundle.putBoolean("select_client", false);
+                MyUtils.startRequestActivity(this, ActivityAddVisits.class, Constants.Visits, bundle);
                 break;
         }
     }
@@ -157,7 +166,11 @@ public class LineClientVisitsActivity extends AppCompatActivity implements View.
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == Constants.Visits && resultCode == this.RESULT_OK) {
-            loadVisits();
+            setDefaultVisitFilter();
+        } else if(requestCode == Constants.VISIT_FILTER && resultCode == this.RESULT_OK) {
+            bundle = data.getExtras();
+            visitFilter = (VisitFilter) bundle.getSerializable(Constants.VISIT_DATA);
+            loadVisits(visitFilter);
         }
     }
 }

@@ -96,7 +96,8 @@ public class LineClientListActivity extends AppCompatActivity implements View.On
         if (client_list.equals("line")) {
             txt_title.setText(String.format("Clients for %s", line.getName()));
         } else if (client_list.equals("territory")) {
-            txt_title.setText(String.format("Clients for %s", territory.getCounty()));
+            txt_title.setText(String.format("Clients in %s", territory.getCounty()));
+            img_plus.setVisibility(View.GONE);
         }
 
         num_clients = (TextView) findViewById(R.id.num_clients);
@@ -177,6 +178,7 @@ public class LineClientListActivity extends AppCompatActivity implements View.On
                             initFormattedClient(clients);
                         } else {
                             bundle.putBoolean(Constants.NO_CLIENT_FOUND, true);
+                            num_clients.setVisibility(View.GONE);
                            // MyUtils.startActivity(LineClientListActivity.this, MainActivity.class, bundle);
                         }
                     } else {
@@ -258,7 +260,7 @@ public class LineClientListActivity extends AppCompatActivity implements View.On
                 //integrate of api
                 addLineClient(client);
             } else {
-                MyUtils.showToast("Already existing!");
+                MyUtils.showMessageAlert(this, "Already existing!");
             }
         } else if (requestCode==Constants.ClientDelete && resultCode==RESULT_OK) {
             MyUtils.showToast("Delete Successfully");

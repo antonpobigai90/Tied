@@ -73,8 +73,8 @@ public class LinesListActivity extends AppCompatActivity implements  View.OnClic
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == RESULT_OK) {
-            linesFragment.initLines();
+        if((requestCode == Constants.ADD_LINE || requestCode == Constants.LineDelete) && resultCode == RESULT_OK) {
+            linesFragment.onActivityResult(requestCode, resultCode, data);
         }
     }
 }

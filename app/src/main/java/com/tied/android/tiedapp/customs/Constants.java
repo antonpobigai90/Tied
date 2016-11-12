@@ -221,6 +221,7 @@ public class Constants {
     public static final int ClientDelete = 81;
     public static final int LineDelete = 82;
     public static final int Visits = 83;
+    public static final int VISIT_FILTER = 84;
 
     //    Profile Activity fragments indexes
     public static final int EditProfile = 101;
@@ -252,6 +253,7 @@ public class Constants {
     public static final int SELECT_TERRITORY = 1004;
     public static final int ADD_SALES = 1001;
     public static final int ADD_CLIENT = 2001;
+    public static final int EDIT_CLIENT = 2002;
     public static final int ADD_LINE = 3001;
     public static final int FILTER_CODE = 302;
     public static final String FILTER = "filter";

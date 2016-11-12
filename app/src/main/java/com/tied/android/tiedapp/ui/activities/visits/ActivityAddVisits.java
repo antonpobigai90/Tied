@@ -66,9 +66,11 @@ public class ActivityAddVisits extends AppCompatActivity implements  View.OnClic
     String title="";
     RelativeLayout select_date, select_time;
     TextView time_selected, date, time;
-    TextView date_selected;
+    TextView date_selected, txt_change;
 
    // AddSalesFragment fragment;
+
+    Boolean isSelectClient = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +79,14 @@ public class ActivityAddVisits extends AppCompatActivity implements  View.OnClic
 
         bundle = getIntent().getExtras();
         user=MyUtils.getUserLoggedIn();
-        client = (Client) bundle.getSerializable(Constants.CLIENT_DATA);
-        visit = (Visit) bundle.getSerializable(Constants.VISIT_DATA);
+
+        try {
+            client = (Client) bundle.getSerializable(Constants.CLIENT_DATA);
+            visit = (Visit) bundle.getSerializable(Constants.VISIT_DATA);
+            isSelectClient = bundle.getBoolean("select_client", true);
+        } catch (Exception e) {
+
+        }
 
         initComponent();
     }
@@ -98,6 +106,7 @@ public class ActivityAddVisits extends AppCompatActivity implements  View.OnClic
         select_time.setOnClickListener(this);
 
         time_selected = (TextView)findViewById(R.id.time_selected);
+        txt_change = (TextView)findViewById(R.id.txt_change);
 
         date = (TextView)findViewById(R.id.date);
         time = (TextView)findViewById(R.id.time);
@@ -121,12 +130,18 @@ public class ActivityAddVisits extends AppCompatActivity implements  View.OnClic
             date.setText(MyUtils.MONTHS_LIST[Integer.valueOf(strdate[1]).intValue() - 1] + " " + strdate[2] + ", " + strdate[0]);
             time.setText(visit.getVisit_time());
         }
+
+        if (!isSelectClient) {
+            txt_change.setVisibility(View.GONE);
+        }
     }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.select_client_layout:
-                selectClient(client);
+                if (isSelectClient) {
+                    selectClient(client);
+                }
                 break;
             case R.id.select_location_layout:
                 MyUtils.showAddressDialog(this, "Visit Location", location, new MyUtils.MyDialogClickListener() {
@@ -224,6 +239,7 @@ public class ActivityAddVisits extends AppCompatActivity implements  View.OnClic
                         Intent intent = new Intent();
                         setResult(RESULT_OK, intent);
                         finishActivity(Constants.Visits);
+                        finish();
                     }else{
                         MyUtils.showToast("Error encountered");
                         DialogUtils.closeProgress();

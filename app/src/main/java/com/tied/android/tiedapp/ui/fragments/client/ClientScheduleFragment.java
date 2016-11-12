@@ -1,5 +1,7 @@
 package com.tied.android.tiedapp.ui.fragments.client;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
@@ -89,5 +91,14 @@ public class ClientScheduleFragment extends SchedulesFragment implements View.On
 
         mListViewState = listView.onSaveInstanceState();
         super.onPause();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == Constants.CreateSchedule && resultCode == Activity.RESULT_OK) {
+            initSchedule();
+        }
     }
 }

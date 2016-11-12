@@ -64,6 +64,7 @@ public class ActivityVisits extends AppCompatActivity implements View.OnClickLis
     List<Visit> visits = new ArrayList<Visit>();
     List<Client> clients = new ArrayList<Client>();
     protected VisitListAdapter adapter;
+    VisitFilter visitFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +88,7 @@ public class ActivityVisits extends AppCompatActivity implements View.OnClickLis
 
         adapter = new VisitListAdapter(visits, clients, this);
         listView.setAdapter(adapter);
-        loadVisits();
+        setDefaultVisitFilter();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -103,15 +104,19 @@ public class ActivityVisits extends AppCompatActivity implements View.OnClickLis
         });
     }
 
-    private void loadVisits() {
-        VisitFilter visitFilter = new VisitFilter();
-        visitFilter.setClient_id(null);
-        visitFilter.setSchedule_id(null);
+    private void setDefaultVisitFilter() {
+        visitFilter = new VisitFilter();
+        visitFilter.setClient(null);
         visitFilter.setMonth(11);
         visitFilter.setYear(2016);
-        visitFilter.setDate("2016-11-04");
         visitFilter.setDistance(4500);
         visitFilter.setUnit("mi");
+        visitFilter.setSort("recent");
+
+        loadVisits(visitFilter);
+    }
+
+    private void loadVisits(VisitFilter visitFilter) {
 
         final VisitApi visitApi =  MainApplication.createService(VisitApi.class);
         Call<ResponseBody> response = visitApi.getUserVisits(user.getId(), visitFilter);
@@ -177,6 +182,9 @@ public class ActivityVisits extends AppCompatActivity implements View.OnClickLis
                 finish();
                 break;
             case R.id.img_filter:
+                bundle = new Bundle();
+                bundle.putSerializable(Constants.VISIT_DATA, visitFilter);
+                MyUtils.startRequestActivity(this, VisitFilterActivity.class, Constants.VISIT_FILTER, bundle);
                 break;
             case R.id.img_plus:
                 MyUtils.startRequestActivity(this, ActivityAddVisits.class, Constants.Visits);
@@ -189,7 +197,11 @@ public class ActivityVisits extends AppCompatActivity implements View.OnClickLis
         super.onActivityResult(requestCode, resultCode, data);
 
         if ((requestCode == Constants.Visits || requestCode == Constants.VISIT_LIST) && resultCode == this.RESULT_OK) {
-            loadVisits();
+            setDefaultVisitFilter();
+        } else if(requestCode == Constants.VISIT_FILTER && resultCode == this.RESULT_OK) {
+            bundle = data.getExtras();
+            visitFilter = (VisitFilter) bundle.getSerializable(Constants.VISIT_DATA);
+            loadVisits(visitFilter);
         }
     }
 }

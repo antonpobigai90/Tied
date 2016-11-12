@@ -66,8 +66,6 @@ public class SimpleDialogSelector implements View.OnClickListener{
         close.setOnClickListener(this);
         close.setText("CLOSE");
 
-
-
         adapter = new DataSelectAdapter(listData,context);
         listView.setAdapter(adapter);
 

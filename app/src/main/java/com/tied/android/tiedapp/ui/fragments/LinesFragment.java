@@ -2,6 +2,7 @@ package com.tied.android.tiedapp.ui.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -29,6 +30,7 @@ import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.retrofits.services.LineApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.lines.AddLinesActivity;
+import com.tied.android.tiedapp.ui.activities.lines.LinesSelect;
 import com.tied.android.tiedapp.ui.activities.lines.ViewLineActivity;
 import com.tied.android.tiedapp.ui.activities.lines.ViewNewLineActivity;
 import com.tied.android.tiedapp.ui.adapters.LinesAdapter;
@@ -101,7 +103,7 @@ public class LinesFragment extends Fragment implements AdapterView.OnItemClickLi
 
                     }
                 });*/
-                MyUtils.startRequestActivity(getActivity(), AddLinesActivity.class, Constants.ADD_LINE, bundle);
+                MyUtils.startRequestActivity(getActivity(), LinesSelect.class, Constants.ADD_LINE, bundle);
             }
         });
 
@@ -182,4 +184,16 @@ public class LinesFragment extends Fragment implements AdapterView.OnItemClickLi
         });
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == Constants.ADD_LINE) {
+                Bundle bundle = data.getExtras();
+                client = (Client) bundle.getSerializable(Constants.CLIENT_DATA);
+            }
+            initLines();
+        }
+    }
 }

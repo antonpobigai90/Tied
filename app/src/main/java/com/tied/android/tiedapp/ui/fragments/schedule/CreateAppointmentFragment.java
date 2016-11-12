@@ -33,6 +33,7 @@ import com.tied.android.tiedapp.objects.schedule.TimeRange;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
+import com.tied.android.tiedapp.ui.activities.client.ActivityClient;
 import com.tied.android.tiedapp.ui.activities.coworker.CoWorkerTerritoriesActivity;
 import com.tied.android.tiedapp.ui.activities.schedule.ViewSchedule;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
@@ -83,6 +84,9 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
     ScheduleNotifyDialog alert;
 
     private FragmentIterationListener fragmentIterationListener;
+
+    boolean isSelectClient = true;
+    ImageView img_right_arrow;
 
     public static Fragment newInstance(Bundle bundle) {
         Fragment fragment=new CreateAppointmentFragment();
@@ -148,6 +152,7 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
         txt_time = (TextView) view.findViewById(R.id.time);
         txt_reminder = (TextView) view.findViewById(R.id.reminder);
         locationTV=(TextView) view.findViewById(R.id.txt_location);
+        img_right_arrow = (ImageView) view.findViewById(R.id.img_right_arrow);
 
         view.findViewById(R.id.client_layout).setOnClickListener(this);
 
@@ -181,7 +186,10 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
             String client_json = bundle.getString(Constants.CLIENT_DATA);
             user = gson.fromJson(user_json, User.class);
             client = gson.fromJson(client_json, Client.class);
+            isSelectClient = bundle.getBoolean("select_client", true);
 //            txt_creative_co_op.setText(client.getCompany());
+
+            if (!isSelectClient) img_right_arrow.setVisibility(View.GONE);
 
             String schedule_json = bundle.getString(Constants.SCHEDULE_DATA);
             Log.d(TAG, "schedule_json "+schedule_json);
@@ -210,12 +218,10 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
             if(location!=null) locationTV.setText(location.getLocationAddress());
 
             if(client!=null) {
-
-            txt_client_name.setText(client.getFull_name());
+                txt_client_name.setText(client.getFull_name());
                 txt_client_company.setText(client.getCompany());
                 String logo = client.getLogo().equals("") ? null : client.getLogo();
                 MyUtils.Picasso.displayImage(logo, img_avatar);
-
             }
         }
 
@@ -281,7 +287,9 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
                 }
                 break;
             case R.id.client_layout:
-               MyUtils.initiateClientSelector(getActivity(), null, false);
+                if (isSelectClient) {
+                    MyUtils.initiateClientSelector(getActivity(), null, false);
+                }
                 break;
             case R.id.layout_location:
                 MyUtils.showAddressDialog(getActivity(), "Appointment Location", location, new MyUtils.MyDialogClickListener() {
@@ -430,16 +438,23 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
                         DialogUtils.closeProgress();
                         User.LogOut(getActivity());
                     } else if (scheduleRes.get_meta() != null && scheduleRes.get_meta().getStatus_code() == 201) {
-                        Log.d(TAG + " Schedule", scheduleRes.getSchedule().toString());
-                        Gson gson = new Gson();
-                        Schedule mainSchedule = scheduleRes.getSchedule();
-                        bundle.putSerializable(Constants.SCHEDULE_DATA, mainSchedule);
-                        if(client!=null) bundle.putSerializable(Constants.CLIENT_DATA, client);
-                        Schedule.scheduleCreated(getActivity().getApplicationContext());
-                        bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
-                        DialogUtils.closeProgress();
-                        //nextAction(Constants.ActivitySchedule, bundle);
-                        MyUtils.startActivity(getActivity(), ViewSchedule.class, bundle);
+                        if (isSelectClient) {
+                            Log.d(TAG + " Schedule", scheduleRes.getSchedule().toString());
+                            Gson gson = new Gson();
+                            Schedule mainSchedule = scheduleRes.getSchedule();
+                            bundle.putSerializable(Constants.SCHEDULE_DATA, mainSchedule);
+                            if (client != null)
+                                bundle.putSerializable(Constants.CLIENT_DATA, client);
+                            Schedule.scheduleCreated(getActivity().getApplicationContext());
+                            bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
+                            DialogUtils.closeProgress();
+                            //nextAction(Constants.ActivitySchedule, bundle);
+                            MyUtils.startActivity(getActivity(), ViewSchedule.class, bundle);
+                        } else {
+                            Intent intent = new Intent();
+                            getActivity().setResult(Activity.RESULT_OK, intent);
+                            getActivity().finishActivity(Constants.CreateSchedule);
+                        }
                         getActivity().finish();
                     } else {
                         DialogUtils.closeProgress();

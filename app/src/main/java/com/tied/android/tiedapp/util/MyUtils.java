@@ -1177,7 +1177,7 @@ public abstract class MyUtils {
     public static String formatDate(Date date) {
         Calendar c= Calendar.getInstance();
         c.setTime(date);
-        return toNth(c.get(Calendar.DAY_OF_MONTH))+" "+ MyUtils.MONTHS_LIST[c.get(Calendar.MONTH)+1]+", "+c.get(Calendar.YEAR);
+        return toNth(c.get(Calendar.DAY_OF_MONTH))+" "+ MyUtils.MONTHS_LIST[c.get(Calendar.MONTH)]+", "+c.get(Calendar.YEAR);
     }
 
     public static Date parseDate(String pattern, String date) throws Exception {
@@ -1192,8 +1192,6 @@ public abstract class MyUtils {
             return  new Gson().fromJson(jsonString, new TypeToken<HashMap<String, Object>>() {}.getType());
         }
     }
-
-
 
     public static void showNewLineDialog(final Activity context, String title, final MyDialogClickListener okayClicked) {
         // custom dialog

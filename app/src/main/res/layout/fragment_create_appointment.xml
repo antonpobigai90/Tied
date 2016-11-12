@@ -192,11 +192,12 @@
                     </LinearLayout>
 
                         <ImageView android:layout_width="@dimen/action_bar_icon_height"
-                                   android:layout_height="@dimen/action_bar_icon_height"
-                                   android:padding="@dimen/action_bar_icon_padding"
-                                    android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/ic_arrow_right_blue"/>
+                            android:layout_height="@dimen/action_bar_icon_height"
+                            android:padding="@dimen/action_bar_icon_padding"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:src="@drawable/ic_arrow_right_blue"
+                            android:id="@+id/img_right_arrow"/>
                     </RelativeLayout>
 
 

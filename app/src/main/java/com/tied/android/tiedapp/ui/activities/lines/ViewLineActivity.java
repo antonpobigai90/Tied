@@ -211,7 +211,6 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
                 });
                 break;
             case R.id.img_edit:
-
                 MyUtils.startRequestActivity(this, AddLinesActivity.class, Constants.Lines, bundle);
                 break;
             case R.id.txt_delete:
@@ -232,7 +231,7 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
 
             intent.putExtras(b);
             setResult(RESULT_OK, intent);
-            finishActivity(Constants.ADD_SALES);
+            finishActivity(Constants.LineDelete);
             finish();
             return;
 //        }
@@ -440,6 +439,10 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
         if(requestCode==Constants.ADD_SALES && RESULT_OK==resultCode) {
             setLineTotalRevenue();
             revenueUpdated=true;
+        } else if (requestCode == Constants.Lines && resultCode == RESULT_OK) {
+            bundle = data.getExtras();
+            line = (Line) bundle.getSerializable(Constants.LINE_DATA);
+            setLineTotalRevenue();
         }
     }
 }
