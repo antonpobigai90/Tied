@@ -61,9 +61,6 @@ public class ReportActivity extends AppCompatActivity implements View.OnClickLis
     AlertDialog ad;
     String month, year;
 
-    public static String[] MONTHS_LIST = {"January", "Febuary", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"};
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -190,7 +187,7 @@ public class ReportActivity extends AppCompatActivity implements View.OnClickLis
     private void sendReport() {
         ReportFilter reportFilter = new ReportFilter();
         reportFilter.setYear(Integer.valueOf(txt_year.getText().toString()).intValue());
-        reportFilter.setMonth(Arrays.asList(MONTHS_LIST).indexOf(txt_month.getText().toString()));
+        reportFilter.setMonth(Arrays.asList(MyUtils.MONTHS_LIST).indexOf(txt_month.getText().toString()));
 
         String type = (isCSV) ? "csv" : "pdf";
         reportFilter.setType(type);

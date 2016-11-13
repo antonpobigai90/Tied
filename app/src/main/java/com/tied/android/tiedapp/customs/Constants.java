@@ -31,6 +31,7 @@ public class Constants {
     public static final String USER_FIND_BY_EMAIL_OR_PHONE = API_PATH + "users/find_by_email_or_phone";
     public static final String USER_UPDATE_INFO = API_PATH + "users/me";
     public static final String USER_CHANGE_PASSWORD = API_PATH + "users/changePassword";
+    public static final String GET_USER_WITH_ID = API_PATH + "users/{user_id}";
 
     public static final String CLIENTS = API_PATH + "clients";
     public static final String USER_CLIENTS = API_PATH + "users/{user_id}/clients";
@@ -42,6 +43,7 @@ public class Constants {
 
     public static final String IS_ADDED_USER_AS_COWORKER = API_PATH + "coworkers/are_coworkers/{user_id}/{coworker_id}";
     public static final String COWORKERS_THAT_CAN_SEE = API_PATH + "coworkers/can_see/{user_id}/{section}";
+    public static final String COWORKERS_ACTIVITIES = API_PATH + "activities/{user_id}/{page_number}";
 
     public static final String LINES = API_PATH + "lines";
 
@@ -73,6 +75,9 @@ public class Constants {
     public static final String UPDATE_TERRITORY_WITH_ID = API_PATH + "territory/{territory_id}";
     public static final String USER_TERRITORIES = API_PATH + "users/{user_id}/territories/{page_number}";
     public static final String TERRITORY_CLIENTS = API_PATH + "territories/get_clients";
+    public static final String TERRITORY_FROM_DATABASE = API_PATH + "search/county/{query}";
+
+    public static final String GET_NOTIFICATIONS = API_PATH + "notifications/{user_id}/{page_number}";
 
     public static final String REVENUES = API_PATH + "revenue";
     public static final String UPDATE_REVENUE_WITH_ID = API_PATH + "revenue/{line_id}";
@@ -89,6 +94,7 @@ public class Constants {
 
     public static final String UPDATE_SCHEDULE_WITH_ID = API_PATH + "schedules/{schedule_id}";
     public static final String DELETE_SCHEDULE_WITH_ID = API_PATH + "schedules/{schedule_id}";
+    public static final String GET_SCHEDULE_WITH_ID = API_PATH + "schedule/{schedule_id}";
     public static final String SCHEDULES = API_PATH + "schedules";
     public static final String CLIENT_SCHEDULES = API_PATH + "schedules/{client_id}/upcoming";
     public static final String USER_SCHEDULE = API_PATH + "users/{user_id}/schedules";
@@ -109,6 +115,9 @@ public class Constants {
     public static final String ADD_VISIT = API_PATH + "visit";
     public static final String USER_VISITS = API_PATH + "users/{user_id}/visits";
     public static final String CLIENT_VISITS = API_PATH + "clients/{client_id}/visits";
+    public static final String VISIT_DELETE = API_PATH + "visit/{visit_id}";
+    public static final String VISIT_UPDATE = API_PATH + "visit/{visit_id}";
+    public static final String GET_VISIT = API_PATH + "visit/{visit_id}";
 
     public static final String GET_INDUSTRIES = API_PATH + "config/industries";
 
@@ -119,6 +128,7 @@ public class Constants {
     public static final String USER = "user";
     public static final String USER_DATA = "user_data";
     public static final String CLIENT_DATA = "client_data";
+    public static final String VISIT_DATA = "visit_data";
     public static final String SCHEDULE_DATA = "schedule_data";
     public static final String SCHEDULE_LIST = "schedules";
     public static final String SCHEDULE_DATE_FILTER = "schedule_date_filter";
@@ -211,6 +221,7 @@ public class Constants {
     public static final int ClientDelete = 81;
     public static final int LineDelete = 82;
     public static final int Visits = 83;
+    public static final int VISIT_FILTER = 84;
 
     //    Profile Activity fragments indexes
     public static final int EditProfile = 101;
@@ -225,6 +236,7 @@ public class Constants {
     public static final int LINE_SOURCE = 90001;
     public static final int COWORKER_SOURCE = 90002;
     public static final int PICK_CONTACT = 123;
+    public static final int VISIT_LIST = 23451;
 
 
     public static final String RECEIVER = "geo_address_receiver";
@@ -241,6 +253,7 @@ public class Constants {
     public static final int SELECT_TERRITORY = 1004;
     public static final int ADD_SALES = 1001;
     public static final int ADD_CLIENT = 2001;
+    public static final int EDIT_CLIENT = 2002;
     public static final int ADD_LINE = 3001;
     public static final int FILTER_CODE = 302;
     public static final String FILTER = "filter";

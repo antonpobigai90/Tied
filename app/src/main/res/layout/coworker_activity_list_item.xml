@@ -77,7 +77,8 @@
                 android:textColor="@color/accentColor"
                 android:text="Ilume candles"
                 android:textSize="14dp"
-                android:layout_marginTop="5dp" />
+                android:layout_marginTop="5dp"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:orientation="horizontal"

@@ -1,5 +1,6 @@
 package com.tied.android.tiedapp.ui.activities.lines;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -40,7 +41,7 @@ public class AddLinesActivity extends AppCompatActivity implements  View.OnClick
 
     EditText descriptonET, nameET;
     Line line;
-
+    TextView txt_title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +60,7 @@ public class AddLinesActivity extends AppCompatActivity implements  View.OnClick
         nameET =(EditText) findViewById(R.id.name);
         descriptonET =(EditText) findViewById(R.id.description);
 
-
+        txt_title = (TextView) findViewById(R.id.txt_title);
         btn_add = (TextView) findViewById(R.id.btn_add);
         btn_add.setOnClickListener(this);
         back_layout = (LinearLayout) findViewById(R.id.back_layout);
@@ -67,6 +68,9 @@ public class AddLinesActivity extends AppCompatActivity implements  View.OnClick
         if(line!=null) {
             nameET.setText(line.getName());
             descriptonET.setText(line.getDescription());
+
+            txt_title.setText("Update Line");
+            btn_add.setText("Update Line");
         }
     }
 
@@ -92,13 +96,21 @@ public class AddLinesActivity extends AppCompatActivity implements  View.OnClick
         }
         String description = descriptonET.getText().toString().trim();
 
-        final Line line=new Line();
-        line.setName(lineName);
-        line.setDescription(description);
 
-        if(line.getId()!=null && !line.getId().isEmpty())
+
+        if(line.getId()!=null && !line.getId().isEmpty()) {
+            line.setName(lineName);
+            line.setDescription(description);
+
             updateLine(line);
-        else saveLine(line);
+        }
+        else {
+            final Line line=new Line();
+            line.setName(lineName);
+            line.setDescription(description);
+
+            saveLine(line);
+        }
     }
 
     private void saveLine(final Line line) {
@@ -176,23 +188,15 @@ public class AddLinesActivity extends AppCompatActivity implements  View.OnClick
                         return;
                     }
                     _Meta meta=response.getMeta();
-                    if(meta !=null && meta.getStatus_code()==201) {
+                    if(meta !=null && meta.getStatus_code()==200) {
 
-                        Line the_line = response.getData(Constants.LINE_DATA, Line.class);
-                        Logger.write("the_line: "+the_line.toString());
-                        final Bundle bundle = new Bundle();
-                        bundle.putSerializable(Constants.LINE_DATA, the_line);
-                        MainApplication.linesList.clear();
-                        MyUtils.showMessageAlert(AddLinesActivity.this, "Line \""+nameET.getText().toString()+"\" created!");
-                        nameET.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                DialogUtils.closeProgress();
-                               // MyUtils.startActivity(AddLinesActivity.this, ViewLineActivity.class, bundle);
-                                finish();
-                            }
-                        }, 2000);
+                        MyUtils.showMessageAlert(AddLinesActivity.this, "Update Successfully");
 
+                        Intent intent = new Intent();
+                        intent.putExtra(Constants.LINE_DATA, line);
+                        setResult(RESULT_OK, intent);
+                        finishActivity(Constants.Lines);
+                        finish();
                     }else{
                         MyUtils.showToast("Error encountered");
                         DialogUtils.closeProgress();

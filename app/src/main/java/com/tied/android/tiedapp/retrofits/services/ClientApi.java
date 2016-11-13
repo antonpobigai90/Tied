@@ -72,4 +72,7 @@ public interface ClientApi {
 
     @GET(Constants.CLIENT_LINE)
     Call<ResponseBody> getClientLine(@Path("client_id") String client_id, @Path("page_number") int page);
+
+    @GET(Constants.GET_CLIENT_WITH_ID)
+    Call<ResponseBody> getClient(@Path("client_id") String client_id);
 }

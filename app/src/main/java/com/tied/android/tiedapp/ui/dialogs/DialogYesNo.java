@@ -14,6 +14,7 @@ import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Line;
+import com.tied.android.tiedapp.objects.Visit;
 import com.tied.android.tiedapp.objects._Meta;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
@@ -22,6 +23,7 @@ import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.retrofits.services.LineApi;
 import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
+import com.tied.android.tiedapp.retrofits.services.VisitApi;
 import com.tied.android.tiedapp.ui.activities.client.ActivityClientProfile;
 import com.tied.android.tiedapp.ui.activities.lines.ViewLineActivity;
 import com.tied.android.tiedapp.util.MyUtils;
@@ -90,6 +92,9 @@ public class DialogYesNo {
                     case 1: //ViewLineActivity
                         deleteLine((Line)object);
                         break;
+                    case 2: //ActivityVisitDetails - Delete visit
+                        deleteVisit((Visit) object);
+                        break;
                 }
 
                 dialog.dismiss();
@@ -153,6 +158,41 @@ public class DialogYesNo {
                         Intent intent = new Intent();
                         activity.setResult(activity.RESULT_OK, intent);
                         activity.finishActivity(Constants.ClientDelete);
+                        activity.finish();
+                    }else{
+                        MyUtils.showToast("Error encountered");
+                    }
+                } catch (Exception e) {
+                    MyUtils.showToast(e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                DialogUtils.closeProgress();
+            }
+        });
+    }
+
+    public void deleteVisit(final Visit visit){
+
+        VisitApi visitApi = MainApplication.getInstance().getRetrofit().create(VisitApi.class);
+        DialogUtils.displayProgress(activity);
+        Call<ResponseBody> response = visitApi.deleteVisit(visit.getId());
+        response.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
+                if (activity == null) return;
+
+                DialogUtils.closeProgress();
+                GeneralResponse generalResponse = new GeneralResponse(resResponse.body());
+                try {
+                    _Meta meta = generalResponse.getMeta();
+                    if (meta.getStatus_code() == 200){
+                        Intent intent = new Intent();
+                        activity.setResult(activity.RESULT_OK, intent);
+                        activity.finishActivity(Constants.VISIT_LIST);
                         activity.finish();
                     }else{
                         MyUtils.showToast("Error encountered");

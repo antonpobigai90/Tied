@@ -2,6 +2,7 @@ package com.tied.android.tiedapp.objects.visit;
 
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Territory;
+import com.tied.android.tiedapp.objects.client.Client;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,41 +11,23 @@ import java.util.ArrayList;
  * Created by Emmanuel on 6/30/2016.
  */
 public class VisitFilter implements Serializable {
-    private String client_id;
-    private String schedule_id;
+    private Client client;
     private int month;
     private int year;
-    private String date;
     private int distance;
     private String unit;
+    private String sort;
 
     public VisitFilter() {
     }
 
-    public VisitFilter(String client_id, String schedule_id, int month, int year, String date, int distance, String unit) {
-        this.client_id = client_id;
-        this.schedule_id = schedule_id;
+    public VisitFilter(Client client, int month, int year, int distance, String unit, String sort) {
+        this.client = client;
         this.month = month;
         this.year = year;
-        this.date = date;
         this.distance = distance;
         this.unit = unit;
-    }
-
-    public String getClient_id() {
-        return client_id;
-    }
-
-    public void setClient_id(String client_id) {
-        this.client_id = client_id;
-    }
-
-    public String getSchedule_id() {
-        return schedule_id;
-    }
-
-    public void setSchedule_id(String schedule_id) {
-        this.schedule_id = schedule_id;
+        this.sort = sort;
     }
 
     public int getMonth() {
@@ -63,14 +46,6 @@ public class VisitFilter implements Serializable {
         this.year = year;
     }
 
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
     public int getDistance() {
         return distance;
     }
@@ -87,14 +62,29 @@ public class VisitFilter implements Serializable {
         this.unit = unit;
     }
 
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    public String getSort() {
+        return sort;
+    }
+
+    public void setSort(String sort) {
+        this.sort = sort;
+    }
+
     @Override
     public String toString() {
         return "VisitFilter{" +
-                "client_id='" + client_id + '\'' +
-                ", schedule_id='" + schedule_id + '\'' +
+                "client='" + client +
                 ", month=" + month +
                 ", year=" + year +
-                ", date='" + date + '\'' +
+                ", sort='" + sort + '\'' +
                 ", distance=" + distance +
                 ", unit='" + unit + '\'' +
                 '}';

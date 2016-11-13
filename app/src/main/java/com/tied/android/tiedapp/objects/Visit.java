@@ -13,6 +13,7 @@ public class Visit implements Serializable {
 
     public static final String TAG = Visit.class.getSimpleName();
 
+    private String id;
     private String title;
     private String user_id;
     private String client_id;
@@ -25,6 +26,14 @@ public class Visit implements Serializable {
     private String unit;
 
     public Visit() {
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -110,7 +119,8 @@ public class Visit implements Serializable {
     @Override
     public String toString() {
         return "Visit{" +
-                "title='" + title + '\'' +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
                 ", user_id='" + user_id + '\'' +
                 ", client_id='" + client_id + '\'' +
                 ", schedule_id='" + schedule_id + '\'' +

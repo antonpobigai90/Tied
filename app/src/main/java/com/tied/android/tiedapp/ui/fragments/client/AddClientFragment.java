@@ -88,9 +88,8 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
     ArrayList<DataModel> listLine;
     ArrayList<Territory> selectedTerritories = new ArrayList<Territory>();
 
-
     public ImageView avatar;
-    private EditText company,name, territory, fax, phone, email, revenue, ytd_revenue, note;//, street, city, , zip, ;
+    private EditText company,name, fax, phone, email, revenue, ytd_revenue, note;//, street, city, , zip, ;
 
     private LinearLayout ok_but;
     private TextView industry, line, address;//, birthday;
@@ -108,7 +107,7 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
     RelativeLayout industry_layout, territory_layout;
     Integer industryId=null, lineId=null;
     View lineLayout;
-    TextView txt_title;
+    TextView txt_title, txt_territory;
 
     //int industry_id = 1;
 
@@ -124,6 +123,7 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
     private Uri uri;
 
     FragmentIterationListener mListener;
+    Territory territory;
 
     public static Fragment newInstance(Bundle bundle) {
         Fragment fragment=new AddClientFragment();
@@ -154,10 +154,9 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
         company = (EditText) view.findViewById(R.id.company);
         name = (EditText) view.findViewById(R.id.name);
         address =(TextView) view.findViewById(R.id.address_tv);
-       // street = (EditText) view.findViewById(R.id.street);
-       // zip = (EditText) view.findViewById(R.id.zip);
-       // city = (EditText) view.findViewById(R.id.city);
-        //view.findViewById(R.id.location_layout).setOnClickListener(this);
+        email = (EditText) view.findViewById(R.id.email);
+        txt_territory =(TextView) view.findViewById(R.id.territory_tv);
+
         lineLayout=view.findViewById(R.id.line_layout);
         lineLayout.setOnClickListener(this);
 
@@ -242,7 +241,22 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
                 revenue.setText(client.getRevenue());
                 ytd_revenue.setText(client.getYtd_revenue());
                 note.setText(client.getNote());
-               // birthday.setText(client.getBirthday());
+                email.setText(client.getEmail());
+
+                territory = client.getTerritory();
+                if (territory != null) {
+                    txt_territory.setText(territory.getCounty() + ", " + territory.getState());
+                    selectedTerritories.add(territory);
+                }
+
+                industryId = client.getIndustry_id();
+                for (int i = 0 ; i < listIndustry.size() ; i++) {
+                    DataModel model = listIndustry.get(i);
+                    if (model.getId() == client.getIndustry_id()) {
+                        industry.setText(model.getName());
+                        break;
+                    }
+                }
             }
         }
     }
@@ -271,7 +285,9 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
         if (requestCode == Constants.SELECT_TERRITORY && resultCode == Activity.RESULT_OK) {
 
             selectedTerritories = (ArrayList<Territory>) (data.getSerializableExtra("selected"));
-            Logger.write(selectedTerritories.toString());
+
+
+            txt_territory.setText(selectedTerritories.get(0).getCounty() + ", " + selectedTerritories.get(0).getState());
         }
     }
 
@@ -323,7 +339,12 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
                 }
                 else */
                 if (validated()) {
-                    new GeocodeAsyncTask().execute();
+//                    new GeocodeAsyncTask().execute();
+                    if (client == null){
+                        createClient();
+                    }else{
+                        editClient();
+                    }
                 }
                 break;
             case R.id.weekly_layout:
@@ -681,10 +702,21 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
                 } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200) {
                     Log.d(TAG + " client updated", clientRes.getClient().toString());
                     DialogUtils.closeProgress();
-                    bundle.putBoolean(Constants.NO_CLIENT_FOUND, false);
-                    Client.clientCreated(getActivity().getApplicationContext());
-                    bundle.putBoolean(Constants.CLIENT_EDITED, true);
 
+//                    bundle.putBoolean(Constants.NO_CLIENT_FOUND, false);
+//                    Client.clientCreated(getActivity().getApplicationContext());
+//                    bundle.putBoolean(Constants.CLIENT_EDITED, true);
+//                    MyUtils.startActivity(getActivity(), MainActivity.class, bundle);
+
+                    Intent intent = new Intent();
+
+                    Bundle b =new Bundle();
+                    b.putSerializable("client_id", client.getId());
+                    intent.putExtras(b);
+
+                    getActivity().setResult(Activity.RESULT_OK, intent);
+                    getActivity().finishActivity(Constants.EDIT_CLIENT);
+                    getActivity().finish();
                 } else {
                     DialogUtils.closeProgress();
                     Toast.makeText(getActivity(), clientRes.getMessage(), Toast.LENGTH_LONG).show();

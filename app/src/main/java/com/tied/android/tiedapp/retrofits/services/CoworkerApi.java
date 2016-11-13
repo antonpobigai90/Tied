@@ -30,5 +30,6 @@ public interface CoworkerApi {
     @POST(Constants.COWORKERS_THAT_CAN_SEE)
     Call<ResponseBody> updatePrivacy(@Path("user_id") String user_id, @Path("section") String section, @Body ArrayList body);
 
-
+    @GET(Constants.COWORKERS_ACTIVITIES)
+    Call<ResponseBody> getCoworkerActivity(@Path("user_id") String user_id, @Path("page_number") int page_number);
 }

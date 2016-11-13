@@ -26,9 +26,6 @@ import java.util.List;
 public class VisitListAdapter extends BaseAdapter {
     public static final String TAG = "VisitListAdapter";
 
-    public static String[] MONTHS_LIST = {"Jan", "Feb", "March", "Apr", "May", "June",
-            "July", "Aug", "Sept", "Oct", "Nov", "Dec"};
-
     public List _visits;
     public List _clients;
     Context _c;
@@ -94,7 +91,7 @@ public class VisitListAdapter extends BaseAdapter {
 
         String[] date = visit.getVisit_date().split("-");
         v.day.setText(date[2]);
-        v.month.setText(MONTHS_LIST[Integer.valueOf(date[1]).intValue() - 1]);
+        v.month.setText(MyUtils.MONTHS_LIST[Integer.valueOf(date[1]).intValue() - 1]);
 
         v.time.setText(visit.getVisit_time());
 

@@ -18,6 +18,7 @@ import com.johnhiott.darkskyandroidlib.models.WeatherResponse;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
+import com.tied.android.tiedapp.util.MyUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -36,7 +37,6 @@ public class AppointmentCalendarFragment extends Fragment implements View.OnClic
     public static final String TAG = AppointmentCalendarFragment.class
             .getSimpleName();
 
-    String[] MONTHS_LIST = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
     String[] WEEK_LIST = {"", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday","Sunday"};
 
     private Bundle bundle;
@@ -174,7 +174,7 @@ public class AppointmentCalendarFragment extends Fragment implements View.OnClic
     public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
         // Do something with the date chosen by the user
 
-        String month_name=MONTHS_LIST[month];
+        String month_name= MyUtils.MONTHS_LIST[month];
         GregorianCalendar gregorianCalendar = new GregorianCalendar(year, month, dayOfMonth-1);
 
         int dayOfWeek=gregorianCalendar.get(gregorianCalendar.DAY_OF_WEEK);

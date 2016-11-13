@@ -19,4 +19,7 @@ public interface UserApi {
     @POST(Constants.USER_FIND_BY_EMAIL_OR_PHONE)
     Call<ResponseBody> findByEmailOrPhone(@Header("token") String token,
                                           @Body User user);
+
+    @GET(Constants.GET_USER_WITH_ID)
+    Call<ResponseBody> getUser(@Path("user_id") String user_id);
 }

@@ -54,28 +54,13 @@
                 android:layout_marginTop="5dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Added"
-                    android:id="@+id/txt_first"
-                    android:textColor="@color/gray" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Emmanuel Iroko"
-                    android:id="@+id/txt_user"
-                    android:textColor="@color/blue"
-                    android:textStyle="bold"
-                    android:layout_marginLeft="5dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="as a client"
-                    android:id="@+id/txt_end"
+                    android:id="@+id/txt_comment"
                     android:textColor="@color/gray"
-                    android:layout_marginLeft="5dp" />
+                    android:layout_marginRight="25dp"/>
+
             </LinearLayout>
         </LinearLayout>
 
@@ -91,7 +76,8 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="15dp"
             android:layout_marginTop="10dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone"/>
 
     </RelativeLayout>
 </LinearLayout>

@@ -1,5 +1,6 @@
 package com.tied.android.tiedapp.ui.activities.client;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -33,6 +34,7 @@ public class ActivityClientProfile extends AppCompatActivity implements  View.On
 
     LinearLayout back_layout;
     LinearLayout lines_tab, territories_tab, tab_bar;
+    ViewClientFragment linesFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +46,7 @@ public class ActivityClientProfile extends AppCompatActivity implements  View.On
         setContentView(R.layout.activity_fragment_container);
         FragmentManager fm =getSupportFragmentManager();
         FragmentTransaction ft=fm.beginTransaction();
-        ViewClientFragment linesFragment=(ViewClientFragment)ViewClientFragment.newInstance(bundle);
+        linesFragment=(ViewClientFragment)ViewClientFragment.newInstance(bundle);
         MyUtils.addFragment(ft, null, linesFragment , ViewClientFragment.class.getName());
 /**
  if (bundle.getBoolean(Constants.SHOW_TERRITORY)) {
@@ -77,5 +79,12 @@ public class ActivityClientProfile extends AppCompatActivity implements  View.On
     @Override
     public void OnFragmentInteractionListener(int action, Bundle bundle) {
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        linesFragment.onActivityResult(requestCode, resultCode, data);
     }
 }

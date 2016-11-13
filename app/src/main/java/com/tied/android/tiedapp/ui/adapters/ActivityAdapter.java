@@ -13,9 +13,15 @@ import android.widget.TextView;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.model.ActivityDataModel;
 import com.tied.android.tiedapp.objects.Line;
+import com.tied.android.tiedapp.objects.Notification;
+import com.tied.android.tiedapp.util.MyUtils;
 
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by ZuumaPC on 8/18/2016.
@@ -29,11 +35,11 @@ public class ActivityAdapter extends BaseAdapter {
     public static final String TAG = ActivityAdapter.class
             .getSimpleName();
 
-    public ArrayList<ActivityDataModel> _data;
+    public ArrayList<Notification> _data;
     Context _c;
     ViewHolder viewHolder;
 
-    public ActivityAdapter(ArrayList<ActivityDataModel> activity_list, Context context) {
+    public ActivityAdapter(ArrayList<Notification> activity_list, Context context) {
         _data = activity_list;
         _c = context;
     }
@@ -71,15 +77,26 @@ public class ActivityAdapter extends BaseAdapter {
         viewHolder.title = (TextView) view.findViewById(R.id.title);
         viewHolder.description = (TextView) view.findViewById(R.id.description);
 
-        final ActivityDataModel data = (ActivityDataModel) _data.get(i);
+        final Notification data = (Notification) _data.get(i);
 
-        viewHolder.day.setText(data.getDay());
-        viewHolder.month.setText(data.getMonth());
-        viewHolder.time_range.setText(data.getTime_range());
-        viewHolder.title.setText(data.getTitle());
-        viewHolder.description.setText(data.getDescription());
+        String datetime = getDate(data.getCreated());
+        String[] time = datetime.split(" ");
+
+        viewHolder.day.setText(time[2]);
+        viewHolder.month.setText(MyUtils.MONTHS_LIST[Integer.valueOf(time[1]).intValue() - 1]);
+//        viewHolder.time_range.setText(data.getTime_range());
+        viewHolder.title.setText(data.getComment());
+//        viewHolder.description.setText(data.getDescription());
 
         view.setTag(data);
         return view;
+    }
+
+    private String getDate(long created) {
+        Timestamp stamp = new Timestamp(created);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        Date date = new Date(stamp.getTime());
+        String time = sdf.format(date);
+        return time;
     }
 }

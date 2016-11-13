@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -30,6 +31,7 @@ import com.tied.android.tiedapp.objects.visit.VisitFilter;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.retrofits.services.VisitApi;
 import com.tied.android.tiedapp.ui.activities.coworker.CoWorkerLinesActivity;
+import com.tied.android.tiedapp.ui.activities.sales.ActivityLineClientSales;
 import com.tied.android.tiedapp.ui.adapters.MapClientListAdapter;
 import com.tied.android.tiedapp.ui.adapters.VisitListAdapter;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
@@ -56,11 +58,13 @@ public class ActivityVisits extends AppCompatActivity implements View.OnClickLis
     public static final String TAG = ActivityVisits.class
             .getSimpleName();
 
+    private Bundle bundle;
     private User user;
     protected ListView listView;
     List<Visit> visits = new ArrayList<Visit>();
     List<Client> clients = new ArrayList<Client>();
     protected VisitListAdapter adapter;
+    VisitFilter visitFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,18 +88,35 @@ public class ActivityVisits extends AppCompatActivity implements View.OnClickLis
 
         adapter = new VisitListAdapter(visits, clients, this);
         listView.setAdapter(adapter);
-        loadVisits();
+        setDefaultVisitFilter();
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Client client = clients.get(position);
+                Visit visit = visits.get(position);
+
+                bundle = new Bundle();
+                bundle.putSerializable(Constants.CLIENT_DATA, client);
+                bundle.putSerializable(Constants.VISIT_DATA, visit);
+                MyUtils.startRequestActivity(ActivityVisits.this, ActivityVisitDetails.class, Constants.VISIT_LIST, bundle);
+            }
+        });
     }
 
-    private void loadVisits() {
-        VisitFilter visitFilter = new VisitFilter();
-        visitFilter.setClient_id(null);
-        visitFilter.setSchedule_id(null);
+    private void setDefaultVisitFilter() {
+        visitFilter = new VisitFilter();
+        visitFilter.setClient(null);
         visitFilter.setMonth(11);
         visitFilter.setYear(2016);
-        visitFilter.setDate("2016-11-04");
         visitFilter.setDistance(4500);
         visitFilter.setUnit("mi");
+        visitFilter.setSort("recent");
+
+        loadVisits(visitFilter);
+    }
+
+    private void loadVisits(VisitFilter visitFilter) {
 
         final VisitApi visitApi =  MainApplication.createService(VisitApi.class);
         Call<ResponseBody> response = visitApi.getUserVisits(user.getId(), visitFilter);
@@ -161,6 +182,9 @@ public class ActivityVisits extends AppCompatActivity implements View.OnClickLis
                 finish();
                 break;
             case R.id.img_filter:
+                bundle = new Bundle();
+                bundle.putSerializable(Constants.VISIT_DATA, visitFilter);
+                MyUtils.startRequestActivity(this, VisitFilterActivity.class, Constants.VISIT_FILTER, bundle);
                 break;
             case R.id.img_plus:
                 MyUtils.startRequestActivity(this, ActivityAddVisits.class, Constants.Visits);
@@ -172,8 +196,12 @@ public class ActivityVisits extends AppCompatActivity implements View.OnClickLis
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == Constants.Visits && resultCode == this.RESULT_OK) {
-            loadVisits();
+        if ((requestCode == Constants.Visits || requestCode == Constants.VISIT_LIST) && resultCode == this.RESULT_OK) {
+            setDefaultVisitFilter();
+        } else if(requestCode == Constants.VISIT_FILTER && resultCode == this.RESULT_OK) {
+            bundle = data.getExtras();
+            visitFilter = (VisitFilter) bundle.getSerializable(Constants.VISIT_DATA);
+            loadVisits(visitFilter);
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.tied.android.tiedapp.ui.activities.schedule;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -22,6 +23,7 @@ public class ClientSchedulesActivity extends AppCompatActivity implements Fragme
     Bundle bundle;
 
 
+    ClientScheduleFragment scheduleFragment;
     private TextView description, temperature,  schedule_title, weatherInfo;
 
     @Override
@@ -34,7 +36,7 @@ public class ClientSchedulesActivity extends AppCompatActivity implements Fragme
 
         FragmentManager fm =getSupportFragmentManager();
         FragmentTransaction ft=fm.beginTransaction();
-        ClientScheduleFragment scheduleFragment=new  ClientScheduleFragment();
+        scheduleFragment=new  ClientScheduleFragment();
         scheduleFragment.setArguments(bundle);
         ft.replace(R.id.fragment_place , scheduleFragment, scheduleFragment.getClass().getName());
         ft.commit();
@@ -51,7 +53,17 @@ public class ClientSchedulesActivity extends AppCompatActivity implements Fragme
             case R.id.img_close:
                 finish();
                 break;
+            case R.id.ok_but:
+                bundle.putBoolean("select_client", false);
+                MyUtils.startRequestActivity(this, CreateAppointmentActivity.class, Constants.CreateSchedule, bundle);
+                break;
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        scheduleFragment.onActivityResult(requestCode, resultCode, data);
+    }
 }
