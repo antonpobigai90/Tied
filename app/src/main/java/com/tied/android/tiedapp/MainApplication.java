@@ -69,8 +69,9 @@ public class MainApplication extends Application {
         //Fabric.with(this, new TwitterCore(authConfig));
 
         final Fabric fabric = new Fabric.Builder(this)
-                .kits(new Crashlytics())
-                .debuggable(true)
+                .kits(new Crashlytics(), new TwitterCore(authConfig))
+
+                //.debuggable(true)
                 .build();
         Fabric.with(fabric);
         OneSignal.startInit(this).init();

@@ -97,8 +97,8 @@ public class ResetFragment extends Fragment implements View.OnClickListener{
         reset_password = (ImageView) view.findViewById(R.id.reset_password);
         reset_password.setOnClickListener(this);
 
-        alert_valid_email = (LinearLayout) view.findViewById(R.id.alert_valid_email);
-        alert_valid_email.setVisibility(View.GONE);
+      //  alert_valid_email = (LinearLayout) view.findViewById(R.id.alert_valid_email);
+      //  alert_valid_email.setVisibility(View.GONE);
     }
 
     @Override
@@ -108,7 +108,7 @@ public class ResetFragment extends Fragment implements View.OnClickListener{
                 if (!Utility.isEmailValid(email.getText().toString())) {
                     alert_valid_email.setVisibility(View.VISIBLE);
                     //Utility.moveViewToScreenCenter( alert_valid_email, );
-                    MyUtils.showAlert(getActivity(), Utility.getResourceString(context, R.string.alert_valide_email));
+                    MyUtils.showErrorAlert(getActivity(), Utility.getResourceString(context, R.string.alert_valide_email));
                 } else {
                     new LoadForgetPasswordTask().execute(email.getText().toString());
                 }
@@ -128,16 +128,28 @@ public class ResetFragment extends Fragment implements View.OnClickListener{
         }
 
         @Override
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(String resp) {
             if(getActivity() == null) return;
-
             DialogUtils.closeProgress();
+            try {
+                JSONObject result=new JSONObject(resp);
+                if (result.has("success")) {
+                    m_bExit = true;
+                    value = result.getString("message");
+                    nextAction(Constants.DoneReset,null);
 
-            if(m_bExit) {
-                nextAction(Constants.DoneReset,null);
-            } else {
-                DialogUtils.openDialog(context, result, "OK", "");
+                } else {
+                    m_bExit = false;
+                    value = result.getString("developer_message");
+                    DialogUtils.openDialog(context, value, "OK", "");
+                }
             }
+            catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+
         }
 
         @Override
@@ -149,19 +161,8 @@ public class ResetFragment extends Fragment implements View.OnClickListener{
             JSONObject result = null;
             result =  APIManager.getInstance().callPost(context, "auth/forgot_password", params, false);
 
-            try {
-                if (result.has("success")) {
-                    m_bExit = true;
-                    value = result.getString("message");
-                } else {
-                    m_bExit = false;
-                    value = result.getString("developer_message");
-                }
-            }
-            catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return null;
+
+            return result.toString();
         }
     }
 }

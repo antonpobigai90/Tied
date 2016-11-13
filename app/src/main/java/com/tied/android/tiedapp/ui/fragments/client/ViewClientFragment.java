@@ -264,7 +264,7 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
                     //Logger.write(resResponse.body().string());
                     //  JSONObject response = new JSONObject(resResponse.body().string());
                     GeneralResponse response=new GeneralResponse(resResponse.body());
-                    // Logger.write("RESPONSSSSSSSSSSSSSSSSSSSS "+response.toString());
+                    Logger.write("RESPONSSSSSSSSSSSSSSSSSSSS "+response.toString());
                     if (response != null && response.isAuthFailed()) {
                         User.LogOut(getActivity());
                         return;

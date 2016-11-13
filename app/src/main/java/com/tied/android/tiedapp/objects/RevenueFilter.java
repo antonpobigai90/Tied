@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by femi on 9/28/2016.
  */
 public class RevenueFilter  implements Serializable {
-    String start_date, end_date, sort;
+    String start_date, end_date, sort, client_id, line_id;
     int quarter;
 
     public int getQuarter() {
@@ -41,6 +41,22 @@ public class RevenueFilter  implements Serializable {
 
     public void setStart_date(String start_date) {
         this.start_date = start_date;
+    }
+
+    public void setClient_id(String client_id) {
+        this.client_id = client_id;
+    }
+
+    public String getClient_id() {
+        return client_id;
+    }
+
+    public void setLine_id(String line_id) {
+        this.line_id = line_id;
+    }
+
+    public String getLine_id() {
+        return line_id;
     }
 
     @Override

@@ -213,7 +213,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         bundle.putString(Constants.USER_DATA, user_json);
         if ((new Date().getTime() - MyUtils.getLastTimeAppRan()) > 24*60*60*1000) {
             //launchFragment(Constants.HomeSchedule, bundle);
-            MyUtils.startActivity(this, DailyStatsActivity.class);
+            //MyUtils.startActivity(this, DailyStatsActivity.class);
             MyUtils.setLastTimeAppRan(new Date().getTime());
            // return;
         }
@@ -547,6 +547,8 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
             case R.id.territories_menu:
                 MyUtils.startActivity(MainActivity.this, ActivityTerritories.class,bundle);
                 break;
+
+
 
             case R.id.invite_menu:
                // MyUtils.startActivity(MainActivity.this, SendInviteActivity.class, bundle);

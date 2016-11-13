@@ -281,6 +281,8 @@ public class Constants {
     public static final String SHOW_CLIENT = "showClient";
     public static final String SHOW_LINE = "showLine";
     public static final String SHOW_MORE_CLIENT = "showMoreClients";
+    public static final String CLIENT_ID = "client_id";
+    public static final String LINE_ID = "line_id";
 
     public static File DIR_ROOT = new File("StreamLive"),
             DIR_CACHE = new File("cache"), DIR_HTML_CACHE = new File("html"), DIR_DOWNLOADS = new File("downloads"), DIR_MEDIA = new File("media");

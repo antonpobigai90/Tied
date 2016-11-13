@@ -23,7 +23,20 @@
 
     </RelativeLayout>
 
+    <WebView
+              android:id="@+id/webview"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:layout_below="@+id/top_layout"
+              android:layout_above="@+id/bottom_layout"
+    />
+    <ProgressBar android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
+    android:indeterminate="true"
+    android:id="@+id/progress_bar"/>
     <ListView
+            android:visibility="gone"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:id="@+id/list"
@@ -36,34 +49,23 @@
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:background="@color/bt_blue"
         android:id="@+id/bottom_layout">
 
-        <TextView
-            android:id="@+id/line1"
-            android:layout_width="fill_parent"
-            android:layout_height="0.2dp"
-            android:background="#dcdcdc"
-            android:layout_above="@+id/done"/>
 
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:id="@+id/done"
-            android:layout_height="54dp"
-            android:background="@color/white2">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="DONE"
                 android:id="@+id/txt_help_done"
-                android:textColor="@color/button_bg"
+                android:textColor="@color/white"
                 android:textSize="23sp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="0dp"
                 android:layout_centerHorizontal="true" />
-
-        </RelativeLayout>
 
     </RelativeLayout>
 </RelativeLayout>

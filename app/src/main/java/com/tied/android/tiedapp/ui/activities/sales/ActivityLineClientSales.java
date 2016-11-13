@@ -30,6 +30,7 @@ import com.tied.android.tiedapp.util.HelperMethods;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 import okhttp3.ResponseBody;
+import org.json.JSONException;
 import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -133,11 +134,23 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
         client_sales_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Bundle bundle=new Bundle();
+                Revenue revenue=(Revenue)revenueList.get(position);
                 if (client == null) {
-                    bundle.putSerializable(Constants.LINE_DATA, line);
-                } else {
+                    Client client=new Client();
+                    client.setId(revenue.getClient_id());
+                    client.setCompany(revenue.getTitle());
                     bundle.putSerializable(Constants.CLIENT_DATA, client);
+                    filter.setLine_id(line.getId());
+
+                } else {
+                    Line line=new Line();
+                    line.setId(revenue.getLine_id());
+                    line.setName(revenue.getTitle());
+                    bundle.putSerializable(Constants.LINE_DATA, line);
+                   filter.setClient_id(client.getId());
                 }
+                bundle.putSerializable(Constants.FILTER, filter);
 
                 MyUtils.startActivity(ActivityLineClientSales.this, ActivityUniqueSales.class, bundle);
             }
@@ -200,8 +213,20 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
                             // lines.add((Line)map.get(MyUtils.MapObject.create(keyObject.toString()).get("key")));
                             Revenue revenue = new Revenue();
                             if(line==null) {
-                                Line mLine = gson.fromJson(map.getString(obj.get("key").toString()), Line.class);
-                                Float val = Float.parseFloat("" + (Double) obj.get("value"));
+                                Line mLine;
+                                try {
+                                    mLine = gson.fromJson(map.getString(obj.get("key").toString()), Line.class);
+                                }catch (JSONException je) {
+                                    mLine=new Line();
+                                    mLine.setName("<Deleted>");
+                                    mLine.setId(obj.get("key").toString());
+                                }
+                                Float val=0.0f;
+                                try {
+                                     val = Float.parseFloat("" + (Double) obj.get("value"));
+                                }catch (Exception e) {
+
+                                }
                                 mLine.setTotal_revenue(val);
                                 //total=total+val;
                                 //topRevenues.add(val);
@@ -215,8 +240,20 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
                                 revenue.setLine_id(mLine.getId());
                                 revenue.setTitle(mLine.getName());
                             }else {
-                                Client client = gson.fromJson(map.getString(obj.get("key").toString()), Client.class);
-                                Float val = Float.parseFloat("" + (Double) obj.get("value"));
+                                Client client;
+                                try {
+                                    client = gson.fromJson(map.getString(obj.get("key").toString()), Client.class);
+                                } catch (JSONException je) {
+                                    client = new Client();
+                                    client.setCompany("<Deleted>");
+                                    client.setId(obj.get("key").toString());
+                                }
+                                Float val=0.0f;
+                                try {
+                                  val = Float.parseFloat("" + (Double) obj.get("value"));
+                                }catch (Exception e) {
+
+                                }
                                 client.setTotal_revenue(val);
                                 //total=total+val;
                                 //topRevenues.add(val);

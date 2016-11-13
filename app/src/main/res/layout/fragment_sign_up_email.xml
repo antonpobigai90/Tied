@@ -139,6 +139,7 @@
                         android:layout_height="50dp"
                         android:id="@+id/img_twitter"
                         android:src="@drawable/twitter1"
+                        android:visibility="gone"
                         android:layout_marginLeft="12dp" />
 
                 </LinearLayout>

@@ -40,7 +40,7 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
     private FragmentIterationListener mListener;
 
 //    private Button continue_btn;
-    private LinearLayout back_btn;
+    private View back_btn;
     private RelativeLayout continue_btn;
     //LinearLayout alert_valid_password;
     private EditText password;
@@ -81,10 +81,11 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
         password = (EditText) view.findViewById(R.id.password);
         password.setTransformationMethod(PasswordTransformationMethod.getInstance());
 
-        //back_btn = (LinearLayout) view.findViewById(R.id.back_layout);
+        back_btn =  view.findViewById(R.id.img_close);
         continue_btn = (RelativeLayout)view.findViewById(R.id.continue_btn);
         continue_btn.setOnClickListener(this);
-        // back_btn.setOnClickListener(this);
+         back_btn.setOnClickListener(this);
+        showPasswordSelector.setImageResource(R.drawable.empty_unchecked_icon);
 
 
     }
@@ -185,20 +186,20 @@ boolean isShowingPassword=true;
 
                 }
                 break;
-            case R.id.back_layout:
-                nextAction(Constants.EmailSignUp,bundle);
+            case R.id.img_close:
+                getActivity().onBackPressed();
                 break;
             case R.id.show_password:
                 int post=password.getSelectionStart();
                 if(!isShowingPassword) {
                     password.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
                     isShowingPassword=true;
-                    showPasswordSelector.setImageResource(R.drawable.ic_selected_white);
+                    showPasswordSelector.setImageResource(R.drawable.check_icon);
 
                 }else {
                     password.setTransformationMethod(PasswordTransformationMethod.getInstance());
                     isShowingPassword=false;
-                    showPasswordSelector.setImageResource(R.drawable.unselectd_bg);
+                    showPasswordSelector.setImageResource(R.drawable.empty_unchecked_icon);
                 }
                 password.setSelection(post);
                 break;

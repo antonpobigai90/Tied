@@ -15,12 +15,15 @@ import android.widget.TextView;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.client.Client;
+import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.client.ActivityClientProfile;
 import com.tied.android.tiedapp.ui.activities.client.AddClientActivity;
 import com.tied.android.tiedapp.ui.activities.client.NewClientActivity;
 import com.tied.android.tiedapp.ui.activities.lines.AddLinesActivity;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityAddSales;
 import com.tied.android.tiedapp.ui.activities.schedule.CreateAppointmentActivity;
+import com.tied.android.tiedapp.ui.activities.territories.ActivityTerritories;
+import com.tied.android.tiedapp.ui.activities.visits.ActivityAddVisits;
 import com.tied.android.tiedapp.ui.adapters.ScheduleListAdapter;
 import com.tied.android.tiedapp.ui.fragments.client.AddClientFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.CreateScheduleFragment;
@@ -64,6 +67,9 @@ public class DialogAddNewItem implements View.OnClickListener {
 
         RelativeLayout sale_layout = (RelativeLayout) dialog.findViewById(R.id.sale_layout);
         sale_layout.setOnClickListener(this);
+
+        RelativeLayout visit_layout = (RelativeLayout) dialog.findViewById(R.id.visit_layout);
+        visit_layout.setOnClickListener(this);
 
         RelativeLayout client_layout = (RelativeLayout) dialog.findViewById(R.id.client_layout);
         client_layout.setOnClickListener(this);
@@ -118,6 +124,10 @@ public class DialogAddNewItem implements View.OnClickListener {
                 break;
             case R.id.line_layout:
                 MyUtils.startActivity(_c, AddLinesActivity.class, bundle);
+                dialog.dismiss();
+                break;
+            case R.id.visit_layout:
+                MyUtils.startActivity(_c, ActivityAddVisits.class,bundle);
                 dialog.dismiss();
                 break;
 

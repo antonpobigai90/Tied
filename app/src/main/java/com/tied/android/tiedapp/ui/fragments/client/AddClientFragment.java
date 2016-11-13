@@ -50,6 +50,7 @@ import com.tied.android.tiedapp.ui.dialogs.SelectDataDialog;
 import com.tied.android.tiedapp.ui.dialogs.SimpleDialogSelector;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.HTTPConnection;
+import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import org.json.JSONObject;
@@ -268,7 +269,9 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == Constants.SELECT_TERRITORY && resultCode == Activity.RESULT_OK) {
+
             selectedTerritories = (ArrayList<Territory>) (data.getSerializableExtra("selected"));
+            Logger.write(selectedTerritories.toString());
         }
     }
 
@@ -681,7 +684,7 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
                     bundle.putBoolean(Constants.NO_CLIENT_FOUND, false);
                     Client.clientCreated(getActivity().getApplicationContext());
                     bundle.putBoolean(Constants.CLIENT_EDITED, true);
-                    MyUtils.startActivity(getActivity(), MainActivity.class, bundle);
+
                 } else {
                     DialogUtils.closeProgress();
                     Toast.makeText(getActivity(), clientRes.getMessage(), Toast.LENGTH_LONG).show();

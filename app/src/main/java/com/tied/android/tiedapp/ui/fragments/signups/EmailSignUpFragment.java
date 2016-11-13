@@ -305,6 +305,7 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
                             firstName = obj.getString("first_name");
                             lastName = obj.getString("last_name");
                             emailText = obj.getString("email");
+                            email.setText(emailText);
                             continue_action();
 
                         } catch (JSONException e) {
