@@ -35,12 +35,14 @@ import com.tied.android.tiedapp.objects.Territory;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.services.LocationService;
+import com.tied.android.tiedapp.ui.activities.client.TotalSalesActivity;
 import com.tied.android.tiedapp.ui.activities.coworker.CoWorkerActivity;
 import com.tied.android.tiedapp.ui.activities.goal.LineGoalActivity;
 
 import com.tied.android.tiedapp.ui.activities.lines.LinesListActivity;
 import com.tied.android.tiedapp.ui.activities.report.ReportActivity;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityGroupedSales;
+import com.tied.android.tiedapp.ui.activities.sales.ActivityUniqueSales;
 import com.tied.android.tiedapp.ui.activities.territories.ActivityTerritories;
 import com.tied.android.tiedapp.ui.activities.visits.ActivityAddVisits;
 import com.tied.android.tiedapp.ui.activities.visits.ActivityVisits;
@@ -53,6 +55,7 @@ import com.tied.android.tiedapp.ui.fragments.notification.NotificationFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.AvatarProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.ProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.ProfileFragment1;
+import com.tied.android.tiedapp.ui.fragments.profile.SalesPrivacyFragment;
 import com.tied.android.tiedapp.ui.fragments.sales.*;
 import com.tied.android.tiedapp.ui.fragments.schedule.CreateScheduleFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleAppointmentsFragment;
@@ -592,6 +595,9 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 break;
             case R.id.reports_menu:
                 MyUtils.startActivity(this, ReportActivity.class);
+                break;
+            case R.id.sales_menu:
+                MyUtils.startActivity(this, ActivityUniqueSales.class, bundle);
                 break;
         }
     }

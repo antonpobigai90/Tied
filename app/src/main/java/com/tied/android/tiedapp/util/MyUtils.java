@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.location.Location;
+import com.tied.android.tiedapp.objects.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -350,15 +350,18 @@ public abstract class MyUtils {
         Gson gson = new Gson();
         try {
             if (bundle != null) {
+                try {
+                    String user_json = bundle.getString(Constants.USER_DATA);
+                    user = gson.fromJson(user_json, User.class);
+                }catch (ClassCastException cce) {
 
-                String user_json = bundle.getString(Constants.USER_DATA);
-                if(user_json==null) {
-                    user=(User)bundle.getSerializable(Constants.USER_DATA);
-                    if(user==null)
-                        user = getUserLoggedIn();
+                        user = (User) bundle.getSerializable(Constants.USER_DATA);
+
+
                 }
-                else user = gson.fromJson(user_json, User.class);
 
+                if (user == null)
+                    user = getUserLoggedIn();
             } else {
                 Logger.write(getSharedPreferences().getString(Constants.CURRENT_USER, null));
                 user = getUserLoggedIn();
@@ -383,9 +386,10 @@ public abstract class MyUtils {
         Toast.makeText(MainApplication.getInstance(), message, Toast.LENGTH_SHORT).show();
     }
 
-    public static void getLatLon(String address, final HTTPConnection.AjaxCallback cb) {
+    public static void getLatLon(final Location mylocation, final HTTPConnection.AjaxCallback cb) {
+        String address=mylocation.getLocationAddress();
         try {
-            address = URLEncoder.encode(address, "UTF-8");
+            address = URLEncoder.encode(mylocation.getLocationAddress(), "UTF-8");
         } catch (Exception e) {
 
         }
@@ -405,10 +409,52 @@ public abstract class MyUtils {
                             JSONObject addrJO = new JSONObject(ja.get(k).toString());
                             JSONObject coordCompObj = new JSONObject(addrJO.getString("geometry"));
                             JSONObject locObj = new JSONObject(coordCompObj.getString("location"));
-                            Coordinate coordinate = new Coordinate(locObj.getDouble("lat"), locObj.getDouble("lng"));
-                            cb.run(200, coordinate.toJSONString());
+                            JSONArray addressComp= addrJO.getJSONArray("address_components");
+
+                            com.tied.android.tiedapp.objects.Location location= new com.tied.android.tiedapp.objects.Location();
+                            String error="";
+                            for(int l=0; l<addressComp.length(); l++) {
+                                JSONObject comp= addressComp.getJSONObject(l);
+                                String type=comp.getJSONArray("types").get(0).toString();
+                                if(type.equalsIgnoreCase("administrative_area_level_1")) {
+                                    location.setState(comp.getString("short_name"));
+                                    if(!mylocation.getState().equalsIgnoreCase(location.getState())) {
+                                        error="Address is invalid. Please check!";
+                                        break;
+                                    }
+                                }
+                                if(type.equalsIgnoreCase("country")) {
+                                    location.setCountry(comp.getString("short_name"));
+                                    if(mylocation.getCountry()!=null  && !mylocation.getCountry().isEmpty() && !mylocation.getCountry().equalsIgnoreCase(location.getCountry())) {
+                                        error="Address is invalid. Please check!";
+                                        break;
+                                    }
+                                }
+
+                                if(type.equalsIgnoreCase("administrative_area_level_2")) {
+                                    location.setCounty(comp.getString("long_name"));
+                                }
+                                if(type.equalsIgnoreCase("locality")) {
+                                    location.setCity(comp.getString("long_name"));
+                                }
+                                if(type.equalsIgnoreCase("postal_code")) {
+                                    location.setZip(comp.getString("long_name"));
+                                }
+                            }
+                            if(mylocation.getZip().equalsIgnoreCase(location.getZip()))  error="Address is invalid. Please check!";
+                            if(mylocation.getState().equalsIgnoreCase(location.getState())) error="Address is invalid. Please check!";
+                            if(error.isEmpty()) {
+                                location.setStreet(mylocation.getStreet());
+
+                                Coordinate coordinate = new Coordinate(locObj.getDouble("lat"), locObj.getDouble("lng"));
+                                location.setCoordinate(coordinate);
+                                cb.run(200, location.toJSONString());
+                            }else{
+                                cb.run(0, error);
+                            }
                             break;
                         }
+
                     } catch (JSONException jje) {
                         Logger.write(jje);
                         cb.run(0, "");
@@ -451,11 +497,11 @@ public abstract class MyUtils {
     }
     public static String getDistance(Coordinate start, Coordinate stop, boolean showUnit) {
         try {
-            Location mallLoc = new Location("");
+            android.location.Location mallLoc = new android.location.Location("");
             mallLoc.setLatitude(start.getLat());
             mallLoc.setLongitude(start.getLon());
 
-            Location userLoc = new Location("");
+            android.location.Location userLoc = new android.location.Location("");
             userLoc.setLatitude(stop.getLat());
             userLoc.setLongitude(stop.getLon());
 
@@ -695,19 +741,26 @@ public abstract class MyUtils {
                         return;
                     }
 
-                    final com.tied.android.tiedapp.objects.Location location = new com.tied.android.tiedapp.objects.Location(city, zip, state,  street);
+                    final Location location = new Location(city, zip, state,  street);
                     location.setCountry("US");
-                    MyUtils.getLatLon(location.getLocationAddress(), new HTTPConnection.AjaxCallback() {
+                    MyUtils.getLatLon(location, new HTTPConnection.AjaxCallback() {
                         @Override
                         public void run(int code, String response) {
                             if(code!=200) {
-                                MyUtils.showToast("Could not validate address!");
-                            }else {
-                                location.setCoordinate(Coordinate.fromJSONString(response));
                                 context.runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        okayClicked.onClick(location);
+                                        MyUtils.showToast("Could not validate this address!");
+                                    }
+                                });
+
+                            }else {
+                                final Location loc = Location.fromJSONString(response);
+                                //location.setCoordinate(Location.fromJSONString(response).getCoordinate());
+                                context.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        okayClicked.onClick(loc);
                                         dialog.dismiss();
                                     }
                                 });

@@ -105,7 +105,7 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.github.johnhiott:DarkSkyApi:v0.1.4'
     compile 'com.github.tittojose:timerangepicker-library:0.2'
-    compile 'com.google.android.gms:play-services-maps:9.4.0'
+    compile 'com.google.android.gms:play-services-maps:+'
     /*
     compile 'io.realm:realm-android:0.87.5'
     compile ('com.mapbox.mapboxsdk:mapbox-android-sdk:4.2.0-beta.1@aar'){

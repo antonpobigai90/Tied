@@ -35,15 +35,19 @@ import com.tied.android.tiedapp.customs.model.DataModel;
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.objects.Territory;
+import com.tied.android.tiedapp.objects._Meta;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
+import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
+import com.tied.android.tiedapp.retrofits.services.TerritoryApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.client.ActivityClientProfile;
 import com.tied.android.tiedapp.ui.activities.client.AddClientActivity;
 import com.tied.android.tiedapp.ui.activities.coworker.CoWorkerTerritoriesActivity;
+import com.tied.android.tiedapp.ui.activities.lines.ViewLineActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.dialogs.SelectDataDialog;
@@ -53,6 +57,7 @@ import com.tied.android.tiedapp.util.HTTPConnection;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 
+import okhttp3.ResponseBody;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -88,16 +93,17 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
     ArrayList<DataModel> listLine;
     ArrayList<Territory> selectedTerritories = new ArrayList<Territory>();
 
+
     public ImageView avatar;
     private EditText company,name, fax, phone, email, revenue, ytd_revenue, note;//, street, city, , zip, ;
-
+    View uploadClients;
     private LinearLayout ok_but;
     private TextView industry, line, address;//, birthday;
     private Coordinate coordinate;
 
     Spinner stateSpinner;
 
-    private String companyText, nameText, streetText, cityText, stateText, zipText, phoneText, noteText, birthdayText;
+    private String companyText, nameText, streetText, cityText, stateText, zipText, phoneText, faxText, noteText, birthdayText;
     private Location location;
 
     private int visit_frequency = 1;
@@ -108,6 +114,7 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
     Integer industryId=null, lineId=null;
     View lineLayout;
     TextView txt_title, txt_territory;
+    boolean addTerritory=false;
 
     //int industry_id = 1;
 
@@ -163,10 +170,12 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
         addressLayout=view.findViewById(R.id.address_layout);
         addressLayout.setOnClickListener(this);
 
-     //   stateSpinner = (Spinner) view.findViewById(R.id.state);
+        uploadClients = view.findViewById(R.id.upload_clients);
+        uploadClients.setOnClickListener(this);
+        //   stateSpinner = (Spinner) view.findViewById(R.id.state);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getActivity(), R.layout.my_spinner_item, MyUtils.States.asArrayList());
         adapter.setDropDownViewResource(R.layout.my_spinner_dropdown);
-//        stateSpinner.setAdapter(adapter);
+        // stateSpinner.setAdapter(adapter);
 
         //stateSpinner.setSelection(adapter.getPosition("TX"));
 
@@ -297,11 +306,11 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
             MyUtils.showErrorAlert(getActivity(), "Company name is required");
             return false;
         }
-        nameText = name.getText().toString();
+       /* nameText = name.getText().toString();
         if(nameText.isEmpty()) {
             MyUtils.showErrorAlert(getActivity(), "Contact person's name is required");
             return false;
-        }
+        }*/
        // streetText = street.getText().toString();
        // cityText = city.getText().toString();
         //zipText = zip.getText().toString();
@@ -312,10 +321,10 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
             return false;
         }
 
-        if (selectedTerritories.size() == 0) {
+        /*if (selectedTerritories.size() == 0) {
             MyUtils.showErrorAlert(getActivity(), "You must select an territory");
             return false;
-        }
+        }*/
 
         //birthdayText = birthday.getText().toString();
         if(industryId==null) {
@@ -325,6 +334,8 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
 
         noteText = note.getText().toString();
         phoneText = phone.getText().toString();
+        faxText = fax.getText().toString();
+
         return true;
        // return !streetText.equals("");
     }
@@ -393,6 +404,7 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
                     @Override
                     public void onClick(Object response) {
                         location = (Location)response;
+                        Logger.write("***************************", location.toJSONString());
                         address.setText(location.getLocationAddress());
                     }
                 });
@@ -401,6 +413,16 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
                 bundle.putInt(Constants.SHOW_TERRITORY, 0);
                 bundle.putBoolean("single", true);
                 MyUtils.startRequestActivity(getActivity(), CoWorkerTerritoriesActivity.class, Constants.SELECT_TERRITORY, bundle);
+                break;
+            case R.id.upload_clients:
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(Constants.HOST+Constants.API_UPLOAD_CLIENTS+"?token="+MyUtils.getUserLoggedIn().getToken()));
+                startActivity(i);
+
+                /* Bundle bundle=new Bundle();
+                bundle.putString("url", Constants.HOST+Constants.API_UPLOAD_CLIENTS+"?token="+MyUtils.getUserLoggedIn().getToken());
+                bundle.putString("title", "Add Clients");
+                MyUtils.startActivity(getActivity(), WebviewActivity.class, bundle);*/
                 break;
         }
     }
@@ -529,7 +551,18 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
         client.setVisit_id(visit_frequency);
         //client.setBirthday(birthdayText);
         client.setDescription(noteText);
-        client.setTerritory(selectedTerritories.get(0));
+
+        if(selectedTerritories.size()==0) {
+            if(location.getCounty() !=null) {
+                territory=new Territory();
+                territory.setState(location.getState());
+                territory.setCounty(location.getCounty());
+                territory.setCountry(location.getCountry());
+                client.setTerritory(territory);
+            }
+        }else      client.setTerritory(selectedTerritories.get(0));
+
+
 
         return client;
     }
@@ -563,7 +596,7 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
         RequestBody clientReq =
                 RequestBody.create(
                         MediaType.parse("multipart/form-data"), new Gson().toJson(client));
-
+        DialogUtils.displayProgress(getActivity());
         ClientApi clientApi = MainApplication.getInstance().getRetrofit().create(ClientApi.class);
         Call<ClientRes> response = clientApi.createClient(user.getToken(), clientReq, body);
         response.enqueue(new Callback<ClientRes>() {
@@ -610,6 +643,10 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
                 DialogUtils.closeProgress();
             }
         });
+        if(selectedTerritories.size()==0 && territory!=null) {
+            //add this territory
+            addTerritory();
+        }
     }
 
     public static void createClient(final Client client, final Context context, final HTTPConnection.AjaxCallback callback) {
@@ -728,6 +765,56 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
                 Toast.makeText(getActivity(), "On failure edit: error encountered", Toast.LENGTH_LONG).show();
                 Log.d(TAG + " onFailure edit", t.toString());
                 DialogUtils.closeProgress();
+            }
+        });
+        if(selectedTerritories.size()==0 && territory!=null) {
+            //add this territory
+            addTerritory();
+        }
+    }
+
+    private void addTerritory() {
+        User user=MyUtils.getUserLoggedIn();
+        TerritoryApi territoryApi = MainApplication.createService(TerritoryApi.class);
+        Call<ResponseBody> response = territoryApi.createUnique(user.getId(),territory);
+        response.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
+                if (getActivity() == null) return;
+                try {
+
+                    GeneralResponse response = new GeneralResponse(resResponse.body());
+                    Log.d(TAG + " onResponse", response.toString());
+                        if (response.isAuthFailed()) {
+                        User.LogOut(getActivity());
+                        return;
+                    }
+                    _Meta meta=response.getMeta();
+                    if(meta !=null && meta.getStatus_code()==200) {
+
+                       // Log.d(TAG + " client good", clientRes.getClient().toString());
+                        //bundle.putBoolean(Constants.NO_CLIENT_FOUND, false);
+                       // DialogUtils.closeProgress();
+                       // Client.clientCreated(context.getApplicationContext());
+                      //  MyUtils.showToast("Client successfully created");
+                       // callback.run(201, clientRes.toString());
+                        // MyUtils.startActivity(getActivity(), MainActivity.class, bundle);
+                    } else {
+                        DialogUtils.closeProgress();
+                        //Toast.makeText(getActivity(), clientRes.getMessage(), Toast.LENGTH_LONG).show();
+                        //MyUtils.showErrorAlert(getActivity(), meta.getUser_message());
+                    }
+                }catch (Exception e) {
+                    //MyUtils.showToast(getActivity().getString(R.string.connection_error));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> ClientResponseCall, Throwable t) {
+                //Toast.makeText(getActivity(), "On failure create: error encountered", Toast.LENGTH_LONG).show();
+                //Log.d(TAG + " onFailure create", t.toString());
+                //MyUtils.showToast(getActivity().getString(R.string.connection_error));
+                //DialogUtils.closeProgress();
             }
         });
     }

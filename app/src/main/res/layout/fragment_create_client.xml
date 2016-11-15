@@ -41,7 +41,7 @@
                     android:id="@+id/img_close"
                     style="@style/ActionBarIcon"
                     android:onClick="goBack"
-                    android:src="@drawable/btn_close" />
+                    android:src="@drawable/btn_back_arrow" />
 
             </LinearLayout>
 
@@ -96,12 +96,36 @@
         </RelativeLayout>
 
     </LinearLayout>
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:gravity="right|center_vertical"
+                  android:orientation="vertical"
+
+                  android:background="@color/white"
+                  android:id="@+id/import_file"
+                  android:layout_below="@id/top">
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_margin="8dp"
+                  android:textColor="@color/grey"
+                  android:padding="6dp"
+                  android:textSize="11sp"
+                  android:id="@+id/upload_clients"
+
+                  android:background="@drawable/white_fill_grey_stroke"
+        android:text="Import from file"/>
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="0.1dp"
+
+                      android:layout_centerInParent="true"
+                      android:background="@color/light_gray2"/>
+    </LinearLayout>
 
     <ScrollView
         android:id="@+id/scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/top"
+        android:layout_below="@id/import_file"
         android:background="@android:color/white"
         android:paddingBottom="0dp">
 
@@ -109,7 +133,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="20dp"
+            android:paddingTop="10dp"
             android:paddingLeft="16dp"
             android:paddingRight="15dp">
 
@@ -141,7 +165,248 @@
                       android:background="@color/light_gray"
                 />
             </LinearLayout>
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingBottom="2dp"
+                    android:onClick="onClick"
+                    android:background="@android:color/white"
+                    android:id="@+id/address_layout"
+                    android:paddingTop="5dp">
 
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="0dp"
+                        android:layout_weight="1"
+                        android:background="@color/white"
+                        android:id="@+id/location_layout"
+                        android:orientation="vertical">
+
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="LOCATION"
+                            style="@style/FieldLabels"/>
+                    <RelativeLayout
+                            android:onClick="onClick"
+                            android:layout_width="match_parent"
+                            android:layout_height="fill_parent">
+                        <TextView
+                                android:paddingLeft="5dp"
+                                android:id="@+id/address_tv"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@android:color/white"
+                                android:textColor="@color/grey"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:text="Click to add address"/>
+                        <ImageView android:layout_width="wrap_content"
+                                   android:layout_height="wrap_content"
+                                   android:src="@drawable/right_arrow"
+                                   android:layout_alignParentBottom="true"
+                                   android:paddingBottom="10dp"
+                                   android:layout_marginRight="5dp"
+                                   android:layout_alignParentRight="true"/>
+                    </RelativeLayout>
+                    <View android:layout_width="match_parent"
+                          android:layout_height="0.1dp"
+                          android:background="@color/light_gray"
+                    />
+
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingBottom="2dp"
+                    android:paddingTop="5dp">
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="INDUSTRY"
+                        style="@style/FieldLabels" />
+
+                <RelativeLayout
+                        android:id="@+id/industry_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    <TextView
+                            android:paddingLeft="5dp"
+                            android:id="@+id/industry"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Click to select industry"
+                            android:textColor="@color/schedule_title_bg_color"
+                            android:textStyle="bold" />
+
+                    <ImageView android:layout_width="wrap_content"
+                               android:layout_height="wrap_content"
+                               android:src="@drawable/right_arrow"
+                               android:layout_alignParentBottom="true"
+                               android:paddingBottom="10dp"
+                               android:layout_marginRight="5dp"
+                               android:layout_alignParentRight="true"/>
+                </RelativeLayout>
+                <View android:layout_width="match_parent"
+                      android:layout_height="0.1dp"
+                      android:background="@color/light_gray"
+                />
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingBottom="2dp"
+                    android:paddingTop="5dp">
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="VISIT FREQUENCY"
+                        style="@style/FieldLabels"/>
+
+                <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingBottom="30dp">
+
+
+
+                    <LinearLayout
+                            android:id="@+id/visit_radio"
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                        <LinearLayout
+                                android:id="@+id/weekly_layout"
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical">
+
+                            <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:src="@drawable/circle_uncheck"
+                                    android:id="@+id/img_weekly" />
+
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Weekly"
+                                    android:textColor="@color/schedule_title_bg_color"
+                                    android:id="@+id/txt_weekly"
+                                    android:layout_marginLeft="7dp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                                android:id="@+id/two_weeks_layout"
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical">
+
+                            <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:src="@drawable/circle_uncheck"
+                                    android:id="@+id/img_two_weeks" />
+
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="2 Weeks"
+                                    android:textColor="@color/schedule_title_bg_color"
+                                    android:id="@+id/txt_two_weeks"
+                                    android:layout_marginLeft="7dp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                                android:id="@+id/three_weeks_layout"
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical">
+
+                            <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:src="@drawable/circle_uncheck"
+                                    android:id="@+id/img_three_weeks" />
+
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="3 Weeks"
+                                    android:textColor="@color/schedule_title_bg_color"
+                                    android:id="@+id/txt_three_weeks"
+                                    android:layout_marginLeft="7dp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                                android:id="@+id/monthly_layout"
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center_vertical">
+
+                            <ImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    android:src="@drawable/circle_uncheck"
+                                    android:id="@+id/img_monthly" />
+
+                            <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Monthly"
+                                    android:textColor="@color/schedule_title_bg_color"
+                                    android:id="@+id/txt_monthly"
+                                    android:layout_marginLeft="7dp" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <RelativeLayout
+                    android:layout_margin="0dp"
+                    android:layout_width="match_parent" android:layout_height="wrap_content">
+                <LinearLayout android:layout_width="match_parent"
+                              android:layout_height="0.1dp"
+
+                              android:layout_centerInParent="true"
+                android:background="@color/light_gray2"/>
+                    <TextView android:layout_width="wrap_content"
+
+                              android:paddingLeft="10dp"
+                              android:paddingRight="10dp"
+                              android:text="Optional"
+                              android:textColor="@color/grey"
+                              android:background="@color/white"
+                              android:layout_centerInParent="true"
+                              android:layout_height="wrap_content"/>
+
+            </RelativeLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -169,112 +434,14 @@
                       />
             </LinearLayout>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingBottom="2dp"
-                android:onClick="onClick"
-                android:background="@android:color/white"
-                android:id="@+id/address_layout"
-                android:paddingTop="5dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="0dp"
-                    android:layout_weight="1"
-                    android:id="@+id/location_layout"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="LOCATION"
-                        style="@style/FieldLabels"/>
-                    <RelativeLayout
-                            android:onClick="onClick"
-                            android:layout_width="match_parent"
-                            android:layout_height="fill_parent">
-                    <TextView
-                        android:paddingLeft="5dp"
-                        android:id="@+id/address_tv"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@android:color/white"
-                        android:textColor="@color/grey"
-                        android:inputType="text"
-                        android:maxLines="1"
-                        android:text="Click to add address"/>
-                        <ImageView android:layout_width="wrap_content"
-                           android:layout_height="wrap_content"
-                           android:src="@drawable/right_arrow"
-                           android:layout_alignParentBottom="true"
-                           android:paddingBottom="10dp"
-                           android:layout_marginRight="5dp"
-                           android:layout_alignParentRight="true"/>
-                    </RelativeLayout>
-                    <View android:layout_width="match_parent"
-                          android:layout_height="0.1dp"
-                          android:background="@color/light_gray"
-                    />
 
 
-                </LinearLayout>
 
 
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/territory_layout"
-                android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:paddingBottom="2dp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="TERRITORY"
-                        style="@style/FieldLabels"/>
-                    <RelativeLayout
-                        android:onClick="onClick"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            android:paddingLeft="5dp"
-                            android:id="@+id/territory_tv"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@android:color/white"
-                            android:textColor="@color/schedule_title_bg_color"
-                            android:inputType="text"
-                            android:maxLines="1"
-                            android:text="Click to add territory"
-                            android:textStyle="bold" />
-                        <ImageView android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/right_arrow"
-                            android:layout_alignParentBottom="true"
-                            android:paddingBottom="10dp"
-                            android:layout_marginRight="5dp"
-                            android:layout_alignParentRight="true"/>
-                    </RelativeLayout>
-
-
-                </LinearLayout>
-            </RelativeLayout>
-
-            <View android:layout_width="match_parent"
+            <!--<View android:layout_width="match_parent"
                 android:layout_height="0.1dp"
                 android:background="@color/light_gray"
-                />
+                /> -->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -472,48 +639,53 @@
                             android:text="$" />
                 </RelativeLayout>
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingBottom="2dp"
-                android:paddingTop="5dp">
-
-                <TextView
+            <RelativeLayout
+                    android:id="@+id/territory_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="INDUSTRY"
-                    style="@style/FieldLabels" />
-
-                <RelativeLayout
-                    android:id="@+id/industry_layout"
-                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/white"
                     android:layout_height="wrap_content">
 
-                    <TextView
-                            android:paddingLeft="5dp"
-                        android:id="@+id/industry"
+                <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Click to select industry"
-                        android:textColor="@color/schedule_title_bg_color"
-                        android:textStyle="bold" />
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:paddingBottom="2dp">
 
-                    <ImageView android:layout_width="wrap_content"
-                               android:layout_height="wrap_content"
-                               android:src="@drawable/right_arrow"
-                               android:layout_alignParentBottom="true"
-                               android:paddingBottom="10dp"
-                               android:layout_marginRight="5dp"
-                               android:layout_alignParentRight="true"/>
-                </RelativeLayout>
-                <View android:layout_width="match_parent"
-                      android:layout_height="0.1dp"
-                      android:background="@color/light_gray"
-                />
+                    <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="TERRITORY"
+                            style="@style/FieldLabels"/>
+                    <RelativeLayout
+                            android:onClick="onClick"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+                        <TextView
+                                android:paddingLeft="5dp"
+                                android:id="@+id/territory_tv"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:background="@android:color/white"
+                                android:textColor="@color/schedule_title_bg_color"
+                                android:inputType="text"
+                                android:maxLines="1"
+                                android:text="Click to add territory"
+                                android:textStyle="bold" />
+                        <ImageView android:layout_width="wrap_content"
+                                   android:layout_height="wrap_content"
+                                   android:src="@drawable/right_arrow"
+                                   android:layout_alignParentBottom="true"
+                                   android:paddingBottom="10dp"
+                                   android:layout_marginRight="5dp"
+                                   android:layout_alignParentRight="true"/>
+                    </RelativeLayout>
 
-            </LinearLayout>
+
+                </LinearLayout>
+            </RelativeLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -611,130 +783,7 @@
             </LinearLayout>
 -->
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingBottom="2dp"
-                android:paddingTop="5dp">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="VISIT FREQUENCY"
-                    style="@style/FieldLabels"/>
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                android:paddingBottom="30dp">
-
-
-
-                    <LinearLayout
-                        android:id="@+id/visit_radio"
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <LinearLayout
-                            android:id="@+id/weekly_layout"
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical">
-
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:src="@drawable/circle_uncheck"
-                                android:id="@+id/img_weekly" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Weekly"
-                                android:textColor="@color/schedule_title_bg_color"
-                                android:id="@+id/txt_weekly"
-                                android:layout_marginLeft="7dp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/two_weeks_layout"
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical">
-
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:src="@drawable/circle_uncheck"
-                                android:id="@+id/img_two_weeks" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="2 Weeks"
-                                android:textColor="@color/schedule_title_bg_color"
-                                android:id="@+id/txt_two_weeks"
-                                android:layout_marginLeft="7dp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/three_weeks_layout"
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical">
-
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:src="@drawable/circle_uncheck"
-                                android:id="@+id/img_three_weeks" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="3 Weeks"
-                                android:textColor="@color/schedule_title_bg_color"
-                                android:id="@+id/txt_three_weeks"
-                                android:layout_marginLeft="7dp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/monthly_layout"
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical">
-
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:src="@drawable/circle_uncheck"
-                                android:id="@+id/img_monthly" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Monthly"
-                                android:textColor="@color/schedule_title_bg_color"
-                                android:id="@+id/txt_monthly"
-                                android:layout_marginLeft="7dp" />
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </LinearLayout>
 
         </LinearLayout>
 

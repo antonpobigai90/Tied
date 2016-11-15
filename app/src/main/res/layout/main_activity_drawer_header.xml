@@ -142,6 +142,7 @@
             <ImageView
                     style="@style/DrawerMenuIcon"
                     android:src="@drawable/icon_location"
+                    android:alpha="0.4"
             />
             <TextView android:layout_width="wrap_content"
                       android:text="Territories"
@@ -159,6 +160,21 @@
             />
             <TextView android:layout_width="wrap_content"
                       android:text="Visits and Trips"
+                      style="@style/DrawerMenuText"
+                      android:layout_height="wrap_content"/>
+
+        </RelativeLayout>
+        <RelativeLayout
+                android:id="@+id/sales_menu"
+                style="@style/DrawerMenuItem"
+                android:onClick="onClick">
+            <ImageView
+                    style="@style/DrawerMenuIcon"
+                    android:src="@drawable/ic_dollar_grey"
+                    android:alpha="0.3"
+            />
+            <TextView android:layout_width="wrap_content"
+                      android:text="Sales"
                       style="@style/DrawerMenuText"
                       android:layout_height="wrap_content"/>
 

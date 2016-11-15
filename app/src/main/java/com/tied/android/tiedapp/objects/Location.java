@@ -1,5 +1,7 @@
 package com.tied.android.tiedapp.objects;
 
+import com.google.gson.Gson;
+
 import java.io.Serializable;
 
 /**
@@ -11,7 +13,10 @@ public class Location implements Serializable {
     private String state;
     private String country;
     private String street;
+    private String county;
     private Coordinate coordinate;
+
+    public Location() {}
 
     public Location(String city, String zip, String state, String country, String street, Coordinate coordinate) {
         this.city = city;
@@ -27,11 +32,12 @@ public class Location implements Serializable {
         this.zip = zip;
         this.state = state;
         this.street = street;
+        this.country="US";
     }
 
     public String getLocationAddress()
     {
-        return street + ", " + city + ", " + state + " " + zip;
+        return street + ", " + city + ", " + state + " " + zip +" "+country;
     }
 
     public String getCity() {
@@ -83,6 +89,14 @@ public class Location implements Serializable {
         this.coordinate = coordinate;
     }
 
+    public void setCounty(String county) {
+        this.county = county;
+    }
+
+    public String getCounty() {
+        return county;
+    }
+
     @Override
     public String toString() {
         return "Location{" +
@@ -93,5 +107,17 @@ public class Location implements Serializable {
                 ", street='" + street + '\'' +
                 ", coordinate=" + coordinate +
                 '}';
+    }
+    public String toAddressString() {
+        return street+", "+ city + ", "+ state + " "+zip+" "+ country;
+    }
+
+    public String toJSONString() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
+    }
+    public static Location fromJSONString(String string) {
+        Gson gson = new Gson();
+        return gson.fromJson(string, Location.class);
     }
 }

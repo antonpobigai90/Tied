@@ -71,11 +71,12 @@ public class Constants {
     public static final String CLIENT_LINE=  API_PATH + "clients/{client_id}/lines/{page_number}";
 
     public static final String TERRITORIES = API_PATH + "territories";
-
+    public static final String API_TERRITORY = API_PATH + "territory/{user_id}";
     public static final String UPDATE_TERRITORY_WITH_ID = API_PATH + "territory/{territory_id}";
     public static final String USER_TERRITORIES = API_PATH + "users/{user_id}/territories/{page_number}";
     public static final String TERRITORY_CLIENTS = API_PATH + "territories/get_clients";
     public static final String TERRITORY_FROM_DATABASE = API_PATH + "search/county/{query}";
+    public static final String API_UPLOAD_CLIENTS  = API_PATH + "clients/upload/";
 
     public static final String GET_NOTIFICATIONS = API_PATH + "notifications/{user_id}/{page_number}";
 

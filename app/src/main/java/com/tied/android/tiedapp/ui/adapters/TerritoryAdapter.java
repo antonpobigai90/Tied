@@ -43,9 +43,9 @@ public class TerritoryAdapter extends BaseAdapter implements ListAdapterListener
 
         client = (Client) bundle.getSerializable(Constants.CLIENT_DATA);
 
-        if (client != null){
+        /*if (client != null){
             _data = client.getTerritories();
-        }
+        }*/
     }
 
     @Override

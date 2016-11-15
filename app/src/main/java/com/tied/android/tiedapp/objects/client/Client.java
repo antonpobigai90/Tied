@@ -48,7 +48,7 @@ public class Client implements Serializable, Comparable<Client>{
     private int dis_from;
     private ArrayList _score;
     Boolean checkStatus = false;
-    ArrayList<TerritoryModel> territories = new ArrayList<>();
+   // ArrayList<TerritoryModel> territories = new ArrayList<>();
     private ArrayList<Line> lines =  new ArrayList<>();
 
     public Client() {
@@ -99,14 +99,15 @@ public class Client implements Serializable, Comparable<Client>{
         this.lines = lines;
     }
 
-    public ArrayList<TerritoryModel> getTerritories() {
+    /*public ArrayList<TerritoryModel> getTerritories() {
         return territories;
     }
-
+*/
+    /*
     public void setTerritories(ArrayList<TerritoryModel> territories) {
         this.territories = territories;
     }
-
+*/
     public String getFax() {
         return fax;
     }
@@ -305,7 +306,7 @@ public class Client implements Serializable, Comparable<Client>{
                 ", dis_from=" + dis_from +
                 ", _score=" + _score +
                 ", checkStatus=" + checkStatus +
-                ", territories=" + territories +
+               // ", territories=" + territories +
                 ", total_revenue=" + total_revenue +
                 ", territory=" + territory +
                 '}';

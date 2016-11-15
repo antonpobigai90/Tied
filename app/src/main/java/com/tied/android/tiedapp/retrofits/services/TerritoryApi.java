@@ -19,6 +19,10 @@ public interface  TerritoryApi {
     @POST(Constants.TERRITORIES)
     Call<ResponseBody> create(@Body ArrayList<Territory> territories);
 
+    @POST(Constants.API_TERRITORY )
+    Call<ResponseBody> createUnique(@Path("user_id") String user_id, @Body Territory territory);
+
+
     @PUT(Constants.UPDATE_TERRITORY_WITH_ID)
     Call<ResponseBody> update(@Path("territory_id") String line_id, @Body Territory territory);
 

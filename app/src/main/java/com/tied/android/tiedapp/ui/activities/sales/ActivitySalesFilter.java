@@ -120,7 +120,7 @@ public class ActivitySalesFilter extends AppCompatActivity implements  View.OnCl
         //txt_year.setText(HelperMethods.getCurrentYear(revenueFilter.getStart_date()));
 
         try {
-            quarter = quarters[revenueFilter.getQuarter()-1];
+            quarter = quarters[revenueFilter.getQuarter()];
         }catch (Exception e) {
 
         }
