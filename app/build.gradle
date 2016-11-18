@@ -35,7 +35,6 @@ android {
                                 onesignal_google_project_number: "716681828169"]
     }
     dexOptions {
-        incremental true
         javaMaxHeapSize "4g"
     }
     signingConfigs {

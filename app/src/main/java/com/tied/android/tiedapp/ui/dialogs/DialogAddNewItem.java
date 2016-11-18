@@ -94,7 +94,7 @@ public class DialogAddNewItem implements View.OnClickListener {
                 dialog.dismiss();
                 break;
             case R.id.schedule_layout:
-                MyUtils.startActivity(_c, CreateAppointmentActivity.class, bundle);
+                MyUtils.startRequestActivity(_c, CreateAppointmentActivity.class, Constants.CreateSchedule, bundle);
                 dialog.dismiss();
                 break;
             case R.id.sale_layout:

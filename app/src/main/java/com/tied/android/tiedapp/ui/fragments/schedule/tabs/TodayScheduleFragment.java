@@ -1,9 +1,12 @@
 package com.tied.android.tiedapp.ui.fragments.schedule.tabs;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
 
+import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.model.ScheduleDataModel;
 import com.tied.android.tiedapp.objects.schedule.DateRange;
 import com.tied.android.tiedapp.objects.schedule.Schedule;
@@ -84,4 +87,5 @@ public class TodayScheduleFragment extends SchedulesFragment implements View.OnC
 
         return scheduleDataModels;
     }
+
 }

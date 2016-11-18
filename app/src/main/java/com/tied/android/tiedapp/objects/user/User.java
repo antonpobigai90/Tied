@@ -11,6 +11,7 @@ import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.signups.WalkThroughActivity;
 import com.tied.android.tiedapp.util.MyUtils;
+import retrofit2.Retrofit;
 
 import java.io.Serializable;
 import java.util.ArrayList;

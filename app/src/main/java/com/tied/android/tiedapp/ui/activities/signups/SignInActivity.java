@@ -43,8 +43,10 @@ public class SignInActivity extends AppCompatActivity implements FragmentIterati
         this.overridePendingTransition(R.anim.slide_in_from_bottom, R.anim.slide_out_top);
         setContentView(R.layout.activity_sign_in);
         launchFragment(Constants.SignInUser, null);
+        MainApplication.clearToken();
+        retrofit = MainApplication.getInstance().initRetrofit();
 
-        retrofit = MainApplication.getInstance().getRetrofit();
+
         service = retrofit.create(SignUpApi.class);
 
     }

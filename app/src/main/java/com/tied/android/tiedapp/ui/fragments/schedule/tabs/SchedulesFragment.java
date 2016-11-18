@@ -105,6 +105,7 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
         //Logger.write("shedule fragment resumed");
         //if(scheduleDataModels==null || scheduleDataModels.isEmpty())
        // initSchedule();
+        user =MyUtils.getUserFromBundle(bundle);
     }
 
     @Override
@@ -128,6 +129,13 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
 
     public void initSchedule() {
 //        Log.d(TAG + " scheduinitScheduleleDate", scheduleDate.toString());
+        loadSchedule();
+    }
+
+    public void loadSchedule() {
+//        Log.d(TAG + " scheduinitScheduleleDate", scheduleDate.toString());
+        if(user==null) user =MyUtils.getUserFromBundle(bundle);
+        Logger.write("Userrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr  "+user.toString());
         pb.setVisibility(View.VISIBLE);
         emptyScheduleMessage.setVisibility(View.GONE);
         ScheduleApi scheduleApi = MainApplication.createService(ScheduleApi.class);
@@ -157,7 +165,7 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
                         MyUtils.showToast(getString(R.string.connection_error));
                     }
                 }catch (Exception e) {
-
+                    Logger.write(e);
                 }
             }
 
@@ -240,7 +248,9 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
         super.onActivityResult(requestCode, resultCode, data);
 
         if ((requestCode == Constants.CreateSchedule || requestCode == Constants.ViewSchedule) && resultCode == Activity.RESULT_OK) {
-            initSchedule();
+            //Logger.write("helllllllllllllllllllllllllllllllllll inited");
+           // loadSchedule();
+           // Logger.write("helllllllllllllllllllllllllllllllllll inited");
         }
     }
 }

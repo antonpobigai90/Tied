@@ -327,7 +327,13 @@ public class ScheduleAppointmentsFragment extends Fragment implements View.OnCli
         }
 
         if ((requestCode == Constants.ViewSchedule || requestCode == Constants.CreateSchedule) && resultCode == Activity.RESULT_OK) {
-            fragment.onActivityResult(requestCode, resultCode, data);
+            //Fragment currentFrag= mPagerAdapter.getItem(mViewPager.getCurrentItem());
+            //if(currentFrag instanceof TodayScheduleFragment)
+                //((TodayScheduleFragment)mPagerAdapter.getItem(mViewPager.getCurrentItem())).initSchedule();
+            mViewPager.setAdapter(null);
+            mViewPager.setAdapter(mPagerAdapter);
+            mViewPager.getAdapter().notifyDataSetChanged();
+            Logger.write("lkasdafa;lskdf;laksdf alsdkj adapter");
         }
     }
 }

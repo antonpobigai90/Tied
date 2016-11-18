@@ -136,6 +136,9 @@ public class MainApplication extends Application {
             }
         });
     }
+    public static void clearToken() {
+        httpClient.interceptors().clear();
+    }
     public static <S> S createService(Class<S> serviceClass, final String authToken) {
         if (authToken != null) {
             httpClient.interceptors().clear();
@@ -179,6 +182,16 @@ public class MainApplication extends Application {
 
         return retrofit;
     }
+    public Retrofit initRetrofit() {
+
+        httpClient = new OkHttpClient.Builder();
+
+        OkHttpClient client = httpClient.build();
+        retrofit = builder.client(client).build();
+
+        return retrofit;
+    }
+
 
     public static synchronized MainApplication getInstance() {
         return mInstance;

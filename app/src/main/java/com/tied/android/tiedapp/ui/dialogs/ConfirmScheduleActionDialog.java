@@ -171,7 +171,7 @@ public class ConfirmScheduleActionDialog {
         User user = MyUtils.getUserFromBundle(bundle);
         Log.d(TAG + "schedule", schedule.toString());
 
-        ScheduleApi scheduleApi = MainApplication.getInstance().getRetrofit().create(ScheduleApi.class);
+        ScheduleApi scheduleApi = MainApplication.createService(ScheduleApi.class);
         Call<ResponseBody> response = scheduleApi.deleteSchedule(user.getToken(), schedule.getId());
         response.enqueue(new Callback<ResponseBody>() {
             @Override
