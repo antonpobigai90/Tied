@@ -2,6 +2,7 @@ package com.tied.android.tiedapp.ui.fragments.client;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -52,7 +53,7 @@ public class MapFragment extends Fragment implements View.OnClickListener {
     private ClientsMapFragment clientsMapFragment;
     ClientsListFragment clientsListFragment;
     LinearLayout parent, back_layout;
-    ImageView img_segment, img_filter;
+    ImageView img_segment, img_filter, app_icon;
     User user;
     ArrayList<Client> clients;
 
@@ -95,6 +96,9 @@ public class MapFragment extends Fragment implements View.OnClickListener {
     private void initComponent(View view) {
 
         bundle = getArguments();
+
+        app_icon = (ImageView) view.findViewById(R.id.app_icon);
+        app_icon.setVisibility(View.VISIBLE);
 
         parent = (LinearLayout) view.findViewById(R.id.parent);
         parent.setBackgroundResource(R.drawable.background_blue);

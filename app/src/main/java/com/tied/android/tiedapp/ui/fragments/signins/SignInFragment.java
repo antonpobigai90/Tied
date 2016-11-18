@@ -171,7 +171,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                 break;
             case R.id.signup:
                 Intent intent = new Intent(getActivity(), SignUpActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 break;
         }

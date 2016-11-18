@@ -17,14 +17,14 @@
             android:layout_width="match_parent"
                 android:layout_height="@dimen/action_bar_height">
             <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="0dp"
-                    android:text="Select Line for Sale"
-                    android:textColor="@color/white"
-                    android:textSize="18sp" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="0dp"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:id="@+id/txt_title"/>
 
             <LinearLayout
                     android:id="@+id/back_layout"

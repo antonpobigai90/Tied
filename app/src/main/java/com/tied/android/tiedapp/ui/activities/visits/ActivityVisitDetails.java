@@ -137,7 +137,7 @@ public class ActivityVisitDetails extends AppCompatActivity implements  View.OnC
                 break;
             case R.id.txt_delete:
                 color = this.getResources().getColor(R.color.alert_bg_color);
-                DialogYesNo alert_delete = new DialogYesNo(ActivityVisitDetails.this,client, "DELETE VISIT","Are you sure want to delete this visit","YES DELETE!",color,2);
+                DialogYesNo alert_delete = new DialogYesNo(ActivityVisitDetails.this, visit, "DELETE VISIT","Are you sure want to delete this visit","YES DELETE!",color,2);
                 alert_delete.showDialog();
                 break;
         }

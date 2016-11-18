@@ -206,6 +206,7 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
                 txt_date.setText(HelperMethods.getFormatedDate(schedule.getDate()));
                 txt_create_schedule.setText("UPDATE SCHEDULE");
                 title.setText("Update Appointment");
+                txt_description.setText(schedule.getDescription());
             }else{
                /* street.setText(client.getAddress().getStreet());
                 city.setText(client.getAddress().getCity());
@@ -283,7 +284,12 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
                 break;
             case R.id.txt_create_schedule:
                 if (validated()) {
-                    new GeocodeAsyncTask().execute();
+                    if(schedule == null){
+                        createAppointment();
+                    }else {
+                        updateAppointment();
+                    }
+//                    new GeocodeAsyncTask().execute();
                 }
                 break;
             case R.id.client_layout:
@@ -421,6 +427,7 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
         schedule.setEnd_time(endTimeText);
         schedule.setDate(dateText);
         schedule.setLocation(location);
+        schedule.setDescription(txt_description.getText().toString());
 
         Log.d(TAG + " schedule", schedule.toString());
 
@@ -432,29 +439,30 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
             public void onResponse(Call<ScheduleRes> call, Response<ScheduleRes> scheduleResResponse) {
                 if (getActivity() == null) return;
                 try {
+                    DialogUtils.closeProgress();
+
                     ScheduleRes scheduleRes = scheduleResResponse.body();
                     Log.d(TAG + " onFailure", scheduleRes.toString());
                     if (scheduleRes.isAuthFailed()) {
-                        DialogUtils.closeProgress();
                         User.LogOut(getActivity());
                     } else if (scheduleRes.get_meta() != null && scheduleRes.get_meta().getStatus_code() == 201) {
-                        if (isSelectClient) {
-                            Log.d(TAG + " Schedule", scheduleRes.getSchedule().toString());
-                            Gson gson = new Gson();
-                            Schedule mainSchedule = scheduleRes.getSchedule();
-                            bundle.putSerializable(Constants.SCHEDULE_DATA, mainSchedule);
-                            if (client != null)
-                                bundle.putSerializable(Constants.CLIENT_DATA, client);
-                            Schedule.scheduleCreated(getActivity().getApplicationContext());
-                            bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
-                            DialogUtils.closeProgress();
-                            //nextAction(Constants.ActivitySchedule, bundle);
-                            MyUtils.startActivity(getActivity(), ViewSchedule.class, bundle);
-                        } else {
+//                        if (isSelectClient) {
+//                            Log.d(TAG + " Schedule", scheduleRes.getSchedule().toString());
+//                            Gson gson = new Gson();
+//                            Schedule mainSchedule = scheduleRes.getSchedule();
+//                            bundle.putSerializable(Constants.SCHEDULE_DATA, mainSchedule);
+//                            if (client != null)
+//                                bundle.putSerializable(Constants.CLIENT_DATA, client);
+//                            Schedule.scheduleCreated(getActivity().getApplicationContext());
+//                            bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
+//                            DialogUtils.closeProgress();
+//                            //nextAction(Constants.ActivitySchedule, bundle);
+//                            MyUtils.startActivity(getActivity(), ViewSchedule.class, bundle);
+//                        } else {
                             Intent intent = new Intent();
                             getActivity().setResult(Activity.RESULT_OK, intent);
                             getActivity().finishActivity(Constants.CreateSchedule);
-                        }
+//                        }
                         getActivity().finish();
                     } else {
                         DialogUtils.closeProgress();
@@ -487,6 +495,7 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
         schedule.setEnd_time(endTimeText);
         schedule.setDate(dateText);
         schedule.setLocation(location);
+        schedule.setDescription(txt_description.getText().toString());
 
         Log.d(TAG + " schedule", schedule.toString());
 
@@ -508,17 +517,22 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
                         Schedule updatedSchedule = scheduleRes.getSchedule();
                         if (updatedSchedule.getId().equals(schedule.getId())) {
                            // String schedule_string = gson.toJson(schedule, Schedule.class);
-                            bundle.putSerializable(Constants.SCHEDULE_DATA, schedule);
-                            bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
-                            bundle.putBoolean(Constants.SCHEDULE_EDITED, true);
-                            bundle.putSerializable(Constants.CLIENT_DATA, client);
+//                            bundle.putSerializable(Constants.SCHEDULE_DATA, schedule);
+//                            bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
+//                            bundle.putBoolean(Constants.SCHEDULE_EDITED, true);
+//                            bundle.putSerializable(Constants.CLIENT_DATA, client);
 
                            // MyUtils.startActivity(getActivity(), MainActivity.class, bundle);
 
-                            getActivity().finish();
+//                            getActivity().finish();
 //                        Schedule.scheduleCreated(getActivity().getApplicationContext());
 //                        DialogUtils.closeProgress();
 //                        nextAction(Constants.ScheduleSuggestions, bundle);
+
+                            Intent intent = new Intent();
+                            getActivity().setResult(Activity.RESULT_OK, intent);
+                            getActivity().finishActivity(Constants.CreateSchedule);
+                            getActivity().finish();
                         }
                     } else {
                         //Toast.makeText(getActivity(), scheduleRes.toString(), Toast.LENGTH_LONG).show();

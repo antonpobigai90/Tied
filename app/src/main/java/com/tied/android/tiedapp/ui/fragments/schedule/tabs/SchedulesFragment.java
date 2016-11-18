@@ -1,6 +1,8 @@
 package com.tied.android.tiedapp.ui.fragments.schedule.tabs;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -124,11 +126,9 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
         initSchedule();
     }
 
-
-
     public void initSchedule() {
-//        Log.d(TAG + " scheduleDate", scheduleDate.toString());
-       pb.setVisibility(View.VISIBLE);
+//        Log.d(TAG + " scheduinitScheduleleDate", scheduleDate.toString());
+        pb.setVisibility(View.VISIBLE);
         emptyScheduleMessage.setVisibility(View.GONE);
         ScheduleApi scheduleApi = MainApplication.createService(ScheduleApi.class);
         Logger.write("Userrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr  "+user.toString());
@@ -235,4 +235,12 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if ((requestCode == Constants.CreateSchedule || requestCode == Constants.ViewSchedule) && resultCode == Activity.RESULT_OK) {
+            initSchedule();
+        }
+    }
 }

@@ -129,6 +129,8 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
     public static boolean isClientFilter = false;
     public static boolean isClear = false;
 
+    ImageView schedule_icon, map_icon, sale_icon, more_icon;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -169,6 +171,11 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         drawerUserPicture = (ImageView) findViewById(R.id.user_picture_iv);
         notification_menu = (RelativeLayout) findViewById(R.id.notification_menu);
         subscription_menu = (RelativeLayout) findViewById(R.id.subscription_menu);
+
+        schedule_icon = (ImageView) findViewById(R.id.schedule_icon);
+        map_icon = (ImageView) findViewById(R.id.map_icon);
+        sale_icon = (ImageView) findViewById(R.id.sale_icon);
+        more_icon = (ImageView) findViewById(R.id.more_icon);
 
         more_layout.setOnClickListener(this);
         add.setOnClickListener(this);
@@ -289,7 +296,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 MyUtils.startActivity(this, AddOptionsActivity.class);
                 return;
             case Constants.Profile:
-                //relativeLayout.setVisibility(View.GONE);
+                setActiveIcon(3);
                 more_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
                 if(fragments.get(pos)==null) {
                     fragments.put(pos, ProfileFragment.newInstance(bundle) );
@@ -315,6 +322,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
 
                 break;*/
             case Constants.Notification:
+                setActiveIcon(3);
                 more_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
                 if(fragments.get(pos)==null) {
                     fragments.put(pos, NotificationFragment.newInstance(bundle) );
@@ -323,6 +331,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 break;
 
             case Constants.HomeSale:
+                setActiveIcon(2);
                 sale_tab.setBackground(getResources().getDrawable(R.drawable.tab_selected));
                 //relativeLayout.setVisibility(View.GONE);
                 if(fragments.get(pos)==null) {
@@ -359,7 +368,8 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 fragment = fragments.get(pos);
                 break;
             case Constants.AppointmentList:
-                //tab_bar.setVisibility(View.VISIBLE);
+                setActiveIcon(0);
+                activity_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
                 if(fragments.get(pos)==null) {
                     fragments.put(pos, ScheduleAppointmentsFragment.newInstance(bundle) );
                     Logger.write("it is new");
@@ -381,6 +391,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                // tab_bar.setVisibility(View.VISIBLE);
                 break;
             case Constants.MapFragment:
+                setActiveIcon(1);
                 map_tab.setBackground(getResources().getDrawable(R.drawable.tab_selected));
                // relativeLayout.setVisibility(View.GONE);
                 if(fragments.get(pos)==null) {
@@ -466,7 +477,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
             }
         }
 
-        if ((requestCode == Constants.ClientFilter || requestCode == Constants.ClientDelete) && resultCode == Activity.RESULT_OK) {
+        if ((requestCode == Constants.ClientFilter || requestCode == Constants.ClientDelete || requestCode == Constants.ViewSchedule || requestCode == Constants.CreateSchedule) && resultCode == Activity.RESULT_OK) {
 //            launchFragment(Constants.MapFragment, bundle);
             fragment.onActivityResult(requestCode, resultCode, data);
         }
@@ -686,4 +697,37 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         //currentFragment=targetFragment;
     }
 
+    private void setActiveIcon(int index) {
+        switch (index) {
+            case 0:
+                schedule_icon.setBackgroundResource(R.drawable.analytics_active);
+
+                map_icon.setBackgroundResource(R.drawable.maps);
+                sale_icon.setBackgroundResource(R.drawable.sales);
+                more_icon.setBackgroundResource(R.drawable.lists);
+                break;
+            case 1:
+                map_icon.setBackgroundResource(R.drawable.maps_active);
+
+                schedule_icon.setBackgroundResource(R.drawable.analytics);
+                sale_icon.setBackgroundResource(R.drawable.sales);
+                more_icon.setBackgroundResource(R.drawable.lists);
+                break;
+            case 2:
+                sale_icon.setBackgroundResource(R.drawable.sales_active);
+
+                schedule_icon.setBackgroundResource(R.drawable.analytics);
+                map_icon.setBackgroundResource(R.drawable.maps);
+                more_icon.setBackgroundResource(R.drawable.lists);
+                break;
+            case 3:
+                more_icon.setBackgroundResource(R.drawable.lists_active);
+
+                schedule_icon.setBackgroundResource(R.drawable.analytics);
+                map_icon.setBackgroundResource(R.drawable.maps);
+                sale_icon.setBackgroundResource(R.drawable.sales);
+                break;
+        }
+    }
 }
+

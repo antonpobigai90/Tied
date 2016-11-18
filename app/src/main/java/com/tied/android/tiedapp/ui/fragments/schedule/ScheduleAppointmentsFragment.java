@@ -20,15 +20,18 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.ui.activities.schedule.CreateAppointmentActivity;
 import com.tied.android.tiedapp.ui.fragments.schedule.tabs.*;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.Logger;
+import com.tied.android.tiedapp.util.MyUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +54,9 @@ public class ScheduleAppointmentsFragment extends Fragment implements View.OnCli
     LinearLayout all_tab, today_tab, this_week_tab, next_week_tab, tab_bar, this_month, alert_edit_msg;
     HorizontalScrollView tab_scroll;
     List<SchedulesFragment> fragmentList = new ArrayList<SchedulesFragment>();
+    ImageView img_plus;
 
+    Fragment fragment = null;
 
     public static Fragment newInstance(Bundle bundle) {
         Fragment fragment = new ScheduleAppointmentsFragment();
@@ -92,7 +97,7 @@ public class ScheduleAppointmentsFragment extends Fragment implements View.OnCli
             window.setStatusBarColor(getActivity().getResources().getColor(R.color.blue_status_bar));
         }
 
-
+        img_plus = (ImageView) view.findViewById(R.id.img_plus);
         mViewPager = (ViewPager) view.findViewById(R.id.viewpager);
         tab_bar = (LinearLayout) view.findViewById(R.id.tab_bar);
         all_tab = (LinearLayout) view.findViewById(R.id.all_tab);
@@ -105,6 +110,7 @@ public class ScheduleAppointmentsFragment extends Fragment implements View.OnCli
         alert_edit_msg = (LinearLayout) getActivity().findViewById(R.id.alert_edit_msg);
         // moveViewToScreenCenter( alert_edit_msg, "Your edit was successful");
 
+        img_plus.setOnClickListener(this);
         all_tab.setOnClickListener(this);
         today_tab.setOnClickListener(this);
         this_week_tab.setOnClickListener(this);
@@ -126,6 +132,9 @@ public class ScheduleAppointmentsFragment extends Fragment implements View.OnCli
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.img_plus:
+                MyUtils.startRequestActivity(getActivity(), CreateAppointmentActivity.class, Constants.CreateSchedule, bundle);
+                break;
             case R.id.all_tab:
                 mViewPager.setCurrentItem(1);
                 break;
@@ -269,7 +278,7 @@ public class ScheduleAppointmentsFragment extends Fragment implements View.OnCli
 
         @Override
         public Fragment getItem(int position) {
-            Fragment fragment = null;
+
             Log.d(TAG, "position : " + position);
             switch (position) {
                         case 0: fragment = new TodayScheduleFragment(); break;
@@ -291,7 +300,8 @@ public class ScheduleAppointmentsFragment extends Fragment implements View.OnCli
     }
 
     private static int mCurCheckPosition = 0;
-private String key="curTab";
+    private String key="curTab";
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -313,8 +323,11 @@ private String key="curTab";
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Constants.ADD_SALES && resultCode == Activity.RESULT_OK) {
-
             Logger.write(data.getSerializableExtra("selected").toString());
+        }
+
+        if ((requestCode == Constants.ViewSchedule || requestCode == Constants.CreateSchedule) && resultCode == Activity.RESULT_OK) {
+            fragment.onActivityResult(requestCode, resultCode, data);
         }
     }
 }

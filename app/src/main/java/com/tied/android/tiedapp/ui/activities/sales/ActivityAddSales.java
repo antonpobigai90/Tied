@@ -46,19 +46,17 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
     private Bundle bundle;
     private User user;
     Client client;
-//    String dateString="";
     Line line;
+
     ImageView clientPhoto;
-    TextView clientNameTV, dateTV, lineNameTV;
+    TextView clientNameTV, dateTV, lineNameTV, sale_amount;
     EditText saleAmountET, titleET;
     float salesAmount=0.00f;
     String title="";
     View lineLayout, clientLayout;
     Revenue revenue=new Revenue();
     RelativeLayout select_date;
-    TextView date_selected;
-
-   // AddSalesFragment fragment;
+    TextView date_selected, date, add_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +65,7 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
 
         bundle = getIntent().getExtras();
         user=MyUtils.getUserLoggedIn();
-        //user = MyUtils.getUserFromBundle(bundle);
-       // fragment=AddSalesFragment.newInstance(bundle);
+
         View getFocus=findViewById(R.id.getFocus);
         getFocus.requestFocusFromTouch();
         getFocus.setFocusableInTouchMode(true);
@@ -76,6 +73,7 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
         try {
             line = (Line) bundle.getSerializable(Constants.LINE_DATA);
             client = (Client) bundle.getSerializable(Constants.CLIENT_DATA);
+            revenue = (Revenue) bundle.getSerializable(Constants.REVENUE_DATA);
         }catch(Exception e) {
 
         }
@@ -87,6 +85,7 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
         ft.add(R.id.fragment_container, fragment);
         ft.commit();*/
         MyUtils.setColorTheme(this, bundle.getInt(Constants.SOURCE), findViewById(R.id.parent));
+        add_button=(TextView)findViewById(R.id.add_button);
         clientPhoto=(ImageView)findViewById(R.id.client_photo);
         saleAmountET=(EditText)findViewById(R.id.sale_amount);
         clientNameTV=(TextView)findViewById(R.id.client_name);
@@ -97,7 +96,9 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
         lineNameTV = (TextView)findViewById(R.id.lineNameTV);
         select_date = (RelativeLayout)findViewById(R.id.select_date);
         select_date.setOnClickListener(this);
+        date = (TextView)findViewById(R.id.date);
         date_selected = (TextView)findViewById(R.id.date_selected);
+        sale_amount = (TextView)findViewById(R.id.sale_amount);
         if(line == null) lineLayout.setVisibility(View.VISIBLE);
         else lineLayout.setVisibility(View.GONE);
 
@@ -108,6 +109,15 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
            window.setStatusBarColor(getResources().getColor(R.color.green_color1));
+        }
+
+        if (revenue != null) {
+            add_button.setText("Save");
+            titleET.setText(revenue.getTitle());
+            sale_amount.setText(String.valueOf(revenue.getValue()));
+            date_selected.setText(revenue.getDate_sold());
+            String[] strdate = revenue.getDate_sold().split("-");
+            date.setText(MyUtils.MONTHS_LIST[Integer.valueOf(strdate[1]).intValue() - 1] + " " + strdate[2] + ", " + strdate[0]);
         }
     }
     @Override
@@ -172,12 +182,19 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
                     return;
                 }
 
-                revenue.setClient_id(client.getId());
-                revenue.setValue(salesAmount);
-                revenue.setTitle(title);
-                revenue.setUser_id(user.getId());
-                revenue.setLine_id(line.getId());
-                revenue.setDate_sold(date_selected.getText().toString());
+                if (revenue == null) {
+                    revenue = new Revenue();
+                    revenue.setClient_id(client.getId());
+                    revenue.setValue(salesAmount);
+                    revenue.setTitle(title);
+                    revenue.setUser_id(user.getId());
+                    revenue.setLine_id(line.getId());
+                    revenue.setDate_sold(date_selected.getText().toString());
+                } else {
+                    revenue.setValue(salesAmount);
+                    revenue.setTitle(title);
+                    revenue.setDate_sold(date_selected.getText().toString());
+                }
 
 //                if(revenue.getId()!=null && !revenue.getId().isEmpty()) {
 //                    //update
@@ -192,7 +209,13 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
     private void saveRevenue(final Revenue revenue) {
         RevenueApi revenueApi = MainApplication.createService(RevenueApi.class, user.getToken());
         DialogUtils.displayProgress(this);
-        Call<ResponseBody> response = revenueApi.createRevenue(revenue);
+
+        Call<ResponseBody> response = null;
+        if (revenue.getId()!=null && !revenue.getId().isEmpty()) {
+            response = revenueApi.updateRevenue(revenue.getId(), revenue);
+        } else {
+            response = revenueApi.createRevenue(revenue);
+        }
         response.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
@@ -204,13 +227,13 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
                         return;
                     }
                     _Meta meta=response.getMeta();
-                    if(meta !=null && meta.getStatus_code()==201) {
+                    if(meta !=null && meta.getStatus_code()==200) {
 
-                        Revenue revenue2 = response.getData(Constants.REVENUE_DATA, Revenue.class);
-                        Logger.write("the_line: "+revenue2.toString());
-                        final Bundle bundle = new Bundle();
-                        bundle.putSerializable(Constants.REVENUE_DATA, revenue2);
-                        MainApplication.linesList.clear();
+//                        final Revenue revenue2 = response.getData(Constants.REVENUE_DATA, Revenue.class);
+//                        Logger.write("the_line: "+revenue2.toString());
+//                        final Bundle bundle = new Bundle();
+//                        bundle.putSerializable(Constants.REVENUE_DATA, revenue2);
+//                        MainApplication.linesList.clear();
                         MyUtils.showMessageAlert(ActivityAddSales.this, "Revenue added!");
                         titleET.postDelayed(new Runnable() {
                             @Override
@@ -218,7 +241,7 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
                                 DialogUtils.closeProgress();
                                 Intent intent = new Intent();
                                 Bundle b =new Bundle();
-                                 b.putSerializable("revenue", revenue);
+                                b.putSerializable("revenue", revenue);
 
                                 intent.putExtras(b);
                                 Logger.write("finishginnnnn.");
@@ -256,9 +279,6 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
         });
     }
     private void selectClient(Client client) {
-        //GeneralSelectObjectActivity.setType(GeneralSelectObjectActivity.SELECT_CLIENT_TYPE, false);
-       // MyUtils.startRequestActivity(this, GeneralSelectObjectActivity.class, Constants.SELECT_CLIENT);
-
         MyUtils.initiateClientSelector(this, client, false);
     }
     private void selectLine(Line line) {

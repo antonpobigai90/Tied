@@ -33,6 +33,7 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.MyAddressAsyncTask;
 import com.tied.android.tiedapp.customs.model.DataModel;
 import com.tied.android.tiedapp.objects.Coordinate;
+import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.objects.Territory;
 import com.tied.android.tiedapp.objects._Meta;
@@ -107,10 +108,9 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
     private Location location;
 
     private int visit_frequency = 1;
-//    private ImageView img_weekly, img_two_weeks,img_monthly,img_three_weeks;
     private LinearLayout weekly_layout, two_weeks_layout,monthly_layout,three_weeks_layout;
-    LinearLayout visit_radio, birthday_layout;
-    RelativeLayout industry_layout, territory_layout;
+    LinearLayout visit_radio, camera;
+    RelativeLayout industry_layout, territory_layout, name_layout;
     Integer industryId=null, lineId=null;
     View lineLayout;
     TextView txt_title, txt_territory;
@@ -195,6 +195,10 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
         territory_layout = (RelativeLayout) view.findViewById(R.id.territory_layout);
         territory_layout.setOnClickListener(this);
 
+        name_layout = (RelativeLayout) view.findViewById(R.id.name_layout);
+        camera = (LinearLayout) view.findViewById(R.id.camera);
+        camera.setOnClickListener(this);
+
         line = (TextView) view.findViewById(R.id.line);
         line.setOnClickListener(this);
 
@@ -265,6 +269,10 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
                         industry.setText(model.getName());
                         break;
                     }
+                }
+
+                if (user.getId().equals(client.getUser_id())) {
+                    name_layout.setVisibility(View.VISIBLE);
                 }
             }
         }

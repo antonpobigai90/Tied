@@ -80,11 +80,12 @@
                             <EditText
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Meeting with Janet"
                                 android:backgroundTint="@android:color/transparent"
                                 android:id="@+id/txt_title"
                                 android:textColor="@color/schedule_title_bg_color"
-                                android:textSize="16sp" />
+                                android:textSize="16sp"
+                                android:hint="Meeting with Janet"
+                                android:textColorHint="@color/light_gray2" />
                         </LinearLayout>
                     </RelativeLayout>
                 </LinearLayout>
@@ -120,11 +121,12 @@
                         <EditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Go over feedback from the client"
                             android:backgroundTint="@android:color/transparent"
                             android:id="@+id/txt_description"
                             android:textColor="@color/schedule_title_bg_color"
-                            android:textSize="16sp"/>
+                            android:textSize="16sp"
+                            android:hint="Go over feedback from the client"
+                            android:textColorHint="@color/light_gray2" />
                     </LinearLayout>
 
                 </LinearLayout>

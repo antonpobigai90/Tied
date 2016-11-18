@@ -104,18 +104,18 @@ public class DialogScheduleEventOptions implements View.OnClickListener {
                 break;
             case R.id.mark_as_completed:
                 dialog.dismiss();
-                confirmScheduleActionDialog = new ConfirmScheduleActionDialog(schedule,adapter,_c,bundle, 1);
-                confirmScheduleActionDialog.showDialog();
+//                confirmScheduleActionDialog = new ConfirmScheduleActionDialog(schedule,adapter,_c,bundle, 1);
+//                confirmScheduleActionDialog.showDialog();
                 break;
             case R.id.cancel_appointment:
                 dialog.dismiss();
-                confirmScheduleActionDialog = new ConfirmScheduleActionDialog(schedule,adapter,_c,bundle, 2);
-                confirmScheduleActionDialog.showDialog();
+//                confirmScheduleActionDialog = new ConfirmScheduleActionDialog(schedule,adapter,_c,bundle, 2);
+//                confirmScheduleActionDialog.showDialog();
                 break;
             case R.id.delete:
                 dialog.dismiss();
-                confirmScheduleActionDialog = new ConfirmScheduleActionDialog(schedule,adapter,_c,bundle, 3);
-                confirmScheduleActionDialog.showDialog();
+//                confirmScheduleActionDialog = new ConfirmScheduleActionDialog(schedule,adapter,_c,bundle, 3);
+//                confirmScheduleActionDialog.showDialog();
                 break;
             case R.id.view:
                 bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);

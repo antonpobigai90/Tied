@@ -66,7 +66,7 @@ public class SelectLineActivity extends Activity
     public FragmentIterationListener mListener;
     ArrayList selectedObjects = new ArrayList();
 
-    ArrayList<Line> search_data = new ArrayList<Line>();
+    ArrayList<Line> search_data;
     ArrayList<Line> lineDataModels = new ArrayList<Line>();
     private ListView listView;
     private ClientLinesAdapter adapter;
@@ -77,7 +77,7 @@ public class SelectLineActivity extends Activity
     private Bundle bundle;
     private User user;
 
-    private TextView txt_continue, selectedCountText;
+    private TextView txt_title, selectedCountText;
     private View addLayout;
     View finishSelection;
     private boolean isMultiple=false;
@@ -102,6 +102,7 @@ public class SelectLineActivity extends Activity
     }
 
     public void initComponent() {
+        txt_title = (TextView) findViewById(R.id.txt_title);
         listView = (ListView) findViewById(R.id.list);
 
         search = (EditText) findViewById(R.id.search);
@@ -116,12 +117,21 @@ public class SelectLineActivity extends Activity
 
         selectedCountText=(TextView)findViewById(R.id.selected_count);
 
+        if( objectType==SELECT_CLIENT_TYPE) {
+            txt_title.setText("Select Client");
+            search.setHint("Search Client by Name");
+        } else {
+            txt_title.setText("Select Line");
+            search.setHint("Search Line by Name");
+        }
+
         search.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // TODO Auto-generated method stub
-                search_data.clear();
+
+                search_data = new ArrayList<Line>();
                 // TODO Auto-generated method stub
                 for(int i = 0 ; i < lineDataModels.size() ; i++) {
                     Line model = (Line) lineDataModels.get(i);
@@ -132,6 +142,7 @@ public class SelectLineActivity extends Activity
                     }
                 }
 
+                lineDataModels = search_data;
                 adapter = new ClientLinesAdapter(search_data, SelectLineActivity.this);
                 listView.setAdapter(adapter);
             }

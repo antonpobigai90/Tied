@@ -65,4 +65,24 @@ public interface RevenueApi {
     Call<ResponseBody> getUniqueClientRevenues(
             @Path("client_id") String client_id,
             @Path("page_number") int page_number, @Body RevenueFilter filter);
+
+    @POST(Constants.GET_USER_All_REVENUES)
+    Call<ResponseBody> getUserAllRevenues(
+            @Path("user_id") String user_id,
+            @Path("page_number") int page_number, @Body RevenueFilter filter);
+
+    @POST(Constants.TOTAL_REVENUE)
+    Call<ResponseBody> getTotalRevenues(
+            @Path("user_id") String user_id, @Body RevenueFilter filter);
+
+    @GET(Constants.REVENUE_DETAILS)
+    Call<ResponseBody> getSaleDetails(
+            @Path("revenue_id") String revenue_id);
+
+    @DELETE(Constants.REVENUE_DELETE)
+    Call<ResponseBody> deleteSale(@Path("revenue_id") String revenue_id);
+
+    @PUT(Constants.REVENUE_DETAILS)
+    Call<ResponseBody> updateRevenue(
+            @Path("revenue_id") String revenue_id, @Body Revenue revenue);
 }

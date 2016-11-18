@@ -136,9 +136,9 @@
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/schedule_icon"
                     android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:src="@drawable/analytics" />
+                    android:layout_height="25dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -157,9 +157,9 @@
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/map_icon"
                     android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:src="@drawable/map" />
+                    android:layout_height="25dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -194,9 +194,9 @@
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/sale_icon"
                     android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:src="@drawable/sale" />
+                    android:layout_height="25dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -215,9 +215,9 @@
                 android:orientation="vertical">
 
                 <ImageView
+                    android:id="@+id/more_icon"
                     android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:src="@drawable/lists" />
+                    android:layout_height="25dp" />
 
                 <TextView
                     android:layout_width="wrap_content"

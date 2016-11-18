@@ -17,12 +17,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.objects._Meta;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
 import com.tied.android.tiedapp.ui.activities.visits.ActivityVisitDetails;
+import com.tied.android.tiedapp.ui.dialogs.ConfirmScheduleActionDialog;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.Logger;
 import org.apache.commons.lang.time.DateUtils;
@@ -79,11 +81,12 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
     View callClient;
     Bundle bundle;
 
-    private TextView description, temperature, schedule_title, weatherInfo;
+    private TextView description, temperature, schedule_title, weatherInfo, txt_complete, txt_delete;
     private LinearLayout description_layout;
     View line;
 
     MapFragment mapFragment;
+    ConfirmScheduleActionDialog confirmScheduleActionDialog = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +111,9 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
         schedule_title = (TextView) findViewById(R.id.schedule_title);
         description = (TextView) findViewById(R.id.description);
         temperature = (TextView) findViewById(R.id.weather);
+
+        txt_complete = (TextView) findViewById(R.id.txt_complete);
+        txt_delete = (TextView) findViewById(R.id.txt_delete);
 
         description_layout = (LinearLayout) findViewById(R.id.description_layout);
         line = (View) findViewById(R.id.line);
@@ -182,6 +188,14 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
                     return;
                 }
                 startActivity(callIntent);
+                break;
+            case R.id.txt_complete:
+                confirmScheduleActionDialog = new ConfirmScheduleActionDialog(schedule, ViewSchedule.this, bundle, 1);
+                confirmScheduleActionDialog.showDialog();
+                break;
+            case R.id.txt_delete:
+                confirmScheduleActionDialog = new ConfirmScheduleActionDialog(schedule,ViewSchedule.this,bundle, 3);
+                confirmScheduleActionDialog.showDialog();
                 break;
         }
     }
@@ -260,6 +274,13 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
         }
 
         weekTV.setText(MyUtils.getWeekDay(schedule));
+
+        if(schedule.getUser_id().equals(user.getId())) {
+            if (schedule.getStatus() != 1) {
+                txt_complete.setVisibility(View.VISIBLE);
+            }
+            txt_delete.setVisibility(View.VISIBLE);
+        }
 
         setTemperature();
     }
@@ -381,4 +402,5 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
     }
+
 }
