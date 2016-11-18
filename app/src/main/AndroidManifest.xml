@@ -33,6 +33,15 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.CALL_PHONE"></uses-permission>
 
+    <permission android:name="com.tied.android.tiedapp.permission.C2D_MESSAGE"
+                android:protectionLevel="signature" />
+    <uses-permission android:name="com.tied.android.tiedapp.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <uses-feature
             android:name="android.hardware.camera"
             android:required="true" />
@@ -42,6 +51,31 @@
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
+    <!-- START: ShortcutBadger -->
+    <!-- Samsung -->
+    <uses-permission android:name="com.sec.android.provider.badge.permission.READ"/>
+    <uses-permission android:name="com.sec.android.provider.badge.permission.WRITE"/>
+
+    <!-- HTC -->
+    <uses-permission android:name="com.htc.launcher.permission.READ_SETTINGS"/>
+    <uses-permission android:name="com.htc.launcher.permission.UPDATE_SHORTCUT"/>
+
+    <!-- Sony -->
+    <uses-permission android:name="com.sonyericsson.home.permission.BROADCAST_BADGE"/>
+    <uses-permission android:name="com.sonymobile.home.permission.PROVIDER_INSERT_BADGE"/>
+
+    <!-- Apex -->
+    <uses-permission android:name="com.anddoes.launcher.permission.UPDATE_COUNT"/>
+
+    <!-- Solid -->
+    <uses-permission android:name="com.majeur.launcher.permission.UPDATE_BADGE"/>
+
+    <!-- Huawei -->
+    <uses-permission android:name="com.huawei.android.launcher.permission.CHANGE_BADGE" />
+    <uses-permission android:name="com.huawei.android.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name="com.huawei.android.launcher.permission.WRITE_SETTINGS" />
+    <!-- End: ShortcutBadger -->
+
     <application
             android:name=".MainApplication"
             android:allowBackup="true"
@@ -50,6 +84,7 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:largeHeap="true">
+        <meta-data android:name="com.onesignal.BadgeCount" android:value="DISABLE" />
         <meta-data
                 android:name="com.facebook.sdk.ApplicationId"
                 android:value="@string/facebook_app_id" />
@@ -62,6 +97,7 @@
         <meta-data
                 android:name="io.fabric.ApiKey"
                 android:value="86c1fb407b27a6b13b7588dbee2d502e177c7790" />
+        <meta-data android:name="com.onesignal.NotificationOpened.DEFAULT" android:value="DISABLE" />
 
         <!--
              <meta-data
@@ -411,7 +447,6 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
 
-        <service android:name="com.mapbox.mapboxsdk.telemetry.TelemetryService" />
 
         <activity android:name=".ui.activities.SelectPicture"
                   android:screenOrientation="portrait"
@@ -419,6 +454,37 @@
         <activity android:name=".ui.activities.coworker.InviteCoWorkerActivity"
                   android:screenOrientation="portrait"
                   android:theme="@style/AppTheme.NoActionBar"/>
+
+
+        <meta-data android:name="com.google.android.gms.version"
+                   android:value="@integer/google_play_services_version" />
+        <meta-data android:name="onesignal_app_id"
+                   android:value="1f0fbe0c-52f5-4bd8-8b0b-ba60849ed4ef" />
+
+        <receiver android:name="com.onesignal.GcmBroadcastReceiver"
+                  android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="com.tied.android.tiedapp" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.onesignal.NotificationOpenedReceiver" />
+        <service android:name="com.onesignal.GcmIntentService" />
+        <service android:name="com.onesignal.SyncService" android:stopWithTask="false" />
+        <activity android:name="com.onesignal.PermissionsActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <service android:name="com.onesignal.NotificationRestoreService" />
+        <receiver android:name="com.onesignal.BootUpReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.onesignal.UpgradeReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
 
 
     </application>

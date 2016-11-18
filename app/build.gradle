@@ -106,6 +106,7 @@ dependencies {
     compile 'com.github.johnhiott:DarkSkyApi:v0.1.4'
     compile 'com.github.tittojose:timerangepicker-library:0.2'
     compile 'com.google.android.gms:play-services-maps:+'
+    compile 'me.leolin:ShortcutBadger:1.1.10@aar'
     /*
     compile 'io.realm:realm-android:0.87.5'
     compile ('com.mapbox.mapboxsdk:mapbox-android-sdk:4.2.0-beta.1@aar'){

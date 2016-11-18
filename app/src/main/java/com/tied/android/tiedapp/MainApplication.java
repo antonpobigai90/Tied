@@ -14,6 +14,7 @@ import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.util.FontsOverride;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
@@ -74,7 +75,15 @@ public class MainApplication extends Application {
                 //.debuggable(true)
                 .build();
         Fabric.with(fabric);
-        OneSignal.startInit(this).init();
+        OneSignal.startInit(this)
+                .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
+        .setNotificationReceivedHandler(new MainActivity.MyNotificationReceivedHandler())
+        .setNotificationOpenedHandler(new MainActivity.OneSignalNotificationOpenedHandler(getApplicationContext())).init();
+        OneSignal.enableSound(true);
+        //OneSignal.enableNotificationsWhenActive(true);
+
+
+
 
         mInstance = this;
         Logger.write("apppppppppppppp started");

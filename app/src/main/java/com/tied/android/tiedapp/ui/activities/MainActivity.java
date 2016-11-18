@@ -1,7 +1,9 @@
 package com.tied.android.tiedapp.ui.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,6 +25,9 @@ import com.braintreepayments.api.BraintreePaymentActivity;
 import com.braintreepayments.api.models.PaymentMethodNonce;
 import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
+import com.onesignal.OSNotification;
+import com.onesignal.OSNotificationAction;
+import com.onesignal.OSNotificationOpenResult;
 import com.onesignal.OneSignal;
 import com.soundcloud.android.crop.Crop;
 import com.squareup.picasso.MemoryPolicy;
@@ -74,6 +79,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.fabric.sdk.android.Fabric;
+import me.leolin.shortcutbadger.ShortcutBadger;
+import org.json.JSONException;
+import org.json.JSONObject;
 import retrofit2.Retrofit;
 
 /**
@@ -685,5 +693,103 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         }
         //currentFragment=targetFragment;
     }
+    public static class OneSignalNotificationOpenedHandler implements OneSignal.NotificationOpenedHandler {
+
+        Context context;
+        public OneSignalNotificationOpenedHandler(Context c)  {
+            context=c;
+        }
+
+
+
+        @Override
+        public void notificationOpened(OSNotificationOpenResult result) {
+            OSNotificationAction.ActionType actionType = result.action.type;
+            JSONObject data = result.notification.payload.additionalData;
+            String customKey;
+
+            Logger.write("OneSignalExample", "customkey set with value: " + result.notification.toString());
+            if (data != null) {
+                customKey = data.optString("customkey", null);
+                if (customKey != null) {
+                    SharedPreferences sp=MyUtils.getSharedPreferences();
+                    SharedPreferences.Editor ed = sp.edit();
+                    ed.putString(Constants.PREFS_CLICKED_NOTIFICATION, customKey);
+                    ed.apply();
+                    Logger.write("OneSignalExample", "customkey set with value: " + customKey);
+                }
+            }
+
+
+            if (actionType == OSNotificationAction.ActionType.ActionTaken)
+                Log.i("OneSignalExample", "Button pressed with id: " + result.action.actionID);
+
+
+
+        }
+    }
+    private static final String NEW_MESSAGE_TYPE="message";
+    private static final String SEEN_MESSAGE_TYPE="seen_message";
+    private static final String  NEW_NOTIFICATION_TYPE="notification";
+    private static final String SEEN_NOTIFICATION_TYPE="seen_notification";
+    public static class MyNotificationReceivedHandler implements OneSignal.NotificationReceivedHandler {
+        @Override
+        public void notificationReceived(OSNotification notification) {
+            Logger.write("OneSignalExample", "customkey set with value: " +notification.toString());
+            JSONObject data = notification.payload.additionalData;
+            String customKey;
+            ShortcutBadger.applyCount(MainApplication.getInstance().getApplicationContext(), 3);
+            if (data != null) {
+                customKey = data.optString("customkey", null);
+                if (customKey != null) {
+                    Logger.write("OneSignalExample", "customkey set with value: " + customKey);
+                    try {
+                        JSONObject pushData=new JSONObject(customKey);
+                        String type = pushData.getString("type");
+                        SharedPreferences sp = MyUtils.getSharedPreferences();
+                        SharedPreferences.Editor ed = sp.edit();
+                /*
+                ed.putString(Constants.PREFS_ALERT, intent.getBundleExtra("data").getString("alert").toString());
+                ed.apply();*/
+                        int numNewAlert = sp.getInt(Constants.PREFS_NEW_NOTIFICATION_COUNT, 0) + sp.getInt(Constants.PREFS_NEW_MESSAGE_COUNT, 0);
+                        switch (type) {
+                            case  NEW_MESSAGE_TYPE:
+                            case NEW_NOTIFICATION_TYPE:
+                                int numNewMessage = sp.getInt(Constants.PREFS_NEW_MESSAGE_COUNT, 0);
+                                numNewAlert++;
+                                numNewMessage++;
+                                ed.putInt(Constants.PREFS_NEW_MESSAGE_COUNT, numNewMessage);
+                                break;
+                            default:
+
+                                int numNewNotification = sp.getInt(Constants.PREFS_NEW_NOTIFICATION_COUNT, 0);
+                                numNewAlert++;
+                                numNewNotification++;
+                                ed.putInt(Constants.PREFS_NEW_NOTIFICATION_COUNT, numNewNotification);
+
+                                break;
+                        }
+                        ed.commit();
+
+                        try {
+                           /* notification_menu.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    showNumAlerts();
+                                }
+                            }, 500);*/
+                        } catch (Exception e) {
+                        }
+                    } catch (JSONException je) {
+
+                    }
+                }
+            }
+        }
+    }
+    public static  void showNumAlerts() {
+
+    }
+
 
 }

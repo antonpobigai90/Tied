@@ -166,6 +166,9 @@ public class Constants {
     public static final String PREVIOUS = "previous";
 
     public static final String TerritoryData="territories";
+    public static final String PREFS_NEW_NOTIFICATION_COUNT ="num_alerts";
+    public static final String PREFS_NEW_MESSAGE_COUNT="num_messages";
+    public static final String PREFS_CLICKED_NOTIFICATION ="notification_alerts";
 
     public static final int Help = 0;
     public static final int SignInUser = 1;
