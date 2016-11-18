@@ -38,29 +38,29 @@ public class SaleClientDetailsListAdapter extends ClientParentAdapter {
             v = new ViewHolder();
             LayoutInflater li = (LayoutInflater) _c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = li.inflate(R.layout.sale_client_details_list_item, viewGroup, false);
-
-            Revenue data = (Revenue) _data.get(i);
-
-            v.txt_price = (TextView) view.findViewById(R.id.txt_price);
-            v.txt_date = (TextView) view.findViewById(R.id.txt_date);
-            v.txt_summary = (TextView) view.findViewById(R.id.txt_summary);
-
-            v.txt_price.setText(MyUtils.moneyFormat(data.getValue()));
-            try {
-                Logger.write(data.getDate_sold());
-                if(!data.getDate_sold().isEmpty()) {
-                    v.txt_date.setText(MyUtils.formatDate(MyUtils.parseDate(data.getDate_sold())));
-                    v.txt_date.setVisibility(View.VISIBLE);
-                }else v.txt_date.setVisibility(View.GONE);
-            }catch (Exception e){
-                Logger.write(e);
-            }
-            v.txt_summary.setText(data.getTitle());
-
-            view.setTag(v);
         } else {
             v = (ViewHolder) convertView.getTag();
         }
+
+        Revenue data = (Revenue) _data.get(i);
+
+        v.txt_price = (TextView) view.findViewById(R.id.txt_price);
+        v.txt_date = (TextView) view.findViewById(R.id.txt_date);
+        v.txt_summary = (TextView) view.findViewById(R.id.txt_summary);
+
+        v.txt_price.setText(MyUtils.moneyFormat(data.getValue()));
+        try {
+            Logger.write(data.getDate_sold());
+            if(!data.getDate_sold().isEmpty()) {
+                v.txt_date.setText(MyUtils.formatDate(MyUtils.parseDate(data.getDate_sold())));
+                v.txt_date.setVisibility(View.VISIBLE);
+            }else v.txt_date.setVisibility(View.GONE);
+        }catch (Exception e){
+            Logger.write(e);
+        }
+        v.txt_summary.setText(data.getTitle());
+
+        view.setTag(v);
 
         return view;
     }

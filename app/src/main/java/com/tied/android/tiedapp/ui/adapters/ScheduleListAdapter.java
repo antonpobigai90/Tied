@@ -3,6 +3,7 @@ package com.tied.android.tiedapp.ui.adapters;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,16 +14,23 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.johnhiott.darkskyandroidlib.RequestBuilder;
 import com.johnhiott.darkskyandroidlib.models.DataPoint;
 import com.johnhiott.darkskyandroidlib.models.Request;
 import com.johnhiott.darkskyandroidlib.models.WeatherResponse;
+import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
+import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.model.ScheduleDataModel;
 import com.tied.android.tiedapp.objects.client.Client;
+import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.retrofits.services.ClientApi;
+import com.tied.android.tiedapp.ui.activities.schedule.ViewSchedule;
 import com.tied.android.tiedapp.ui.dialogs.DialogScheduleEventOptions;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleAppointmentsFragment;
 import com.tied.android.tiedapp.util.HelperMethods;
 
@@ -33,6 +41,7 @@ import com.tied.android.tiedapp.util.MyUtils;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import retrofit2.Call;
 
 /**
  * Created by Emmanuel on 7/1/2016.
@@ -161,8 +170,12 @@ public class ScheduleListAdapter extends BaseAdapter{
                 linearLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        DialogScheduleEventOptions alert = new DialogScheduleEventOptions();
-                        alert.showDialog(schedule, ScheduleListAdapter.this, _c, bundle);
+                        bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
+                        bundle.putString("fragment", ViewSchedule.class.getName());
+                        doAction(schedule,ViewSchedule.class, bundle);
+
+//                        DialogScheduleEventOptions alert = new DialogScheduleEventOptions();
+//                        alert.showDialog(schedule, ScheduleListAdapter.this, _c, bundle);
                     }
                 });
             }
@@ -176,6 +189,49 @@ public class ScheduleListAdapter extends BaseAdapter{
         }
         view.setTag(data);
         return view;
+    }
+
+    public void doAction(final Schedule schedule,  final Class aClass, Bundle bundle){
+        Gson gson = new Gson();
+        String user_json = bundle.getString(Constants.USER_DATA);
+        User user = gson.fromJson(user_json, User.class);
+
+        Log.d(TAG + "schedule", schedule.toString());
+
+        ClientApi clientApi = MainApplication.getInstance().getRetrofit().create(ClientApi.class);
+        Call<ClientRes> response = clientApi.getClientWithId(user.getToken(), schedule.getClient_id());
+        response.enqueue(new retrofit2.Callback<ClientRes>() {
+            @Override
+            public void onResponse(Call<ClientRes> call, retrofit2.Response<ClientRes> resResponse) {
+                if (_c == null) return;
+                Log.d(TAG + "ClientRes", resResponse.toString());
+                DialogUtils.closeProgress();
+                try {
+                    ClientRes ClientRes = resResponse.body();
+                    if (ClientRes != null && ClientRes.isAuthFailed()) {
+                        User.LogOut(_c);
+                    } else if (ClientRes != null && ClientRes.get_meta() != null && ClientRes.get_meta().getStatus_code() == 200) {
+                        Client client = ClientRes.getClient();
+                        Log.d(TAG + "client", client.toString());
+                        Gson gson = new Gson();
+                        Intent intent = new Intent(_c, aClass);
+                        intent.putExtra(Constants.CLIENT_DATA, client);
+                        intent.putExtra(Constants.SCHEDULE_DATA, schedule);
+                        _c.startActivityForResult(intent, Constants.ViewSchedule);
+                    } else {
+                        MyUtils.showConnectionErrorToast(_c);
+                    }
+                }catch (Exception e) {
+                    MyUtils.showConnectionErrorToast(_c);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ClientRes> call, Throwable t) {
+                Log.d(TAG + " onFailure", t.toString());
+                DialogUtils.closeProgress();
+            }
+        });
     }
 
     static class ViewHolder {

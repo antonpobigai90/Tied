@@ -42,7 +42,7 @@
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:src="@drawable/map" />
+                android:src="@drawable/maps" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -76,7 +76,7 @@
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:src="@drawable/sale" />
+                android:src="@drawable/sales" />
 
             <TextView
                 android:layout_width="wrap_content"

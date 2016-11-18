@@ -52,6 +52,7 @@ public class Constants {
     public static final String USER_CLIENT_LINES = API_PATH + "users/me/client_lines";
     public static final String GET_USER_REVENUES = API_PATH + "users/{user_id}/{group_by}/{object_id}/revenues/{page_number}";
     public static final String GET_OBJECT_REVENUES = API_PATH + "revenues/get_list/{object_type}/{object_id}/{page_number}";
+    public static final String GET_USER_All_REVENUES = API_PATH + "users/{user_id}/revenues/{page_number}";
 
     public static final String GET_LINE_REVENUES = API_PATH + "lines/{line_id}/revenues/{page_number}";
     public static final String GET_CLIENT_REVENUES = API_PATH + "clients/{client_id}/revenues/{page_number}";
@@ -62,6 +63,8 @@ public class Constants {
     //public static final String TOTAL_LINE_REVENUE =  API_PATH + "lines/{line_id}/total_revenue";
     public static final String GET_TOTAL_REVENUE =  API_PATH + "revenues/get_total/{object_type}/{object_id}";
     public static final String CLIENT_COUNT=  API_PATH + "lines/{line_id}/num_clients";
+    public static final String TOTAL_REVENUE=  API_PATH + "users/{user_id}/revenues/total";
+    public static final String REVENUE_DETAILS=  API_PATH + "revenue/{revenue_id}";
 
     public static final String LINE_CLIENTS=  API_PATH + "lines/{line_id}/clients/{page_number}";
 
@@ -87,7 +90,7 @@ public class Constants {
     public static final String GET_REVENUE_BY_GROUP = API_PATH + "revenue/{user_id}/by_group/{group_by}";
 
     public static final String GET_TOTAL_REVENUES_FOR_USER = API_PATH + "/users/me/revenue/total";
-
+    public static final String REVENUE_DELETE = API_PATH + "revenue/{revenue_id}";
 
     public static final String GET_CLIENT_WITH_ID = API_PATH + "client/{client_id}";
     public static final String UPDATE_CLIENT_WITH_ID = API_PATH + "clients/{client_id}";

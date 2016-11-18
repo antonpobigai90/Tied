@@ -7,13 +7,21 @@ import android.widget.Toast;
 
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.objects.responses.ScheduleRes;
+import com.tied.android.tiedapp.objects.schedule.DateRange;
 import com.tied.android.tiedapp.objects.schedule.Schedule;
+import com.tied.android.tiedapp.objects.schedule.ScheduleDate;
+import com.tied.android.tiedapp.objects.schedule.TimeRange;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
 import com.tied.android.tiedapp.ui.adapters.ScheduleListAdapter;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.util.Logger;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;

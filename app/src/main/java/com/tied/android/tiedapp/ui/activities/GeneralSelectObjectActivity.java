@@ -34,6 +34,8 @@ import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -65,7 +67,7 @@ public class GeneralSelectObjectActivity extends Activity
     ArrayList selectedObjects = new ArrayList();
 
 
-    private ArrayList clientsWithDistance;
+    private ArrayList clientsWithDistance = new ArrayList<Client>();
     ArrayList search_data = new ArrayList<>();
 
     private ArrayList<String> selectedIDs=new ArrayList<String>(0);
@@ -80,7 +82,7 @@ public class GeneralSelectObjectActivity extends Activity
     private Bundle bundle;
     private User user;
 
-    private TextView txt_continue, selectedCountText;
+    private TextView txt_title, selectedCountText;
     private View addLayout;
     View finishSelection;
     private boolean isMultiple=false;
@@ -111,7 +113,8 @@ public class GeneralSelectObjectActivity extends Activity
     }
 
     public void initComponent() {
-        clientsWithDistance = new ArrayList<Client>();
+
+        txt_title = (TextView) findViewById(R.id.txt_title);
         listView = (ListView) findViewById(R.id.list);
 
         search = (EditText) findViewById(R.id.search);
@@ -126,6 +129,14 @@ public class GeneralSelectObjectActivity extends Activity
         finishSelection.setOnClickListener(this);
         selectedCountText=(TextView)findViewById(R.id.selected_count);
 
+        if( objectType==SELECT_CLIENT_TYPE) {
+            txt_title.setText("Select Client");
+            search.setHint("Search Client by Name");
+        } else {
+            txt_title.setText("Select Line");
+            search.setHint("Search Line by Name");
+        }
+
         updateNumSelected();
 
         search.addTextChangedListener(new TextWatcher() {
@@ -133,7 +144,7 @@ public class GeneralSelectObjectActivity extends Activity
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 // TODO Auto-generated method stub
-                search_data.clear();
+                search_data = new ArrayList<>();
                 // TODO Auto-generated method stub
                 for(int i = 0 ; i < clientsWithDistance.size() ; i++) {
                     Client model = (Client) clientsWithDistance.get(i);
@@ -144,6 +155,7 @@ public class GeneralSelectObjectActivity extends Activity
                     }
                 }
 
+                clientsWithDistance = search_data;
                 adapter = new MyClientLineAdapter(search_data, selectedIDs, GeneralSelectObjectActivity.this, isMultiple);
                 listView.setAdapter(adapter);
             }
@@ -174,11 +186,9 @@ public class GeneralSelectObjectActivity extends Activity
             for(int i=0; i<len; i++) {
                 if( objectType==SELECT_CLIENT_TYPE) {
                     selectedIDs.add(((Client) selectedObjects.get(i)).getId());
-
                 }
                 else{
                     selectedIDs.add(((Line)selectedObjects.get(i)).getId());
-
                 }
             }
         }else{
@@ -226,7 +236,8 @@ public class GeneralSelectObjectActivity extends Activity
             selectedIDs.clear();
             selectedObjects.clear();
         }
-      if( objectType==SELECT_CLIENT_TYPE) {
+
+        if( objectType==SELECT_CLIENT_TYPE) {
             Client obj=(Client)clientsWithDistance.get(position);
 
             if(selectedIDs.contains(obj.getId())) {

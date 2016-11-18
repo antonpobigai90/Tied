@@ -2,6 +2,7 @@ package com.tied.android.tiedapp.ui.dialogs;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -40,16 +41,14 @@ public class ConfirmScheduleActionDialog {
     private Schedule schedule;
     Activity _c;
     Bundle bundle;
-    private ScheduleListAdapter adapter;
     private int type;
 
-    public ConfirmScheduleActionDialog(Schedule schedule1, ScheduleListAdapter adapter, Activity activity, Bundle bundle1, int type){
+    public ConfirmScheduleActionDialog(Schedule schedule1, Activity activity, Bundle bundle1, int type){
         this.activity = activity;
 
         schedule = schedule1;
         _c = activity;
         bundle = bundle1;
-        this.adapter = adapter;
         this.type = type;
     }
 
@@ -113,7 +112,7 @@ public class ConfirmScheduleActionDialog {
                 }
 
                 dialog.dismiss();
-                ((MainActivity) _c).ShowSuccessMessage(message, Constants.SCHEDULE_DELETED);
+//                ((MainActivity) _c).ShowSuccessMessage(message, Constants.SCHEDULE_DELETED);
             }
         });
 
@@ -133,17 +132,19 @@ public class ConfirmScheduleActionDialog {
             public void onResponse(Call<ScheduleRes> call, Response<ScheduleRes> scheduleResResponse) {
                 if (_c == null) return;
                 try {
+                    DialogUtils.closeProgress();
+
                     ScheduleRes scheduleRes = scheduleResResponse.body();
                     if (scheduleRes != null && scheduleRes.isAuthFailed()) {
-                        DialogUtils.closeProgress();
                         User.LogOut(_c);
                     } else if (scheduleRes != null && scheduleRes.get_meta() != null && scheduleRes.get_meta().getStatus_code() == 200) {
                         Log.d(TAG + " Schedule", scheduleRes.getSchedule().toString());
                         Schedule updatedSchedule = scheduleRes.getSchedule();
                         if (updatedSchedule.getId().equals(schedule.getId())) {
-                            MyUtils.showToast(scheduleRes.get_meta().getUser_message());
-                            adapter.updateStatus(schedule.getId(), schedule.getStatus());
-                            DialogUtils.closeProgress();
+                            Intent intent = new Intent();
+                            _c.setResult(Activity.RESULT_OK, intent);
+                            _c.finishActivity(Constants.ViewSchedule);
+                            _c.finish();
                         }
                     } else {
                         //Toast.makeText(getActivity(), scheduleRes.toString(), Toast.LENGTH_LONG).show();
@@ -167,7 +168,7 @@ public class ConfirmScheduleActionDialog {
     public void deleteSchedule(final Schedule schedule){
         Gson gson = new Gson();
         String user_json = bundle.getString(Constants.USER_DATA);
-        User user = gson.fromJson(user_json, User.class);
+        User user = MyUtils.getUserFromBundle(bundle);
         Log.d(TAG + "schedule", schedule.toString());
 
         ScheduleApi scheduleApi = MainApplication.getInstance().getRetrofit().create(ScheduleApi.class);
@@ -182,8 +183,10 @@ public class ConfirmScheduleActionDialog {
                 try {
                     _Meta meta = generalResponse.getMeta();
                     if (meta.getStatus_code() == 200){
-                        MyUtils.showToast(meta.getUser_message());
-                        adapter.remove(schedule.getId());
+                        Intent intent = new Intent();
+                        _c.setResult(Activity.RESULT_OK, intent);
+                        _c.finishActivity(Constants.ViewSchedule);
+                        _c.finish();
                     }else{
                         MyUtils.showToast("Error encountered");
                     }

@@ -157,7 +157,8 @@
                 android:name=".ui.activities.signups.SignInActivity"
                 android:label="@string/app_name"
                 android:screenOrientation="portrait"
-                android:theme="@style/AppTheme.NoActionBar" />
+                android:theme="@style/AppTheme.NoActionBar"
+                android:windowSoftInputMode="adjustResize"/>
         <activity
                 android:name=".ui.activities.client.ActivityClient"
                 android:label="@string/app_name"
@@ -172,7 +173,9 @@
                 android:name=".ui.activities.sales.ActivityAddSales"
                 android:label="@string/app_name"
                 android:screenOrientation="portrait"
-                android:theme="@style/AppTheme.NoActionBar" />
+                android:theme="@style/AppTheme.NoActionBar"
+                android:windowSoftInputMode="adjustResize"/>
+
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
         <activity
                 android:name=".ui.activities.client.ActivityClientProfile"
@@ -239,7 +242,8 @@
                 android:name=".ui.activities.schedule.CreateAppointmentActivity"
                 android:label="@string/app_name"
                 android:screenOrientation="portrait"
-                android:theme="@style/AppTheme.NoActionBar" />
+                android:theme="@style/AppTheme.NoActionBar"
+                android:windowSoftInputMode="adjustResize" />
         <activity
                 android:name=".ui.activities.territories.ActivityTerritories"
                 android:label="@string/app_name"
@@ -302,6 +306,12 @@
                 android:label="@string/app_name"
                 android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+            android:name=".ui.activities.sales.ActivitySaleDetails"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <service
                 android:name=".services.LocationService"
