@@ -55,8 +55,8 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/avatar"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="10dp"
             android:src="@drawable/default_avatar"
@@ -92,15 +92,15 @@
             android:layout_marginTop="15dp" />
 
         <TextView
-            android:text="To go discuss the new stie and the new lines they might need to complete the intended project"
+            android:text="Not specified"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/txt_description"
             android:textColor="@color/grey"
             android:gravity="center_horizontal"
             android:textSize="13sp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:layout_marginTop="5dp" />
 
         <LinearLayout style="@style/SeperatorHorizontal"

@@ -39,6 +39,7 @@ import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.RevenueApi;
+import com.tied.android.tiedapp.ui.activities.report.ReportActivity;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityGroupedSales;
 import com.tied.android.tiedapp.ui.activities.sales.ActivitySalesFilter;
 import com.tied.android.tiedapp.ui.activities.sales.ActivitySalesPrint;
@@ -109,11 +110,11 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_sale_home, null);
+        final View view = inflater.inflate(R.layout.fragment_sale_home, null);
 
         bundle=getArguments();
         user=MyUtils.getUserFromBundle(bundle);
-        initComponent(view);
+
         String today=HelperMethods.getTodayDate();
         start=HelperMethods.getMonthOfTheYear(today)+" "+today;
         Logger.write("8888888888888888888888 "+today);
@@ -122,6 +123,13 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
         this.year = today.substring(0, 4);
 
         Log.d(TAG, "AM HERE AGAIN");
+        view.findViewById(R.id.img_segment).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                initComponent(view);
+            }
+        }, 800);
+
         return view;
     }
 
@@ -248,7 +256,8 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
                 MyUtils.startActivity(getActivity(), ActivitySalesFilter.class, bundle);
                 break;
             case R.id.img_printer:
-                MyUtils.startActivity(getActivity(), ActivitySalesPrint.class, bundle);
+               // MyUtils.startActivity(getActivity(), ActivitySalesPrint.class, bundle);
+                MyUtils.startActivity(getActivity(), ReportActivity.class);
                 break;
             case R.id.img_plus:
                MyUtils.initiateAddSales(getActivity(), bundle);

@@ -116,7 +116,11 @@ public class Notification implements Serializable {
     }
     public String toJSONString() {
         Gson gson=new Gson();
-        return gson.toJson(this, Schedule.class);
+        return gson.toJson(this, Notification.class);
+    }
+    public static Notification fromJSONString(String str) {
+        Gson gson=new Gson();
+        return gson.fromJson(str, Notification.class);
     }
 }
 

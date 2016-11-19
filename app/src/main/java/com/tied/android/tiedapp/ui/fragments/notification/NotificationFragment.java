@@ -87,6 +87,8 @@ public class NotificationFragment extends Fragment {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(getActivity().getResources().getColor(R.color.blue_status_bar));
         }
+        MainActivity.getInstance().clearNewAlertCount();
+
 
         bundle = getArguments();
         user = MyUtils.getUserFromBundle(bundle);

@@ -71,6 +71,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -326,7 +327,11 @@ public abstract class MyUtils {
 
         return sp.getString(Constants.DISTANCE_UNIT, Distance.UNIT_MILES);
     }
-
+    static DecimalFormat distanceFormat = new DecimalFormat("#,###,###");
+    public static String formatDistance(float distance) {
+        if(distanceFormat==null) distanceFormat = new DecimalFormat("#,###,###");
+        return distanceFormat.format(distance);
+    }
     public static void setPreferredDistanceUnit(String unit) {
         SharedPreferences.Editor e = getSharedPreferences().edit();
         e.putString(Constants.DISTANCE_UNIT, unit);
@@ -1094,6 +1099,17 @@ public abstract class MyUtils {
         }
         return day;
     }
+    static SimpleDateFormat timeParser = new SimpleDateFormat("HH:mm");
+    static SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm aa");
+    public static String formatTime(String time) {
+        if(timeParser==null) timeParser = new SimpleDateFormat("HH:mm");
+        if(timeFormat==null) timeFormat = new SimpleDateFormat("hh:mm aa");
+        try{
+        return timeFormat.format(timeParser.parse(time));
+        }catch (Exception e) {
+            return time;
+        }
+    }
 
     public static boolean isSameDay(String day1, String day2) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -1232,6 +1248,7 @@ public abstract class MyUtils {
         c.setTime(date);
         return toNth(c.get(Calendar.DAY_OF_MONTH))+" "+ MyUtils.MONTHS_LIST[c.get(Calendar.MONTH)]+", "+c.get(Calendar.YEAR);
     }
+
 
     public static Date parseDate(String pattern, String date) throws Exception {
         return new SimpleDateFormat(pattern).parse(date);

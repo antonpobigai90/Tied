@@ -72,7 +72,7 @@
                       style="@style/DrawerMenuText"
                       android:layout_height="wrap_content"/>
             <LinearLayout android:layout_width="30dp"
-                          android:id="@+id/red_circle"
+                          android:id="@+id/notification_circle"
                           android:background="@drawable/red_circle"
                           android:layout_alignParentRight="true"
                           android:layout_centerVertical="true"
@@ -80,7 +80,7 @@
                           android:layout_height="30dp">
                 <TextView android:layout_width="wrap_content"
                           android:text="2"
-                          android:id="@+id/num_notifications"
+                          android:id="@+id/num_new_alerts"
                           android:textStyle="bold"
                           android:textColor="@color/white"
                           android:layout_height="wrap_content"/>

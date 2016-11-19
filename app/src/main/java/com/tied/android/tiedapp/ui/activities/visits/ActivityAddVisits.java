@@ -36,6 +36,7 @@ import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -53,7 +54,7 @@ public class ActivityAddVisits extends AppCompatActivity implements  View.OnClic
 
     public static final String TAG = ActivityAddVisits.class
             .getSimpleName();
-
+    DecimalFormat formatter = new DecimalFormat("#,###,###");
     private Bundle bundle;
     private User user;
     Client client;
@@ -125,7 +126,7 @@ public class ActivityAddVisits extends AppCompatActivity implements  View.OnClic
         if (visit != null) {
             titleET.setText(visit.getTitle());
             locationTV.setText(visit.getAddress().getStreet() + ", " + visit.getAddress().getCity() + ", " + visit.getAddress().getState() + ", " + visit.getAddress().getZip());
-            distance.setText(visit.getDistance());
+            distance.setText(""+visit.getDistance());
             String[] strdate = visit.getVisit_date().split("-");
             date.setText(MyUtils.MONTHS_LIST[Integer.valueOf(strdate[1]).intValue() - 1] + " " + strdate[2] + ", " + strdate[0]);
             time.setText(visit.getVisit_time());
@@ -190,23 +191,23 @@ public class ActivityAddVisits extends AppCompatActivity implements  View.OnClic
                     return;
                 }
 
-                createVisits();
+                createOrUpdateVisits();
 
 //                new GeocodeAsyncTask().execute();
                 break;
         }
     }
 
-    private void createVisits() {
+    private void createOrUpdateVisits() {
 
-        final Visit visit = new Visit();
+        if(visit==null) visit = new Visit();
         visit.setTitle(titleET.getText().toString());
         visit.setUser_id(user.getId());
         if(client!=null)    visit.setClient_id(client.getId());
         else visit.setClient_id(null);
         visit.setSchedule_id(null);
         visit.setAddress(location);
-        visit.setDistance(distance.getText().toString());
+        visit.setDistance(Float.valueOf(distance.getText().toString().replace(",", "")));
         visit.setUnit("mi");
         visit.setVisit_date(date_selected.getText().toString());
         visit.setVisit_time(time.getText().toString());
@@ -214,11 +215,11 @@ public class ActivityAddVisits extends AppCompatActivity implements  View.OnClic
         Duration duration = new Duration(5, 30);
         visit.setDuration(duration);
 
-        VisitApi visitApi = MainApplication.createService(VisitApi.class, user.getToken());
+        VisitApi visitApi = MainApplication.createService(VisitApi.class);
         DialogUtils.displayProgress(this);
 
         Call<ResponseBody> response;
-        if (visit == null) {
+        if (visit.getId() == null) {
             response = visitApi.addVisit(visit);
         } else {
             response = visitApi.updateVisit(visit.getId(), visit);
@@ -229,17 +230,26 @@ public class ActivityAddVisits extends AppCompatActivity implements  View.OnClic
                 if (this == null) return;
                 try {
                     GeneralResponse response =new GeneralResponse(resResponse.body());
+                    Logger.write(response.toString());
                     if (response.isAuthFailed()) {
                         User.LogOut(ActivityAddVisits.this);
                         return;
                     }
                     _Meta meta=response.getMeta();
-                    if(meta !=null && meta.getStatus_code()==201) {
-                        DialogUtils.closeProgress();
-                        Intent intent = new Intent();
-                        setResult(RESULT_OK, intent);
-                        finishActivity(Constants.Visits);
-                        finish();
+                    if(meta !=null && (meta.getStatus_code()==201 || meta.getStatus_code()==200)) {
+                        if(visit.getId()==null) {
+                            Bundle bundle=new Bundle();
+                            bundle.putSerializable(Constants.CLIENT_DATA, client);
+                            bundle.putSerializable(Constants.VISIT_DATA, visit);
+                            MyUtils.startRequestActivity(ActivityAddVisits.this, ActivityVisitDetails.class, Constants.VISIT_LIST, bundle);
+                            ActivityAddVisits.this.finish();
+                        }else {
+                            DialogUtils.closeProgress();
+                            Intent intent = new Intent();
+                            setResult(RESULT_OK, intent);
+                            finishActivity(Constants.Visits);
+                            finish();
+                        }
                     }else{
                         MyUtils.showToast("Error encountered");
                         DialogUtils.closeProgress();
@@ -305,7 +315,7 @@ public class ActivityAddVisits extends AppCompatActivity implements  View.OnClic
             if (address != null) {
                 Coordinate coordinate = new Coordinate(address.getLatitude(), address.getLongitude());
                 location.setCoordinate(coordinate);
-                createVisits();
+                createOrUpdateVisits();
             } else {
                 DialogUtils.closeProgress();
                 Toast.makeText(ActivityAddVisits.this, "sorry location cannot be found in map", Toast.LENGTH_LONG).show();

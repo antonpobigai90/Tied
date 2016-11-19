@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -25,10 +27,7 @@ import com.braintreepayments.api.BraintreePaymentActivity;
 import com.braintreepayments.api.models.PaymentMethodNonce;
 import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
-import com.onesignal.OSNotification;
-import com.onesignal.OSNotificationAction;
-import com.onesignal.OSNotificationOpenResult;
-import com.onesignal.OneSignal;
+import com.onesignal.*;
 import com.soundcloud.android.crop.Crop;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
@@ -36,20 +35,25 @@ import com.squareup.picasso.Picasso;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.objects.Notification;
 import com.tied.android.tiedapp.objects.Territory;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.services.LocationService;
+import com.tied.android.tiedapp.ui.activities.client.ActivityClientProfile;
 import com.tied.android.tiedapp.ui.activities.client.TotalSalesActivity;
 import com.tied.android.tiedapp.ui.activities.coworker.CoWorkerActivity;
+import com.tied.android.tiedapp.ui.activities.coworker.ViewCoWorkerActivity;
 import com.tied.android.tiedapp.ui.activities.goal.LineGoalActivity;
 
 import com.tied.android.tiedapp.ui.activities.lines.LinesListActivity;
 import com.tied.android.tiedapp.ui.activities.report.ReportActivity;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityGroupedSales;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityUniqueSales;
+import com.tied.android.tiedapp.ui.activities.schedule.ViewSchedule;
 import com.tied.android.tiedapp.ui.activities.territories.ActivityTerritories;
 import com.tied.android.tiedapp.ui.activities.visits.ActivityAddVisits;
+import com.tied.android.tiedapp.ui.activities.visits.ActivityVisitDetails;
 import com.tied.android.tiedapp.ui.activities.visits.ActivityVisits;
 import com.tied.android.tiedapp.ui.dialogs.DialogAddNewItem;
 import com.tied.android.tiedapp.ui.fragments.DailyStatsFragment;
@@ -136,6 +140,9 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
     public static String order = "desc";
     public static boolean isClientFilter = false;
     public static boolean isClear = false;
+    public static MainActivity mainActivity;
+    public View notificationCircle;
+    public TextView numNotifications;
 
     ImageView schedule_icon, map_icon, sale_icon, more_icon;
 
@@ -143,6 +150,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
+        mainActivity=this;
 
 
         this.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
@@ -158,6 +166,11 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         startService(new Intent(this, LocationService.class));
         navigationView=(NavigationView)findViewById(R.id.navigation_view);
         drawerLayout=(DrawerLayout)findViewById(R.id.drawer);
+        numNotifications=(TextView)findViewById(R.id.num_new_alerts);
+        notificationCircle=findViewById(R.id.notification_circle);
+        notificationCircle.setVisibility(View.GONE);
+        //showNumAlerts(null);
+
 
         //relativeLayout = (LinearLayout) findViewById(R.id.linearLayout);
        // tab_bar = (LinearLayout) findViewById(R.id.tab_bar);
@@ -245,6 +258,17 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
             launchFragment(Constants.AppointmentList, bundle);
         //}
         activity_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mainActivity=this;
+
+        showNumAlerts(null);
+    }
+    public static MainActivity getInstance() {
+        return mainActivity;
     }
 
     Fragment currentFragment=null;
@@ -719,17 +743,45 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
             OSNotificationAction.ActionType actionType = result.action.type;
             JSONObject data = result.notification.payload.additionalData;
             String customKey;
-
             Logger.write("OneSignalExample", "customkey set with value: " + result.notification.toString());
+            final Bundle bundle=new Bundle();
             if (data != null) {
-                customKey = data.optString("customkey", null);
-                if (customKey != null) {
-                    SharedPreferences sp=MyUtils.getSharedPreferences();
-                    SharedPreferences.Editor ed = sp.edit();
-                    ed.putString(Constants.PREFS_CLICKED_NOTIFICATION, customKey);
-                    ed.apply();
-                    Logger.write("OneSignalExample", "customkey set with value: " + customKey);
+                try {
+                    Logger.write(data.toString());
+                    final Notification model=Notification.fromJSONString(data.toString());
+                    getUIHandler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            switch (model.getObject()) {
+                                case "user":
+
+                                    if (MyUtils.getUserLoggedIn().getId().equals(model.getUser_id())) {
+                                        MainActivity.getInstance().launchFragment(Constants.Profile, bundle);
+                                    } else {
+                                        bundle.putString("user_id", model.getObject_id());
+                                        MyUtils.startActivity(context, ViewCoWorkerActivity.class, bundle);
+                                    }
+                                    break;
+                                case "visit":
+                                    bundle.putString("visit_id", model.getObject_id());
+                                    MyUtils.startActivity(context, ActivityVisitDetails.class, bundle);
+                                    break;
+                                case "client":
+                                    bundle.putString("client_id", model.getObject_id());
+                                    MyUtils.startActivity(context, ActivityClientProfile.class, bundle);
+                                    break;
+                                case "schedule":
+                                    bundle.putString("schedule_id", model.getObject_id());
+                                    MyUtils.startActivity(context, ViewSchedule.class, bundle);
+                                    break;
+                            }
+                        }
+                    }, 500);
+
+                }catch (Exception e) {
+                    Logger.write(e);
                 }
+
             }
 
 
@@ -740,67 +792,94 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
 
         }
     }
+    public static Handler UIHandler = new Handler(Looper.getMainLooper());
+    public static Handler getUIHandler() {
+        if(UIHandler==null) UIHandler = new Handler(Looper.getMainLooper());
+        return UIHandler;
+    }
     private static final String NEW_MESSAGE_TYPE="message";
     private static final String SEEN_MESSAGE_TYPE="seen_message";
     private static final String  NEW_NOTIFICATION_TYPE="notification";
     private static final String SEEN_NOTIFICATION_TYPE="seen_notification";
+    static int numNewAlert;
     public static class MyNotificationReceivedHandler implements OneSignal.NotificationReceivedHandler {
+
+        Context context;
+        public MyNotificationReceivedHandler(Context c)  {
+            context=c;
+        }
+
         @Override
         public void notificationReceived(OSNotification notification) {
-            Logger.write("OneSignalExample", "customkey set with value: " +notification.toString());
+
+
+           ////Logger.write("OneSignalExample", "customkey set with value: " +notification.payload.additionalData.toString());
             JSONObject data = notification.payload.additionalData;
-            String customKey;
-            ShortcutBadger.applyCount(MainApplication.getInstance().getApplicationContext(), 3);
+           // Logger.write("Custome " +data.toString());
+           // String customKey;
+           // ShortcutBadger.applyCount(MainApplication.getInstance().getApplicationContext(), 3);
             if (data != null) {
-                customKey = data.optString("customkey", null);
-                if (customKey != null) {
-                    Logger.write("OneSignalExample", "customkey set with value: " + customKey);
+                //customKey = data.optString("customkey", null);
+               // if (customKey != null) {
+                 //   Logger.write("OneSignalExample", "customkey set with value: " + customKey);
                     try {
-                        JSONObject pushData=new JSONObject(customKey);
-                        String type = pushData.getString("type");
+
                         SharedPreferences sp = MyUtils.getSharedPreferences();
                         SharedPreferences.Editor ed = sp.edit();
                 /*
                 ed.putString(Constants.PREFS_ALERT, intent.getBundleExtra("data").getString("alert").toString());
                 ed.apply();*/
-                        int numNewAlert = sp.getInt(Constants.PREFS_NEW_NOTIFICATION_COUNT, 0) + sp.getInt(Constants.PREFS_NEW_MESSAGE_COUNT, 0);
-                        switch (type) {
-                            case  NEW_MESSAGE_TYPE:
-                            case NEW_NOTIFICATION_TYPE:
-                                int numNewMessage = sp.getInt(Constants.PREFS_NEW_MESSAGE_COUNT, 0);
-                                numNewAlert++;
-                                numNewMessage++;
-                                ed.putInt(Constants.PREFS_NEW_MESSAGE_COUNT, numNewMessage);
-                                break;
-                            default:
+                          numNewAlert = sp.getInt(Constants.PREFS_NEW_NOTIFICATION_COUNT, 0) + sp.getInt(Constants.PREFS_NEW_MESSAGE_COUNT, 0);
 
-                                int numNewNotification = sp.getInt(Constants.PREFS_NEW_NOTIFICATION_COUNT, 0);
                                 numNewAlert++;
-                                numNewNotification++;
-                                ed.putInt(Constants.PREFS_NEW_NOTIFICATION_COUNT, numNewNotification);
 
-                                break;
-                        }
+                                ed.putInt(Constants.PREFS_NEW_NOTIFICATION_COUNT, numNewAlert);
+
+
                         ed.commit();
+                        ShortcutBadger.applyCount(MainApplication.getInstance().getApplicationContext(), numNewAlert);
 
                         try {
-                           /* notification_menu.postDelayed(new Runnable() {
+                          getUIHandler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    showNumAlerts();
+                                    MainActivity.getInstance().showNumAlerts(numNewAlert);
                                 }
-                            }, 500);*/
+                            }, 500);
                         } catch (Exception e) {
+                            Logger.write(e);
                         }
-                    } catch (JSONException je) {
-
+                    } catch (Exception je) {
+                        Logger.write(je);
                     }
-                }
+               // }
             }
         }
     }
-    public static  void showNumAlerts() {
+    public void showNumAlerts(Integer numAlerts) {
+        if(numAlerts==null) {
+            SharedPreferences sp = MyUtils.getSharedPreferences();
+            numAlerts = sp.getInt(Constants.PREFS_NEW_NOTIFICATION_COUNT, 0) + sp.getInt(Constants.PREFS_NEW_MESSAGE_COUNT, 0);
+        }
+        if(numAlerts>0) {
+            notificationCircle.setVisibility(View.VISIBLE);
+        }else{
+            notificationCircle.setVisibility(View.GONE);
+            ShortcutBadger.applyCount(MainApplication.getInstance().getApplicationContext(), 0);
+        }
+        numNotifications.setText(""+numAlerts);
+    }
 
+    public void clearNewAlertCount() {
+        SharedPreferences sp = MyUtils.getSharedPreferences();
+        numNewAlert = sp.getInt(Constants.PREFS_NEW_NOTIFICATION_COUNT, 0) + sp.getInt(Constants.PREFS_NEW_MESSAGE_COUNT, 0);
+        if(numNewAlert > 0) {
+            SharedPreferences.Editor ed = sp.edit();
+            ed.remove(Constants.PREFS_NEW_NOTIFICATION_COUNT);
+            ed.commit();
+        }
+        notificationCircle.setVisibility(View.GONE);
+        ShortcutBadger.applyCount(MainApplication.getInstance().getApplicationContext(), 0);
     }
 
 
@@ -834,6 +913,15 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 map_icon.setBackgroundResource(R.drawable.maps);
                 sale_icon.setBackgroundResource(R.drawable.sales);
                 break;
+        }
+    }
+    public static class NotificationExtender extends NotificationExtenderService {
+        @Override
+        protected boolean onNotificationProcessing(OSNotificationReceivedResult receivedResult) {
+            // Read properties from result.
+            if(MyUtils.getUserLoggedIn()==null) return true;
+            // Return true to stop the notification from displaying.
+            return false;
         }
     }
 }

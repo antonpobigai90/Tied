@@ -97,7 +97,6 @@
         <meta-data
                 android:name="io.fabric.ApiKey"
                 android:value="86c1fb407b27a6b13b7588dbee2d502e177c7790" />
-        <meta-data android:name="com.onesignal.NotificationOpened.DEFAULT" android:value="DISABLE" />
 
         <!--
              <meta-data

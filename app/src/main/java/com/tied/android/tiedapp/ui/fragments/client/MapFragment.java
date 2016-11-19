@@ -116,14 +116,20 @@ public class MapFragment extends Fragment implements View.OnClickListener {
 
         mPagerAdapter = new PagerAdapter(getChildFragmentManager());
         if (mViewPager != null) {
-            mViewPager.setAdapter(mPagerAdapter);
-            if (bundle.getBoolean(Constants.CLIENT_LIST)){
-                mViewPager.setCurrentItem(1);
-                selectTab(1);
-            }else{
-                mViewPager.setCurrentItem(0);
-                selectTab(0);
-            }
+            mViewPager.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mViewPager.setAdapter(mPagerAdapter);
+                    if (bundle.getBoolean(Constants.CLIENT_LIST)){
+                        mViewPager.setCurrentItem(1);
+                        selectTab(1);
+                    }else{
+                        mViewPager.setCurrentItem(0);
+                        selectTab(0);
+                    }
+                }
+            }, 500);
+
 
         }
         onCustomSelected(mViewPager);

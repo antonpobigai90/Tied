@@ -129,9 +129,12 @@ public class VisitFilterActivity extends AppCompatActivity implements View.OnCli
             }
 
             m_seekbar.setProgress(visitFilter.getDistance());
-            txt_month.setText(MyUtils.MONTHS_LIST[visitFilter.getMonth() - 1]);
+            if(visitFilter.getMonth()==0) txt_month.setText("All");
+            else txt_month.setText(MyUtils.MONTHS_LIST[visitFilter.getMonth() - 1]);
             txt_year.setText(String.valueOf(visitFilter.getYear()));
             setSortby(visitFilter.getSort());
+        }else{
+
         }
     }
 
@@ -161,6 +164,7 @@ public class VisitFilterActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void setSortby(String sortby) {
+        this.sortby=sortby;
         if (sortby.equals("recent")) {
             txt_recent.setBackgroundResource(R.drawable.blue_fill_grey_stroke);
             txt_recent.setTextColor(Color.WHITE);
@@ -260,8 +264,8 @@ public class VisitFilterActivity extends AppCompatActivity implements View.OnCli
                 break;
             case R.id.txt_apply:
                 if (client == null) {
-                    MyUtils.showAlert(this, "please select a client");
-                    return;
+                   // MyUtils.showAlert(this, "please select a client");
+                   // return;
                 } else if (txt_month.getText().toString().isEmpty()) {
                     MyUtils.showAlert(this, "please select a month");
                     return;

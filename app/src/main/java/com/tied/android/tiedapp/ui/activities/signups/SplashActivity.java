@@ -2,6 +2,7 @@ package com.tied.android.tiedapp.ui.activities.signups;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -29,11 +30,21 @@ public class SplashActivity extends Activity {
     protected int _splashTime = 3000;
 
     Typeface typeFace;
+    private static boolean activityStarted;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
+
+        if (   activityStarted
+                && getIntent() != null
+                && (getIntent().getFlags() & Intent.FLAG_ACTIVITY_REORDER_TO_FRONT) != 0) {
+            finish();
+            return;
+        }
+
+        activityStarted = true;
         setContentView(R.layout.activity_splash);
         final SplashActivity sPlashScreen = this;
         Fabric.with(this, new Crashlytics());

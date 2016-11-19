@@ -22,7 +22,7 @@ public class Visit implements Serializable {
     private String visit_date;
     private String visit_time;
     private Duration duration;
-    private String distance;
+    private float distance;
     private String unit;
 
     public Visit() {
@@ -100,11 +100,11 @@ public class Visit implements Serializable {
         this.duration = duration;
     }
 
-    public String getDistance() {
+    public float getDistance() {
         return distance;
     }
 
-    public void setDistance(String distance) {
+    public void setDistance(float distance) {
         this.distance = distance;
     }
 
@@ -134,7 +134,7 @@ public class Visit implements Serializable {
     }
     public String toJSONString() {
         Gson gson=new Gson();
-        return gson.toJson(this, Schedule.class);
+        return gson.toJson(this, Visit.class);
     }
 }
 

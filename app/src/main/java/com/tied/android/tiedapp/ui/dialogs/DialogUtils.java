@@ -19,22 +19,25 @@ public class DialogUtils {
 	}
 	    
     public static void displayProgress(final Context context){
-
-            if(progressIndicator == null){
-                if(context instanceof Activity) {
-                    ((Activity)context).runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            progressIndicator = new ProgressIndicator(context);
-                            if(!progressIndicator.isShowing()) progressIndicator.show();
-                        }
-                    });
-                }else {
-                    progressIndicator = new ProgressIndicator(context);
-                    if(!progressIndicator.isShowing()) progressIndicator.show();
+            try {
+                if (progressIndicator == null) {
+                    if (context instanceof Activity) {
+                        ((Activity) context).runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                progressIndicator = new ProgressIndicator(context);
+                                if (!progressIndicator.isShowing()) progressIndicator.show();
+                            }
+                        });
+                    } else {
+                        progressIndicator = new ProgressIndicator(context);
+                        if (!progressIndicator.isShowing()) progressIndicator.show();
+                    }
+                } else {
+                    if (!progressIndicator.isShowing()) progressIndicator.show();
                 }
-            }else {
-                if(!progressIndicator.isShowing()) progressIndicator.show();
+            }catch (Exception e) {
+
             }
     }
 

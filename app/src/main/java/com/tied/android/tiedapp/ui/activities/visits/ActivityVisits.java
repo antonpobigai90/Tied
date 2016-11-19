@@ -35,6 +35,7 @@ import com.tied.android.tiedapp.ui.activities.sales.ActivityLineClientSales;
 import com.tied.android.tiedapp.ui.adapters.MapClientListAdapter;
 import com.tied.android.tiedapp.ui.adapters.VisitListAdapter;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.util.HelperMethods;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 
@@ -107,9 +108,10 @@ public class ActivityVisits extends AppCompatActivity implements View.OnClickLis
     private void setDefaultVisitFilter() {
         visitFilter = new VisitFilter();
         visitFilter.setClient(null);
-        visitFilter.setMonth(11);
-        visitFilter.setYear(2016);
-        visitFilter.setDistance(4500);
+        //visitFilter.setMonth(HelperMethods.getNumericMonthOfTheYear(HelperMethods.getTodayDate()));
+        visitFilter.setMonth(0);
+        visitFilter.setYear(HelperMethods.getCurrentYear(HelperMethods.getTodayDate()));
+        visitFilter.setDistance(5000);
         visitFilter.setUnit("mi");
         visitFilter.setSort("recent");
 
@@ -199,8 +201,7 @@ public class ActivityVisits extends AppCompatActivity implements View.OnClickLis
         if ((requestCode == Constants.Visits || requestCode == Constants.VISIT_LIST) && resultCode == this.RESULT_OK) {
             setDefaultVisitFilter();
         } else if(requestCode == Constants.VISIT_FILTER && resultCode == this.RESULT_OK) {
-            bundle = data.getExtras();
-            visitFilter = (VisitFilter) bundle.getSerializable(Constants.VISIT_DATA);
+            visitFilter = (VisitFilter) data.getExtras().getSerializable(Constants.VISIT_DATA);
             loadVisits(visitFilter);
         }
     }

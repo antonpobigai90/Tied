@@ -77,7 +77,7 @@ public class MainApplication extends Application {
         Fabric.with(fabric);
         OneSignal.startInit(this)
                 .inFocusDisplaying(OneSignal.OSInFocusDisplayOption.Notification)
-        .setNotificationReceivedHandler(new MainActivity.MyNotificationReceivedHandler())
+        .setNotificationReceivedHandler(new MainActivity.MyNotificationReceivedHandler(getApplicationContext()))
         .setNotificationOpenedHandler(new MainActivity.OneSignalNotificationOpenedHandler(getApplicationContext())).init();
         OneSignal.enableSound(true);
         //OneSignal.enableNotificationsWhenActive(true);

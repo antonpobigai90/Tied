@@ -113,12 +113,12 @@ public class ActivityVisitDetails extends AppCompatActivity implements  View.OnC
 
         if (visit != null) {
             locationTV.setText(visit.getAddress().getStreet() + ", " + visit.getAddress().getCity() + ", " + visit.getAddress().getState() + ", " + visit.getAddress().getZip());
-            distance.setText(MyUtils.getDistance(MyUtils.getCurrentLocation(), visit.getAddress().getCoordinate(), false));
-
+            distance.setText(MyUtils.formatDistance(visit.getDistance())+MyUtils.getPreferredDistanceUnit());
+            dscription.setText(visit.getTitle());
             String[] strdate = visit.getVisit_date().split("-");
             date.setText(MyUtils.MONTHS_LIST[Integer.valueOf(strdate[1]).intValue() - 1] + " " + strdate[2] + ", " + strdate[0]);
 
-            time.setText(visit.getVisit_time());
+            time.setText(MyUtils.formatTime(visit.getVisit_time()));
 
             setVisibile();
         } else {
@@ -176,13 +176,13 @@ public class ActivityVisitDetails extends AppCompatActivity implements  View.OnC
                         getClientObject(visit.getClient_id());
 
                         locationTV.setText(visit.getAddress().getStreet() + ", " + visit.getAddress().getCity() + ", " + visit.getAddress().getState() + ", " + visit.getAddress().getZip());
-                        distance.setText(MyUtils.getDistance(MyUtils.getCurrentLocation(), visit.getAddress().getCoordinate(), false));
+                        distance.setText(MyUtils.formatDistance(visit.getDistance())+MyUtils.getPreferredDistanceUnit());
 
                         String[] strdate = visit.getVisit_date().split("-");
                         date.setText(MyUtils.MONTHS_LIST[Integer.valueOf(strdate[1]).intValue() - 1] + " " + strdate[2] + ", " + strdate[0]);
 
-                        time.setText(visit.getVisit_time());
-
+                        time.setText(MyUtils.formatTime(visit.getVisit_time()));
+                        dscription.setText(visit.getTitle());
                         setVisibile();
 
                     } else {

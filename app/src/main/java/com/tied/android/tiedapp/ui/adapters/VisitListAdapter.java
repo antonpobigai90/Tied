@@ -14,9 +14,11 @@ import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.ui.activities.client.ClientMapAndListActivity;
 import com.tied.android.tiedapp.ui.listeners.ListAdapterListener;
 import com.tied.android.tiedapp.util.HelperMethods;
+import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 import com.tied.android.tiedapp.util.RoundImage;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,11 +32,15 @@ public class VisitListAdapter extends BaseAdapter {
     public List _clients;
     Context _c;
     ViewHolder v;
+    SimpleDateFormat timeParser = new SimpleDateFormat("HH:mm");
+    SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm aa");
+    String unit="mi";
 
     public VisitListAdapter(List<Visit> visits, List<Client> clients, Context context) {
         _visits = visits;
         _clients = clients;
         _c = context;
+        unit=MyUtils.getPreferredDistanceUnit();
     }
 
     @Override
@@ -87,13 +93,13 @@ public class VisitListAdapter extends BaseAdapter {
             v.address.setText(visit.getAddress().getStreet() + ", " + visit.getAddress().getCity() + ", " + visit.getAddress().getState() + ", " + visit.getAddress().getZip());
         }
 
-        v.distance.setText(MyUtils.getDistance(MyUtils.getCurrentLocation(), visit.getAddress().getCoordinate(), false)+"m");
+        v.distance.setText(MyUtils.formatDistance(visit.getDistance())+unit);
 
         String[] date = visit.getVisit_date().split("-");
         v.day.setText(date[2]);
-        v.month.setText(MyUtils.MONTHS_LIST[Integer.valueOf(date[1]).intValue() - 1]);
+        v.month.setText(MyUtils.MONTHS_LIST[Integer.valueOf(date[1]).intValue() - 1].toUpperCase());
+         v.time.setText(MyUtils.formatTime(visit.getVisit_time()));
 
-        v.time.setText(visit.getVisit_time());
 
         view.setTag(v);
 
