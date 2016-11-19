@@ -461,7 +461,7 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
 //                        } else {
                             Intent intent = new Intent();
                             getActivity().setResult(Activity.RESULT_OK, intent);
-                            getActivity().finishActivity(Constants.CreateSchedule);
+                            getActivity().finishActivity(Constants.ViewSchedule);
 //                        }
                         getActivity().finish();
                     } else {
@@ -530,8 +530,9 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
 //                        nextAction(Constants.ScheduleSuggestions, bundle);
 
                             Intent intent = new Intent();
+                            intent.putExtra(Constants.SCHEDULE_DATA, schedule);
                             getActivity().setResult(Activity.RESULT_OK, intent);
-                            getActivity().finishActivity(Constants.CreateSchedule);
+                            getActivity().finishActivity(Constants.ViewSchedule);
                             getActivity().finish();
                         }
                     } else {

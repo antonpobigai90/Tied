@@ -155,11 +155,11 @@ public class MapFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.search_button:
                 if (search.getText().toString().length() > 3) {
-                    if (bMap) {
+//                    if (bMap) {
                         clientsMapFragment.loadClientsFilter(search.getText().toString());
-                    } else {
+//                    } else {
                         clientsListFragment.loadClientsFilter(search.getText().toString());
-                    }
+//                    }
                 }
                 break;
         }
@@ -296,6 +296,9 @@ public class MapFragment extends Fragment implements View.OnClickListener {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        fragment.onActivityResult(requestCode, resultCode, data);
+        clientsMapFragment.loadClientsFilter(search.getText().toString());
+        clientsListFragment.loadClientsFilter(search.getText().toString());
+
+//        fragment.onActivityResult(requestCode, resultCode, data);
     }
 }

@@ -41,7 +41,7 @@ public  class HelperMethods {
             int dayOfWeek=gregorianCalendar.get(gregorianCalendar.DAY_OF_WEEK);
             String dayOfWeekName= WEEK_LIST[dayOfWeek];
 
-            return ""+ dayOfWeekName +", " + month_name + " " + dayOfWeek + ", " + year;
+            return ""+ dayOfWeekName +", " + month_name + " " + day + ", " + year;
 
         } catch (ParseException e) {
             return null;

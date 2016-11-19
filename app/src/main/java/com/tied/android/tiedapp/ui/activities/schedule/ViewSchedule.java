@@ -2,6 +2,7 @@ package com.tied.android.tiedapp.ui.activities.schedule;
 
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -168,10 +169,13 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.img_close:
-                onBackPressed();
+                Intent intent = new Intent();
+                setResult(Activity.RESULT_OK, intent);
+                finishActivity(Constants.ViewSchedule);
+                finish();
                 break;
             case R.id.img_edit:
-                MyUtils.startRequestActivity(this, CreateAppointmentActivity.class, Constants.AddScheduleActivity, bundle);
+                MyUtils.startRequestActivity(this, CreateAppointmentActivity.class, Constants.ViewSchedule, bundle);
                 break;
             case R.id.call_client:
                 String number = "tel:" + client.getPhone().trim();
@@ -403,4 +407,13 @@ public class ViewSchedule extends AppCompatActivity implements OnMapReadyCallbac
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == Constants.ViewSchedule && resultCode == RESULT_OK) {
+            schedule = (Schedule) data.getSerializableExtra(Constants.SCHEDULE_DATA);
+            initValue();
+        }
+    }
 }

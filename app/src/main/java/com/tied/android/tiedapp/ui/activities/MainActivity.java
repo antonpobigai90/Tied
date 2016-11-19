@@ -129,7 +129,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
     public static ArrayList<String> selectedLines = new ArrayList<String>();
     public static ArrayList<Territory> selectedTerritories = new ArrayList<Territory>();
     public static String search_name = "";
-    public static int distance = 10000;
+    public static int distance = 20000;
     public static String group = "me";
     public static int last_visited = 1;
     public static String orderby = "distance";
@@ -369,6 +369,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 fragment = fragments.get(pos);
                 break;
             case Constants.ActivityFragment:
+                setActiveIcon(0);
                 activity_layout.setBackground(getResources().getDrawable(R.drawable.tab_selected));
                 if(fragments.get(pos)==null) {
                     fragments.put(pos, ScheduleAppointmentsFragment.newInstance(bundle) );
