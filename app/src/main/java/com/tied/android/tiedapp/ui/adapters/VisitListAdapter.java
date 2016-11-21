@@ -21,6 +21,7 @@ import com.tied.android.tiedapp.util.RoundImage;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Emmanuel on 8/20/2016.
@@ -29,14 +30,14 @@ public class VisitListAdapter extends BaseAdapter {
     public static final String TAG = "VisitListAdapter";
 
     public List _visits;
-    public List _clients;
+    public Map<String, Client> _clients;
     Context _c;
     ViewHolder v;
     SimpleDateFormat timeParser = new SimpleDateFormat("HH:mm");
     SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm aa");
     String unit="mi";
 
-    public VisitListAdapter(List<Visit> visits, List<Client> clients, Context context) {
+    public VisitListAdapter(List<Visit> visits, Map clients, Context context) {
         _visits = visits;
         _clients = clients;
         _c = context;
@@ -80,7 +81,7 @@ public class VisitListAdapter extends BaseAdapter {
         v.month = (TextView)view.findViewById(R.id.month);
 
         if (_clients != null) {
-            Client client = (Client) _clients.get(i);
+            Client client = (Client) _clients.get(visit.getClient_id());
 
             v.name.setText(MyUtils.getClientName(client));
             MyUtils.Picasso.displayImage(client.getLogo(), v.pic);
@@ -106,6 +107,10 @@ public class VisitListAdapter extends BaseAdapter {
         return view;
     }
 
+    public void setClients(Map map) {
+        _clients=map;
+        Logger.write(map.toString());
+    }
     static class ViewHolder {
         ImageView pic;
         TextView name,address, distance, time, day, month;

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.Line;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,10 +32,14 @@ public class ClientLinesAdapter extends BaseAdapter {
     public List<Line> _data;
     Context _c;
     ViewHolder viewHolder;
+    private List<String> selected=null;
+    boolean isMultiple=false;
 
-    public ClientLinesAdapter(List<Line> line_list, Context context) {
-        _data = line_list;
+    public ClientLinesAdapter(List<Line> data, List<String> selected, Context context, boolean isMultiple) {
+        _data = data;
         _c = context;
+        this.selected=(selected==null?new ArrayList<String>():selected);
+        this.isMultiple=isMultiple;
     }
 
     @Override
@@ -73,34 +78,23 @@ public class ClientLinesAdapter extends BaseAdapter {
         viewHolder.txt_line_name.setText(data.getName());
 //        String sales = data.getSales() + "Total sales";
 //        viewHolder.txt_line_sales.setText(sales);
-        if (data.isCheck_status()) {
-            viewHolder.img_check.setBackgroundResource(R.drawable.circle_check2);
-            viewHolder.txt_line_name.setTextColor(_c.getResources().getColor(R.color.light_gray2));
-        } else {
-            viewHolder.img_check.setBackgroundResource(R.drawable.unselectd_bg);
-            viewHolder.txt_line_name.setTextColor(_c.getResources().getColor(R.color.grey));
+
+        if(isMultiple) {
+            if (selected.contains(data.getId())) {
+                viewHolder.img_check.setImageResource(R.drawable.selected_bg);
+            } else {
+                viewHolder.img_check.setImageResource(R.drawable.unselectd_bg);
+            }
+        }else{
+            viewHolder.img_check.setVisibility(View.GONE);
         }
-
-//        viewHolder.img_check.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                setSelectedIndex(i);
-//            }
-//        });
-
         view.setTag(data);
         return view;
     }
-
-    public void setSelectedIndex(int index){
-        for(int i = 0; i< _data.size(); i++){
-            if(i != index){
-                _data.get(i).setCheck_status(false);
-            }
-            else{
-                _data.get(i).setCheck_status(true);
-            }
-        }
-        notifyDataSetChanged();
+    public void setSelected(List<String> selected) {
+        this.selected=(selected==null?new ArrayList<String>():selected);
     }
+
+
+
 }

@@ -325,6 +325,11 @@ public class GeneralSelectObjectActivity extends Activity
                     adapter = new MyClientLineAdapter(clientsWithDistance, selectedIDs, GeneralSelectObjectActivity.this, isMultiple);
                     listView.setAdapter(adapter);
                     listView.setFastScrollEnabled(true);
+                    if(clientsWithDistance.size()==0) {
+                        findViewById(R.id.no_results).setVisibility(View.VISIBLE);
+                    }else{
+                        findViewById(R.id.no_results).setVisibility(View.GONE);
+                    }
                 }else{
                     Toast.makeText(GeneralSelectObjectActivity.this, clientRes.getMessage(), Toast.LENGTH_LONG).show();
                 }
@@ -343,50 +348,6 @@ public class GeneralSelectObjectActivity extends Activity
         added = new boolean[range.length-1];
     }
 
-    public ArrayList getClientsWithLocationDistance(ArrayList<Client> clients){
-
-        initAdded();
-
-        ArrayList data = new ArrayList();
-        int rangeIndex = 0;
-        int minIndex = range[0];
-        for(int i = 0; i < range.length - 1; i++){
-            for(int j = 0; j < clients.size(); j++ ) {
-                Client this_client = clients.get(j);
-                if(this_client.getDis_from() >= range[rangeIndex] && this_client.getDis_from() <= range[rangeIndex + 1]){
-                    if(!added[rangeIndex]){
-                        String lower = minIndex+"";
-                        String upper = range[rangeIndex + 1]+"";
-                        Distance distance = new Distance(lower, upper, "Miles");
-                        data.add(distance);
-                        added[rangeIndex] = true;
-                        Log.d(TAG, "DISTANCE IS RANGE: "+distance.toString() +" j = "+j);
-                        minIndex = range[rangeIndex + 1];
-                    }
-                    Log.d(TAG, "this_client DISTANCE IS : "+this_client.getDis_from() +" name "+this_client.getFull_name() +" j = "+j);
-                    data.add(this_client);
-                    clients.remove(j);
-                    j--;
-                }
-            }
-            rangeIndex++;
-        }
-
-        if(clients.size() > 0){
-            String lower = range[rangeIndex]+"";
-            String upper = "n";
-            Distance distance = new Distance(lower, upper, "Miles");
-            data.add(distance);
-            data.addAll(clients);
-        }
-
-        return data;
-    }
-
-    public ArrayList getClientsByRecentlyAdded(ArrayList<Client> clients){
-
-        return clients;
-    }
 
     @Override
     protected void onResume() {

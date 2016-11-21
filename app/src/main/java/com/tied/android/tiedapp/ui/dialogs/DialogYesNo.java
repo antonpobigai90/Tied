@@ -130,10 +130,10 @@ public class DialogYesNo {
                         activity.finishActivity(Constants.LineDelete);
                         activity.finish();
                     }else{
-                        MyUtils.showToast("Error encountered");
+                        MyUtils.showToast(meta.getUser_message());
                     }
                 } catch (Exception e) {
-                    MyUtils.showToast(e.getMessage());
+                    MyUtils.showToast("Error Encounted");
                     e.printStackTrace();
                 }
             }
@@ -165,10 +165,10 @@ public class DialogYesNo {
                         activity.finishActivity(Constants.ClientDelete);
                         activity.finish();
                     }else{
-                        MyUtils.showToast("Error encountered");
+                        MyUtils.showToast(meta.getUser_message());
                     }
                 } catch (Exception e) {
-                    MyUtils.showToast(e.getMessage());
+                    MyUtils.showToast("Error encountered");
                     e.printStackTrace();
                 }
             }
@@ -200,10 +200,10 @@ public class DialogYesNo {
                         activity.finishActivity(Constants.VISIT_LIST);
                         activity.finish();
                     }else{
-                        MyUtils.showToast("Error encountered");
+                        MyUtils.showToast(meta.getUser_message());
                     }
                 } catch (Exception e) {
-                    MyUtils.showToast(e.getMessage());
+                    MyUtils.showToast("Error encountered");
                     e.printStackTrace();
                 }
             }

@@ -95,7 +95,7 @@ public class AddLinesActivity extends AppCompatActivity implements  View.OnClick
             return;
         }
         String description = descriptonET.getText().toString().trim();
-
+        if(line==null) line=new Line();
 
 
         if(line.getId()!=null && !line.getId().isEmpty()) {

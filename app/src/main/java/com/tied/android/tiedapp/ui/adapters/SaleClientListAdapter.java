@@ -79,7 +79,7 @@ public class SaleClientListAdapter extends ClientParentAdapter {
                 MyUtils.Picasso.displayImage(data.getLogo(), v.imageView);
             }
 
-            v.line_name.setText(MyUtils.getClientName(data));
+            v.line_name.setText(MyUtils.getClientName(data)+" Client");
             //v.line_date.setText(String.format("%s", data.getLine_date()));
            // v.percent.setText(String.format("(%s%s)", data.getPercent(), "%"));
             v.price.setText(MyUtils.moneyFormat(data.getTotal_revenue()));

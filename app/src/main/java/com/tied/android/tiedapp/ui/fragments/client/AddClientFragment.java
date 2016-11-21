@@ -243,6 +243,7 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
                 MyUtils.Picasso.displayImage(client.getLogo(), avatar);
                 name.setText(client.getFull_name());
                 company.setText(client.getCompany());
+                view.findViewById(R.id.import_file).setVisibility(View.GONE);
                 ///street.setText(client.getAddress().getStreet());
                 //zip.setText(client.getAddress().getZip());
                 //city.setText(client.getAddress().getCity());

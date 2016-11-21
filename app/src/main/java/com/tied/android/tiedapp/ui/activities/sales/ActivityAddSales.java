@@ -233,7 +233,7 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
                         return;
                     }
                     _Meta meta=response.getMeta();
-                    if(meta !=null && meta.getStatus_code()==200) {
+                    if(meta !=null && meta.getStatus_code()==201) {
 
 //                        final Revenue revenue2 = response.getData(Constants.REVENUE_DATA, Revenue.class);
 //                        Logger.write("the_line: "+revenue2.toString());

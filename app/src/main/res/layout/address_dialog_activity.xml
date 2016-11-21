@@ -55,11 +55,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
-                    android:text="6408 Rocksprings drive"
+                    android:text=""
+                    android:hint="Enter Street address and Apt"
                     android:textColor="@color/grey"
                     style="@style/EditTextStyle"
 
             />
+            <LinearLayout style="@style/SeperatorHorizontal"></LinearLayout>
         </LinearLayout>
 
         <View
@@ -95,7 +97,8 @@
                         android:layout_height="wrap_content"
                         android:backgroundTint="@android:color/transparent"
                         android:inputType="text"
-                        android:text="Dallas"
+                        android:text=""
+                        android:hint="Enter City"
                         style="@style/EditTextStyle"
                         android:textColor="@color/grey"
                 />
@@ -131,7 +134,9 @@
 
                 </RelativeLayout>
 
+
             </LinearLayout>
+
 
 
         </LinearLayout>
@@ -159,7 +164,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
-                    android:text="76001"
+                    android:text=""
+                    android:hint="Enter Zip Code"
                     style="@style/EditTextStyle"
                     android:inputType="number"
                     android:textColor="@color/grey"

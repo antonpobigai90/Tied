@@ -169,7 +169,7 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
 
             case R.id.txt_delete:
                 color = this.getResources().getColor(R.color.alert_bg_color);
-                DialogYesNo alert_delete = new DialogYesNo(getActivity(),client, "DELETE CLIENT","Are you sure want to delete this client","YES DELETE!",color,0);
+                DialogYesNo alert_delete = new DialogYesNo(getActivity(),client, "DELETE CLIENT","All sales, schedule and visits related to this client with be deleted. Are you sure want to continue?","YES DELETE!",color,0);
                 alert_delete.showDialog();
                 break;
             case R.id.icon_plus:

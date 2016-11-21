@@ -68,8 +68,10 @@ public class SelectLineActivity extends Activity
 
     ArrayList<Line> search_data;
     ArrayList<Line> lineDataModels = new ArrayList<Line>();
+    ArrayList<Line> lineDataModelsHolder = new ArrayList<Line>();
     private ListView listView;
     private ClientLinesAdapter adapter;
+    private ArrayList<String> selectedIDs=new ArrayList<String>(0);
 
     // Pop up
     private EditText search;
@@ -95,11 +97,31 @@ public class SelectLineActivity extends Activity
             try{
                 objectType=bundle.getInt(OBJECT_TYPE);
             }catch (Exception e) {}
+            if(bundle!=null) {
+                selectedObjects=(ArrayList<Object>)bundle.getSerializable(SELECTED_OBJECTS);
+            }
+            if(selectedObjects!=null) {
+                int len=selectedObjects.size();
+                selectedIDs=new ArrayList<>(len);
+                for(int i=0; i<len; i++) {
+               /* if( objectType==SELECT_CLIENT_TYPE) {
+                    selectedIDs.add(((Client) selectedObjects.get(i)).getId());
+
+                }
+                else{*/
+                    selectedIDs.add(((Line)selectedObjects.get(i)).getId());
+
+                    // }
+                }
+            }else{
+                selectedObjects=new ArrayList<Objects>();
+            }
         }
         setContentView(R.layout.schedule_select_client_list_general);
         MyUtils.setFocus(findViewById(R.id.getFocus));
         initComponent();
     }
+
 
     public void initComponent() {
         txt_title = (TextView) findViewById(R.id.txt_title);
@@ -133,18 +155,24 @@ public class SelectLineActivity extends Activity
 
                 search_data = new ArrayList<Line>();
                 // TODO Auto-generated method stub
-                for(int i = 0 ; i < lineDataModels.size() ; i++) {
-                    Line model = (Line) lineDataModels.get(i);
+                for(int i = 0 ; i < lineDataModelsHolder.size() ; i++) {
+                    Line model = (Line) lineDataModelsHolder.get(i);
 
                     String title = model.getName();
-                    if(title.matches("(?i).*" + search.getText().toString() + ".*")) {
-                        search_data.add(model);
+                    try {
+                        if (title.matches("(?i).*" + search.getText().toString().trim() + ".*")) {
+                            search_data.add(model);
+                        }
+                    }catch (NullPointerException npe) {
+
                     }
                 }
 
-                lineDataModels = search_data;
-                adapter = new ClientLinesAdapter(search_data, SelectLineActivity.this);
-                listView.setAdapter(adapter);
+                lineDataModels.clear();
+                lineDataModels.addAll(search_data);
+               // adapter = new ClientLinesAdapter(search_data, selectedIDs, SelectLineActivity.this, isMultiple);
+                //listView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -164,40 +192,79 @@ public class SelectLineActivity extends Activity
         user = MyUtils.getUserFromBundle(bundle);
         if(user==null) user=MyUtils.getUserLoggedIn();
 
-        adapter = new ClientLinesAdapter( lineDataModels, this);
+        adapter = new ClientLinesAdapter( lineDataModels, selectedIDs, SelectLineActivity.this, isMultiple);
         listView.setAdapter(adapter);
 
         initLines();
     }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.add_button:
                 finishSelection();
                 break;
+            case R.id.clear_but:
+                showClearWarning();
+                break;
         }
+    }
+    private void showClearWarning() {
+        final AlertDialog ad= new AlertDialog.Builder(this).create();
+        ad.setMessage("This will clear all selections. Are you sure you want to proceed?");
+        ad.setButton(AlertDialog.BUTTON_POSITIVE, "YES", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                selectedIDs.clear();
+                selectedObjects.clear();
+                finishSelection();
+            }
+        });
+        ad.setButton(AlertDialog.BUTTON_NEGATIVE, "NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        ad.show();
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         Log.d("search", "here---------------- listener");
-        Line item = lineDataModels.get(position);
-
-        selectedObjects.clear();
-
-        for (int i = 0; i < lineDataModels.size(); i++) {
-            Line model = lineDataModels.get(i);
-            if (item.getId().equals(model.getId())) {
-                item.setCheck_status(true);
-
-                selectedObjects.add(item);
-            } else {
-                model.setCheck_status(false);
-            }
+        if(!isMultiple) {
+            selectedIDs.clear();
+            selectedObjects.clear();
         }
 
-        adapter.notifyDataSetChanged();
+            Line obj=(Line)lineDataModels.get(position);
+            if(selectedIDs.contains(obj.getId())) {
+                selectedIDs.remove(obj.getId());
+                selectedObjects.remove(obj);
+            }else {
+                selectedIDs.add(obj.getId());
+                selectedObjects.add(obj);
+            }
+
+       /* Intent intent = new Intent();
+        Bundle b =new Bundle();
+        b.putSerializable("selected", selectedObjects);
+        intent.putExtras(b);
+        setResult(RESULT_OK, intent);
+        finish();*/
+        if(isMultiple) {
+            adapter.setSelected(selectedIDs);
+            adapter.notifyDataSetChanged();
+        }else{
+            finishSelection();
+            return;
+        }
+        updateNumSelected();
+    }
+    private void updateNumSelected() {
+        int size=selectedIDs.size();
+       // selectedCountText.setText(size+" Selected");
+//        if(size==0) finishSelection.setVisibility(View.GONE);
+        //  else finishSelection.setVisibility(View.VISIBLE);
     }
 
     private void finishSelection() {
@@ -234,10 +301,16 @@ public class SelectLineActivity extends Activity
                     _Meta meta=response.getMeta();
                     if(meta !=null && meta.getStatus_code() == 200) {
 
-                        lineDataModels .addAll( (ArrayList) response.getDataAsList(Constants.LINES_lIST, Line.class));
+                        lineDataModels .addAll((ArrayList) response.getDataAsList(Constants.LINES_lIST, Line.class));
+                        lineDataModelsHolder.clear();
+                        lineDataModelsHolder.addAll(lineDataModels);
                         Logger.write("Lines loadeddddddddddddddddddddddddddddddddddddddddddddddd "+lineDataModels.size());
                         adapter.notifyDataSetChanged();
-
+                        if(lineDataModelsHolder.size()==0) {
+                            findViewById(R.id.no_results).setVisibility(View.VISIBLE);
+                        }else{
+                            findViewById(R.id.no_results).setVisibility(View.GONE);
+                        }
                     }else{
                         MyUtils.showToast("Error encountered");
                         DialogUtils.closeProgress();

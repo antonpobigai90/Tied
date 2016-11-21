@@ -12,7 +12,7 @@
 
         <ImageView
             android:id="@+id/img_close"
-            android:src="@mipmap/btn_back_arrow"
+            android:src="@drawable/btn_back_arrow"
             android:layout_centerVertical="true"
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -21,7 +21,7 @@
 
         <ImageView
             android:id="@+id/img_plus"
-            android:src="@mipmap/plus_thin"
+            android:src="@drawable/plus_thin"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_width="40dp"
@@ -31,7 +31,7 @@
 
         <ImageView
             android:id="@+id/img_filter"
-            android:src="@mipmap/ic_filter_map"
+            android:src="@drawable/ic_filter_map"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@+id/img_plus"
             android:layout_width="40dp"
@@ -61,7 +61,7 @@
         <TextView android:layout_width="wrap_content"
                   android:gravity="center"
                   android:layout_gravity="center"
-                  android:text="You have no notifications"
+                  android:text="You have no visits recorded"
                   android:layout_margin="30dp"
                   android:background="@drawable/white_fill_grey_stroke"
                   android:padding="20dp"

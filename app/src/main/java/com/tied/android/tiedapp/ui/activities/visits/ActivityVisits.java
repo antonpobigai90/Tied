@@ -39,12 +39,11 @@ import com.tied.android.tiedapp.util.HelperMethods;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -63,9 +62,9 @@ public class ActivityVisits extends AppCompatActivity implements View.OnClickLis
     private User user;
     protected ListView listView;
     List<Visit> visits = new ArrayList<Visit>();
-    List<Client> clients = new ArrayList<Client>();
     protected VisitListAdapter adapter;
     VisitFilter visitFilter;
+    Map<String, Client> clients=new HashMap<String, Client>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,9 +93,9 @@ public class ActivityVisits extends AppCompatActivity implements View.OnClickLis
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Client client = clients.get(position);
-                Visit visit = visits.get(position);
 
+                Visit visit = visits.get(position);
+                Client client = clients.get(visit.getClient_id());
                 bundle = new Bundle();
                 bundle.putSerializable(Constants.CLIENT_DATA, client);
                 bundle.putSerializable(Constants.VISIT_DATA, visit);
@@ -134,7 +133,7 @@ public class ActivityVisits extends AppCompatActivity implements View.OnClickLis
 
                 try {
                     GeneralResponse response = new GeneralResponse(resResponse.body());
-
+                    Logger.write(response.toString());
                     if (response.isAuthFailed()) {
                         User.LogOut(ActivityVisits.this);
                         return;
@@ -143,23 +142,33 @@ public class ActivityVisits extends AppCompatActivity implements View.OnClickLis
                     _Meta meta = response.getMeta();
                     if (meta != null && meta.getStatus_code() == 200) {
                         visits.clear();
-                        clients.clear();
-                            int size=visits.size();
-                        if(size==0) findViewById(R.id.no_results).setVisibility(View.VISIBLE);
-                        else  findViewById(R.id.no_results).setVisibility(View.GONE);
-                        visits.addAll( (ArrayList) response.getDataAsList(Constants.VISITS_lIST, Visit.class));
+
+
+
 
                         JSONObject jsonObject=new JSONObject(response.toString());
                         JSONObject client_obj = jsonObject.getJSONObject("clients");
-                        Client client;
+
+                        //Logger.write(client_obj.toString());
                         Gson gson = new Gson();
-                        for (int i = 0 ; i < size ; i++) {
-                            Visit item = visits.get(i);
-                            client = gson.fromJson(client_obj.getJSONObject(item.getClient_id()).toString(), Client.class);
-                            clients.add(client);
+
+                        Iterator<String> iter = client_obj.keys();
+                        while (iter.hasNext()) {
+                            String key = iter.next();
+                            try {
+                               clients.put(key, gson.fromJson(client_obj.getString(key), Client.class));
+                            } catch (JSONException e) {
+                                // Something went wrong!
+                            }
                         }
+                        Logger.write(clients.toString());
+                        adapter.setClients(clients);
+                        visits.addAll( (ArrayList) response.getDataAsList(Constants.VISITS_lIST, Visit.class));
 
                         adapter.notifyDataSetChanged();
+                        int size=visits.size();
+                        if(size==0) findViewById(R.id.no_results).setVisibility(View.VISIBLE);
+                        else  findViewById(R.id.no_results).setVisibility(View.GONE);
 
                     } else {
                         MyUtils.showToast("Error encountered");

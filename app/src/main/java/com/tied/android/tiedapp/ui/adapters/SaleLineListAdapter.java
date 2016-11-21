@@ -89,7 +89,7 @@ public class SaleLineListAdapter extends ClientParentAdapter {
                 }
             }
 
-            v.line_name.setText(data.getName());
+            v.line_name.setText(data.getName()+" Line");
             //v.line_date.setText(String.format(data.getLine_date()));
             //v.percent.setText(String.format("(%s%s)", data.getPercent(), "%"));
             v.price.setText(MyUtils.moneyFormat(data.getTotal_revenue()));

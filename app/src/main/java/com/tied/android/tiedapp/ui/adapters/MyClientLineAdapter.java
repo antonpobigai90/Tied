@@ -112,7 +112,8 @@ public class MyClientLineAdapter extends BaseAdapter {
             final Line line = (Line) _data.get(i);
             viewHolder.name.setText(line.getName());
            // MyUtils.Picasso.displayImage(client.getLogo(), viewHolder.roundedImage);
-            viewHolder.roundedImage.setVisibility(View.GONE);
+            viewHolder.roundedImage.setVisibility(View.VISIBLE);
+            viewHolder.roundedImage.setImageResource(R.drawable.ic_layer_gray);
             try{
                 viewHolder.description.setText(line.getDescription().substring(0,20)+"...");
             }catch (Exception e) {

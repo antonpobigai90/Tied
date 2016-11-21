@@ -27,22 +27,22 @@ public class Line implements Serializable {
     private String reorder;
     private String request;
 
-    private int dis_from;
+   // private int dis_from;
     private String _score;
 
     private String sales;
-    boolean check_status;
+    //boolean check_status;
     private float total_revenue=0f;
-    private int num_clients, num_goals, num_territories=0;
+    //private int num_clients, num_goals, num_territories=0;
 
     public Line() {
     }
 
-    public Line(String id, String name, String sales, boolean check_status) {
+    public Line(String id, String name, String sales) {
         this.id = id;
         this.name = name;
         this.sales = sales;
-        this.check_status = check_status;
+       // this.check_status = check_status;
     }
 
     public void setRelevantInfo(String website, String request, String opening, String reorder){
@@ -139,13 +139,15 @@ public class Line implements Serializable {
         this.sales = sales;
     }
 
-    public boolean isCheck_status() {
+  /*  public boolean isCheck_status() {
         return check_status;
     }
 
     public void setCheck_status(boolean check_status) {
         this.check_status = check_status;
     }
+
+    */
 
     public float getTotal_revenue() {
         return total_revenue;
@@ -154,6 +156,7 @@ public class Line implements Serializable {
     public void setTotal_revenue(float total_revenue) {
         this.total_revenue = total_revenue;
     }
+    /*
 
     public void setNum_clients(int num_clients) {
         this.num_clients = num_clients;
@@ -177,7 +180,7 @@ public class Line implements Serializable {
 
     public void setNum_territories(int num_territories) {
         this.num_territories = num_territories;
-    }
+    } */
 
     @Override
     public String toString() {

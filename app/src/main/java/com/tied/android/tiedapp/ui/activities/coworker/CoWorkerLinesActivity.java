@@ -31,6 +31,7 @@ import com.tied.android.tiedapp.util.MyUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -95,7 +96,7 @@ public class CoWorkerLinesActivity extends AppCompatActivity implements View.OnC
         String title = (page_index == 0 || page_index == 2) ? "Lines" : "Filter Line";
         txt_title.setText(title);
 
-        linesAdapter = new ClientLinesAdapter( lineDataModels, this);
+        linesAdapter = new ClientLinesAdapter( lineDataModels, selectedLines, this, false);
         line_listview.setAdapter(linesAdapter);
         linesAdapter.notifyDataSetChanged();
 
@@ -107,7 +108,7 @@ public class CoWorkerLinesActivity extends AppCompatActivity implements View.OnC
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Line line = lineDataModels.get(position);
 
-                    if (line.isCheck_status()) {
+                   /* if (line.isCheck_status()) {
                         line.setCheck_status(false);
 
                         for (int i = 0; i < selectedLines.size(); i++) {
@@ -121,7 +122,7 @@ public class CoWorkerLinesActivity extends AppCompatActivity implements View.OnC
 
                         selectedLines.add(line.getId());
                     }
-
+*/
                     linesAdapter.notifyDataSetChanged();
                 }
             });

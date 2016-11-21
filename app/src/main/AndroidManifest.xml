@@ -146,6 +146,13 @@
                 android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.NoActionBar"
                 android:windowSoftInputMode="adjustResize" />
+
+        <activity
+                android:name=".ui.activities.ActivityMaintenance"
+                android:label="@string/app_name"
+                android:screenOrientation="portrait"
+                android:theme="@style/AppTheme.NoActionBar"
+                android:windowSoftInputMode="adjustResize" />
         <activity
                 android:name=".ui.activities.sales.ActivityGroupedSales"
                 android:label="@string/app_name"

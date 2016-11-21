@@ -280,7 +280,7 @@ public class ActivityAddVisits extends AppCompatActivity implements  View.OnClic
 
     @Override
     public void onTimeRangeSelected(int startHour, int startMin, int endHour, int endMin) {
-        time.setText(String.format("%02d", startHour) + ":" + String.format("%02d", startMin));
+        time.setText(MyUtils.formatTime(String.format("%02d", startHour) + ":" + String.format("%02d", startMin)));
     }
 
     class GeocodeAsyncTask extends MyAddressAsyncTask {
@@ -334,6 +334,10 @@ public class ActivityAddVisits extends AppCompatActivity implements  View.OnClic
         if(requestCode==Constants.SELECT_CLIENT && resultCode==RESULT_OK) {
             client = (Client)(data.getSerializableExtra("selected"));
             clientNameTV.setText(MyUtils.getClientName(client));
+            if(location==null) {
+                location=client.getAddress();
+                locationTV.setText(location.getLocationAddress());
+            }
             MyUtils.Picasso.displayImage(client.getLogo(), clientPhoto);
             Logger.write(client.toString());
         }

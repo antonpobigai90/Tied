@@ -41,6 +41,8 @@ public class Constants {
     public static final String ADD_COWORKER = API_PATH + "users/me/coworkers";
     public static final String GET_COWORKERS = API_PATH + "coworker/{user_id}/{group}/{count}/{filter}";
 
+    public static final String GET_CONFIGURATION = API_PATH + "config/{key}";
+
     public static final String IS_ADDED_USER_AS_COWORKER = API_PATH + "coworkers/are_coworkers/{user_id}/{coworker_id}";
     public static final String COWORKERS_THAT_CAN_SEE = API_PATH + "coworkers/can_see/{user_id}/{section}";
     public static final String COWORKERS_ACTIVITIES = API_PATH + "activities/{user_id}/{page_number}";
@@ -303,6 +305,7 @@ public class Constants {
     public static final String SHOW_MORE_CLIENT = "showMoreClients";
     public static final String CLIENT_ID = "client_id";
     public static final String LINE_ID = "line_id";
+    public static final String SELECTED_IDS ="selected_ids";
 
     public static File DIR_ROOT = new File("StreamLive"),
             DIR_CACHE = new File("cache"), DIR_HTML_CACHE = new File("html"), DIR_DOWNLOADS = new File("downloads"), DIR_MEDIA = new File("media");

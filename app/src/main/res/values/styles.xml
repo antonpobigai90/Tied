@@ -10,6 +10,21 @@
         <!--<item name="android:windowBackground">@color/white</item>-->
         <item name="android:textViewStyle">@style/RobotoTextViewStyle</item>
     </style>
+    <style name="customDialog" parent="@android:style/Theme.Holo.Dialog">
+        <item name="android:windowAnimationStyle">@style/customDialogAnimation</item>
+
+    </style>
+    <style name="customHelpDialog" parent="@android:style/Theme.Holo.Dialog">
+        <item name="android:windowAnimationStyle">@style/customDialogAnimation</item>
+        <item name="android:background">@color/transparent</item>
+
+    </style>
+
+    <style name="customDialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_from_right</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_left</item>
+
+    </style>
 
     <style name="NoResultText" parent="AppTheme">
         <item name="android:layout_width">wrap_content</item>

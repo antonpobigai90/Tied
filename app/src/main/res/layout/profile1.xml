@@ -44,7 +44,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
                 android:gravity="center_horizontal"
-                android:text="Good job you have completed 6% more tasks this month"
+                android:text="You subscription expires in 20 days"
                 android:textColor="@color/gray_light"
                 android:textSize="13sp"
                 android:layout_marginLeft="35dp"

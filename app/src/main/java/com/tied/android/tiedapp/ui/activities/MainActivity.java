@@ -51,6 +51,7 @@ import com.tied.android.tiedapp.ui.activities.report.ReportActivity;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityGroupedSales;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityUniqueSales;
 import com.tied.android.tiedapp.ui.activities.schedule.ViewSchedule;
+import com.tied.android.tiedapp.ui.activities.signups.SplashActivity;
 import com.tied.android.tiedapp.ui.activities.territories.ActivityTerritories;
 import com.tied.android.tiedapp.ui.activities.visits.ActivityVisitDetails;
 import com.tied.android.tiedapp.ui.activities.visits.ActivityVisits;
@@ -143,6 +144,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         mainActivity=this;
 
 
+        SplashActivity.checkForUpdate(this);
         this.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
         setContentView(R.layout.activity_main);
         OneSignal.sendTag("user_id", MyUtils.getUserLoggedIn().getId());
@@ -155,6 +157,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
 
         startService(new Intent(this, LocationService.class));
         refresh=(SwipeRefreshLayout)findViewById(R.id.swiperefresh) ;
+        refresh.setOnRefreshListener(this);
         navigationView=(NavigationView)findViewById(R.id.navigation_view);
         drawerLayout=(DrawerLayout)findViewById(R.id.drawer);
         numNotifications=(TextView)findViewById(R.id.num_new_alerts);
@@ -726,16 +729,28 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
 
     @Override
     public void onRefresh() {
-        Fragment visibleFragment=getVisibleFragment();
-        if(visibleFragment!=null) {
+        Fragment visibleFragment = getVisibleFragment();
 
-            if(visibleFragment instanceof MapAndListFragment) {
-                ((MapAndListFragment)fragment).refresh();
+        if (visibleFragment != null) {
+
+            if (visibleFragment instanceof MapAndListFragment) {
+                ((MapAndListFragment) fragment).refresh();
                 return;
             }
-        }else if(visibleFragment instanceof ScheduleAppointmentsFragment) {
-            ((ScheduleAppointmentsFragment)fragment).refresh();
-            return;
+             else if (visibleFragment instanceof ScheduleAppointmentsFragment) {
+                ((ScheduleAppointmentsFragment) fragment).refresh();
+                return;
+            } else if (visibleFragment instanceof SaleFragment) {
+                Logger.write(visibleFragment.getClass().getCanonicalName());
+                ((SaleFragment) fragment).refresh();
+                return;
+            } else if (visibleFragment instanceof NotificationFragment) {
+                ((NotificationFragment) fragment).refresh();
+                return;
+            } else if (visibleFragment instanceof ProfileFragment) {
+                ((ProfileFragment) fragment).refresh();
+                return;
+            }
         }
         refresh.setRefreshing(false);
     }

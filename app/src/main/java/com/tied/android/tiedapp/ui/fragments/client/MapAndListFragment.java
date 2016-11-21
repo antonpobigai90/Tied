@@ -223,9 +223,17 @@ public class MapAndListFragment extends Fragment implements View.OnClickListener
         });
     }
     public void refresh() {
+        final int current_item=mViewPager.getCurrentItem();
         mViewPager.setAdapter(null);
         mViewPager.setAdapter(mPagerAdapter);
         mPagerAdapter.notifyDataSetChanged();
+        mViewPager.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mViewPager.setCurrentItem(current_item);
+            }
+        }, 300);
+
         MainActivity.getInstance().refresh.setRefreshing(false);
     }
     public class PagerAdapter extends FragmentStatePagerAdapter {

@@ -233,9 +233,17 @@ public class ScheduleAppointmentsFragment extends Fragment implements View.OnCli
     }
 
     public void refresh() {
+        Logger.write("Refreshing");
+        final int current_item=mViewPager.getCurrentItem();
         mViewPager.setAdapter(null);
         mViewPager.setAdapter(mPagerAdapter);
         mPagerAdapter.notifyDataSetChanged();
+        mViewPager.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mViewPager.setCurrentItem(current_item);
+            }
+        }, 300);
         MainActivity.getInstance().refresh.setRefreshing(false);
     }
 

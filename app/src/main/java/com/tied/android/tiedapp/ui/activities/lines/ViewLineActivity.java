@@ -135,7 +135,7 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
         location=line.getAddress();
         if(location!=null)
             addressTV.setText(location.getLocationAddress());
-        numClients.setText(""+line.getNum_clients());
+        //numClients.setText(""+line.getNum_clients());
 
         nameEditor = findViewById(R.id.name_editor);
         nameEditor.setOnClickListener(this);
@@ -216,7 +216,7 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
                 break;
             case R.id.txt_delete:
                 int color = this.getResources().getColor(R.color.alert_bg_color);
-                DialogYesNo alert_delete = new DialogYesNo(ViewLineActivity.this, line, "DELETE LINE","Are you sure want to delete this line","YES DELETE!",color,1);
+                DialogYesNo alert_delete = new DialogYesNo(ViewLineActivity.this, line, "DELETE LINE","All sales related to this line will also be deleted. Do you want to continue?","YES DELETE!",color,1);
                 alert_delete.showDialog();
                 break;
         }
@@ -364,9 +364,9 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
                     if(meta !=null && meta.getStatus_code()==200) {
                         // revenueList.addAll(response.getDataAsList("revenues", Revenue.class));
                         // adapter.notifyDataSetChanged();
-                        line.setNum_clients(response.getData("line", Line.class).getNum_clients());
-                        Logger.write("num clientsss "+line.getNum_clients());
-                        numClients.setText(""+line.getNum_clients());
+                        //line.setNum_clients(response.getData("line", Line.class).getNum_clients());
+                        //Logger.write("num clientsss "+line.getNum_clients());
+                       // numClients.setText(""+line.getNum_clients());
 
 
                     } else {
@@ -411,9 +411,9 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
                     if(meta !=null && meta.getStatus_code()==200) {
                         // revenueList.addAll(response.getDataAsList("revenues", Revenue.class));
                         // adapter.notifyDataSetChanged();
-                        line.setNum_goals(response.getData("line", Line.class).getNum_goals());
-                        Logger.write("num clientsss "+line.getNum_goals());
-                        numGoalsTV.setText(""+line.getNum_goals());
+                        //line.setNum_goals(response.getData("line", Line.class).getNum_goals());
+                        //Logger.write("num clientsss "+line.getNum_goals());
+                        //numGoalsTV.setText(""+line.getNum_goals());
 
 
                     } else {

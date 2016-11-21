@@ -448,8 +448,8 @@ public abstract class MyUtils {
                                     location.setZip(comp.getString("long_name"));
                                 }
                             }
-                            if(!mylocation.getZip().equals(location.getZip()))  error="Address is invalid. Please check!";
-                            if(!mylocation.getState().equals(location.getState())) error="Address is invalid. Please check!";
+                            if(!mylocation.getZip().equals(location.getZip()))  error="Address is invalid. Check Zip code!";
+                            if(!mylocation.getState().equals(location.getState())) error="Address is invalid. Check State!";
                             if(error.isEmpty()) {
                                 location.setStreet(mylocation.getStreet());
 

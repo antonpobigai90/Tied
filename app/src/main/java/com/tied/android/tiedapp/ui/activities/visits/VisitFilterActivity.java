@@ -97,7 +97,7 @@ public class VisitFilterActivity extends AppCompatActivity implements View.OnCli
         txt_year = (TextView)findViewById(R.id.txt_year_val);
 
         m_seekbar = (SeekBar) findViewById(R.id.seekBar);
-        m_seekbar.setProgress(MapAndListFragment.distance);
+        m_seekbar.setProgress(2000);
         m_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {

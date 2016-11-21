@@ -73,7 +73,7 @@ public class GoalMoreSaleActivity extends AppCompatActivity implements View.OnCl
                 newFragment.show(this.getSupportFragmentManager(), "datePicker");
                 break;
             case R.id.line_layout:
-                MyUtils.startActivity(this, GoalAddLineActivity.class);
+               // MyUtils.startActivity(this, GoalAddLineActivity.class);
                 break;
             case R.id.client_layout:
                 bundle.putInt(Constants.SHOW_CLIENT, 1);

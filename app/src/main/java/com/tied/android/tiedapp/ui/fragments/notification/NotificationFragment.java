@@ -145,7 +145,10 @@ View view;
             }
         });
     }
-
+    public void refresh() {
+        prepareListData();
+        MainActivity.getInstance().refresh.setRefreshing(false);
+    }
     private void prepareListData() {
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, ArrayList<Notification>>();
@@ -179,8 +182,6 @@ View view;
                         JSONObject jsonObject=new JSONObject(response.toString());
                         JSONArray notification_obj = jsonObject.getJSONArray("notification");
                         int len=notification_obj.length();
-                        if(len==0) view.findViewById(R.id.no_results).setVisibility(View.VISIBLE);
-                        else view.findViewById(R.id.no_results).setVisibility(View.GONE);
                         for (int i = 0 ; i < len; i++) {
                             JSONObject item = notification_obj.getJSONObject(i);
 
@@ -218,6 +219,9 @@ View view;
                             listDataChild.put(listDataHeader.get(i), temp1);
                             expandableListView.expandGroup(i);
                         }
+
+                        if(len==0) view.findViewById(R.id.no_results).setVisibility(View.VISIBLE);
+                        else view.findViewById(R.id.no_results).setVisibility(View.GONE);
 
                     } else {
                         MyUtils.showToast("Error encountered");

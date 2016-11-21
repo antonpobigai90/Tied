@@ -118,7 +118,12 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         atvLogout = (RelativeLayout) view.findViewById(R.id.rlLogout);
         atvLogout.setOnClickListener(this);
     }
-
+    public void refresh() {
+        vpProfile.setAdapter(null);
+        vpProfile.setAdapter(mPagerAdapter);
+        mPagerAdapter.notifyDataSetChanged();
+        MainActivity.getInstance().refresh.setRefreshing(false);
+    }
     @Override
     public void onResume() {
         super.onResume();

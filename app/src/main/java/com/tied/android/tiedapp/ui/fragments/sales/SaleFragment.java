@@ -39,6 +39,7 @@ import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.RevenueApi;
+import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.report.ReportActivity;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityGroupedSales;
 import com.tied.android.tiedapp.ui.activities.sales.ActivitySalesFilter;
@@ -453,6 +454,16 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
         // DialogUtils.displayProgress(this);
 
 
+    }
+
+    public void refresh() {
+        Logger.write(this.getClass().getCanonicalName());
+        if( group_by=="client") {
+            loadClientData();
+        }else{
+            loadData();
+        }
+        MainActivity.getInstance().refresh.setRefreshing(false);
     }
     public void loadClientData() {
         // super.loadData();
