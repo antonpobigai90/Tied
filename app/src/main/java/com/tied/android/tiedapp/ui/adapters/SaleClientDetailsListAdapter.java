@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
+import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects.Revenue;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
@@ -22,11 +23,13 @@ public class SaleClientDetailsListAdapter extends ClientParentAdapter {
 
     ViewHolder v;
     protected ArrayList<Revenue> arraylist = new ArrayList<Revenue>();
+    protected ArrayList<Line> lines = new ArrayList<Line>();
     Context context;
 
-    public SaleClientDetailsListAdapter(ArrayList<Revenue> lines, Context context) {
+    public SaleClientDetailsListAdapter(ArrayList<Revenue> revenues, ArrayList<Line> lines, Context context) {
         super(lines, context);
-        this.arraylist = lines;
+        this._data = revenues;
+        this.lines = lines;
         this.context = context;
     }
 
@@ -44,6 +47,7 @@ public class SaleClientDetailsListAdapter extends ClientParentAdapter {
 
         Revenue data = (Revenue) _data.get(i);
 
+
         v.txt_price = (TextView) view.findViewById(R.id.txt_price);
         v.txt_date = (TextView) view.findViewById(R.id.txt_date);
         v.txt_summary = (TextView) view.findViewById(R.id.txt_summary);
@@ -58,11 +62,21 @@ public class SaleClientDetailsListAdapter extends ClientParentAdapter {
         }catch (Exception e){
             Logger.write(e);
         }
-        v.txt_summary.setText(data.getTitle());
+        if(lines!=null){
+            Line line= (Line) lines.get(i);
+            v.txt_summary.setText(line.getName());
+        }else{
+            v.txt_summary.setText(data.getTitle());
+        }
+
 
         view.setTag(v);
 
         return view;
+    }
+
+    public void setLines(ArrayList lines) {
+        this.lines=lines;
     }
 
     @Override

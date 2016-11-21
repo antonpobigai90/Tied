@@ -77,7 +77,7 @@ public class CoWorkerGAdapter extends BaseAdapter implements ListAdapterListener
 
         Logger.write("Client Name "+data.getFirst_name());
 
-        String logo = data.getAvatarURL().equals("") ? null  : data.getAvatarURL();
+        String logo = data.getAvatar().equals("") ? null  : data.getAvatar();
         MyUtils.Picasso.displayImage(logo ,viewHolder.pic);
         viewHolder.name.setText(data.getFirst_name()+" "+data.getLast_name());
         view.setTag(data);

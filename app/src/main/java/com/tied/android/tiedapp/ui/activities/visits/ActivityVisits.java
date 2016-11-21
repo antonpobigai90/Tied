@@ -144,14 +144,16 @@ public class ActivityVisits extends AppCompatActivity implements View.OnClickLis
                     if (meta != null && meta.getStatus_code() == 200) {
                         visits.clear();
                         clients.clear();
-
+                            int size=visits.size();
+                        if(size==0) findViewById(R.id.no_results).setVisibility(View.VISIBLE);
+                        else  findViewById(R.id.no_results).setVisibility(View.GONE);
                         visits.addAll( (ArrayList) response.getDataAsList(Constants.VISITS_lIST, Visit.class));
 
                         JSONObject jsonObject=new JSONObject(response.toString());
                         JSONObject client_obj = jsonObject.getJSONObject("clients");
                         Client client;
                         Gson gson = new Gson();
-                        for (int i = 0 ; i < visits.size() ; i++) {
+                        for (int i = 0 ; i < size ; i++) {
                             Visit item = visits.get(i);
                             client = gson.fromJson(client_obj.getJSONObject(item.getClient_id()).toString(), Client.class);
                             clients.add(client);

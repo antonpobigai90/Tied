@@ -252,21 +252,21 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
     public void loadClientsFilter(String search_name) {
         ClientFilter clientFilter = new ClientFilter();
         clientFilter.setName(search_name);
-        clientFilter.setDistance(MainActivity.distance);
+        clientFilter.setDistance(MapAndListFragment.distance);
         clientFilter.setUnit("mi");
-        clientFilter.setGroup(MainActivity.group);
-        clientFilter.setLast_visited(MainActivity.last_visited);
-        clientFilter.setOrder_by(MainActivity.orderby);
-        clientFilter.setOrder(MainActivity.order);
-        if (MainActivity.selectedTerritories.size() == 0)
+        clientFilter.setGroup(MapAndListFragment.group);
+        clientFilter.setLast_visited(MapAndListFragment.last_visited);
+        clientFilter.setOrder_by(MapAndListFragment.orderby);
+        clientFilter.setOrder(MapAndListFragment.order);
+        if (MapAndListFragment.selectedTerritories.size() == 0)
             clientFilter.setTerritories(null);
         else
-            clientFilter.setTerritories(MainActivity.selectedTerritories);
+            clientFilter.setTerritories(MapAndListFragment.selectedTerritories);
 
-        if (MainActivity.selectedLines.size() == 0)
+        if (MapAndListFragment.selectedLines.size() == 0)
             clientFilter.setLines(null);
         else
-            clientFilter.setLines(MainActivity.selectedLines);
+            clientFilter.setLines(MapAndListFragment.selectedLines);
         clientFilter.setPage_number(1);
 
         Coordinate coordinate = MyUtils.getCurrentLocation();
@@ -561,9 +561,9 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == Constants.ClientFilter && resultCode == Activity.RESULT_OK) {
-            if (MainActivity.isClientFilter) {
-                loadClientsFilter(MainActivity.search_name);
-            } else if (MainActivity.isClear) {
+            if (MapAndListFragment.isClientFilter) {
+                loadClientsFilter(MapAndListFragment.search_name);
+            } else if (MapAndListFragment.isClear) {
                 loadClients(googleMap);
             }
         }

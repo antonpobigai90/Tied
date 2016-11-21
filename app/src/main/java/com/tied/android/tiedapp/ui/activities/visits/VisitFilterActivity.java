@@ -30,6 +30,7 @@ import com.tied.android.tiedapp.objects.visit.VisitFilter;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.coworker.CoWorkerLinesActivity;
 import com.tied.android.tiedapp.ui.activities.coworker.CoWorkerTerritoriesActivity;
+import com.tied.android.tiedapp.ui.fragments.client.MapAndListFragment;
 import com.tied.android.tiedapp.util.HelperMethods;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
@@ -90,13 +91,13 @@ public class VisitFilterActivity extends AppCompatActivity implements View.OnCli
         clientPhoto=(ImageView)findViewById(R.id.client_photo);
         client_name = (TextView) findViewById(R.id.client_name);
         txt_miles = (TextView) findViewById(R.id.txt_miles);
-        setMiles(MainActivity.distance);
+        setMiles(MapAndListFragment.distance);
 
         txt_month = (TextView)findViewById(R.id.txt_month_val);
         txt_year = (TextView)findViewById(R.id.txt_year_val);
 
         m_seekbar = (SeekBar) findViewById(R.id.seekBar);
-        m_seekbar.setProgress(MainActivity.distance);
+        m_seekbar.setProgress(MapAndListFragment.distance);
         m_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {

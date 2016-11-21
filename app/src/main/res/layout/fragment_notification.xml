@@ -23,7 +23,18 @@
             style="@style/EditTextStyle" />
 
     </RelativeLayout>
-
+    <TextView android:layout_width="wrap_content"
+              android:gravity="center"
+              android:layout_gravity="center"
+              android:text="You have no notifications"
+              android:layout_margin="30dp"
+              android:background="@drawable/white_fill_grey_stroke"
+              android:padding="20dp"
+              android:textSize="15sp"
+              android:visibility="gone"
+              android:textColor="@color/light_gray"
+              android:id="@+id/no_results"
+              android:layout_height="wrap_content"/>
     <ExpandableListView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"

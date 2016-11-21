@@ -142,10 +142,10 @@ public class MyClientLineAdapter extends BaseAdapter {
             }catch (Exception e) {
                 //viewHolder.description.setText(line.getDescription());
             }
-            if(viewHolder.pic.getTag() == null || !viewHolder.pic.getTag().equals(user.getAvatarURL())) {
-                MyUtils.Picasso.displayImage(user.getAvatarURL(), viewHolder.pic);
+            if(viewHolder.pic.getTag() == null || !viewHolder.pic.getTag().equals(user.getAvatar())) {
+                MyUtils.Picasso.displayImage(user.getAvatar(), viewHolder.pic);
             }
-            viewHolder.pic.setTag(user.getAvatarURL());
+            viewHolder.pic.setTag(user.getAvatar());
             viewHolder.pic.setVisibility(View.VISIBLE);
 
             if(isMultiple) {

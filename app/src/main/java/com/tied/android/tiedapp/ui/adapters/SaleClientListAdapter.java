@@ -74,7 +74,7 @@ public class SaleClientListAdapter extends ClientParentAdapter {
                 v.item_cell.setBackgroundResource(R.color.light_grey3);
             }
 
-            v.imageView.setBackgroundResource(R.drawable.client_photo);
+            v.imageView.setBackgroundResource(R.drawable.default_avatar);
             if(data.getLogo()!=null && !data.getLogo().isEmpty()) {
                 MyUtils.Picasso.displayImage(data.getLogo(), v.imageView);
             }

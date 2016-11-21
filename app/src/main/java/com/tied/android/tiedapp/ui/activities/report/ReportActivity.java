@@ -59,7 +59,7 @@ public class ReportActivity extends AppCompatActivity implements View.OnClickLis
     int iReportContent = 1;
 
     AlertDialog ad;
-    String month, year;
+    int month, year;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +68,8 @@ public class ReportActivity extends AppCompatActivity implements View.OnClickLis
 
         bundle = getIntent().getExtras();
         user = MyUtils.getUserFromBundle(bundle);
-
+        month=HelperMethods.getNumericMonthOfTheYear(HelperMethods.getTodayDate());
+        year=HelperMethods.getCurrentYear(HelperMethods.getTodayDate());
         initComponents();
     }
 
@@ -112,8 +113,8 @@ public class ReportActivity extends AppCompatActivity implements View.OnClickLis
                 showList(yearArray, new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        year=""+years.get(i);
-                        txt_year.setText(year);
+                        year=i;
+                        txt_year.setText(years.get(i));
                         ad.dismiss();
                     }
                 });
@@ -122,8 +123,8 @@ public class ReportActivity extends AppCompatActivity implements View.OnClickLis
                 showList(HelperMethods.MONTHS_LIST, new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        month=HelperMethods.MONTHS_LIST[i];
-                        txt_month.setText(month);
+                        month=i;
+                        txt_month.setText(HelperMethods.MONTHS_LIST[i]);
                         ad.dismiss();
                     }
                 });
@@ -186,17 +187,18 @@ public class ReportActivity extends AppCompatActivity implements View.OnClickLis
 
     private void sendReport() {
         ReportFilter reportFilter = new ReportFilter();
-        reportFilter.setYear(Integer.valueOf(txt_year.getText().toString()).intValue());
-        reportFilter.setMonth(Arrays.asList(MyUtils.MONTHS_LIST).indexOf(txt_month.getText().toString()));
+        reportFilter.setYear(Integer.valueOf(year));
+        reportFilter.setMonth(month);
 
         String type = (isCSV) ? "csv" : "pdf";
         reportFilter.setType(type);
-
+DialogUtils.displayProgress(this);
         String content = (iReportContent == 1) ? "sales" : ((iReportContent == 2) ? "clients" : "visits");
         reportFilter.setContent(content);
+        Logger.write(reportFilter.toString());
 
         final ReportApi reportApi =  MainApplication.createService(ReportApi.class);
-        Call<ResponseBody> response = reportApi.report(reportFilter);
+        Call<ResponseBody> response = reportApi.report(user.getId(), reportFilter);
         response.enqueue(new retrofit2.Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {

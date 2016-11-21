@@ -100,10 +100,11 @@ public abstract class MyUtils {
 
     public static class Picasso {
         public static void displayImage(final String imageUrl, final ImageView imageView) {
+           Logger.write("image url "+imageUrl);
             if (imageUrl != null && !imageUrl.isEmpty()) {
                 com.squareup.picasso.Picasso.with(MainApplication.getInstance().getApplicationContext())
                         .load(imageUrl)
-                .placeholder(MainApplication.getInstance().getApplicationContext().getResources().getDrawable(R.drawable.default_avatar))
+                        .placeholder(R.drawable.default_avatar)
 //                        .memoryPolicy(MemoryPolicy.NO_CACHE)
 //                        .networkPolicy(NetworkPolicy.NO_CACHE)
                         .networkPolicy(NetworkPolicy.OFFLINE)
@@ -118,6 +119,7 @@ public abstract class MyUtils {
                                 //Try again online if cache failed
                                 com.squareup.picasso.Picasso.with(MainApplication.getInstance().getApplicationContext())
                                         .load(imageUrl)
+                                        .placeholder(R.drawable.default_avatar)
                                         .error(R.drawable.default_avatar)
                                         .into(imageView, new Callback() {
                                             @Override
@@ -135,7 +137,7 @@ public abstract class MyUtils {
             } else {
                 com.squareup.picasso.Picasso.with(MainApplication.getInstance().getApplicationContext())
                         .load(R.drawable.default_avatar)
-                        .placeholder(MainApplication.getInstance().getApplicationContext().getResources().getDrawable(R.drawable.default_avatar))
+                        .placeholder(R.drawable.default_avatar)
                         .error(R.drawable.default_avatar)
                         .into(imageView, new Callback() {
 
@@ -327,9 +329,9 @@ public abstract class MyUtils {
 
         return sp.getString(Constants.DISTANCE_UNIT, Distance.UNIT_MILES);
     }
-    static DecimalFormat distanceFormat = new DecimalFormat("#,###,###");
+    static DecimalFormat distanceFormat = new DecimalFormat("#,###,###.00");
     public static String formatDistance(float distance) {
-        if(distanceFormat==null) distanceFormat = new DecimalFormat("#,###,###");
+        if(distanceFormat==null) distanceFormat = new DecimalFormat("#,###,###.00");
         return distanceFormat.format(distance);
     }
     public static void setPreferredDistanceUnit(String unit) {
@@ -1377,11 +1379,13 @@ public abstract class MyUtils {
         RevenueFilter filter=new RevenueFilter();
         filter.setSort("desc");
         int year=HelperMethods.getCurrentYear(HelperMethods.getTodayDate());
-        filter.setStart_date(year+"-"+HelperMethods.getNumericMonthOfTheYear(todaysDate)+"-01");
-        int endMonth=Arrays.asList(MONTHS_LIST).indexOf(HelperMethods.getMonthOfTheYear(todaysDate));
-        endMonth=endMonth+2;
-        if(endMonth>12) endMonth=1;
-        filter.setEnd_date(year+"-"+endMonth+"-01");
+        filter.setMonth(0);
+        filter.setYear(year);
+        filter.setQuarter(0);
+       // int endMonth=Arrays.asList(MONTHS_LIST).indexOf(HelperMethods.getMonthOfTheYear(todaysDate));
+       // endMonth=endMonth+2;
+       // if(endMonth>12) endMonth=1;
+       // filter.setEnd_date(year+"-"+endMonth+"-01");
         return filter;
     }
 

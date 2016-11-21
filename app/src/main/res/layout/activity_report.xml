@@ -42,124 +42,43 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/white">
 
         <TextView
-            android:text="Send Report to apjemmax@irokotech.com"
+            android:text=""
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:textSize="14sp"
             android:id="@+id/txt_user_email"
-            android:textColor="@android:color/white"
-            android:background="@color/indigo"
+            android:textColor="@color/grey"
+            android:background="@color/white"
             android:gravity="right|center_vertical"
             android:paddingRight="15dp" />
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="0.1dp"
+                      android:layout_below="@+id/txt_user_email"
+        android:background="@color/light_gray"/>
+
+
+<ScrollView android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/txt_user_email"
             android:layout_above="@+id/txt_report">
 
-            <LinearLayout
-                android:id="@+id/year_layout"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:orientation="vertical"
-                android:paddingBottom="2dp"
-                android:paddingTop="5dp"
-                android:onClick="onClick">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Year"
-                    style="@style/FieldLabels" />
 
-                <RelativeLayout
-                    android:id="@+id/industry_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/right_arrow"
-                        android:layout_alignParentBottom="true"
-                        android:paddingBottom="10dp"
-                        android:layout_marginRight="5dp"
-                        android:layout_alignParentRight="true"/>
-
-                    <TextView
-                        android:paddingLeft="5dp"
-                        android:id="@+id/txt_year"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="2016"
-                        android:textColor="@color/schedule_title_bg_color"
-                        android:textStyle="bold"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:textSize="14sp" />
-                </RelativeLayout>
-
-            </LinearLayout>
-
-            <View android:layout_width="match_parent"
-                android:layout_height="0.1dp"
-                android:background="@color/light_gray" />
-
-            <LinearLayout
-                android:id="@+id/month_layout"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:orientation="vertical"
-                android:paddingTop="5dp"
-                android:onClick="onClick">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Month"
-                    style="@style/FieldLabels" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/right_arrow"
-                        android:layout_alignParentBottom="true"
-                        android:paddingBottom="10dp"
-                        android:layout_marginRight="5dp"
-                        android:layout_alignParentRight="true"/>
-
-                    <TextView
-                        android:paddingLeft="5dp"
-                        android:id="@+id/txt_month"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="November"
-                        android:textColor="@color/schedule_title_bg_color"
-                        android:textStyle="bold"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:textSize="14sp" />
-                </RelativeLayout>
-
-            </LinearLayout>
-
-            <View android:layout_width="match_parent"
-                android:layout_height="0.1dp"
-                android:background="@color/light_gray" />
 
             <LinearLayout
                 android:id="@+id/visit_radio"
@@ -323,13 +242,105 @@
                     android:layout_centerVertical="true"
                     android:textSize="15sp" />
             </RelativeLayout>
+            <View android:layout_width="match_parent"
+                  android:layout_height="0.1dp"
+                  android:background="@color/light_gray" />
+            <LinearLayout
+                    android:id="@+id/year_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:orientation="vertical"
+                    android:layout_marginTop="10dp"
+                    android:paddingBottom="2dp"
+                    android:paddingTop="5dp"
+                    android:onClick="onClick">
 
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Year"
+                        style="@style/FieldLabels" />
+
+                <RelativeLayout
+                        android:id="@+id/industry_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+                    <ImageView android:layout_width="30dp"
+                               android:layout_height="40dp"
+                               android:layout_centerInParent="true"
+                               android:src="@drawable/right_arrow"
+                               android:layout_marginBottom="10dp"
+                               android:layout_marginRight="5dp"
+                               android:layout_alignParentRight="true"/>
+
+                    <TextView
+                            android:paddingLeft="5dp"
+                            android:id="@+id/txt_year"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="2016"
+                            android:textColor="@color/schedule_title_bg_color"
+                            android:textStyle="bold"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentStart="true"
+                            android:textSize="14sp" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <View android:layout_width="match_parent"
+                  android:layout_height="0.1dp"
+                  android:background="@color/light_gray" />
+
+            <LinearLayout
+                    android:id="@+id/month_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:orientation="vertical"
+                    android:paddingTop="5dp"
+                    android:onClick="onClick">
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Month"
+                        style="@style/FieldLabels" />
+
+                <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    <ImageView android:layout_width="30dp"
+                               android:layout_height="40dp"
+                               android:layout_centerInParent="true"
+                               android:src="@drawable/right_arrow"
+                               android:layout_marginBottom="10dp"
+                               android:layout_marginRight="5dp"
+                               android:layout_alignParentRight="true"/>
+
+                    <TextView
+                            android:paddingLeft="5dp"
+                            android:id="@+id/txt_month"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Nov"
+                            android:textColor="@color/schedule_title_bg_color"
+                            android:textStyle="bold"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentLeft="true"
+                            android:textSize="14sp" />
+                </RelativeLayout>
+
+            </LinearLayout>
             <View android:layout_width="match_parent"
                 android:layout_height="0.1dp"
                 android:background="@color/light_gray" />
 
-        </LinearLayout>
-
+           </LinearLayout>
+        </ScrollView>
         <TextView
             android:id="@+id/txt_report"
             android:layout_width="match_parent"
@@ -347,6 +358,5 @@
             android:layout_marginRight="20dp"
             android:layout_marginBottom="15dp"
             android:onClick="onClick" />
-    </RelativeLayout>
-
+    </LinearLayout>
 </LinearLayout>

@@ -35,6 +35,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
@@ -57,7 +58,7 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
     Revenue revenue=new Revenue();
     RelativeLayout select_date;
     TextView date_selected, date, add_button;
-
+    DecimalFormat numberFormat = new DecimalFormat("#######.00");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,6 +106,9 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
         if(client == null) clientLayout.setVisibility(View.VISIBLE);
         else clientLayout.setVisibility(View.GONE);
 
+        if(line == null) lineLayout.setVisibility(View.VISIBLE);
+        else lineLayout.setVisibility(View.GONE);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -114,7 +118,8 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
         if (revenue != null) {
             add_button.setText("Save");
             titleET.setText(revenue.getTitle());
-            sale_amount.setText(String.valueOf(revenue.getValue()));
+            ((TextView)findViewById(R.id.page_title)).setText("Update Sale");
+            sale_amount.setText(numberFormat.format(revenue.getValue()));
             date_selected.setText(revenue.getDate_sold());
             String[] strdate = revenue.getDate_sold().split("-");
             date.setText(MyUtils.MONTHS_LIST[Integer.valueOf(strdate[1]).intValue() - 1] + " " + strdate[2] + ", " + strdate[0]);
@@ -193,6 +198,7 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
                 } else {
                     revenue.setValue(salesAmount);
                     revenue.setTitle(title);
+                    revenue.setLine_id(line.getId());
                     revenue.setDate_sold(date_selected.getText().toString());
                 }
 
@@ -234,7 +240,7 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
 //                        final Bundle bundle = new Bundle();
 //                        bundle.putSerializable(Constants.REVENUE_DATA, revenue2);
 //                        MainApplication.linesList.clear();
-                        MyUtils.showMessageAlert(ActivityAddSales.this, "Revenue added!");
+                        MyUtils.showMessageAlert(ActivityAddSales.this, "Revenue Saved!");
                         titleET.postDelayed(new Runnable() {
                             @Override
                             public void run() {
@@ -249,7 +255,7 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
                                 ActivityAddSales.this.finishActivity(Constants.ADD_SALES);
                                 ActivityAddSales.this.finish();
                             }
-                        }, 2000);
+                        }, 1200);
 
                     }else{
                         MyUtils.showToast("Error encountered");

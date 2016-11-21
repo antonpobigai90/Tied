@@ -347,7 +347,7 @@
         <activity android:name=".ui.activities.coworker.CoWorkerSchedulesActivity"
                   android:screenOrientation="portrait"
                   android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".ui.activities.coworker.CoWorkerFilterActivity"
+        <activity android:name=".ui.activities.client.ClientFilterActivity"
                   android:screenOrientation="portrait"
                   android:theme="@style/AppTheme.NoActionBar"/>
 

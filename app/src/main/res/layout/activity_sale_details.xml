@@ -92,7 +92,7 @@
             android:layout_marginTop="15dp" />
 
         <TextView
-            android:text="To go discuss the new stie and the new lines they might need to complete the intended project"
+            android:text="NO DESCRIPTION ADDED"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/txt_description"
@@ -180,7 +180,7 @@
                     android:textColor="@color/grey"
                     android:textSize="14sp"
                     android:layout_height="wrap_content"
-                    android:text="4500"
+                    android:text="0.00"
                     android:id="@+id/txt_ammount"
                     android:inputType="numberDecimal"
                     android:layout_marginTop="5dp" />
@@ -233,7 +233,7 @@
                     android:textColor="@color/grey"
                     android:textSize="13sp"
                     android:layout_height="wrap_content"
-                    android:text="July 11, 2016"
+                    android:text=""
                     android:inputType="number"
                     android:gravity="center_vertical"
                     android:layout_marginTop="5dp" />

@@ -1,8 +1,6 @@
 package com.tied.android.tiedapp.ui.fragments.client;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,13 +22,14 @@ import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Coordinate;
+import com.tied.android.tiedapp.objects.Territory;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.client.ClientLocation;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
-import com.tied.android.tiedapp.ui.activities.coworker.CoWorkerFilterActivity;
+import com.tied.android.tiedapp.ui.activities.client.ClientFilterActivity;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
@@ -42,19 +41,30 @@ import java.util.ArrayList;
 /**
  * Created by Emmanuel on 7/1/2016.
  */
-public class MapFragment extends Fragment implements View.OnClickListener {
+public class MapAndListFragment extends Fragment implements View.OnClickListener {
 
-    public static final String TAG = MapFragment.class
+    public static final String TAG = MapAndListFragment.class
             .getSimpleName();
 
     public ViewPager mViewPager;
     public PagerAdapter mPagerAdapter;
     private Bundle bundle;
     private ClientsMapFragment clientsMapFragment;
+
+    public static ArrayList<String> selectedLines = new ArrayList<String>();
+    public static ArrayList<Territory> selectedTerritories = new ArrayList<Territory>();
     ClientsListFragment clientsListFragment;
     LinearLayout parent, back_layout;
     ImageView img_segment, img_filter, app_icon;
     User user;
+    public static String search_name = "";
+    public static int distance = 20000;
+    public static String group = "me";
+    public static int last_visited = 0;
+    public static String orderby = "distance";
+    public static String order = "asc";
+    public static boolean isClientFilter = false;
+    public static boolean isClear = false;
     ArrayList<Client> clients;
 
     boolean bMap = true;
@@ -63,11 +73,13 @@ public class MapFragment extends Fragment implements View.OnClickListener {
     Fragment fragment = null;
 
     public static Fragment newInstance(Bundle bundle) {
-        Fragment fragment = new MapFragment();
+        Fragment fragment = new MapAndListFragment();
         fragment.setArguments(bundle);
         return fragment;
     }
-
+    public static int getDefaultDistance() {
+        return distance;
+    }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -156,8 +168,8 @@ public class MapFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.img_filter:
-                MainActivity.search_name = search.getText().toString();
-                MyUtils.startRequestActivity(getActivity(), CoWorkerFilterActivity.class, Constants.ClientFilter, bundle);
+                search_name = search.getText().toString();
+                MyUtils.startRequestActivity(getActivity(), ClientFilterActivity.class, Constants.ClientFilter, bundle);
                 break;
             case R.id.search_button:
                 if (search.getText().toString().length() > 3) {
@@ -210,7 +222,12 @@ public class MapFragment extends Fragment implements View.OnClickListener {
             }
         });
     }
-
+    public void refresh() {
+        mViewPager.setAdapter(null);
+        mViewPager.setAdapter(mPagerAdapter);
+        mPagerAdapter.notifyDataSetChanged();
+        MainActivity.getInstance().refresh.setRefreshing(false);
+    }
     public class PagerAdapter extends FragmentStatePagerAdapter {
 
         public PagerAdapter(FragmentManager fm) {

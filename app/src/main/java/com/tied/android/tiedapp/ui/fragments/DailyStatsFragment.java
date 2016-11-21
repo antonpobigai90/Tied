@@ -107,7 +107,7 @@ public class DailyStatsFragment extends Fragment implements View.OnClickListener
         user = MyUtils.getUserLoggedIn();
         Logger.write(user.toString());
 
-        MyUtils.Picasso.displayImage(user.getAvatarURL(), img_user_picture);
+        MyUtils.Picasso.displayImage(user.getAvatar(), img_user_picture);
 
         Calendar cal = Calendar.getInstance();
 

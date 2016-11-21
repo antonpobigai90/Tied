@@ -13,8 +13,10 @@ import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -36,12 +38,10 @@ import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Notification;
-import com.tied.android.tiedapp.objects.Territory;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.services.LocationService;
 import com.tied.android.tiedapp.ui.activities.client.ActivityClientProfile;
-import com.tied.android.tiedapp.ui.activities.client.TotalSalesActivity;
 import com.tied.android.tiedapp.ui.activities.coworker.CoWorkerActivity;
 import com.tied.android.tiedapp.ui.activities.coworker.ViewCoWorkerActivity;
 import com.tied.android.tiedapp.ui.activities.goal.LineGoalActivity;
@@ -52,19 +52,18 @@ import com.tied.android.tiedapp.ui.activities.sales.ActivityGroupedSales;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityUniqueSales;
 import com.tied.android.tiedapp.ui.activities.schedule.ViewSchedule;
 import com.tied.android.tiedapp.ui.activities.territories.ActivityTerritories;
-import com.tied.android.tiedapp.ui.activities.visits.ActivityAddVisits;
 import com.tied.android.tiedapp.ui.activities.visits.ActivityVisitDetails;
 import com.tied.android.tiedapp.ui.activities.visits.ActivityVisits;
 import com.tied.android.tiedapp.ui.dialogs.DialogAddNewItem;
 import com.tied.android.tiedapp.ui.fragments.DailyStatsFragment;
 import com.tied.android.tiedapp.ui.fragments.LinesFragment;
 import com.tied.android.tiedapp.ui.fragments.client.ClientAddFragment;
-import com.tied.android.tiedapp.ui.fragments.client.MapFragment;
+import com.tied.android.tiedapp.ui.fragments.client.ClientsListFragment;
+import com.tied.android.tiedapp.ui.fragments.client.MapAndListFragment;
 import com.tied.android.tiedapp.ui.fragments.notification.NotificationFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.AvatarProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.ProfileFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.ProfileFragment1;
-import com.tied.android.tiedapp.ui.fragments.profile.SalesPrivacyFragment;
 import com.tied.android.tiedapp.ui.fragments.sales.*;
 import com.tied.android.tiedapp.ui.fragments.schedule.CreateScheduleFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleAppointmentsFragment;
@@ -77,21 +76,20 @@ import com.tied.android.tiedapp.util.MyUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.fabric.sdk.android.Fabric;
 import me.leolin.shortcutbadger.ShortcutBadger;
-import org.json.JSONException;
 import org.json.JSONObject;
 import retrofit2.Retrofit;
 
 /**
  * Created by Daniel on 5/3/2016.
  */
-public class MainActivity extends FragmentActivity implements FragmentIterationListener, View.OnClickListener {
+public class MainActivity extends FragmentActivity implements FragmentIterationListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     public static final String TAG = MainActivity.class
             .getSimpleName();
@@ -130,19 +128,11 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
     DrawerLayout drawerLayout;
     int currentFragmentID=0;
 
-    public static ArrayList<String> selectedLines = new ArrayList<String>();
-    public static ArrayList<Territory> selectedTerritories = new ArrayList<Territory>();
-    public static String search_name = "";
-    public static int distance = 20000;
-    public static String group = "me";
-    public static int last_visited = 1;
-    public static String orderby = "distance";
-    public static String order = "desc";
-    public static boolean isClientFilter = false;
-    public static boolean isClear = false;
+
     public static MainActivity mainActivity;
     public View notificationCircle;
     public TextView numNotifications;
+    public SwipeRefreshLayout refresh;
 
     ImageView schedule_icon, map_icon, sale_icon, more_icon;
 
@@ -164,6 +154,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         }
 
         startService(new Intent(this, LocationService.class));
+        refresh=(SwipeRefreshLayout)findViewById(R.id.swiperefresh) ;
         navigationView=(NavigationView)findViewById(R.id.navigation_view);
         drawerLayout=(DrawerLayout)findViewById(R.id.drawer);
         numNotifications=(TextView)findViewById(R.id.num_new_alerts);
@@ -214,14 +205,14 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         drawerEmail.setText(user.getEmail());
         drawerFullName.setText(user.getFirst_name()+" "+user.getLast_name());
 
-        Log.d(TAG, "Avatar Url : " + Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg");
+       // Log.d(TAG, "Avatar Url : " + Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg");
         //String avatarURL =Constants.GET_AVATAR_ENDPOINT + "avatar_" + user.getId() + ".jpg";
        // MyUtils.Picasso.displayImage(user.getAvatarURL(), img_user_picture);
-//        MyUtils.Picasso.displayImage(user.getAvatar(), drawerUserPicture);
+           MyUtils.Picasso.displayImage(user.getAvatar(), drawerUserPicture);
         retrofit = MainApplication.getInstance().getRetrofit();
         service = retrofit.create(SignUpApi.class);
 
-        Picasso.with(this).load(user.getAvatar()).into(drawerUserPicture);
+        //Picasso.with(this).load(user.getAvatar()).into(drawerUserPicture);
 
         bundle = getIntent().getExtras();
         if(bundle == null){
@@ -428,7 +419,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 map_tab.setBackground(getResources().getDrawable(R.drawable.tab_selected));
                // relativeLayout.setVisibility(View.GONE);
                 if(fragments.get(pos)==null) {
-                    fragments.put(pos, MapFragment.newInstance(bundle));
+                    fragments.put(pos, MapAndListFragment.newInstance(bundle));
                 }
                 fragment = fragments.get(pos);
                 //tab_bar.setVisibility(View.VISIBLE);
@@ -511,7 +502,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         }
 
         if ((requestCode == Constants.ClientFilter || requestCode == Constants.ClientDelete || requestCode == Constants.ViewSchedule || requestCode == Constants.CreateSchedule) && resultCode == Activity.RESULT_OK) {
-//            launchFragment(Constants.MapFragment, bundle);
+//            launchFragment(Constants.MapAndListFragment, bundle);
             fragment.onActivityResult(requestCode, resultCode, data);
         }
     }
@@ -585,7 +576,9 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                 break;
 
 
-            case R.id.img_user_picture : case R.id.user_picture_iv:
+            case R.id.img_user_picture :
+            case R.id.user_picture_iv:
+            case R.id.profile_menu:
                 if(currentFragmentID==Constants.ProfileFragment) return;
                 launchFragment(Constants.Profile, bundle);
 
@@ -655,10 +648,11 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
             user = User.getCurrentUser(getApplicationContext());
             drawerEmail.setText(user.getEmail());
             drawerFullName.setText(user.getFirst_name()+" "+user.getLast_name());
-
+            MyUtils.Picasso.displayImage(user.getAvatar(), drawerUserPicture);
+/*
             Picasso.with(this).load(user.getAvatar())
                     .memoryPolicy(MemoryPolicy.NO_CACHE)
-                    .networkPolicy(NetworkPolicy.NO_CACHE).into(drawerUserPicture);
+                    .networkPolicy(NetworkPolicy.NO_CACHE).into(drawerUserPicture);*/
         }
     }
 
@@ -729,6 +723,35 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         }
         //currentFragment=targetFragment;
     }
+
+    @Override
+    public void onRefresh() {
+        Fragment visibleFragment=getVisibleFragment();
+        if(visibleFragment!=null) {
+
+            if(visibleFragment instanceof MapAndListFragment) {
+                ((MapAndListFragment)fragment).refresh();
+                return;
+            }
+        }else if(visibleFragment instanceof ScheduleAppointmentsFragment) {
+            ((ScheduleAppointmentsFragment)fragment).refresh();
+            return;
+        }
+        refresh.setRefreshing(false);
+    }
+
+    public Fragment getVisibleFragment(){
+        FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
+        List<Fragment> fragments = fragmentManager.getFragments();
+        if(fragments != null){
+            for(Fragment fragment : fragments){
+                if(fragment != null && fragment.isVisible())
+                    return fragment;
+            }
+        }
+        return null;
+    }
+
     public static class OneSignalNotificationOpenedHandler implements OneSignal.NotificationOpenedHandler {
 
         Context context;

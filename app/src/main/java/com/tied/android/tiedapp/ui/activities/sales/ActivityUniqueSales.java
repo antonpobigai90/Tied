@@ -57,7 +57,7 @@ public class ActivityUniqueSales extends FragmentActivity implements  View.OnCli
     private ListView client_sales_listview;
     private SaleClientDetailsListAdapter client_sale_adapter;
     ArrayList<Revenue> revenueList=new ArrayList<Revenue>();
-    List<Line> lines = new ArrayList<Line>();
+    ArrayList<Line> lines = new ArrayList<Line>();
 
     int page=1;
     TextView totalRevenue, title;
@@ -66,6 +66,7 @@ public class ActivityUniqueSales extends FragmentActivity implements  View.OnCli
     String type="line";
     RevenueFilter filter;
     TextView periodLabelTV;
+    String line_id, client_id;
     int source=Constants.SALES_SOURCE;
     private boolean revenueAdded=false;
 
@@ -93,8 +94,19 @@ public class ActivityUniqueSales extends FragmentActivity implements  View.OnCli
         }catch (Exception e){
 
         }
+
         if(filter==null) {
             filter=MyUtils.initializeFilter();
+        }
+        try{
+            line_id=bundle.getString(Constants.LINE_ID);
+        }catch (Exception e){
+
+        }
+        try{
+            client_id=bundle.getString(Constants.CLIENT_ID);
+        }catch (Exception e){
+
         }
         try{
             source=bundle.getInt(Constants.SOURCE);
@@ -127,18 +139,23 @@ public class ActivityUniqueSales extends FragmentActivity implements  View.OnCli
 
         client_sales_listview = (ListView) findViewById(R.id.client_sales_listview);
 
-        client_sale_adapter = new SaleClientDetailsListAdapter(revenueList, this);
+        client_sale_adapter = new SaleClientDetailsListAdapter(revenueList, null, this);
         client_sales_listview.setAdapter(client_sale_adapter);
         client_sale_adapter.notifyDataSetChanged();
+
+        //if(line_id!=null) filter.setLine_id(line_id);
+        //else if(client_id!=null) filter.setClient_id(client_id);
+
+        setLineTotalRevenue();
         loadData();
         updateSalesLabel();
-        setLineTotalRevenue();
 
         client_sales_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Revenue item = revenueList.get(position);
-                bundle.putString("revenue_id", item.getId());
+               // bundle.putString("revenue_id", item.getId());
+                bundle.putSerializable(Constants.REVENUE_DATA, item);
                 MyUtils.startRequestActivity(ActivityUniqueSales.this, ActivitySaleDetails.class, Constants.REVENUE_LIST, bundle);
             }
         });
@@ -167,10 +184,12 @@ public class ActivityUniqueSales extends FragmentActivity implements  View.OnCli
         DialogUtils.displayProgress(this);
         RevenueApi revenueApi = MainApplication.createService(RevenueApi.class);
         if (client == null && line == null) {
+
             response = revenueApi.getUserAllRevenues(user.getId(), page, filter);
         }
         else {
             if (line != null) {
+
                 response = revenueApi.getUniqueLineRevenues(line.getId(), page, filter);
             } else if (client != null) {
                 response = revenueApi.getUniqueClientRevenues(client.getId(), page, filter);
@@ -211,7 +230,7 @@ public class ActivityUniqueSales extends FragmentActivity implements  View.OnCli
                                 lines.add(line);
                             }
                         }
-
+                        //client_sale_adapter.setLines(lines);
                         client_sale_adapter.notifyDataSetChanged();
                     } else {
                         MyUtils.showToast(getString(R.string.connection_error));
@@ -353,19 +372,33 @@ public class ActivityUniqueSales extends FragmentActivity implements  View.OnCli
         }
     }
     private void updateSalesLabel() {
-        if(filter.getStart_date()!= null && !filter.getStart_date().isEmpty()) {
-            String endMonth = HelperMethods.getMonthOfTheYear(filter.getEnd_date());
-            int position= Arrays.asList(HelperMethods.MONTHS_LIST).indexOf(endMonth)-1;
-            if(position<0) position=11;
-            endMonth=HelperMethods.MONTHS_LIST[position];
-            String startMonth = HelperMethods.getMonthOfTheYear(filter.getStart_date());
-            if(endMonth.equalsIgnoreCase(startMonth)) {
-                periodLabelTV.setText(startMonth+" "+HelperMethods.getCurrentYear(filter.getStart_date()));
-            }else
-                periodLabelTV.setText(startMonth+" to "+endMonth+", "+HelperMethods.getCurrentYear(filter.getStart_date()));
+
+        if(filter.getQuarter()==0 && filter.getMonth()!=0) {
+            //int position= Arrays.asList(HelperMethods.MONTHS_LIST).indexOf(endMonth)-1;
+
+
+            periodLabelTV.setText(HelperMethods.MONTHS_LIST[filter.getMonth()-1]);
+        }else if(filter.getQuarter()!=0 && filter.getMonth()==0) {
+            //int position= Arrays.asList(HelperMethods.MONTHS_LIST).indexOf(endMonth)-1;
+            switch(filter.getQuarter()) {
+                case 1:
+                    periodLabelTV.setText(HelperMethods.MONTHS_LIST[0]+"-"+HelperMethods.MONTHS_LIST[2]);
+                    break;
+                case 2:
+                    periodLabelTV.setText(HelperMethods.MONTHS_LIST[3]+"-"+HelperMethods.MONTHS_LIST[5]);
+                    break;
+                case 3:
+                    periodLabelTV.setText(HelperMethods.MONTHS_LIST[6]+"-"+HelperMethods.MONTHS_LIST[8]);
+                    break;
+                case 4:
+                    periodLabelTV.setText(HelperMethods.MONTHS_LIST[9]+"-"+HelperMethods.MONTHS_LIST[11]);
+                    break;
+            }
+
         }else{
-            periodLabelTV.setText("All time sales");
+            periodLabelTV.setText("Sales for");
         }
+        periodLabelTV.setText(periodLabelTV.getText()+" "+filter.getYear());
 
     }
 }

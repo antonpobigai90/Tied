@@ -17,6 +17,6 @@ import retrofit2.http.Path;
 public interface ReportApi {
 
     @POST(Constants.REPORT)
-    Call<ResponseBody> report(@Body ReportFilter reportFilter);
+    Call<ResponseBody> report(@Path("user_id") String user_id, @Body ReportFilter reportFilter);
 
 }

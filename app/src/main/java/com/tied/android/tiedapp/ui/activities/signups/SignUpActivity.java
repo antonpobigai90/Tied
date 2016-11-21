@@ -98,8 +98,8 @@ public class SignUpActivity extends AppCompatActivity implements FragmentIterati
 
 
     public void loadAvatar(User user, ImageView img_user_picture) {
-        if (user.getAvatar_uri() != null) {
-            Uri myUri = Uri.parse(user.getAvatar_uri());
+        if (user.getAvatar() != null) {
+            Uri myUri = Uri.parse(user.getAvatar());
             img_user_picture.setImageURI(myUri);
         } else if (user.getAvatar() != null && !user.getAvatar().equals("")) {
             Picasso.with(this).

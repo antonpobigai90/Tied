@@ -356,15 +356,28 @@ public class SaleViewAllFragment extends Fragment implements View.OnClickListene
     }
 
     private void updateSalesLabel() {
-        if(filter.getStart_date()!= null && !filter.getStart_date().isEmpty()) {
-            String endMonth = HelperMethods.getMonthOfTheYear(filter.getEnd_date());
-            int position= Arrays.asList(HelperMethods.MONTHS_LIST).indexOf(endMonth)-1;
-           if(position<0) position=11;
-            endMonth=HelperMethods.MONTHS_LIST[position];
-            String startMonth = HelperMethods.getMonthOfTheYear(filter.getStart_date());
-            if(endMonth.equalsIgnoreCase(startMonth)) {
-                totalSalesLabelTV.setText(startMonth+" "+HelperMethods.getCurrentYear(filter.getStart_date()));
-            }else         totalSalesLabelTV.setText(startMonth+" to "+endMonth+", "+HelperMethods.getCurrentYear(filter.getStart_date()));
+        if(filter.getQuarter()==0 && filter.getMonth()!=0) {
+           //int position= Arrays.asList(HelperMethods.MONTHS_LIST).indexOf(endMonth)-1;
+
+
+                totalSalesLabelTV.setText(HelperMethods.MONTHS_LIST[filter.getMonth()-1]);
+        }else if(filter.getQuarter()!=0 && filter.getMonth()==0) {
+            //int position= Arrays.asList(HelperMethods.MONTHS_LIST).indexOf(endMonth)-1;
+            switch(filter.getQuarter()) {
+                case 1:
+                    totalSalesLabelTV.setText(HelperMethods.MONTHS_LIST[0]+"-"+HelperMethods.MONTHS_LIST[2]);
+                    break;
+                case 2:
+                    totalSalesLabelTV.setText(HelperMethods.MONTHS_LIST[3]+"-"+HelperMethods.MONTHS_LIST[5]);
+                    break;
+                case 3:
+                    totalSalesLabelTV.setText(HelperMethods.MONTHS_LIST[6]+"-"+HelperMethods.MONTHS_LIST[9]);
+                    break;
+                case 4:
+                    totalSalesLabelTV.setText(HelperMethods.MONTHS_LIST[10]+"-"+HelperMethods.MONTHS_LIST[12]);
+                    break;
+            }
+
         }else{
             totalSalesLabelTV.setText("All time sales");
         }

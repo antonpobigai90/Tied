@@ -85,7 +85,8 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_view_client, container, false);
-        filter.setStart_date("2000-01-01");
+        //filter.setStart_d("2000-01-01");
+
         return view;
     }
 
@@ -142,30 +143,12 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
             client = (Client)bundle.getSerializable(Constants.CLIENT_DATA);
 
             String logo = client.getLogo().equals("") ? null  : client.getLogo();
-            Picasso.with(getActivity()).
-                    load(logo)
-                    .into(new Target() {
-                        @Override
-                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                            if (bitmap != null) {
-                                avatar.setImageBitmap(bitmap);
-                            } else {
-                                avatar.setImageResource(R.mipmap.default_avatar);
-                            }
-                        }
-
-                        @Override
-                        public void onBitmapFailed(Drawable errorDrawable) {
-                        }
-
-                        @Override
-                        public void onPrepareLoad(Drawable placeHolderDrawable) {
-                        }
-                    });
+            MyUtils.Picasso.displayImage(logo, avatar);
+           totalSales.setText(MyUtils.moneyFormat(client.getTotal_revenue()));
             String lastVisited=client.getLast_visited();
             lastVisitedTV.setText("Last Visited: "+ (lastVisited==null || lastVisited.isEmpty()?"Never":HelperMethods.getDateDifferenceWithToday(lastVisited)));
 
-            setTotalRevenue();
+            //setTotalRevenue();
             setVisibile();
         }
         else if (client == null && !client_id.isEmpty()) {
@@ -228,6 +211,7 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
               //  MyUtils.startRequestActivity(getActivity(), ActivityLineClientSales.class, Constants.SALES_SOURCE, bundle);
                 bundle.putSerializable(Constants.CLIENT_DATA, client);
                 bundle.putInt(Constants.SOURCE, source);
+                bundle.putSerializable(Constants.FILTER, filter);
                 MyUtils.startRequestActivity(getActivity(), ActivityLineClientSales.class, Constants.REVENUE_LIST, bundle);
                 break;
             case R.id.schedule_layout:
@@ -294,7 +278,7 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
                         // revenueList.addAll(response.getDataAsList("revenues", Revenue.class));
                         // adapter.notifyDataSetChanged();
 
-                            client.setTotal_revenue(response.getData("line", Client.class).getTotal_revenue());
+                           // client.setTotal_revenue(response.getData("line", Client.class).getTotal_revenue());
                             totalSales.setText("All Time: "+MyUtils.moneyFormat(client.getTotal_revenue()));
 
                         //totalRevenueBodyTV.setText(MyUtils.moneyFormat(line.getTotal_revenue()));
@@ -348,7 +332,7 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
                         String lastVisited=client.getLast_visited();
                         lastVisitedTV.setText("Last Visited: "+ (lastVisited==null || lastVisited.isEmpty()?"Never":HelperMethods.getDateDifferenceWithToday(lastVisited)));
 
-                        setTotalRevenue();
+                        //setTotalRevenue();
                         setVisibile();
 
                     } else {

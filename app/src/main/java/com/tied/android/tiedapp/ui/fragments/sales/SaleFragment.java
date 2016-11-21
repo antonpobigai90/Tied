@@ -165,6 +165,7 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
 
         txt_view_all = (TextView) view.findViewById(R.id.txt_view_all);
         txt_view_all.setOnClickListener(this);
+        txt_view_all.setVisibility(View.INVISIBLE);
 
         lines_listview = (ListView) view.findViewById(R.id.lines_listview);
         client_listview = (ListView) view.findViewById(R.id.client_listview);
@@ -236,8 +237,6 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
                     this.lines_listview.setAdapter(this.line_adapter);
                     group_by="line";
                     loadData();
-
-
                     img_segment.setBackgroundResource(R.drawable.line);
                 } else {
                     //line_layout.setVisibility(View.GONE);
@@ -383,8 +382,10 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
 
                         List<Object> keys=response.getKeys();
                         JSONObject map=response.getKeyObjects();
-
-                        List<Line> lines = new ArrayList<Line>(keys.size());
+                        int size=keys.size();
+                        if(size==0) txt_view_all.setVisibility(View.INVISIBLE);
+                        else  txt_view_all.setVisibility(View.VISIBLE);
+                        List<Line> lines = new ArrayList<Line>(size);
                         Gson gson = new Gson();
                         topRevenues.clear();
                         topRevenuesName.clear();
@@ -398,9 +399,17 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
                             Map<String, Object> obj = MyUtils.MapObject.create(keyObject.toString());
                             //Logger.write(map.get(MyUtils.MapObject.create(keyObject.toString()).get("key")).toString());
                             // lines.add((Line)map.get(MyUtils.MapObject.create(keyObject.toString()).get("key")));
-                            Line line =gson.fromJson(map.getString(obj.get("key").toString()), Line.class);
                             Float val=Float.parseFloat(""+(Double)obj.get("value"));
-                            line.setTotal_revenue(val);
+                            Line line;
+                            try {
+                                line = gson.fromJson(map.getString(obj.get("key").toString()), Line.class);
+                                line.setTotal_revenue(val);
+                            }catch (Exception e) {
+                                line=new Line();
+                                line.setName("<Deleted Line>");
+                                line.setTotal_revenue(val);
+                                line.setId(obj.get("key").toString());
+                            }
                             total=total+val;
 
                             if(count<4) {
@@ -473,8 +482,10 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
 
                         List<Object> keys=response.getKeys();
                         JSONObject map=response.getKeyObjects();
-
-                        List<Client> clients = new ArrayList<Client>(keys.size());
+                        int size=keys.size();
+                        if(size==0) txt_view_all.setVisibility(View.INVISIBLE);
+                        else  txt_view_all.setVisibility(View.VISIBLE);
+                        List<Client> clients = new ArrayList<Client>(size);
                         Gson gson = new Gson();
                         topRevenues.clear();
                         topRevenuesName.clear();
@@ -488,9 +499,18 @@ public class SaleFragment extends Fragment implements OnChartValueSelectedListen
                             Map<String, Object> obj = MyUtils.MapObject.create(keyObject.toString());
 //                            Logger.write(map.get(MyUtils.MapObject.create(keyObject.toString()).get("key")).toString());
                             // lines.add((Line)map.get(MyUtils.MapObject.create(keyObject.toString()).get("key")));
-                            Client client =gson.fromJson(map.getString(obj.get("key").toString()), Client.class);
                             Float val=Float.parseFloat(""+(Double)obj.get("value"));
-                            client.setTotal_revenue(val);
+                            Client client;
+                            try {
+                                client =gson.fromJson(map.getString(obj.get("key").toString()), Client.class);
+                                client.setTotal_revenue(val);
+                            }catch (Exception e) {
+                                client=new Client();
+                                client.setCompany("<Deleted Client>");
+                                client.setTotal_revenue(val);
+                                client.setId(obj.get("key").toString());
+                            }
+
                             total=total+val;
 
 

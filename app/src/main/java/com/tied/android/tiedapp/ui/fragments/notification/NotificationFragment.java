@@ -1,5 +1,6 @@
 package com.tied.android.tiedapp.ui.fragments.notification;
 
+import android.opengl.Visibility;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -66,7 +67,7 @@ public class NotificationFragment extends Fragment {
     List<String> listDataHeader;
     HashMap<String, ArrayList<Notification>> listDataChild;
     ArrayList<Notification> temp;
-
+View view;
     public static Fragment newInstance(Bundle bundle) {
         Fragment fragment = new NotificationFragment();
         fragment.setArguments(bundle);
@@ -80,7 +81,7 @@ public class NotificationFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_notification, container, false);
+        view = inflater.inflate(R.layout.fragment_notification, container, false);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getActivity().getWindow();
@@ -177,8 +178,10 @@ public class NotificationFragment extends Fragment {
                     if (meta != null && meta.getStatus_code() == 200) {
                         JSONObject jsonObject=new JSONObject(response.toString());
                         JSONArray notification_obj = jsonObject.getJSONArray("notification");
-
-                        for (int i = 0 ; i < notification_obj.length() ; i++) {
+                        int len=notification_obj.length();
+                        if(len==0) view.findViewById(R.id.no_results).setVisibility(View.VISIBLE);
+                        else view.findViewById(R.id.no_results).setVisibility(View.GONE);
+                        for (int i = 0 ; i < len; i++) {
                             JSONObject item = notification_obj.getJSONObject(i);
 
                             String date = MyUtils.getDate(item.getLong("created"));

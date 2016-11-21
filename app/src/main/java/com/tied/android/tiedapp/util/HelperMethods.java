@@ -19,8 +19,8 @@ public  class HelperMethods {
     protected static final String TAG = HelperMethods.class
             .getSimpleName();
 
-    public static String[] MONTHS_LIST = {"Jan", "Feb", "March", "Apr", "May", "June",
-            "July", "Aug", "Sept", "Oct", "Nov", "Dec"};
+    public static String[] MONTHS_LIST = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
+            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
     public static String[] WEEK_LIST = {"", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
 

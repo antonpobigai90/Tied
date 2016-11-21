@@ -8,8 +8,9 @@ import java.io.Serializable;
  * Created by femi on 9/28/2016.
  */
 public class RevenueFilter  implements Serializable {
-    String start_date, end_date, sort, client_id, line_id;
-    int quarter;
+   // String start_date, end_date, sort, client_id, line_id;
+    //int quarter;
+    int month, year, quarter; String client_id, line_id, sort;
 
     public int getQuarter() {
         return quarter;
@@ -19,13 +20,24 @@ public class RevenueFilter  implements Serializable {
         this.quarter = quarter;
     }
 
-    public String getEnd_date() {
+  /*  public String getEnd_date() {
         return end_date;
     }
 
     public void setEnd_date(String end_date) {
         this.end_date = end_date;
     }
+
+
+
+    public String getStart_date() {
+        return start_date;
+    }
+
+    public void setStart_date(String start_date) {
+        this.start_date = start_date;
+    }
+*/
 
     public String getSort() {
         return sort;
@@ -35,13 +47,23 @@ public class RevenueFilter  implements Serializable {
         this.sort = sort;
     }
 
-    public String getStart_date() {
-        return start_date;
+    public int getMonth() {
+        return month;
     }
 
-    public void setStart_date(String start_date) {
-        this.start_date = start_date;
+    public void setMonth(int month) {
+        this.month = month;
     }
+
+
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
+
 
     public void setClient_id(String client_id) {
         this.client_id = client_id;

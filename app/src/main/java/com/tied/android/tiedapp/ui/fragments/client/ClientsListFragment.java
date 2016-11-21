@@ -1,28 +1,17 @@
 package com.tied.android.tiedapp.ui.fragments.client;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
@@ -35,9 +24,6 @@ import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.client.ActivityClientProfile;
-import com.tied.android.tiedapp.ui.activities.client.ClientInfo;
-import com.tied.android.tiedapp.ui.activities.lines.ViewLineActivity;
-import com.tied.android.tiedapp.ui.adapters.LineClientAdapter;
 import com.tied.android.tiedapp.ui.adapters.MapClientListAdapter;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.Logger;
@@ -102,7 +88,7 @@ public class ClientsListFragment extends Fragment implements AdapterView.OnItemC
 
         adapter = new MapClientListAdapter(clients, getActivity());
         listView.setAdapter(adapter);
-        loadClients();
+        loadClientsFilter(MapAndListFragment.search_name);
     }
 
     @Override
@@ -123,21 +109,21 @@ public class ClientsListFragment extends Fragment implements AdapterView.OnItemC
     public void loadClientsFilter(String search_name) {
         ClientFilter clientFilter = new ClientFilter();
         clientFilter.setName(search_name);
-        clientFilter.setDistance(MainActivity.distance);
+        clientFilter.setDistance(MapAndListFragment.distance);
         clientFilter.setUnit("mi");
-        clientFilter.setGroup(MainActivity.group);
-        clientFilter.setLast_visited(MainActivity.last_visited);
-        clientFilter.setOrder_by(MainActivity.orderby);
-        clientFilter.setOrder(MainActivity.order);
-        if (MainActivity.selectedTerritories.size() == 0)
+        clientFilter.setGroup(MapAndListFragment.group);
+        clientFilter.setLast_visited(MapAndListFragment.last_visited);
+        clientFilter.setOrder_by(MapAndListFragment.orderby);
+        clientFilter.setOrder(MapAndListFragment.order);
+        if (MapAndListFragment.selectedTerritories.size() == 0)
             clientFilter.setTerritories(null);
         else
-            clientFilter.setTerritories(MainActivity.selectedTerritories);
+            clientFilter.setTerritories(MapAndListFragment.selectedTerritories);
 
-        if (MainActivity.selectedLines.size() == 0)
+        if (MapAndListFragment.selectedLines.size() == 0)
             clientFilter.setLines(null);
         else
-            clientFilter.setLines(MainActivity.selectedLines);
+            clientFilter.setLines(MapAndListFragment.selectedLines);
         clientFilter.setPage_number(1);
 
         Coordinate coordinate = MyUtils.getCurrentLocation();
@@ -145,7 +131,7 @@ public class ClientsListFragment extends Fragment implements AdapterView.OnItemC
             coordinate = user.getOffice_address().getCoordinate();
         }
         clientFilter.setCoordinate(coordinate);
-
+        DialogUtils.displayProgress(getActivity());
         ClientApi clientApi = MainApplication.createService(ClientApi.class);
         Call<ClientRes> response = clientApi.getClientsFilter(user.getId(), clientFilter);
         response.enqueue(new Callback<ClientRes>() {
@@ -188,6 +174,7 @@ public class ClientsListFragment extends Fragment implements AdapterView.OnItemC
             }
         });
     }
+
 
     private void loadClients() {
         ClientLocation clientLocation = new ClientLocation();
@@ -247,9 +234,9 @@ public class ClientsListFragment extends Fragment implements AdapterView.OnItemC
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == Constants.ClientFilter && resultCode == Activity.RESULT_OK) {
-            if (MainActivity.isClientFilter) {
-                loadClientsFilter(MainActivity.search_name);
-            } else if (MainActivity.isClear) {
+            if (MapAndListFragment.isClientFilter) {
+                loadClientsFilter(MapAndListFragment.search_name);
+            } else if (MapAndListFragment.isClear) {
                 loadClients();
             }
         }

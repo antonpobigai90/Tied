@@ -37,7 +37,7 @@ public class ActivitySalesFilter extends AppCompatActivity implements  View.OnCl
     private User user;
     RevenueFilter revenueFilter;
     String month, year, quarter="";
-    String[] quarters = new String[] { "First", "Second", "Third", "Fourth"};
+    String[] quarters = new String[] { "Any", "First", "Second", "Third", "Fourth"};
     String sort="desc";
     AlertDialog ad;
 
@@ -60,7 +60,9 @@ public class ActivitySalesFilter extends AppCompatActivity implements  View.OnCl
             int nextMonth=HelperMethods.getNumericMonthOfTheYear(today)+1;
             if(nextMonth>12) nextMonth=1;
             revenueFilter.setEnd_date(HelperMethods.getCurrentYear(today)+"-"+nextMonth+"-01");*/
-            revenueFilter.setStart_date("");
+            revenueFilter.setMonth(0);
+            revenueFilter.setYear(HelperMethods.getCurrentYear(HelperMethods.getTodayDate()));
+            revenueFilter.setQuarter(0);
         }
 
 
@@ -77,29 +79,28 @@ public class ActivitySalesFilter extends AppCompatActivity implements  View.OnCl
         if(revenueFilter.getSort()!=null && !revenueFilter.getSort().isEmpty()) {
             sort=revenueFilter.getSort();
         }
+
+        /*
         try {
-            quarter = quarters[revenueFilter.getQuarter()];
+            quarter = quarters[revenueFilter.getQuarter()+1];
             month="";
         }catch (Exception e) {
             try {
-                month = HelperMethods.getMonthOfTheYear(revenueFilter.getStart_date());
-                Logger.write("&&&&&&  "+month);
-                Logger.write("&&&&&&  "+revenueFilter.getStart_date());
-
+                    month = HelperMethods.MONTHS_LIST[revenueFilter.getMonth() - 1];//HelperMethods.getMonthOfTheYear(revenueFilter.getStart_date());
             }catch (Exception ee) {
-                month="";
+                month="All";
             }
-            quarter="";
+            quarter="Any";
         }
         try {
-            year = "" + HelperMethods.getCurrentYear(revenueFilter.getStart_date());
+            year = "" + revenueFilter.getYear();
         }catch (Exception e) {
            // try {
               //  year = "" + HelperMethods.getCurrentYear(HelperMethods.getTodayDate());
           //  }catch (Exception ee) {
                 year="";
            // }
-        }
+        }*/
 
         txt_reset = (TextView) findViewById(R.id.txt_reset);
         txt_cancel = (TextView) findViewById(R.id.txt_cancel);
@@ -131,6 +132,23 @@ public class ActivitySalesFilter extends AppCompatActivity implements  View.OnCl
         txt_default.setOnClickListener(this);
         txt_highest.setOnClickListener(this);
         txt_filter.setOnClickListener(this);
+Logger.write(revenueFilter.toJSONString());
+        year =""+revenueFilter.getYear();
+        if(revenueFilter.getMonth()>0) {
+            month=HelperMethods.MONTHS_LIST[revenueFilter.getMonth() - 1];
+
+        }else{
+            month="";
+            txt_month.setText("");
+        }
+        txt_month.setText(month);
+        if(revenueFilter.getQuarter()>0) {
+            quarter=quarters[revenueFilter.getQuarter()];
+            txt_quater.setText(quarter);
+        }else{
+            txt_quater.setText("");
+        }
+        txt_year.setText(year);
 
         toggleSortButs(sort);
 
@@ -189,60 +207,45 @@ public class ActivitySalesFilter extends AppCompatActivity implements  View.OnCl
                 break;
             case R.id.txt_highest:
                 sort ="desc";
-                revenueFilter.setSort("sort");
+                revenueFilter.setSort(sort);
                 toggleSortButs(sort);
                 break;
             case R.id.txt_lowest:
                 sort="asc";
-                revenueFilter.setSort("asc");
+                revenueFilter.setSort(sort);
                 toggleSortButs(sort);
                 break;
             case R.id.txt_filter:
-                if(year.isEmpty() && (!month.isEmpty() || !quarter.isEmpty())) {
+                if(year.isEmpty()) {
                     MyUtils.showErrorAlert(this, "You must select a year");
                     return;
                 }
                 if(!month.isEmpty() ) {
-                    revenueFilter.setStart_date(year+"-"+(Arrays.asList(HelperMethods.MONTHS_LIST).indexOf(month)+1)+"-1");
-                    int endMonth =Arrays.asList(HelperMethods.MONTHS_LIST).indexOf(month)+2;
-                    if(endMonth>12) {
-                        endMonth=1;
-                        year=""+(Integer.parseInt(year)+1);
-                    }
-                    revenueFilter.setEnd_date(year+"-"+endMonth+"-1");
-                    revenueFilter.setQuarter(-1);
+                    revenueFilter.setMonth(1+(Arrays.asList(HelperMethods.MONTHS_LIST).indexOf(month)));
+                    revenueFilter.setQuarter(0);
                 }else{
                     if(!quarter.isEmpty()) {
-                        if(quarter.equals(quarters[0])) {
-                            revenueFilter.setStart_date(year+"-01-01");
-                            revenueFilter.setEnd_date(year+"-04-01");
-                        }
-                        if(quarter.equals(quarters[1])) {
-                            revenueFilter.setStart_date(year+"-04-01");
-                            revenueFilter.setEnd_date(year+"-07-01");
-                        }
-                        if(quarter.equals(quarters[2])) {
-                            revenueFilter.setStart_date(year+"-07-01");
-                            revenueFilter.setEnd_date(year+"-10-01");
-                        }
-                        if(quarter.equals(quarters[3])) {
-                            revenueFilter.setStart_date(year+"-10-01");
-                            revenueFilter.setEnd_date((Integer.parseInt(year)+1)+"-01-01");
-                        }
+
                         revenueFilter.setQuarter(Arrays.asList(quarters).indexOf(quarter));
+                        revenueFilter.setMonth(0);
                     }
                 }
                 finishSelection();
 
                 break;
             case R.id.choose_month:
-                showList(HelperMethods.MONTHS_LIST, new AdapterView.OnItemClickListener() {
+                final String[] months = new String[13];
+                months[0]="All";
+                System.arraycopy( HelperMethods.MONTHS_LIST, 0, months, 1, HelperMethods.MONTHS_LIST.length );
+                showList(months, new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        month=HelperMethods.MONTHS_LIST[i];
+                        month=months[i];
                         txt_month.setText(month);
                         quarter="";
                         txt_quater.setText("");
+                        revenueFilter.setMonth(i);
+                        revenueFilter.setQuarter(0);
                         ad.dismiss();
                     }
                 });
@@ -262,6 +265,7 @@ public class ActivitySalesFilter extends AppCompatActivity implements  View.OnCl
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         year=""+years.get(i);
                         txt_year.setText(year);
+                        revenueFilter.setYear(Integer.parseInt(year));
                         ad.dismiss();
                     }
                 });
@@ -275,6 +279,8 @@ public class ActivitySalesFilter extends AppCompatActivity implements  View.OnCl
 
                         txt_quater.setText(quarter);
                         month="";
+                        revenueFilter.setMonth(0);
+                        revenueFilter.setQuarter(i);
                         txt_month.setText(month);
                         ad.dismiss();
 

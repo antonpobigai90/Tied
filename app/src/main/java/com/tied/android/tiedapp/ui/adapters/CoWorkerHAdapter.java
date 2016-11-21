@@ -54,7 +54,7 @@ public class CoWorkerHAdapter extends RecyclerView.Adapter<CoWorkerHAdapter.View
     public void onBindViewHolder(final ViewHolder viewHolder, final int position) {
 
         final User data = (User) _data.get(position);
-        String logo = data.getAvatar().equals("") ? null  : data.getAvatar_uri();
+        String logo = data.getAvatar().equals("") ? null  : data.getAvatar();
         MyUtils.Picasso.displayImage(logo ,viewHolder.pic);
         MyListener myListener = new MyListener(data);
         viewHolder.name.setText(data.getFirst_name());

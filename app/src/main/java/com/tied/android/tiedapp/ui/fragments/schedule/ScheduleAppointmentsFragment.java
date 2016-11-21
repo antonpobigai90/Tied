@@ -27,6 +27,7 @@ import android.widget.TextView;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.schedule.CreateAppointmentActivity;
 import com.tied.android.tiedapp.ui.fragments.schedule.tabs.*;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
@@ -229,6 +230,13 @@ public class ScheduleAppointmentsFragment extends Fragment implements View.OnCli
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }*/
+    }
+
+    public void refresh() {
+        mViewPager.setAdapter(null);
+        mViewPager.setAdapter(mPagerAdapter);
+        mPagerAdapter.notifyDataSetChanged();
+        MainActivity.getInstance().refresh.setRefreshing(false);
     }
 
     public void nextAction(int action, Bundle bundle) {

@@ -61,7 +61,9 @@ public class ActivitySaleDetails extends AppCompatActivity implements  View.OnCl
 
         bundle = getIntent().getExtras();
         user=MyUtils.getUserLoggedIn();
-        revenue_id = (String) bundle.getSerializable("revenue_id");
+
+        revenue = (Revenue) bundle.getSerializable(Constants.REVENUE_DATA);
+        revenue_id = revenue.getId();
 
         initComponent();
     }
@@ -81,7 +83,13 @@ public class ActivitySaleDetails extends AppCompatActivity implements  View.OnCl
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(getResources().getColor(R.color.blue_status_bar));
         }
+        txt_amount.setText(MyUtils.moneyFormat(revenue.getValue()));
+        try {
+            date.setText(MyUtils.formatDate(MyUtils.parseDate(revenue.getDate_sold())));
+        }catch (Exception e) {
 
+        }
+        setVisibile();
         getSaleDetails();
     }
     @Override
@@ -136,15 +144,23 @@ public class ActivitySaleDetails extends AppCompatActivity implements  View.OnCl
                     if (meta != null && meta.getStatus_code() == 200) {
 
                         revenue = ( (Revenue) response.getData("revenue", Revenue.class));
-                        client = ( (Client) response.getData("client", Client.class));
-                        line = ( (Line) response.getData("line", Line.class));
+                        try {
+                            client = ((Client) response.getData("client", Client.class));
+                            MyUtils.Picasso.displayImage(client.getLogo(), clientPhoto);
+                            clientNameTV.setText(MyUtils.getClientName(client));
+                        }catch (Exception e) {
 
-                        MyUtils.Picasso.displayImage(client.getLogo(), clientPhoto);
-                        clientNameTV.setText(MyUtils.getClientName(client));
+                        }
+                        try {
+                            line = ((Line) response.getData("line", Line.class));
+                            txt_line.setText(line.getName());
+                        }catch (Exception e) {
 
+                        }
+                        Logger.write(revenue.toString());
                         dscription.setText(revenue.getTitle());
-                        txt_line.setText(line.getName());
-                        txt_amount.setText(String.valueOf(revenue.getValue()));
+
+                        txt_amount.setText(MyUtils.moneyFormat(revenue.getValue()));
                         String[] strdate = revenue.getDate_sold().split("-");
                         date.setText(MyUtils.MONTHS_LIST[Integer.valueOf(strdate[1]).intValue() - 1] + " " + strdate[2] + ", " + strdate[0]);
 
@@ -163,12 +179,13 @@ public class ActivitySaleDetails extends AppCompatActivity implements  View.OnCl
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
 
-                Logger.write(" onFailure", t.toString());
-            }
+                MyUtils.showConnectionErrorToast(ActivitySaleDetails.this);
+        }
         });
     }
 
     private void setVisibile() {
+
         if (user.getId().equals(revenue.getUser_id())) {
             txt_delete.setVisibility(View.VISIBLE);
         }

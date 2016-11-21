@@ -124,9 +124,10 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
 
         client_sales_listview = (ListView) findViewById(R.id.client_sales_listview);
 
-        client_sale_adapter = new SaleClientDetailsListAdapter(revenueList, this);
+        client_sale_adapter = new SaleClientDetailsListAdapter(revenueList, null, this);
         client_sales_listview.setAdapter(client_sale_adapter);
         client_sale_adapter.notifyDataSetChanged();
+
         loadData();
         updateSalesLabel();
         setLineTotalRevenue();
@@ -401,18 +402,32 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
         }
     }
     private void updateSalesLabel() {
-        if(filter.getStart_date()!= null && !filter.getStart_date().isEmpty()) {
-            String endMonth = HelperMethods.getMonthOfTheYear(filter.getEnd_date());
-            int position= Arrays.asList(HelperMethods.MONTHS_LIST).indexOf(endMonth)-1;
-            if(position<0) position=11;
-            endMonth=HelperMethods.MONTHS_LIST[position];
-            String startMonth = HelperMethods.getMonthOfTheYear(filter.getStart_date());
-            if(endMonth.equalsIgnoreCase(startMonth)) {
-                periodLabelTV.setText(startMonth+" "+HelperMethods.getCurrentYear(filter.getStart_date()));
-            }else        periodLabelTV.setText(startMonth+" to "+endMonth+", "+HelperMethods.getCurrentYear(filter.getStart_date()));
+        if(filter.getQuarter()==0 && filter.getMonth()!=0) {
+            //int position= Arrays.asList(HelperMethods.MONTHS_LIST).indexOf(endMonth)-1;
+
+
+            periodLabelTV.setText(HelperMethods.MONTHS_LIST[filter.getMonth()-1]);
+        }else if(filter.getQuarter()!=0 && filter.getMonth()==0) {
+            //int position= Arrays.asList(HelperMethods.MONTHS_LIST).indexOf(endMonth)-1;
+            switch(filter.getQuarter()) {
+                case 1:
+                    periodLabelTV.setText(HelperMethods.MONTHS_LIST[0]+"-"+HelperMethods.MONTHS_LIST[2]);
+                    break;
+                case 2:
+                    periodLabelTV.setText(HelperMethods.MONTHS_LIST[3]+"-"+HelperMethods.MONTHS_LIST[5]);
+                    break;
+                case 3:
+                    periodLabelTV.setText(HelperMethods.MONTHS_LIST[6]+"-"+HelperMethods.MONTHS_LIST[8]);
+                    break;
+                case 4:
+                    periodLabelTV.setText(HelperMethods.MONTHS_LIST[9]+"-"+HelperMethods.MONTHS_LIST[11]);
+                    break;
+            }
+
         }else{
             periodLabelTV.setText("All time sales");
         }
+        periodLabelTV.setText(periodLabelTV.getText()+" "+filter.getYear());
 
     }
 }

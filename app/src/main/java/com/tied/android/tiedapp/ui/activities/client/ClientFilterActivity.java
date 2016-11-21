@@ -1,4 +1,4 @@
-package com.tied.android.tiedapp.ui.activities.coworker;
+package com.tied.android.tiedapp.ui.activities.client;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -18,15 +18,17 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Territory;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
-import com.tied.android.tiedapp.util.Logger;
+import com.tied.android.tiedapp.ui.activities.coworker.CoWorkerLinesActivity;
+import com.tied.android.tiedapp.ui.activities.coworker.CoWorkerTerritoriesActivity;
+import com.tied.android.tiedapp.ui.fragments.client.MapAndListFragment;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class CoWorkerFilterActivity extends AppCompatActivity implements View.OnClickListener{
+public class ClientFilterActivity extends AppCompatActivity implements View.OnClickListener{
 
-    public static final String TAG = CoWorkerFilterActivity.class
+    public static final String TAG = ClientFilterActivity.class
             .getSimpleName();
 
     private Bundle bundle;
@@ -38,12 +40,12 @@ public class CoWorkerFilterActivity extends AppCompatActivity implements View.On
     int page_index;
     SeekBar m_seekbar;
     TextView txt_miles, txt_justme, txt_co_worker;
-    TextView txt_1w, txt_2w, txt_3w, txt_4w, txt_2m;
+    TextView txt_all, txt_1w, txt_2w, txt_3w, txt_4w, txt_2m;
     TextView txt_distance, txt_sale, txt_highest, txt_lowest;
 
     String group = "all";
-    int last_visited = 1;
-    String order = "desc";
+    int last_visited = 0;
+    String order = "asc";
     int distance = 10000;
     String orderby = "distance";
     ArrayList<Territory> selectedTerritories = new ArrayList<Territory>();
@@ -92,10 +94,10 @@ public class CoWorkerFilterActivity extends AppCompatActivity implements View.On
         line_layout.setOnClickListener(this);
 
         txt_miles = (TextView) findViewById(R.id.txt_miles);
-        setMiles(MainActivity.distance);
+        setMiles(MapAndListFragment.distance);
 
         m_seekbar = (SeekBar) findViewById(R.id.seekBar);
-        m_seekbar.setProgress(MainActivity.distance);
+        m_seekbar.setProgress(MapAndListFragment.distance);
         m_seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -119,6 +121,7 @@ public class CoWorkerFilterActivity extends AppCompatActivity implements View.On
         txt_justme = (TextView) findViewById(R.id.txt_justme);
         txt_co_worker = (TextView) findViewById(R.id.txt_co_worker);
 
+        txt_all = (TextView) findViewById(R.id.txt_all);
         txt_1w = (TextView) findViewById(R.id.txt_1w);
         txt_2w = (TextView) findViewById(R.id.txt_2w);
         txt_3w = (TextView) findViewById(R.id.txt_3w);
@@ -131,10 +134,11 @@ public class CoWorkerFilterActivity extends AppCompatActivity implements View.On
         txt_highest = (TextView) findViewById(R.id.txt_highest);
         txt_lowest = (TextView) findViewById(R.id.txt_lowest);
 
-        setGroup(MainActivity.group);
-        setLastVisited(MainActivity.last_visited);
-        setOrderby(MainActivity.orderby);
-        setOrder(MainActivity.order);
+        setGroup(MapAndListFragment.group);
+
+        setLastVisited(MapAndListFragment.last_visited);
+        setOrderby(MapAndListFragment.orderby);
+        setOrder(MapAndListFragment.order);
     }
 
     private void setMiles(int miles) {
@@ -174,6 +178,9 @@ public class CoWorkerFilterActivity extends AppCompatActivity implements View.On
 
     public void onLastVisited(View v) {
         switch (v.getId()) {
+            case R.id.txt_all:
+                last_visited = 0;
+                break;
             case R.id.txt_1w:
                 last_visited = 1;
                 break;
@@ -195,10 +202,31 @@ public class CoWorkerFilterActivity extends AppCompatActivity implements View.On
     }
 
     private void setLastVisited(int index) {
+        last_visited=index;
         switch (index) {
+            case 0:
+                txt_all.setBackgroundResource(R.drawable.blue_fill_grey_stroke);
+                txt_all.setTextColor(Color.WHITE);
+
+                txt_1w.setBackgroundResource(R.drawable.white_fill_grey_stroke);
+                txt_1w.setTextColor(Color.BLACK);
+
+                txt_2w.setBackgroundResource(R.drawable.white_fill_grey_stroke);
+                txt_3w.setBackgroundResource(R.drawable.white_fill_grey_stroke);
+                txt_4w.setBackgroundResource(R.drawable.white_fill_grey_stroke);
+                txt_2m.setBackgroundResource(R.drawable.white_fill_grey_stroke);
+
+                txt_2w.setTextColor(Color.BLACK);
+                txt_3w.setTextColor(Color.BLACK);
+                txt_4w.setTextColor(Color.BLACK);
+                txt_2m.setTextColor(Color.BLACK);
+                break;
             case 1:
                 txt_1w.setBackgroundResource(R.drawable.blue_fill_grey_stroke);
                 txt_1w.setTextColor(Color.WHITE);
+
+                txt_all.setBackgroundResource(R.drawable.white_fill_grey_stroke);
+                txt_all.setTextColor(Color.BLACK);
 
                 txt_2w.setBackgroundResource(R.drawable.white_fill_grey_stroke);
                 txt_3w.setBackgroundResource(R.drawable.white_fill_grey_stroke);
@@ -214,6 +242,8 @@ public class CoWorkerFilterActivity extends AppCompatActivity implements View.On
                 txt_2w.setBackgroundResource(R.drawable.blue_fill_grey_stroke);
                 txt_2w.setTextColor(Color.WHITE);
 
+                txt_all.setBackgroundResource(R.drawable.white_fill_grey_stroke);
+                txt_all.setTextColor(Color.BLACK);
                 txt_1w.setBackgroundResource(R.drawable.white_fill_grey_stroke);
                 txt_3w.setBackgroundResource(R.drawable.white_fill_grey_stroke);
                 txt_4w.setBackgroundResource(R.drawable.white_fill_grey_stroke);
@@ -225,6 +255,8 @@ public class CoWorkerFilterActivity extends AppCompatActivity implements View.On
                 txt_2m.setTextColor(Color.BLACK);
                 break;
             case 3:
+                txt_all.setBackgroundResource(R.drawable.white_fill_grey_stroke);
+                txt_all.setTextColor(Color.BLACK);
                 txt_3w.setBackgroundResource(R.drawable.blue_fill_grey_stroke);
                 txt_3w.setTextColor(Color.WHITE);
 
@@ -239,6 +271,8 @@ public class CoWorkerFilterActivity extends AppCompatActivity implements View.On
                 txt_2m.setTextColor(Color.BLACK);
                 break;
             case 4:
+                txt_all.setBackgroundResource(R.drawable.white_fill_grey_stroke);
+                txt_all.setTextColor(Color.BLACK);
                 txt_4w.setBackgroundResource(R.drawable.blue_fill_grey_stroke);
                 txt_4w.setTextColor(Color.WHITE);
 
@@ -253,9 +287,12 @@ public class CoWorkerFilterActivity extends AppCompatActivity implements View.On
                 txt_2m.setTextColor(Color.BLACK);
                 break;
             case 8:
+
                 txt_2m.setBackgroundResource(R.drawable.blue_fill_grey_stroke);
                 txt_2m.setTextColor(Color.WHITE);
 
+                txt_all.setBackgroundResource(R.drawable.white_fill_grey_stroke);
+                txt_all.setTextColor(Color.BLACK);
                 txt_2w.setBackgroundResource(R.drawable.white_fill_grey_stroke);
                 txt_3w.setBackgroundResource(R.drawable.white_fill_grey_stroke);
                 txt_4w.setBackgroundResource(R.drawable.white_fill_grey_stroke);
@@ -275,7 +312,7 @@ public class CoWorkerFilterActivity extends AppCompatActivity implements View.On
                 orderby = "distance";
                 break;
             case R.id.txt_sale:
-                orderby = "sale";
+                orderby = "sales";
                 break;
         }
 
@@ -283,6 +320,7 @@ public class CoWorkerFilterActivity extends AppCompatActivity implements View.On
     }
 
     private void setOrderby(String orderby) {
+        this.orderby=orderby;
         if (orderby.equals("distance")) {
             txt_distance.setBackgroundResource(R.drawable.blue_fill_grey_stroke);
             txt_distance.setTextColor(Color.WHITE);
@@ -299,6 +337,7 @@ public class CoWorkerFilterActivity extends AppCompatActivity implements View.On
     }
 
     public void onOrder(View v) {
+
         switch (v.getId()) {
             case R.id.txt_highest:
                 order = "desc";
@@ -312,6 +351,7 @@ public class CoWorkerFilterActivity extends AppCompatActivity implements View.On
     }
 
     private void setOrder(String order) {
+        this.order=order;
         if (order.equals("desc")) {
             txt_highest.setBackgroundResource(R.drawable.blue_fill_grey_stroke);
             txt_highest.setTextColor(Color.WHITE);
@@ -334,14 +374,14 @@ public class CoWorkerFilterActivity extends AppCompatActivity implements View.On
                 super.onBackPressed();
                 break;
             case R.id.txt_apply:
-                MainActivity.isClientFilter = true;
-                MainActivity.group = group;
-                MainActivity.distance = distance;
-                MainActivity.last_visited = last_visited;
-                MainActivity.order = order;
-                MainActivity.orderby = orderby;
-                MainActivity.selectedTerritories = selectedTerritories;
-                MainActivity.selectedLines = selectedLines;
+                MapAndListFragment.isClientFilter = true;
+                MapAndListFragment.group = group;
+                MapAndListFragment.distance = distance;
+                MapAndListFragment.last_visited = last_visited;
+                MapAndListFragment.order = order;
+                MapAndListFragment.orderby = orderby;
+                MapAndListFragment.selectedTerritories = selectedTerritories;
+                MapAndListFragment.selectedLines = selectedLines;
 
                 Intent intent = new Intent();
                 setResult(RESULT_OK, intent);
@@ -349,8 +389,8 @@ public class CoWorkerFilterActivity extends AppCompatActivity implements View.On
                 finish();
                 break;
             case R.id.txt_clear:
-                MainActivity.isClientFilter = false;
-                MainActivity.isClear = true;
+                MapAndListFragment.isClientFilter = false;
+                MapAndListFragment.isClear = true;
                 intent = new Intent();
                 setResult(RESULT_OK, intent);
                 finishActivity(Constants.ClientFilter);

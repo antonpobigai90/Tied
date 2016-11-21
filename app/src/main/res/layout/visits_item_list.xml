@@ -13,7 +13,7 @@
 
         <LinearLayout
             android:id="@+id/layout_left"
-            android:layout_width="100dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="false"
             android:layout_centerVertical="true"
@@ -53,7 +53,7 @@
                 android:maxLines="1"
                 android:text="Sept"
                 android:textColor="@color/schedule_title_bg_color"
-                android:textSize="14sp"
+                android:textSize="11sp"
                 android:layout_marginTop="2dp" />
 
         </LinearLayout>

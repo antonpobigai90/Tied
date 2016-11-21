@@ -125,7 +125,7 @@ public class Constants {
 
     public static final String GET_INDUSTRIES = API_PATH + "config/industries";
 
-    public static final String REPORT = API_PATH + "report";
+    public static final String REPORT = API_PATH + "users/{user_id}/report";
 
     public static final String APP_DATA = "app_data";
     public static final String COWORKER = "coworker";

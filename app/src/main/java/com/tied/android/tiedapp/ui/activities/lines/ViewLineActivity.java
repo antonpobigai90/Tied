@@ -21,6 +21,7 @@ import com.tied.android.tiedapp.retrofits.services.RevenueApi;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityLineClientSales;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.dialogs.DialogYesNo;
+import com.tied.android.tiedapp.util.HelperMethods;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 import com.tied.android.tiedapp.ui.activities.goal.LineGoalActivity;
@@ -293,7 +294,9 @@ public class ViewLineActivity extends AppCompatActivity implements  View.OnClick
     public void setLineTotalRevenue() {
         RevenueApi lineApi = MainApplication.createService(RevenueApi.class);
         RevenueFilter rf=new RevenueFilter();
-        rf.setStart_date("2015-01-01");
+        rf.setMonth(0);
+        rf.setYear(HelperMethods.getCurrentYear(HelperMethods.getTodayDate()));
+        rf.setQuarter(0);
         final Call<ResponseBody> response2 = lineApi.getTotalRevenues("line", line.getId(), rf);
         response2.enqueue(new Callback<ResponseBody>() {
             @Override

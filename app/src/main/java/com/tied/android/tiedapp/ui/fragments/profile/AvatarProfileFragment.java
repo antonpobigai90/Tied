@@ -22,6 +22,7 @@ import com.tied.android.tiedapp.retrofits.services.ProfileApi;
 import com.tied.android.tiedapp.ui.dialogs.DialogSelectPicture;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.listeners.ImageReadyForUploadListener;
+import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import java.io.File;
@@ -75,9 +76,7 @@ public class AvatarProfileFragment extends Fragment implements View.OnClickListe
         if (user != null) {
             name.setText(user.getFullName());
             Log.d(TAG, "user.getAvatar()"+user.getAvatar());
-            Picasso.with(getActivity()).load(user.getAvatar())
-                    .memoryPolicy(MemoryPolicy.NO_CACHE)
-                    .networkPolicy(NetworkPolicy.NO_CACHE).into(image);
+            MyUtils.Picasso.displayImage(user.getAvatar(), image);
         }
     }
 
@@ -122,13 +121,14 @@ public class AvatarProfileFragment extends Fragment implements View.OnClickListe
             public void onResponse(Call<ServerRes> call, Response<ServerRes> updateAvatarResponse) {
                 if (getActivity() == null) return;
                 ServerRes ServerRes = updateAvatarResponse.body();
-                Log.d(TAG, ServerRes.toString() );
+                Logger.write(TAG, ServerRes.toString() );
                 if(ServerRes.isSuccess()){
-                    user.setAvatar_uri(null);
+                    //user.setAvatar(null);
                     user.setAvatar(ServerRes.getUser().getAvatar());
                     boolean saved = user.save(getActivity().getApplicationContext());
                     if(saved){
                         DialogUtils.closeProgress();
+                        //MyUtils.Picasso.displayImage(user.getAvatar(), image);
                         Picasso.with(getActivity()).load(user.getAvatar())
                                 .memoryPolicy(MemoryPolicy.NO_CACHE)
                                 .networkPolicy(NetworkPolicy.NO_CACHE).into(image);

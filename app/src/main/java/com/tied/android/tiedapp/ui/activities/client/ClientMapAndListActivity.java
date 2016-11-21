@@ -12,12 +12,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.activities.coworker.CoWorkerFilterActivity;
 import com.tied.android.tiedapp.ui.fragments.client.ClientsListFragment;
 import com.tied.android.tiedapp.ui.fragments.client.ClientsMapFragment;
 import com.tied.android.tiedapp.util.MyUtils;
@@ -103,7 +101,7 @@ public class ClientMapAndListActivity extends AppCompatActivity implements  View
                 }
                 break;
             case R.id.img_filter:
-                MyUtils.startActivity(this, CoWorkerFilterActivity.class, bundle);
+                MyUtils.startActivity(this, ClientFilterActivity.class, bundle);
                 break;
         }
     }

@@ -116,7 +116,7 @@ public class ViewCoWorkerActivity extends AppCompatActivity implements View.OnCl
 
         if (coworker != null) {
             name.setText(coworker.getFirst_name() + " " + coworker.getLast_name());
-            MyUtils.Picasso.displayImage(coworker.getAvatarURL(), avatar);
+            MyUtils.Picasso.displayImage(coworker.getAvatar(), avatar);
 
             checkCoworkers();
             getActivities(coworker.getId());
@@ -360,7 +360,7 @@ public class ViewCoWorkerActivity extends AppCompatActivity implements View.OnCl
                         coworker = ( (User) response.getData("user", User.class));
 
                         name.setText(coworker.getFirst_name() + " " + coworker.getLast_name());
-                        MyUtils.Picasso.displayImage(coworker.getAvatarURL(), avatar);
+                        MyUtils.Picasso.displayImage(coworker.getAvatar(), avatar);
 
                         checkCoworkers();
 
