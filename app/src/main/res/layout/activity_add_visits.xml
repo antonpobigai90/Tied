@@ -18,6 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TextView
+                android:id="@+id/txt_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -198,7 +199,6 @@
                         android:textColor="@color/grey"
                         android:textSize="15sp"
                         android:layout_height="35dp"
-                        android:text="4500"
                         android:id="@+id/distance"
                         android:inputType="numberDecimal" />
                 </LinearLayout>
@@ -251,7 +251,6 @@
                         android:textColor="@color/grey"
                         android:textSize="13sp"
                         android:layout_height="35dp"
-                        android:text="July 11, 2016"
                         android:inputType="number"
                         android:gravity="center_vertical" />
 
@@ -316,7 +315,6 @@
                         android:textColor="@color/grey"
                         android:textSize="13sp"
                         android:layout_height="35dp"
-                        android:text="23:23"
                         android:inputType="number"
                         android:gravity="center_vertical" />
 

@@ -196,8 +196,7 @@
                         android:textColor="@color/grey"
                         android:textSize="15sp"
                         android:layout_height="35dp"
-                        android:text="4500"
-                              android:id="@+id/sale_amount"
+                        android:id="@+id/sale_amount"
                         android:inputType="numberDecimal" />
                 </LinearLayout>
 
@@ -248,7 +247,6 @@
                         android:textColor="@color/grey"
                         android:textSize="13sp"
                         android:layout_height="35dp"
-                        android:text="July 11, 2016"
                         android:inputType="number"
                         android:gravity="center_vertical" />
 
