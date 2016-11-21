@@ -112,15 +112,7 @@ public class ActivityVisitDetails extends AppCompatActivity implements  View.OnC
         }
 
         if (visit != null) {
-            locationTV.setText(visit.getAddress().getStreet() + ", " + visit.getAddress().getCity() + ", " + visit.getAddress().getState() + ", " + visit.getAddress().getZip());
-            distance.setText(MyUtils.formatDistance(visit.getDistance())+MyUtils.getPreferredDistanceUnit());
-            dscription.setText(visit.getTitle());
-            String[] strdate = visit.getVisit_date().split("-");
-            date.setText(MyUtils.MONTHS_LIST[Integer.valueOf(strdate[1]).intValue() - 1] + " " + strdate[2] + ", " + strdate[0]);
-
-            time.setText(MyUtils.formatTime(visit.getVisit_time()));
-
-            setVisibile();
+            setVisitData(visit);
         } else {
             getVisitDetails();
         }
@@ -144,7 +136,10 @@ public class ActivityVisitDetails extends AppCompatActivity implements  View.OnC
     }
 
     public void goBack(View v) {
-        onBackPressed();
+        Intent intent = new Intent();
+        setResult(RESULT_OK, intent);
+        finishActivity(Constants.VISIT_LIST);
+        finish();
     }
 
     private void getVisitDetails() {
@@ -175,15 +170,7 @@ public class ActivityVisitDetails extends AppCompatActivity implements  View.OnC
 
                         getClientObject(visit.getClient_id());
 
-                        locationTV.setText(visit.getAddress().getStreet() + ", " + visit.getAddress().getCity() + ", " + visit.getAddress().getState() + ", " + visit.getAddress().getZip());
-                        distance.setText(MyUtils.formatDistance(visit.getDistance())+MyUtils.getPreferredDistanceUnit());
-
-                        String[] strdate = visit.getVisit_date().split("-");
-                        date.setText(MyUtils.MONTHS_LIST[Integer.valueOf(strdate[1]).intValue() - 1] + " " + strdate[2] + ", " + strdate[0]);
-
-                        time.setText(MyUtils.formatTime(visit.getVisit_time()));
-                        dscription.setText(visit.getTitle());
-                        setVisibile();
+                        setVisitData(visit);
 
                     } else {
                         MyUtils.showToast("Error encountered");
@@ -250,9 +237,34 @@ public class ActivityVisitDetails extends AppCompatActivity implements  View.OnC
         });
     }
 
-    private void setVisibile() {
+    private void setVisitData(Visit visit) {
+        locationTV.setText(visit.getAddress().getStreet() + ", " + visit.getAddress().getCity() + ", " + visit.getAddress().getState() + ", " + visit.getAddress().getZip());
+        distance.setText(MyUtils.formatDistance(visit.getDistance())+MyUtils.getPreferredDistanceUnit());
+        dscription.setText(visit.getTitle());
+        String[] strdate = visit.getVisit_date().split("-");
+        date.setText(MyUtils.MONTHS_LIST[Integer.valueOf(strdate[1]).intValue() - 1] + " " + strdate[2] + ", " + strdate[0]);
+
+        time.setText(MyUtils.formatTime(visit.getVisit_time()));
+
         if (user.getId().equals(visit.getUser_id())) {
             txt_delete.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == Constants.Visits && resultCode == RESULT_OK) {
+
+            bundle = data.getExtras();
+            client = (Client) bundle.getSerializable(Constants.CLIENT_DATA);
+            visit = (Visit) bundle.getSerializable(Constants.VISIT_DATA);
+
+            MyUtils.Picasso.displayImage(client.getLogo(), clientPhoto);
+            clientNameTV.setText(MyUtils.getClientName(client));
+
+            setVisitData(visit);
         }
     }
 }

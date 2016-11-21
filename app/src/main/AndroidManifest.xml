@@ -381,7 +381,8 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".ui.activities.visits.ActivityAddVisits"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".ui.activities.visits.ActivityVisits"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>

@@ -71,7 +71,7 @@ public class ActivityAddVisits extends AppCompatActivity implements  View.OnClic
 
    // AddSalesFragment fragment;
 
-    Boolean isSelectClient = true;
+    TextView txt_title, add_button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +84,6 @@ public class ActivityAddVisits extends AppCompatActivity implements  View.OnClic
         try {
             client = (Client) bundle.getSerializable(Constants.CLIENT_DATA);
             visit = (Visit) bundle.getSerializable(Constants.VISIT_DATA);
-            isSelectClient = bundle.getBoolean("select_client", true);
         } catch (Exception e) {
 
         }
@@ -112,6 +111,9 @@ public class ActivityAddVisits extends AppCompatActivity implements  View.OnClic
         date = (TextView)findViewById(R.id.date);
         time = (TextView)findViewById(R.id.time);
 
+        txt_title = (TextView)findViewById(R.id.txt_title);
+        add_button = (TextView)findViewById(R.id.add_button);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -121,6 +123,10 @@ public class ActivityAddVisits extends AppCompatActivity implements  View.OnClic
         if (client != null) {
             clientNameTV.setText(MyUtils.getClientName(client));
             MyUtils.Picasso.displayImage(client.getLogo(), clientPhoto);
+
+            txt_change.setVisibility(View.GONE);
+            txt_title.setText("Edit Visit");
+            add_button.setText("Save");
         }
 
         if (visit != null) {
@@ -131,16 +137,12 @@ public class ActivityAddVisits extends AppCompatActivity implements  View.OnClic
             date.setText(MyUtils.MONTHS_LIST[Integer.valueOf(strdate[1]).intValue() - 1] + " " + strdate[2] + ", " + strdate[0]);
             time.setText(visit.getVisit_time());
         }
-
-        if (!isSelectClient) {
-            txt_change.setVisibility(View.GONE);
-        }
     }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.select_client_layout:
-                if (isSelectClient) {
+                if (client == null) {
                     selectClient(client);
                 }
                 break;
@@ -229,6 +231,8 @@ public class ActivityAddVisits extends AppCompatActivity implements  View.OnClic
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
                 if (this == null) return;
                 try {
+                    DialogUtils.closeProgress();
+
                     GeneralResponse response =new GeneralResponse(resResponse.body());
                     Logger.write(response.toString());
                     if (response.isAuthFailed()) {
@@ -244,8 +248,9 @@ public class ActivityAddVisits extends AppCompatActivity implements  View.OnClic
                             MyUtils.startRequestActivity(ActivityAddVisits.this, ActivityVisitDetails.class, Constants.VISIT_LIST, bundle);
                             ActivityAddVisits.this.finish();
                         }else {
-                            DialogUtils.closeProgress();
                             Intent intent = new Intent();
+                            intent.putExtra(Constants.VISIT_DATA, visit);
+                            intent.putExtra(Constants.CLIENT_DATA, client);
                             setResult(RESULT_OK, intent);
                             finishActivity(Constants.Visits);
                             finish();

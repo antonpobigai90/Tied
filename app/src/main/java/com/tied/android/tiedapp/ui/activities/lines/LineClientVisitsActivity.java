@@ -155,7 +155,6 @@ public class LineClientVisitsActivity extends AppCompatActivity implements View.
                 MyUtils.startRequestActivity(this, VisitFilterActivity.class, Constants.VISIT_FILTER, bundle);
                 break;
             case R.id.img_plus:
-                bundle.putBoolean("select_client", false);
                 MyUtils.startRequestActivity(this, ActivityAddVisits.class, Constants.Visits, bundle);
                 break;
         }
