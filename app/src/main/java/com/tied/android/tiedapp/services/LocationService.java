@@ -1,21 +1,46 @@
 package com.tied.android.tiedapp.services;
 
 import android.Manifest;
-import android.app.Service;
+import android.app.*;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
+import com.tied.android.tiedapp.MainApplication;
+import com.tied.android.tiedapp.R;
+import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Coordinate;
+import com.tied.android.tiedapp.objects.client.Client;
+import com.tied.android.tiedapp.objects.client.ClientFilter;
+import com.tied.android.tiedapp.objects.responses.ClientRes;
+import com.tied.android.tiedapp.objects.user.User;
+import com.tied.android.tiedapp.retrofits.services.ClientApi;
+import com.tied.android.tiedapp.ui.activities.MainActivity;
+import com.tied.android.tiedapp.ui.activities.client.ActivityClientProfile;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by femi on 8/10/2016.
@@ -29,6 +54,7 @@ public class LocationService extends Service {
 
     Intent intent;
     int counter = 0;
+    ArrayList<String> foundClients=new ArrayList<>();
 
     @Override
     public void onCreate() {
@@ -50,8 +76,8 @@ public class LocationService extends Service {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 4000, 0, listener);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 4000, 0, listener);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 4000, 4, listener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 4000, 4, listener);
     }
 
     @Override
@@ -147,7 +173,7 @@ public class LocationService extends Service {
 
 
 
-
+    private long lastChecked=new Date().getTime();
     public class MyLocationListener implements LocationListener
     {
 
@@ -162,15 +188,142 @@ public class LocationService extends Service {
                 intent.putExtra("Provider", loc.getProvider());
                 sendBroadcast(intent);*/
                 Coordinate co=new Coordinate(loc.getLatitude(), loc.getLongitude());
+
                 Log.i("CURRENT LOCATION", co.toString());
                 MyUtils.setCurrentLocation(co);
+                if(new Date().getTime()-lastChecked>(5*60*1000)) {
+                    User user=MyUtils.getUserLoggedIn();
+                    if(user.getNotification().getProximity().getPush()) {//if he wants proximity checks
+                        doProximityCheck(user, co);
+                    }
+                    lastChecked=new Date().getTime();
+                }
 
             }
         }
 
+        private void doProximityCheck(User user, final Coordinate coordinate) {
+            ClientFilter clientFilter=new ClientFilter();
+            clientFilter.setCoordinate(coordinate);
+            clientFilter.setPage_size(2);
+            clientFilter.setOrder("asc");
+            clientFilter.setOrder_by("distance");
+            clientFilter.setDistance(MyUtils.getSharedPreferences().getInt(Constants.PROXIMITY_REMINDER_DISTANCE, 400));
+            clientFilter.setUnit("mi");
+            Logger.write("*********************"+clientFilter.getDistance()+"");
+            ClientApi clientApi = MainApplication.createService(ClientApi.class);
+            Call<ClientRes> response = clientApi.getClientsFilter(user.getId(), 1, clientFilter);
+
+            response.enqueue(new Callback<ClientRes>() {
+                @Override
+                public void onResponse(Call<ClientRes> call, Response<ClientRes> resResponse) {
+                    if (getApplicationContext()== null ) {
+                        // Logger.write("null activity");
+                        return;
+                    }
+                    //Logger.write("(((((((((((((((((((((((((((((999999");
+                    DialogUtils.closeProgress();
+                    ClientRes clientRes = resResponse.body();
+                    Logger.write(clientRes.toString());
+                    try {
+                        if (clientRes.isAuthFailed()) {
+                            User.LogOut(getApplicationContext());
+                        } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200) {
+                            Client client =clientRes.getClients().get(0);
+
+                                createNotification(client, coordinate);
+
+                        } else {
+                            Logger.write("Error onResponse", clientRes.getMessage());
+                        }
+                    }catch (Exception e) {
+                        Logger.write(e);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ClientRes> call, Throwable t) {
+                    Logger.write(" onFailure", t.toString());
+                    DialogUtils.closeProgress();
+                }
+            });
+        }
+        static final int mId=9230923;
         public void onProviderDisabled(String provider)
         {
             //Toast.makeText( getApplicationContext(), "Gps Disabled", Toast.LENGTH_SHORT ).show();
+        }
+
+        void createNotification(Client client, Coordinate coordinate) {
+           /* SharedPreferences sp=MyUtils.getSharedPreferences();
+            try {
+                JSONArray ja = new JSONArray(
+                        sp.getString(Constants.NEARBY_CLIENTS, new JSONArray().toString())
+                );
+
+                for (int i=0; i<ja.length(); i++) {
+                    foundClients.add(ja.getString(i));
+                }
+            }catch (JSONException je) {
+                foundClients=new ArrayList<>();
+            }
+*/
+            if(foundClients.contains(client.getId())) return;
+           if(foundClients.size()<5) {
+                foundClients.add(client.getId());
+            }else  {
+               foundClients.remove(0);
+                foundClients.add(client.getId());
+            }
+          /*  JSONArray ja=new JSONArray();
+            for (int j=0; j<foundClients.size(); j++) {
+               ja.put(foundClients.get(j));
+            }
+            SharedPreferences.Editor e=sp.edit();
+            e.putString(Constants.NEARBY_CLIENTS, ja.toString());
+            e.apply();
+          //  i++;
+          */
+           Logger.write(foundClients.toString());
+            String clientName=MyUtils.getClientName(client);
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(getApplicationContext())
+                            .setSmallIcon(R.drawable.ic_stat_onesignal_default)
+                            .setContentTitle("Visit "+clientName)
+                            .setContentText("You are only "+MyUtils.getDistance(client.getAddress().getCoordinate(), coordinate, true)+" away.");
+            // Creates an explicit intent for an Activity in your app
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(Constants.PROXIMITY_CLIENT_DATA, client);
+            Intent resultIntent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            resultIntent.putExtras(bundle);
+            // The stack builder object will contain an artificial back stack for the
+            // started Activity.
+            // This ensures that navigating backward from the Activity leads out of
+            // your application to the Home screen.
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
+            // Adds the back stack for the Intent (but not the Intent itself)
+            stackBuilder.addParentStack(MainActivity.class);
+            // Adds the Intent that starts the Activity to the top of the stack
+            stackBuilder.addNextIntent(resultIntent);
+            PendingIntent resultPendingIntent =
+                    stackBuilder.getPendingIntent(
+                            0,
+                            PendingIntent.FLAG_UPDATE_CURRENT
+                    );
+            //Vibration
+           // mBuilder.setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 });
+
+            //LED
+            //mBuilder.setLights(Color.BLUE, 3000, 3000);
+            mBuilder.setDefaults(Notification.DEFAULT_SOUND|Notification.DEFAULT_LIGHTS|Notification.DEFAULT_VIBRATE);
+           // Uri alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+           // mBuilder.setSound(alarmSound);
+            mBuilder.setContentIntent(resultPendingIntent);
+            NotificationManager mNotificationManager =
+                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+// mId allows you to update the notification later on.
+            mNotificationManager.notify(mId, mBuilder.build());
         }
 
 

@@ -70,6 +70,7 @@ public class ActivityVisitDetails extends AppCompatActivity implements  View.OnC
     Client client;
     Visit visit;
     String visit_id;
+    boolean updateMade=false;
 
     ImageView clientPhoto;
     TextView clientNameTV, locationTV;
@@ -136,9 +137,11 @@ public class ActivityVisitDetails extends AppCompatActivity implements  View.OnC
     }
 
     public void goBack(View v) {
-        Intent intent = new Intent();
-        setResult(RESULT_OK, intent);
-        finishActivity(Constants.VISIT_LIST);
+        if(updateMade) {
+            Intent intent = new Intent();
+            setResult(RESULT_OK, intent);
+            finishActivity(Constants.VISIT_LIST);
+        }
         finish();
     }
 
@@ -263,7 +266,7 @@ public class ActivityVisitDetails extends AppCompatActivity implements  View.OnC
 
             MyUtils.Picasso.displayImage(client.getLogo(), clientPhoto);
             clientNameTV.setText(MyUtils.getClientName(client));
-
+            updateMade=true;
             setVisitData(visit);
         }
     }

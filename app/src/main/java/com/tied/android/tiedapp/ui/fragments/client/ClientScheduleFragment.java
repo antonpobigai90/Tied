@@ -46,7 +46,7 @@ public class ClientScheduleFragment extends SchedulesFragment implements View.On
         client = (Client)bundle.getSerializable(Constants.CLIENT_DATA);
 
         ScheduleApi scheduleApi = MainApplication.createService(ScheduleApi.class);
-        Call<ScheduleRes> response = scheduleApi.getClientSchedule(client.getId());
+        Call<ScheduleRes> response = scheduleApi.getClientSchedule(client.getId(), 1);
         response.enqueue(new Callback<ScheduleRes>() {
             @Override
             public void onResponse(Call<ScheduleRes> call, Response<ScheduleRes> resResponse) {

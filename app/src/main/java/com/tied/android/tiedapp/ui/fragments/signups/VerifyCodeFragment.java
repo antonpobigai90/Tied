@@ -26,7 +26,6 @@ import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
-import com.tied.android.tiedapp.util.Utility;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -206,7 +205,7 @@ public class VerifyCodeFragment extends Fragment implements View.OnClickListener
                 if (txt_verify_code.getText().length() == 0) {
                    // alert_valid.setVisibility(View.VISIBLE);
 
-                    MyUtils.showAlert(getActivity(), getActivity().getString(R.string.alert_valide_verify_code));
+                    MyUtils.showErrorAlert(getActivity(), getActivity().getString(R.string.alert_valide_verify_code));
                   //  Utility.moveViewToScreenCenter( alert_valid, Utility.getResourceString(context, R.string.alert_valide_verify_code));
                 } else {
                     code=txt_verify_code.getText().toString().trim();

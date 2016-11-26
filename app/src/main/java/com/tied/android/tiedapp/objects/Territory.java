@@ -10,7 +10,6 @@ import java.io.Serializable;
 public class Territory implements Serializable {
     String id, county, city,state,country;
     int num_clients;
-    boolean check_status;
 
     public void setCounty(String county) {
         this.county = county;
@@ -60,13 +59,6 @@ public class Territory implements Serializable {
         this.num_clients = num_clients;
     }
 
-    public boolean isCheck_status() {
-        return check_status;
-    }
-
-    public void setCheck_status(boolean check_status) {
-        this.check_status = check_status;
-    }
 
     @Override
     public String toString() {

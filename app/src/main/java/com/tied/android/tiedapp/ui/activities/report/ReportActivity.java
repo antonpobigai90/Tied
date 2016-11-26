@@ -219,7 +219,7 @@ DialogUtils.displayProgress(this);
 
                     _Meta meta = response.getMeta();
                     if (meta != null && meta.getStatus_code() == 200) {
-                        MyUtils.showAlert(ReportActivity.this, "Reported!");
+                        MyUtils.showMessageAlert(ReportActivity.this, "Report sent. Thank you.");
                     } else {
                         MyUtils.showToast("Error encountered");
                         DialogUtils.closeProgress();

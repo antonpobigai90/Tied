@@ -10,6 +10,39 @@ public class _Meta implements Serializable {
     private String developer_message;
     private String user_message;
     private String response_time;
+    private int page_count, page_number, total, page_size;
+
+    public void setPage_count(int page_count) {
+        this.page_count = page_count;
+    }
+
+    public int getPage_count() {
+        return page_count;
+    }
+
+    public int getPage_number() {
+        return page_number;
+    }
+
+    public void setPage_number(int page_number) {
+        this.page_number = page_number;
+    }
+
+    public int getPage_size() {
+        return page_size;
+    }
+
+    public void setPage_size(int page_size) {
+        this.page_size = page_size;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
+    }
 
     public int getStatus_code() {
         return status_code;

@@ -31,15 +31,15 @@ import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
 import com.onesignal.*;
 import com.soundcloud.android.crop.Crop;
-import com.squareup.picasso.MemoryPolicy;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Notification;
+import com.tied.android.tiedapp.objects._Meta;
+import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
+import com.tied.android.tiedapp.retrofits.services.UserApi;
 import com.tied.android.tiedapp.services.LocationService;
 import com.tied.android.tiedapp.ui.activities.client.ActivityClientProfile;
 import com.tied.android.tiedapp.ui.activities.coworker.CoWorkerActivity;
@@ -50,16 +50,16 @@ import com.tied.android.tiedapp.ui.activities.lines.LinesListActivity;
 import com.tied.android.tiedapp.ui.activities.report.ReportActivity;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityGroupedSales;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityUniqueSales;
-import com.tied.android.tiedapp.ui.activities.schedule.ViewSchedule;
+import com.tied.android.tiedapp.ui.activities.schedule.ScheduleDetailsActivitiy;
 import com.tied.android.tiedapp.ui.activities.signups.SplashActivity;
 import com.tied.android.tiedapp.ui.activities.territories.ActivityTerritories;
 import com.tied.android.tiedapp.ui.activities.visits.ActivityVisitDetails;
 import com.tied.android.tiedapp.ui.activities.visits.ActivityVisits;
 import com.tied.android.tiedapp.ui.dialogs.DialogAddNewItem;
+import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.fragments.DailyStatsFragment;
 import com.tied.android.tiedapp.ui.fragments.LinesFragment;
 import com.tied.android.tiedapp.ui.fragments.client.ClientAddFragment;
-import com.tied.android.tiedapp.ui.fragments.client.ClientsListFragment;
 import com.tied.android.tiedapp.ui.fragments.client.MapAndListFragment;
 import com.tied.android.tiedapp.ui.fragments.notification.NotificationFragment;
 import com.tied.android.tiedapp.ui.fragments.profile.AvatarProfileFragment;
@@ -72,19 +72,20 @@ import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleSuggestionFragment
 import com.tied.android.tiedapp.ui.fragments.signups.IndustryFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.ui.listeners.ImageReadyForUploadListener;
+import com.tied.android.tiedapp.util.HelperMethods;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import io.fabric.sdk.android.Fabric;
 import me.leolin.shortcutbadger.ShortcutBadger;
+import okhttp3.ResponseBody;
 import org.json.JSONObject;
+import retrofit2.Call;
 import retrofit2.Retrofit;
 
 /**
@@ -102,7 +103,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
     public Fragment profileFragment = null;
     private int fragment_index = 0;
     //LinearLayout relativeLayout , tab_bar;
-    private LinearLayout  map_tab,  activity_layout, add_layout, more_layout, tab_actvity_schedule, alert_edit_msg, sale_tab;
+    private LinearLayout  map_tab,  activity_layout, add_layout, more_layout, tab_actvity_schedule,  sale_tab;
     private RelativeLayout invite_menu, notification_menu, subscription_menu;
     private TextView txt_schedules, txt_activities, info_msg, drawerFullName, drawerEmail;
 
@@ -143,12 +144,11 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         Fabric.with(this, new Crashlytics());
         mainActivity=this;
 
-
-        SplashActivity.checkForUpdate(this);
+        SplashActivity. checkForUpdateAndSaveServerSettings(this);
         this.overridePendingTransition(R.anim.slide_in_from_right, R.anim.slide_out_left);
         setContentView(R.layout.activity_main);
         OneSignal.sendTag("user_id", MyUtils.getUserLoggedIn().getId());
-
+        checkSubscription();
         user = User.getCurrentUser(getApplicationContext());
         if(user == null){
             User.LogOut(getApplicationContext());
@@ -168,7 +168,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
 
         //relativeLayout = (LinearLayout) findViewById(R.id.linearLayout);
        // tab_bar = (LinearLayout) findViewById(R.id.tab_bar);
-        alert_edit_msg = (LinearLayout) findViewById(R.id.alert_edit_msg);
+        //alert_edit_msg = (LinearLayout) findViewById(R.id.alert_edit_msg);
        //tab_actvity_schedule = (LinearLayout) findViewById(R.id.tab_activity_schedule);
 
         more_layout = (LinearLayout) findViewById(R.id.more);
@@ -220,15 +220,15 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         bundle = getIntent().getExtras();
         if(bundle == null){
             bundle = new Bundle();
-            alert_edit_msg = (LinearLayout) findViewById(R.id.alert_edit_msg);
+
         }
 
         if(bundle.getBoolean(Constants.SCHEDULE_EDITED)){
-            ShowSuccessMessage("Schedule successfully updated",Constants.SCHEDULE_EDITED);
+            MyUtils.showMessageSuccess(this, "Schedule successfully updated");
         }
 
         if(bundle.getBoolean(Constants.CLIENT_EDITED)){
-            ShowSuccessMessage("Client successfully updated",Constants.CLIENT_EDITED);
+            MyUtils.showMessageSuccess(this, "Client successfully updated");
         }
 
 
@@ -236,6 +236,13 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         String user_json = gson.toJson(user);
 
         bundle.putString(Constants.USER_DATA, user_json);
+
+        if(bundle.getSerializable(Constants.PROXIMITY_CLIENT_DATA) !=null) {
+            Bundle b=new Bundle();
+            b.putSerializable(Constants.CLIENT_DATA, bundle.getSerializable(Constants.PROXIMITY_CLIENT_DATA) );
+            MyUtils.startActivity(this, ActivityClientProfile.class, b);
+
+        }
         if ((new Date().getTime() - MyUtils.getLastTimeAppRan()) > 24*60*60*1000) {
             //launchFragment(Constants.HomeSchedule, bundle);
             //MyUtils.startActivity(this, DailyStatsActivity.class);
@@ -664,43 +671,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
         map_tab.setBackground(null);
     }
 
-    public void ShowSuccessMessage(String message, final String forWhat){
-        info_msg = (TextView) findViewById(R.id.info_msg);
-        info_msg.setText(message);
-        alert_edit_msg = (LinearLayout) findViewById(R.id.alert_edit_msg);
-        final int _splashTime = 3000;
-        alert_edit_msg.setVisibility(View.VISIBLE);
-        final boolean _active = true;
-        final int time = 3000;
-        final Thread splashTread = new Thread() {
-            @Override
-            public void run() {
-                try {
-                    int waited = 0;
-                    while (_active && waited < time) {
-                        sleep(100);
-                        if (_active) {
-                            waited += 100;
-                        }
-                    }
-                } catch (final InterruptedException e) {
-                    // do nothing
-                } finally {
 
-                    runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            alert_edit_msg.setVisibility(View.GONE);
-                            bundle.putBoolean(forWhat, false);
-                        }
-                    });
-                }
-            }
-        };
-        splashTread.start();
-        alert_edit_msg.setVisibility(View.VISIBLE);
-    }
 
     public void addFragment(FragmentTransaction transaction, Fragment cCurrentFragment, Fragment targetFragment, String tag) {
 
@@ -810,7 +781,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                                     break;
                                 case "schedule":
                                     bundle.putString("schedule_id", model.getObject_id());
-                                    MyUtils.startActivity(context, ViewSchedule.class, bundle);
+                                    MyUtils.startActivity(context, ScheduleDetailsActivitiy.class, bundle);
                                     break;
                             }
                         }
@@ -961,6 +932,65 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
             // Return true to stop the notification from displaying.
             return false;
         }
+    }
+    private void checkSubscription() {
+        final UserApi userApi =  MainApplication.createService(UserApi.class);
+        Call<ResponseBody> response = userApi.getUser(MyUtils.getUserLoggedIn().getId());
+        response.enqueue(new retrofit2.Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> resResponse) {
+                if (this == null) {
+                    // Logger.write("null activity");
+                    return;
+                }
+                //Logger.write("(((((((((((((((((((((((((((((999999");
+                DialogUtils.closeProgress();
+
+                try {
+                    GeneralResponse response = new GeneralResponse(resResponse.body());
+
+                    if (response.isAuthFailed()) {
+                        User.LogOut(MainActivity.this);
+                        return;
+                    }
+
+                    _Meta meta = response.getMeta();
+                    if (meta != null && meta.getStatus_code() == 200) {
+
+                        User user = ( (User) response.getData("user", User.class));
+                        SimpleDateFormat format = new SimpleDateFormat(
+                                "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US);
+                        format.setTimeZone(TimeZone.getDefault());
+                        Date expDate=format.parse(user.getSub_expiration_date());
+
+                        Calendar c= Calendar.getInstance();
+                        c.setTime(expDate);
+                        long days=HelperMethods.getDateDifferenceWithToday(c.get(Calendar.YEAR)+"-"+(1+c.get(Calendar.MONTH))+"-"+c.get(Calendar.DAY_OF_MONTH));
+                        TextView packageTV=(TextView)findViewById(R.id.package_expiry);
+                        if(days>0) {
+                            packageTV.setText("Expires in "+days+" days");
+                            if(days<10) packageTV.setTextColor(getResources().getColor(R.color.red_color));
+                        }else{
+                            packageTV.setText("Expired");
+                            packageTV.setTextColor(getResources().getColor(R.color.red_color));
+                        }
+
+                    } else {
+                        MyUtils.showToast("Error encountered");
+                        DialogUtils.closeProgress();
+                    }
+
+                } catch (Exception e) {
+                    Logger.write(e);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                Logger.write(" onFailure", t.toString());
+            }
+        });
     }
 }
 

@@ -120,31 +120,38 @@ public class ActivityAddVisits extends AppCompatActivity implements  View.OnClic
             window.setStatusBarColor(getResources().getColor(R.color.blue_status_bar));
         }
 
-        if (client != null) {
-            clientNameTV.setText(MyUtils.getClientName(client));
-            MyUtils.Picasso.displayImage(client.getLogo(), clientPhoto);
 
-            txt_change.setVisibility(View.GONE);
-            txt_title.setText("Edit Visit");
-            add_button.setText("Save");
-        }
 
         if (visit != null) {
+            location=visit.getAddress();
+            add_button.setText("Save");
+            if(visit.getId()!=null)  txt_title.setText("Edit Visit");
             titleET.setText(visit.getTitle());
-            locationTV.setText(visit.getAddress().getStreet() + ", " + visit.getAddress().getCity() + ", " + visit.getAddress().getState() + ", " + visit.getAddress().getZip());
+            locationTV.setText(location.getStreet() + ", " + location.getCity() + ", " + location.getState() + ", " + location.getZip());
             distance.setText(""+visit.getDistance());
             String[] strdate = visit.getVisit_date().split("-");
             date.setText(MyUtils.MONTHS_LIST[Integer.valueOf(strdate[1]).intValue() - 1] + " " + strdate[2] + ", " + strdate[0]);
-            time.setText(visit.getVisit_time());
+            date_selected.setText(visit.getVisit_date());
+            time.setText(MyUtils.formatTime(visit.getVisit_time()));
+            time_selected.setText(visit.getVisit_time());
+        }
+        if (client != null) {
+            clientNameTV.setText(MyUtils.getClientName(client));
+            MyUtils.Picasso.displayImage(client.getLogo(), clientPhoto);
+            txt_change.setVisibility(View.GONE);
+            if(visit==null) {
+                location=client.getAddress();
+                locationTV.setText(location.getStreet() + ", " + location.getCity() + ", " + location.getState() + ", " + location.getZip());
+            }
         }
     }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.select_client_layout:
-                if (client == null) {
+                //if (client == null) {
                     selectClient(client);
-                }
+                //}
                 break;
             case R.id.select_location_layout:
                 MyUtils.showAddressDialog(this, "Visit Location", location, new MyUtils.MyDialogClickListener() {
@@ -171,25 +178,25 @@ public class ActivityAddVisits extends AppCompatActivity implements  View.OnClic
             case R.id.add_button:
                 title=titleET.getText().toString().trim();
                 if(title.isEmpty()) {
-                    MyUtils.showAlert(this, "You must enter the title for this visit");
+                    MyUtils.showErrorAlert(this, "You must enter the title for this visit");
                     return;
                 }
                 if(client==null) {
-                    MyUtils.showAlert(this, "You must choose a client");
+                    MyUtils.showErrorAlert(this, "You must choose a client");
                     return;
                 }
                 if(locationTV.getText().toString().trim().isEmpty()) {
-                    MyUtils.showAlert(this, "You must choose a location");
+                    MyUtils.showErrorAlert(this, "You must choose a location");
                     return;
                 }
                 if(date_selected.getText().toString().trim().isEmpty()) {
-                    MyUtils.showAlert(this, "You must enter the date of this visit");
+                    MyUtils.showErrorAlert(this, "You must enter the date of this visit");
                     return;
                 }
 
                 String str_time = time.getText().toString();
                 if(str_time==null || str_time.isEmpty()) {
-                    MyUtils.showAlert(this, "You must enter the time for the visit");
+                    MyUtils.showErrorAlert(this, "You must enter the time for the visit");
                     return;
                 }
 
@@ -212,7 +219,7 @@ public class ActivityAddVisits extends AppCompatActivity implements  View.OnClic
         visit.setDistance(Float.valueOf(distance.getText().toString().replace(",", "")));
         visit.setUnit("mi");
         visit.setVisit_date(date_selected.getText().toString());
-        visit.setVisit_time(time.getText().toString());
+        visit.setVisit_time(time_selected.getText().toString());
 
         Duration duration = new Duration(5, 30);
         visit.setDuration(duration);
@@ -241,6 +248,7 @@ public class ActivityAddVisits extends AppCompatActivity implements  View.OnClic
                     }
                     _Meta meta=response.getMeta();
                     if(meta !=null && (meta.getStatus_code()==201 || meta.getStatus_code()==200)) {
+                        Logger.write(visit.toJSONString());
                         if(visit.getId()==null) {
                             Bundle bundle=new Bundle();
                             bundle.putSerializable(Constants.CLIENT_DATA, client);
@@ -286,6 +294,7 @@ public class ActivityAddVisits extends AppCompatActivity implements  View.OnClic
     @Override
     public void onTimeRangeSelected(int startHour, int startMin, int endHour, int endMin) {
         time.setText(MyUtils.formatTime(String.format("%02d", startHour) + ":" + String.format("%02d", startMin)));
+        time_selected.setText(String.format("%02d", startHour) + ":" + String.format("%02d", startMin));
     }
 
     class GeocodeAsyncTask extends MyAddressAsyncTask {

@@ -140,7 +140,7 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
         emptyScheduleMessage.setVisibility(View.GONE);
         ScheduleApi scheduleApi = MainApplication.createService(ScheduleApi.class);
         Logger.write("Userrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr  "+user.toString());
-        Call<ScheduleRes> response = scheduleApi.getScheduleByDate(user.getId(), scheduleDate);
+        Call<ScheduleRes> response = scheduleApi.getScheduleByDate(user.getId(), scheduleDate,1);
         response.enqueue(new Callback<ScheduleRes>() {
             @Override
             public void onResponse(Call<ScheduleRes> call, Response<ScheduleRes> resResponse) {

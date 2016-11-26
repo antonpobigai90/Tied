@@ -32,24 +32,24 @@ public interface ScheduleApi {
                                      @Body Schedule schedule);
 
     @GET(Constants.USER_SCHEDULE)
-    Call<ScheduleRes> getSchedule(@Path("user_id") String user_id);
+    Call<ScheduleRes> getSchedule(@Path("user_id") String user_id, @Path("page_number") int page_number);
 
     @GET(Constants.CLIENT_SCHEDULES)
-    Call<ScheduleRes> getClientSchedule(@Path("client_id") String client_id);
-
+    Call<ScheduleRes> getClientSchedule(@Path("client_id") String client_id, @Path("page_number") int page_number);
+/*
     @GET(Constants.USER_SCHEDULE)
     Call<ScheduleRes> getUserSchedules(@Path("user_id") String user_id);
 
     @GET(Constants.USER_SCHEDULE)
     Call<ResponseBody> getSchedules(@Path("user_id") String user_id);
 
-
+*/
     @GET(Constants.USER_SCHEDULE_COUNT)
     Call<Count> getScheduleCount(@Header(Constants.TOKEN_HEADER) String token);
 
 
     @POST(Constants.USER_SCHEDULES_BY_DATE)
-    Call<ScheduleRes> getScheduleByDate(@Path("user_id") String user_id, @Body ScheduleDate scheduleDate);
+    Call<ScheduleRes> getScheduleByDate(@Path("user_id") String user_id, @Body ScheduleDate scheduleDate, @Path("page_number") int page_number);
 
     @DELETE(Constants.DELETE_SCHEDULE_WITH_ID)
     Call<ResponseBody> deleteSchedule(@Header(Constants.TOKEN_HEADER) String token,

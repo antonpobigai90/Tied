@@ -15,23 +15,19 @@ import android.widget.TextView;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.customs.model.ActivityDataModel;
 import com.tied.android.tiedapp.objects.CoWorker;
 import com.tied.android.tiedapp.objects.Notification;
-import com.tied.android.tiedapp.objects.RevenueFilter;
 import com.tied.android.tiedapp.objects._Meta;
-import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.retrofits.services.CoworkerApi;
 import com.tied.android.tiedapp.retrofits.services.UserApi;
-import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.client.ActivityClientProfile;
 import com.tied.android.tiedapp.ui.activities.lines.LinesListActivity;
 import com.tied.android.tiedapp.ui.activities.client.ClientMapAndListActivity;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityGroupedSales;
-import com.tied.android.tiedapp.ui.activities.schedule.ViewSchedule;
+import com.tied.android.tiedapp.ui.activities.schedule.ScheduleDetailsActivitiy;
+import com.tied.android.tiedapp.ui.activities.territories.ActivityTerritories;
 import com.tied.android.tiedapp.ui.activities.visits.ActivityVisitDetails;
 import com.tied.android.tiedapp.ui.adapters.ActivityAdapter;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
@@ -145,7 +141,7 @@ public class ViewCoWorkerActivity extends AppCompatActivity implements View.OnCl
                         break;
                     case "schedule":
                         bundle.putString("schedule_id", model.getObject_id());
-                        MyUtils.startActivity(ViewCoWorkerActivity.this, ViewSchedule.class, bundle);
+                        MyUtils.startActivity(ViewCoWorkerActivity.this, ScheduleDetailsActivitiy.class, bundle);
                         break;
                 }
             }
@@ -189,7 +185,7 @@ public class ViewCoWorkerActivity extends AppCompatActivity implements View.OnCl
             case R.id.territories:
                 bundle.putInt(Constants.SHOW_TERRITORY, 0);
                 bundle.putInt(Constants.SHOW_FILTER, 1);
-                MyUtils.startActivity(this, CoWorkerTerritoriesActivity.class, bundle);
+                MyUtils.startActivity(this, ActivityTerritories.class, bundle);
                 break;
             case R.id.schedules:
                 MyUtils.startActivity(this, CoWorkerSchedulesActivity.class, bundle);
@@ -213,7 +209,7 @@ public class ViewCoWorkerActivity extends AppCompatActivity implements View.OnCl
         DialogUtils.displayProgress(this);
         CoworkerApi coworkerApi = MainApplication.createService(CoworkerApi.class);
 
-        final Call<ResponseBody> response = coworkerApi.isCoworker( currentUser.getId(), coworker.getId());
+        final Call<ResponseBody> response = coworkerApi.isCoworker(  coworker.getId(), currentUser.getId());
         response.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {

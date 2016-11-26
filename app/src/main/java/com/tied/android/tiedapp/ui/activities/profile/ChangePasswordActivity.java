@@ -65,13 +65,13 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
                 String new_pass = etNewPassword.getText().toString();
                 String conf_pass = etReNewPassword.getText().toString();
                 if(old_pass.length() == 0){
-                    MyUtils.showAlert(this, "Pls enter current password");
+                    MyUtils.showErrorAlert(this, "Please enter current password");
                 }
                 else if(!new_pass.equals(conf_pass)){
-                    MyUtils.showAlert(this, "New password does not match");
+                    MyUtils.showErrorAlert(this, "New password does not match");
                 }
                 else if(new_pass.length() == 0){
-                    MyUtils.showAlert(this, "New password cannot be empty");
+                    MyUtils.showErrorAlert(this, "New password cannot be empty");
                 }
                 else{
                     changePassword();

@@ -23,7 +23,6 @@ import com.tied.android.tiedapp.ui.activities.signups.WalkThroughActivity;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.MyUtils;
-import com.tied.android.tiedapp.util.Utility;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -152,7 +151,7 @@ public class PasswordFragment extends Fragment implements View.OnClickListener {
                             //Toast.makeText(getActivity(), "user not created", Toast.LENGTH_LONG).show();
                         }
                     }catch (Exception e) {
-                        MyUtils.showAlert(getActivity(), signUpLogin.get_meta().getUser_message());
+                        MyUtils.showErrorAlert(getActivity(), signUpLogin.get_meta().getUser_message());
                     }
                 }catch (Exception e) {
                     MyUtils.showToast(getString(R.string.connection_error));
@@ -178,9 +177,9 @@ boolean isShowingPassword=true;
                    // alert_valid_password.setVisibility(View.VISIBLE);
                    // Utility.moveViewToScreenCenter( alert_valid_password, Utility.getResourceString(getActivity(), R.string.alert_valide_password));
 
-                    MyUtils.showAlert(getActivity(), getActivity().getString(R.string.alert_valide_password));
+                    MyUtils.showErrorAlert(getActivity(), getActivity().getString(R.string.alert_valide_password));
                 } else if (passwordText.length() <6) {
-                    MyUtils.showAlert(getActivity(), "Password cannot be less than 6 characters");
+                    MyUtils.showErrorAlert(getActivity(), "Password cannot be less than 6 characters");
                 } else{
                         continue_action();
 

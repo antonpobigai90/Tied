@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -175,7 +174,7 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
                         bundle.putString(Constants.USER_DATA, user_json);
                         nextAction(bundle);
                     } else {
-                        MyUtils.showAlert(getActivity(), checkEmail.getMessage());
+                        MyUtils.showErrorAlert(getActivity(), checkEmail.getMessage());
                     }
                 }catch (Exception e) {
                     Logger.write(e);
@@ -202,7 +201,7 @@ public class EmailSignUpFragment extends Fragment implements View.OnClickListene
                 if (!Utility.isEmailValid(emailText)) {
                   //  alert_valid_email.setVisibility(View.VISIBLE);
                  //  Utility.moveViewToScreenCenter( alert_valid_email, Utility.getResourceString(getActivity(), R.string.alert_valide_email));
-                    MyUtils.showAlert(getActivity(), Utility.getResourceString(getActivity(), R.string.alert_valide_email));
+                    MyUtils.showErrorAlert(getActivity(), Utility.getResourceString(getActivity(), R.string.alert_valide_email));
                 } else {
                     continue_action();
                 }

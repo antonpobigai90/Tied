@@ -19,7 +19,10 @@ public interface CoworkerApi {
     Call<ResponseBody> addCoworker(@Header(Constants.TOKEN_HEADER) String token,  @Body User coworker_id);
 
     @GET(Constants.GET_COWORKERS)
-    Call<ResponseBody> getCoworkers(@Header(Constants.TOKEN_HEADER) String token, @Path("user_id") String user_id, @Path("group") String group,  @Path("count") int count, @Path("filter") RevenueFilter filter);
+    Call<ResponseBody> getCoworkers(@Header(Constants.TOKEN_HEADER) String token, @Path("user_id") String user_id,
+                                    @Path("group") String group,  @Path("count") int count,
+                                    @Path("filter") RevenueFilter filter,
+                                    @Path("page_number") int page_number);
 
     @GET(Constants.IS_ADDED_USER_AS_COWORKER)
     Call<ResponseBody> isCoworker( @Path("user_id") String user_id, @Path("coworker_id") String coworker_id);

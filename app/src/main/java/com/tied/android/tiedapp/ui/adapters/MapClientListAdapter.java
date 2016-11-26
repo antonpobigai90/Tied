@@ -29,6 +29,7 @@ public class MapClientListAdapter extends BaseAdapter implements ListAdapterList
     Context _c;
     ViewHolder v;
     RoundImage roundedImage;
+    String unit=MyUtils.getPreferredDistanceUnit();
 
     public MapClientListAdapter(List<Client> clients, Context context) {
         _data = clients;
@@ -83,7 +84,7 @@ public class MapClientListAdapter extends BaseAdapter implements ListAdapterList
         v.name.setText(MyUtils.getClientName(data));
         v.address.setText(data.getAddress().getStreet());
         MyUtils.Picasso.displayImage(data.getLogo(), v.pic);
-        v.client_distance.setText(MyUtils.getDistance(MyUtils.getCurrentLocation(), data.getAddress().getCoordinate(), false)+"m");
+        v.client_distance.setText(MyUtils.getDistance(MyUtils.getCurrentLocation(), data.getAddress().getCoordinate(), false)+unit);
 
         view.setTag(v);
 

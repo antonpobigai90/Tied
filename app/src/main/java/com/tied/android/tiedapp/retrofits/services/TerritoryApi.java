@@ -30,7 +30,7 @@ public interface  TerritoryApi {
     Call<ResponseBody> getTerritories(@Path("user_id") String user_id, @Path("page_number") int page_number);
 
     @POST(Constants.TERRITORY_CLIENTS)
-    Call<ClientRes> getTerritoryClient(@Body Territory territory);
+    Call<ClientRes> getTerritoryClient(@Body Territory territory, @Path("page_number") int page_number);
 
     @GET(Constants.TERRITORY_FROM_DATABASE)
     Call<ResponseBody> getTerritoriesDatabase(@Path("query") String query);

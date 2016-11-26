@@ -63,7 +63,7 @@ public class AllScheduleFragment extends SchedulesFragment implements View.OnCli
 
     public void initSchedule() {
         ScheduleApi scheduleApi = MainApplication.createService(ScheduleApi.class);
-        Call<ScheduleRes> response = scheduleApi.getSchedule(user.getId());
+        Call<ScheduleRes> response = scheduleApi.getSchedule(user.getId(), 1);
         response.enqueue(new Callback<ScheduleRes>() {
             @Override
             public void onResponse(Call<ScheduleRes> call, Response<ScheduleRes> resResponse) {

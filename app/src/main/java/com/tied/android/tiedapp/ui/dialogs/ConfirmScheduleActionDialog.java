@@ -13,14 +13,15 @@ import com.google.gson.Gson;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.objects.Visit;
 import com.tied.android.tiedapp.objects._Meta;
+import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.responses.ScheduleRes;
 import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
-import com.tied.android.tiedapp.ui.activities.MainActivity;
-import com.tied.android.tiedapp.ui.adapters.ScheduleListAdapter;
+import com.tied.android.tiedapp.ui.activities.visits.ActivityAddVisits;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import okhttp3.ResponseBody;
@@ -42,14 +43,16 @@ public class ConfirmScheduleActionDialog {
     Activity _c;
     Bundle bundle;
     private int type;
+    Client client;
 
-    public ConfirmScheduleActionDialog(Schedule schedule1, Activity activity, Bundle bundle1, int type){
+    public ConfirmScheduleActionDialog(Schedule schedule1, Client client, Activity activity, Bundle bundle1, int type){
         this.activity = activity;
 
         schedule = schedule1;
         _c = activity;
         bundle = bundle1;
         this.type = type;
+        this.client=client;
     }
 
     public void showDialog(){
@@ -66,7 +69,7 @@ public class ConfirmScheduleActionDialog {
         switch (type){
             case 1:
                 heading = "Mark as Completed";
-                content = "Are you sure you want to make the appointment as completed";
+                content = "Are you sure you want to mark this appointment as completed";
                 break;
             case 2:
                 heading = "Cancel Appointment";
@@ -144,11 +147,32 @@ public class ConfirmScheduleActionDialog {
                             Intent intent = new Intent();
                             _c.setResult(Activity.RESULT_OK, intent);
                             _c.finishActivity(Constants.ViewSchedule);
+                            Visit visit=new Visit();
+                            visit.setAddress(client.getAddress());
+                            visit.setClient_id(client.getId());
+                            visit.setTitle(schedule.getTitle());
+                            visit.setVisit_date(schedule.getDate());
+                            visit.setVisit_time(schedule.getTime_range().getStart_time());
+                            visit.setSchedule_id(schedule.getId());
+                            visit.setUnit(MyUtils.getPreferredDistanceUnit());
+                            try {
+                                visit.setDistance(2*Float.parseFloat(MyUtils.getDistance(MyUtils.getUserLoggedIn().getOffice_address().getCoordinate(), schedule.getLocation().getCoordinate(), false)));
+                            }catch (Exception e) {
+                                try {
+                                    visit.setDistance(2*Float.parseFloat(MyUtils.getDistance(MyUtils.getUserLoggedIn().getOffice_address().getCoordinate(), schedule.getLocation().getCoordinate(), false)));
+                                }catch (Exception ee) {
+                                    visit.setDistance(2*Float.parseFloat(MyUtils.getDistance(MyUtils.getCurrentLocation(), schedule.getLocation().getCoordinate(), false)));
+                                }
+                            }
+                            Bundle bundle=new Bundle();
+                            bundle.putSerializable(Constants.VISIT_DATA, visit);
+                            bundle.putSerializable(Constants.CLIENT_DATA, client);
+                            MyUtils.startRequestActivity(_c, ActivityAddVisits.class, Constants.VISIT_LIST, bundle);
                             _c.finish();
                         }
                     } else {
                         //Toast.makeText(getActivity(), scheduleRes.toString(), Toast.LENGTH_LONG).show();
-                        MyUtils.showAlert(_c, scheduleRes.getMessage());
+                        MyUtils.showErrorAlert(_c, scheduleRes.getMessage());
                         DialogUtils.closeProgress();
                     }
                 }catch (Exception e) {

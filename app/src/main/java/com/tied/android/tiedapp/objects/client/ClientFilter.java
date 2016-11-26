@@ -19,13 +19,13 @@ public class ClientFilter implements Serializable {
     private String order;
     private ArrayList<Territory> territories;
     private ArrayList<String> lines;
-    private int page_number;
+    int page_size;
     private Coordinate coordinate;
 
     public ClientFilter() {
     }
 
-    public ClientFilter(String name, int distance, String unit, String group, int last_visited, String order_by, String order, ArrayList<Territory> territories, ArrayList<String> lines, int page_number, Coordinate coordinate) {
+    public ClientFilter(String name, int distance, String unit, String group, int last_visited, String order_by, String order, ArrayList<Territory> territories, ArrayList<String> lines, Coordinate coordinate) {
         this.name = name;
         this.distance = distance;
         this.unit = unit;
@@ -35,8 +35,16 @@ public class ClientFilter implements Serializable {
         this.order = order;
         this.territories = territories;
         this.lines = lines;
-        this.page_number = page_number;
+
         this.coordinate = coordinate;
+    }
+
+    public void setPage_size(int page_size) {
+        this.page_size = page_size;
+    }
+
+    public int getPage_size() {
+        return page_size;
     }
 
     public String getName() {
@@ -111,13 +119,6 @@ public class ClientFilter implements Serializable {
         this.lines = lines;
     }
 
-    public int getPage_number() {
-        return page_number;
-    }
-
-    public void setPage_number(int page_number) {
-        this.page_number = page_number;
-    }
 
     public Coordinate getCoordinate() {
         return coordinate;
@@ -139,7 +140,6 @@ public class ClientFilter implements Serializable {
                 ", order='" + order + '\'' +
                 ", territories=" + territories +
                 ", line_ids=" + lines +
-                ", page_number=" + page_number +
                 ", coordinate=" + coordinate +
                 '}';
     }

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -48,9 +49,10 @@ public class ClientsListFragment extends Fragment implements AdapterView.OnItemC
     protected Bundle bundle;
     protected ListView listView;
     List<Client> clients = new ArrayList<Client>();
+    ClientFilter clientFilter;
 //    List<Client> search_data = new ArrayList<Client>();
     protected MapClientListAdapter adapter;
-
+    int numPages=1;
     String search_name;
 
     @Override
@@ -79,7 +81,7 @@ public class ClientsListFragment extends Fragment implements AdapterView.OnItemC
         this.clients.addAll( clients);
         adapter.notifyDataSetChanged();
     }
-
+    private int preLast;
     public void initComponent(View view){
         bundle = getArguments();
         user = MyUtils.getUserFromBundle(bundle);
@@ -88,7 +90,33 @@ public class ClientsListFragment extends Fragment implements AdapterView.OnItemC
 
         adapter = new MapClientListAdapter(clients, getActivity());
         listView.setAdapter(adapter);
-        loadClientsFilter(MapAndListFragment.search_name);
+
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                final int lastItem = firstVisibleItem + visibleItemCount;
+
+                if(lastItem == totalItemCount)
+                {
+                    if(preLast!=lastItem)
+                    {
+                        if(pageNumber<numPages) {
+                            pageNumber++;
+                            loadClientsFilter(clientFilter);
+                        }
+
+                        preLast = lastItem;
+                    }
+                }
+            }
+        });
+        loadClientsFilter(MapAndListFragment.getInstance().clientFilter);
     }
 
     @Override
@@ -106,34 +134,16 @@ public class ClientsListFragment extends Fragment implements AdapterView.OnItemC
 
     }
 
-    public void loadClientsFilter(String search_name) {
-        ClientFilter clientFilter = new ClientFilter();
-        clientFilter.setName(search_name);
-        clientFilter.setDistance(MapAndListFragment.distance);
-        clientFilter.setUnit("mi");
-        clientFilter.setGroup(MapAndListFragment.group);
-        clientFilter.setLast_visited(MapAndListFragment.last_visited);
-        clientFilter.setOrder_by(MapAndListFragment.orderby);
-        clientFilter.setOrder(MapAndListFragment.order);
-        if (MapAndListFragment.selectedTerritories.size() == 0)
-            clientFilter.setTerritories(null);
-        else
-            clientFilter.setTerritories(MapAndListFragment.selectedTerritories);
 
-        if (MapAndListFragment.selectedLines.size() == 0)
-            clientFilter.setLines(null);
-        else
-            clientFilter.setLines(MapAndListFragment.selectedLines);
-        clientFilter.setPage_number(1);
 
-        Coordinate coordinate = MyUtils.getCurrentLocation();
-        if (coordinate == null) {
-            coordinate = user.getOffice_address().getCoordinate();
-        }
-        clientFilter.setCoordinate(coordinate);
+    public int pageNumber=1;
+    public void loadClientsFilter(final ClientFilter clientFilter) {
+        if(clientFilter.getDistance()==MapAndListFragment.distance) clientFilter.setDistance(0);
+        this.clientFilter=clientFilter;
+        clientFilter.setCoordinate(MyUtils.getCurrentLocation());
         DialogUtils.displayProgress(getActivity());
         ClientApi clientApi = MainApplication.createService(ClientApi.class);
-        Call<ClientRes> response = clientApi.getClientsFilter(user.getId(), clientFilter);
+        Call<ClientRes> response = clientApi.getClientsFilter(user.getId(), pageNumber, clientFilter);
         response.enqueue(new Callback<ClientRes>() {
             @Override
             public void onResponse(Call<ClientRes> call, Response<ClientRes> resResponse) {
@@ -144,15 +154,16 @@ public class ClientsListFragment extends Fragment implements AdapterView.OnItemC
                 //Logger.write("(((((((((((((((((((((((((((((999999");
                 DialogUtils.closeProgress();
                 ClientRes clientRes = resResponse.body();
-                Logger.write(clientRes.toString());
+               Logger.write(clientRes.toString());
                 try {
                     if (clientRes.isAuthFailed()) {
                         User.LogOut(getActivity());
                     } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200) {
-                        clients.clear();
+                        numPages=clientRes.get_meta().getPage_count();
+                        if(pageNumber==1)  clients.clear();
                         clients.addAll(clientRes.getClients());
 
-                        if(clients.size()==0) {
+                        if(pageNumber==1 && clients.size()==0) {
                             MyUtils.showNoResults(getView(), R.id.no_results);
                         } else {
                             MyUtils.hideNoResults(getView());
@@ -174,59 +185,9 @@ public class ClientsListFragment extends Fragment implements AdapterView.OnItemC
             }
         });
     }
-
-
-    private void loadClients() {
-        ClientLocation clientLocation = new ClientLocation();
-
-        clientLocation.setDistance("100000" + MyUtils.getPreferredDistanceUnit());
-        Coordinate coordinate = MyUtils.getCurrentLocation();
-        if( coordinate == null ){
-            coordinate = user.getOffice_address().getCoordinate();
-        }
-        clientLocation.setCoordinate(coordinate);
-
-        final ClientApi clientApi =  MainApplication.createService(ClientApi.class);
-        Call<ClientRes> response = clientApi.getClientsByLocation(user.getId(), clientLocation);
-        response.enqueue(new retrofit2.Callback<ClientRes>() {
-            @Override
-            public void onResponse(Call<ClientRes> call, Response<ClientRes> resResponse) {
-                if (getActivity()== null ) {
-                   // Logger.write("null activity");
-                    return;
-                }
-                //Logger.write("(((((((((((((((((((((((((((((999999");
-                DialogUtils.closeProgress();
-                ClientRes clientRes = resResponse.body();
-                Logger.write(clientRes.toString());
-                try {
-                    if (clientRes.isAuthFailed()) {
-                         User.LogOut(getActivity());
-                    } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200) {
-                        clients.clear();
-                        clients.addAll(clientRes.getClients());
-
-                        if(clients.size()==0) {
-                            MyUtils.showNoResults(getView(), R.id.no_results);
-                        } else {
-                            MyUtils.hideNoResults(getView());
-                        }
-
-                        adapter.notifyDataSetChanged();
-                    } else {
-                        Logger.write("Error onResponse", clientRes.getMessage());
-                    }
-                }catch (Exception e) {
-                    Logger.write(e);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ClientRes> call, Throwable t) {
-
-                Logger.write(" onFailure", t.toString());
-            }
-        });
+    public void loadClientsFilter(ClientFilter clientFilter, int pageNumber) {
+        this.pageNumber=pageNumber;
+        loadClientsFilter(clientFilter);
     }
 
     @Override
@@ -235,9 +196,9 @@ public class ClientsListFragment extends Fragment implements AdapterView.OnItemC
 
         if (requestCode == Constants.ClientFilter && resultCode == Activity.RESULT_OK) {
             if (MapAndListFragment.isClientFilter) {
-                loadClientsFilter(MapAndListFragment.search_name);
+                //loadClientsFilter(MapAndListFragment.search_name);
             } else if (MapAndListFragment.isClear) {
-                loadClients();
+                //loadClients();
             }
         }
     }

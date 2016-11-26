@@ -76,7 +76,7 @@ public class Utility {
 	/*
 	public static void moveViewToScreenCenter(View view, String message )
 	{
-		//MyUtils.showAlert(view.getParent();
+		//MyUtils.showErrorAlert(view.getParent();
 		TextView txt_alert = (TextView) view.findViewById(R.id.txt_alert);
 		txt_alert.setText(message);
 

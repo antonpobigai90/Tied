@@ -32,10 +32,7 @@ import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.schedule.TimeRange;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
-import com.tied.android.tiedapp.ui.activities.MainActivity;
-import com.tied.android.tiedapp.ui.activities.client.ActivityClient;
-import com.tied.android.tiedapp.ui.activities.coworker.CoWorkerTerritoriesActivity;
-import com.tied.android.tiedapp.ui.activities.schedule.ViewSchedule;
+import com.tied.android.tiedapp.ui.activities.schedule.ScheduleDetailsActivitiy;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.dialogs.ScheduleNotifyDialog;
 import com.tied.android.tiedapp.ui.dialogs.DatePickerFragment;
@@ -328,19 +325,19 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
        // zipText = zip.getText().toString();
         //stateText = state.getText().toString();
         if(client==null) {
-            MyUtils.showAlert(getActivity(), "You must select a client");
+            MyUtils.showErrorAlert(getActivity(), "You must select a client");
             return false;
         }
         if(titleText.trim().isEmpty()) {
-            MyUtils.showAlert(getActivity(), "Schedule title is required");
+            MyUtils.showErrorAlert(getActivity(), "Schedule title is required");
             return false;
         }
         if(dateText.trim().isEmpty()) {
-            MyUtils.showAlert(getActivity(), "Schedule date is required");
+            MyUtils.showErrorAlert(getActivity(), "Schedule date is required");
             return false;
         }
         if(location==null) {
-            MyUtils.showAlert(getActivity(), "Schedule location is required");
+            MyUtils.showErrorAlert(getActivity(), "Schedule location is required");
             return false;
         }
 
@@ -357,7 +354,7 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
             endTimeText = timeFormat(to);
         }
         if(startTimeText==null || startTimeText.isEmpty() || endTimeText==null || endTimeText.isEmpty()) {
-            MyUtils.showAlert(getActivity(), "You must enter the time for the schedule");
+            MyUtils.showErrorAlert(getActivity(), "You must enter the time for the schedule");
             return false;
         }
 
@@ -419,7 +416,7 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
         final Schedule schedule = new Schedule();
         schedule.setTitle(titleText);
         if(client!=null)    schedule.setClient_id(client.getId());
-        //schedule.setUser_id(user.getId());
+        schedule.setUser_id(MyUtils.getUserLoggedIn().getId());
         schedule.setVisited(false);
         schedule.setReminder(notify_id);
         TimeRange timeRange = new TimeRange(startTimeText, endTimeText);
@@ -457,11 +454,21 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
 //                            bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
 //                            DialogUtils.closeProgress();
 //                            //nextAction(Constants.ActivitySchedule, bundle);
-//                            MyUtils.startActivity(getActivity(), ViewSchedule.class, bundle);
+//                            MyUtils.startActivity(getActivity(), ScheduleDetailsActivitiy.class, bundle);
 //                        } else {
-                            Intent intent = new Intent();
+                            /*Intent intent = new Intent();
                             getActivity().setResult(Activity.RESULT_OK, intent);
-                            getActivity().finishActivity(Constants.ViewSchedule);
+                            getActivity().finishActivity(Constants.ScheduleDetailsActivitiy);*/
+                        MyUtils.showMessageAlert(getActivity(), "Schedule Created!");
+                        txt_date.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                bundle.putSerializable(Constants.SCHEDULE_DATA, schedule);
+                                bundle.putSerializable(Constants.CLIENT_DATA, client);
+                                MyUtils.startActivity(getActivity(), ScheduleDetailsActivitiy.class, bundle);
+                            }
+                        }, 1000);
+
 //                        }
                         getActivity().finish();
                     } else {
@@ -537,7 +544,7 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
                         }
                     } else {
                         //Toast.makeText(getActivity(), scheduleRes.toString(), Toast.LENGTH_LONG).show();
-                        MyUtils.showAlert(getActivity(), scheduleRes.getMessage());
+                        MyUtils.showErrorAlert(getActivity(), scheduleRes.getMessage());
                         DialogUtils.closeProgress();
                     }
                 }catch (Exception e) {
@@ -571,7 +578,7 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
                 client = (Client) data.getSerializableExtra("selected");
                 String logo = client.getLogo().equals("") ? null : client.getLogo();
                 MyUtils.Picasso.displayImage(logo, img_avatar);
-                txt_client_name.setText(client.getFull_name());
+                txt_client_name.setText(MyUtils.getClientName(client));
                 txt_client_company.setText(client.getCompany());
                 if(location==null) {
                     location=client.getAddress();

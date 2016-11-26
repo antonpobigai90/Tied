@@ -17,17 +17,20 @@ import com.tied.android.tiedapp.customs.model.TerritoryModel;
 import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects.Territory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by ZuumaPC on 8/18/2016.
  */
 public class ClientTerritoriesAdapter extends BaseAdapter {
-
+    boolean isMultiple=false;
     private static class ViewHolder {
         TextView txt_territoy_name,txt_territory_client;
         ImageView img_check;
     }
+
+    private List<String> selected=null;
 
     public static final String TAG = ClientTerritoriesAdapter.class
             .getSimpleName();
@@ -37,10 +40,11 @@ public class ClientTerritoriesAdapter extends BaseAdapter {
     ViewHolder viewHolder;
     int _page_index;
 
-    public ClientTerritoriesAdapter(int page_index, List<Territory> territory_list, Context context) {
+    public ClientTerritoriesAdapter( List<Territory> territory_list,  List<String> selected, Context context, boolean isMultiple) {
         _data = territory_list;
         _c = context;
-        _page_index = page_index;
+        this.selected=selected;
+        this.isMultiple=isMultiple;
     }
 
     @Override
@@ -76,15 +80,22 @@ public class ClientTerritoriesAdapter extends BaseAdapter {
         final Territory data = (Territory) _data.get(i);
 
         viewHolder.txt_territoy_name.setText(data.getCounty()+", "+data.getState());
-        if (data.isCheck_status()) {
-            viewHolder.img_check.setBackgroundResource(R.drawable.circle_check2);
-            viewHolder.txt_territoy_name.setTextColor(_c.getResources().getColor(R.color.light_gray2));
-        } else {
-            viewHolder.img_check.setBackgroundResource(R.drawable.unselectd_bg);
-            viewHolder.txt_territoy_name.setTextColor(_c.getResources().getColor(R.color.grey));
+        if(isMultiple) {
+            if (selected.contains(data.getId())) {
+                viewHolder.img_check.setBackgroundResource(R.drawable.circle_check2);
+                viewHolder.txt_territoy_name.setTextColor(_c.getResources().getColor(R.color.light_gray2));
+            } else {
+                viewHolder.img_check.setBackgroundResource(R.drawable.unselectd_bg);
+                viewHolder.txt_territoy_name.setTextColor(_c.getResources().getColor(R.color.grey));
+            }
+        }else{
+            viewHolder.img_check.setVisibility(View.GONE);
         }
 
         view.setTag(data);
         return view;
+    }
+    public void setSelected(List<String> selected) {
+        this.selected=(selected==null?new ArrayList<String>():selected);
     }
 }

@@ -135,11 +135,11 @@ public class AvatarProfileFragment extends Fragment implements View.OnClickListe
                         ProfileFragment.mPagerAdapter.notifyDataSetChanged();
                     }else {
                         DialogUtils.closeProgress();
-                        MyUtils.showAlert(getActivity(), "user information  was not updated");
+                        MyUtils.showErrorAlert(getActivity(), "user information  was not updated");
                     }
                 }else{
                     DialogUtils.closeProgress();
-                    MyUtils.showAlert(getActivity(), ServerRes.getMessage());
+                    MyUtils.showErrorAlert(getActivity(), ServerRes.getMessage());
                 }
             }
 

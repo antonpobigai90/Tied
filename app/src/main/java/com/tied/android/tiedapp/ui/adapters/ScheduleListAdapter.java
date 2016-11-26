@@ -28,10 +28,8 @@ import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
-import com.tied.android.tiedapp.ui.activities.schedule.ViewSchedule;
-import com.tied.android.tiedapp.ui.dialogs.DialogScheduleEventOptions;
+import com.tied.android.tiedapp.ui.activities.schedule.ScheduleDetailsActivitiy;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
-import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleAppointmentsFragment;
 import com.tied.android.tiedapp.util.HelperMethods;
 
 import java.util.ArrayList;
@@ -171,8 +169,8 @@ public class ScheduleListAdapter extends BaseAdapter{
                     @Override
                     public void onClick(View v) {
                         bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
-                        bundle.putString("fragment", ViewSchedule.class.getName());
-                        doAction(schedule,ViewSchedule.class, bundle);
+                        bundle.putString("fragment", ScheduleDetailsActivitiy.class.getName());
+                        doAction(schedule,ScheduleDetailsActivitiy.class, bundle);
 
 //                        DialogScheduleEventOptions alert = new DialogScheduleEventOptions();
 //                        alert.showDialog(schedule, ScheduleListAdapter.this, _c, bundle);
@@ -292,14 +290,14 @@ public class ScheduleListAdapter extends BaseAdapter{
         String from = schedule.getTime_range().getStart_time();
         String to = schedule.getTime_range().getEnd_time();
 
-        String range = getMeridianTime(from) +" - "+getMeridianTime(to);
+        String range =  MyUtils.formatTime(from) +" - "+ MyUtils.formatTime(to);
         long diff = HelperMethods.getTimeDifference(from,to);
         int abs_difference = Math.abs((int)diff);
 
         if(abs_difference > 15){
             range = "All Day";
         }else if(abs_difference < 1){
-            range = getMeridianTime(from) +" "+getMeridianString(from);
+            range =  MyUtils.formatTime(from);
         }
         return range;
     }

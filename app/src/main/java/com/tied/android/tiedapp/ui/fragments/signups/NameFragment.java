@@ -10,9 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.MainApplication;
@@ -26,7 +24,6 @@ import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
-import com.tied.android.tiedapp.util.Utility;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -142,7 +139,7 @@ public class NameFragment extends Fragment implements View.OnClickListener {
                             MyUtils.showToast(getString(R.string.connection_error));
                         }
                     } else {
-                        MyUtils.showAlert(getActivity(), ServerRes.getMessage());
+                        MyUtils.showErrorAlert(getActivity(), ServerRes.getMessage());
                     }
                 }catch (Exception e) {
                     MyUtils.showToast(getString(R.string.connection_error));
@@ -168,11 +165,11 @@ public class NameFragment extends Fragment implements View.OnClickListener {
                 boolean first_name_match = firstNameText.matches("^[\\p{L} .'-]+$");
                 if (firstNameText.length() == 0) {
                     // alert_valid.setVisibility(View.VISIBLE);
-                    MyUtils.showAlert(getActivity(), "First name is required");
+                    MyUtils.showErrorAlert(getActivity(), "First name is required");
                     //Utility.moveViewToScreenCenter(alert_valid, Utility.getResourceString(getActivity(), R.string.alert_valide_name_empty));
                 } else if (!first_name_match) {
                   //  alert_valid.setVisibility(View.VISIBLE);
-                    MyUtils.showAlert(getActivity(), getActivity().getString(R.string.alert_valide_first_name));
+                    MyUtils.showErrorAlert(getActivity(), getActivity().getString(R.string.alert_valide_first_name));
                    // Utility.moveViewToScreenCenter(alert_valid, );
                 } else  {
                     continue_action();

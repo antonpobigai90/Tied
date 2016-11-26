@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -28,7 +27,6 @@ import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.MyUtils;
-import com.tied.android.tiedapp.util.Utility;
 
 import java.util.ArrayList;
 
@@ -185,7 +183,7 @@ public class TerritoryFragment extends Fragment implements View.OnClickListener{
             });
         }else{
            // Utility.moveViewToScreenCenter( alert_valid, Utility.getResourceString(context, R.string.alert_valide_no_territory));
-            MyUtils.showAlert(getActivity(),getActivity().getString(R.string.alert_valide_no_territory) );
+            MyUtils.showErrorAlert(getActivity(),getActivity().getString(R.string.alert_valide_no_territory) );
         }
     }
 
@@ -223,7 +221,7 @@ public class TerritoryFragment extends Fragment implements View.OnClickListener{
                 @Override
                 public void onClick(View v) {
                     if (txt_territory.getText().length() == 0) {
-                        MyUtils.showAlert(getActivity(),getActivity().getString(R.string.alert_valide_territory) );
+                        MyUtils.showErrorAlert(getActivity(),getActivity().getString(R.string.alert_valide_territory) );
                     } else {
                         item.setTerritory_name(txt_territory.getText().toString());
                         item.setiNew(false);

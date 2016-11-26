@@ -166,6 +166,8 @@ public class ActivityTerritories extends AppCompatActivity implements  View.OnCl
                             MyUtils.showToast("Error encountered");
                             DialogUtils.closeProgress();
                         }
+                        if(territoryModels.size()>0) findViewById(R.id.no_results).setVisibility(View.GONE);
+                        else findViewById(R.id.no_results).setVisibility(View.VISIBLE);
 
                     }catch (IOException ioe) {
                         Logger.write(ioe);

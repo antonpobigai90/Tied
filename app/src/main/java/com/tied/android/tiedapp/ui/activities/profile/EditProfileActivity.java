@@ -163,7 +163,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
                             onBackPressed();
                         } else {
                             DialogUtils.closeProgress();
-                            MyUtils.showAlert(EditProfileActivity.this, "user info  was not updated");
+                            MyUtils.showErrorAlert(EditProfileActivity.this, "An error occurred. Your info was not updated");
                         }
                     } else {
                         Toast.makeText(context, ServerRes.getMessage(), Toast.LENGTH_LONG).show();
@@ -173,7 +173,7 @@ public class EditProfileActivity extends AppCompatActivity implements View.OnCli
 
                 @Override
                 public void onFailure(Call<ServerRes> ServerResponseCall, Throwable t) {
-                    MyUtils.showAlert(EditProfileActivity.this, "Server error. try again later");
+                    MyUtils.showErrorAlert(EditProfileActivity.this, "Server error. Please try again later");
                     DialogUtils.closeProgress();
                 }
             });

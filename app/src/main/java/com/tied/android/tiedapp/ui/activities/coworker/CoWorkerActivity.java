@@ -123,7 +123,7 @@ public class CoWorkerActivity extends AppCompatActivity implements AdapterView.O
         DialogUtils.displayProgress(this);
         CoworkerApi coworkerApi = MainApplication.getInstance().getRetrofit().create(CoworkerApi.class);
 
-        final Call<ResponseBody> response = coworkerApi.getCoworkers( user.getToken(), user.getId(), "i_added",  10, new RevenueFilter());
+        final Call<ResponseBody> response = coworkerApi.getCoworkers( user.getToken(), user.getId(), "i_added",  10, new RevenueFilter(), 1);
         response.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
@@ -179,7 +179,7 @@ public class CoWorkerActivity extends AppCompatActivity implements AdapterView.O
         DialogUtils.displayProgress(this);
         CoworkerApi coworkerApi = MainApplication.getInstance().getRetrofit().create(CoworkerApi.class);
         String group="added_me";
-        final Call<ResponseBody> response = coworkerApi.getCoworkers( user.getToken(), user.getId(), "added_me",  10, new RevenueFilter());
+        final Call<ResponseBody> response = coworkerApi.getCoworkers( user.getToken(), user.getId(), "added_me",  10, new RevenueFilter(), 1);
         response.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {

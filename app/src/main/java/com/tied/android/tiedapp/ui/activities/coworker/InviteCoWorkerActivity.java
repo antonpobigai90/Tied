@@ -211,7 +211,7 @@ public class InviteCoWorkerActivity extends AppCompatActivity implements View.On
             case R.id.invite:
                 emailText = email.getText().toString().trim();
                /* if (!Utility.isEmailValid(emailText)) {
-                    MyUtils.showAlert(this, Utility.getResourceString(this, R.string.alert_valide_email));
+                    MyUtils.showErrorAlert(this, Utility.getResourceString(this, R.string.alert_valide_email));
                 } else {
                     ..continue_action();
                 }*/

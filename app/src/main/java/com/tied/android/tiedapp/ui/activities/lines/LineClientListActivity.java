@@ -57,6 +57,7 @@ public class LineClientListActivity extends AppCompatActivity implements View.On
 
     protected LineClientAdapter adapter;
     protected ArrayList<Client> clientsList;
+    protected ArrayList<Client> clientsListHolder = new ArrayList<>();
     protected Territory territory;
     ArrayList search_data = new ArrayList<>();
 
@@ -101,8 +102,9 @@ public class LineClientListActivity extends AppCompatActivity implements View.On
         }
 
         num_clients = (TextView) findViewById(R.id.num_clients);
-
+        adapter = new LineClientAdapter(clientsList, this);
         search = (EditText) findViewById(R.id.search);
+        listView.setAdapter(adapter);
         search.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -118,16 +120,17 @@ public class LineClientListActivity extends AppCompatActivity implements View.On
 
                 search_data.clear();
                 // TODO Auto-generated method stub
-                for(int i = 0 ; i < clientsList.size() ; i++) {
-                    Client model = (Client) clientsList.get(i);
+                for(int i = 0 ; i < clientsListHolder.size() ; i++) {
+                    Client model = (Client) clientsListHolder.get(i);
 
                     String title = MyUtils.getClientName(model);
                     if(title.matches("(?i).*" + search.getText().toString() + ".*")) {
                         search_data.add(model);
                     }
                 }
-
-                adapter = new LineClientAdapter(search_data, getApplicationContext());
+                clientsList.clear();
+                clientsList.addAll(search_data);
+               adapter.notifyDataSetChanged();
                 listView.setAdapter(adapter);
             }
 
@@ -155,10 +158,10 @@ public class LineClientListActivity extends AppCompatActivity implements View.On
             clientLocation.setCoordinate(coordinate);
 
             final ClientApi clientApi = MainApplication.createService(ClientApi.class, user.getToken());
-            response = clientApi.getLineClients(user.getToken(), line.getId(), 0, clientLocation);
+            response = clientApi.getLineClients(user.getToken(), line.getId(), 1, clientLocation);
         } else {
             final TerritoryApi territoryApi = MainApplication.createService(TerritoryApi.class, user.getToken());
-            response = territoryApi.getTerritoryClient(territory);
+            response = territoryApi.getTerritoryClient(territory, 1);
         }
         response.enqueue(new Callback<ClientRes>() {
             @Override
@@ -201,12 +204,13 @@ public class LineClientListActivity extends AppCompatActivity implements View.On
     }
 
     public void initFormattedClient(ArrayList<Client> clients) {
-        clientsList = clients;
+
 
         num_clients.setText(String.format("%d Clients", clientsList.size()));
+        clientsList.clear();
+        clientsList.addAll(clients);
 
-        adapter = new LineClientAdapter(clientsList, this);
-        listView.setAdapter(adapter);
+       adapter.notifyDataSetChanged();
         listView.setFastScrollEnabled(true);
     }
 

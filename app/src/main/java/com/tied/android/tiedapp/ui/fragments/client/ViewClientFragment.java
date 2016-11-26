@@ -20,6 +20,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 import com.tied.android.tiedapp.MainApplication;
@@ -64,7 +66,7 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
     private LinearLayout icon_plus, icon_call, icon_mail;
     private TextView btn_delete, client_name, totalSales;
     RelativeLayout important_info,lines_territory;
-    TextView lastVisitedTV;
+    TextView lastVisitedTV, addressTV;
 
     private Bundle bundle;
     private User user;
@@ -115,6 +117,7 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
         view.findViewById(R.id.visits_layout).setOnClickListener(this);
         view.findViewById(R.id.line_layout).setOnClickListener(this);
         lastVisitedTV=(TextView)view.findViewById(R.id.last_visited) ;
+        addressTV=(TextView)view.findViewById(R.id.address) ;
 
         MyUtils.Picasso.displayImage(client.getLogo(), (ImageView)view.findViewById(R.id.avatar));
 
@@ -142,12 +145,17 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
             user = MyUtils.getUserFromBundle(bundle);
             client = (Client)bundle.getSerializable(Constants.CLIENT_DATA);
 
-            String logo = client.getLogo().equals("") ? null  : client.getLogo();
+            String logo;
+            try{
+                logo=client.getLogo().equals("") ? null  : client.getLogo();
+            } catch (NullPointerException npe) {
+                logo=null;
+            }
             MyUtils.Picasso.displayImage(logo, avatar);
            totalSales.setText(MyUtils.moneyFormat(client.getTotal_revenue()));
             String lastVisited=client.getLast_visited();
             lastVisitedTV.setText("Last Visited: "+ (lastVisited==null || lastVisited.isEmpty()?"Never":HelperMethods.getDateDifferenceWithToday(lastVisited)));
-
+            addressTV.setText(client.getAddress().getLocationAddress());
             //setTotalRevenue();
             setVisibile();
         }
@@ -327,8 +335,10 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
                     if (meta != null && meta.getStatus_code() == 200) {
 
                         client = ( (Client) response.getData("client", Client.class));
-
-                        MyUtils.Picasso.displayImage(client.getLogo(), avatar);
+                        Picasso.with(getActivity()).load(client.getLogo())
+                                .memoryPolicy(MemoryPolicy.NO_CACHE)
+                                .networkPolicy(NetworkPolicy.NO_CACHE).into(avatar);
+                       // MyUtils.Picasso.displayImage(client.getLogo(), avatar);
                         String lastVisited=client.getLast_visited();
                         lastVisitedTV.setText("Last Visited: "+ (lastVisited==null || lastVisited.isEmpty()?"Never":HelperMethods.getDateDifferenceWithToday(lastVisited)));
 

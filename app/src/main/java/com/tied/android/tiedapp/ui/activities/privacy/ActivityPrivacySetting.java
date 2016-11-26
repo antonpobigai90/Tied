@@ -112,7 +112,7 @@ public class ActivityPrivacySetting extends Activity
       //  IS_MULTIPLE=isMultiple;
        // this.objectType=objectType;
        // this.isMultiple=isMultiple
-       // GeneralSelectObjectActivity.IS_MULTIPLE=isMultiple;
+       // SelectClientActivity.IS_MULTIPLE=isMultiple;
     }*/
 
 
@@ -296,7 +296,7 @@ public class ActivityPrivacySetting extends Activity
         DialogUtils.displayProgress(this);
         CoworkerApi coworkerApi = MainApplication.getInstance().getRetrofit().create(CoworkerApi.class);
 
-        final Call<ResponseBody> request = coworkerApi.getCoworkers( user.getToken(), user.getId(), "i_added",  10, new RevenueFilter());
+        final Call<ResponseBody> request = coworkerApi.getCoworkers( user.getToken(), user.getId(), "i_added",  10, new RevenueFilter(), 1);
 
         request.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -321,7 +321,7 @@ public class ActivityPrivacySetting extends Activity
                         listView.setFastScrollEnabled(true);
                         updateNumSelected();
                     } else {
-                        // Toast.makeText(com.tied.android.tiedapp.ui.activities.GeneralSelectObjectActivity.this, clientRes.getMessage(), Toast.LENGTH_LONG).show();
+                        // Toast.makeText(com.tied.android.tiedapp.ui.activities.SelectClientActivity.this, clientRes.getMessage(), Toast.LENGTH_LONG).show();
                     }
                 }catch (Exception e) {
                     Logger.write(e);

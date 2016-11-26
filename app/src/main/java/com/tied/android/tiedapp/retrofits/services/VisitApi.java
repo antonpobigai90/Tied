@@ -32,10 +32,10 @@ public interface VisitApi {
     Call<ResponseBody> addVisit(@Body Visit visit);
 
     @POST(Constants.USER_VISITS)
-    Call<ResponseBody> getUserVisits(@Path("user_id") String user_id, @Body VisitFilter visitFilter);
+    Call<ResponseBody> getUserVisits(@Path("user_id") String user_id,  @Path("page_number") int pageNumber, @Body VisitFilter visitFilter);
 
     @POST(Constants.CLIENT_VISITS)
-    Call<ResponseBody> getClientVisits(@Path("client_id") String user_id, @Body VisitFilter visitFilter);
+    Call<ResponseBody> getClientVisits(@Path("client_id") String user_id, @Path("page_number") int pageNumber, @Body VisitFilter visitFilter);
 
     @DELETE(Constants.VISIT_DELETE)
     Call<ResponseBody> deleteVisit(@Path("visit_id") String visit_id);

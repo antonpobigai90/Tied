@@ -111,6 +111,19 @@ public class SplashActivity extends Activity {
             splashTread.start();
         }
     }
+    public static void checkForUpdateAndSaveServerSettings(final Activity context) {
+        checkForUpdate( context);
+    }
+    private static void saveServerSettings(final Activity context, JSONObject jo) {
+        SharedPreferences sp=MyUtils.getSharedPreferences();
+        SharedPreferences.Editor  editor=sp.edit();
+        try {
+            editor.putInt(Constants.PROXIMITY_REMINDER_DISTANCE, jo.getInt("proximity_reminder_distance"));
+        }catch (Exception e) {
+            Logger.write(e);
+        }
+        editor.apply();
+    }
     public static void checkForUpdate(final Activity context) {
 
         ConfigApi clientApi = MainApplication.getInstance().getRetrofit().create(ConfigApi.class);
@@ -127,7 +140,7 @@ public class SplashActivity extends Activity {
 
                     JSONObject jo=new JSONObject(response.toString());
                     JSONObject vJO=new JSONObject(jo.getString("version_android"));
-
+                    saveServerSettings(context, jo);
                     final boolean isRequired = vJO.getBoolean("required");
                     if ( !isUptoDate(context, vJO.getString("code").trim())) {
                         android.app.AlertDialog c=null;

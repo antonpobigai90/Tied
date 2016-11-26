@@ -44,7 +44,7 @@ public class IndustryActivity extends AppCompatActivity implements View.OnClickL
     ListView line_listview;
     ClientTerritoriesAdapter territoriesAdapter;
     ArrayList<Territory> territoryModels = new ArrayList<Territory>();
-
+    ArrayList selectedObjects = new ArrayList();
     private User user;
 
     @Override
@@ -72,18 +72,18 @@ public class IndustryActivity extends AppCompatActivity implements View.OnClickL
 //            territoryModels.add(territoryModel);
 //        }
 
-        territoriesAdapter = new ClientTerritoriesAdapter(1, territoryModels, this);
+        territoriesAdapter = new ClientTerritoriesAdapter(territoryModels, selectedObjects , this, false);
         line_listview.setAdapter(territoriesAdapter);
         territoriesAdapter.notifyDataSetChanged();
 
         line_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (territoryModels.get(position).isCheck_status()) {
+                /*if (territoryModels.get(position).isCheck_status()) {
                     territoryModels.get(position).setCheck_status(false);
                 } else {
                     territoryModels.get(position).setCheck_status(true);
-                }
+                }*/
 
                 territoriesAdapter.notifyDataSetChanged();
             }
@@ -92,12 +92,12 @@ public class IndustryActivity extends AppCompatActivity implements View.OnClickL
         line_listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (territoryModels.get(position).isCheck_status()) {
+               /* if (territoryModels.get(position).isCheck_status()) {
                     territoryModels.get(position).setCheck_status(false);
                 } else {
                     territoryModels.get(position).setCheck_status(true);
                 }
-
+ */
                 territoriesAdapter.notifyDataSetChanged();
             }
         });

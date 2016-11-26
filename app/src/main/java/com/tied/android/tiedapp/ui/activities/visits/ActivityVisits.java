@@ -120,7 +120,7 @@ public class ActivityVisits extends AppCompatActivity implements View.OnClickLis
     private void loadVisits(VisitFilter visitFilter) {
 
         final VisitApi visitApi =  MainApplication.createService(VisitApi.class);
-        Call<ResponseBody> response = visitApi.getUserVisits(user.getId(), visitFilter);
+        Call<ResponseBody> response = visitApi.getUserVisits(user.getId(), 1, visitFilter);
         response.enqueue(new retrofit2.Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {

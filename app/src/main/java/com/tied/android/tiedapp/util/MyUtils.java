@@ -1,8 +1,10 @@
 package com.tied.android.tiedapp.util;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -32,7 +34,6 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Callback;
-import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
@@ -56,11 +57,10 @@ import com.tied.android.tiedapp.retrofits.services.GoalApi;
 import com.tied.android.tiedapp.retrofits.services.LineApi;
 import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
-import com.tied.android.tiedapp.ui.activities.GeneralSelectObjectActivity;
+import com.tied.android.tiedapp.ui.activities.SelectClientActivity;
 import com.tied.android.tiedapp.ui.activities.SelectLineActivity;
-import com.tied.android.tiedapp.ui.activities.client.NewClientActivity;
+import com.tied.android.tiedapp.ui.activities.SelectTerritoryActivity;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityAddSales;
-import com.tied.android.tiedapp.ui.dialogs.DatePickerFragment;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.listeners.ListAdapterListener;
 
@@ -76,7 +76,6 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -233,10 +232,10 @@ public abstract class MyUtils {
     }
 
     public static void initiateClientSelector(Activity c,  Object selected, boolean isMultiple) {
-        Intent i = new Intent(c, GeneralSelectObjectActivity.class);
+        Intent i = new Intent(c, SelectClientActivity.class);
         Bundle b=new Bundle();
-        b.putInt(GeneralSelectObjectActivity.OBJECT_TYPE, GeneralSelectObjectActivity.SELECT_CLIENT_TYPE);
-        b.putBoolean(GeneralSelectObjectActivity.IS_MULTIPLE, isMultiple);
+        b.putInt(SelectClientActivity.OBJECT_TYPE, SelectClientActivity.SELECT_CLIENT_TYPE);
+        b.putBoolean(SelectClientActivity.IS_MULTIPLE, isMultiple);
         ArrayList<Object> selectedObjects=null;
         if(!(selected instanceof ArrayList)) {
             selectedObjects= new ArrayList<Object>(1);
@@ -244,15 +243,27 @@ public abstract class MyUtils {
         }else{
             selectedObjects=(ArrayList)selected;
         }
-        if(selected!=null) b.putSerializable(GeneralSelectObjectActivity.SELECTED_OBJECTS, selectedObjects);
+        if(selected!=null) b.putSerializable(SelectClientActivity.SELECTED_OBJECTS, selectedObjects);
         i.putExtras(b);
         c.startActivityForResult(i, Constants.SELECT_CLIENT);
 
     }
+    public static void  showClearWarning(Activity activity, DialogInterface.OnClickListener onYesClicked ) {
+        final AlertDialog ad= new AlertDialog.Builder(activity).create();
+        ad.setMessage("This will clear all selections. Are you sure you want to proceed?");
+        ad.setButton(AlertDialog.BUTTON_POSITIVE, "YES", onYesClicked);
+        ad.setButton(AlertDialog.BUTTON_NEGATIVE, "NO", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        ad.show();
+    }
     public static void initiateLineSelector(Activity c,  Object selected, boolean isMultiple) {
         Intent i = new Intent(c, SelectLineActivity.class);
         Bundle b=new Bundle();
-        b.putInt(SelectLineActivity.OBJECT_TYPE, SelectLineActivity.SELECT_LINE_TYPE);
+      //  b.putInt(SelectLineActivity.OBJECT_TYPE, SelectLineActivity.SELECT_LINE_TYPE);
         b.putBoolean(SelectLineActivity.IS_MULTIPLE, isMultiple);
         ArrayList<Object> selectedObjects=null;
         if(!(selected instanceof ArrayList)) {
@@ -264,6 +275,23 @@ public abstract class MyUtils {
         if(selected!=null) b.putSerializable(SelectLineActivity.SELECTED_OBJECTS, selectedObjects);
         i.putExtras(b);
         c.startActivityForResult(i, Constants.SELECT_LINE);
+
+    }
+    public static void initiateTerritorySelector(Activity c,  Object selected, boolean isMultiple) {
+        Intent i = new Intent(c, SelectTerritoryActivity.class);
+        Bundle b=new Bundle();
+        //b.putInt(SelectLineActivity.OBJECT_TYPE, CoWorkerTerritoriesActivity.SELECT_LINE_TYPE);
+        b.putBoolean(SelectLineActivity.IS_MULTIPLE, isMultiple);
+        ArrayList<Object> selectedObjects=null;
+        if(!(selected instanceof ArrayList)) {
+            selectedObjects= new ArrayList<Object>(1);
+            selectedObjects.add(selected);
+        }else{
+            selectedObjects=(ArrayList)selected;
+        }
+        if(selected!=null) b.putSerializable(SelectTerritoryActivity.SELECTED_OBJECTS, selectedObjects);
+        i.putExtras(b);
+        c.startActivityForResult(i, Constants.SELECT_TERRITORY);
 
     }
     public static void initiateAddSales(Activity c,  Bundle bundle) {
@@ -329,9 +357,9 @@ public abstract class MyUtils {
 
         return sp.getString(Constants.DISTANCE_UNIT, Distance.UNIT_MILES);
     }
-    static DecimalFormat distanceFormat = new DecimalFormat("#,###,###.00");
+    static DecimalFormat distanceFormat = new DecimalFormat("#,###,###.0");
     public static String formatDistance(float distance) {
-        if(distanceFormat==null) distanceFormat = new DecimalFormat("#,###,###.00");
+        if(distanceFormat==null) distanceFormat = new DecimalFormat("#,###,###.0");
         return distanceFormat.format(distance);
     }
     public static void setPreferredDistanceUnit(String unit) {
@@ -513,8 +541,12 @@ public abstract class MyUtils {
             userLoc.setLongitude(stop.getLon());
 
             float distance = 0.621371f * (mallLoc.distanceTo(userLoc) / 1000);
-            return String.format(Locale.getDefault(), "%.0f", distance)
-                    + (showUnit?" miles":"");
+            if(showUnit) {
+                return formatDistance( distance)
+                        + (showUnit ? " miles" : "");
+            }else{
+                return ""+distance;
+            }
         } catch (Exception e) {
             // TODO Auto-generated catch block
             return "Unknown";
@@ -526,20 +558,20 @@ public abstract class MyUtils {
 
 
     public static final int MESSAGE_TOAST=0, ERROR_TOAST=1;
-    public static void showAlert(Activity  activity, String message) {
-        showAlert(activity, message, MESSAGE_TOAST);
-    }
+   // public static void showErrorAlert(Activity  activity, String message) {
+      //  showErrorAlert(activity, message, MESSAGE_TOAST);
+    //}
     public static void showMessageAlert(Activity  activity, String message) {
-        showAlert(activity, message, MESSAGE_TOAST);
+        showErrorAlert(activity, message, MESSAGE_TOAST);
     }
     public static void showMessageSuccess(Activity  activity, String message) {
-        showAlert(activity, message, 3);
+        showErrorAlert(activity, message, MESSAGE_TOAST);
     }
     public static void showErrorAlert(Activity  activity, String message) {
-        showAlert(activity, message, ERROR_TOAST);
+        showErrorAlert(activity, message, ERROR_TOAST);
     }
     public static MyStringAsyncTask animateTask=null;
-    public static void showAlert(Activity activity, String message, int type) {
+    public static void showErrorAlert(Activity activity, String message, int type) {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.addRule(RelativeLayout.ALIGN_PARENT_TOP, RelativeLayout.TRUE);
@@ -556,10 +588,18 @@ public abstract class MyUtils {
             LayoutInflater inflater = LayoutInflater.from(MainApplication.getInstance().getApplicationContext());
             view=inflater.inflate(R.layout.custom_toast, null);
             //view.setVisibility(View.INVISIBLE);
+
             ((ViewGroup)layout).addView(view, params);
             //view.setVisibility(View.GONE);
            // view.setTranslationY(-80.0f);
             //view.setVisibility(View.GONE);
+        }
+        ImageView icon= (ImageView) view.findViewById(R.id.icon);
+        if(type==ERROR_TOAST) {
+            view.setBackgroundColor(activity.getResources().getColor(R.color.red_color));
+        }else{
+            view.setBackgroundColor(activity.getResources().getColor(R.color.icon_green));
+            icon.setImageResource(R.drawable.check_icon);
         }
         final AlertLayout v=(AlertLayout)view;
        // v.setVisibility(View.VISIBLE);
@@ -971,7 +1011,7 @@ public abstract class MyUtils {
         });
     }
 
-
+/*
 
 
     public static void initSchedules(final Context context, User user, final ListAdapterListener listAdapterListener){
@@ -1014,7 +1054,7 @@ public abstract class MyUtils {
                 Log.d(" onFailure", t.toString());
             }
         });
-    }
+    }*/
     public static String getTimeRange(Schedule schedule){
         String from = schedule.getTime_range().getStart_time();
         String to = schedule.getTime_range().getEnd_time();

@@ -66,11 +66,23 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/avatar"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="15dp"
                 android:src="@drawable/default_avatar" />
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="10dp"
+                    android:id="@+id/address"
+                    android:layout_gravity="center"
+                    android:layout_toRightOf="@+id/icon_symbol"
+                    android:text=""
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
             <RelativeLayout
                 android:id="@+id/info"
@@ -92,9 +104,9 @@
                     android:layout_marginLeft="10dp"
                     android:id="@+id/last_visited"
                     android:layout_toRightOf="@+id/icon_symbol"
-                    android:text="last visit 10 days ago"
+                    android:text=""
                     android:textColor="@color/white"
-                    android:textSize="14sp"
+                    android:textSize="12sp"
                     android:textStyle="bold" />
 
             </RelativeLayout>

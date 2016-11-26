@@ -84,7 +84,7 @@
                                 android:id="@+id/txt_title"
                                 android:textColor="@color/schedule_title_bg_color"
                                 android:textSize="16sp"
-                                android:hint="Meeting with Janet"
+                                android:hint="Enter title or label"
                                 android:textColorHint="@color/light_gray2" />
                         </LinearLayout>
                     </RelativeLayout>
@@ -125,7 +125,7 @@
                             android:id="@+id/txt_description"
                             android:textColor="@color/schedule_title_bg_color"
                             android:textSize="16sp"
-                            android:hint="Go over feedback from the client"
+                            android:hint="Enter summary of purpose"
                             android:textColorHint="@color/light_gray2" />
                     </LinearLayout>
 
@@ -174,7 +174,7 @@
                         <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Click here if meeting with a client"
+                                android:text="Click to choose client"
                                 android:textSize="13sp"
                                 android:textAlignment="center"
                                 android:gravity="left"
@@ -185,6 +185,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text=""
+                                android:visibility="gone"
                                 android:textSize="11sp"
                                 android:textAlignment="center"
                                 android:gravity="left"
@@ -248,8 +249,9 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/date"
-                                android:enabled="false"
-                                android:textColor="@color/schedule_title_bg_color"
+                                android:enabled="true"
+                                android:hint="Click to choose date of appointment"
+                                android:textColor="@color/black"
                                 android:textSize="14sp"/>
 
                             <TextView
@@ -352,6 +354,7 @@
                                     android:layout_height="wrap_content"
                                     android:id="@+id/txt_location"
                                     android:paddingTop="4dp"
+                                    android:hint="Click to enter location"
                                     android:textColor="@color/schedule_title_bg_color"
                                     android:textSize="14sp" />
                         </LinearLayout>

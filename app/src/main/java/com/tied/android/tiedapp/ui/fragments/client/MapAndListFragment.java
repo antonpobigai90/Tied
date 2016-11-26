@@ -8,6 +8,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,8 +24,10 @@ import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Coordinate;
+import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects.Territory;
 import com.tied.android.tiedapp.objects.client.Client;
+import com.tied.android.tiedapp.objects.client.ClientFilter;
 import com.tied.android.tiedapp.objects.client.ClientLocation;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.user.User;
@@ -50,6 +54,8 @@ public class MapAndListFragment extends Fragment implements View.OnClickListener
     public PagerAdapter mPagerAdapter;
     private Bundle bundle;
     private ClientsMapFragment clientsMapFragment;
+    public  ClientFilter clientFilter = new ClientFilter();
+
 
     public static ArrayList<String> selectedLines = new ArrayList<String>();
     public static ArrayList<Territory> selectedTerritories = new ArrayList<Territory>();
@@ -58,13 +64,14 @@ public class MapAndListFragment extends Fragment implements View.OnClickListener
     ImageView img_segment, img_filter, app_icon;
     User user;
     public static String search_name = "";
-    public static int distance = 20000;
+    public static int distance = 2000;
     public static String group = "me";
     public static int last_visited = 0;
     public static String orderby = "distance";
     public static String order = "asc";
     public static boolean isClientFilter = false;
     public static boolean isClear = false;
+    private static MapAndListFragment mapAndListFragment;
     ArrayList<Client> clients;
 
     boolean bMap = true;
@@ -77,12 +84,18 @@ public class MapAndListFragment extends Fragment implements View.OnClickListener
         fragment.setArguments(bundle);
         return fragment;
     }
+    public static MapAndListFragment getInstance() {
+        return mapAndListFragment;
+    }
     public static int getDefaultDistance() {
         return distance;
     }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initializeFilter();
+        mapAndListFragment=this;
+
     }
 
     @Override
@@ -150,8 +163,35 @@ public class MapAndListFragment extends Fragment implements View.OnClickListener
         search = (EditText) view.findViewById(R.id.search);
         search_button = (TextView) view.findViewById(R.id.search_button);
         search_button.setOnClickListener(this);
+        triggerReloadOnSearchFieldEmpty();
     }
 
+    private void initializeFilter() {
+        clientFilter=new ClientFilter();
+        //clientFilter.setName(search.getText().toString());
+        clientFilter.setDistance(0);
+        clientFilter.setUnit("mi");
+        clientFilter.setGroup(MapAndListFragment.group);
+        clientFilter.setLast_visited(MapAndListFragment.last_visited);
+        clientFilter.setOrder_by(MapAndListFragment.orderby);
+        clientFilter.setOrder(MapAndListFragment.order);
+        if (MapAndListFragment.selectedTerritories.size() == 0)
+            clientFilter.setTerritories(null);
+        else
+            clientFilter.setTerritories(MapAndListFragment.selectedTerritories);
+
+        if (MapAndListFragment.selectedLines.size() == 0)
+            clientFilter.setLines(null);
+        else
+            clientFilter.setLines(MapAndListFragment.selectedLines);
+
+        Coordinate coordinate =MyUtils.getCurrentLocation();
+        if (coordinate == null) {
+            coordinate = user.getOffice_address().getCoordinate();
+        }
+        clientFilter.setCoordinate(coordinate);
+
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -174,13 +214,36 @@ public class MapAndListFragment extends Fragment implements View.OnClickListener
             case R.id.search_button:
                 if (search.getText().toString().length() > 3) {
 //                    if (bMap) {
-                        clientsMapFragment.loadClientsFilter(search.getText().toString());
-//                    } else {
-                        clientsListFragment.loadClientsFilter(search.getText().toString());
-//                    }
+                    clientFilter.setName(search.getText().toString());
+                    doSearch();
                 }
                 break;
         }
+    }
+    void triggerReloadOnSearchFieldEmpty() {
+        search.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // TODO Auto-generated method stub
+                if(search.getText().toString().isEmpty()) {
+                    clientFilter.setName(null);
+                    doSearch();
+                }
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                                          int after) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // TODO Auto-generated method stub
+            }
+        });
     }
 
     public void selectTab(int position){
@@ -205,6 +268,7 @@ public class MapAndListFragment extends Fragment implements View.OnClickListener
             @Override
             public void onPageSelected(int position) {
 //                Toast.makeText(LinesListActivity.this,"Selected page position: " + position, Toast.LENGTH_SHORT).show();
+              //  if(position>0) MainActivity.getInstance().refresh.setEnabled(true);
                 selectTab(position);
             }
 
@@ -270,66 +334,49 @@ public class MapAndListFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    private void loadClients() {
-        ClientLocation clientLocation = new ClientLocation();
-        clientLocation.setDistance("0m");
 
-        Coordinate coordinate = MyUtils.getCurrentLocation();
-        if( coordinate == null ){
-            coordinate = user.getOffice_address().getCoordinate();
-        }
-        clientLocation.setCoordinate(coordinate);
 
-        final ClientApi clientApi =  MainApplication.createService(ClientApi.class);
-        Call<ClientRes> response = clientApi.getClientsByLocation(user.getId(), clientLocation);
-        response.enqueue(new retrofit2.Callback<ClientRes>() {
-            @Override
-            public void onResponse(Call<ClientRes> call, Response<ClientRes> resResponse) {
-                if (getActivity()== null ) {
-                    // Logger.write("null activity");
-                    return;
-                }
-                //Logger.write("(((((((((((((((((((((((((((((999999");
-                DialogUtils.closeProgress();
-                ClientRes clientRes = resResponse.body();
-                //Logger.write(clientRes.toString());
-                try {
-                    if (clientRes.isAuthFailed()) {
-                        // User.LogOut(getActivity());
-                    } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200) {
-                        clients.addAll(clientRes.getClients());
-                          /*
-                            if (clients.size() > 0) {
-                              clients = clients;
-                                if (adapter != null) {
-                                    adapter.listInit(clients);
-                                }
-                            }*/
-
-                       // adapter.notifyDataSetChanged();
-                    } else {
-                        Logger.write("Error onResponse", clientRes.getMessage());
-                    }
-                }catch (Exception e) {
-                    Logger.write(e);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ClientRes> call, Throwable t) {
-
-                Logger.write(" onFailure", t.toString());
-            }
-        });
+    @Override
+    public void onPause() {
+        super.onPause();
+        MainActivity.getInstance().refresh.setEnabled(true);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        clientsMapFragment.loadClientsFilter(search.getText().toString());
-        clientsListFragment.loadClientsFilter(search.getText().toString());
+        clientFilter.setName(search.getText().toString());
+        clientFilter.setDistance(MapAndListFragment.distance);
+        clientFilter.setUnit("mi");
+        clientFilter.setGroup(MapAndListFragment.group);
+        clientFilter.setLast_visited(MapAndListFragment.last_visited);
+        clientFilter.setOrder_by(MapAndListFragment.orderby);
+        clientFilter.setOrder(MapAndListFragment.order);
+        if (MapAndListFragment.selectedTerritories.size() == 0)
+            clientFilter.setTerritories(null);
+        else
+            clientFilter.setTerritories(MapAndListFragment.selectedTerritories);
+
+        if (MapAndListFragment.selectedLines.size() == 0)
+            clientFilter.setLines(null);
+        else
+            clientFilter.setLines(MapAndListFragment.selectedLines);
+
+
+        Coordinate coordinate = new Coordinate(39.9001126, -75.2890745);//MyUtils.getCurrentLocation();
+        if (coordinate == null) {
+            coordinate = user.getOffice_address().getCoordinate();
+        }
+        clientFilter.setCoordinate(coordinate);
+
+        doSearch();
 
 //        fragment.onActivityResult(requestCode, resultCode, data);
+    }
+    void doSearch() {
+
+        clientsMapFragment.loadClientsFilter(clientFilter, 1);
+        clientsListFragment.loadClientsFilter(clientFilter, 1);
     }
 }

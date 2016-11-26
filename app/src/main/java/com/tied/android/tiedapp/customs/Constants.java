@@ -36,10 +36,10 @@ public class Constants {
     public static final String CLIENTS = API_PATH + "clients";
     public static final String USER_CLIENTS = API_PATH + "users/{user_id}/clients";
     public static final String USER_CLIENTS_COUNT = API_PATH + "users/{user_id}/clients_count";
-    public static final String USER_GE0_CLIENTS = API_PATH + "users/{user_id}/clients/geo";
+    public static final String USER_GE0_CLIENTS = API_PATH + "users/{user_id}/clients/geo/{page_number}";
 
     public static final String ADD_COWORKER = API_PATH + "users/me/coworkers";
-    public static final String GET_COWORKERS = API_PATH + "coworker/{user_id}/{group}/{count}/{filter}";
+    public static final String GET_COWORKERS = API_PATH + "coworker/{user_id}/{group}/{count}/{filter}/{page_number}";
 
     public static final String GET_CONFIGURATION = API_PATH + "config/{key}";
 
@@ -79,7 +79,7 @@ public class Constants {
     public static final String API_TERRITORY = API_PATH + "territory/{user_id}";
     public static final String UPDATE_TERRITORY_WITH_ID = API_PATH + "territory/{territory_id}";
     public static final String USER_TERRITORIES = API_PATH + "users/{user_id}/territories/{page_number}";
-    public static final String TERRITORY_CLIENTS = API_PATH + "territories/get_clients";
+    public static final String TERRITORY_CLIENTS = API_PATH + "territories/get_clients/{page_number}";
     public static final String TERRITORY_FROM_DATABASE = API_PATH + "search/county/{query}";
     public static final String API_UPLOAD_CLIENTS  = API_PATH + "clients/upload/";
 
@@ -102,12 +102,11 @@ public class Constants {
     public static final String DELETE_SCHEDULE_WITH_ID = API_PATH + "schedules/{schedule_id}";
     public static final String GET_SCHEDULE_WITH_ID = API_PATH + "schedule/{schedule_id}";
     public static final String SCHEDULES = API_PATH + "schedules";
-    public static final String CLIENT_SCHEDULES = API_PATH + "schedules/{client_id}/upcoming";
-    public static final String USER_SCHEDULE = API_PATH + "users/{user_id}/schedules";
-    public static final String USER_GET_SCHEDULE = API_PATH + "users/{user_id}/schedules";
+    public static final String CLIENT_SCHEDULES = API_PATH + "schedules/{client_id}/upcoming/{page_number}";
+    public static final String USER_SCHEDULE = API_PATH + "users/{user_id}/schedules/{page_number}";
     public static final String USER_SCHEDULE_COUNT = API_PATH + "users/me/schedules_count";
     public static final String USER_GE0_SCHEDULE = API_PATH + "users/me/schedules/geo";
-    public static final String USER_SCHEDULES_BY_DATE = API_PATH + "users/{user_id}/schedules/date";
+    public static final String USER_SCHEDULES_BY_DATE = API_PATH + "users/{user_id}/schedules/date/{page_number}";
 
 
     public static final String UPDATE_GOAL_WITH_ID = API_PATH + "goals/{goal_id}";
@@ -119,8 +118,8 @@ public class Constants {
     public static final String NUM_LINE_GOALS = API_PATH + "lines/{line_id}/num_goals";
 
     public static final String ADD_VISIT = API_PATH + "visit";
-    public static final String USER_VISITS = API_PATH + "users/{user_id}/visits";
-    public static final String CLIENT_VISITS = API_PATH + "clients/{client_id}/visits";
+    public static final String USER_VISITS = API_PATH + "users/{user_id}/visits/{page_number}";
+    public static final String CLIENT_VISITS = API_PATH + "clients/{client_id}/visits/{page_number}";
     public static final String VISIT_DELETE = API_PATH + "visit/{visit_id}";
     public static final String VISIT_UPDATE = API_PATH + "visit/{visit_id}";
     public static final String GET_VISIT = API_PATH + "visit/{visit_id}";
@@ -129,11 +128,14 @@ public class Constants {
 
     public static final String REPORT = API_PATH + "users/{user_id}/report";
 
+    public static final String BRAINTREE= API_PATH + "braintree";
+
     public static final String APP_DATA = "app_data";
     public static final String COWORKER = "coworker";
     public static final String USER = "user";
     public static final String USER_DATA = "user_data";
     public static final String CLIENT_DATA = "client_data";
+    public static final String PROXIMITY_CLIENT_DATA = "prox_client_data";
     public static final String VISIT_DATA = "visit_data";
     public static final String SCHEDULE_DATA = "schedule_data";
     public static final String SCHEDULE_LIST = "schedules";
@@ -306,6 +308,9 @@ public class Constants {
     public static final String CLIENT_ID = "client_id";
     public static final String LINE_ID = "line_id";
     public static final String SELECTED_IDS ="selected_ids";
+    public static final String PROXIMITY_REMINDER_DISTANCE="PROXIMITY_REMINDER_DISTANCE";
+    public static final String NEARBY_CLIENTS="NEARBY_CLIENTS";
+
 
     public static File DIR_ROOT = new File("StreamLive"),
             DIR_CACHE = new File("cache"), DIR_HTML_CACHE = new File("html"), DIR_DOWNLOADS = new File("downloads"), DIR_MEDIA = new File("media");

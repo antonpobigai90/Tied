@@ -58,10 +58,7 @@ public class SelectLineActivity extends Activity
 
 
     public static final String SELECTED_OBJECTS="selected_ids";
-    public static final String OBJECT_TYPE="object_type";
     public static final String IS_MULTIPLE="is_multiple";
-    public static final int SELECT_CLIENT_TYPE=100;
-    public static final int SELECT_LINE_TYPE=200;
 
     public FragmentIterationListener mListener;
     ArrayList selectedObjects = new ArrayList();
@@ -82,8 +79,8 @@ public class SelectLineActivity extends Activity
     private TextView txt_title, selectedCountText;
     private View addLayout;
     View finishSelection;
+    View clearBut;
     private boolean isMultiple=false;
-    int objectType=SELECT_CLIENT_TYPE;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,9 +91,7 @@ public class SelectLineActivity extends Activity
                 isMultiple=bundle.getBoolean(IS_MULTIPLE);
 
             }catch (Exception e) {}
-            try{
-                objectType=bundle.getInt(OBJECT_TYPE);
-            }catch (Exception e) {}
+
             if(bundle!=null) {
                 selectedObjects=(ArrayList<Object>)bundle.getSerializable(SELECTED_OBJECTS);
             }
@@ -139,13 +134,12 @@ public class SelectLineActivity extends Activity
 
         selectedCountText=(TextView)findViewById(R.id.selected_count);
 
-        if( objectType==SELECT_CLIENT_TYPE) {
-            txt_title.setText("Select Client");
-            search.setHint("Search Client by Name");
-        } else {
+
             txt_title.setText("Select Line");
             search.setHint("Search Line by Name");
-        }
+        clearBut =findViewById(R.id.clear_but);
+        updateNumSelected();
+        clearBut.setOnClickListener(this);
 
         search.addTextChangedListener(new TextWatcher() {
 
@@ -201,32 +195,24 @@ public class SelectLineActivity extends Activity
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.add_button:
+                if(selectedIDs.size()==0) selectedObjects.clear();
                 finishSelection();
                 break;
             case R.id.clear_but:
-                showClearWarning();
+                MyUtils.showClearWarning(this, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        selectedIDs.clear();
+                        selectedObjects.clear();
+                        adapter.notifyDataSetChanged();
+                       // finishSelection();
+                        updateNumSelected();
+                    }
+                });
                 break;
         }
     }
-    private void showClearWarning() {
-        final AlertDialog ad= new AlertDialog.Builder(this).create();
-        ad.setMessage("This will clear all selections. Are you sure you want to proceed?");
-        ad.setButton(AlertDialog.BUTTON_POSITIVE, "YES", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                selectedIDs.clear();
-                selectedObjects.clear();
-                finishSelection();
-            }
-        });
-        ad.setButton(AlertDialog.BUTTON_NEGATIVE, "NO", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
-        ad.show();
-    }
+
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -262,6 +248,8 @@ public class SelectLineActivity extends Activity
     }
     private void updateNumSelected() {
         int size=selectedIDs.size();
+        if(size==0) clearBut.setVisibility(View.GONE);
+        else clearBut.setVisibility(View.VISIBLE);
        // selectedCountText.setText(size+" Selected");
 //        if(size==0) finishSelection.setVisibility(View.GONE);
         //  else finishSelection.setVisibility(View.VISIBLE);

@@ -26,7 +26,7 @@ import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
 import com.tied.android.tiedapp.ui.activities.schedule.CreateAppointmentActivity;
-import com.tied.android.tiedapp.ui.activities.schedule.ViewSchedule;
+import com.tied.android.tiedapp.ui.activities.schedule.ScheduleDetailsActivitiy;
 import com.tied.android.tiedapp.ui.adapters.ScheduleListAdapter;
 import com.tied.android.tiedapp.util.MyUtils;
 
@@ -119,8 +119,8 @@ public class DialogScheduleEventOptions implements View.OnClickListener {
                 break;
             case R.id.view:
                 bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
-                bundle.putString("fragment", ViewSchedule.class.getName());
-                doAction(schedule,ViewSchedule.class, bundle);
+                bundle.putString("fragment", ScheduleDetailsActivitiy.class.getName());
+                doAction(schedule,ScheduleDetailsActivitiy.class, bundle);
                 dialog.dismiss();
                 break;
         }
@@ -176,8 +176,8 @@ public class DialogScheduleEventOptions implements View.OnClickListener {
 //        client.setId(schedule.getClient_id());
 //        if(schedule.getClient_id()!=null) bundle.putSerializable(Constants.CLIENT_DATA, client);
         bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
-        bundle.putString("fragment", ViewSchedule.class.getName());
-        MyUtils.startActivity(_c,  ViewSchedule.class, bundle);
+        bundle.putString("fragment", ScheduleDetailsActivitiy.class.getName());
+        MyUtils.startActivity(_c,  ScheduleDetailsActivitiy.class, bundle);
     }
 
 //    public void editSchedule(final Schedule schedule){

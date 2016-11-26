@@ -45,9 +45,9 @@ import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.retrofits.services.TerritoryApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
+import com.tied.android.tiedapp.ui.activities.SelectTerritoryActivity;
 import com.tied.android.tiedapp.ui.activities.client.ActivityClientProfile;
 import com.tied.android.tiedapp.ui.activities.client.AddClientActivity;
-import com.tied.android.tiedapp.ui.activities.coworker.CoWorkerTerritoriesActivity;
 import com.tied.android.tiedapp.ui.activities.lines.ViewLineActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
@@ -421,7 +421,7 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
             case R.id.territory_layout:
                 bundle.putInt(Constants.SHOW_TERRITORY, 0);
                 bundle.putBoolean("single", true);
-                MyUtils.startRequestActivity(getActivity(), CoWorkerTerritoriesActivity.class, Constants.SELECT_TERRITORY, bundle);
+                MyUtils.startRequestActivity(getActivity(), SelectTerritoryActivity.class, Constants.SELECT_TERRITORY, bundle);
                 break;
             case R.id.upload_clients:
                 Intent i = new Intent(Intent.ACTION_VIEW);
@@ -605,7 +605,8 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
         RequestBody clientReq =
                 RequestBody.create(
                         MediaType.parse("multipart/form-data"), new Gson().toJson(client));
-        DialogUtils.displayProgress(getActivity());
+
+
         ClientApi clientApi = MainApplication.getInstance().getRetrofit().create(ClientApi.class);
         Call<ClientRes> response = clientApi.createClient(user.getToken(), clientReq, body);
         response.enqueue(new Callback<ClientRes>() {

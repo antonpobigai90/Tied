@@ -139,7 +139,7 @@ public class HomeAddressFragment extends Fragment implements View.OnClickListene
         if (validated()) {
             new GeocodeAsyncTask().execute();
         }else{
-            MyUtils.showAlert(getActivity(), "You must enter a valid address");
+            MyUtils.showErrorAlert(getActivity(), "You must enter a valid address");
         }
     }
 
@@ -256,7 +256,7 @@ public class HomeAddressFragment extends Fragment implements View.OnClickListene
                             }
                         } else {
                             DialogUtils.closeProgress();
-                            MyUtils.showAlert(getActivity(), ServerRes.getMessage());
+                            MyUtils.showErrorAlert(getActivity(), ServerRes.getMessage());
                         }
                     }catch (Exception e) {
                         MyUtils.showToast(getString(R.string.connection_error));

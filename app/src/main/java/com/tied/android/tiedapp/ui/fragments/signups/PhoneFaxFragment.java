@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.google.gson.Gson;
@@ -28,7 +27,6 @@ import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
-import com.tied.android.tiedapp.util.Utility;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -215,7 +213,7 @@ public class PhoneFaxFragment extends Fragment implements View.OnClickListener{
                    // alert_valid.setVisibility(View.VISIBLE);
                     //Utility.moveViewToScreenCenter( alert_valid, Utility.getResourceString(getActivity(), R.string.alert_valide_phone_number));
 
-                    MyUtils.showAlert(getActivity(), getActivity().getString(R.string.alert_valide_phone_number));
+                    MyUtils.showErrorAlert(getActivity(), getActivity().getString(R.string.alert_valide_phone_number));
                 } else {
                     continue_action();
                 }

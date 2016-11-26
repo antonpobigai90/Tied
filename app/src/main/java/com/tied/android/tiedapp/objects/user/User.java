@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
+import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Location;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
@@ -30,8 +31,10 @@ public class User implements Serializable {
     private String fax;
     private String password;
     private String avatar;
+    private String  sub_expiration_date;
    // private String avatar_uri;
 
+    private Notification notification;
     private String sale_type;
     private String co_workers;
     private String group_description;
@@ -97,6 +100,14 @@ public class User implements Serializable {
         return gson.fromJson(json, User.class);
     }
 
+    public String getSub_expiration_date() {
+        return sub_expiration_date;
+    }
+
+    public void setSub_expiration_date(String sub_expiration_date) {
+        this.sub_expiration_date = sub_expiration_date;
+    }
+
     public boolean save(Context context){
         User user = this;
         SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -122,6 +133,7 @@ public class User implements Serializable {
             //editor.putString(Constants.CURRENT_USER,this.toJSONString());
             editor.putBoolean(Constants.IS_LOGGED_IN_USER,true);
             editor.commit();
+            MainApplication.updateToken(getToken());
             MyUtils.startActivity(context, MainActivity.class);
         }
     }
@@ -132,6 +144,7 @@ public class User implements Serializable {
         prefsEditor.putBoolean(Constants.IS_LOGGED_IN_USER,false);
         prefsEditor.remove(Constants.CURRENT_USER);
         prefsEditor.commit();
+        MainApplication.clearToken();
 
         MyUtils.startActivity(context, WalkThroughActivity.class);
         try{
@@ -309,18 +322,27 @@ public class User implements Serializable {
     public void setCo_workers(String co_workers) {
         this.co_workers = co_workers;
     }
-    /*
-       public String getAvatar_uri() {
-           return avatar_uri;
-       }
 
-      public void setAvatar_uri(String avatar_uri) {
-           this.avatar_uri = avatar_uri;
-       }
-       public String getAvatarURL() {
-           return Constants.GET_AVATAR_ENDPOINT + "avatar_" + getId() + ".jpg";
-       }
-   */
+    public void setNotification(Notification notification) {
+        this.notification = notification;
+    }
+
+    public Notification getNotification() {
+        return notification;
+    }
+
+    /*
+               public String getAvatar_uri() {
+                   return avatar_uri;
+               }
+
+              public void setAvatar_uri(String avatar_uri) {
+                   this.avatar_uri = avatar_uri;
+               }
+               public String getAvatarURL() {
+                   return Constants.GET_AVATAR_ENDPOINT + "avatar_" + getId() + ".jpg";
+               }
+           */
     public String getFullName(){
         return first_name +" "+last_name;
     }

@@ -18,8 +18,6 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Territory;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
-import com.tied.android.tiedapp.ui.activities.coworker.CoWorkerLinesActivity;
-import com.tied.android.tiedapp.ui.activities.coworker.CoWorkerTerritoriesActivity;
 import com.tied.android.tiedapp.ui.fragments.client.MapAndListFragment;
 import com.tied.android.tiedapp.util.MyUtils;
 
@@ -41,15 +39,16 @@ public class ClientFilterActivity extends AppCompatActivity implements View.OnCl
     SeekBar m_seekbar;
     TextView txt_miles, txt_justme, txt_co_worker;
     TextView txt_all, txt_1w, txt_2w, txt_3w, txt_4w, txt_2m;
-    TextView txt_distance, txt_sale, txt_highest, txt_lowest;
+    TextView txt_distance, txt_sale, txt_highest, txt_lowest, txt_num_lines, txt_num_territories;
 
     String group = "all";
     int last_visited = 0;
     String order = "asc";
-    int distance = 10000;
+    int distance = MapAndListFragment.distance;
     String orderby = "distance";
     ArrayList<Territory> selectedTerritories = new ArrayList<Territory>();
     ArrayList<String> selectedLines = new ArrayList<String>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +94,9 @@ public class ClientFilterActivity extends AppCompatActivity implements View.OnCl
 
         txt_miles = (TextView) findViewById(R.id.txt_miles);
         setMiles(MapAndListFragment.distance);
+
+        txt_num_lines=(TextView) findViewById(R.id.num_lines);
+        txt_num_territories =(TextView) findViewById(R.id.num_territories);
 
         m_seekbar = (SeekBar) findViewById(R.id.seekBar);
         m_seekbar.setProgress(MapAndListFragment.distance);
@@ -142,9 +144,13 @@ public class ClientFilterActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void setMiles(int miles) {
-        DecimalFormat formatter = new DecimalFormat("#,###,###");
-        String formattedString = formatter.format(Double.valueOf(miles));
-        txt_miles.setText(formattedString + " miles");
+        if(miles==0 || miles>=MapAndListFragment.distance) {
+            txt_miles.setText("Any");
+        }else {
+            DecimalFormat formatter = new DecimalFormat("#,###,###");
+            String formattedString = formatter.format(Double.valueOf(miles));
+            txt_miles.setText(formattedString + " miles");
+        }
     }
 
     public void onClient(View v) {
@@ -399,11 +405,11 @@ public class ClientFilterActivity extends AppCompatActivity implements View.OnCl
             case R.id.territory_layout:
                 bundle.putInt(Constants.SHOW_TERRITORY, 1);
                 bundle.putBoolean("single", false);
-                MyUtils.startRequestActivity(this, CoWorkerTerritoriesActivity.class, Constants.SELECT_TERRITORY, bundle);
+                MyUtils.initiateTerritorySelector(this, selectedTerritories, true);
                 break;
             case R.id.line_layout:
                 bundle.putInt(Constants.SHOW_LINE, 1);
-                MyUtils.startRequestActivity(this, CoWorkerLinesActivity.class, Constants.SELECT_LINE, bundle);
+                MyUtils.initiateLineSelector(this, selectedLines ,true);
                 break;
         }
     }
@@ -414,8 +420,18 @@ public class ClientFilterActivity extends AppCompatActivity implements View.OnCl
 
         if (requestCode == Constants.SELECT_TERRITORY && resultCode == this.RESULT_OK) {
             selectedTerritories = (ArrayList<Territory>) (data.getSerializableExtra("selected"));
+            try {
+                txt_num_territories.setText(selectedTerritories.size()+" selected");
+            }catch (Exception e) {
+                txt_num_territories.setText( "0 selected");
+            }
         } else if (requestCode == Constants.SELECT_LINE && resultCode == this.RESULT_OK) {
             selectedLines = (ArrayList<String>) (data.getSerializableExtra("selected"));
+            try {
+                txt_num_lines.setText(selectedLines.size() + " selected");
+            }catch (Exception e) {
+                txt_num_lines.setText( "0 selected");
+            }
         }
     }
 }

@@ -71,6 +71,7 @@ public class GeneralResponse  {
     public boolean isAuthFailed() throws Exception  {
         if(response==null) response=new JSONObject(responseBody.string());
         return MyUtils.isAuthFailed(response);
+       // return getMeta().getStatus_code()==401;
     }
     public String toString() {
         return response.toString();

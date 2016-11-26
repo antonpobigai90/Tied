@@ -160,30 +160,30 @@ public class ActivityAddSales extends AppCompatActivity implements  View.OnClick
             case R.id.add_button:
                 title=titleET.getText().toString().trim();
                 if(title.isEmpty()) {
-                    MyUtils.showAlert(this, "You must enter the title for this sale");
+                    MyUtils.showErrorAlert(this, "You must enter the title for this sale");
                     return;
                 }
                 if(line==null) {
-                    MyUtils.showAlert(this, "You must choose a line");
+                    MyUtils.showErrorAlert(this, "You must choose a line");
                     return;
                 }
                 if(client==null) {
-                    MyUtils.showAlert(this, "You must choose a client");
+                    MyUtils.showErrorAlert(this, "You must choose a client");
                     return;
                 }
                 if(saleAmountET.getText().toString().trim().isEmpty() ) {
-                    MyUtils.showAlert(this, "You must enter the sales amount");
+                    MyUtils.showErrorAlert(this, "You must enter the sales amount");
                     return;
                 }
                 try {
                     salesAmount = Float.parseFloat(saleAmountET.getText().toString().trim());
 
                 }catch (Exception e) {
-                    MyUtils.showAlert(this, "You must enter a valid sales amount");
+                    MyUtils.showErrorAlert(this, "You must enter a valid sales amount");
                     return;
                 }
                 if(date_selected.getText().toString().trim().isEmpty()) {
-                    MyUtils.showAlert(this, "You must enter the date of this sales");
+                    MyUtils.showErrorAlert(this, "You must enter the date of this sales");
                     return;
                 }
 

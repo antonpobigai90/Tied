@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.MainApplication;
@@ -187,7 +186,7 @@ public class PictureFragment extends Fragment implements View.OnClickListener {
                             }
                         } else {
                             DialogUtils.closeProgress();
-                           MyUtils.showAlert(getActivity(), ServerRes.getMessage());
+                           MyUtils.showErrorAlert(getActivity(), ServerRes.getMessage());
                         }
                     }catch (Exception e) {
                         MyUtils.showToast(getString(R.string.connection_error));

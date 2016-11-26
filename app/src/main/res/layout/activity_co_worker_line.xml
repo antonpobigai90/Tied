@@ -36,7 +36,24 @@
             android:textSize="18dp"
             android:textStyle="bold"
             android:layout_centerInParent="true" />
+        <LinearLayout
+                android:id="@+id/clear_but"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_toLeftOf="@+id/add_button"
+                android:layout_centerVertical="true"
+                android:orientation="horizontal">
 
+            <TextView
+                    android:layout_alignParentTop="true"
+                    android:padding="@dimen/action_bar_icon_padding"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/action_bar_icon_height"
+                    android:text="Clear"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+        </LinearLayout>
         <LinearLayout
             android:id="@+id/add_button"
             android:layout_width="wrap_content"

@@ -43,6 +43,7 @@ import com.squareup.picasso.Transformation;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
+import com.tied.android.tiedapp.customs.MyStringAsyncTask;
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.client.ClientFilter;
@@ -80,7 +81,6 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
     GoogleMap googleMap;
     ImageView img_list_clients;
     Bundle bundle;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_client_map_layout, container, false);
@@ -129,6 +129,13 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
             googleMap.clear();
         }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        MainActivity.getInstance().refresh.setEnabled(false);
+    }
+
     @Override
     public void onLowMemory() {
         super.onLowMemory();
@@ -245,38 +252,29 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
 
             }
         });*/
+        Coordinate currentLocation= new Coordinate(39.9001126, -75.2890745);//clientFilter.getCoordinate();
+        LatLng loc=new LatLng(currentLocation.getLat(), currentLocation.getLon());
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 11.5f));
+        Marker marker=googleMap.addMarker(new MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
+                .position(loc));
+        marker.setZIndex(10000.0f);
+        //marker.showInfoWindow();
+        googleMap.animateCamera(CameraUpdateFactory.newLatLng(loc));
+        googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+            public void onMapLoaded() {
+                //do stuff here
+                loadClientsFilter(MapAndListFragment.getInstance().clientFilter);
+            }
+        });
 
-                loadClients(googleMap);
     }
 
-    public void loadClientsFilter(String search_name) {
-        ClientFilter clientFilter = new ClientFilter();
-        clientFilter.setName(search_name);
-        clientFilter.setDistance(MapAndListFragment.distance);
-        clientFilter.setUnit("mi");
-        clientFilter.setGroup(MapAndListFragment.group);
-        clientFilter.setLast_visited(MapAndListFragment.last_visited);
-        clientFilter.setOrder_by(MapAndListFragment.orderby);
-        clientFilter.setOrder(MapAndListFragment.order);
-        if (MapAndListFragment.selectedTerritories.size() == 0)
-            clientFilter.setTerritories(null);
-        else
-            clientFilter.setTerritories(MapAndListFragment.selectedTerritories);
-
-        if (MapAndListFragment.selectedLines.size() == 0)
-            clientFilter.setLines(null);
-        else
-            clientFilter.setLines(MapAndListFragment.selectedLines);
-        clientFilter.setPage_number(1);
-
-        Coordinate coordinate = MyUtils.getCurrentLocation();
-        if (coordinate == null) {
-            coordinate = user.getOffice_address().getCoordinate();
-        }
-        clientFilter.setCoordinate(coordinate);
-
+    public int pageNumber=1;
+    private int numPages=1;
+    public void loadClientsFilter(final ClientFilter clientFilter) {
+        if(clientFilter.getDistance()==MapAndListFragment.distance) clientFilter.setDistance(0);
         ClientApi clientApi = MainApplication.createService(ClientApi.class);
-        Call<ClientRes> response = clientApi.getClientsFilter(user.getId(), clientFilter);
+        Call<ClientRes> response = clientApi.getClientsFilter(user.getId(), pageNumber, clientFilter);
         response.enqueue(new Callback<ClientRes>() {
             @Override
             public void onResponse(Call<ClientRes> call, Response<ClientRes> resResponse) {
@@ -287,46 +285,74 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
                 if (clientRes.isAuthFailed()) {
                     User.LogOut(getActivity().getApplicationContext());
                 } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200) {
-                    clients.clear();
+                    numPages=clientRes.get_meta().getPage_count();
+                   if(pageNumber==1) {
+                       clients.clear();
+                       googleMap.clear();
+                   }
                     clients.addAll(clientRes.getClients());
-                    googleMap.clear();
+
                     if(clients.size()==0) {
                         MyUtils.showToast("No clients found");
                         return;
                     }
-                    Coordinate currentLocation=MyUtils.getCurrentLocation();
+                   /* Coordinate currentLocation= new Coordinate(39.9001126, -75.2890745);//clientFilter.getCoordinate();
                     LatLng loc=new LatLng(currentLocation.getLat(), currentLocation.getLon());
-                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 5.0f));
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 10.0f));
                     googleMap.addMarker(new MarkerOptions()
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
                             .position(loc));
                     googleMap.animateCamera(CameraUpdateFactory.newLatLng(loc));
-
+*/
 
                     boolean centered = false;
-                    int i = -1;
-                    for (Client client : clients) {
 
-                        Logger.write(client.getLogo());
-                        try {
+                    new MyStringAsyncTask() {
+                        @Override
+                        protected String doInBackground(Void... params) {
+                            int i = -1;
+                            for (final Client client : clients) {
 
-                            final LatLng latLng = new LatLng(client.getAddress().getCoordinate().getLat(),
-                                    client.getAddress().getCoordinate().getLon());
-                            i++;
+                                Logger.write(client.getLogo());
+                                try {
 
-                            View marker = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.custom_marker_layout, null);
-                            ImageView pic = (ImageView) marker.findViewById(R.id.pic);
-                            MyUtils.Picasso.displayImage(client.getLogo(), pic);
+                                    final LatLng latLng = new LatLng(client.getAddress().getCoordinate().getLat(),
+                                            client.getAddress().getCoordinate().getLon());
+                                    i++;
+                                    final int num=i;
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            View marker = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.custom_marker_layout, null);
 
-                            Marker nMarker= googleMap.addMarker(new MarkerOptions().anchor(0.5f, 1.5f).icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(getActivity(), marker)))
-                                    .position(latLng));
-                            nMarker.setTag(i);
+                                            ImageView pic = (ImageView) marker.findViewById(R.id.pic);
+                                            MyUtils.Picasso.displayImage(client.getLogo(), pic);
 
-                        }catch (NullPointerException npe) {
-                            continue;
+                                            Marker nMarker= googleMap.addMarker(new MarkerOptions().anchor(0.5f, 1.5f).icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(getActivity(), marker)))
+                                                    .position(latLng));
+                                            nMarker.setTag(num);
+                                        }
+                                    });
+
+
+                                }catch (NullPointerException npe) {
+                                    continue;
+                                }
+                                try{
+                                    Thread.sleep(50);
+                                }catch (Exception e) {
+
+                                }
+
+                            }
+                            if(pageNumber<numPages) {
+                                pageNumber++;
+                                loadClientsFilter(clientFilter);
+                            }
+                            return super.doInBackground(params);
                         }
+                    }.execute();
 
-                    }
 
                 } else {
                     Logger.write(clientRes.getMessage());
@@ -342,85 +368,11 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
             }
         });
     }
-
-
-    public void loadClients(final GoogleMap googleMap) {
-
-        ClientLocation clientLocation = new ClientLocation();
-        clientLocation.setDistance("100000" + MyUtils.getPreferredDistanceUnit());
-        Coordinate coordinate = MyUtils.getCurrentLocation();
-        if (coordinate == null) {
-            coordinate = user.getOffice_address().getCoordinate();
-        }
-        clientLocation.setCoordinate(coordinate);
-
-        ClientApi clientApi = MainApplication.createService(ClientApi.class);
-        Call<ClientRes> response = clientApi.getClientsByLocation(user.getId(), clientLocation);
-        response.enqueue(new Callback<ClientRes>() {
-            @Override
-            public void onResponse(Call<ClientRes> call, Response<ClientRes> resResponse) {
-                if (this == null) return;
-                DialogUtils.closeProgress();
-                ClientRes clientRes = resResponse.body();
-                Logger.write(clientRes.toString());
-                if (clientRes.isAuthFailed()) {
-                    User.LogOut(getActivity().getApplicationContext());
-                } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200) {
-                    clients.clear();
-                    clients.addAll(clientRes.getClients());
-                    googleMap.clear();
-                    if(clients.size()==0) {
-                        MyUtils.showToast("No clients found");
-                        return;
-                    }
-                    Coordinate currentLocation=MyUtils.getCurrentLocation();
-                    LatLng loc=new LatLng(currentLocation.getLat(), currentLocation.getLon());
-                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 5.0f));
-                    googleMap.addMarker(new MarkerOptions()
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
-                            .position(loc));
-                    googleMap.animateCamera(CameraUpdateFactory.newLatLng(loc));
-
-
-                    boolean centered = false;
-                    int i = -1;
-                    for (Client client : clients) {
-
-                        Logger.write(client.getLogo());
-                        try {
-
-                            final LatLng latLng = new LatLng(client.getAddress().getCoordinate().getLat(),
-                                    client.getAddress().getCoordinate().getLon());
-                            i++;
-
-                            View marker = ((LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.custom_marker_layout, null);
-                            ImageView pic = (ImageView) marker.findViewById(R.id.pic);
-                            MyUtils.Picasso.displayImage(client.getLogo(), pic);
-
-                            Marker nMarker= googleMap.addMarker(new MarkerOptions().anchor(0.5f, 1.5f).icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(getActivity(), marker)))
-                                    .position(latLng));
-                            nMarker.setTag(i);
-
-                        }catch (NullPointerException npe) {
-                            continue;
-                        }
-
-                    }
-
-                } else {
-                    Logger.write(clientRes.getMessage());
-                    MyUtils.showToast(getString(R.string.connection_error));
-                }
-                // Log.d(TAG + " onResponse", resResponse.body().toString());
-            }
-
-            @Override
-            public void onFailure(Call<ClientRes> call, Throwable t) {
-                Log.d(TAG + "onFailure", t.toString());
-                DialogUtils.closeProgress();
-            }
-        });
+    public void loadClientsFilter(ClientFilter clientFilter, int pageNumber) {
+        this.pageNumber=pageNumber;
+        loadClientsFilter(clientFilter);
     }
+
 
     // Convert a view to bitmap
     public static Bitmap createDrawableFromView(Context context, View view) {
@@ -521,6 +473,18 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
         }
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        MainActivity.getInstance().refresh.setEnabled(true);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MainActivity.getInstance().refresh.setEnabled(true);
+    }
+
     public static class CircleTransform implements Transformation {
         @Override
         public Bitmap transform(Bitmap source) {
@@ -562,9 +526,9 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
 
         if (requestCode == Constants.ClientFilter && resultCode == Activity.RESULT_OK) {
             if (MapAndListFragment.isClientFilter) {
-                loadClientsFilter(MapAndListFragment.search_name);
+                //loadClientsFilter(MapAndListFragment.search_name);
             } else if (MapAndListFragment.isClear) {
-                loadClients(googleMap);
+                //loadClients(googleMap);
             }
         }
     }

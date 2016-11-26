@@ -1,6 +1,5 @@
 package com.tied.android.tiedapp.ui.fragments.notification;
 
-import android.opengl.Visibility;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,24 +12,19 @@ import android.view.WindowManager;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 
-import com.google.gson.Gson;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Notification;
-import com.tied.android.tiedapp.objects.Visit;
 import com.tied.android.tiedapp.objects._Meta;
-import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.NotificationApi;
-import com.tied.android.tiedapp.retrofits.services.VisitApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.client.ActivityClientProfile;
 import com.tied.android.tiedapp.ui.activities.coworker.ViewCoWorkerActivity;
-import com.tied.android.tiedapp.ui.activities.schedule.ViewSchedule;
+import com.tied.android.tiedapp.ui.activities.schedule.ScheduleDetailsActivitiy;
 import com.tied.android.tiedapp.ui.activities.visits.ActivityVisitDetails;
-import com.tied.android.tiedapp.ui.activities.visits.ActivityVisits;
 import com.tied.android.tiedapp.ui.adapters.ExpendableNotificationListAdapter;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.Logger;
@@ -39,13 +33,9 @@ import com.tied.android.tiedapp.util.MyUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -138,7 +128,7 @@ View view;
                         break;
                     case "schedule":
                         bundle.putString("schedule_id", model.getObject_id());
-                        MyUtils.startActivity(getActivity(), ViewSchedule.class, bundle);
+                        MyUtils.startActivity(getActivity(), ScheduleDetailsActivitiy.class, bundle);
                         break;
                 }
                 return false;

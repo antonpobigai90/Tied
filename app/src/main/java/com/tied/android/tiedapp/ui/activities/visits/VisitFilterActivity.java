@@ -16,20 +16,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.objects.Territory;
-import com.tied.android.tiedapp.objects.Visit;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.objects.visit.VisitFilter;
-import com.tied.android.tiedapp.ui.activities.MainActivity;
-import com.tied.android.tiedapp.ui.activities.coworker.CoWorkerLinesActivity;
-import com.tied.android.tiedapp.ui.activities.coworker.CoWorkerTerritoriesActivity;
 import com.tied.android.tiedapp.ui.fragments.client.MapAndListFragment;
 import com.tied.android.tiedapp.util.HelperMethods;
 import com.tied.android.tiedapp.util.Logger;
@@ -265,13 +259,13 @@ public class VisitFilterActivity extends AppCompatActivity implements View.OnCli
                 break;
             case R.id.txt_apply:
                 if (client == null) {
-                   // MyUtils.showAlert(this, "please select a client");
+                   // MyUtils.showErrorAlert(this, "please select a client");
                    // return;
                 } else if (txt_month.getText().toString().isEmpty()) {
-                    MyUtils.showAlert(this, "please select a month");
+                    MyUtils.showErrorAlert(this, "please select a month");
                     return;
                 } else if (txt_year.getText().toString().isEmpty()) {
-                    MyUtils.showAlert(this, "please select a year");
+                    MyUtils.showErrorAlert(this, "please select a year");
                     return;
                 }
 

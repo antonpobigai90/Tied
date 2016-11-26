@@ -100,7 +100,7 @@ public class LineClientVisitsActivity extends AppCompatActivity implements View.
 
     private void loadVisits(VisitFilter visitFilter) {
         final VisitApi visitApi =  MainApplication.createService(VisitApi.class);
-        Call<ResponseBody> response = visitApi.getClientVisits(client.getId(), visitFilter);
+        Call<ResponseBody> response = visitApi.getClientVisits(client.getId(), 1, visitFilter);
         response.enqueue(new retrofit2.Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {

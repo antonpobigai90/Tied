@@ -16,7 +16,6 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.objects.responses.LoginUser;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignInActivity;
 import com.tied.android.tiedapp.ui.activities.signups.SignUpActivity;
 import com.tied.android.tiedapp.ui.activities.signups.WalkThroughActivity;
@@ -80,7 +79,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
     public void initComponent(View view){
 
         context = getActivity();
-      //  MyUtils.showAlert(view, "Hello Femi", MyUtils.ERROR_TOAST);
+      //  MyUtils.showErrorAlert(view, "Hello Femi", MyUtils.ERROR_TOAST);
 
         email = (EditText) view.findViewById(R.id.email);
         password = (EditText) view.findViewById(R.id.password);
@@ -130,7 +129,7 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                         Logger.write(LoginUser.getMessage());
                         DialogUtils.closeProgress();
                        // Toast.makeText(getActivity(), LoginUser.getMessage(), Toast.LENGTH_LONG).show();
-                        MyUtils.showAlert(getActivity(), LoginUser.getMessage());
+                        MyUtils.showErrorAlert(getActivity(), LoginUser.getMessage());
                     }
 
                 }catch (Exception e) {
@@ -156,10 +155,10 @@ public class SignInFragment extends Fragment implements View.OnClickListener{
                 if (!Utility.isEmailValid(email.getText().toString())) {
                     //alert_valid.setVisibility(View.VISIBLE);
                    // Utility.moveViewToScreenCenter( alert_valid, Utility.getResourceString(context, R.string.alert_valide_email));
-                    MyUtils.showAlert(getActivity(), Utility.getResourceString(context, R.string.alert_valide_email));
+                    MyUtils.showErrorAlert(getActivity(), Utility.getResourceString(context, R.string.alert_valide_email));
                 } else if (password.getText().length() == 0) {
                    // alert_valid.setVisibility(View.VISIBLE);
-                    MyUtils.showAlert(getActivity(), Utility.getResourceString(context, R.string.alert_valide_password));
+                    MyUtils.showErrorAlert(getActivity(), Utility.getResourceString(context, R.string.alert_valide_password));
                    // Utility.moveViewToScreenCenter( alert_valid, Utility.getResourceString(context, R.string.alert_valide_password));
                 } else {
                     continue_action();
