@@ -12,7 +12,7 @@ import java.util.Date;
 
 public abstract class Logger {
 	//static boolean debugMode=true;
-	public static boolean debugMode=true;
+	public static boolean debugMode=false;
 	public static void write(String fileName, String text) {
        // if(text.contains("ball")) Log.e("femi", ""+Integer.parseInt(text));
 		//else

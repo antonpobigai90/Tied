@@ -21,6 +21,7 @@ import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Line;
 import com.tied.android.tiedapp.objects.client.Client;
+import com.tied.android.tiedapp.objects.client.ClientFilter;
 import com.tied.android.tiedapp.objects.client.ClientLocation;
 import com.tied.android.tiedapp.objects.responses.ClientRes;
 import com.tied.android.tiedapp.objects.user.User;
@@ -85,6 +86,7 @@ public class SelectClientActivity extends Activity
     private boolean isMultiple=false;
     private String selectedIds;
     int objectType=SELECT_CLIENT_TYPE;
+    View clearBut;
 
 
     @Override
@@ -121,13 +123,15 @@ public class SelectClientActivity extends Activity
         if(!isMultiple) {
             addLayout.setVisibility(View.GONE);
         }
+        clearBut = findViewById(R.id.clear_but);
+        clearBut.setOnClickListener(this);
         finishSelection=findViewById(R.id.add_button);
         finishSelection.setVisibility(View.GONE);
         finishSelection.setOnClickListener(this);
         selectedCountText=(TextView)findViewById(R.id.selected_count);
 
         if( objectType==SELECT_CLIENT_TYPE) {
-            txt_title.setText("Select Client");
+            //txt_title.setText("Select Client");
             search.setHint("Search Client by Name");
         } else {
             txt_title.setText("Select Line");
@@ -206,6 +210,18 @@ public class SelectClientActivity extends Activity
             case R.id.add_button:
                 finishSelection();
                 break;
+            case R.id.clear_but:
+                MyUtils.showClearWarning(this, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        selectedIDs.clear();
+                        selectedObjects.clear();
+                        adapter.notifyDataSetChanged();
+                        // finishSelection();
+                        updateNumSelected();
+                    }
+                });
+                break;
         }
     }
     private void showClearWarning() {
@@ -277,8 +293,14 @@ public class SelectClientActivity extends Activity
     private void updateNumSelected() {
         int size=selectedIDs.size();
         selectedCountText.setText(size+" Selected");
-        if(size==0) finishSelection.setVisibility(View.GONE);
-        else finishSelection.setVisibility(View.VISIBLE);
+        if(size==0) {
+            finishSelection.setVisibility(View.GONE);
+            clearBut.setVisibility(View.GONE);
+        }
+        else{
+            finishSelection.setVisibility(View.VISIBLE);
+            clearBut.setVisibility(View.VISIBLE);
+        }
     }
     private void finishSelection() {
         Intent intent = new Intent();
@@ -309,7 +331,7 @@ public class SelectClientActivity extends Activity
         clientLocation.setCoordinate(coordinate);
 
         ClientApi clientApi =  MainApplication.createService(ClientApi.class, user.getToken());
-        Call<ClientRes> response = clientApi.getClientsByLocation(user.getId(), clientLocation);
+        Call<ClientRes> response = clientApi.getClientsFilter(user.getId(), 1, new ClientFilter());
         response.enqueue(new Callback<ClientRes>() {
             @Override
             public void onResponse(Call<ClientRes> call, Response<ClientRes> resResponse) {

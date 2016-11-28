@@ -301,8 +301,8 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == Constants.SELECT_TERRITORY && resultCode == Activity.RESULT_OK) {
-
-            selectedTerritories = (ArrayList<Territory>) (data.getSerializableExtra("selected"));
+            selectedTerritories.clear();
+            selectedTerritories.add( (Territory) (data.getSerializableExtra("selected")));
 
 
             txt_territory.setText(selectedTerritories.get(0).getCounty() + ", " + selectedTerritories.get(0).getState());

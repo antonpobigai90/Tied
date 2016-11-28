@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -154,7 +155,16 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
             MyUtils.Picasso.displayImage(logo, avatar);
            totalSales.setText(MyUtils.moneyFormat(client.getTotal_revenue()));
             String lastVisited=client.getLast_visited();
-            lastVisitedTV.setText("Last Visited: "+ (lastVisited==null || lastVisited.isEmpty()?"Never":HelperMethods.getDateDifferenceWithToday(lastVisited)));
+            long epoch=0;
+            try {
+               epoch = MyUtils.parseDate(lastVisited).getTime();
+            }catch (Exception e) {
+
+            }
+
+            String timePassedString = ""+ DateUtils.getRelativeTimeSpanString(epoch, System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
+
+            lastVisitedTV.setText("Last Visited: "+ (lastVisited==null || lastVisited.isEmpty()?"Never":timePassedString));
             addressTV.setText(client.getAddress().getLocationAddress());
             //setTotalRevenue();
             setVisibile();
@@ -188,23 +198,32 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
                 color = this.getResources().getColor(R.color.green_color);
                 //DialogYesNo alert_call = new DialogYesNo(getActivity(),"CALL CLIENT","Are you sure want to call this client?. Call charges may apply","YES, CALL!",color,1);
                // alert_call.showDialog();
-                Intent i = new Intent(Intent.ACTION_SEND);
-                i.setType("message/rfc822");
-                i.putExtra(Intent.EXTRA_EMAIL  , new String[]{client.getEmail()});
-                i.putExtra(Intent.EXTRA_SUBJECT, "");
-                i.putExtra(Intent.EXTRA_TEXT   , "");
                 try {
-                    startActivity(Intent.createChooser(i, "Send mail..."));
-                } catch (android.content.ActivityNotFoundException ex) {
-                 MyUtils.showToast("There are no email clients installed.");
+                    Intent i = new Intent(Intent.ACTION_SEND);
+                    i.setType("message/rfc822");
+                    i.putExtra(Intent.EXTRA_EMAIL, new String[]{client.getEmail()});
+                    i.putExtra(Intent.EXTRA_SUBJECT, "");
+                    i.putExtra(Intent.EXTRA_TEXT, "");
+
+                    try {
+                        startActivity(Intent.createChooser(i, "Send mail..."));
+                    } catch (android.content.ActivityNotFoundException ex) {
+                        MyUtils.showToast("There are no email clients installed.");
+                    }
+                }catch(Exception e) {
+                    MyUtils.showErrorAlert(getActivity(), "Client's email not provided");
                 }
                 break;
             case R.id.icon_call:
                 color = this.getResources().getColor(R.color.green_color);
-                Logger.write("caling...................");
-                String number = "tel:" + client.getPhone().trim();
-                Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse(number));
-                startActivity(callIntent);
+                try {
+                    Logger.write("caling...................");
+                    String number = "tel:" + client.getPhone().trim();
+                    Intent callIntent = new Intent(Intent.ACTION_CALL, Uri.parse(number));
+                    startActivity(callIntent);
+                }catch (Exception e) {
+                    MyUtils.showErrorAlert(getActivity(), "Client's phone number not provided");
+                }
                 break;
             case R.id.img_edit:
                 MyUtils.startRequestActivity(getActivity(), AddClientActivity.class, Constants.EDIT_CLIENT, bundle);

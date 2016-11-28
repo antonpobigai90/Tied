@@ -54,14 +54,14 @@ public interface ClientApi {
     Call<Count> getClientsCount(@Header(Constants.TOKEN_HEADER) String token);
 
     @POST(Constants.USER_GE0_CLIENTS)
-    Call<ClientRes> getClientsByLocation(@Path("user_id") String user_id, @Body ClientLocation clientLocation);
+    Call<ClientRes> getClientsByLocation(@Path("user_id") String user_id, @Path("page_number") int pageNumber, @Body ClientLocation clientLocation);
 
 
 
     @POST(Constants.LINE_CLIENTS)
     Call<ClientRes> getLineClients(@Header(Constants.TOKEN_HEADER) String token,
                                    @Path("line_id") String line_id,
-                                   @Path("page_number") int pageNumber,
+                                   @Path("page_number")int page_number,
                                    @Body ClientLocation clientLocation);
 
     @POST(Constants.USER_GE0_CLIENTS)

@@ -212,9 +212,12 @@ public abstract class MyUtils {
      * @param b           Bundle :bundle data to be passed
      */
     public static void startActivity(Context a, Class newActivity, Bundle b) {
+        startActivity(a, newActivity,  b, false);
+    }
+    public static void startActivity(Context a, Class newActivity, Bundle b, boolean newTask) {
         Intent i = new Intent(a, newActivity);
 
-        if (b == null) {
+        if (b == null || newTask) {
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             a.startActivity(i);
         } else {
@@ -224,7 +227,6 @@ public abstract class MyUtils {
             );
         }
     }
-
     public static void setFocus(View view) {
         view.setFocusable(true);
         view.requestFocus();
@@ -883,7 +885,7 @@ public abstract class MyUtils {
         clientLocation.setCoordinate(coordinate);
 
         final ClientApi clientApi =  MainApplication.createService(ClientApi.class, user.getToken());
-        Call<ClientRes> response = clientApi.getClientsByLocation(user.getId(), clientLocation);
+        Call<ClientRes> response = clientApi.getClientsByLocation(user.getId(), 1, clientLocation);
         response.enqueue(new retrofit2.Callback<ClientRes>() {
             @Override
             public void onResponse(Call<ClientRes> call, Response<ClientRes> resResponse) {
@@ -1235,7 +1237,11 @@ public abstract class MyUtils {
         return new Pair<String,String>(sdf.format(monday), sdf.format(sunday));
     }
     public static String getClientName(Client client) {
-        return (client.getCompany()==null || client.getCompany().isEmpty())?client.getFull_name():client.getCompany();
+        try {
+            return (client.getCompany() == null || client.getCompany().isEmpty()) ? client.getFull_name() : client.getCompany();
+        }catch (Exception e) {
+            return "<Client>";
+        }
     }
 
     public static String getDate(long timestamp) {

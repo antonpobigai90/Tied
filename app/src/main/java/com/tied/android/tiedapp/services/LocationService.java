@@ -30,6 +30,7 @@ import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.client.ActivityClientProfile;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
+import com.tied.android.tiedapp.util.HelperMethods;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 import org.json.JSONArray;
@@ -191,7 +192,7 @@ public class LocationService extends Service {
 
                 Log.i("CURRENT LOCATION", co.toString());
                 MyUtils.setCurrentLocation(co);
-                if(new Date().getTime()-lastChecked>(5*60*1000)) {
+                if(new Date().getTime()-lastChecked>(0.1*60*1000)) {
                     User user=MyUtils.getUserLoggedIn();
                     if(user.getNotification().getProximity().getPush()) {//if he wants proximity checks
                         doProximityCheck(user, co);
@@ -253,9 +254,8 @@ public class LocationService extends Service {
         {
             //Toast.makeText( getApplicationContext(), "Gps Disabled", Toast.LENGTH_SHORT ).show();
         }
-
-        void createNotification(Client client, Coordinate coordinate) {
-           /* SharedPreferences sp=MyUtils.getSharedPreferences();
+        private void loadFoundClients() {
+            SharedPreferences sp=MyUtils.getSharedPreferences();
             try {
                 JSONArray ja = new JSONArray(
                         sp.getString(Constants.NEARBY_CLIENTS, new JSONArray().toString())
@@ -267,7 +267,36 @@ public class LocationService extends Service {
             }catch (JSONException je) {
                 foundClients=new ArrayList<>();
             }
-*/
+        }
+        private final String PROXIMITY_IS_TODAYS_DATE="proximity_is_newday";
+        String savedDate=null;
+        private boolean isNewDay() {
+            if(savedDate==null) {
+                SharedPreferences sp = MyUtils.getSharedPreferences();
+                sp.getString(PROXIMITY_IS_TODAYS_DATE, "");
+            }
+            boolean isNew= !(HelperMethods.getTodayDate().equalsIgnoreCase(savedDate)) ;
+            if(isNew) {
+                SharedPreferences sp = MyUtils.getSharedPreferences();
+                SharedPreferences.Editor e=sp.edit();
+                e.putString(PROXIMITY_IS_TODAYS_DATE,  HelperMethods.getTodayDate());
+                e.apply();
+            }
+            return isNew;
+        }
+        private void saveFoundClients() {
+            JSONArray ja=new JSONArray();
+            for (int j=0; j<foundClients.size(); j++) {
+                ja.put(foundClients.get(j));
+            }
+            SharedPreferences sp=MyUtils.getSharedPreferences();
+            SharedPreferences.Editor e=sp.edit();
+            e.putString(Constants.NEARBY_CLIENTS, ja.toString());
+            e.apply();
+        }
+        void createNotification(Client client, Coordinate coordinate) {
+
+            if(foundClients==null || foundClients.size()==0) loadFoundClients();
             if(foundClients.contains(client.getId())) return;
            if(foundClients.size()<5) {
                 foundClients.add(client.getId());
@@ -275,15 +304,10 @@ public class LocationService extends Service {
                foundClients.remove(0);
                 foundClients.add(client.getId());
             }
-          /*  JSONArray ja=new JSONArray();
-            for (int j=0; j<foundClients.size(); j++) {
-               ja.put(foundClients.get(j));
-            }
-            SharedPreferences.Editor e=sp.edit();
-            e.putString(Constants.NEARBY_CLIENTS, ja.toString());
-            e.apply();
+            saveFoundClients();
+
           //  i++;
-          */
+
            Logger.write(foundClients.toString());
             String clientName=MyUtils.getClientName(client);
             NotificationCompat.Builder mBuilder =

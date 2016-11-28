@@ -768,20 +768,20 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                                         MainActivity.getInstance().launchFragment(Constants.Profile, bundle);
                                     } else {
                                         bundle.putString("user_id", model.getObject_id());
-                                        MyUtils.startActivity(context, ViewCoWorkerActivity.class, bundle);
+                                        MyUtils.startActivity(context, ViewCoWorkerActivity.class, bundle, true);
                                     }
                                     break;
                                 case "visit":
                                     bundle.putString("visit_id", model.getObject_id());
-                                    MyUtils.startActivity(context, ActivityVisitDetails.class, bundle);
+                                    MyUtils.startActivity(context, ActivityVisitDetails.class, bundle, true);
                                     break;
                                 case "client":
                                     bundle.putString("client_id", model.getObject_id());
-                                    MyUtils.startActivity(context, ActivityClientProfile.class, bundle);
+                                    MyUtils.startActivity(context, ActivityClientProfile.class, bundle, true);
                                     break;
                                 case "schedule":
                                     bundle.putString("schedule_id", model.getObject_id());
-                                    MyUtils.startActivity(context, ScheduleDetailsActivitiy.class, bundle);
+                                    MyUtils.startActivity(context, ScheduleDetailsActivitiy.class, bundle, true);
                                     break;
                             }
                         }
@@ -852,7 +852,11 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                           getUIHandler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    MainActivity.getInstance().showNumAlerts(numNewAlert);
+                                    try {
+                                        MainActivity.getInstance().showNumAlerts(numNewAlert);
+                                    }catch (NullPointerException npe) {
+
+                                    }
                                 }
                             }, 500);
                         } catch (Exception e) {
@@ -874,7 +878,11 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
             notificationCircle.setVisibility(View.VISIBLE);
         }else{
             notificationCircle.setVisibility(View.GONE);
-            ShortcutBadger.applyCount(MainApplication.getInstance().getApplicationContext(), 0);
+        try {
+            ShortcutBadger.applyCount(this, 0);
+        }catch(Exception e) {
+
+        }
         }
         numNotifications.setText(""+numAlerts);
     }

@@ -290,7 +290,8 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
                        clients.clear();
                        googleMap.clear();
                    }
-                    clients.addAll(clientRes.getClients());
+                    final ArrayList<Client> newClients= clientRes.getClients();
+                    clients.addAll(newClients);
 
                     if(clients.size()==0) {
                         MyUtils.showToast("No clients found");
@@ -311,7 +312,7 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
                         @Override
                         protected String doInBackground(Void... params) {
                             int i = -1;
-                            for (final Client client : clients) {
+                            for (final Client client : newClients) {
 
                                 Logger.write(client.getLogo());
                                 try {
