@@ -37,7 +37,7 @@
                 style="@style/ActionBarIcon"
                 android:layout_gravity="center"
                 android:layout_marginLeft="0dp"
-                android:src="@drawable/btn_back_arrow" />
+                android:src="@drawable/btn_close" />
 
         </LinearLayout>
     </RelativeLayout>
@@ -69,6 +69,8 @@
             android:backgroundTint="@android:color/transparent"
             android:hint="Enter the name of the line"
             android:text=""
+            android:imeOptions="actionNext"
+            android:singleLine="true"
             android:padding="5dp"
             android:textColorHint="@color/light_gray"
             style="@style/EditTextStyle"
@@ -104,7 +106,7 @@
             style="@style/EditTextStyle"
             android:textColorHint="@color/light_gray"
             android:padding="5dp"
-
+            android:imeOptions="actionDone"
             android:text=""
             android:textColor="@color/grey"
             />

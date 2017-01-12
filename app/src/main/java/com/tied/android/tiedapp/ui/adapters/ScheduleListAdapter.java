@@ -33,7 +33,9 @@ import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.HelperMethods;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.tied.android.tiedapp.util.MyUtils;
 import retrofit.Callback;
@@ -54,8 +56,9 @@ public class ScheduleListAdapter extends BaseAdapter{
     Bundle bundle;
     private Client client;
     User currentUser;
+    Map<String, Client> clients=new HashMap<>();
 
-    public ScheduleListAdapter(List<ScheduleDataModel> schedules, Activity context, Bundle bundle) {
+    public ScheduleListAdapter(List<ScheduleDataModel> schedules, Map<String, Client> clients, Activity context, Bundle bundle) {
         _data = schedules;
         _c = context;
         this.bundle = bundle;
@@ -63,6 +66,16 @@ public class ScheduleListAdapter extends BaseAdapter{
             filterForClient();
         }
         currentUser= MyUtils.getUserLoggedIn();
+        this.clients=clients;
+    }
+    public void addClients(Map<String, Client> clis) {
+        //Map tmp = new HashMap(clis);
+       // tmp.keySet().removeAll(target.keySet());
+        this.clients.putAll(clis);
+
+    }
+    public void clearClients() {
+        this.clients.clear();
     }
 
     public void filterForClient(){
@@ -168,9 +181,13 @@ public class ScheduleListAdapter extends BaseAdapter{
                 linearLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Bundle bundle=new Bundle();
                         bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
                         bundle.putString("fragment", ScheduleDetailsActivitiy.class.getName());
-                        doAction(schedule,ScheduleDetailsActivitiy.class, bundle);
+                        //doAction(schedule,ScheduleDetailsActivitiy.class, bundle);
+                            bundle.putSerializable(Constants.CLIENT_DATA, clients.get(schedule.getClient_id()));
+                        bundle.putSerializable(Constants.SCHEDULE_DATA, schedule);
+                        MyUtils.startRequestActivity(_c, ScheduleDetailsActivitiy.class, Constants.ViewSchedule, bundle);
 
 //                        DialogScheduleEventOptions alert = new DialogScheduleEventOptions();
 //                        alert.showDialog(schedule, ScheduleListAdapter.this, _c, bundle);

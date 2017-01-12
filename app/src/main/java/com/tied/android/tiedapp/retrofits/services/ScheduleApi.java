@@ -7,6 +7,7 @@ import com.tied.android.tiedapp.objects.responses.ScheduleRes;
 import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.schedule.ScheduleDate;
 
+import com.tied.android.tiedapp.objects.schedule.ScheduleFilter;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -31,8 +32,8 @@ public interface ScheduleApi {
                                      @Path("schedule_id") String schedule_id,
                                      @Body Schedule schedule);
 
-    @GET(Constants.USER_SCHEDULE)
-    Call<ScheduleRes> getSchedule(@Path("user_id") String user_id, @Path("page_number") int page_number);
+    @POST(Constants.USER_SCHEDULE)
+    Call<ScheduleRes> getSchedule(@Path("user_id") String user_id, @Path("page_number") int page_number, @Body ScheduleFilter filter);
 
     @GET(Constants.CLIENT_SCHEDULES)
     Call<ScheduleRes> getClientSchedule(@Path("client_id") String client_id, @Path("page_number") int page_number);

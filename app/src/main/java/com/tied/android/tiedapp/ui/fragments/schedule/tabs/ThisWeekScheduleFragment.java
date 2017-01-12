@@ -15,7 +15,7 @@ import java.util.Calendar;
  */
 public class ThisWeekScheduleFragment extends SchedulesFragment implements View.OnClickListener {
 
-    public static final String TAG = TodayScheduleFragment.class
+    public static final String TAG = UpcomingScheduleFragment.class
             .getSimpleName();
 
     protected void initComponent(View view) {

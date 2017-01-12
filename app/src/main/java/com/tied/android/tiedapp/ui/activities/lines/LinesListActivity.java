@@ -27,6 +27,7 @@ public class LinesListActivity extends AppCompatActivity implements  View.OnClic
     LinearLayout back_layout;
     LinearLayout lines_tab, territories_tab, tab_bar;
     LinesFragment linesFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -104,15 +104,15 @@
     <TextView android:layout_width="wrap_content"
               android:gravity="center"
               android:layout_gravity="center"
-              android:text="No territories found"
+              android:text="All you territories are listed here. Click to Add a territory"
               android:layout_margin="30dp"
               android:background="@drawable/white_fill_grey_stroke"
               android:padding="20dp"
               android:textSize="15sp"
-              android:visibility="gone"
-              android:textColor="@color/light_gray"
+        android:textColor="@color/light_gray"
               android:id="@+id/no_results"
-              android:layout_height="wrap_content"/>
+              android:layout_height="wrap_content"
+        android:visibility="gone" />
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

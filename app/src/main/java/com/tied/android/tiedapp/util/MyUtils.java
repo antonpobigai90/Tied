@@ -44,7 +44,7 @@ import com.tied.android.tiedapp.objects.Coordinate;
 import com.tied.android.tiedapp.objects.Distance;
 import com.tied.android.tiedapp.objects.Goal;
 import com.tied.android.tiedapp.objects.Line;
-import com.tied.android.tiedapp.objects.RevenueFilter;
+import com.tied.android.tiedapp.objects.sales.RevenueFilter;
 import com.tied.android.tiedapp.objects._Meta;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.client.ClientLocation;
@@ -55,7 +55,6 @@ import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.retrofits.services.GoalApi;
 import com.tied.android.tiedapp.retrofits.services.LineApi;
-import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
 import com.tied.android.tiedapp.retrofits.services.SignUpApi;
 import com.tied.android.tiedapp.ui.activities.SelectClientActivity;
 import com.tied.android.tiedapp.ui.activities.SelectLineActivity;
@@ -171,7 +170,7 @@ public abstract class MyUtils {
         }
     }
 
-    public static boolean locationValidation(com.tied.android.tiedapp.objects.Location location){
+    public static boolean locationValidation(Location location){
         if(location == null){
             return false;
         }
@@ -214,6 +213,7 @@ public abstract class MyUtils {
     public static void startActivity(Context a, Class newActivity, Bundle b) {
         startActivity(a, newActivity,  b, false);
     }
+
     public static void startActivity(Context a, Class newActivity, Bundle b, boolean newTask) {
         Intent i = new Intent(a, newActivity);
 
@@ -227,6 +227,7 @@ public abstract class MyUtils {
             );
         }
     }
+
     public static void setFocus(View view) {
         view.setFocusable(true);
         view.requestFocus();
@@ -448,7 +449,7 @@ public abstract class MyUtils {
                             JSONObject locObj = new JSONObject(coordCompObj.getString("location"));
                             JSONArray addressComp= addrJO.getJSONArray("address_components");
 
-                            com.tied.android.tiedapp.objects.Location location= new com.tied.android.tiedapp.objects.Location();
+                            Location location= new Location();
                             String error="";
                             for(int l=0; l<addressComp.length(); l++) {
                                 JSONObject comp= addressComp.getJSONObject(l);
@@ -723,7 +724,7 @@ public abstract class MyUtils {
     }
 
 
-    public static void showAddressDialog(final Activity context, String title, final com.tied.android.tiedapp.objects.Location currentLocation, final MyDialogClickListener okayClicked) {
+    public static void showAddressDialog(final Activity context, String title, final Location currentLocation, final MyDialogClickListener okayClicked) {
         // custom dialog
         final Dialog dialog = new Dialog(context);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);

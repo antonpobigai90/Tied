@@ -148,7 +148,7 @@ public class ActivityVisitDetails extends AppCompatActivity implements  View.OnC
     private void getVisitDetails() {
         final VisitApi visitApi =  MainApplication.createService(VisitApi.class);
         Call<ResponseBody> response = visitApi.getVisit(visit_id);
-        response.enqueue(new retrofit2.Callback<ResponseBody>() {
+        response.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
                 if (this == null) {
@@ -196,7 +196,7 @@ public class ActivityVisitDetails extends AppCompatActivity implements  View.OnC
     private void getClientObject(String client_id) {
         final ClientApi clientApi =  MainApplication.createService(ClientApi.class);
         Call<ResponseBody> response = clientApi.getClient(client_id);
-        response.enqueue(new retrofit2.Callback<ResponseBody>() {
+        response.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
                 if (this == null) {

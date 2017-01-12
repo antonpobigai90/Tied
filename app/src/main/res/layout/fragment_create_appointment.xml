@@ -84,6 +84,8 @@
                                 android:id="@+id/txt_title"
                                 android:textColor="@color/schedule_title_bg_color"
                                 android:textSize="16sp"
+                                android:imeOptions="actionNext"
+                                android:singleLine="true"
                                 android:hint="Enter title or label"
                                 android:textColorHint="@color/light_gray2" />
                         </LinearLayout>
@@ -125,6 +127,7 @@
                             android:id="@+id/txt_description"
                             android:textColor="@color/schedule_title_bg_color"
                             android:textSize="16sp"
+                            android:imeOptions="actionDone"
                             android:hint="Enter summary of purpose"
                             android:textColorHint="@color/light_gray2" />
                     </LinearLayout>
@@ -250,6 +253,7 @@
                                 android:layout_height="wrap_content"
                                 android:id="@+id/date"
                                 android:enabled="true"
+                                android:textColorHint="@color/light_gray"
                                 android:hint="Click to choose date of appointment"
                                 android:textColor="@color/black"
                                 android:textSize="14sp"/>
@@ -307,7 +311,9 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/time"
+                                android:hint="Click to select date"
                                 android:paddingTop="4dp"
+                                android:textColorHint="@color/light_grey3"
                                 android:textColor="@color/schedule_title_bg_color"
                                 android:textSize="14sp" />
                         </LinearLayout>
@@ -354,6 +360,7 @@
                                     android:layout_height="wrap_content"
                                     android:id="@+id/txt_location"
                                     android:paddingTop="4dp"
+                                    android:textColorHint="@color/light_gray"
                                     android:hint="Click to enter location"
                                     android:textColor="@color/schedule_title_bg_color"
                                     android:textSize="14sp" />

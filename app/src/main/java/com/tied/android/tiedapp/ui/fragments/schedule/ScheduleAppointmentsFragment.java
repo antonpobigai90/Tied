@@ -267,6 +267,7 @@ public class ScheduleAppointmentsFragment extends Fragment implements View.OnCli
                 } else {
                     indicator.setVisibility(View.VISIBLE);
                     title.setTextColor(getResources().getColor(R.color.button_bg));
+                    /*
                     ViewTreeObserver vto = tab_scroll.getViewTreeObserver();
                     vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                         @Override
@@ -281,6 +282,7 @@ public class ScheduleAppointmentsFragment extends Fragment implements View.OnCli
                             }
                         }
                     });
+                    */
                 }
                 index++;
             }
@@ -297,11 +299,11 @@ public class ScheduleAppointmentsFragment extends Fragment implements View.OnCli
 
             Log.d(TAG, "position : " + position);
             switch (position) {
-                        case 0: fragment = new TodayScheduleFragment(); break;
-                        case 1: fragment = new  AllScheduleFragment(); break;
-                        case 2: fragment = new ThisWeekScheduleFragment(); break;
-                        case 3: fragment = new NextWeekScheduleFragment(); break;
-                        case 4: fragment = new ThisMonthScheduleFragment(); break;
+                        case 0: fragment = new UpcomingScheduleFragment(); break;
+                        case 1: fragment = new CompletedScheduleFragment(); break;
+                        case 2: fragment = new AllScheduleFragment(); break;
+                        //case 3: fragment = new NextWeekScheduleFragment(); break;
+                        //case 4: fragment = new ThisMonthScheduleFragment(); break;
             }
 
             bundle.putInt("position", position);
@@ -311,7 +313,7 @@ public class ScheduleAppointmentsFragment extends Fragment implements View.OnCli
 
         @Override
         public int getCount() {
-            return 5;
+            return 3;
         }
     }
 
@@ -344,8 +346,8 @@ public class ScheduleAppointmentsFragment extends Fragment implements View.OnCli
 
         if ((requestCode == Constants.ViewSchedule || requestCode == Constants.CreateSchedule) && resultCode == Activity.RESULT_OK) {
             //Fragment currentFrag= mPagerAdapter.getItem(mViewPager.getCurrentItem());
-            //if(currentFrag instanceof TodayScheduleFragment)
-                //((TodayScheduleFragment)mPagerAdapter.getItem(mViewPager.getCurrentItem())).initSchedule();
+            //if(currentFrag instanceof UpcomingScheduleFragment)
+                //((UpcomingScheduleFragment)mPagerAdapter.getItem(mViewPager.getCurrentItem())).initSchedule();
             mViewPager.setAdapter(null);
             mViewPager.setAdapter(mPagerAdapter);
             mViewPager.getAdapter().notifyDataSetChanged();

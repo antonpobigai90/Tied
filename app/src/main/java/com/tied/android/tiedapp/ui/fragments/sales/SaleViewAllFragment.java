@@ -2,46 +2,25 @@ package com.tied.android.tiedapp.ui.fragments.sales;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
-import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 
-import com.github.mikephil.charting.animation.Easing;
-import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.formatter.PercentFormatter;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.google.gson.Gson;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.customs.model.ClientDataModel;
-import com.tied.android.tiedapp.customs.model.LineDataModel;
 import com.tied.android.tiedapp.objects.Line;
-import com.tied.android.tiedapp.objects.Revenue;
-import com.tied.android.tiedapp.objects.RevenueFilter;
+import com.tied.android.tiedapp.objects.sales.RevenueFilter;
 import com.tied.android.tiedapp.objects._Meta;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.RevenueApi;
-import com.tied.android.tiedapp.ui.activities.MainActivity;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityAddSales;
 import com.tied.android.tiedapp.ui.activities.sales.ActivitySalesFilter;
 import com.tied.android.tiedapp.ui.activities.sales.ActivitySalesPrint;
@@ -59,7 +38,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -89,6 +67,9 @@ public class SaleViewAllFragment extends Fragment implements View.OnClickListene
     User user, userLoggedIn;
     TextView titleTV, totalSalesTV, totalSalesLabelTV;
 
+    int numPages=1;
+    private int preLast;
+    public int pageNumber=1;
 
     public static Fragment newInstance(Bundle bundle) {
         Fragment fragment = new SaleViewAllFragment();
@@ -149,7 +130,31 @@ public class SaleViewAllFragment extends Fragment implements View.OnClickListene
         lines_listview = (ListView) view.findViewById(R.id.lines_listview);
         lines_listview.setOnItemClickListener(this);
 
+        lines_listview.setOnScrollListener(new AbsListView.OnScrollListener() {
 
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                final int lastItem = firstVisibleItem + visibleItemCount;
+
+                if(lastItem == totalItemCount)
+                {
+                    if(preLast!=lastItem)
+                    {
+                        if(pageNumber<numPages) {
+                            pageNumber++;
+                            loadData();
+                        }
+
+                        preLast = lastItem;
+                    }
+                }
+            }
+        });
 
         if(group_by.equals("line")) {
             line_adapter = new SaleLineListAdapter(1, lineDataModels, getActivity(), Constants.SALES_SOURCE);
@@ -226,6 +231,8 @@ public class SaleViewAllFragment extends Fragment implements View.OnClickListene
                     _Meta meta=response.getMeta();
                     if(meta !=null && meta.getStatus_code()==200) {
 
+                        numPages=meta.getPage_count();
+
                         List<Object> keys=response.getKeys();
                         JSONObject map=response.getKeyObjects();
 
@@ -253,7 +260,7 @@ public class SaleViewAllFragment extends Fragment implements View.OnClickListene
                         lineDataModels.addAll(lines);
 
                         line_adapter.notifyDataSetChanged();
-                        if(lineDataModels.size()==0) {
+                        if(pageNumber==1 && lineDataModels.size()==0) {
                             MyUtils.showToast("No sales recorded for this period");
                         }
 

@@ -1,20 +1,16 @@
 package com.tied.android.tiedapp.ui.activities.client;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
@@ -28,11 +24,8 @@ import android.widget.TextView;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.fragments.schedule.tabs.AllScheduleFragment;
-import com.tied.android.tiedapp.ui.fragments.schedule.tabs.NextWeekScheduleFragment;
-import com.tied.android.tiedapp.ui.fragments.schedule.tabs.ThisMonthScheduleFragment;
-import com.tied.android.tiedapp.ui.fragments.schedule.tabs.ThisWeekScheduleFragment;
-import com.tied.android.tiedapp.ui.fragments.schedule.tabs.TodayScheduleFragment;
+import com.tied.android.tiedapp.ui.fragments.schedule.tabs.*;
+import com.tied.android.tiedapp.ui.fragments.schedule.tabs.UpcomingScheduleFragment;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
 import com.tied.android.tiedapp.util.Logger;
 
@@ -65,7 +58,7 @@ public class ScheduleActivity extends FragmentActivity implements FragmentIterat
         setContentView(R.layout.activity_schedule_timeline);
 
         mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
-        fragmentList.add(new TodayScheduleFragment());
+        fragmentList.add(new UpcomingScheduleFragment());
         fragmentList.add(new AllScheduleFragment());
         fragmentList.add(new ThisWeekScheduleFragment());
 

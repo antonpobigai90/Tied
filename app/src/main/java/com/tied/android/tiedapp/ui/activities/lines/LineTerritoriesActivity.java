@@ -11,32 +11,16 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.customs.model.LineDataModel;
-import com.tied.android.tiedapp.customs.model.TerritoryModel;
 import com.tied.android.tiedapp.objects.Line;
-import com.tied.android.tiedapp.objects.Revenue;
 import com.tied.android.tiedapp.objects.Territory;
-import com.tied.android.tiedapp.objects._Meta;
-import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.retrofits.services.LineApi;
-import com.tied.android.tiedapp.ui.activities.sales.ActivitySalesFilter;
 import com.tied.android.tiedapp.ui.adapters.LineTerritoriesAdapter;
-import com.tied.android.tiedapp.ui.adapters.SaleLineDetailsListAdapter;
-import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by femi on 9/4/2016.

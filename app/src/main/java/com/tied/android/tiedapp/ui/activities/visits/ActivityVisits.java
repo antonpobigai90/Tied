@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -65,6 +66,10 @@ public class ActivityVisits extends AppCompatActivity implements View.OnClickLis
     protected VisitListAdapter adapter;
     VisitFilter visitFilter;
     Map<String, Client> clients=new HashMap<String, Client>();
+    TextView no_result;
+    int numPages=1;
+    private int preLast;
+    public int pageNumber=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +89,9 @@ public class ActivityVisits extends AppCompatActivity implements View.OnClickLis
             window.setStatusBarColor(getResources().getColor(R.color.blue_status_bar));
         }
 
+        no_result = (TextView)  findViewById(R.id.no_results);
+        no_result.setOnClickListener(this);
+
         listView = (ListView) findViewById(R.id.visits_listview);
 
         adapter = new VisitListAdapter(visits, clients, this);
@@ -102,6 +110,32 @@ public class ActivityVisits extends AppCompatActivity implements View.OnClickLis
                 MyUtils.startRequestActivity(ActivityVisits.this, ActivityVisitDetails.class, Constants.VISIT_LIST, bundle);
             }
         });
+
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                final int lastItem = firstVisibleItem + visibleItemCount;
+
+                if(lastItem == totalItemCount)
+                {
+                    if(preLast!=lastItem)
+                    {
+                        if(pageNumber<numPages) {
+                            pageNumber++;
+                            loadVisits(visitFilter);
+                        }
+
+                        preLast = lastItem;
+                    }
+                }
+            }
+        });
     }
 
     private void setDefaultVisitFilter() {
@@ -118,9 +152,9 @@ public class ActivityVisits extends AppCompatActivity implements View.OnClickLis
     }
 
     private void loadVisits(VisitFilter visitFilter) {
-
+        DialogUtils.displayProgress(this);
         final VisitApi visitApi =  MainApplication.createService(VisitApi.class);
-        Call<ResponseBody> response = visitApi.getUserVisits(user.getId(), 1, visitFilter);
+        Call<ResponseBody> response = visitApi.getUserVisits(user.getId(), pageNumber, visitFilter);
         response.enqueue(new retrofit2.Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
@@ -141,11 +175,6 @@ public class ActivityVisits extends AppCompatActivity implements View.OnClickLis
 
                     _Meta meta = response.getMeta();
                     if (meta != null && meta.getStatus_code() == 200) {
-                        visits.clear();
-
-
-
-
                         JSONObject jsonObject=new JSONObject(response.toString());
                         JSONObject client_obj = jsonObject.getJSONObject("clients");
 
@@ -163,12 +192,18 @@ public class ActivityVisits extends AppCompatActivity implements View.OnClickLis
                         }
                         Logger.write(clients.toString());
                         adapter.setClients(clients);
+
+                        numPages=meta.getPage_count();
+                        if(pageNumber==1)  visits.clear();
                         visits.addAll( (ArrayList) response.getDataAsList(Constants.VISITS_lIST, Visit.class));
 
+                        if(pageNumber==1 && visits.size()==0) {
+                            findViewById(R.id.no_results).setVisibility(View.VISIBLE);
+                        } else {
+                            findViewById(R.id.no_results).setVisibility(View.GONE);
+                        }
+
                         adapter.notifyDataSetChanged();
-                        int size=visits.size();
-                        if(size==0) findViewById(R.id.no_results).setVisibility(View.VISIBLE);
-                        else  findViewById(R.id.no_results).setVisibility(View.GONE);
 
                     } else {
                         MyUtils.showToast("Error encountered");
@@ -200,6 +235,9 @@ public class ActivityVisits extends AppCompatActivity implements View.OnClickLis
                 MyUtils.startRequestActivity(this, VisitFilterActivity.class, Constants.VISIT_FILTER, bundle);
                 break;
             case R.id.img_plus:
+                MyUtils.startRequestActivity(this, ActivityAddVisits.class, Constants.Visits);
+                break;
+            case R.id.no_results:
                 MyUtils.startRequestActivity(this, ActivityAddVisits.class, Constants.Visits);
                 break;
         }

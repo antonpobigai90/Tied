@@ -61,11 +61,11 @@ public interface ClientApi {
     @POST(Constants.LINE_CLIENTS)
     Call<ClientRes> getLineClients(@Header(Constants.TOKEN_HEADER) String token,
                                    @Path("line_id") String line_id,
-                                   @Path("page_number")int page_number,
+                                   @Path("page_number") int page_number,
                                    @Body ClientLocation clientLocation);
 
     @POST(Constants.USER_GE0_CLIENTS)
-    Call<ClientRes> getClientsFilter(@Path("user_id") String user_id, @Path("page_number")int page_number, @Body ClientFilter clientFilter);
+    Call<ClientRes> getClientsFilter(@Path("user_id") String user_id, @Path("page_number") int page_number, @Body ClientFilter clientFilter);
 
     @DELETE(Constants.CLIENT_DELETE)
     Call<ResponseBody> deleteClient(@Path("client_id") String client_id);

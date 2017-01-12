@@ -1,10 +1,12 @@
 package com.tied.android.tiedapp.objects.responses;
 
+import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects._Meta;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by Emmanuel on 6/28/2016.
@@ -17,6 +19,7 @@ public class ScheduleRes implements Serializable {
     private _Meta _meta;
     private ArrayList<Schedule> schedules;
     private Schedule schedule;
+    Map<String, Client> clients;
 
     public ScheduleRes(String id, boolean success, String message, boolean authFailed, _Meta _meta, ArrayList<Schedule> schedules, Schedule schedule) {
         this.id = id;
@@ -26,6 +29,14 @@ public class ScheduleRes implements Serializable {
         this._meta = _meta;
         this.schedules = schedules;
         this.schedule = schedule;
+    }
+
+    public void setClients(Map<String, Client> clients) {
+        this.clients = clients;
+    }
+
+    public Map<String, Client> getClients() {
+        return clients;
     }
 
     public _Meta get_meta() {
@@ -94,6 +105,7 @@ public class ScheduleRes implements Serializable {
                 ", _meta=" + _meta +
                 ", schedules=" + schedules +
                 ", schedule=" + schedule +
+                ", clients=" +clients+
                 '}';
     }
 }

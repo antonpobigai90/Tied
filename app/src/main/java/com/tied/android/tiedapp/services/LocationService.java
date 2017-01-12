@@ -228,7 +228,8 @@ public class LocationService extends Service {
                     Logger.write(clientRes.toString());
                     try {
                         if (clientRes.isAuthFailed()) {
-                            User.LogOut(getApplicationContext());
+                            return;
+                           // User.LogOut(getApplicationContext());
                         } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200) {
                             Client client =clientRes.getClients().get(0);
 
@@ -254,6 +255,7 @@ public class LocationService extends Service {
         {
             //Toast.makeText( getApplicationContext(), "Gps Disabled", Toast.LENGTH_SHORT ).show();
         }
+
         private void loadFoundClients() {
             SharedPreferences sp=MyUtils.getSharedPreferences();
             try {
@@ -268,13 +270,16 @@ public class LocationService extends Service {
                 foundClients=new ArrayList<>();
             }
         }
+
         private final String PROXIMITY_IS_TODAYS_DATE="proximity_is_newday";
         String savedDate=null;
+
         private boolean isNewDay() {
             if(savedDate==null) {
                 SharedPreferences sp = MyUtils.getSharedPreferences();
                 sp.getString(PROXIMITY_IS_TODAYS_DATE, "");
             }
+
             boolean isNew= !(HelperMethods.getTodayDate().equalsIgnoreCase(savedDate)) ;
             if(isNew) {
                 SharedPreferences sp = MyUtils.getSharedPreferences();
@@ -289,26 +294,26 @@ public class LocationService extends Service {
             for (int j=0; j<foundClients.size(); j++) {
                 ja.put(foundClients.get(j));
             }
+
             SharedPreferences sp=MyUtils.getSharedPreferences();
             SharedPreferences.Editor e=sp.edit();
             e.putString(Constants.NEARBY_CLIENTS, ja.toString());
             e.apply();
         }
-        void createNotification(Client client, Coordinate coordinate) {
 
+        void createNotification(Client client, Coordinate coordinate) {
             if(foundClients==null || foundClients.size()==0) loadFoundClients();
             if(foundClients.contains(client.getId())) return;
-           if(foundClients.size()<5) {
+            if(foundClients.size()<5) {
                 foundClients.add(client.getId());
             }else  {
                foundClients.remove(0);
                 foundClients.add(client.getId());
             }
+
             saveFoundClients();
 
-          //  i++;
-
-           Logger.write(foundClients.toString());
+            Logger.write(foundClients.toString());
             String clientName=MyUtils.getClientName(client);
             NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(getApplicationContext())

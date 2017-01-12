@@ -14,19 +14,13 @@ import android.widget.*;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.customs.model.LineDataModel;
-import com.tied.android.tiedapp.objects.Revenue;
-import com.tied.android.tiedapp.objects.RevenueFilter;
-import com.tied.android.tiedapp.objects.client.Client;
+import com.tied.android.tiedapp.objects.sales.RevenueFilter;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.ui.adapters.SalePrintListAdapter;
 
 import com.tied.android.tiedapp.util.HelperMethods;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
-import org.w3c.dom.Text;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**

@@ -94,7 +94,7 @@ public class WebviewActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         // For Lollipop 5.0+ Devices
-        public boolean onShowFileChooser(WebView mWebView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
+        public boolean onShowFileChooser(WebView mWebView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
             if (uploadMessage != null) {
                 uploadMessage.onReceiveValue(null);
                 uploadMessage = null;

@@ -1,7 +1,9 @@
 package com.tied.android.tiedapp.ui.activities.territories;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -33,6 +36,7 @@ import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 import java.io.IOException;
@@ -56,23 +60,28 @@ public class ActivityTerritories extends AppCompatActivity implements  View.OnCl
 
         ImageView img_close, img_edit;
         int page_index;
+        TextView no_results;
 
         ArrayList<Territory> territoryModels = new ArrayList<Territory>();
         TextView txt_client_info, txt_description;
 
-            @Override
-            protected void onCreate(Bundle savedInstanceState) {
-                    super.onCreate(savedInstanceState);
-                    setContentView(R.layout.activity_territory);
+        int numPages=1;
+        private int preLast;
+        public int pageNumber=1;
 
-                    bundle = getIntent().getExtras();
-                    user=MyUtils.getUserFromBundle(bundle);
-                    page_index = bundle.getInt(Constants.SHOW_LINE);
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+                setContentView(R.layout.activity_territory);
 
-                    MyUtils.setColorTheme(this, bundle.getInt(Constants.SOURCE), findViewById(R.id.main_layout));
+                bundle = getIntent().getExtras();
+                user=MyUtils.getUserFromBundle(bundle);
+                page_index = bundle.getInt(Constants.SHOW_LINE);
 
-                    initComponents();
-            }
+                MyUtils.setColorTheme(this, bundle.getInt(Constants.SOURCE), findViewById(R.id.main_layout));
+
+                initComponents();
+        }
 
         @Override
         public void onClick(View view) {
@@ -85,32 +94,153 @@ public class ActivityTerritories extends AppCompatActivity implements  View.OnCl
                         bundle.putSerializable("my_territories", territoryModels);
                         MyUtils.startRequestActivity(this, ActivityAddTerritory.class, Constants.ADD_TERRITORY, bundle);
                         break;
+                    case R.id.no_results:
+                        bundle.putSerializable("my_territories", territoryModels);
+                        MyUtils.startRequestActivity(this, ActivityAddTerritory.class, Constants.ADD_TERRITORY, bundle);
+                        break;
                 }
         }
 
         public void initComponents() {
 
-                img_close = (ImageView) findViewById(R.id.img_close);
-                img_close.setOnClickListener(this);
+            img_close = (ImageView) findViewById(R.id.img_close);
+            img_close.setOnClickListener(this);
 
-               // img_edit = (ImageView) findViewById(R.id.img_edit);
-               // img_edit.setOnClickListener(this);
+           // img_edit = (ImageView) findViewById(R.id.img_edit);
+           // img_edit.setOnClickListener(this);
 
-                txt_client_info = (TextView) findViewById(R.id.txt_client_info);
-                txt_description = (TextView) findViewById(R.id.txt_description);
+            txt_client_info = (TextView) findViewById(R.id.txt_client_info);
+            txt_description = (TextView) findViewById(R.id.txt_description);
 
+            no_results = (TextView) findViewById(R.id.no_results);
+            no_results.setOnClickListener(this);
 
-                txt_client_info.setText("Territories");
-                txt_description.setText("You currently serve 20 territories for");
+            txt_client_info.setText("Territories");
+            txt_description.setText("You currently serve 20 territories for");
 
-                territories_listview = (ListView) findViewById(R.id.listView);
-                territories_listview.setOnItemClickListener(this);
+            territories_listview = (ListView) findViewById(R.id.listView);
+            territories_listview.setOnItemClickListener(this);
 
-                territoriesAdapter = new LineTerritoriesAdapter(territoryModels, this);
-                territories_listview.setAdapter(territoriesAdapter);
-                territoriesAdapter.notifyDataSetChanged();
-                initTerritories();
+            territoriesAdapter = new LineTerritoriesAdapter(territoryModels, this);
+            territories_listview.setAdapter(territoriesAdapter);
+            territoriesAdapter.notifyDataSetChanged();
+            initTerritories();
+
+            territories_listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                int color = getResources().getColor(R.color.schedule_title_bg_color);
+                Territory item = territoryModels.get(position);
+
+                alertDialog(item, color);
+
+                return false;
+                }
+            });
+
+            territories_listview.setOnScrollListener(new AbsListView.OnScrollListener() {
+
+                @Override
+                public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+                }
+
+                @Override
+                public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                    final int lastItem = firstVisibleItem + visibleItemCount;
+
+                    if(lastItem == totalItemCount)
+                    {
+                        if(preLast!=lastItem)
+                        {
+                            if(pageNumber<numPages) {
+                                pageNumber++;
+                                initTerritories();
+                            }
+
+                            preLast = lastItem;
+                        }
+                    }
+                }
+            });
         }
+
+    private void alertDialog(final Territory territory, int color){
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setCancelable(false);
+        dialog.setContentView(R.layout.dialog_yes_no);
+
+        TextView heading = (TextView) dialog.findViewById(R.id.txt_heading);
+        TextView content = (TextView) dialog.findViewById(R.id.txt_content);
+        TextView yes = (TextView) dialog.findViewById(R.id.yes);
+
+        heading.setText("DELETE TERRITORY");
+        content.setText("All sales, schedule and visits related to this territory with be deleted. Are you sure want to continue?");
+        yes.setText("YES DELETE!");
+        yes.setTextColor(color);
+
+        TextView cancel = (TextView) dialog.findViewById(R.id.cancel);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteTerritory(territory);
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+
+    }
+
+    public void deleteTerritory(final Territory territory){
+
+        TerritoryApi territoryApi = MainApplication.getInstance().getRetrofit().create(TerritoryApi.class);
+        DialogUtils.displayProgress(this);
+        Call<ResponseBody> response = territoryApi.deleteTerritory(territory.getId());
+        response.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
+                if (this == null) return;
+
+                DialogUtils.closeProgress();
+                GeneralResponse generalResponse = new GeneralResponse(resResponse.body());
+                try {
+                    _Meta meta = generalResponse.getMeta();
+                    if (meta.getStatus_code() == 200){
+                        MyUtils.showMessageAlert(ActivityTerritories.this, "Territory successfully deleted!");
+                        territoryModels.clear();
+                        territoriesAdapter.notifyDataSetChanged();
+                        territories_listview.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                initTerritories();
+                            }
+                        }, 200);
+                    }else{
+                        MyUtils.showToast("Error encountered");
+                    }
+                } catch (Exception e) {
+                    MyUtils.showToast(e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                DialogUtils.closeProgress();
+            }
+        });
+    }
 
         @Override
         protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -142,8 +272,8 @@ public class ActivityTerritories extends AppCompatActivity implements  View.OnCl
         }
         public void initTerritories(){
             final TerritoryApi territoryApi =  MainApplication.createService(TerritoryApi.class);
-            Call<ResponseBody> response = territoryApi.getTerritories(user.getId(), 1);
-            response.enqueue(new retrofit2.Callback<ResponseBody>() {
+            Call<ResponseBody> response = territoryApi.getTerritories(user.getId(), pageNumber);
+            response.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
                     try {
@@ -157,11 +287,15 @@ public class ActivityTerritories extends AppCompatActivity implements  View.OnCl
 
 
                         if(meta !=null && meta.getStatus_code() == 200) {
-
+                            numPages=meta.getPage_count();
+                            if(pageNumber==1)  territoryModels.clear();
                             territoryModels.addAll( (ArrayList) response.getDataAsList(Constants.TerritoryData, Territory.class));
-                            //Logger.write("Lines loadeddddddddddddddddddddddddddddddddddddddddddddddd "+territories.size());
+
+                            if(pageNumber==1 && territoryModels.size()==0) {
+                                MyUtils.showNoResults(ActivityTerritories.this.findViewById(R.id.main_layout), R.id.no_results);
+                            }
+
                             territoriesAdapter.notifyDataSetChanged();
-                            if( territoryModels.isEmpty()) MyUtils.showNoResults(ActivityTerritories.this.findViewById(R.id.main_layout), R.id.no_results);
                         }else{
                             MyUtils.showToast("Error encountered");
                             DialogUtils.closeProgress();

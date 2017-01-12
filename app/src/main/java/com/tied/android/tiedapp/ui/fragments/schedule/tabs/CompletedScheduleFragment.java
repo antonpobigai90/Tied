@@ -1,12 +1,11 @@
 package com.tied.android.tiedapp.ui.fragments.schedule.tabs;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
 
-import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.model.ScheduleDataModel;
 import com.tied.android.tiedapp.objects.schedule.DateRange;
 import com.tied.android.tiedapp.objects.schedule.Schedule;
@@ -26,18 +25,19 @@ import java.util.Locale;
  */
 
 
-public class TodayScheduleFragment extends SchedulesFragment implements View.OnClickListener {
+public class CompletedScheduleFragment extends SchedulesFragment implements View.OnClickListener {
     public static ArrayList<ScheduleDataModel> todayScheduleDataModels;
-    public static final String TAG = TodayScheduleFragment.class
+    public static final String TAG = UpcomingScheduleFragment.class
             .getSimpleName();
 
     public static SchedulesFragment getInstance(ArrayList<ScheduleDataModel> data) {
-        TodayScheduleFragment sf=new TodayScheduleFragment();
+        UpcomingScheduleFragment sf=new UpcomingScheduleFragment();
         if(data != null) {
             sf.scheduleDataModels=data;
         }
         return sf;
     }
+
 
     @Override
     public void onAttach(Context context) {
@@ -47,15 +47,17 @@ public class TodayScheduleFragment extends SchedulesFragment implements View.OnC
     }
 
     public void initComponent(View view) {
-        Calendar cal = Calendar.getInstance();
+       /* Calendar cal = Calendar.getInstance();
         Date now = cal.getTime();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         String  today = sdf.format(now);
         timeRange = new TimeRange("00:00","23:59");
         dateRange = new DateRange(today, today);
-        scheduleDate = new ScheduleDate(timeRange, dateRange);
+        scheduleDate = new ScheduleDate(timeRange, dateRange);*/
+        filter.setStatus(1);
         super.initComponent(view);
         Logger.write("I am attaching");
+
     }
 
     @Override

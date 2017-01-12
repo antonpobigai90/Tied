@@ -288,8 +288,13 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
                     numPages=clientRes.get_meta().getPage_count();
                    if(pageNumber==1) {
                        clients.clear();
-                       googleMap.clear();
+                       try {
+                           googleMap.clear();
+                       }catch (Exception e) {
+
+                       }
                    }
+
                     final ArrayList<Client> newClients= clientRes.getClients();
                     clients.addAll(newClients);
 
@@ -328,10 +333,11 @@ public class ClientsMapFragment extends Fragment implements OnMapReadyCallback, 
 
                                             ImageView pic = (ImageView) marker.findViewById(R.id.pic);
                                             MyUtils.Picasso.displayImage(client.getLogo(), pic);
-
-                                            Marker nMarker= googleMap.addMarker(new MarkerOptions().anchor(0.5f, 1.5f).icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(getActivity(), marker)))
-                                                    .position(latLng));
-                                            nMarker.setTag(num);
+                                            if(googleMap!=null) {
+                                                Marker nMarker = googleMap.addMarker(new MarkerOptions().anchor(0.5f, 1.5f).icon(BitmapDescriptorFactory.fromBitmap(createDrawableFromView(getActivity(), marker)))
+                                                        .position(latLng));
+                                                nMarker.setTag(num);
+                                            }
                                         }
                                     });
 

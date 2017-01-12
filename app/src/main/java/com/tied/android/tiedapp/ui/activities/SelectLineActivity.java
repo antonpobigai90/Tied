@@ -276,7 +276,7 @@ public class SelectLineActivity extends Activity
     public void initLines(){
         final LineApi lineApi =  MainApplication.createService(LineApi.class);
         Call<ResponseBody> response = lineApi.getUserLines(user.getId(), 1);
-        response.enqueue(new retrofit2.Callback<ResponseBody>() {
+        response.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
                 try {

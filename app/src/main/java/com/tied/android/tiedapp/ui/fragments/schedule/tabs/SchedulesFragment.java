@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -19,11 +20,9 @@ import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.model.ScheduleDataModel;
+import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.responses.ScheduleRes;
-import com.tied.android.tiedapp.objects.schedule.DateRange;
-import com.tied.android.tiedapp.objects.schedule.Schedule;
-import com.tied.android.tiedapp.objects.schedule.ScheduleDate;
-import com.tied.android.tiedapp.objects.schedule.TimeRange;
+import com.tied.android.tiedapp.objects.schedule.*;
 import com.tied.android.tiedapp.objects.user.User;
 import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
 import com.tied.android.tiedapp.ui.adapters.ScheduleListAdapter;
@@ -33,9 +32,7 @@ import com.tied.android.tiedapp.util.HelperMethods;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -52,7 +49,7 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
 
     protected ScheduleDate scheduleDate;
 
-    protected ArrayList<ScheduleDataModel> scheduleDataModels;
+    protected ArrayList<ScheduleDataModel> scheduleDataModels = new ArrayList<ScheduleDataModel>();
     protected ListView listView;
 
     protected TimeRange timeRange = null;
@@ -64,15 +61,21 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
     protected Bundle bundle;
     protected User user;
 
+    public ScheduleFilter filter;
     public int num;
 
-    protected ProgressBar pb;
+    //protected ProgressBar pb;
+
+    public int numPages=1;
+    public int preLast;
+    public int pageNumber=1;
+    Map<String, Client> clients=new HashMap<>();
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.schedule_list, container, false);
-
+        filter=new ScheduleFilter();
         return view;
     }
 
@@ -87,16 +90,46 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
         listView.setOnItemClickListener(this);
         emptyScheduleMessage=view.findViewById(R.id.empty_schedule);
         emptyScheduleMessage.setVisibility(View.GONE);
-        pb=(ProgressBar)view.findViewById(R.id.progress_bar);
-        pb.setVisibility(View.GONE);
+        //pb=(ProgressBar)view.findViewById(R.id.progress_bar);
+        //pb.setVisibility(View.GONE);
         bundle = getArguments();
 
         if (bundle != null) {
             Gson gson = new Gson();
             String user_json = bundle.getString(Constants.USER_DATA);
             user =MyUtils.getUserFromBundle(bundle);
-           // initSchedule();
+
         }
+        adapter = new ScheduleListAdapter(scheduleDataModels,clients, getActivity(), bundle);
+        listView.setAdapter(adapter);
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                final int lastItem = firstVisibleItem + visibleItemCount;
+
+                if(lastItem == totalItemCount)
+                {
+                    if(preLast!=lastItem)
+                    {
+                        if(pageNumber<numPages) {
+                            pageNumber++;
+                            loadSchedule();
+                        }
+
+                        preLast = lastItem;
+                    }
+                }
+            }
+        });
+
+
+
     }
 
     @Override
@@ -136,16 +169,18 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
 //        Log.d(TAG + " scheduinitScheduleleDate", scheduleDate.toString());
         if(user==null) user =MyUtils.getUserFromBundle(bundle);
         Logger.write("Userrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr  "+user.toString());
-        pb.setVisibility(View.VISIBLE);
+       DialogUtils.displayProgress(getActivity());
         emptyScheduleMessage.setVisibility(View.GONE);
         ScheduleApi scheduleApi = MainApplication.createService(ScheduleApi.class);
-        Logger.write("Userrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr  "+user.toString());
-        Call<ScheduleRes> response = scheduleApi.getScheduleByDate(user.getId(), scheduleDate,1);
+        //Logger.write("Userrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr  "+user.toString());
+        Call<ScheduleRes> response = scheduleApi.getSchedule(user.getId(), pageNumber, filter);
         response.enqueue(new Callback<ScheduleRes>() {
             @Override
             public void onResponse(Call<ScheduleRes> call, Response<ScheduleRes> resResponse) {
+                DialogUtils.closeProgress();
                 if (getActivity() == null) return;
-                pb.setVisibility(View.GONE);
+                //pb.setVisibility(View.GONE);
+
                 try {
                     ScheduleRes scheduleRes = resResponse.body();
                     Logger.write(scheduleRes.toString());
@@ -153,14 +188,24 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
                         User.LogOut(getActivity());
                     } else if (scheduleRes != null && scheduleRes.get_meta() != null && scheduleRes.get_meta().getStatus_code() == 200) {
                         ArrayList<Schedule> scheduleArrayList = scheduleRes.getSchedules();
-                        scheduleDataModels = parseSchedules(scheduleArrayList);
-                        Log.d(TAG + "scheduleDataModels", scheduleDataModels.toString());
-                        bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
-                        adapter = new ScheduleListAdapter(scheduleDataModels, getActivity(), bundle);
-                        listView.setAdapter(adapter);
-                        if(scheduleArrayList.size()==0) {
-                            emptyScheduleMessage.setVisibility(View.VISIBLE);
+                        numPages=scheduleRes.get_meta().getPage_count();
+                        if(pageNumber==1) {
+                            scheduleDataModels.clear();
+                            adapter.clearClients();
                         }
+
+                        if(pageNumber==1 && scheduleArrayList.size()==0) {
+                            bundle.putBoolean(Constants.NO_CLIENT_FOUND, true);
+                            emptyScheduleMessage.setVisibility(View.VISIBLE);
+                        } else {
+                            scheduleDataModels.addAll(parseSchedules(scheduleArrayList));
+                            Log.d(TAG + "scheduleDataModels", scheduleDataModels.toString());
+                            bundle.putBoolean(Constants.NO_SCHEDULE_FOUND, false);
+
+                        }
+                        adapter.addClients(scheduleRes.getClients());
+                        adapter.notifyDataSetChanged();
+
                     } else {
                         MyUtils.showToast(getString(R.string.connection_error));
                     }
@@ -172,7 +217,7 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
             @Override
             public void onFailure(Call<ScheduleRes> call, Throwable t) {
                 Log.d(TAG + " onFailure", t.toString());
-                pb.setVisibility(View.GONE);
+                DialogUtils.closeProgress();
                 MyUtils.showToast(getString(R.string.connection_error));
                 DialogUtils.closeProgress();
             }
@@ -215,7 +260,7 @@ public abstract class SchedulesFragment extends Fragment implements View.OnClick
 
             scheduleDataModels.add(scheduleDataModel);
         }
-        Collections.reverse(scheduleDataModels);
+        //Collections.reverse(scheduleDataModels);
         return scheduleDataModels;
     }
 

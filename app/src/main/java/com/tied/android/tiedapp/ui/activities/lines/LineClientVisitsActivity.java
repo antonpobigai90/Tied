@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -54,7 +55,11 @@ public class LineClientVisitsActivity extends AppCompatActivity implements View.
     List<Visit> visits = new ArrayList<Visit>();
     private  Client client;
     protected VisitListAdapter adapter;
-    TextView txt_title;
+    TextView txt_title, no_results;
+
+    int numPages=1;
+    private int preLast;
+    public int pageNumber=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,11 +84,40 @@ public class LineClientVisitsActivity extends AppCompatActivity implements View.
         txt_title = (TextView) findViewById(R.id.txt_title);
         txt_title.setText(client.getCompany());
 
+        no_results = (TextView) findViewById(R.id.no_results);
+        no_results.setOnClickListener(this);
+
         listView = (ListView) findViewById(R.id.visits_listview);
 
         adapter = new VisitListAdapter(visits, null, this);
         listView.setAdapter(adapter);
         setDefaultVisitFilter();
+
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                final int lastItem = firstVisibleItem + visibleItemCount;
+
+                if(lastItem == totalItemCount)
+                {
+                    if(preLast!=lastItem)
+                    {
+                        if(pageNumber<numPages) {
+                            pageNumber++;
+                            loadVisits(visitFilter);
+                        }
+
+                        preLast = lastItem;
+                    }
+                }
+            }
+        });
     }
 
     private void setDefaultVisitFilter() {
@@ -121,8 +155,16 @@ public class LineClientVisitsActivity extends AppCompatActivity implements View.
 
                     _Meta meta = response.getMeta();
                     if (meta != null && meta.getStatus_code() == 200) {
-                        visits.clear();
-                        visits.addAll( (ArrayList) response.getDataAsList(Constants.CLIENTS_lIST, Visit.class));
+
+                        numPages=meta.getPage_count();
+                        if(pageNumber==1)  visits.clear();
+                        visits.addAll( (ArrayList) response.getDataAsList(Constants.VISITS_lIST, Visit.class));
+
+                        if(pageNumber==1 && visits.size()==0) {
+                            findViewById(R.id.no_results).setVisibility(View.VISIBLE);
+                        } else {
+                            findViewById(R.id.no_results).setVisibility(View.GONE);
+                        }
 
                         adapter.notifyDataSetChanged();
 
@@ -155,6 +197,9 @@ public class LineClientVisitsActivity extends AppCompatActivity implements View.
                 MyUtils.startRequestActivity(this, VisitFilterActivity.class, Constants.VISIT_FILTER, bundle);
                 break;
             case R.id.img_plus:
+                MyUtils.startRequestActivity(this, ActivityAddVisits.class, Constants.Visits, bundle);
+                break;
+            case R.id.no_results:
                 MyUtils.startRequestActivity(this, ActivityAddVisits.class, Constants.Visits, bundle);
                 break;
         }

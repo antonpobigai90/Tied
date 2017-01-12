@@ -41,7 +41,7 @@
                     android:id="@+id/img_close"
                     style="@style/ActionBarIcon"
                     android:onClick="goBack"
-                    android:src="@drawable/btn_back_arrow" />
+                    android:src="@drawable/btn_close" />
 
             </LinearLayout>
 
@@ -159,6 +159,8 @@
                         android:layout_height="wrap_content"
                         android:backgroundTint="@android:color/transparent"
                         android:text=""
+                        android:imeOptions="actionNext"
+                        android:singleLine="true"
                         android:hint="Enter company/business name"
                         android:textColor="@color/grey" />
                 <View android:layout_width="match_parent"
@@ -426,6 +428,8 @@
                     android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                        android:imeOptions="actionNext"
+                        android:singleLine="true"
                     android:backgroundTint="@android:color/transparent"
                     android:text=""
                     android:textColor="@color/grey" />
@@ -473,6 +477,8 @@
                             android:inputType="phone"
                             android:maxLines="1"
                             android:paddingLeft="5dp"
+                            android:imeOptions="actionNext"
+                            android:singleLine="true"
                             android:textColor="@color/grey"
                             android:text="" />
                     <View android:layout_width="match_parent"
@@ -502,6 +508,8 @@
                         android:backgroundTint="@android:color/transparent"
                         android:inputType="phone"
                         android:maxLines="1"
+                        android:imeOptions="actionNext"
+                        android:singleLine="true"
                         android:text=""
                         android:textColor="@color/grey"/>
                     <View android:layout_width="match_parent"
@@ -544,6 +552,9 @@
                         android:layout_height="wrap_content"
                         android:backgroundTint="@android:color/transparent"
                         android:maxLines="1"
+
+                        android:imeOptions="actionNext"
+                        android:singleLine="true"
                         android:inputType="textEmailAddress"
                         android:textColor="@color/grey"
                         android:text="" />
@@ -580,6 +591,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_toLeftOf="@+id/dollar"
+                        android:imeOptions="actionNext"
+                        android:singleLine="true"
                         android:backgroundTint="@android:color/transparent"
                         android:text=""
                         android:inputType="numberDecimal"
@@ -751,6 +764,8 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="@android:color/transparent"
                     android:text=""
+                    android:imeOptions="actionDone"
+                    android:singleLine="true"
                     android:paddingLeft="5dp"
                     android:textColor="@color/grey"/>
                 <View android:layout_width="match_parent"

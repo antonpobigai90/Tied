@@ -21,6 +21,7 @@ import com.tied.android.tiedapp.ui.fragments.schedule.tabs.SchedulesFragment;
 
 import java.util.ArrayList;
 
+import com.tied.android.tiedapp.util.Logger;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,8 +41,28 @@ public class ClientScheduleFragment extends SchedulesFragment implements View.On
     public ClientScheduleFragment() {
         super();
     }
+    public void initComponent(View view) {
+       /* Calendar cal = Calendar.getInstance();
+        Date now = cal.getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String  today = sdf.format(now);
+        timeRange = new TimeRange("00:00","23:59");
+        dateRange = new DateRange(today, today);
+        scheduleDate = new ScheduleDate(timeRange, dateRange);*/
+        bundle = getArguments();
+        try {
+            client = (Client) bundle.getSerializable(Constants.CLIENT_DATA);
 
-    public void initSchedule() {
+            filter.setStatus(0);
+            filter.setClient_id(client.getId());
+            super.initComponent(view);
+            //Logger.write("I am attaching");
+        }catch (Exception e) {
+            Logger.write(e);
+        }
+
+    }
+   /* public void initSchedule() {
         bundle = getArguments();
         client = (Client)bundle.getSerializable(Constants.CLIENT_DATA);
 
@@ -60,8 +81,7 @@ public class ClientScheduleFragment extends SchedulesFragment implements View.On
                     ArrayList<Schedule> scheduleArrayList = scheduleRes.getSchedules();
 
                     scheduleDataModels = parseSchedules(scheduleArrayList);
-                    adapter = new ScheduleListAdapter(scheduleDataModels, getActivity(), bundle);
-                    listView.setAdapter(adapter);
+
                     if(scheduleArrayList.size()==0) {
                         emptyScheduleMessage.setVisibility(View.VISIBLE);
                     }
@@ -76,7 +96,7 @@ public class ClientScheduleFragment extends SchedulesFragment implements View.On
                 DialogUtils.closeProgress();
             }
         });
-    }
+    } */
     public void loadData() {
 
     }

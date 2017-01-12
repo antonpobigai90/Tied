@@ -302,7 +302,7 @@ public class InviteCoWorkerActivity extends AppCompatActivity implements View.On
        }
     }
     private void share(String phone) {
-        Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
         String body ="I'm using "+getString(R.string.app_name)+" for Android and I recommend it to manage your business. Click here: "+getString(R.string.website);
 
@@ -326,8 +326,8 @@ public class InviteCoWorkerActivity extends AppCompatActivity implements View.On
           return;
 
         }
-        shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Try Tied for Android!");
-        shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, "I'm using "+getString(R.string.app_name)+" for Android and I recommend it to manage your business. Click here: "+getString(R.string.website));
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Try Tied for Android!");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, "I'm using "+getString(R.string.app_name)+" for Android and I recommend it to manage your business. Click here: "+getString(R.string.website));
 
         Intent chooserIntent = Intent.createChooser(shareIntent, "Share with");
         chooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

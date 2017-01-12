@@ -40,12 +40,12 @@
             android:layout_centerVertical="true" />
 
     </RelativeLayout>
-    <HorizontalScrollView
+   <!-- <HorizontalScrollView
         android:id="@+id/tab_scroll"
         android:layout_width="match_parent"
         android:scrollbars="none"
         android:layout_height="wrap_content">
-
+-->
         <LinearLayout
             android:id="@+id/tab_bar"
             android:layout_width="match_parent"
@@ -57,7 +57,8 @@
 
             <LinearLayout
                 android:id="@+id/today_tab"
-                android:layout_width="100dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:gravity="bottom"
 
@@ -68,7 +69,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:layout_marginBottom="10dp"
-                    android:text="TODAY"
+                    android:text="UPCOMING"
                     android:textColor="@color/semi_transparent_black"
                     android:textSize="12sp"
                     android:textStyle="bold" />
@@ -81,7 +82,8 @@
             </LinearLayout>
             <LinearLayout
                     android:id="@+id/all_tab"
-                    android:layout_width="100dp"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="match_parent"
                     android:gravity="bottom"
                     android:orientation="vertical">
@@ -91,7 +93,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
                         android:layout_marginBottom="10dp"
-                        android:text="ALL"
+                        android:text="COMPLETED"
                         android:textColor="@color/semi_transparent_black"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -106,7 +108,8 @@
 
             <LinearLayout
                 android:id="@+id/this_week_tab"
-                android:layout_width="100dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:gravity="bottom"
                 android:orientation="vertical">
@@ -116,7 +119,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:layout_marginBottom="10dp"
-                    android:text="THIS WEEK"
+                    android:text="ALL"
                     android:textColor="@color/semi_transparent_black"
                     android:textSize="12sp"
                     android:textStyle="bold" />
@@ -133,6 +136,7 @@
                 android:layout_width="100dp"
                 android:layout_height="match_parent"
                 android:gravity="bottom"
+                android:visibility="gone"
                 android:orientation="vertical">
 
                 <TextView
@@ -155,6 +159,7 @@
             <LinearLayout
                 android:id="@+id/this_month"
                 android:layout_width="100dp"
+                android:visibility="gone"
                 android:layout_height="match_parent"
                 android:gravity="bottom"
                 android:orientation="vertical">
@@ -178,7 +183,7 @@
 
         </LinearLayout>
 
-    </HorizontalScrollView>
+    <!-- </HorizontalScrollView> -->
     <View android:layout_height="0.1dp"
           android:layout_width="match_parent"
           android:background="@color/light_gray2" />

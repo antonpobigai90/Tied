@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -15,9 +16,8 @@ import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Line;
-import com.tied.android.tiedapp.objects.Revenue;
-import com.tied.android.tiedapp.objects.RevenueFilter;
-import com.tied.android.tiedapp.objects.Visit;
+import com.tied.android.tiedapp.objects.sales.Revenue;
+import com.tied.android.tiedapp.objects.sales.RevenueFilter;
 import com.tied.android.tiedapp.objects._Meta;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
@@ -32,9 +32,6 @@ import com.tied.android.tiedapp.util.MyUtils;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -65,10 +62,14 @@ public class ActivityUniqueSales extends FragmentActivity implements  View.OnCli
     Client client;
     String type="line";
     RevenueFilter filter;
-    TextView periodLabelTV;
+    TextView periodLabelTV, no_results;
     String line_id, client_id;
     int source=Constants.SALES_SOURCE;
     private boolean revenueAdded=false;
+
+    int numPages=1;
+    private int preLast;
+    public int pageNumber=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +129,10 @@ public class ActivityUniqueSales extends FragmentActivity implements  View.OnCli
         totalRevenue = (TextView)findViewById(R.id.txt_total_sales);
         periodLabelTV = (TextView) findViewById(R.id.period_label);
         title=(TextView)findViewById(R.id.title) ;
+
+        no_results = (TextView) findViewById(R.id.no_results) ;
+        no_results.setOnClickListener(this);
+
         if(client!=null) title.setText(MyUtils.getClientName(client));
         else if(line!=null) title.setText(line.getName());
         else title.setText("Sales");
@@ -159,6 +164,32 @@ public class ActivityUniqueSales extends FragmentActivity implements  View.OnCli
                 MyUtils.startRequestActivity(ActivityUniqueSales.this, ActivitySaleDetails.class, Constants.REVENUE_LIST, bundle);
             }
         });
+
+        client_sales_listview.setOnScrollListener(new AbsListView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                final int lastItem = firstVisibleItem + visibleItemCount;
+
+                if(lastItem == totalItemCount)
+                {
+                    if(preLast!=lastItem)
+                    {
+                        if(pageNumber<numPages) {
+                            pageNumber++;
+                            loadData();
+                        }
+
+                        preLast = lastItem;
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -174,6 +205,9 @@ public class ActivityUniqueSales extends FragmentActivity implements  View.OnCli
             case R.id.img_plus:
                 MyUtils.startRequestActivity(this, ActivityAddSales.class, Constants.ADD_SALES, bundle);
                 break;
+            case R.id.no_results:
+                MyUtils.startRequestActivity(this, ActivityAddSales.class, Constants.ADD_SALES, bundle);
+                break;
         }
     }
 
@@ -184,15 +218,14 @@ public class ActivityUniqueSales extends FragmentActivity implements  View.OnCli
         DialogUtils.displayProgress(this);
         RevenueApi revenueApi = MainApplication.createService(RevenueApi.class);
         if (client == null && line == null) {
-
-            response = revenueApi.getUserAllRevenues(user.getId(), page, filter);
+            response = revenueApi.getUserAllRevenues(user.getId(), pageNumber, filter);
         }
         else {
             if (line != null) {
 
-                response = revenueApi.getUniqueLineRevenues(line.getId(), page, filter);
+                response = revenueApi.getUniqueLineRevenues(line.getId(), pageNumber, filter);
             } else if (client != null) {
-                response = revenueApi.getUniqueClientRevenues(client.getId(), page, filter);
+                response = revenueApi.getUniqueClientRevenues(client.getId(), pageNumber, filter);
             }
         }
 
@@ -214,10 +247,28 @@ public class ActivityUniqueSales extends FragmentActivity implements  View.OnCli
                     _Meta meta=response.getMeta();
                     if(meta !=null && meta.getStatus_code()==200) {
 
-                        revenueList.clear();
-                        lines.clear();
+                        numPages=meta.getPage_count();
+                        if(pageNumber==1)  {
+                            revenueList.clear();
+                            lines.clear();
+                        }
+                        if(client!=null) {
+                            for (Object rev : ((ArrayList) response.getDataAsList("revenues", Revenue.class))) {
+                                Revenue revenue = (Revenue) rev;
 
-                        revenueList.addAll( (ArrayList) response.getDataAsList("revenues", Revenue.class));
+                                if (revenue.getClient_id().equalsIgnoreCase(client_id)) {
+                                    revenueList.add(revenue);
+                                }
+
+                            }
+                        }
+                      if(client==null)  revenueList.addAll( (ArrayList) response.getDataAsList("revenues", Revenue.class));
+
+                        if(pageNumber==1 && revenueList.size()==0) {
+                            //findViewById(R.id.no_results).setVisibility(View.VISIBLE);
+                        }else{
+                            findViewById(R.id.no_results).setVisibility(View.GONE);
+                        }
 
                         if (client == null && line == null) {
                             JSONObject jsonObject = new JSONObject(response.toString());
@@ -232,6 +283,7 @@ public class ActivityUniqueSales extends FragmentActivity implements  View.OnCli
                         }
                         //client_sale_adapter.setLines(lines);
                         client_sale_adapter.notifyDataSetChanged();
+
                     } else {
                         MyUtils.showToast(getString(R.string.connection_error));
                     }

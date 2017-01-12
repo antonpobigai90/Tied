@@ -576,8 +576,8 @@ public class CreateAppointmentFragment extends Fragment implements View.OnClickL
             if(data.getSerializableExtra("selected")!=null) {
 
                 client = (Client) data.getSerializableExtra("selected");
-                String logo = client.getLogo().equals("") ? null : client.getLogo();
-                MyUtils.Picasso.displayImage(logo, img_avatar);
+               // String logo = (client.getLogo()==null ||client.getLogo().equals("")) ? null : client.getLogo();
+                MyUtils.Picasso.displayImage(client.getLogo(), img_avatar);
                 txt_client_name.setText(MyUtils.getClientName(client));
                 txt_client_company.setText(client.getCompany());
                 if(location==null) {

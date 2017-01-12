@@ -25,7 +25,7 @@
                 android:layout_centerInParent="true"
                 android:layout_marginTop="0dp"
                 android:paddingLeft="0dp"
-                android:text="Add a Visits"
+                android:text="Add a Visit"
                 android:textColor="@color/white"
                 android:textSize="17dp"
                 android:textStyle="bold" />
@@ -37,7 +37,7 @@
                 style="@style/ActionBarIcon"
                 android:layout_alignParentTop="true"
                 android:layout_marginLeft="0dp"
-                android:src="@drawable/btn_back_arrow" />
+                android:src="@drawable/btn_close" />
 
 
             <LinearLayout
@@ -93,6 +93,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="text|textMultiLine"
                     android:ems="10"
+                    android:imeOptions="actionDone"
                     android:id="@+id/title"
                     android:layout_marginTop="7dp"
                     android:textColorHint="@color/light_gray"
@@ -209,7 +210,8 @@
                         android:textColor="@color/grey"
                         android:textSize="15sp"
                         android:layout_height="35dp"
-
+                              android:imeOptions="actionNext"
+                              android:singleLine="true"
                         android:text=""
                               android:hint="Distance traveled to complete visit"
 

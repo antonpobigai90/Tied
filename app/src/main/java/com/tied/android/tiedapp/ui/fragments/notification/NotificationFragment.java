@@ -119,15 +119,15 @@ View view;
                         }
                         break;
                     case "visit":
-                        bundle.putString("visit_id", model.getObject_id());
+                        bundle.putString("visit_id", model.getId());
                         MyUtils.startActivity(getActivity(), ActivityVisitDetails.class, bundle);
                         break;
                     case "client":
-                        bundle.putString("client_id", model.getObject_id());
+                        bundle.putString("client_id", model.getId());
                         MyUtils.startActivity(getActivity(), ActivityClientProfile.class, bundle);
                         break;
                     case "schedule":
-                        bundle.putString("schedule_id", model.getObject_id());
+                        bundle.putString("schedule_id", model.getId());
                         MyUtils.startActivity(getActivity(), ScheduleDetailsActivitiy.class, bundle);
                         break;
                 }

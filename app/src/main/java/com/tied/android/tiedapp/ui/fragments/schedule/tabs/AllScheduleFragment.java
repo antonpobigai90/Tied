@@ -42,6 +42,20 @@ public class AllScheduleFragment extends SchedulesFragment implements View.OnCli
 
     }
 
+    public void initComponent(View view) {
+       /* Calendar cal = Calendar.getInstance();
+        Date now = cal.getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String  today = sdf.format(now);
+        timeRange = new TimeRange("00:00","23:59");
+        dateRange = new DateRange(today, today);
+        scheduleDate = new ScheduleDate(timeRange, dateRange);*/
+        filter.setStatus(4);
+        super.initComponent(view);
+        Logger.write("I am attaching");
+
+    }
+
 //    @Override
 //    public void onCreate(@Nullable Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
@@ -61,7 +75,7 @@ public class AllScheduleFragment extends SchedulesFragment implements View.OnCli
 //        super.initComponent(view);
 //    }
 
-    public void initSchedule() {
+    /*public void initSchedule() {
         ScheduleApi scheduleApi = MainApplication.createService(ScheduleApi.class);
         Call<ScheduleRes> response = scheduleApi.getSchedule(user.getId(), 1);
         response.enqueue(new Callback<ScheduleRes>() {
@@ -93,7 +107,7 @@ public class AllScheduleFragment extends SchedulesFragment implements View.OnCli
                 DialogUtils.closeProgress();
             }
         });
-    }
+    }*/
     public void loadData() {
 
     }

@@ -37,7 +37,7 @@
                     style="@style/ActionBarIcon"
                     android:layout_alignParentTop="true"
                     android:layout_marginLeft="0dp"
-                    android:src="@drawable/btn_back_arrow" />
+                    android:src="@drawable/btn_close" />
 
 
             <LinearLayout
@@ -92,6 +92,8 @@
                         android:layout_height="wrap_content"
                         android:inputType="text|textMultiLine"
                         android:ems="10"
+                        android:imeOptions="actionNext"
+                        android:singleLine="true"
                         android:id="@+id/title"
                         android:layout_marginTop="7dp"
                         android:textColorHint="@color/light_gray"
@@ -200,6 +202,8 @@
                         android:textSize="15sp"
                         android:layout_height="35dp"
                         android:text=""
+                              android:imeOptions="actionDone"
+                              android:singleLine="true"
                               android:hint="0.00"
                               android:id="@+id/sale_amount"
                         android:inputType="numberDecimal" />
@@ -212,7 +216,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:id="@+id/select_date"
-                 android:background="@color/white"
+                            android:background="@color/white"
                 android:orientation="horizontal">
                 <ImageView
                     android:id="@+id/img_timer"
@@ -226,10 +230,10 @@
                 <LinearLayout android:layout_width="match_parent"
                     android:layout_weight="1"
                     android:textColorHint="@color/grey"
+                    android:hint="Date of Sales"
                     android:textSize="15sp"
-
-                              android:clickable="false"
-                              android:focusable="false"
+                    android:clickable="false"
+                    android:focusable="false"
                     android:textColor="@color/grey"
                     android:layout_height="wrap_content"
                     android:text=""
@@ -243,7 +247,6 @@
                         android:layout_height="wrap_content"
                         android:text="Date sale was made"
                         android:textColor="@color/grey"
-
                         android:clickable="false"
                         android:focusable="false"
                         android:layout_marginTop="5dp"
@@ -257,7 +260,6 @@
                         android:textSize="13sp"
                         android:clickable="false"
                         android:focusable="false"
-
                         android:layout_marginTop="4dp"
                         android:layout_height="wrap_content"
                         android:text=""

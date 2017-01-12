@@ -602,10 +602,10 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
 
             case R.id.invite_menu:
                // MyUtils.startActivity(MainActivity.this, SendInviteActivity.class, bundle);
-                Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
-                shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Try Tied for Android!");
-                shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, "I'm using Tied for Android and I recommend it to manage your business. Click here: http://www.gettied.com");
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Try Tied for Android!");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "I'm using Tied for Android and I recommend it to manage your business. Click here: http://www.gettied.com");
 
                 Intent chooserIntent = Intent.createChooser(shareIntent, "Share with");
                 chooserIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -772,15 +772,15 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                                     }
                                     break;
                                 case "visit":
-                                    bundle.putString("visit_id", model.getObject_id());
+                                    bundle.putString("visit_id", model.getId());
                                     MyUtils.startActivity(context, ActivityVisitDetails.class, bundle, true);
                                     break;
                                 case "client":
-                                    bundle.putString("client_id", model.getObject_id());
+                                    bundle.putString("client_id", model.getId());
                                     MyUtils.startActivity(context, ActivityClientProfile.class, bundle, true);
                                     break;
                                 case "schedule":
-                                    bundle.putString("schedule_id", model.getObject_id());
+                                    bundle.putString("schedule_id", model.getId());
                                     MyUtils.startActivity(context, ScheduleDetailsActivitiy.class, bundle, true);
                                     break;
                             }
@@ -852,6 +852,7 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
                           getUIHandler().postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
+                                    MainActivity.getInstance().showNumAlerts(numNewAlert);
                                     try {
                                         MainActivity.getInstance().showNumAlerts(numNewAlert);
                                     }catch (NullPointerException npe) {
@@ -878,11 +879,12 @@ public class MainActivity extends FragmentActivity implements FragmentIterationL
             notificationCircle.setVisibility(View.VISIBLE);
         }else{
             notificationCircle.setVisibility(View.GONE);
-        try {
-            ShortcutBadger.applyCount(this, 0);
-        }catch(Exception e) {
 
-        }
+            try {
+                ShortcutBadger.applyCount(this, 0);
+            }catch(Exception e) {
+
+            }
         }
         numNotifications.setText(""+numAlerts);
     }

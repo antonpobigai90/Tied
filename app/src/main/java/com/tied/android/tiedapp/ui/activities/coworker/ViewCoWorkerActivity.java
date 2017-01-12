@@ -132,15 +132,15 @@ public class ViewCoWorkerActivity extends AppCompatActivity implements View.OnCl
                         MyUtils.startActivity(ViewCoWorkerActivity.this, ViewCoWorkerActivity.class, bundle);
                         break;
                     case "visit":
-                        bundle.putString("visit_id", model.getObject_id());
+                        bundle.putString("visit_id", model.getId());
                         MyUtils.startActivity(ViewCoWorkerActivity.this, ActivityVisitDetails.class, bundle);
                         break;
                     case "client":
-                        bundle.putString("client_id", model.getObject_id());
+                        bundle.putString("client_id", model.getId());
                         MyUtils.startActivity(ViewCoWorkerActivity.this, ActivityClientProfile.class, bundle);
                         break;
                     case "schedule":
-                        bundle.putString("schedule_id", model.getObject_id());
+                        bundle.putString("schedule_id", model.getId());
                         MyUtils.startActivity(ViewCoWorkerActivity.this, ScheduleDetailsActivitiy.class, bundle);
                         break;
                 }
@@ -287,9 +287,9 @@ public class ViewCoWorkerActivity extends AppCompatActivity implements View.OnCl
     private void getActivities(String user_id) {
         final CoworkerApi coworkerApi =  MainApplication.createService(CoworkerApi.class);
         Call<ResponseBody> response = coworkerApi.getCoworkerActivity(user_id, 1);
-        response.enqueue(new retrofit2.Callback<ResponseBody>() {
+        response.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> resResponse) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
                 if (this == null) {
                     // Logger.write("null activity");
                     return;
@@ -332,9 +332,9 @@ public class ViewCoWorkerActivity extends AppCompatActivity implements View.OnCl
     private void getUserObject(String user_id) {
         final UserApi userApi =  MainApplication.createService(UserApi.class);
         Call<ResponseBody> response = userApi.getUser(user_id);
-        response.enqueue(new retrofit2.Callback<ResponseBody>() {
+        response.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> resResponse) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
                 if (this == null) {
                     // Logger.write("null activity");
                     return;

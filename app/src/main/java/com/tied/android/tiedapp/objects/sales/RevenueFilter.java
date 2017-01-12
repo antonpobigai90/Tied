@@ -1,4 +1,4 @@
-package com.tied.android.tiedapp.objects;
+package com.tied.android.tiedapp.objects.sales;
 
 import com.google.gson.Gson;
 

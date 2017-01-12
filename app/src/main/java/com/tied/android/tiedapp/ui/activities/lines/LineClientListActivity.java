@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -61,10 +62,14 @@ public class LineClientListActivity extends AppCompatActivity implements View.On
     protected Territory territory;
     ArrayList search_data = new ArrayList<>();
 
-    TextView txt_title, num_clients;
+    TextView txt_title, num_clients, no_results;
     EditText search;
     ImageView img_plus;
     String client_list;
+
+    int numPages=1;
+    private int preLast;
+    public int pageNumber=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +98,9 @@ public class LineClientListActivity extends AppCompatActivity implements View.On
             initClient();
         }
 
+        no_results = (TextView) findViewById(R.id.no_results);
+        no_results.setOnClickListener(this);
+
         txt_title = (TextView) findViewById(R.id.txt_title);
         if (client_list.equals("line")) {
             txt_title.setText(String.format("Clients for %s", line.getName()));
@@ -105,6 +113,7 @@ public class LineClientListActivity extends AppCompatActivity implements View.On
         adapter = new LineClientAdapter(clientsList, this);
         search = (EditText) findViewById(R.id.search);
         listView.setAdapter(adapter);
+        listView.setFastScrollEnabled(true);
         search.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -130,7 +139,7 @@ public class LineClientListActivity extends AppCompatActivity implements View.On
                 }
                 clientsList.clear();
                 clientsList.addAll(search_data);
-               adapter.notifyDataSetChanged();
+                adapter.notifyDataSetChanged();
                 listView.setAdapter(adapter);
             }
 
@@ -142,11 +151,38 @@ public class LineClientListActivity extends AppCompatActivity implements View.On
 
         });
 
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                final int lastItem = firstVisibleItem + visibleItemCount;
+
+                if(lastItem == totalItemCount)
+                {
+                    if(preLast!=lastItem)
+                    {
+                        if(pageNumber<numPages) {
+                            pageNumber++;
+                            initClient();
+                        }
+
+                        preLast = lastItem;
+                    }
+                }
+            }
+        });
+
     }
 
 
     protected void initClient() {
 
+        DialogUtils.displayProgress(this);
         Call<ClientRes> response;
         if (client_list.equals("line")) {
             ClientLocation clientLocation = new ClientLocation();
@@ -158,10 +194,10 @@ public class LineClientListActivity extends AppCompatActivity implements View.On
             clientLocation.setCoordinate(coordinate);
 
             final ClientApi clientApi = MainApplication.createService(ClientApi.class, user.getToken());
-            response = clientApi.getLineClients(user.getToken(), line.getId(), 1, clientLocation);
+            response = clientApi.getLineClients(user.getToken(), line.getId(), pageNumber, clientLocation);
         } else {
             final TerritoryApi territoryApi = MainApplication.createService(TerritoryApi.class, user.getToken());
-            response = territoryApi.getTerritoryClient(territory, 1);
+            response = territoryApi.getTerritoryClient(territory, pageNumber);
         }
         response.enqueue(new Callback<ClientRes>() {
             @Override
@@ -175,14 +211,19 @@ public class LineClientListActivity extends AppCompatActivity implements View.On
                        // User.LogOut(LineClientListActivity.this);
                         Logger.write(clientRes.toString());
                     } else if (clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200) {
+                        numPages=clientRes.get_meta().getPage_count();
                         ArrayList<Client> clients = clientRes.getClients();
-                        Log.d(TAG + "", clients.toString());
-                        if (clients.size() > 0) {
-                            initFormattedClient(clients);
-                        } else {
+                        if(pageNumber==1) clientsList.clear();
+                        if(pageNumber==1 && clients.size()==0) {
                             bundle.putBoolean(Constants.NO_CLIENT_FOUND, true);
                             num_clients.setVisibility(View.GONE);
-                           // MyUtils.startActivity(LineClientListActivity.this, MainActivity.class, bundle);
+                            findViewById(R.id.no_results).setVisibility(View.VISIBLE);
+                        } else {
+
+                            clientsList.addAll(clients);
+
+                            adapter.notifyDataSetChanged();
+
                         }
                     } else {
                         Logger.write(clientRes.getMessage());
@@ -203,16 +244,16 @@ public class LineClientListActivity extends AppCompatActivity implements View.On
 
     }
 
-    public void initFormattedClient(ArrayList<Client> clients) {
+  /*  public void initFormattedClient(ArrayList<Client> clients) {
 
 
-        num_clients.setText(String.format("%d Clients", clientsList.size()));
+        num_clients.setText("Clients");
         clientsList.clear();
         clientsList.addAll(clients);
 
-       adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
         listView.setFastScrollEnabled(true);
-    }
+    }*/
 
 
     @Override
@@ -222,6 +263,9 @@ public class LineClientListActivity extends AppCompatActivity implements View.On
                 onBackPressed();
                 break;
             case R.id.img_plus:
+                MyUtils.initiateClientSelector(this, null, false);
+                break;
+            case R.id.no_results:
                 MyUtils.initiateClientSelector(this, null, false);
                 break;
         }
@@ -267,7 +311,6 @@ public class LineClientListActivity extends AppCompatActivity implements View.On
                 MyUtils.showMessageAlert(this, "Already existing!");
             }
         } else if (requestCode==Constants.ClientDelete && resultCode==RESULT_OK) {
-            MyUtils.showToast("Delete Successfully");
             initClient();
         }
     }

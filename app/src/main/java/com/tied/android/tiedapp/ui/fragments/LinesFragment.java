@@ -13,9 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
@@ -65,6 +67,11 @@ public class LinesFragment extends Fragment implements AdapterView.OnItemClickLi
 
     public LinesAdapter adapter;
     ImageView img_plus;
+    TextView no_results;
+
+    int numPages=1;
+    private int preLast;
+    public int pageNumber=1;
 
     public static Fragment newInstance(Bundle bundle) {
         Fragment fragment = new LinesFragment();
@@ -107,6 +114,14 @@ public class LinesFragment extends Fragment implements AdapterView.OnItemClickLi
             }
         });
 
+        no_results = (TextView) view.findViewById(R.id.no_results);
+        no_results.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyUtils.startRequestActivity(getActivity(), LinesSelect.class, Constants.ADD_LINE, bundle);
+            }
+        });
+
         listView = (ListView) view.findViewById(R.id.lines_listview);
         if(!MyUtils.currentUserIs(user)) {
             img_plus.setVisibility(View.GONE);
@@ -118,6 +133,32 @@ public class LinesFragment extends Fragment implements AdapterView.OnItemClickLi
 
         initLines();
         listView.setOnItemClickListener(this);
+
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                final int lastItem = firstVisibleItem + visibleItemCount;
+
+                if(lastItem == totalItemCount)
+                {
+                    if(preLast!=lastItem)
+                    {
+                        if(pageNumber<numPages) {
+                            pageNumber++;
+                            initLines();
+                        }
+
+                        preLast = lastItem;
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -140,10 +181,10 @@ public class LinesFragment extends Fragment implements AdapterView.OnItemClickLi
 
         if (client == null) {
             final LineApi lineApi = MainApplication.createService(LineApi.class);
-            response = lineApi.getUserLines(user.getId(), 1);
+            response = lineApi.getUserLines(user.getId(), pageNumber);
         } else {
             final ClientApi clientApi =  MainApplication.createService(ClientApi.class);
-            response = clientApi.getClientLine(client.getId(), 1);
+            response = clientApi.getClientLine(client.getId(), pageNumber);
         }
 
         response.enqueue(new retrofit2.Callback<ResponseBody>() {
@@ -158,11 +199,15 @@ public class LinesFragment extends Fragment implements AdapterView.OnItemClickLi
                     }
                     _Meta meta=response.getMeta();
                     if(meta !=null && meta.getStatus_code() == 200) {
-                        lines.clear();
-                        lines .addAll( (ArrayList) response.getDataAsList(Constants.LINES_lIST, Line.class));
-                        Logger.write("Lines loadeddddddddddddddddddddddddddddddddddddddddddddddd "+lines.size());
+                        numPages=meta.getPage_count();
+                        if(pageNumber==1)  lines.clear();
+                        lines.addAll( (ArrayList) response.getDataAsList(Constants.LINES_lIST, Line.class));
+
+                        if(pageNumber==1 && lines.size()==0) {
+                            MyUtils.showNoResults(getView(), R.id.no_results);
+                        }
+
                         adapter.notifyDataSetChanged();
-                        if(lines.isEmpty()) MyUtils.showNoResults(getView(), R.id.no_results);
                     }else{
                         MyUtils.showToast("Error encountered");
                         DialogUtils.closeProgress();

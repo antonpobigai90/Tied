@@ -58,6 +58,9 @@ public class ActivityClientProfile extends AppCompatActivity implements  View.On
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.img_back:
+                Intent intent = new Intent();
+                setResult(RESULT_OK, intent);
+                finishActivity(Constants.ClientDelete);
                 finish();
                 break;
             case R.id.lines_tab:

@@ -9,6 +9,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -86,8 +87,12 @@ public class SelectClientActivity extends Activity
     private boolean isMultiple=false;
     private String selectedIds;
     int objectType=SELECT_CLIENT_TYPE;
-    View clearBut;
 
+    int numPages=1;
+    private int preLast;
+    public int pageNumber=1;
+
+    View clearBut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +128,7 @@ public class SelectClientActivity extends Activity
         if(!isMultiple) {
             addLayout.setVisibility(View.GONE);
         }
+
         clearBut = findViewById(R.id.clear_but);
         clearBut.setOnClickListener(this);
         finishSelection=findViewById(R.id.add_button);
@@ -131,7 +137,7 @@ public class SelectClientActivity extends Activity
         selectedCountText=(TextView)findViewById(R.id.selected_count);
 
         if( objectType==SELECT_CLIENT_TYPE) {
-            //txt_title.setText("Select Client");
+            txt_title.setText("Select Client");
             search.setHint("Search Client by Name");
         } else {
             txt_title.setText("Select Line");
@@ -173,6 +179,32 @@ public class SelectClientActivity extends Activity
             public void afterTextChanged(Editable s) {
                 // TODO Auto-generated method stub
 
+            }
+        });
+
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                final int lastItem = firstVisibleItem + visibleItemCount;
+
+                if(lastItem == totalItemCount)
+                {
+                    if(preLast!=lastItem)
+                    {
+                        if(pageNumber<numPages) {
+                            pageNumber++;
+                            initClient();
+                        }
+
+                        preLast = lastItem;
+                    }
+                }
             }
         });
 
@@ -296,7 +328,7 @@ public class SelectClientActivity extends Activity
         if(size==0) {
             finishSelection.setVisibility(View.GONE);
             clearBut.setVisibility(View.GONE);
-        }
+            }
         else{
             finishSelection.setVisibility(View.VISIBLE);
             clearBut.setVisibility(View.VISIBLE);
@@ -321,6 +353,7 @@ public class SelectClientActivity extends Activity
 
     private void initClient(){
 
+        DialogUtils.displayProgress(this);
         ClientLocation clientLocation = new ClientLocation();
         clientLocation.setDistance("100000"+MyUtils.getPreferredDistanceUnit());
         MyUtils.setCurrentLocation(new Coordinate(33.894212, -84.231574));
@@ -331,7 +364,7 @@ public class SelectClientActivity extends Activity
         clientLocation.setCoordinate(coordinate);
 
         ClientApi clientApi =  MainApplication.createService(ClientApi.class, user.getToken());
-        Call<ClientRes> response = clientApi.getClientsFilter(user.getId(), 1, new ClientFilter());
+        Call<ClientRes> response = clientApi.getClientsFilter(user.getId(), pageNumber, new ClientFilter());
         response.enqueue(new Callback<ClientRes>() {
             @Override
             public void onResponse(Call<ClientRes> call, Response<ClientRes> resResponse) {
@@ -342,18 +375,24 @@ public class SelectClientActivity extends Activity
                     User.LogOut(getApplicationContext());
                 }
                 else if(clientRes.get_meta() != null && clientRes.get_meta().getStatus_code() == 200){
+                    numPages=clientRes.get_meta().getPage_count();
                     ArrayList<Client> clients = clientRes.getClients();
                     //Log.d(TAG + "", clients.toString());
-                    clientsWithDistance.clear();
+
+                    if(pageNumber==1) {
+                        clientsWithDistance.clear();
+                        clientsWithDistanceHolder.clear();
+                    }
                     clientsWithDistance.addAll(clients);
-                    clientsWithDistanceHolder.clear();
-                    clientsWithDistanceHolder.addAll(clientsWithDistance);
-                    listView.setFastScrollEnabled(true);
-                    if(clientsWithDistance.size()==0) {
+                    clientsWithDistanceHolder.addAll(clients);
+
+                    if(pageNumber==1 && clientsWithDistance.size()==0) {
                         findViewById(R.id.no_results).setVisibility(View.VISIBLE);
-                    }else{
+                    } else {
                         findViewById(R.id.no_results).setVisibility(View.GONE);
                     }
+
+                    listView.setFastScrollEnabled(true);
                     adapter.notifyDataSetChanged();
                 }else{
                     Toast.makeText(SelectClientActivity.this, clientRes.getMessage(), Toast.LENGTH_LONG).show();

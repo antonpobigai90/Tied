@@ -1,11 +1,9 @@
 package com.tied.android.tiedapp.retrofits.services;
 
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.objects.RevenueFilter;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
 import retrofit2.http.Path;
 
 /**
@@ -13,7 +11,7 @@ import retrofit2.http.Path;
  */
 public interface ConfigApi {
     @GET(Constants.GET_CONFIGURATION)
-    Call<ResponseBody> getSetting( @Path("key") String key);
+    Call<ResponseBody> getSetting(@Path("key") String key);
 
 
 }

@@ -1,11 +1,9 @@
 package com.tied.android.tiedapp.ui.activities.coworker;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -20,31 +18,19 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.*;
 
-import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.customs.model.ScheduleDataModel;
 import com.tied.android.tiedapp.objects.client.Client;
-import com.tied.android.tiedapp.objects.responses.ScheduleRes;
-import com.tied.android.tiedapp.objects.schedule.Schedule;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.retrofits.services.ScheduleApi;
 import com.tied.android.tiedapp.ui.adapters.ScheduleListAdapter;
-import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
-import com.tied.android.tiedapp.ui.fragments.schedule.ScheduleAppointmentsFragment;
 import com.tied.android.tiedapp.ui.fragments.schedule.tabs.*;
 import com.tied.android.tiedapp.ui.listeners.FragmentIterationListener;
-import com.tied.android.tiedapp.util.HelperMethods;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by Emmanuel on 9/9/2016.
@@ -285,7 +271,7 @@ public class CoWorkerSchedulesActivity extends AppCompatActivity implements Frag
             Fragment fragment = null;
             Log.d(TAG, "position : " + position);
             switch (position) {
-                case 0: fragment = new TodayScheduleFragment(); break;
+                case 0: fragment = new UpcomingScheduleFragment(); break;
                 case 1: fragment = new AllScheduleFragment(); break;
                 case 2: fragment = new ThisWeekScheduleFragment(); break;
                 case 3: fragment = new NextWeekScheduleFragment(); break;

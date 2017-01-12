@@ -4,8 +4,6 @@ package com.tied.android.tiedapp.ui.fragments.client;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,13 +22,10 @@ import com.google.gson.Gson;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.customs.model.ScheduleDataModel;
-import com.tied.android.tiedapp.objects.Line;
-import com.tied.android.tiedapp.objects.RevenueFilter;
+import com.tied.android.tiedapp.objects.sales.RevenueFilter;
 import com.tied.android.tiedapp.objects._Meta;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
@@ -39,12 +34,10 @@ import com.tied.android.tiedapp.retrofits.services.ClientApi;
 import com.tied.android.tiedapp.retrofits.services.RevenueApi;
 import com.tied.android.tiedapp.ui.activities.client.AddClientActivity;
 import com.tied.android.tiedapp.ui.activities.client.ClientInfo;
-import com.tied.android.tiedapp.ui.activities.goal.LineGoalActivity;
 import com.tied.android.tiedapp.ui.activities.lines.LineClientVisitsActivity;
 import com.tied.android.tiedapp.ui.activities.lines.LinesListActivity;
 import com.tied.android.tiedapp.ui.activities.sales.ActivityLineClientSales;
 import com.tied.android.tiedapp.ui.activities.schedule.ClientSchedulesActivity;
-import com.tied.android.tiedapp.ui.activities.visits.ActivityVisitDetails;
 import com.tied.android.tiedapp.ui.dialogs.DialogClientOptions;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.ui.dialogs.DialogYesNo;
@@ -110,7 +103,6 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
         icon_call = (LinearLayout) view.findViewById(R.id.icon_call);
         icon_mail =(LinearLayout) view.findViewById(R.id.icon_mail);
         client_name = (TextView) view.findViewById(R.id.client_name);
-        client_name.setText(MyUtils.getClientName(client));
         totalSales=(TextView) view.findViewById(R.id.total_sales);
         img_edit = (ImageView) view.findViewById(R.id.img_edit);
         view.findViewById(R.id.sales_layout).setOnClickListener(this);
@@ -120,9 +112,6 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
         lastVisitedTV=(TextView)view.findViewById(R.id.last_visited) ;
         addressTV=(TextView)view.findViewById(R.id.address) ;
 
-        MyUtils.Picasso.displayImage(client.getLogo(), (ImageView)view.findViewById(R.id.avatar));
-
-        Logger.write("ava ttttttttttttttttt "+client.getLogo());
         avatar = (ImageView) view.findViewById(R.id.avatar);
 
         btn_delete.setOnClickListener(this);
@@ -153,18 +142,19 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
                 logo=null;
             }
             MyUtils.Picasso.displayImage(logo, avatar);
-           totalSales.setText(MyUtils.moneyFormat(client.getTotal_revenue()));
+            totalSales.setText(MyUtils.moneyFormat(client.getTotal_revenue()));
             String lastVisited=client.getLast_visited();
+
             long epoch=0;
             try {
-               epoch = MyUtils.parseDate(lastVisited).getTime();
+                epoch = MyUtils.parseDate(lastVisited).getTime();
             }catch (Exception e) {
 
             }
 
             String timePassedString = ""+ DateUtils.getRelativeTimeSpanString(epoch, System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
-
             lastVisitedTV.setText("Last Visited: "+ (lastVisited==null || lastVisited.isEmpty()?"Never":timePassedString));
+
             addressTV.setText(client.getAddress().getLocationAddress());
             //setTotalRevenue();
             setVisibile();
@@ -332,7 +322,7 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
     private void getClient() {
         final ClientApi clientApi =  MainApplication.createService(ClientApi.class);
         Call<ResponseBody> response = clientApi.getClient(client_id);
-        response.enqueue(new retrofit2.Callback<ResponseBody>() {
+        response.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
                 if (this == null) {
@@ -360,6 +350,7 @@ public class ViewClientFragment extends Fragment implements View.OnClickListener
                        // MyUtils.Picasso.displayImage(client.getLogo(), avatar);
                         String lastVisited=client.getLast_visited();
                         lastVisitedTV.setText("Last Visited: "+ (lastVisited==null || lastVisited.isEmpty()?"Never":HelperMethods.getDateDifferenceWithToday(lastVisited)));
+                        totalSales.setText(MyUtils.moneyFormat(client.getTotal_revenue()));
 
                         //setTotalRevenue();
                         setVisibile();

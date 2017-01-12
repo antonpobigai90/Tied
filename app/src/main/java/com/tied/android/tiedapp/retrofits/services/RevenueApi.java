@@ -5,13 +5,8 @@ package com.tied.android.tiedapp.retrofits.services;
  */
 
 import com.tied.android.tiedapp.customs.Constants;
-import com.tied.android.tiedapp.objects.Line;
-import com.tied.android.tiedapp.objects.Revenue;
-import com.tied.android.tiedapp.objects.RevenueFilter;
-import com.tied.android.tiedapp.objects.responses.ServerRes;
-import com.tied.android.tiedapp.objects.user.User;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
+import com.tied.android.tiedapp.objects.sales.Revenue;
+import com.tied.android.tiedapp.objects.sales.RevenueFilter;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.*;
@@ -45,8 +40,8 @@ public interface RevenueApi {
     Call<ResponseBody> getLineRevenues(
             @Path("object_type") String object_type,
             @Path("object_id") String object_id,
-                                       @Path("page_number") int page_number,
-                                       @Body RevenueFilter filter);
+            @Path("page_number") int page_number,
+            @Body RevenueFilter filter);
     @POST(Constants.GET_TOTAL_REVENUE)
     Call<ResponseBody> getTotalRevenues(
             @Path("object_type") String object_type,

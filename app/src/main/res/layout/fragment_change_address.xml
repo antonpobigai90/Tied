@@ -108,7 +108,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:backgroundTint="@android:color/transparent"
-                    android:text="581 Meagen Ferry Suite 685"
                     android:textColor="@color/schedule_title_bg_color"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -143,7 +142,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:backgroundTint="@android:color/transparent"
-                    android:text="76019"
                     android:textColor="@color/schedule_title_bg_color"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -178,7 +176,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:backgroundTint="@android:color/transparent"
-                    android:text="Dallas"
                     android:textColor="@color/schedule_title_bg_color"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -215,7 +212,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:backgroundTint="@android:color/transparent"
-                    android:text="581 Meagen Ferry Suite 685"
                     android:textColor="@color/schedule_title_bg_color"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -247,7 +243,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:backgroundTint="@android:color/transparent"
-                    android:text="76019"
                     android:textColor="@color/schedule_title_bg_color"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -280,7 +275,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:backgroundTint="@android:color/transparent"
-                    android:text="Dallas"
                     android:textColor="@color/schedule_title_bg_color"
                     android:textSize="14sp"
                     android:textStyle="bold" />

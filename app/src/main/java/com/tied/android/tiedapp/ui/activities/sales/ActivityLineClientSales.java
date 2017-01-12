@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -15,15 +16,13 @@ import com.tied.android.tiedapp.MainApplication;
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.customs.Constants;
 import com.tied.android.tiedapp.objects.Line;
-import com.tied.android.tiedapp.objects.Revenue;
-import com.tied.android.tiedapp.objects.RevenueFilter;
+import com.tied.android.tiedapp.objects.sales.Revenue;
+import com.tied.android.tiedapp.objects.sales.RevenueFilter;
 import com.tied.android.tiedapp.objects._Meta;
 import com.tied.android.tiedapp.objects.client.Client;
 import com.tied.android.tiedapp.objects.responses.GeneralResponse;
 import com.tied.android.tiedapp.objects.user.User;
-import com.tied.android.tiedapp.retrofits.services.LineApi;
 import com.tied.android.tiedapp.retrofits.services.RevenueApi;
-import com.tied.android.tiedapp.ui.activities.lines.ViewLineActivity;
 import com.tied.android.tiedapp.ui.adapters.SaleClientDetailsListAdapter;
 import com.tied.android.tiedapp.ui.dialogs.DialogUtils;
 import com.tied.android.tiedapp.util.HelperMethods;
@@ -37,7 +36,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -57,15 +55,18 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
     private ListView client_sales_listview;
     private SaleClientDetailsListAdapter client_sale_adapter;
     ArrayList revenueList=new ArrayList<Revenue>();
-    int page=1;
     TextView totalRevenue, title;
     Line line;
     Client client;
     String type="line";
     RevenueFilter filter;
-    TextView periodLabelTV;
+    TextView periodLabelTV, no_results;
     int source=Constants.SALES_SOURCE;
     private boolean revenueAdded=false;
+
+    int numPages=1;
+    private int preLast;
+    public int pageNumber=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +114,9 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
         img_plus = (ImageView) findViewById(R.id.img_plus);
         totalRevenue = (TextView)findViewById(R.id.txt_total_sales);
         periodLabelTV = (TextView) findViewById(R.id.period_label);
-        title=(TextView)findViewById(R.id.title) ;
+        title = (TextView)findViewById(R.id.title);
+        no_results = (TextView)findViewById(R.id.no_results);
+        no_results.setOnClickListener(this);
         if(client!=null) title.setText(MyUtils.getClientName(client));
         if(line!=null) title.setText(line.getName());
 
@@ -142,6 +145,7 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
                     client.setId(revenue.getClient_id());
                     client.setCompany(revenue.getTitle());
                     bundle.putSerializable(Constants.CLIENT_DATA, client);
+                    if(line!=null)  bundle.putSerializable(Constants.LINE_DATA, line);
                     filter.setLine_id(line.getId());
 
                 } else {
@@ -149,11 +153,38 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
                     line.setId(revenue.getLine_id());
                     line.setName(revenue.getTitle());
                     bundle.putSerializable(Constants.LINE_DATA, line);
+                    bundle.putSerializable(Constants.CLIENT_DATA, client);
                    filter.setClient_id(client.getId());
                 }
                 bundle.putSerializable(Constants.FILTER, filter);
 
                 MyUtils.startActivity(ActivityLineClientSales.this, ActivityUniqueSales.class, bundle);
+            }
+        });
+
+        client_sales_listview.setOnScrollListener(new AbsListView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                final int lastItem = firstVisibleItem + visibleItemCount;
+
+                if(lastItem == totalItemCount)
+                {
+                    if(preLast!=lastItem)
+                    {
+                        if(pageNumber<numPages) {
+                            pageNumber++;
+                            loadData();
+                        }
+
+                        preLast = lastItem;
+                    }
+                }
             }
         });
     }
@@ -171,6 +202,9 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
             case R.id.img_plus:
                 MyUtils.startRequestActivity(this, ActivityAddSales.class, Constants.ADD_SALES, bundle);
                 break;
+            case R.id.no_results:
+                MyUtils.startRequestActivity(this, ActivityAddSales.class, Constants.ADD_SALES, bundle);
+                break;
         }
     }
 
@@ -182,7 +216,7 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
         RevenueApi revenueApi = MainApplication.createService(RevenueApi.class);
         String id=(client==null?line.getId():client.getId());
         String type=(client==null?"line":"client");
-        final Call<ResponseBody> response = revenueApi.getLineRevenues( type, id, page, filter);
+        final Call<ResponseBody> response = revenueApi.getLineRevenues( type, id, pageNumber, filter);
         response.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> resResponse) {
@@ -200,6 +234,7 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
                     Logger.write("************************** "+response.toString());
                     _Meta meta=response.getMeta();
                     if(meta !=null && meta.getStatus_code()==200) {
+                        numPages=meta.getPage_count();
                         //revenueList.addAll(response.getDataAsList("revenues", Revenue.class));
                         //client_sale_adapter.notifyDataSetChanged();
                         Gson gson = new Gson();
@@ -272,6 +307,10 @@ public class ActivityLineClientSales extends FragmentActivity implements  View.O
                             revenueList.add(revenue);
                         }
                         client_sale_adapter.notifyDataSetChanged();
+
+                        if(pageNumber==1 && revenueList.size()==0) {
+                            findViewById(R.id.no_results).setVisibility(View.VISIBLE);
+                        }
                     } else {
                         MyUtils.showToast(getString(R.string.connection_error));
                     }

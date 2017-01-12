@@ -301,9 +301,9 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == Constants.SELECT_TERRITORY && resultCode == Activity.RESULT_OK) {
+
             selectedTerritories.clear();
             selectedTerritories.add( (Territory) (data.getSerializableExtra("selected")));
-
 
             txt_territory.setText(selectedTerritories.get(0).getCounty() + ", " + selectedTerritories.get(0).getState());
         }
@@ -484,7 +484,7 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
                                 Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
                                 getIntent.setType("image/*");
 
-                                Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                Intent pickIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                                 pickIntent.setType("image/*");
 
                                 Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
@@ -710,6 +710,7 @@ public class AddClientFragment extends Fragment implements View.OnClickListener,
     private void editClient() {
         client = initClient(client);
 
+        DialogUtils.displayProgress(getActivity());
         ClientApi clientApi = MainApplication.createService(ClientApi.class);
         Call<ClientRes> response = null;
         if(uri != null){

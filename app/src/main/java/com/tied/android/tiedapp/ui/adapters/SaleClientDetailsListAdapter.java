@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.tied.android.tiedapp.R;
 import com.tied.android.tiedapp.objects.Line;
-import com.tied.android.tiedapp.objects.Revenue;
+import com.tied.android.tiedapp.objects.sales.Revenue;
 import com.tied.android.tiedapp.util.Logger;
 import com.tied.android.tiedapp.util.MyUtils;
 

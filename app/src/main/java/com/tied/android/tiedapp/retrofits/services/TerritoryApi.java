@@ -34,4 +34,7 @@ public interface  TerritoryApi {
 
     @GET(Constants.TERRITORY_FROM_DATABASE)
     Call<ResponseBody> getTerritoriesDatabase(@Path("query") String query);
+
+    @DELETE(Constants.TERRITORY_DELETE)
+    Call<ResponseBody> deleteTerritory(@Path("territory_id") String territory_id);
 }

@@ -1,9 +1,8 @@
-package com.tied.android.tiedapp.objects;
+package com.tied.android.tiedapp.objects.sales;
 
 import com.google.gson.Gson;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * Created by Femi on 7/28/2016.
