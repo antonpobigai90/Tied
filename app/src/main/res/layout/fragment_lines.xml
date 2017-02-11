@@ -51,7 +51,7 @@
     <TextView android:layout_width="wrap_content"
               android:gravity="center"
               android:layout_gravity="center"
-              android:text="All you lines are listed here. Click to Add a line "
+              android:text="All your lines are listed here. \nClick to Add a line "
               android:layout_margin="30dp"
               android:background="@drawable/white_fill_grey_stroke"
               android:padding="20dp"

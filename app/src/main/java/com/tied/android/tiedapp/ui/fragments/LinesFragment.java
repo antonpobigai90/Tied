@@ -110,7 +110,7 @@ public class LinesFragment extends Fragment implements AdapterView.OnItemClickLi
 
                     }
                 });*/
-                MyUtils.startRequestActivity(getActivity(), LinesSelect.class, Constants.ADD_LINE, bundle);
+                MyUtils.startRequestActivity(getActivity(), AddLinesActivity.class, Constants.ADD_LINE, bundle);
             }
         });
 
@@ -118,7 +118,7 @@ public class LinesFragment extends Fragment implements AdapterView.OnItemClickLi
         no_results.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MyUtils.startRequestActivity(getActivity(), LinesSelect.class, Constants.ADD_LINE, bundle);
+                MyUtils.startRequestActivity(getActivity(), AddLinesActivity.class, Constants.ADD_LINE, bundle);
             }
         });
 
@@ -205,6 +205,8 @@ public class LinesFragment extends Fragment implements AdapterView.OnItemClickLi
 
                         if(pageNumber==1 && lines.size()==0) {
                             MyUtils.showNoResults(getView(), R.id.no_results);
+                        }else{
+                            MyUtils.hideNoResults(getView());
                         }
 
                         adapter.notifyDataSetChanged();
